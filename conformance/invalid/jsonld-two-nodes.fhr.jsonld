@@ -1,0 +1,344 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+    "sdo": "http://schema.org/",
+    "fhr": "https://w3id.org/fair-bioheaders/terms#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dct": "http://purl.org/dc/terms/",
+    "Dataset": "sdo:Dataset",
+    "schema": {
+      "@id": "sdo:schemaVersion",
+      "@type": "@id"
+    },
+    "schemaVersion": {
+      "@id": "fhr:schemaVersion"
+    },
+    "genome": {
+      "@id": "sdo:name"
+    },
+    "genomeSynonym": {
+      "@id": "sdo:alternateName",
+      "@container": "@set"
+    },
+    "taxon": {
+      "@id": "sdo:about",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "Taxon": "sdo:Taxon",
+          "name": {
+            "@id": "sdo:name"
+          },
+          "uri": "@id"
+        }
+      ]
+    },
+    "version": {
+      "@id": "sdo:version"
+    },
+    "metadataAuthor": {
+      "@id": "fhr:metadataAuthor",
+      "@container": "@set",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "Person": "sdo:Person",
+          "Organization": "sdo:Organization",
+          "Agent": "fhr:Agent",
+          "name": {
+            "@id": "sdo:name"
+          },
+          "uri": "@id"
+        }
+      ]
+    },
+    "assemblyAuthor": {
+      "@id": "sdo:creator",
+      "@container": "@set",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "Person": "sdo:Person",
+          "Organization": "sdo:Organization",
+          "Agent": "fhr:Agent",
+          "name": {
+            "@id": "sdo:name"
+          },
+          "uri": "@id"
+        }
+      ]
+    },
+    "dateCreated": {
+      "@id": "sdo:dateCreated",
+      "@type": "xsd:date"
+    },
+    "voucherSpecimen": {
+      "@id": "fhr:voucherSpecimen"
+    },
+    "accessionID": {
+      "@id": "fhr:accessionID",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "PropertyValue": "sdo:PropertyValue",
+          "name": {
+            "@id": "sdo:name"
+          },
+          "url": {
+            "@id": "sdo:url",
+            "@type": "@id"
+          }
+        }
+      ]
+    },
+    "instrument": {
+      "@id": "fhr:instrument",
+      "@container": "@set"
+    },
+    "scholarlyArticle": {
+      "@id": "sdo:citation"
+    },
+    "documentation": {
+      "@id": "sdo:description"
+    },
+    "identifier": {
+      "@id": "sdo:identifier",
+      "@container": "@set"
+    },
+    "relatedLink": {
+      "@id": "fhr:relatedLink",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "funding": {
+      "@id": "sdo:funding"
+    },
+    "reuseConditions": {
+      "@id": "sdo:license"
+    },
+    "masking": {
+      "@id": "fhr:masking"
+    },
+    "vitalStats": {
+      "@id": "fhr:vitalStats",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "VitalStats": "fhr:VitalStats",
+          "L50": {
+            "@id": "fhr:L50"
+          },
+          "N50": {
+            "@id": "fhr:N50"
+          },
+          "L90": {
+            "@id": "fhr:L90"
+          },
+          "totalBasePairs": {
+            "@id": "fhr:totalBasePairs"
+          },
+          "numberContigs": {
+            "@id": "fhr:numberContigs"
+          },
+          "numberScaffolds": {
+            "@id": "fhr:numberScaffolds"
+          },
+          "readTechnology": {
+            "@id": "fhr:readTechnology"
+          },
+          "N90": {
+            "@id": "fhr:N90"
+          },
+          "gcContent": {
+            "@id": "fhr:gcContent"
+          }
+        }
+      ]
+    },
+    "checksum": {
+      "@id": "fhr:checksum"
+    },
+    "assemblySoftware": {
+      "@id": "fhr:assemblySoftware",
+      "@container": "@set",
+      "@context": [
+        null,
+        {
+          "@protected": true,
+          "sdo": "http://schema.org/",
+          "fhr": "https://w3id.org/fair-bioheaders/terms#",
+          "SoftwareApplication": "sdo:SoftwareApplication",
+          "name": {
+            "@id": "sdo:name"
+          },
+          "uri": {
+            "@id": "sdo:url",
+            "@type": "@id"
+          },
+          "version": {
+            "@id": "sdo:softwareVersion"
+          },
+          "commandLineOption": {
+            "@id": "fhr:commandLineOption",
+            "@container": "@list"
+          }
+        }
+      ]
+    },
+    "assemblyProtocol": {
+      "@id": "fhr:assemblyProtocol",
+      "@type": "@id"
+    },
+    "seqcol_id": {
+      "@id": "fhr:seqcol_id"
+    },
+    "subjectOf": {
+      "@id": "sdo:subjectOf",
+      "@type": "@id"
+    },
+    "keywords": {
+      "@id": "sdo:keywords",
+      "@container": "@set"
+    },
+    "url": {
+      "@id": "sdo:url",
+      "@type": "@id"
+    },
+    "conformsTo": {
+      "@id": "dct:conformsTo",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@type": "Dataset",
+      "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+      "schemaVersion": 1.0,
+      "genome": "Synthetic FHR conformance genome",
+      "taxon": {
+        "@type": "Taxon",
+        "name": "Homo sapiens",
+        "uri": "https://identifiers.org/taxonomy:9606"
+      },
+      "version": "1.0.0",
+      "metadataAuthor": [
+        {
+          "@type": "Agent",
+          "name": "Synthetic metadata author (placeholder)"
+        }
+      ],
+      "assemblyAuthor": [
+        {
+          "@type": "Person",
+          "name": "Josiah Carberry (ORCID example iD)",
+          "uri": "https://orcid.org/0000-0002-1825-0097"
+        }
+      ],
+      "dateCreated": "2026-10-08",
+      "masking": "not-masked",
+      "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+      "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+      "genomeSynonym": [
+        "synthetic conformance genome"
+      ],
+      "identifier": [
+        "example:conformance-1"
+      ],
+      "relatedLink": [
+        "https://example.org/synthetic"
+      ],
+      "reuseConditions": "CC0-1.0",
+      "assemblySoftware": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "synthetic-assembler",
+          "version": "1.2.3",
+          "commandLineOption": [
+            "-t",
+            "2"
+          ]
+        }
+      ],
+      "vitalStats": {
+        "@type": "VitalStats",
+        "N50": 20,
+        "L50": 1,
+        "totalBasePairs": 20,
+        "gcContent": 45.5
+      }
+    },
+    {
+      "@type": "Dataset",
+      "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+      "schemaVersion": 1.0,
+      "genome": "Second synthetic genome",
+      "taxon": {
+        "@type": "Taxon",
+        "name": "Homo sapiens",
+        "uri": "https://identifiers.org/taxonomy:9606"
+      },
+      "version": "1.0.0",
+      "metadataAuthor": [
+        {
+          "@type": "Agent",
+          "name": "Synthetic metadata author (placeholder)"
+        }
+      ],
+      "assemblyAuthor": [
+        {
+          "@type": "Person",
+          "name": "Josiah Carberry (ORCID example iD)",
+          "uri": "https://orcid.org/0000-0002-1825-0097"
+        }
+      ],
+      "dateCreated": "2026-10-08",
+      "masking": "not-masked",
+      "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+      "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+      "genomeSynonym": [
+        "synthetic conformance genome"
+      ],
+      "identifier": [
+        "example:conformance-1"
+      ],
+      "relatedLink": [
+        "https://example.org/synthetic"
+      ],
+      "reuseConditions": "CC0-1.0",
+      "assemblySoftware": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "synthetic-assembler",
+          "version": "1.2.3",
+          "commandLineOption": [
+            "-t",
+            "2"
+          ]
+        }
+      ],
+      "vitalStats": {
+        "@type": "VitalStats",
+        "N50": 20,
+        "L50": 1,
+        "totalBasePairs": 20,
+        "gcContent": 45.5
+      }
+    }
+  ]
+}

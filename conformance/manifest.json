@@ -53,6 +53,15 @@
     "J2": {
       "summary": "JSON-LD: duplicate object keys are invalid."
     },
+    "J3": {
+      "summary": "JSON-LD: any other form is read by JSON-LD 1.1 expansion with bundled contexts only; a context that is not bundled, remote or unknown, is invalid."
+    },
+    "J4": {
+      "summary": "JSON-LD: exactly one top-level node (directly or the only item of @graph); every property must map to an FHR field in its scope, and unknown terms or a root @id make the document invalid."
+    },
+    "J5": {
+      "summary": "JSON-LD: IRI fields take @id or a string; dateCreated takes xsd:date or no type, and no other datatype is allowed; single-valued fields take one value; commandLineOption comes from @list; a node given only by @id is invalid."
+    },
     "J6": {
       "summary": "JSON-LD: the resulting metadata must validate against fhr.json."
     },
@@ -1745,6 +1754,258 @@
       }
     },
     {
+      "id": "jsonld-expanded",
+      "file": "valid/jsonld-expanded.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J3",
+        "J4",
+        "J5",
+        "J6"
+      ],
+      "description": "The canonical document in JSON-LD expanded form: full IRIs, value objects, @id for IRI fields, @list for commandLineOption and no context.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1.0,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
+      "id": "jsonld-schemaorg-vocab-compaction",
+      "file": "valid/jsonld-schemaorg-vocab-compaction.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J3",
+        "J5"
+      ],
+      "description": "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR context; dateCreated is a value object typed xsd:date.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1.0,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
+      "id": "jsonld-graph-single-node",
+      "file": "valid/jsonld-graph-single-node.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J4"
+      ],
+      "description": "The FHR context with the record as the only node of @graph.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1.0,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
+      "id": "jsonld-iri-as-string",
+      "file": "valid/jsonld-iri-as-string.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J5"
+      ],
+      "description": "Under the schema.org @vocab, the IRI fields schema (schema.org schemaVersion) and relatedLink, and dateCreated, are plain strings.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1.0,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
       "id": "fasta-crlf-normalized-checksum",
       "file": "invalid/fasta-crlf-normalized-checksum.fhr.fasta",
       "format": "fasta",
@@ -2424,6 +2685,69 @@
       "expected": "invalid",
       "rule": "J1",
       "reason": "Both documentation and subjectOf give the documentation value."
+    },
+    {
+      "id": "jsonld-unknown-term",
+      "file": "invalid/jsonld-unknown-term.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J4",
+      "reason": "http://schema.org/keywords has no FHR field (it is export metadata only)."
+    },
+    {
+      "id": "jsonld-remote-context",
+      "file": "invalid/jsonld-remote-context.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "The context is a remote URL that is not a bundled FHR context; nothing may be fetched."
+    },
+    {
+      "id": "jsonld-two-nodes",
+      "file": "invalid/jsonld-two-nodes.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J4",
+      "reason": "@graph holds two records."
+    },
+    {
+      "id": "jsonld-two-genome-values",
+      "file": "invalid/jsonld-two-genome-values.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J5",
+      "reason": "Expanded form with two values for genome (schema.org name), a single-valued field."
+    },
+    {
+      "id": "jsonld-flattened",
+      "file": "invalid/jsonld-flattened.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J5",
+      "reason": "The taxon is given only by its @id, as in flattened form; its name is not in the document."
+    },
+    {
+      "id": "jsonld-datetime-datecreated",
+      "file": "invalid/jsonld-datetime-datecreated.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J5",
+      "reason": "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed."
+    },
+    {
+      "id": "jsonld-root-id",
+      "file": "invalid/jsonld-root-id.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J4",
+      "reason": "Expanded form with a root @id, which no FHR field holds."
     }
   ]
 }

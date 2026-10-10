@@ -7,6 +7,10 @@ metadata is written out by hand from docs/FORMAT.md and docs/MICRODATA.md.
 JSON-LD vectors are literal documents built with the reference writer of
 scripts/make_jsonld.py (standard library only, no JSON-LD processor) and the
 committed jsonld/fhr.context.jsonld; their expected metadata follows docs/JSONLD.md.
+The expanded and other-context forms (rules J3 to J5) are rewritten from the
+writer's output by the small functions below, not by a JSON-LD processor;
+tests/test_jsonld_roundtrip.py checks with PyLD that each valid one expands to
+the same RDF as the canonical document.
 Output is deterministic: compressed vectors use stored deflate blocks, mtime 0
 and no file name, so rerunning the script reproduces identical bytes.
 """
@@ -62,6 +66,14 @@ RULES = {
           "URL) and no keyword but @type and a root @id; @context and @type are set aside, "
           "subjectOf is documentation, and export terms are set aside.",
     "J2": "JSON-LD: duplicate object keys are invalid.",
+    "J3": "JSON-LD: any other form is read by JSON-LD 1.1 expansion with bundled contexts "
+          "only; a context that is not bundled, remote or unknown, is invalid.",
+    "J4": "JSON-LD: exactly one top-level node (directly or the only item of @graph); every "
+          "property must map to an FHR field in its scope, and unknown terms or a root @id "
+          "make the document invalid.",
+    "J5": "JSON-LD: IRI fields take @id or a string; dateCreated takes xsd:date or no type, "
+          "and no other datatype is allowed; single-valued fields take one value; "
+          "commandLineOption comes from @list; a node given only by @id is invalid.",
     "J6": "JSON-LD: the resulting metadata must validate against fhr.json.",
     "J7": "JSON-LD: writers emit the record with an embedded context and typed nodes, "
           "byte for byte as docs/JSONLD.md describes.",
@@ -866,6 +878,94 @@ def jsonld_invalid(name, data, rule, reason, metadata=None):
                         metadata=metadata, compression=None, status="invalid"))
 
 
+SDO_IRI = "http://schema.org/"
+FHR_IRI = "https://w3id.org/fair-bioheaders/terms#"
+XSD_IRI = "http://www.w3.org/2001/XMLSchema#"
+VOCAB_CONTEXT = {"@vocab": SDO_IRI, "fhr": FHR_IRI}
+
+
+def _iri(curie, scope):
+    prefix, _, rest = curie.partition(":")
+    namespace = scope.get(prefix, {"xsd": XSD_IRI}.get(prefix))
+    return namespace + rest if isinstance(namespace, str) else curie
+
+
+def _scope_of(term):
+    return term["@context"][1] if isinstance(term, dict) and "@context" in term else None
+
+
+def expand_canonical(document):
+    """The JSON-LD 1.1 expanded form of a canonical document whose context is the
+    embedded FHR context. Covers only what that context uses."""
+    root = document["@context"]
+
+    def node(value, scope):
+        out = {}
+        for key, item in value.items():
+            if key == "@context":
+                continue
+            if key == "@type":
+                kinds = item if isinstance(item, list) else [item]
+                out["@type"] = [_iri(scope[kind], scope) for kind in kinds]
+                continue
+            term = scope[key]
+            if term == "@id":
+                out["@id"] = item
+                continue
+            items = item if isinstance(item, list) else [item]
+            child = _scope_of(term)
+            values = []
+            for entry in items:
+                if child is not None and isinstance(entry, dict):
+                    values.append(node(entry, child))
+                elif term.get("@type") == "@id":
+                    values.append({"@id": entry})
+                elif term.get("@type") == "xsd:date":
+                    values.append({"@type": XSD_IRI + "date", "@value": entry})
+                else:
+                    values.append({"@value": entry})
+            if term.get("@container") == "@list":
+                values = [{"@list": values}]
+            out[_iri(term["@id"], scope)] = values
+        return out
+
+    return [node(document, root)]
+
+
+def vocab_compact(expanded):
+    """Compact an expanded node against {"@vocab": schema.org, "fhr": ...} only:
+    single values unwrapped, untyped values as plain JSON, and typed values,
+    IRIs and lists kept as objects."""
+    def key(iri):
+        if iri.startswith(SDO_IRI):
+            return iri[len(SDO_IRI):]
+        return "fhr:" + iri[len(FHR_IRI):]
+
+    def value(item):
+        if isinstance(item, dict) and set(item) == {"@value"}:
+            return item["@value"]
+        if isinstance(item, dict) and "@list" in item:
+            return {"@list": [value(entry) for entry in item["@list"]]}
+        if isinstance(item, dict) and "@value" not in item and set(item) != {"@id"}:
+            return node(item)
+        return item
+
+    def node(item):
+        out = {}
+        for name, items in item.items():
+            if name == "@id":
+                out["@id"] = items
+            elif name == "@type":
+                kinds = [key(kind) for kind in items]
+                out["@type"] = kinds[0] if len(kinds) == 1 else kinds
+            else:
+                values = [value(entry) for entry in items]
+                out[key(name)] = values[0] if len(values) == 1 else values
+        return out
+
+    return {"@context": VOCAB_CONTEXT, **node(expanded[0])}
+
+
 def build_jsonld():
     import make_jsonld
 
@@ -918,6 +1018,63 @@ def build_jsonld():
     document["subjectOf"] = "https://example.org/synthetic/README"
     jsonld_invalid("jsonld-documentation-and-subjectof", jsonld_bytes(document), "J1",
                    "Both documentation and subjectOf give the documentation value.")
+    build_jsonld_general(write, record)
+
+
+def build_jsonld_general(write, record):
+    """Rules J3 to J5: JSON-LD in other forms than the canonical one."""
+    expanded = expand_canonical(write(record))
+    jsonld_valid("jsonld-expanded", expanded, record, ["J3", "J4", "J5", "J6"],
+                 "The canonical document in JSON-LD expanded form: full IRIs, value objects, "
+                 "@id for IRI fields, @list for commandLineOption and no context.")
+    vocab = vocab_compact(expanded)
+    assert isinstance(vocab["dateCreated"], dict)
+    jsonld_valid("jsonld-schemaorg-vocab-compaction", vocab, record, ["J3", "J5"],
+                 "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR "
+                 "context; dateCreated is a value object typed xsd:date.")
+    canonical = write(record)
+    context = canonical.pop("@context")
+    jsonld_valid("jsonld-graph-single-node", {"@context": context, "@graph": [canonical]},
+                 record, ["J4"],
+                 "The FHR context with the record as the only node of @graph.")
+    strings = copy.deepcopy(vocab)
+    strings["schemaVersion"] = record["schema"]
+    strings["fhr:relatedLink"] = record["relatedLink"][0]
+    strings["dateCreated"] = record["dateCreated"]
+    jsonld_valid("jsonld-iri-as-string", strings, record, ["J5"],
+                 "Under the schema.org @vocab, the IRI fields schema (schema.org schemaVersion) "
+                 "and relatedLink, and dateCreated, are plain strings.")
+
+    unknown = dict(copy.deepcopy(vocab), keywords=["synthetic"])
+    jsonld_invalid("jsonld-unknown-term", jsonld_bytes(unknown), "J4",
+                   "http://schema.org/keywords has no FHR field (it is export metadata only).")
+    remote = {"@context": "https://schema.org/", "@type": "Dataset", "name": GENOME}
+    jsonld_invalid("jsonld-remote-context", jsonld_bytes(remote), "J3",
+                   "The context is a remote URL that is not a bundled FHR context; nothing "
+                   "may be fetched.")
+    second = dict(copy.deepcopy(canonical), genome="Second synthetic genome")
+    jsonld_invalid("jsonld-two-nodes",
+                   jsonld_bytes({"@context": context, "@graph": [canonical, second]}), "J4",
+                   "@graph holds two records.")
+    two = copy.deepcopy(expanded)
+    two[0][SDO_IRI + "name"].append({"@value": "Second synthetic genome"})
+    jsonld_invalid("jsonld-two-genome-values", jsonld_bytes(two), "J5",
+                   "Expanded form with two values for genome (schema.org name), a "
+                   "single-valued field.")
+    flattened = copy.deepcopy(vocab)
+    flattened["about"] = {"@id": record["taxon"]["uri"]}
+    jsonld_invalid("jsonld-flattened", jsonld_bytes(flattened), "J5",
+                   "The taxon is given only by its @id, as in flattened form; its name is "
+                   "not in the document.")
+    dated = copy.deepcopy(vocab)
+    dated["dateCreated"] = {"@value": record["dateCreated"] + "T00:00:00Z",
+                            "@type": XSD_IRI + "dateTime"}
+    jsonld_invalid("jsonld-datetime-datecreated", jsonld_bytes(dated), "J5",
+                   "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed.")
+    identified = copy.deepcopy(expanded)
+    identified[0] = {"@id": EXPORT_CONTEXT["id"], **identified[0]}
+    jsonld_invalid("jsonld-root-id", jsonld_bytes(identified), "J4",
+                   "Expanded form with a root @id, which no FHR field holds.")
 
 
 def path_for(entry):
@@ -964,7 +1121,10 @@ def jsonld_self_check():
     for entry in VALID:
         if entry["kind"] == "jsonld":
             document = json.loads(entry["data"])
-            assert make_jsonld.canonical_record(document) == entry["metadata"], entry["name"]
+            if not any(rule in entry["rules"] for rule in ("J3", "J4", "J5")):
+                assert make_jsonld.canonical_record(document) == entry["metadata"], entry["name"]
+            else:
+                assert not make_jsonld.is_canonical(document), entry["name"]
 
 
 def manifest():

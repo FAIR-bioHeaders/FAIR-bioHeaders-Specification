@@ -153,10 +153,9 @@ The JSON-LD document round-trips exactly as FHR metadata. Converting it to RDF t
 ## Reading rules
 
 Readers turn a JSON-LD document into FHR metadata as follows. The rule ids are stable; the
-conformance vectors in [conformance/](../conformance/README.md) cite them. Rules J3 to J5, for
-JSON-LD in other forms (expanded, compacted with another context or in a `@graph`), are still
-to be specified (specs/011-jsonld-mapping, user story 3); until then a document that is not
-canonical is rejected.
+conformance vectors in [conformance/](../conformance/README.md) cite them. A canonical
+document (J1) needs no JSON-LD processor. Rules J3 to J5 read JSON-LD in other forms: expanded,
+compacted with another context, or a single record in a `@graph`.
 
 - [J1] **Canonical form.** A document is canonical when its root is an object whose `@context`
   is a published FHR context, embedded (equal as parsed JSON to the `@context` value of
@@ -169,6 +168,30 @@ canonical is rejected.
   and `conformsTo` at the root are not FHR fields: they are set aside, with a warning. What
   remains is FHR JSON, including nested keys without a term.
 - [J2] Duplicate object keys are invalid, as in JSON.
+- [J3] **Other forms.** A document that is not canonical is interpreted by JSON-LD 1.1
+  expansion, using bundled contexts only: a context given by URL must be a known FHR context URL,
+  which the reader serves from its own copy. Any other context URL, remote or unknown (for
+  example `https://schema.org/`), makes the document invalid. Nothing is fetched.
+- [J4] **One record, every term mapped.** The expanded document must have exactly one top-level
+  node object, directly or as the only item of `@graph`. Every property of that node, and of its
+  nested nodes, must map to an FHR field in its scope through the reverse of the FHR context: the
+  record (24 fields; `subjectOf` is read as `documentation`), the taxon, an author, the
+  accession, `vitalStats` or an `assemblySoftware` item. A term that expansion drops (it has no
+  IRI), an IRI with no FHR field in its scope, and a root `@id` are unknown terms. They are
+  reported, and the document is invalid; a reader may offer to report them as warnings instead,
+  but never drops them silently.
+- [J5] **Values.**
+  - An IRI-valued field (`schema`, `relatedLink`, `assemblyProtocol`, a taxon or author `uri`,
+    an accession `url`, a software `uri`) accepts `{"@id": ...}` or a string value.
+  - `dateCreated` accepts a value typed `xsd:date` or an untyped string. Any other datatype, on
+    any field, is invalid, and so is a language-tagged value.
+  - A field that takes one value must have exactly one; two values, for example two `genome`
+    names, are invalid.
+  - Array fields keep document order; `commandLineOption` comes from its `@list`.
+  - An `assemblySoftware` whose only value is a string is the legacy software string.
+  - A nested node given only by its `@id`, without properties (the flattened form, where the
+    node is described elsewhere), is invalid.
+  - Every `@type` is set aside. Keys are output in `fhr.json` property order.
 - [J6] The resulting metadata must validate against `fhr.json`.
 - [J7] **Writing.** A writer emits the document described in
   [What the document contains](#what-the-document-contains), serialised as JSON with two-space

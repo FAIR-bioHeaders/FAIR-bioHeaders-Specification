@@ -186,10 +186,13 @@ def check_schema(conformance, manifest):
     problems = []
     for vector in manifest["vectors"]:
         if vector["format"] == "jsonld" and vector["expected"] == "valid":
-            from make_jsonld import canonical_record
+            from make_jsonld import canonical_record, is_canonical
 
             document = json.loads((conformance / vector["file"]).read_text(encoding="utf-8"))
-            if not same_json(canonical_record(document), vector["metadata"]):
+            # Other forms (J3 to J5) need a JSON-LD processor; tests/test_jsonld_roundtrip.py
+            # checks them with PyLD.
+            if is_canonical(document) and not same_json(canonical_record(document),
+                                                        vector["metadata"]):
                 problems.append(f"{vector['id']}: rule J1 reading differs from the manifest metadata")
         if vector["format"] in EXTRACTED:
             errors = list(validator.iter_errors(vector.get("metadata", {})))

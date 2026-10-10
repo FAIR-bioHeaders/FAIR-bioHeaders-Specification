@@ -325,5 +325,42 @@ class ProcessorTests(unittest.TestCase):
             pyld.expand(document, {"documentLoader": loader})
 
 
+    def nquads(self, document):
+        return pyld.normalize(document, {"algorithm": "URDNA2015", "format": "application/n-quads",
+                                         "documentLoader": loader})
+
+    def test_general_form_vectors_mean_the_canonical_document(self):
+        """Rules J3 to J5: each valid vector in another form expands to the same RDF as the
+        canonical document of its expected metadata, except where J5 accepts a string for
+        an IRI (a literal in RDF)."""
+        manifest = json.loads((ROOT / "conformance/manifest.json").read_text())
+        general = [v for v in manifest["vectors"] if v["format"] == "jsonld"
+                   and v["expected"] == "valid" and {"J3", "J4", "J5"} & set(v["rules"])]
+        self.assertEqual(len(general), 4)
+        for vector in general:
+            document = json.loads((ROOT / "conformance" / vector["file"]).read_text())
+            canonical = make_jsonld.to_jsonld(vector["metadata"])
+            with self.subTest(vector=vector["id"]):
+                self.assertFalse(make_jsonld.is_canonical(document))
+                same = self.nquads(document) == self.nquads(canonical)
+                self.assertEqual(same, vector["id"] != "jsonld-iri-as-string")
+
+    def test_general_form_invalid_vectors(self):
+        def read(name):
+            return json.loads((ROOT / f"conformance/invalid/{name}.fhr.jsonld").read_text())
+
+        def expand(name):
+            return pyld.expand(read(name), {"documentLoader": loader})
+
+        with self.assertRaises(pyld.JsonLdError):
+            expand("jsonld-remote-context")
+        self.assertEqual(len(expand("jsonld-two-nodes")), 2)
+        self.assertIn("http://schema.org/keywords", expand("jsonld-unknown-term")[0])
+        self.assertEqual(len(expand("jsonld-two-genome-values")[0]["http://schema.org/name"]), 2)
+        self.assertEqual(expand("jsonld-flattened")[0]["http://schema.org/about"],
+                         [{"@id": "https://identifiers.org/taxonomy:9606"}])
+        self.assertIn("@id", expand("jsonld-root-id")[0])
+
+
 if __name__ == "__main__":
     unittest.main()

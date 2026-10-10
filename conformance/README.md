@@ -23,8 +23,9 @@ open and re-save them in an editor. Run the generator instead.
 ## Manifest
 
 `rules` maps each stable rule id to a short summary: R1 to R10 from
-docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, and J1, J2, J6 and J7 from
-docs/JSONLD.md (J3 to J5 are not yet specified). J7 constrains writers, so it is
+docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, and J1 to J7 from
+docs/JSONLD.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
 attributes and token lists) and M1 to M4 are tested by the microdata vectors.

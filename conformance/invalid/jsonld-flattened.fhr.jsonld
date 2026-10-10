@@ -1,0 +1,56 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "fhr": "https://w3id.org/fair-bioheaders/terms#"
+  },
+  "@type": "Dataset",
+  "schemaVersion": {
+    "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+  },
+  "fhr:schemaVersion": 1.0,
+  "name": "Synthetic FHR conformance genome",
+  "about": {
+    "@id": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "1.0.0",
+  "fhr:metadataAuthor": {
+    "@type": "fhr:Agent",
+    "name": "Synthetic metadata author (placeholder)"
+  },
+  "creator": {
+    "@type": "Person",
+    "name": "Josiah Carberry (ORCID example iD)",
+    "@id": "https://orcid.org/0000-0002-1825-0097"
+  },
+  "dateCreated": {
+    "@type": "http://www.w3.org/2001/XMLSchema#date",
+    "@value": "2026-10-08"
+  },
+  "fhr:masking": "not-masked",
+  "description": "Synthetic FHR conformance vector; not a real assembly.",
+  "fhr:checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+  "alternateName": "synthetic conformance genome",
+  "identifier": "example:conformance-1",
+  "fhr:relatedLink": {
+    "@id": "https://example.org/synthetic"
+  },
+  "license": "CC0-1.0",
+  "fhr:assemblySoftware": {
+    "@type": "SoftwareApplication",
+    "name": "synthetic-assembler",
+    "softwareVersion": "1.2.3",
+    "fhr:commandLineOption": {
+      "@list": [
+        "-t",
+        "2"
+      ]
+    }
+  },
+  "fhr:vitalStats": {
+    "@type": "fhr:VitalStats",
+    "fhr:N50": 20,
+    "fhr:L50": 1,
+    "fhr:totalBasePairs": 20,
+    "fhr:gcContent": 45.5
+  }
+}

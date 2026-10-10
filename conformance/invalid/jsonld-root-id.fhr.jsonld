@@ -1,0 +1,163 @@
+[
+  {
+    "@id": "https://example.org/datasets/synthetic-conformance",
+    "@type": [
+      "http://schema.org/Dataset"
+    ],
+    "http://schema.org/schemaVersion": [
+      {
+        "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#schemaVersion": [
+      {
+        "@value": 1.0
+      }
+    ],
+    "http://schema.org/name": [
+      {
+        "@value": "Synthetic FHR conformance genome"
+      }
+    ],
+    "http://schema.org/about": [
+      {
+        "@type": [
+          "http://schema.org/Taxon"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Homo sapiens"
+          }
+        ],
+        "@id": "https://identifiers.org/taxonomy:9606"
+      }
+    ],
+    "http://schema.org/version": [
+      {
+        "@value": "1.0.0"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#metadataAuthor": [
+      {
+        "@type": [
+          "https://w3id.org/fair-bioheaders/terms#Agent"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Synthetic metadata author (placeholder)"
+          }
+        ]
+      }
+    ],
+    "http://schema.org/creator": [
+      {
+        "@type": [
+          "http://schema.org/Person"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Josiah Carberry (ORCID example iD)"
+          }
+        ],
+        "@id": "https://orcid.org/0000-0002-1825-0097"
+      }
+    ],
+    "http://schema.org/dateCreated": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2026-10-08"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#masking": [
+      {
+        "@value": "not-masked"
+      }
+    ],
+    "http://schema.org/description": [
+      {
+        "@value": "Synthetic FHR conformance vector; not a real assembly."
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#checksum": [
+      {
+        "@value": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc="
+      }
+    ],
+    "http://schema.org/alternateName": [
+      {
+        "@value": "synthetic conformance genome"
+      }
+    ],
+    "http://schema.org/identifier": [
+      {
+        "@value": "example:conformance-1"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#relatedLink": [
+      {
+        "@id": "https://example.org/synthetic"
+      }
+    ],
+    "http://schema.org/license": [
+      {
+        "@value": "CC0-1.0"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#assemblySoftware": [
+      {
+        "@type": [
+          "http://schema.org/SoftwareApplication"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "synthetic-assembler"
+          }
+        ],
+        "http://schema.org/softwareVersion": [
+          {
+            "@value": "1.2.3"
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#commandLineOption": [
+          {
+            "@list": [
+              {
+                "@value": "-t"
+              },
+              {
+                "@value": "2"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#vitalStats": [
+      {
+        "@type": [
+          "https://w3id.org/fair-bioheaders/terms#VitalStats"
+        ],
+        "https://w3id.org/fair-bioheaders/terms#N50": [
+          {
+            "@value": 20
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#L50": [
+          {
+            "@value": 1
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#totalBasePairs": [
+          {
+            "@value": 20
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#gcContent": [
+          {
+            "@value": 45.5
+          }
+        ]
+      }
+    ]
+  }
+]

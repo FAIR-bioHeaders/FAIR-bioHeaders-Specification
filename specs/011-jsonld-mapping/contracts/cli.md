@@ -127,11 +127,6 @@ policy.
 
 ### General path (J3 to J6): needs `fair-bioheaders[jsonld]` and Python 3.10 or later
 
-**Not in the MVP (US3).** Until it exists, every non-canonical document fails with
-`FHR: this JSON-LD is not in the canonical FAIR-bioHeaders form (rule J1 of FHR-Specification
-docs/JSONLD.md); reading other JSON-LD forms is not supported yet`, whether or not PyLD is
-installed; the "needs the jsonld extra" message below arrives with the extra.
-
 Every other JSON object document takes this path. Input that is not an object or an array is
 invalid.
 
