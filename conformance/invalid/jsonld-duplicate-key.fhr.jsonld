@@ -7,6 +7,13 @@
     "xsd": "http://www.w3.org/2001/XMLSchema#",
     "dct": "http://purl.org/dc/terms/",
     "Dataset": "sdo:Dataset",
+    "Taxon": "sdo:Taxon",
+    "Person": "sdo:Person",
+    "Organization": "sdo:Organization",
+    "Agent": "fhr:Agent",
+    "PropertyValue": "sdo:PropertyValue",
+    "VitalStats": "fhr:VitalStats",
+    "SoftwareApplication": "sdo:SoftwareApplication",
     "schema": {
       "@id": "sdo:schemaVersion",
       "@type": "@id"

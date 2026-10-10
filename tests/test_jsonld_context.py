@@ -122,9 +122,17 @@ class ContextTests(unittest.TestCase):
                 terms = [key for key in scope if key in self.keys[name]]
                 self.assertEqual(terms, self.keys[name])
 
+    def test_root_type_terms_match_the_scoped_ones(self):
+        root = self.root
+        for name, scope in self.scopes.items():
+            for term, value in scope.items():
+                if term[:1].isupper() and isinstance(value, str):
+                    with self.subTest(scope=name, term=term):
+                        self.assertEqual(root[term], value)
+
     def test_only_documented_extra_terms(self):
         """Besides FHR keys a scope has only prefixes, type terms and, at the root,
-        the export terms."""
+        the export terms and every nested type term (for JSON-LD 1.0 tools)."""
         allowed = {"@version", "@protected", "sdo", "fhr", "xsd", "dct"}
         types = {
             "record": {"Dataset"}, "taxon": {"Taxon"},
@@ -136,7 +144,9 @@ class ContextTests(unittest.TestCase):
         for name, scope in self.scopes.items():
             with self.subTest(scope=name):
                 extra = set(scope) - set(self.keys[name]) - allowed
-                expected = types[name] | (set(EXPORT_TERMS) if name == "record" else set())
+                expected = types[name]
+                if name == "record":
+                    expected = expected | set(EXPORT_TERMS) | set().union(*types.values())
                 self.assertEqual(extra, expected)
                 for term in types[name]:
                     self.assertIsInstance(scope[term], str)

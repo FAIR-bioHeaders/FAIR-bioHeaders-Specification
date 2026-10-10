@@ -269,11 +269,17 @@ repositories, offline.
   - a link to FHR-Specification `docs/JSONLD.md`.
 
   Also add an `Unreleased` entry to `FAIR-bioHeaders-Tools/CHANGELOG.md`, and add `bioheaders/jsonld.py` and `bioheaders/fhr.context.jsonld` to the repository map in `FAIR-bioHeaders-Tools/AGENTS.md`
-- [ ] T027 [US1] Run quickstart V1, V3, V4, V5, V6 (the J1/J2/J6/J7 vectors) and V7 in both repositories. Do V8 by hand: paste `examples/example.fhr.jsonld` into <https://validator.schema.org/> and record the result (the recognised types and any errors) in the FHR-Specification PR description
+- [X] T027 [US1] Run quickstart V1, V3, V4, V5, V6 (the J1/J2/J6/J7 vectors) and V7 in both repositories. Do V8 by hand: paste `examples/example.fhr.jsonld` into <https://validator.schema.org/> and record the result (the recognised types and any errors) in the FHR-Specification PR description
 
   *Status (2026-10-10):* V1, V3, V4, V5 (Python 3.9 and 3.13), V6 (all 124 vectors through the
-  toolkit checkout) and V7 (installed wheel, outside the checkout) pass. V8 is open: it needs the
-  online validator and a PR description, so it is left to the PR
+  toolkit checkout) and V7 (installed wheel, outside the checkout) pass.
+  *V8 (2026-10-10):* `examples/example.fhr.jsonld` posted to <https://validator.schema.org/>.
+  The first run recognised `Dataset` and `Grant` but read the nested types as relative IRIs:
+  the validator does not implement JSON-LD 1.1 property-scoped contexts. The context now also
+  defines every node type at the root (same IRIs), and the rerun recognises `Dataset`, `Taxon`,
+  `Person`, `PropertyValue`, `SoftwareApplication`, `Grant` and `fhr:VitalStats`. One error
+  remains, and it is the example's data: `license` is the text "public domain", where schema.org
+  expects a URL or `CreativeWork` (guideline item 7 already recommends a licence URL)
 
 **Checkpoint**: US1 is complete. The JSON-LD of every example and vector expands to allowed
 vocabularies and round-trips, and the toolkit converts `.jsonld` in both directions on Python 3.9
@@ -422,9 +428,13 @@ consistency.
   - that the term IRIs never change (FR-008).
 
   Regenerate, and confirm that `--check` passes
-- [ ] T041 Run every FHR-Specification gate in plan.md (`unittest`, `validate_examples.py`, `check_linkml.py`, `check_schema_drift.py`, `make_jsonld.py --check`, `check_conformance.py --schema`, `check_release.py --converter ../FHR-File-Converter`, `check_conformance.py --converter ../FHR-File-Converter`), and record any environment limitation
-- [ ] T042 Run every FAIR-bioHeaders-Tools gate in plan.md on Python 3.9 and 3.13 (`poetry install --extras jsonld`, `pytest`, `ruff`, `isort`, `black`, `poetry build`, `python -m build compat/fhr`). Run the installed-wheel check from outside the checkout (quickstart V7). On 3.9, confirm that the general-path tests are reported as skipped, not failed
-- [ ] T043 Cross-check the spec trace: walk `specs/011-jsonld-mapping/checklists/traceability.md`, confirm each FR/SC has its tasks done, and cross-link the FHR-Specification and FAIR-bioHeaders-Tools PRs (and Tools#35, spec#56). Comment on spec#56 with a link to `mappings/fhr-jsonld-dcmi.yml` **only after merge, and only by a maintainer**
+- [X] T041 Run every FHR-Specification gate in plan.md (`unittest`, `validate_examples.py`, `check_linkml.py`, `check_schema_drift.py`, `make_jsonld.py --check`, `check_conformance.py --schema`, `check_release.py --converter ../FHR-File-Converter`, `check_conformance.py --converter ../FHR-File-Converter`), and record any environment limitation
+- [X] T042 Run every FAIR-bioHeaders-Tools gate in plan.md on Python 3.9 and 3.13 (`poetry install --extras jsonld`, `pytest`, `ruff`, `isort`, `black`, `poetry build`, `python -m build compat/fhr`). Run the installed-wheel check from outside the checkout (quickstart V7). On 3.9, confirm that the general-path tests are reported as skipped, not failed
+- [X] T043 Cross-check the spec trace: walk `specs/011-jsonld-mapping/checklists/traceability.md`, confirm each FR/SC has its tasks done, and cross-link the FHR-Specification and FAIR-bioHeaders-Tools PRs (and Tools#35, spec#56). Comment on spec#56 with a link to `mappings/fhr-jsonld-dcmi.yml` **only after merge, and only by a maintainer**
+  *Done (2026-10-10):* T041 and T042 ran in the US3 PRs (FHR-Specification#86,
+  FAIR-bioHeaders-Tools#44): every gate passes; toolkit 1053 passed on 3.13, and on 3.9 the
+  general-path tests are skipped. The trace walk is recorded at the end of
+  `checklists/traceability.md`
 
 ### Maintainer decisions (plan.md, 2026-10-10)
 
@@ -445,7 +455,8 @@ consistency.
   *As implemented:* in both writers (toolkit `bioheaders/jsonld.py` and the reference
   `make_jsonld.py`). An absolute URL is written under the key `subjectOf` and read back as
   `documentation` (research R-18)
-- [ ] T047 Optional author `type` (`Personal` | `Organizational`, DataCite `nameType`) as an additive schema change on `release-v0.4`, in a separate FHR-Specification PR. It touches the LinkML core, `fhr.json`, the schema-change notes, examples and conformance. The writer prefers an explicit `type` over inference (T046)
+- [X] T047 Optional author `type` (`Personal` | `Organizational`, DataCite `nameType`) as an additive schema change on `release-v0.4`, in a separate FHR-Specification PR. It touches the LinkML core, `fhr.json`, the schema-change notes, examples and conformance. The writer prefers an explicit `type` over inference (T046)
+  *Done on `release-v0.4`* (FHR-Specification#85) as `nameType`; see the tasks.md there
 - [X] T048 [US1] Bioschemas: an optional export context file (`--export-context PATH`, same format as #56 will use) supplies `keywords` and `url`. The writer emits `dct:conformsTo` <https://bioschemas.org/profiles/Dataset/1.1-RELEASE> only when every Dataset minimum property is present. Test complete and incomplete cases
   *As implemented (deviations, research R-18):* the export context also takes `id` (the root
   `@id`), which the Dataset minimum list requires, and `conformsTo` names

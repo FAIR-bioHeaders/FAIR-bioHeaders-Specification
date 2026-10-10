@@ -244,6 +244,13 @@ def check_injective(name, body):
 def build_context(model):
     root = {"@version": 1.1, "@protected": True, **PREFIXES, "xsd": XSD, "dct": DCT}
     root.update(type_terms(model, ROOT_CLASS))
+    # The nested node types are defined in their property-scoped contexts, a
+    # JSON-LD 1.1 feature. Defining them at the root as well lets 1.0-only
+    # tools, such as validator.schema.org, recognise the types (quickstart V8);
+    # 1.1 processors use the scoped definitions, which are the same IRIs.
+    for class_name, _, _ in model.walk():
+        if class_name != ROOT_CLASS:
+            root.update(type_terms(model, class_name))
     url_terms = {}
     for slot in model.slots(ROOT_CLASS, model.schema):
         root[slot.name] = term_definition(model, slot, model.schema["properties"][slot.name])

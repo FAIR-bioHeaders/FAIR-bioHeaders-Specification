@@ -272,6 +272,13 @@
       "@type": "@id",
       "@id": "sdo:schemaVersion"
     },
+    "SoftwareApplication": "sdo:SoftwareApplication",
+    "VitalStats": "fhr:VitalStats",
+    "PropertyValue": "sdo:PropertyValue",
+    "Agent": "fhr:Agent",
+    "Organization": "sdo:Organization",
+    "Person": "sdo:Person",
+    "Taxon": "sdo:Taxon",
     "Dataset": "sdo:Dataset",
     "dct": "http://purl.org/dc/terms/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
