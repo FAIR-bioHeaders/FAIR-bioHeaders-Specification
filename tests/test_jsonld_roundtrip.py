@@ -182,6 +182,20 @@ class MaintainerDecisionTests(unittest.TestCase):
         document = json.loads(json.dumps(make_jsonld.to_jsonld(self.record)))
         self.assertTrue(equal(make_jsonld.canonical_record(document), self.record))
 
+    def test_explicit_name_type_wins_over_the_identifier(self):
+        self.record["metadataAuthor"] = [
+            {"name": "Josiah Carberry", "uri": ORCID, "nameType": "Organizational"},
+            {"name": "Example organization", "uri": ROR, "nameType": "Personal"},
+            {"name": "Name only", "nameType": "Organizational"},
+            {"name": "Name only", "nameType": "Personal"}]
+        written = make_jsonld.to_jsonld(self.record)["metadataAuthor"]
+        self.assertEqual([item["@type"] for item in written],
+                         ["Organization", "Person", "Organization", "Person"])
+        self.assertEqual([item["nameType"] for item in written],
+                         ["Organizational", "Personal", "Organizational", "Personal"])
+        document = json.loads(json.dumps(make_jsonld.to_jsonld(self.record)))
+        self.assertTrue(equal(make_jsonld.canonical_record(document), self.record))
+
     def test_documentation_text_and_url(self):
         document = make_jsonld.to_jsonld(self.record)
         self.assertIn("documentation", document)

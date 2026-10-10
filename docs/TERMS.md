@@ -22,7 +22,7 @@ Each heading is the term's local name, so `https://w3id.org/fair-bioheaders/term
 
 `https://w3id.org/fair-bioheaders/terms#Agent`. Class.
 
-A person or organization that the FHR record does not classify; FHR records the kind of agent only through an ORCID or ROR identifier.
+A person or organization that the FHR record does not classify; FHR records the kind of agent through nameType or an ORCID or ROR identifier.
 
 - Subclass of: `sdo:Thing`
 - Close match: `dcterms:Agent`
@@ -166,6 +166,16 @@ Contig N90, the contig length in base pairs at 90 percent of the assembly length
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
+- DCMI: none (see the [mapping table](../mappings/fhr-jsonld-dcmi.yml))
+
+### nameType
+
+`https://w3id.org/fair-bioheaders/terms#nameType`. Property.
+
+Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType
+
+- Used on: Agent (Author)
+- Value: Text
 - DCMI: none (see the [mapping table](../mappings/fhr-jsonld-dcmi.yml))
 
 ### numberContigs

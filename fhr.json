@@ -57,6 +57,14 @@
           },
           "uri": {
             "$ref": "#/definitions/orcidUri"
+          },
+          "nameType": {
+            "type": "string",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"
           }
         },
         "additionalProperties": false
@@ -73,6 +81,14 @@
           },
           "uri": {
             "$ref": "#/definitions/orcidUri"
+          },
+          "nameType": {
+            "type": "string",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"
           }
         },
         "additionalProperties": false

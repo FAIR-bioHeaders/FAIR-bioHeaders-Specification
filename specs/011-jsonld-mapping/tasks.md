@@ -425,7 +425,11 @@ consistency.
   *As implemented:* in both writers (toolkit `bioheaders/jsonld.py` and the reference
   `make_jsonld.py`). An absolute URL is written under the key `subjectOf` and read back as
   `documentation` (research R-18)
-- [ ] T047 Optional author `type` (`Personal` | `Organizational`, DataCite `nameType`) as an additive schema change on `release-v0.4`, in a separate FHR-Specification PR. It touches the LinkML core, `fhr.json`, the schema-change notes, examples and conformance. The writer prefers an explicit `type` over inference (T046)
+- [X] T047 Optional author `type` (`Personal` | `Organizational`, DataCite `nameType`) as an additive schema change on `release-v0.4`, in a separate FHR-Specification PR. It touches the LinkML core, `fhr.json`, the schema-change notes, examples and conformance. The writer prefers an explicit `type` over inference (T046)
+  *As implemented:* the key is `nameType` (the DataCite name), not `type`, because common
+  JSON-LD contexts, schema.org's among them, alias `type` to `@type`. It is the vocabulary term
+  `fhr:nameType` and the vector `jsonld-author-name-type`. The toolkit writer follows when the
+  toolkit bundles the v0.4 schema
 - [X] T048 [US1] Bioschemas: an optional export context file (`--export-context PATH`, same format as #56 will use) supplies `keywords` and `url`. The writer emits `dct:conformsTo` <https://bioschemas.org/profiles/Dataset/1.1-RELEASE> only when every Dataset minimum property is present. Test complete and incomplete cases
   *As implemented (deviations, research R-18):* the export context also takes `id` (the root
   `@id`), which the Dataset minimum list requires, and `conformsTo` names

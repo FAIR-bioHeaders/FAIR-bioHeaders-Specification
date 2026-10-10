@@ -80,6 +80,9 @@ REJECTED = [
     ("assemblyAuthor.0.email", "someone@example.org", "assemblyAuthor unknown key"),
     ("accessionID.uri", "https://example.org/accession", "accessionID typo key"),
     ("assemblySoftware.0.commandline", ["-t"], "assemblySoftware typo key"),
+    ("metadataAuthor.0.nameType", "Person", "nameType uses DataCite values, not schema.org"),
+    ("metadataAuthor.0.nameType", "personal", "nameType values are case-sensitive"),
+    ("assemblyAuthor.0.nameType", "", "empty nameType"),
 ]
 for name in ("L50", "N50", "L90", "N90", "totalBasePairs", "numberContigs",
              "numberScaffolds", "scaffoldN50", "scaffoldN90", "scaffoldL50",
@@ -114,6 +117,8 @@ ACCEPTED = [
     ("masking", "not-masked", "each masking value"),
     ("masking", "hard-masked", "each masking value"),
     ("masking", "repeat-masked", "each masking value"),
+    ("metadataAuthor.0.nameType", "Personal", "optional author nameType"),
+    ("assemblyAuthor.0.nameType", "Organizational", "optional author nameType"),
 ]
 
 

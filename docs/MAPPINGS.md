@@ -94,9 +94,11 @@ assembly authors).
 | `metadataAuthor[]` | `fhr:metadataAuthor` | exact | `dcterms:creator` | conditional |
 | `metadataAuthor[].name` | `schema:name` | exact | none | unsupported |
 | `metadataAuthor[].uri` | `@id` | exact | `dcterms:creator` | conditional |
+| `metadataAuthor[].nameType` | `fhr:nameType` | exact | none | unsupported |
 | `assemblyAuthor[]` | `schema:creator` | exact | `dcterms:creator` | exact |
 | `assemblyAuthor[].name` | `schema:name` | exact | none | unsupported |
 | `assemblyAuthor[].uri` | `@id` | exact | `dcterms:creator` | exact |
+| `assemblyAuthor[].nameType` | `fhr:nameType` | exact | none | unsupported |
 | `dateCreated` | `schema:dateCreated` | exact | `dcterms:created` | exact |
 | `voucherSpecimen` | `fhr:voucherSpecimen` | exact | none | unsupported |
 | `accessionID` | `fhr:accessionID` | exact | `dcterms:identifier` | conditional |

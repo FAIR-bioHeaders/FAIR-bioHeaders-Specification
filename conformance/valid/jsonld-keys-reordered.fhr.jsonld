@@ -217,6 +217,9 @@
       "@context": [
         null,
         {
+          "nameType": {
+            "@id": "fhr:nameType"
+          },
           "uri": "@id",
           "name": {
             "@id": "sdo:name"
@@ -236,6 +239,9 @@
       "@context": [
         null,
         {
+          "nameType": {
+            "@id": "fhr:nameType"
+          },
           "uri": "@id",
           "name": {
             "@id": "sdo:name"

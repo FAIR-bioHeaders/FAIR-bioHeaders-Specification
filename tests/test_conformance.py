@@ -155,7 +155,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(skipped.returncode, 1)
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
-        self.assertIn("(12 vectors left out: jsonld skipped)", skipped.stdout)
+        self.assertIn("(13 vectors left out: jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
         # An older converter: correct on every format except JSON-LD, which it
@@ -181,7 +181,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(12 vectors left out: jsonld not supported by this converter)",
+        self.assertIn("(13 vectors left out: jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
                             "--converter", bin_directory)
@@ -192,7 +192,7 @@ class ConformanceTests(unittest.TestCase):
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
-        self.assertEqual(len(vectors), 12)
+        self.assertEqual(len(vectors), 13)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])
         for vector in vectors.values():
             document = json.loads((CONFORMANCE / vector["file"]).read_text(encoding="utf-8")) \

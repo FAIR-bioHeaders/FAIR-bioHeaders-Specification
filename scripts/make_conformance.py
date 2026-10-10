@@ -903,6 +903,11 @@ def build_jsonld():
     jsonld_valid("jsonld-documentation-url", write(linked), linked, ["J1", "J7"],
                  "documentation is an absolute URL, so it is written as subjectOf and read "
                  "back as documentation.")
+    typed = jsonld_record(assemblyAuthor=[{"name": "Example Sequencing Centre",
+                                           "nameType": "Organizational"}])
+    jsonld_valid("jsonld-author-name-type", write(typed), typed, ["J1", "J7"],
+                 "An explicit nameType (v0.4) types the author node Organization and is kept "
+                 "as a literal for the round trip.")
     jsonld_valid("jsonld-export-terms", write(record, export=EXPORT_CONTEXT), record,
                  ["J1", "J7"],
                  "Export-context terms @id, keywords, url and conformsTo (Bioschemas Dataset "

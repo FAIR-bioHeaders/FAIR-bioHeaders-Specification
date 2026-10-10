@@ -35,7 +35,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "A person or organization that the FHR record does not classify; FHR records the kind of agent only through an ORCID or ROR identifier.",
+        "@value": "A person or organization that the FHR record does not classify; FHR records the kind of agent through nameType or an ORCID or ROR identifier.",
         "@language": "en"
       },
       "rdfs:subClassOf": [
@@ -405,6 +405,31 @@
       "sdo:rangeIncludes": [
         {
           "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:nameType",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "nameType",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Agent"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
         }
       ],
       "rdfs:isDefinedBy": {

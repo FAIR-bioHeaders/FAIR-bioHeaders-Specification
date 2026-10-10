@@ -25,6 +25,12 @@
 - Add optional `vitalStats.scaffoldN50`, `scaffoldN90`, `scaffoldL50` and
   `scaffoldL90` (nonnegative integers). `N50`, `N90`, `L50` and `L90` are now
   described as contig statistics.
+- Add optional `nameType` (`Personal` or `Organizational`, the DataCite
+  `nameType` values) to `metadataAuthor` and `assemblyAuthor` items (feature 011,
+  maintainer decision 4). It is the vocabulary term `fhr:nameType`, and the
+  JSON-LD writer types the author node from it before inferring the type from an
+  ORCID or ROR `uri`. The key is `nameType`, not `type`, because JSON-LD contexts
+  such as schema.org's alias `type` to `@type`.
 - Document that `gcContent` is a percentage from 0 to 100, not a fraction; `0.42`
   remains valid as 0.42 percent.
 - LinkML (`schemas/core.yaml`, `fhr_linkml.yml`) carries the same constraints;

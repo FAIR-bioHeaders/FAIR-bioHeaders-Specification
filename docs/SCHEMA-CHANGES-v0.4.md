@@ -51,6 +51,7 @@ than extra keys.
 | `/properties/vitalStats/properties/scaffoldN90` | optional `integer`, `minimum: 0` | Scaffold length in base pairs at 90 percent of the assembly length. |
 | `/properties/vitalStats/properties/scaffoldL50` | optional `integer`, `minimum: 0` | Smallest number of scaffolds covering 50 percent of the assembly length. |
 | `/properties/vitalStats/properties/scaffoldL90` | optional `integer`, `minimum: 0` | Smallest number of scaffolds covering 90 percent of the assembly length. |
+| `/properties/metadataAuthor/items/properties/nameType`, `/properties/assemblyAuthor/items/properties/nameType` | optional `string`, `enum: [Personal, Organizational]` | Whether the author is a person or an organization, with the values of DataCite `nameType`. JSON-LD writers type the author node from it (`Person` or `Organization`) before falling back to the ORCID or ROR identifier. |
 
 ## Clarified descriptions (no validation change)
 

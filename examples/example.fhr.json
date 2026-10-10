@@ -13,7 +13,8 @@
   "metadataAuthor": [
     {
       "name": "Adam Wright",
-      "uri": "https://orcid.org/0000-0002-5719-4024"
+      "uri": "https://orcid.org/0000-0002-5719-4024",
+      "nameType": "Personal"
     }
   ],
   "assemblyAuthor": [

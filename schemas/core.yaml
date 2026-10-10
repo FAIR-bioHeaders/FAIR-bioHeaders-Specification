@@ -152,7 +152,7 @@ classes:
       jsonld_type_if_ror: sdo:Organization
       vocabulary_comment: >-
         A person or organization that the FHR record does not classify; FHR
-        records the kind of agent only through an ORCID or ROR identifier.
+        records the kind of agent through nameType or an ORCID or ROR identifier.
       vocabulary_subclass_of: sdo:Thing
     attributes:
       name:
@@ -164,6 +164,13 @@ classes:
         annotations:
           jsonld_node_id: true
         pattern: ^https://orcid\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$
+      nameType:
+        description: >-
+          Whether the author is a person (Personal) or an organization
+          (Organizational), as DataCite nameType
+        range: NameType
+        see_also:
+        - https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/creator/#nametype
   AccessionID:
     description: Accession identifier
     class_uri: sdo:PropertyValue
@@ -198,6 +205,15 @@ classes:
       relationship:
         required: true
 enums:
+  NameType:
+    description: Kind of author, with the values of DataCite nameType
+    permissible_values:
+      Personal:
+        description: A person
+        meaning: sdo:Person
+      Organizational:
+        description: An organization
+        meaning: sdo:Organization
   HeaderType:
     description: FAIR-bioHeaders header types
     permissible_values:

@@ -19,7 +19,7 @@
 
 fhr:Agent a rdfs:Class ;
     rdfs:label "Agent"@en ;
-    rdfs:comment "A person or organization that the FHR record does not classify; FHR records the kind of agent only through an ORCID or ROR identifier."@en ;
+    rdfs:comment "A person or organization that the FHR record does not classify; FHR records the kind of agent through nameType or an ORCID or ROR identifier."@en ;
     rdfs:subClassOf sdo:Thing ;
     skos:closeMatch dcterms:Agent ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -120,6 +120,13 @@ fhr:N90 a rdf:Property ;
     rdfs:comment "Contig N90, the contig length in base pairs at 90 percent of the assembly length"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:nameType a rdf:Property ;
+    rdfs:label "nameType"@en ;
+    rdfs:comment "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"@en ;
+    sdo:domainIncludes fhr:Agent ;
+    sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:numberContigs a rdf:Property ;

@@ -1619,6 +1619,69 @@
       }
     },
     {
+      "id": "jsonld-author-name-type",
+      "file": "valid/jsonld-author-name-type.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J1",
+        "J7"
+      ],
+      "description": "An explicit nameType (v0.4) types the author node Organization and is kept as a literal for the round trip.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1.0,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Example Sequencing Centre",
+            "nameType": "Organizational"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
       "id": "jsonld-export-terms",
       "file": "valid/jsonld-export-terms.fhr.jsonld",
       "format": "jsonld",

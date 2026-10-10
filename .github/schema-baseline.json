@@ -40,6 +40,14 @@
           "name": {
             "type": "string"
           },
+          "nameType": {
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
+            "type": "string"
+          },
           "uri": {
             "$ref": "#/definitions/orcidUri"
           }
@@ -142,6 +150,14 @@
         "description": "Author of the FHR Instance (Person or Org)",
         "properties": {
           "name": {
+            "type": "string"
+          },
+          "nameType": {
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
             "type": "string"
           },
           "uri": {

@@ -235,6 +235,25 @@ entries:
   - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
   - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
+- path: metadataAuthor[].nameType
+  jsonld:
+    term: https://w3id.org/fair-bioheaders/terms#nameType
+    status: fhr
+    kind: exact
+    subject: record
+    coercion: literal
+  schemaorg_gap: schema.org expresses the kind of agent only as the node's type, which the writer
+    also sets (Personal gives Person, Organizational gives Organization); the literal keeps the
+    value for an exact round trip.
+  dcmi:
+  - term: none
+    kind: unsupported
+    reason: DCMI Metadata Terms have no property for the kind of agent.
+  notes: DataCite nameType values (v0.4). It takes precedence over typing from the ORCID or ROR
+    uri.
+  sources:
+  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/creator/#nametype
 - path: assemblyAuthor[]
   jsonld:
     term: http://schema.org/creator
@@ -287,6 +306,24 @@ entries:
   - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
   - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
+- path: assemblyAuthor[].nameType
+  jsonld:
+    term: https://w3id.org/fair-bioheaders/terms#nameType
+    status: fhr
+    kind: exact
+    coercion: literal
+  schemaorg_gap: schema.org expresses the kind of agent only as the node's type, which the writer
+    also sets (Personal gives Person, Organizational gives Organization); the literal keeps the
+    value for an exact round trip.
+  dcmi:
+  - term: none
+    kind: unsupported
+    reason: DCMI Metadata Terms have no property for the kind of agent.
+  notes: DataCite nameType values (v0.4). It takes precedence over typing from the ORCID or ROR
+    uri.
+  sources:
+  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/creator/#nametype
 - path: dateCreated
   jsonld:
     term: http://schema.org/dateCreated

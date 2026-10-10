@@ -32,7 +32,7 @@ The writer (rule J7) emits, in this order:
    | FHR value | `@type` |
    | --- | --- |
    | `taxon` | `Taxon` (`schema:Taxon`) |
-   | an item of `metadataAuthor` or `assemblyAuthor` | `Person` (`schema:Person`) when its `uri` is an ORCID iD; `Organization` (`schema:Organization`) when its `uri` is a ROR ID; otherwise `Agent` (`fhr:Agent`, "not classified") |
+   | an item of `metadataAuthor` or `assemblyAuthor` | `Person` when its `nameType` is `Personal` and `Organization` when it is `Organizational` (v0.4); otherwise `Person` (`schema:Person`) when its `uri` is an ORCID iD; `Organization` (`schema:Organization`) when its `uri` is a ROR ID; otherwise `Agent` (`fhr:Agent`, "not classified") |
    | `accessionID` | `PropertyValue` (`schema:PropertyValue`) |
    | an object item of `assemblySoftware` | `SoftwareApplication` (`schema:SoftwareApplication`); a legacy string stays a string |
    | `vitalStats` | `VitalStats` (`fhr:VitalStats`) |
@@ -42,9 +42,11 @@ The writer (rule J7) emits, in this order:
    under `documentation` (`schema:description`).
 4. Nothing else. Absent optional fields stay absent; no `null` and no empty node is emitted.
 
-FHR does not classify authors, so the type follows the identifier: an ORCID identifies a
-person and a ROR ID an organization. A name alone implies neither, so it is typed `fhr:Agent`.
-`fhr.json` currently allows only ORCID URIs for authors.
+From v0.4 an author may state its kind in `nameType`, with the DataCite values `Personal` and
+`Organizational`; the writer uses it first and keeps it as the literal `fhr:nameType`. Without
+it the type follows the identifier: an ORCID identifies a person and a ROR ID an organization.
+A name alone implies neither, so it is typed `fhr:Agent`. `fhr.json` currently allows only
+ORCID URIs for authors.
 
 Nested objects that FHR leaves open (`taxon`, author items, `accessionID`, `vitalStats`) may
 carry keys that the context does not define, such as `taxon.checksum`. They stay in the

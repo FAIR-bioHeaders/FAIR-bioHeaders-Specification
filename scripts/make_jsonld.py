@@ -299,6 +299,8 @@ def collect_terms(model):
                         if value not in entry["range"]:
                             entry["range"].append(value)
                     continue
+                elif model.view.get_enum(kind) is not None:
+                    value = "sdo:Text"  # an enum value is a string literal
                 else:
                     base = kind
                     linkml_type = model.view.get_type(kind)
@@ -522,8 +524,14 @@ def load_context():
     return json.loads(CONTEXT_PATH.read_text(encoding="utf-8"))
 
 
+NAME_TYPES = {"Personal": "Person", "Organizational": "Organization"}
+
+
 def author_type(item):
-    """data-model section 5: ORCID gives Person, ROR Organization, else Agent."""
+    """data-model section 5: an explicit nameType wins (v0.4, maintainer decision 4);
+    otherwise ORCID gives Person, ROR Organization, else Agent."""
+    if item.get("nameType") in NAME_TYPES:
+        return NAME_TYPES[item["nameType"]]
     uri = item.get("uri")
     if isinstance(uri, str) and ORCID_URI.match(uri):
         return "Person"

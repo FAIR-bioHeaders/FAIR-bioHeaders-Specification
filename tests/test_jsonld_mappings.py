@@ -23,7 +23,8 @@ SCHEMA = ROOT / "mappings" / "mapping-table.schema.json"
 SDO = "http://schema.org/"
 FHR = "https://w3id.org/fair-bioheaders/terms#"
 SKOS = Namespace("http://www.w3.org/2004/02/skos/core#")
-RECORD_PATHS = {"schema", "metadataAuthor[]", "metadataAuthor[].name", "metadataAuthor[].uri"}
+RECORD_PATHS = {"schema", "metadataAuthor[]", "metadataAuthor[].name", "metadataAuthor[].uri",
+                "metadataAuthor[].nameType"}
 
 
 def resolve(node, document):
@@ -100,7 +101,7 @@ class MappingTableTests(unittest.TestCase):
 
     def test_paths_equal_fhr_json(self):
         expected = property_paths(self.schema, self.schema)
-        self.assertEqual(len(expected), 49)
+        self.assertEqual(len(expected), 51)
         paths = [entry["path"] for entry in self.entries]
         self.assertEqual(paths, expected)
 
@@ -195,8 +196,8 @@ class MappingTableTests(unittest.TestCase):
         kinds = Counter(e["dcmi"][0]["kind"] for e in self.entries
                         if e["dcmi"][0]["term"] != "none")
         print(f"\nJSON-LD: {dict(terms)}; DCMI: {dict(dcmi)}; DCMI kinds: {dict(kinds)}")
-        self.assertEqual(terms, {"schema.org": 20, "@id": 3, "FHR": 26})
-        self.assertEqual(dcmi, {"term": 19, "none": 30})
+        self.assertEqual(terms, {"schema.org": 20, "@id": 3, "FHR": 28})
+        self.assertEqual(dcmi, {"term": 19, "none": 32})
         self.assertEqual(kinds, {"exact": 6, "broader": 2, "conditional": 11})
 
     def test_mappings_md_summary_is_current(self):
@@ -205,7 +206,7 @@ class MappingTableTests(unittest.TestCase):
 
     def test_terms_md_has_dcmi_lines(self):
         text = (ROOT / "docs/TERMS.md").read_text(encoding="utf-8")
-        self.assertEqual(text.count("\n- DCMI: "), 26)
+        self.assertEqual(text.count("\n- DCMI: "), 27)
 
 
 if __name__ == "__main__":
