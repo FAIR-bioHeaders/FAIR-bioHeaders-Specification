@@ -60,6 +60,10 @@ def generate_fhp():
         "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json"
     )
     generated["title"] = "FHP"
+    # Generator annotations vary with the installed LinkML runtime, not with the
+    # model; leave them out so fhp.json is reproducible.
+    for key in ("metamodel_version", "version"):
+        generated.pop(key, None)
     # Each header type versions its schema; enum lets later versions be listed.
     for node in (generated, generated["$defs"]["FHP"]):
         version = node["properties"]["schemaVersion"]

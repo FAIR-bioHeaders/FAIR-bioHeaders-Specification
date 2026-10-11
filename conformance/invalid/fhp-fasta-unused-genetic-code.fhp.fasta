@@ -5,17 +5,17 @@
 ;~taxon:
 ;~  name: Homo sapiens
 ;~  uri: https://identifiers.org/taxonomy:9606
-;~version: 1.0.0
+;~version: '1.0.0'
 ;~metadataAuthor:
 ;~- name: Synthetic metadata author (placeholder)
 ;~dateCreated: '2026-10-11'
 ;~derivedFrom:
 ;~- headerType: FHR
-;~  checksum: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=
+;~  checksum: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='
 ;~  relationship: translatedFrom
+;~documentation: 'Synthetic FHP conformance vector; the parent checksum is a placeholder.'
 ;~geneticCode: 7
-;~documentation: Synthetic FHP conformance vector; the parent checksum is a placeholder.
-;~checksum: rHq/fDKLFcsBwbAeSNg069HhSUBf/QeUM8Ogj9uGrzs=
+;~checksum: AAKE7Y8wnUKB2wOkS9YQZ1fUSZ0V8G0zTTU46OI1qnk=
 >prot1 synthetic protein with a terminal stop
 MKTAYIAKQRQISFVKSHFSRQ*
 >prot2 synthetic protein with rare and ambiguous residues

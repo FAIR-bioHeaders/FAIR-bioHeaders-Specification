@@ -462,7 +462,6 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Metadata for protein FASTA files (proteomes and protein sets).",
-  "metamodel_version": "1.11.0",
   "properties": {
     "accessionID": {
       "$ref": "#/$defs/AccessionID",
@@ -621,6 +620,5 @@
     "checksum"
   ],
   "title": "FHP",
-  "type": "object",
-  "version": null
+  "type": "object"
 }

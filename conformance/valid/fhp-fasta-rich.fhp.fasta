@@ -5,21 +5,22 @@
 ;~taxon:
 ;~  name: Homo sapiens
 ;~  uri: https://identifiers.org/taxonomy:9606
-;~version: 1.0.0
+;~version: '1.0.0'
 ;~metadataAuthor:
 ;~- name: Synthetic metadata author (placeholder)
 ;~dateCreated: '2026-10-11'
 ;~derivedFrom:
 ;~- headerType: FHR
-;~  checksum: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=
+;~  checksum: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='
 ;~  relationship: translatedFrom
+;~documentation: 'Synthetic FHP conformance vector; the parent checksum is a placeholder.'
 ;~geneticCode: 1
 ;~isoformPolicy: longestPerGene
 ;~predictionSoftware:
 ;~- name: Synthetic predictor (placeholder)
-;~  version: 1.0.0
+;~  version: '1.0.0'
 ;~  commandLineOption:
-;~  - --species
+;~  - '--species'
 ;~  - human
 ;~predictionProtocol: https://example.org/synthetic-protocol
 ;~sequenceStats:
@@ -33,8 +34,7 @@
 ;~  fragmented: 0
 ;~  missing: 1
 ;~  total: 2
-;~documentation: Synthetic FHP conformance vector; the parent checksum is a placeholder.
-;~checksum: SypSP1MutD352uEzZ/Mv2Rw4+unJX/dGJpYxDZbkeGs=
+;~checksum: qoiqH4ikwA4/SOlSXJ/4FbCTpDBXGliP3+BJm4IV7Mo=
 >prot1 synthetic protein with a terminal stop
 MKTAYIAKQRQISFVKSHFSRQ*
 >prot2 synthetic protein with rare and ambiguous residues

@@ -2029,7 +2029,7 @@
         "R10"
       ],
       "description": "Protein FASTA with stops, rare and ambiguous residues, lower case and a gap; LF line endings.",
-      "checksum": "Q2RJFamJANWOHDYZnry1saMGQqNl++W/ide5+pzj95s=",
+      "checksum": "uL/oQjlUvSRJQwvu+U9Y9MNy7FsIzH16CCqkfzQTRlU=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2048,7 +2048,7 @@
         "R3"
       ],
       "description": "CRLF line endings; CR bytes are hashed.",
-      "checksum": "wmrEJJ8UPLEb7BowpXukgb50rP/uVzkrPg5TirVzHTc=",
+      "checksum": "lyGNyuEPr06kBiMTJQc0x66AXTIcrJXmpzQhTfeh8yc=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2066,7 +2066,7 @@
         "R1"
       ],
       "description": "The last residue line has no terminator.",
-      "checksum": "fY+824qcCUdD1CP+PmYpqEFyamh+ne2HBIAqM5SF5L8=",
+      "checksum": "JIDUYLZ20lxokK5/GVkDCAXv6/kddjmIQBAIus0jwg4=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2085,7 +2085,7 @@
         "R10"
       ],
       "description": "An ordinary comment and a blank line before the FHP lines; both are hashed.",
-      "checksum": "AsaZiqEPWrPcL3CQq9e+7dZdiuFil1GdzEyhKz7jF+Q=",
+      "checksum": "p+4IpO2yRf8FGofiSa3JYMEfje54l6XYYvdY4CUWuZ8=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2104,7 +2104,7 @@
         "R1"
       ],
       "description": "fhp-fasta-lf compressed as one gzip member; same checksum.",
-      "checksum": "Q2RJFamJANWOHDYZnry1saMGQqNl++W/ide5+pzj95s=",
+      "checksum": "uL/oQjlUvSRJQwvu+U9Y9MNy7FsIzH16CCqkfzQTRlU=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2123,7 +2123,7 @@
         "R1"
       ],
       "description": "fhp-fasta-lf compressed as multi-block BGZF; same checksum.",
-      "checksum": "Q2RJFamJANWOHDYZnry1saMGQqNl++W/ide5+pzj95s=",
+      "checksum": "uL/oQjlUvSRJQwvu+U9Y9MNy7FsIzH16CCqkfzQTRlU=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2141,7 +2141,7 @@
         "P2"
       ],
       "description": "sourceType database with a source entry and no derivedFrom.",
-      "checksum": "X3HTqLneHOy7o/tOHLgYxu+Z8JsZ79Lr7HHFxNufBYk=",
+      "checksum": "TYtYOG+YiR6c2HvdjjmmWXXQoSEiyr+4xoEB5VQgH+o=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2158,7 +2158,7 @@
         "P1"
       ],
       "description": "sourceType mixed with a parent file, a database source and a contribution.",
-      "checksum": "YOd5pAeAaixL3aIeu+G3ulOJRExPLipgTIL1IZkpEWU=",
+      "checksum": "peEEB/8z5xZvfWwDTbBIvK26KsMtWTKV5Qm1lyGx1Js=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2175,7 +2175,7 @@
         "P1"
       ],
       "description": "Every optional FHP field.",
-      "checksum": "SypSP1MutD352uEzZ/Mv2Rw4+unJX/dGJpYxDZbkeGs=",
+      "checksum": "qoiqH4ikwA4/SOlSXJ/4FbCTpDBXGliP3+BJm4IV7Mo=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -3002,7 +3002,7 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "guKx94Ks0AGQ5aGC4dywtsrsVl9bfyUqCyRMdjb/bfM="
+        "checksum": "HHIvNrPXyn9twzlmdbPwP2Kxm+s7YT1GLwBYpBM8dDo="
       }
     },
     {
@@ -3037,7 +3037,7 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "veA6eGIIWsSs2IaRivxi+Qen1zyOZTShGy6AqQWEJ+w="
+        "checksum": "81U+CoRT++FGbqHx+REAN5bSQiUhGjXxmq+ebNq2+xc="
       }
     },
     {
@@ -3052,7 +3052,6 @@
         "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
         "schemaVersion": 1,
         "proteome": "Synthetic FHP conformance protein set",
-        "genome": "Synthetic genome",
         "sourceType": "predicted",
         "taxon": {
           "name": "Homo sapiens",
@@ -3073,7 +3072,8 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "xmq68Fbsltl/axR1zI5tdcZgVWO6jdmP8OuMW8eDIDA="
+        "genome": "Synthetic genome",
+        "checksum": "bFUcOcXr3Yq/QIe6lDEGLpzeGIxFt21IxBfEFTMMZI0="
       }
     },
     {
@@ -3107,7 +3107,7 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "4u1ELsOKw5eDtLSI99whtMoAS8XDxn5AKDbYcCuLWMI="
+        "checksum": "seb1QSeaZ9JHZo5s6KHa9bqpHs5QKg2mr/vqrShveJk="
       }
     },
     {
@@ -3142,7 +3142,7 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "TGzI1hKQogq/dsVLcjzQ2MbRqYRiSTUibpObOj7jz8s="
+        "checksum": "SGchuYdO63PotVCwcMR8TvmY6LcKG8e791crwEig3RQ="
       }
     },
     {
@@ -3176,13 +3176,13 @@
             "relationship": "translatedFrom"
           }
         ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
         "source": [
           {
             "release": "2026_03"
           }
         ],
-        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "wIXKLZ45exVnsRx7ih+ND9+gbx2sge6ccldXO9DeXd8="
+        "checksum": "jiidjAcJhdVxEk7VmtuUgActeMA2ZXS94yW4t46g0ck="
       }
     },
     {
@@ -3216,9 +3216,9 @@
             "relationship": "translatedFrom"
           }
         ],
-        "geneticCode": 7,
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "rHq/fDKLFcsBwbAeSNg069HhSUBf/QeUM8Ogj9uGrzs="
+        "geneticCode": 7,
+        "checksum": "AAKE7Y8wnUKB2wOkS9YQZ1fUSZ0V8G0zTTU46OI1qnk="
       }
     },
     {
@@ -3252,6 +3252,7 @@
             "relationship": "translatedFrom"
           }
         ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
         "completeness": {
           "lineageDataset": "primates",
           "completeSingle": 1,
@@ -3260,8 +3261,7 @@
           "missing": 1,
           "total": 2
         },
-        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "lPivAAqHMOHYfx3od/LuCbjgeeXO/7wYmiMNhTHtnqU="
+        "checksum": "9tAXlkGAJZRk6UzIfVzUpxHvzOGEcLadwvOQgYj5MjY="
       }
     },
     {
@@ -3296,7 +3296,7 @@
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "HD6ltCQP2gtIxqUg0gRjwq5pvmFs7m4sZ362YlmHHWU="
+        "checksum": "kAmyNEcAp+ayAZzKRJdl4j6FbVPDyLiey4vptMoadns="
       }
     }
   ]
