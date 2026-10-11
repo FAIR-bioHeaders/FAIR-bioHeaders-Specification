@@ -30,15 +30,20 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATOR = ROOT / "scripts" / "make_conformance.py"
-PREFIXES = {"fasta": b";~", "gfa": b"#~"}
+PREFIXES = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~"}
+# The container whose header-block rules apply to each format (R10).
+CONTAINERS = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta"}
 PLACEHOLDER_CHECKSUMS = {"A" * 43 + "="}
 COMMANDS = {"fasta": "fhr-fasta-validate", "gfa": "fhr-gfa-validate", "microdata": "fhr-convert",
-            "jsonld": "fhr-convert"}
+            "jsonld": "fhr-convert", "fhp-fasta": "fhr-fasta-validate"}
 ENTRY_POINTS = {"fasta": "fasta_validate_main", "gfa": "gfa_validate_main",
-                "microdata": "convert_main", "jsonld": "convert_main"}
+                "microdata": "convert_main", "jsonld": "convert_main",
+                "fhp-fasta": "fasta_validate_main"}
 # Formats whose vectors the converter writes out as JSON metadata.
 EXTRACTED = {"microdata", "jsonld"}
-RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md")
+RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md", "docs/FHP.md")
+# The schema each format's metadata must validate against (FHP: docs/FHP.md P1).
+SCHEMAS = {"fhp-fasta": "fhp.json"}
 
 
 def generated_files(directory):
@@ -89,7 +94,8 @@ def fhr_checksum(data, kind):
     block = True
     for start, end in split_lines(data):
         line = data[start:end]
-        if block and (line[:1] == b">" if kind == "fasta" else line[:1] != b"#" and line.strip()):
+        fasta = CONTAINERS[kind] == "fasta"
+        if block and (line[:1] == b">" if fasta else line[:1] != b"#" and line.strip()):
             block = False
         if line.startswith(prefix):
             if not block:
@@ -157,7 +163,7 @@ def check_checksums(conformance, manifest):
 def check_manifest(manifest):
     problems = []
     labelled = [rule for document in RULE_DOCUMENTS
-                for rule in re.findall(r"\[([RMJ]\d+)\]", (ROOT / document).read_text())]
+                for rule in re.findall(r"\[([RMJP]\d+)\]", (ROOT / document).read_text())]
     if labelled != list(manifest["rules"]):
         problems.append(f"rule ids {labelled} in {', '.join(RULE_DOCUMENTS)} "
                         "differ from the manifest")
@@ -176,15 +182,34 @@ def check_manifest(manifest):
 
 
 def check_schema(conformance, manifest):
-    """Validate the metadata of valid vectors against fhr.json."""
+    """Validate the metadata of valid vectors against fhr.json, or fhp.json for FHP."""
     from jsonschema import Draft202012Validator, FormatChecker
     import yaml
 
-    validator = Draft202012Validator(
-        json.loads((ROOT / "fhr.json").read_text()), format_checker=FormatChecker()
-    )
+    validators = {
+        name: Draft202012Validator(json.loads((ROOT / name).read_text()),
+                                   format_checker=FormatChecker())
+        for name in {"fhr.json", *SCHEMAS.values()}
+    }
     problems = []
     for vector in manifest["vectors"]:
+        validator = validators[SCHEMAS.get(vector["format"], "fhr.json")]
+        if vector["format"] == "fhp-fasta" and vector["expected"] == "invalid" \
+                and vector["rule"] in {"P1", "P2"}:
+            # The parsed header must match the manifest and fail the schema the
+            # rule names: fhp.json for P1, fhr.json for P2 (docs/FHP.md).
+            prefix = PREFIXES[vector["format"]]
+            text = "\n".join(
+                line[len(prefix):].rstrip(b"\r\n").decode("utf-8")
+                for line in read_vector(conformance, vector).splitlines(keepends=True)
+                if line.startswith(prefix)
+            )
+            if not same_json(yaml.safe_load(text), vector["metadata"]):
+                problems.append(f"{vector['id']}: parsed metadata differs from the manifest")
+            schema = "fhp.json" if vector["rule"] == "P1" else "fhr.json"
+            if not list(validators[schema].iter_errors(vector["metadata"])):
+                problems.append(f"{vector['id']}: metadata unexpectedly matches {schema}")
+            continue
         if vector["format"] == "jsonld" and vector["expected"] == "valid":
             from make_jsonld import canonical_record, is_canonical
 
@@ -361,7 +386,7 @@ def main():
     steps.append(("manifest covers the labelled rules", lambda: check_manifest(manifest)))
     steps.append(("checksums recomputed independently", lambda: check_checksums(conformance, manifest)))
     if args.schema:
-        steps.append(("valid metadata matches fhr.json", lambda: check_schema(conformance, manifest)))
+        steps.append(("valid metadata matches fhr.json (fhp.json for FHP)", lambda: check_schema(conformance, manifest)))
     if args.converter:
         steps.append((f"converter ({args.converter}) agrees with the manifest",
                       lambda: check_converter(conformance, manifest, args.converter,

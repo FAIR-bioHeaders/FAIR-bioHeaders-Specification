@@ -38,7 +38,7 @@ class ConformanceTests(unittest.TestCase):
         result = self.check("--schema")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("ok: vectors match the generator", result.stdout)
-        self.assertIn("ok: valid metadata matches fhr.json", result.stdout)
+        self.assertIn("ok: valid metadata matches fhr.json (fhp.json for FHP)", result.stdout)
 
     def test_generator_is_deterministic(self):
         outputs = [self.root / "first", self.root / "second"]
@@ -74,8 +74,9 @@ class ConformanceTests(unittest.TestCase):
         self.assertIn("invalid/stray.fhr.fasta: not produced by the generator", result.stderr)
 
     def test_every_rule_is_labelled_and_covered(self):
-        labels = [label for document in ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md")
-                  for label in re.findall(r"\[([RMJ]\d+)\]", (ROOT / document).read_text())]
+        labels = [label for document in ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md",
+                                         "docs/FHP.md")
+                  for label in re.findall(r"\[([RMJP]\d+)\]", (ROOT / document).read_text())]
         self.assertEqual(labels, list(self.manifest["rules"]))
         for rule, details in self.manifest["rules"].items():
             outcomes = {
@@ -91,7 +92,7 @@ class ConformanceTests(unittest.TestCase):
     def test_manifest_fields(self):
         required = json.loads((ROOT / "fhr.json").read_text())["required"]
         for vector in self.manifest["vectors"]:
-            self.assertIn(vector["format"], {"fasta", "gfa", "microdata", "jsonld"})
+            self.assertIn(vector["format"], {"fasta", "gfa", "microdata", "jsonld", "fhp-fasta"})
             self.assertTrue((CONFORMANCE / vector["file"]).is_file(), vector["file"])
             self.assertEqual(vector["file"].split("/")[0], vector["expected"])
             if vector["format"] in {"microdata", "jsonld"}:
@@ -105,10 +106,28 @@ class ConformanceTests(unittest.TestCase):
                 continue
             if vector["expected"] == "valid":
                 self.assertRegex(vector["checksum"], r"^[A-Za-z0-9+/]{43}=$")
-                self.assertTrue({"genome", "version"} <= vector["metadata"].keys())
+                subject = "proteome" if vector["format"] == "fhp-fasta" else "genome"
+                self.assertTrue({subject, "version"} <= vector["metadata"].keys())
             else:
                 self.assertIn(vector["rule"], self.manifest["rules"])
                 self.assertTrue(vector["reason"])
+
+    def test_fhp_vectors(self):
+        """specs/006-protein-header contracts/conformance.md."""
+        vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
+        self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 9)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 14)
+        for vector in vectors.values():
+            self.assertTrue(vector["file"].endswith(".fhp.fasta")
+                            or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
+        body = (CONFORMANCE / vectors["fhp-fasta-lf"]["file"]).read_bytes().split(b"\n>", 1)[1]
+        for residue in (b"*", b"U", b"O", b"B", b"Z", b"J", b"X", b"m", b"-"):
+            self.assertIn(residue, body)
+        for vector in vectors.values():
+            if vector["expected"] == "invalid" and vector["rule"] in {"P1", "P2"}:
+                self.assertIn("metadata", vector, vector["id"])
+        self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
 
     def test_compressed_vectors_share_the_plain_checksum(self):
         vectors = {vector["id"]: vector for vector in self.manifest["vectors"]}

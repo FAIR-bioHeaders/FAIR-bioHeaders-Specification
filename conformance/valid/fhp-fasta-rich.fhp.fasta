@@ -1,0 +1,41 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
+;~schemaVersion: 1
+;~proteome: Synthetic FHP conformance protein set
+;~sourceType: predicted
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: 1.0.0
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~dateCreated: '2026-10-11'
+;~derivedFrom:
+;~- headerType: FHR
+;~  checksum: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=
+;~  relationship: translatedFrom
+;~geneticCode: 1
+;~isoformPolicy: longestPerGene
+;~predictionSoftware:
+;~- name: Synthetic predictor (placeholder)
+;~  version: 1.0.0
+;~  commandLineOption:
+;~  - --species
+;~  - human
+;~predictionProtocol: https://example.org/synthetic-protocol
+;~sequenceStats:
+;~  sequenceCount: 2
+;~  totalResidues: 42
+;~completeness:
+;~  lineageDataset: primates_odb10
+;~  mode: proteins
+;~  completeSingle: 1
+;~  completeDuplicated: 0
+;~  fragmented: 0
+;~  missing: 1
+;~  total: 2
+;~documentation: Synthetic FHP conformance vector; the parent checksum is a placeholder.
+;~checksum: SypSP1MutD352uEzZ/Mv2Rw4+unJX/dGJpYxDZbkeGs=
+>prot1 synthetic protein with a terminal stop
+MKTAYIAKQRQISFVKSHFSRQ*
+>prot2 synthetic protein with rare and ambiguous residues
+MUOBZJXmkta-yi*AKQR

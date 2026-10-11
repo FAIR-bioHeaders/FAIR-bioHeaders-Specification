@@ -1,0 +1,45 @@
+{
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
+  "schemaVersion": 1,
+  "proteome": "UniProt human reference proteome UP000005640",
+  "sourceType": "database",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "2026_03",
+  "metadataAuthor": [
+    {
+      "name": "Synthetic metadata author (placeholder)"
+    }
+  ],
+  "dateCreated": "2026-09-02",
+  "source": [
+    {
+      "name": "UniProtKB",
+      "release": "2026_03",
+      "setIdentifier": "UP000005640",
+      "url": "https://www.uniprot.org/proteomes/UP000005640",
+      "assemblyAccession": "GCA_000001405.29",
+      "description": "Reference proteome of Homo sapiens as distributed by UniProt; the assembly accession is the one UniProt states for this proteome."
+    }
+  ],
+  "sequenceStats": {
+    "sequenceCount": 147520,
+    "geneCount": 20652
+  },
+  "completeness": {
+    "lineageDataset": "primates_odb10",
+    "mode": "proteins",
+    "completeSingle": 5103,
+    "completeDuplicated": 8613,
+    "fragmented": 5,
+    "missing": 59,
+    "total": 13780
+  },
+  "documentation": "Example metadata for a download of the UniProt human reference proteome. The protein and gene counts and the BUSCO report are UniProt's published values for UP000005640 (https://rest.uniprot.org/proteomes/UP000005640.json, fetched 2026-10-10); they are not recomputed. The checksum is a placeholder: this example has no sequence file.",
+  "relatedLink": [
+    "https://www.uniprot.org/help/proteome_id"
+  ],
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}

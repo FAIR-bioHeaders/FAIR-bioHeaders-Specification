@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (draft), rewritten 2026-10-10
 
-**Status**: Draft
+**Status**: Draft (clarified 2026-10-11)
 
 **Input**: User description: "Define the protein header (FHP) for proteome FASTA files. Cover source
 type, genetic code, isoform policy, prediction software, source database and release (for example
@@ -15,6 +15,18 @@ implementation context on #47 and #55.
 
 **Research**: [research-notes.md](research-notes.md) (UniProt, Ensembl, RefSeq, gene predictors,
 NCBI genetic codes, BUSCO, vocabularies).
+
+## Clarifications
+
+### Session 2026-10-11
+
+- Q: Is `sourceType` required, and what do its values mean? → A: Required, with the values
+  `predicted | database | mixed`, defined by where the sequences came from, not by review status
+  (FR-005).
+- Q: How are external and multiple sources expressed? → A: A separate optional `source` list next
+  to the checksum-only core `derivedFrom`. The core is unchanged (FR-007).
+- Q: Single taxon only in v0.1? → A: Yes. The core's single required `taxon` is unchanged, and
+  multi-species sets are out of scope for v0.1 (FR-012).
 
 ## Purpose and ethos
 
@@ -185,8 +197,8 @@ report. The website entry shows "Draft" before the release record exists.
 - **Subset of another FHP file**: a filtered copy links to its FHP parent as `filteredFrom`.
 - **Per-sequence review status**: Swiss-Prot and TrEMBL entries in one download. FHP records the
   source, not a whole-file review status; per-sequence status stays in each sequence's own header.
-- **Multi-species sets** (UniRef clusters, metaproteomes, pan-proteomes) conflict with the core's
-  single required `taxon`. See FR-012.
+- **Multi-species sets** (UniRef clusters, metaproteomes, pan-proteomes) are out of scope for v0.1
+  (FR-012). Such a set cannot give one `taxon` and is not an FHP v0.1 file.
 - **BUSCO from another lineage version**: completeness values carry their lineage dataset and
   version, so values from different versions are never presented as comparable.
 - **A FASTA file with an FHR header and protein sequences, or the reverse**: validation against the
@@ -213,22 +225,24 @@ report. The website entry shows "Draft" before the release record exists.
   protein-specific slots. Genome-only FHR fields (`genome`, `assemblySoftware`, `vitalStats`,
   `masking` and the like) MUST NOT be part of FHP.
 - **FR-005**: Beyond the core's required slots and `proteome`, the only other required value MUST
-  be the kind of source, `sourceType`
-  [NEEDS CLARIFICATION: Is `sourceType` required, and what does each value mean? The draft
-  proposes `predicted | curated | mixed`, but "curated" suggests manual review, which a UniProt
-  reference proteome (mostly unreviewed TrEMBL) or an Ensembl `pep.all` file lacks (research N-01,
-  N-02).]
+  be `sourceType`, which says where the sequences came from. It does not describe review status,
+  which UniProt records per sequence (research N-01, N-02):
+  - `predicted`: every sequence was produced by a gene-prediction or annotation run (translated
+    gene models or ORFs), whether by the producer or by a pipeline the producer names;
+  - `database`: every sequence was taken from a published database release, set or annotation run
+    (for example a UniProt proteome, an Ensembl `pep.all` file or an NCBI annotation's proteins);
+  - `mixed`: the set combines sequences of more than one of these origins, or adds sequences
+    contributed by other means (for example manual corrections).
 - **FR-006**: An FHP record MUST be able to link parent FAIR-bioHeaders files (FHR genome, FHGFF3
   annotation, FHT transcriptome, or another FHP file) through the core `derivedFrom` structure, by
   checksum, with an optional SeqCol digest and accession, and a relationship from the shared
   vocabulary (`translatedFrom`, `filteredFrom`, …).
 - **FR-007**: An FHP record MUST be able to describe sources that are not FAIR-bioHeaders files,
-  such as a database release, set or annotation run. These are kept distinct from checksum-linked
-  parents, so that no tool presents them as verified
-  [NEEDS CLARIFICATION: How are external and multiple sources expressed? A separate optional
-  `source` list (database name, release, set identifier, URL, optional sequence count, description)
-  beside `derivedFrom`; or a core change that lets `derivedFrom` hold parents without a checksum?
-  See research N-08.]
+  such as a database release, set, annotation run or other contribution. They go in an optional
+  `source` list, separate from the checksum-only core `derivedFrom`. Each source has a name and,
+  optionally, a release, a set identifier, a URL, an assembly accession that the source asserts, a
+  sequence count and a description. Tools MUST NOT present `source` entries as verified. The core
+  is unchanged.
 - **FR-008**: These values MUST be optional, never inferred from the sequences, and omitted when
   unknown:
   - **genetic code**: an NCBI translation table ID (1–6, 9–16, 21–33; research N-05);
@@ -248,10 +262,8 @@ report. The website entry shows "Draft" before the release record exists.
 - **FR-011**: The record MUST identify its header type and schema version through the core
   `schema` URL, so that a validator selects the FHP schema without inspecting residues.
 - **FR-012**: FHP v0.1 covers protein sets from a single taxon, using the core's required `taxon`
-  unchanged. Multi-species sets are out of scope for v0.1
-  [NEEDS CLARIFICATION: Is single-taxon scope acceptable for v0.1, or must FHP admit multi-species
-  sets (UniRef clusters, metaproteomes, pan-proteomes) now? That would need a list of taxa or a
-  higher-rank taxon, which departs from the core's single `taxon`.]
+  unchanged. Multi-species sets (UniRef clusters, metaproteomes, pan-proteomes) are out of scope
+  for v0.1.
 
 **Assertion versus verification**
 
@@ -264,9 +276,10 @@ report. The website entry shows "Draft" before the release record exists.
 
 **Serialisation, conformance and tools**
 
-- **FR-015**: FHP records MUST round-trip losslessly among JSON, YAML, the embedded FASTA header
-  and HTML microdata, using the conventions FHR already uses. A JSON-LD form follows the feature
-  011 conventions once the FHP slots have LinkML annotations and vocabulary terms (dependency).
+- **FR-015**: FHP records MUST round-trip losslessly among JSON, YAML and the embedded FASTA
+  header. HTML microdata and JSON-LD forms follow the FHR conventions (docs/MICRODATA.md, feature
+  011) in a later increment. The FHP LinkML slots carry the term annotations those forms need
+  from the start (plan, research D-08).
 - **FR-016**: FHP MUST ship minimal and rich examples for each kind of source (predicted, database,
   mixed). Example values that do not identify real data MUST be marked as placeholders.
 - **FR-017**: FHP MUST ship byte-exact conformance vectors covering R1–R10 in amino-acid FASTA,
@@ -348,4 +361,5 @@ report. The website entry shows "Draft" before the release record exists.
   source's own convention.
 - Replacing database identifiers (UniProt, RefSeq, Ensembl) or their FASTA header conventions.
 - Single-protein records, protein structures and peptide/spectral proteomics files.
+- Multi-species protein sets in v0.1 (FR-012).
 - Changing FHR, the core's existing slots, or the checksum and parsing rules.

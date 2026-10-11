@@ -1,0 +1,263 @@
+id: https://w3id.org/fhr/fhp
+name: FHPLinkML
+description: >-
+  FHP (FAIR Header Proteome, working name) metadata for protein FASTA files
+  (specs/006-protein-header). The FHP class imports the FAIR-bioHeaders shared
+  core (schemas/core.yaml) and adds the subject slot proteome and the
+  protein-specific slots. Provenance fields are assertions by the producer, not
+  checks (FR-013). The id is provisional, like the core's.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  # JSON-LD term IRIs (specs/011-jsonld-mapping research R-05, R-08); slots
+  # without a slot_uri get an fhr: term in the family-wide vocabulary.
+  sdo: http://schema.org/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- schemas/core
+slots:
+  proteome:
+    description: Name of the protein set
+    slot_uri: sdo:name
+    required: true
+  sourceType:
+    description: >-
+      Where the sequences came from: predicted (a gene-prediction or annotation
+      run), database (a published database release, set or annotation run) or
+      mixed (more than one origin). Not a review status.
+    range: SourceType
+    required: true
+  source:
+    description: >-
+      Sources of the sequences that are not FAIR-bioHeaders files, as asserted
+      by the producer; never verified by checksum
+    range: Source
+    multivalued: true
+    inlined_as_list: true
+  geneticCode:
+    description: >-
+      NCBI translation table ID used to translate the sequences (1-6, 9-16 or
+      21-33); omitted when unknown or when the file mixes tables
+    range: integer
+    any_of:
+    - minimum_value: 1
+      maximum_value: 6
+    - minimum_value: 9
+      maximum_value: 16
+    - minimum_value: 21
+      maximum_value: 33
+  isoformPolicy:
+    description: Which protein isoforms of each gene the set contains
+    range: IsoformPolicy
+  predictionSoftware:
+    description: Software that produced the gene models or translations
+    range: Software
+    multivalued: true
+    inlined_as_list: true
+  predictionProtocol:
+    description: Prediction or annotation protocol or workflow reference URI
+    range: uri
+  sequenceStats:
+    description: Counts describing the protein set, as asserted by the producer
+    range: SequenceStats
+    inlined: true
+  completeness:
+    description: BUSCO completeness of the protein set, as counts
+    range: Completeness
+    inlined: true
+classes:
+  FHP:
+    description: Metadata for protein FASTA files (proteomes and protein sets).
+    class_uri: sdo:Dataset
+    tree_root: true
+    slots:
+    - schema
+    - schemaVersion
+    - proteome
+    - sourceType
+    - taxon
+    - version
+    - metadataAuthor
+    - dateCreated
+    - derivedFrom
+    - source
+    - geneticCode
+    - isoformPolicy
+    - predictionSoftware
+    - predictionProtocol
+    - sequenceStats
+    - completeness
+    - voucherSpecimen
+    - accessionID
+    - scholarlyArticle
+    - documentation
+    - identifier
+    - relatedLink
+    - funding
+    - reuseConditions
+    - checksum
+    slot_usage:
+      schema:
+        description: >-
+          URL of the FHP JSON Schema this record follows; it identifies the
+          header type (FR-011)
+        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\.json$
+      schemaVersion:
+        description: Version of the FHP schema
+        equals_number: 1
+      version:
+        description: Version of the protein set
+      metadataAuthor:
+        description: Authors of the FHP instance
+      dateCreated:
+        description: Date the protein set was created
+      accessionID:
+        description: Accession of the protein set
+      scholarlyArticle:
+        description: Scholarly article where the protein set was published
+      documentation:
+        description: Documentation about the protein set
+      identifier:
+        description: Identifiers of the protein set
+      relatedLink:
+        description: Related URLs to the protein set
+      reuseConditions:
+        description: Reuse conditions or license for the protein set
+  Source:
+    description: >-
+      A source of sequences that is not a FAIR-bioHeaders file: a database
+      release, set, annotation run or other contribution
+    class_uri: fhr:Source
+    attributes:
+      name:
+        description: Name of the database, resource or contribution
+        slot_uri: sdo:name
+        required: true
+      release:
+        description: Release or annotation run of the source, as the source names it
+      setIdentifier:
+        description: Identifier of the set taken from the source, for example a UniProt proteome ID
+      url:
+        description: URL of the source or set
+        slot_uri: sdo:url
+        range: uri
+      assemblyAccession:
+        description: >-
+          Genome assembly accession that the source states for this set; an
+          assertion by the source, not a checksum link
+      sequenceCount:
+        description: Number of sequences in the file that came from this source
+        range: integer
+        minimum_value: 0
+      description:
+        description: What was taken from the source, or how the sequences were contributed
+        slot_uri: sdo:description
+  Software:
+    description: Software with its version and options.
+    class_uri: sdo:SoftwareApplication
+    attributes:
+      name:
+        description: Name of the software
+        slot_uri: sdo:name
+        required: true
+      uri:
+        description: URI of the software
+        slot_uri: sdo:url
+        range: uri
+      version:
+        description: Version of the software
+        slot_uri: sdo:softwareVersion
+      commandLineOption:
+        description: Command-line options given to the software, in order
+        multivalued: true
+        list_elements_ordered: true
+  SequenceStats:
+    description: Counts describing a protein set
+    class_uri: fhr:SequenceStats
+    attributes:
+      sequenceCount:
+        description: Number of protein sequences in the file
+        range: integer
+        minimum_value: 0
+      geneCount:
+        description: Number of genes the sequences represent
+        range: integer
+        minimum_value: 0
+      totalResidues:
+        description: Total number of residues in the file
+        range: integer
+        minimum_value: 0
+  Completeness:
+    description: >-
+      BUSCO completeness as counts, with the lineage dataset whose name gives
+      its version (for example primates_odb10)
+    class_uri: fhr:Completeness
+    attributes:
+      lineageDataset:
+        description: BUSCO lineage dataset, including its version suffix
+        pattern: ^[a-z0-9_]+_odb[0-9]+$
+        required: true
+      buscoVersion:
+        description: Version of BUSCO
+      mode:
+        description: BUSCO mode
+        range: BuscoMode
+      completeSingle:
+        description: Complete single-copy BUSCOs (S)
+        range: integer
+        minimum_value: 0
+        required: true
+      completeDuplicated:
+        description: Complete duplicated BUSCOs (D)
+        range: integer
+        minimum_value: 0
+        required: true
+      fragmented:
+        description: Fragmented BUSCOs (F)
+        range: integer
+        minimum_value: 0
+        required: true
+      missing:
+        description: Missing BUSCOs (M)
+        range: integer
+        minimum_value: 0
+        required: true
+      total:
+        description: Number of BUSCO groups searched (n)
+        range: integer
+        minimum_value: 1
+        required: true
+enums:
+  SourceType:
+    description: Where the sequences of a protein set came from (FR-005)
+    permissible_values:
+      predicted:
+        description: >-
+          Every sequence was produced by a gene-prediction or annotation run
+          (translated gene models or ORFs)
+      database:
+        description: >-
+          Every sequence was taken from a published database release, set or
+          annotation run
+      mixed:
+        description: The set combines more than one origin, or adds contributed sequences
+  IsoformPolicy:
+    description: Which protein isoforms of each gene a set contains
+    permissible_values:
+      all:
+        description: All isoforms
+      longestPerGene:
+        description: One isoform per gene, the longest
+      canonicalPerGene:
+        description: One isoform per gene, the source's canonical choice (not necessarily the longest)
+  BuscoMode:
+    description: BUSCO run modes
+    permissible_values:
+      proteins:
+        description: Protein mode
+      transcriptome:
+        description: Transcriptome mode
+      genome:
+        description: Genome mode

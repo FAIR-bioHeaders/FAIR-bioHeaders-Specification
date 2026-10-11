@@ -1,0 +1,24 @@
+{
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
+  "schemaVersion": 1,
+  "proteome": "Synthetic curated protein set (placeholder)",
+  "sourceType": "mixed",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "1.0",
+  "metadataAuthor": [
+    {
+      "name": "Synthetic metadata author (placeholder)"
+    }
+  ],
+  "dateCreated": "2026-10-11",
+  "source": [
+    {
+      "name": "Synthetic manual curation (placeholder)",
+      "description": "Sequences corrected by hand"
+    }
+  ],
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}

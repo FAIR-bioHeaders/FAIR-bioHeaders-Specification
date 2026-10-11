@@ -32,8 +32,24 @@ def main():
         ):
             print(f"Companion example differs: {example.name}", file=sys.stderr)
             return 1
+    # FHP (specs/006-protein-header): toolkits from the release that adds FHP
+    # bundle fhp_schema.json and copy examples/fhp/; older ones have neither.
+    fhp = args.converter / "bioheaders" / "fhp_schema.json"
+    if fhp.is_file():
+        if fhp.read_bytes() != (ROOT / "fhp.json").read_bytes():
+            print(f"FHP schema copy differs: {fhp}", file=sys.stderr)
+            return 1
+        for example in (ROOT / "examples" / "fhp").iterdir():
+            copy = args.converter / "examples" / "fhp" / example.name
+            if not copy.is_file() or copy.read_bytes() != example.read_bytes():
+                print(f"Companion FHP example differs or is missing: {example.name}",
+                      file=sys.stderr)
+                return 1
+        note = ", the FHP schema and FHP examples"
+    else:
+        note = " (this converter has no FHP schema)"
     print("Both converter schema copies, the JSON-LD context and all example files match "
-          "the specification.")
+          f"the specification{note}.")
     return 0
 
 

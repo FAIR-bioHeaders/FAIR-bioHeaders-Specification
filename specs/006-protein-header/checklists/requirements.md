@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain (3 remain, all maintainer decisions: FR-005, FR-007, FR-012)
+- [x] No [NEEDS CLARIFICATION] markers remain (FR-005, FR-007 and FR-012 resolved 2026-10-11)
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -58,3 +58,11 @@
 
 Answer FR-005, FR-007 and FR-012 through `/speckit-clarify` (maintainers: Adam Wright, David
 Molik) before `/speckit-plan`.
+
+**Clarify session 2026-10-11.** Adam Wright chose the recommended option for all three questions:
+
+- `sourceType` is required, with the values `predicted | database | mixed`, defined by origin;
+- a separate optional `source` list, with the core unchanged;
+- single taxon only in v0.1.
+
+FR-015 was narrowed: microdata and JSON-LD follow in a later increment. Every item passes.

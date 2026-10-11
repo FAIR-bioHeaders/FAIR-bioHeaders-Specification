@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- Add a **draft** FAIR header for protein FASTA, FHP (spec 006, #47, the FHP part of
+  #50). **FHR is unchanged**: `fhr.json`, `fhr_linkml.yml`, the core and every FHR
+  vector are untouched. The new files are:
+  - `fhp_linkml.yml`, which imports the shared core, and the JSON Schema `fhp.json`
+    generated from it (`json-schema-generator.py --type fhp`), with its own review
+    baseline;
+  - the required `proteome` and `sourceType` (`predicted | database | mixed`, by
+    origin) fields;
+  - the optional `derivedFrom`, `source` (non-FAIR-bioHeaders sources such as a
+    UniProt release), `geneticCode`, `isoformPolicy`, `predictionSoftware`,
+    `predictionProtocol`, `sequenceStats` and BUSCO `completeness` fields.
+  `docs/FHP.md` gives the fields and rules P1–P2, and `examples/fhp/` has
+  predicted, database and mixed examples. Twenty-three `fhp-fasta` conformance
+  vectors cover R1–R10 on amino-acid FASTA (stops, U, O, B, Z, J, X, lower case,
+  gaps) and P1–P2. `check_linkml.py` checks both types, and `check_release.py`
+  compares the toolkit's FHP schema copy when present. JSON-LD and microdata for
+  FHP are follow-ups. FHP is not released.
 - Add a JSON-LD form of FHR metadata (feature 011, #56). **No schema change.**
   `jsonld/fhr.context.jsonld` maps every FHR field to schema.org where a term
   fits and otherwise to the FAIR-bioHeaders vocabulary

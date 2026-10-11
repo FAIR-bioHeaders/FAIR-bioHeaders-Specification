@@ -28,6 +28,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Validate schema and examples
         run: python scripts/validate_examples.py
+      - name: Validate the FHP schema and examples
+        run: python scripts/validate_examples.py --schema fhp.json --examples examples/fhp
 
       - name: Check LinkML validation equivalence
         run: python scripts/check_linkml.py
@@ -51,5 +53,6 @@ jobs:
           python -m venv "$RUNNER_TEMP/fhr-converter"
           "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install fhr==0.3.3
       - name: Run the released converter on every vector
-        # fhr 0.3.3 predates JSON-LD (feature 011), so its vectors are skipped.
-        run: python scripts/check_conformance.py --skip-regeneration --skip-format jsonld --converter "$RUNNER_TEMP/fhr-converter"
+        # fhr 0.3.3 predates JSON-LD (feature 011) and FHP (spec 006), so their
+        # vectors are skipped.
+        run: python scripts/check_conformance.py --skip-regeneration --skip-format jsonld --skip-format fhp-fasta --converter "$RUNNER_TEMP/fhr-converter"

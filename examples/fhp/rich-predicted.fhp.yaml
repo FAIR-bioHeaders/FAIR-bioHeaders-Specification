@@ -1,0 +1,49 @@
+# Synthetic FHP example: a proteome predicted from a genome and its annotation.
+# Every name, checksum and identifier here is a placeholder, not real data.
+schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
+schemaVersion: 1
+proteome: Synthetic predicted proteome, longest isoform per gene (placeholder)
+sourceType: predicted
+taxon:
+  name: Homo sapiens
+  uri: https://identifiers.org/taxonomy:9606
+version: '1.0'
+metadataAuthor:
+- name: Synthetic metadata author (placeholder)
+  uri: https://orcid.org/0000-0002-1825-0097
+dateCreated: '2026-10-11'
+derivedFrom:
+- headerType: FHR
+  checksum: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=
+  relationship: translatedFrom
+- headerType: FHGFF3
+  checksum: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=
+  relationship: translatedFrom
+geneticCode: 1
+isoformPolicy: longestPerGene
+predictionSoftware:
+- name: ExamplePredictor (placeholder)
+  version: 1.0.0
+  uri: https://example.org/example-predictor
+  commandLineOption:
+  - --species
+  - human
+predictionProtocol: https://example.org/annotation-protocol
+sequenceStats:
+  sequenceCount: 20000
+  geneCount: 20000
+  totalResidues: 11000000
+completeness:
+  lineageDataset: primates_odb10
+  buscoVersion: 5.8.3
+  mode: proteins
+  completeSingle: 13000
+  completeDuplicated: 100
+  fragmented: 300
+  missing: 380
+  total: 13780
+documentation: >-
+  Synthetic FHP example. Placeholder checksums stand for the FHR genome and
+  FHGFF3 annotation files; the statistics are illustrative, not measured.
+reuseConditions: public domain
+checksum: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=

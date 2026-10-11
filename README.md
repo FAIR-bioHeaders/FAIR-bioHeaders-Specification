@@ -110,8 +110,13 @@ conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-t
   parent by checksum; FHR schemaVersion 1 does not use them.
 - `fhr_linkml.yml`: the FHR LinkML model. It imports the core and adds FHR-only
   slots (`genome`, `assemblyAuthor`, `masking`, `vitalStats`, ...).
-- `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a future header
-  type imports the core.
+- `fhp_linkml.yml` and `fhp.json`: the **draft** FHP header for protein FASTA
+  (proteomes and protein sets). The LinkML model imports the core, and the JSON
+  Schema is generated from it. The format is described in [docs/FHP.md](docs/FHP.md),
+  with examples in [examples/fhp/](examples/fhp/). FHP is not released; see
+  [specs/006-protein-header](specs/006-protein-header/spec.md).
+- `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type
+  imports the core.
 
 For intentional schema edits, explain compatibility and update the review baseline:
 

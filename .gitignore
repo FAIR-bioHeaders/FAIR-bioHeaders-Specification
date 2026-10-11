@@ -465,3 +465,4 @@ __pycache__/
 
 # Generated LinkML artifact (compare validation constraints in CI)
 fhr_linkml.json
+fhp_linkml.json

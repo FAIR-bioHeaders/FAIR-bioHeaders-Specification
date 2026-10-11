@@ -1,0 +1,33 @@
+# Synthetic FHP example: predicted proteins merged with database entries and
+# manual corrections. Names, checksums and counts are placeholders.
+schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
+schemaVersion: 1
+proteome: Synthetic curated protein set (placeholder)
+sourceType: mixed
+taxon:
+  name: Homo sapiens
+  uri: https://identifiers.org/taxonomy:9606
+version: '2.0'
+metadataAuthor:
+- name: Synthetic metadata author (placeholder)
+dateCreated: '2026-10-11'
+derivedFrom:
+- headerType: FHP
+  checksum: DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD=
+  relationship: filteredFrom
+source:
+- name: UniProtKB/Swiss-Prot
+  release: '2026_03'
+  sequenceCount: 120
+  description: Reviewed entries added for genes the prediction missed (placeholder count)
+- name: Synthetic manual curation (placeholder)
+  sequenceCount: 15
+  description: Sequences corrected by hand after review
+sequenceStats:
+  # Asserted totals; the per-source counts need not add up (spec US3).
+  sequenceCount: 19000
+isoformPolicy: all
+documentation: >-
+  Synthetic FHP example. The parent checksum stands for a larger predicted FHP
+  protein set this set was filtered from.
+checksum: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=

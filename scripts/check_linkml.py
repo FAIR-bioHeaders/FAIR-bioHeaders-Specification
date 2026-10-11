@@ -59,25 +59,36 @@ def constraints(node, document):
     return result
 
 
+# (header type, published schema, generator function name). fhr.json is
+# hand-written and must stay validation-equivalent; fhp.json is generated and
+# must equal the generator's constraints (specs/006-protein-header D-01).
+TYPES = (("FHR", "fhr.json", "generate"), ("FHP", "fhp.json", "generate_fhp"))
+
+
 def main():
     module_spec = importlib.util.spec_from_file_location(
         "generator", ROOT / "json-schema-generator.py"
     )
     module = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(module)
-    generated = module.generate()
-    published = json.loads((ROOT / "fhr.json").read_text())
-    left = constraints(published, published)
-    right = constraints(generated, generated)
-    if left != right:
-        from check_schema_drift import differences
+    failed = False
+    for name, path, function in TYPES:
+        generated = getattr(module, function)()
+        published = json.loads((ROOT / path).read_text())
+        left = constraints(published, published)
+        right = constraints(generated, generated)
+        if left != right:
+            from check_schema_drift import differences
 
-        print("LinkML validation constraints differ from fhr.json:", file=sys.stderr)
-        for change in differences(left, right):
-            print(change, file=sys.stderr)
-        return 1
-    print("LinkML generation matches all published validation constraints.")
-    return 0
+            print(f"{name}: LinkML validation constraints differ from {path}:",
+                  file=sys.stderr)
+            for change in differences(left, right):
+                print(change, file=sys.stderr)
+            failed = True
+        else:
+            print(f"{name}: LinkML generation matches all published validation "
+                  f"constraints in {path}.")
+    return int(failed)
 
 
 if __name__ == "__main__":

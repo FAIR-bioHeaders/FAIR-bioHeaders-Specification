@@ -24,3 +24,5 @@ jobs:
         run: python -m unittest discover -s tests -p test_schema_drift.py -v
       - name: Check published schema against its review baseline
         run: python scripts/check_schema_drift.py
+      - name: Check the FHP schema against its review baseline
+        run: python scripts/check_schema_drift.py --schema fhp.json --baseline .github/schema-baseline-fhp.json

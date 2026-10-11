@@ -77,16 +77,22 @@ RULES = {
     "J6": "JSON-LD: the resulting metadata must validate against fhr.json.",
     "J7": "JSON-LD: writers emit the record with an embedded context and typed nodes, "
           "byte for byte as docs/JSONLD.md describes.",
+    "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
+    "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
+          "other header is validated as FHR.",
 }
 NOT_APPLICABLE = {
     "J7": "J7 constrains writers; a reader has no invalid input for it. The valid vectors "
           "that cite J7 are writer output.",
 }
 
-PREFIX = {"fasta": b";~", "gfa": b"#~"}
+PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~"}
+# The container whose header-block rules apply to each kind (R10).
+CONTAINER = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta"}
 ITEM_TYPE = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
-COMMENT = {"fasta": b";", "gfa": b"#"}
-SUFFIX = {"fasta": ".fhr.fasta", "gfa": ".fhr.gfa", "microdata": ".fhr.html",
+COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";"}
+SUFFIX = {"fasta": ".fhr.fasta", "gfa": ".fhr.gfa", "fhp-fasta": ".fhp.fasta",
+          "microdata": ".fhr.html",
           "jsonld": ".fhr.jsonld"}
 MARK = b"@CHECKSUM@"
 GENOME = "Synthetic FHR conformance genome"
@@ -114,6 +120,12 @@ METADATA = [
 BODY = {
     "fasta": [b">Contig1 synthetic sequence", b"ACGTACGTAC", b"GGTTAACCAT"],
     "gfa": [b"H\tVN:Z:1.0", b"S\tContig1\tACGTACGTACGGTTAACCAT"],
+    # Amino acids with a terminal and an internal stop, the rare residues U and O,
+    # the ambiguity codes B, Z, J and X, lower case and a gap (spec 006 FR-017).
+    "fhp-fasta": [b">prot1 synthetic protein with a terminal stop",
+                  b"MKTAYIAKQRQISFVKSHFSRQ*",
+                  b">prot2 synthetic protein with rare and ambiguous residues",
+                  b"MUOBZJXmkta-yi*AKQR"],
 }
 EXPECTED_METADATA = {"genome": GENOME, "version": VERSION, "masking": MASKING}
 
@@ -231,11 +243,12 @@ def reference_checksum(data, kind):
     prefix = PREFIX[kind]
     lines = data.splitlines(keepends=True)
     header_lines, in_block = [], True
+    container = CONTAINER[kind]
     for line in lines:
         if in_block:
-            if kind == "fasta" and line.startswith(b">"):
+            if container == "fasta" and line.startswith(b">"):
                 in_block = False
-            elif kind == "gfa" and not line.startswith(b"#") and line.strip():
+            elif container == "gfa" and not line.startswith(b"#") and line.strip():
                 in_block = False
         if line.startswith(prefix):
             if not in_block:
@@ -272,9 +285,9 @@ def valid(name, kind, data, value, rules, description, compression=None):
                       description=description, compression=compression, status="valid"))
 
 
-def invalid(name, kind, data, rule, reason, compression=None):
+def invalid(name, kind, data, rule, reason, compression=None, metadata=None):
     INVALID.append(dict(name=name, kind=kind, data=data, rule=rule, reason=reason,
-                        compression=compression, status="invalid"))
+                        compression=compression, status="invalid", metadata=metadata))
 
 
 def comments_and_blanks(kind):
@@ -503,6 +516,199 @@ def build():
     MICRODATA_CHECKSUM[0] = plain["fasta"][1]
     build_microdata()
     build_jsonld()
+    build_fhp()
+
+
+# FHP vectors (specs/006-protein-header contracts/conformance.md): the shared
+# rules on amino-acid FASTA, and the FHP schema rules P1 and P2.
+
+FHP_SCHEMA = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json"
+PROTEOME = "Synthetic FHP conformance protein set"
+PARENT_CHECKSUM = "B" * 43 + "="  # Placeholder for a parent genome's checksum.
+FHP_METADATA = [
+    f"schema: {FHP_SCHEMA}",
+    "schemaVersion: 1",
+    f"proteome: {PROTEOME}",
+    "sourceType: predicted",
+    "taxon:",
+    "  name: Homo sapiens",
+    "  uri: https://identifiers.org/taxonomy:9606",
+    f"version: {VERSION}",
+    "metadataAuthor:",
+    "- name: Synthetic metadata author (placeholder)",
+    "dateCreated: '2026-10-11'",
+    "derivedFrom:",
+    "- headerType: FHR",
+    f"  checksum: {PARENT_CHECKSUM}",
+    "  relationship: translatedFrom",
+    "documentation: Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+    None,
+]
+FHP_EXPECTED = {"proteome": PROTEOME, "version": VERSION, "sourceType": "predicted"}
+
+
+def fhp_lines(replacements=(), insert=(), remove=(), metadata=FHP_METADATA):
+    """FHP header lines with the given edits, then the protein body."""
+    items = list(metadata)
+    for old, new in replacements:
+        items[items.index(old)] = new
+    for anchor, extra in insert:
+        position = items.index(anchor) + 1
+        items[position:position] = extra
+    for old in remove:
+        items.remove(old)
+    return header("fhp-fasta", items) + body("fhp-fasta")
+
+
+def fhp_parsed(data):
+    """The YAML metadata in the ``;~`` lines of assembled vector ``data``."""
+    import yaml
+
+    text = b"\n".join(line[2:].rstrip(b"\r\n") for line in data.splitlines(keepends=True)
+                      if line.startswith(b";~"))
+    return yaml.safe_load(text.decode("utf-8"))
+
+
+def fhp_valid(name, lines, rules, description, **options):
+    data, value = assemble(lines, **options)
+    valid(name, "fhp-fasta", data, value, rules, description)
+    VALID[-1]["expected_metadata"] = FHP_EXPECTED
+    return data, value
+
+
+def fhp_invalid(name, lines, rule, reason):
+    data, _ = assemble(lines)
+    invalid(name, "fhp-fasta", data, rule, reason, metadata=fhp_parsed(data))
+
+
+def build_fhp():
+    k = "fhp-fasta"
+    data, value = fhp_valid("fhp-fasta-lf", fhp_lines(), ["P1", "P2", "R1", "R2", "R3", "R4", "R7",
+                                                          "R10"],
+                            "Protein FASTA with stops, rare and ambiguous residues, lower case "
+                            "and a gap; LF line endings.")
+    plain = data
+    fhp_valid("fhp-fasta-crlf", fhp_lines(), ["P1", "R1", "R3"],
+              "CRLF line endings; CR bytes are hashed.", endings=b"\r\n")
+    fhp_valid("fhp-fasta-no-final-newline", fhp_lines(), ["P1", "R1"],
+              "The last residue line has no terminator.", final_newline=False)
+    lines = fhp_lines()
+    lines.insert(0, Line(b"; ordinary comment before the FHP lines"))
+    lines.insert(1, Line(b""))
+    fhp_valid("fhp-fasta-comments-and-blank-lines", lines, ["P1", "R3", "R10"],
+              "An ordinary comment and a blank line before the FHP lines; both are hashed.")
+    valid("fhp-fasta-gzip", k, gzip_member(plain), value, ["P1", "R1"],
+          "fhp-fasta-lf compressed as one gzip member; same checksum.", "gzip")
+    VALID[-1]["expected_metadata"] = FHP_EXPECTED
+    valid("fhp-fasta-bgzf", k, bgzf(plain), value, ["P1", "R1"],
+          "fhp-fasta-lf compressed as multi-block BGZF; same checksum.", "bgzf")
+    VALID[-1]["expected_metadata"] = FHP_EXPECTED
+    database = [
+        "sourceType: database",
+        "source:",
+        "- name: Synthetic protein database (placeholder)",
+        "  release: '2026_03'",
+        "  setIdentifier: SYNTHETIC-SET-1",
+    ]
+    lines = fhp_lines(replacements=[("sourceType: predicted", database[0])],
+                      insert=[("dateCreated: '2026-10-11'", database[1:])],
+                      remove=["derivedFrom:", "- headerType: FHR",
+                              f"  checksum: {PARENT_CHECKSUM}", "  relationship: translatedFrom"])
+    data, value = assemble(lines)
+    valid("fhp-fasta-database-source", k, data, value, ["P1", "P2"],
+          "sourceType database with a source entry and no derivedFrom.")
+    VALID[-1]["expected_metadata"] = dict(FHP_EXPECTED, sourceType="database")
+    mixed = [
+        "source:",
+        "- name: Synthetic protein database (placeholder)",
+        "  sequenceCount: 1",
+        "- name: Synthetic manual curation (placeholder)",
+        "  description: One sequence corrected by hand",
+    ]
+    lines = fhp_lines(replacements=[("sourceType: predicted", "sourceType: mixed")],
+                      insert=[("  relationship: translatedFrom", mixed)])
+    data, value = assemble(lines)
+    valid("fhp-fasta-mixed-sources", k, data, value, ["P1"],
+          "sourceType mixed with a parent file, a database source and a contribution.")
+    VALID[-1]["expected_metadata"] = dict(FHP_EXPECTED, sourceType="mixed")
+    rich = [
+        "geneticCode: 1",
+        "isoformPolicy: longestPerGene",
+        "predictionSoftware:",
+        "- name: Synthetic predictor (placeholder)",
+        "  version: 1.0.0",
+        "  commandLineOption:",
+        "  - --species",
+        "  - human",
+        "predictionProtocol: https://example.org/synthetic-protocol",
+        "sequenceStats:",
+        "  sequenceCount: 2",
+        "  totalResidues: 42",
+        "completeness:",
+        "  lineageDataset: primates_odb10",
+        "  mode: proteins",
+        "  completeSingle: 1",
+        "  completeDuplicated: 0",
+        "  fragmented: 0",
+        "  missing: 1",
+        "  total: 2",
+    ]
+    fhp_valid("fhp-fasta-rich", fhp_lines(insert=[("  relationship: translatedFrom", rich)]),
+              ["P1"], "Every optional FHP field.")
+
+    # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
+    data, _ = assemble(fhp_lines())
+    invalid("fhp-fasta-sequence-tampered", k, data.replace(b"MKTAYIAKQ", b"MKTAYIAKE"), "R3",
+            "A residue changed after the checksum was computed (checksum mismatch).")
+    data, _ = assemble(fhp_lines(), hash_data=lambda b: b.replace(b"*\n", b"\n"))
+    invalid("fhp-fasta-stop-normalized-checksum", k, data, "R1",
+            "Checksum computed after removing terminal stop symbols.")
+    data, _ = assemble(fhp_lines(), hash_data=lambda b: b.replace(b"mkta-yi", b"MKTA-YI"))
+    invalid("fhp-fasta-case-normalized-checksum", k, data, "R1",
+            "Checksum computed after upper-casing residues.")
+    lines = fhp_lines()
+    position = next(i for i, line in enumerate(lines) if line.excluded)
+    lines.insert(2, Line(lines[position].text, excluded=True))
+    data, _ = assemble(lines)
+    invalid("fhp-fasta-two-checksum-lines", k, data, "R2",
+            "Two root-level checksum lines with the same value.")
+    lines = fhp_lines() + [Line(b";~funding: added after the protein records")]
+    data, _ = assemble(lines)
+    invalid("fhp-fasta-header-after-record", k, data, "R10",
+            "An FHP line after the first protein record.")
+
+    # P1: the metadata must validate against fhp.json.
+    fhp_invalid("fhp-fasta-missing-source-type", fhp_lines(remove=["sourceType: predicted"]),
+                "P1", "No sourceType.")
+    fhp_invalid("fhp-fasta-curated-source-type",
+                fhp_lines(replacements=[("sourceType: predicted", "sourceType: curated")]),
+                "P1", "sourceType curated is not an FHP value (use database or mixed).")
+    fhp_invalid("fhp-fasta-genome-key",
+                fhp_lines(insert=[(f"proteome: {PROTEOME}", ["genome: Synthetic genome"])]),
+                "P1", "The FHR-only key genome.")
+    fhp_invalid("fhp-fasta-derived-from-no-checksum",
+                fhp_lines(remove=[f"  checksum: {PARENT_CHECKSUM}"]),
+                "P1", "A derivedFrom entry without a checksum.")
+    fhp_invalid("fhp-fasta-derived-from-bad-relationship",
+                fhp_lines(replacements=[("  relationship: translatedFrom",
+                                         "  relationship: encodes")]),
+                "P1", "A derivedFrom relationship outside the shared vocabulary.")
+    fhp_invalid("fhp-fasta-source-without-name",
+                fhp_lines(insert=[("  relationship: translatedFrom",
+                                   ["source:", "- release: '2026_03'"])]),
+                "P1", "A source entry without a name.")
+    fhp_invalid("fhp-fasta-unused-genetic-code",
+                fhp_lines(insert=[("  relationship: translatedFrom", ["geneticCode: 7"])]),
+                "P1", "geneticCode 7 is not an NCBI translation table.")
+    busco = ["completeness:", "  lineageDataset: primates", "  completeSingle: 1",
+             "  completeDuplicated: 0", "  fragmented: 0", "  missing: 1", "  total: 2"]
+    fhp_invalid("fhp-fasta-busco-no-lineage-version",
+                fhp_lines(insert=[("  relationship: translatedFrom", busco)]),
+                "P1", "A BUSCO lineage dataset without its version suffix (_odbNN).")
+    # P2: the schema URL selects the header type.
+    fhp_invalid("fhp-fasta-cites-fhr-schema",
+                fhp_lines(replacements=[(f"schema: {FHP_SCHEMA}", f"schema: {ITEM_TYPE}")]),
+                "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
 
 # Microdata vectors. The checksum is an ordinary value here (the fasta-lf
 # checksum), so these vectors pin the extracted metadata instead.
@@ -1144,7 +1350,8 @@ def manifest():
             if entry["kind"] in {"microdata", "jsonld"}:
                 item.update(metadata=entry["metadata"])
             else:
-                item.update(checksum=entry["checksum"], metadata=EXPECTED_METADATA)
+                item.update(checksum=entry["checksum"],
+                            metadata=entry.get("expected_metadata", EXPECTED_METADATA))
             for rule in entry["rules"]:
                 covered.setdefault(rule, set()).add("valid")
         else:
@@ -1161,8 +1368,9 @@ def manifest():
         "specification": "docs/FORMAT.md",
         "microdataSpecification": "docs/MICRODATA.md",
         "jsonldSpecification": "docs/JSONLD.md",
+        "fhpSpecification": "docs/FHP.md",
         "checksumDefinition": "base64(SHA-512/256) over the (decompressed) file bytes except the "
-                    "root-level checksum line and its terminator (FASTA and GFA only; in "
+                    "root-level checksum line and its terminator (FASTA, GFA and FHP FASTA only; in "
                     "microdata and JSON-LD the checksum is an ordinary metadata value)",
         "rules": {
             rule: {"summary": text, **({"notApplicable": NOT_APPLICABLE[rule]}

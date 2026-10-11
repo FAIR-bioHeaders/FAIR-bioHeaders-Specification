@@ -1,0 +1,25 @@
+{
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
+  "schemaVersion": 1,
+  "proteome": "UniProt human reference proteome UP000005640",
+  "sourceType": "database",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "2026_03",
+  "metadataAuthor": [
+    {
+      "name": "Synthetic metadata author (placeholder)"
+    }
+  ],
+  "dateCreated": "2026-09-02",
+  "source": [
+    {
+      "name": "UniProtKB",
+      "release": "2026_03",
+      "setIdentifier": "UP000005640"
+    }
+  ],
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}
