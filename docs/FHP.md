@@ -104,5 +104,8 @@ These are recorded as follow-ups F-01 to F-07 in the
 - Checking GFF3 parents (spec 007).
 - A persistent schema alias and a release.
 
-On `main`, FHP inherits the core's v0.3 patterns. The `release-v0.4` line has the tightened
-patterns.
+**Release line (maintainer decision, 2026-10-11).** FHP v0.1 is released from the
+`release-v0.4` line, with FHR-Specification v0.4.0, so it starts with the tightened core
+patterns and the optional author `nameType`. Its persistent schema URL will be
+`https://w3id.org/fair-bioheaders/fhp/vX.Y.Z` (the FHR-Specification release tag;
+perma-id/w3id.org#6868). On `main`, FHP still inherits the core's v0.3 patterns.
