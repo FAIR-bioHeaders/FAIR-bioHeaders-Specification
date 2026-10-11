@@ -81,32 +81,50 @@ and no chain).
   - `--schema` validates `fhp-fasta` vectors against `fhp.json`, checks that invalid P1 metadata fails `fhp.json` and that P2 metadata fails `fhr.json`.
   Update `tests/test_conformance.py` for the counts. Add `--skip-format fhp-fasta` to the released-converter CI step
 - [X] T013 [US4] Extend `FHR-Specification/scripts/check_release.py` to compare the toolkit's `bioheaders/fhp_schema.json` with `fhp.json` when the toolkit has it, and require it from the toolkit version that ships FHP
-- [ ] T014 [P] [US4] Write `FAIR-bioHeaders-Tools/tests/fhp_test.py` (must fail first). It covers:
+- [X] T014 [P] [US4] Write `FAIR-bioHeaders-Tools/tests/fhp_test.py` (must fail first). It covers:
   - schema selection (FHP URL → FHP; anything else → FHR; FHR messages unchanged);
   - `validate`, `verify`, `combine` and `strip` on the FHP fixtures, with byte preservation for every residue class;
   - `.faa` input;
   - `combine` default naming;
   - refusing FHP JSON-LD and microdata output;
   - every FHP conformance vector copied into `tests/fixtures/fhp/`, with its expected outcome.
-- [ ] T015 [US4] Implement the toolkit changes of contracts/cli.md "Schema selection" in `FAIR-bioHeaders-Tools/bioheaders/__init__.py` and `bioheaders/cli.py`. Bundle `bioheaders/fhp_schema.json` and include it in the package data. T014 then passes, apart from the link tests
+- [X] T015 [US4] Implement the toolkit changes of contracts/cli.md "Schema selection" in `FAIR-bioHeaders-Tools/bioheaders/__init__.py` and `bioheaders/cli.py`. Bundle `bioheaders/fhp_schema.json` and include it in the package data. T014 then passes, apart from the link tests
 
 ## Phase 6: User Story 1 (continued) - Link check (P1)
 
-- [ ] T016 [US1] Add link-check tests to `FAIR-bioHeaders-Tools/tests/fhp_test.py` (must fail first). They cover `matched`, `not matched` (a parent of the same type with another checksum), `not checked` (none supplied; a `.gff3` parent), `not a recorded parent`, `--require-all`, the exit codes, that no file is modified (mtime and bytes), and the identity-only notice
-- [ ] T017 [US1] Implement `bioheaders verify-links` in `FAIR-bioHeaders-Tools/bioheaders/cli.py` per contracts/cli.md. T016 then passes
+- [X] T016 [US1] Add link-check tests to `FAIR-bioHeaders-Tools/tests/fhp_test.py` (must fail first). They cover `matched`, `not matched` (a parent of the same type with another checksum), `not checked` (none supplied; a `.gff3` parent), `not a recorded parent`, `--require-all`, the exit codes, that no file is modified (mtime and bytes), and the identity-only notice
+- [X] T017 [US1] Implement `bioheaders verify-links` in `FAIR-bioHeaders-Tools/bioheaders/cli.py` per contracts/cli.md. T016 then passes
 
 ## Phase 7: User Story 5 - Assessment (P3)
 
-- [ ] T018 [P] [US5] Update the FHP wording in `FAIR-bioHeaders-Tools/bioheaders/assess/suggestions.py`, and add an assessment test that an FHP-headed file reports FHP schema conformance
+- [X] T018 [P] [US5] Update the FHP wording in `FAIR-bioHeaders-Tools/bioheaders/assess/suggestions.py`, and add an assessment test that an FHP-headed file reports FHP schema conformance
 
 ## Phase 8: Polish and cross-cutting
 
 - [X] T019 [P] Update `FHR-Specification/README.md` (family section: FHP draft, link to docs/FHP.md), `AGENTS.md` (repository map: `fhp_linkml.yml`, `fhp.json`, `examples/fhp/`) and `CHANGELOG.md` (Unreleased: FHP draft; no FHR change)
-- [ ] T020 [P] Update `FAIR-bioHeaders-Tools/README.md` and `CHANGELOG.md` (Unreleased: FHP support, `verify-links`, `.faa`)
+- [X] T020 [P] Update `FAIR-bioHeaders-Tools/README.md` and `CHANGELOG.md` (Unreleased: FHP support, `verify-links`, `.faa`)
 - [X] T021 Run every FHR-Specification gate in plan.md and quickstart V1–V5, then V6 with the toolkit branch
   *Status (2026-10-11):* the spec gates all pass: unittest 126, both example sets, `check_linkml` for both types, both drift baselines, `make_jsonld --check`, `check_conformance --schema` (158 vectors) and `check_release`. fhr 0.3.3 passes with `--skip-format fhp-fasta`, and without the skip it fails the FHP vectors as expected. V6 with the toolkit branch: 158/158 vectors (`--require-format fhp-fasta --require-format jsonld`), and `check_release.py --converter` matches the FHP schema and example copies
-- [ ] T022 Run every toolkit gate on Python 3.9 and 3.13 (pytest, ruff, isort, black, `poetry build`, `python -m build compat/fhr`), plus the installed-wheel check outside the checkout, including `bioheaders validate` on an FHP example
-- [ ] T023 Open the PRs, specification first. Comment briefly with the PR links on #47, #50, #55 and Tools#33. Record follow-ups F-01 to F-07 (plan.md) on #47
+- [X] T022 Run every toolkit gate on Python 3.9 and 3.13 (pytest, ruff, isort, black, `poetry build`, `python -m build compat/fhr`), plus the installed-wheel check outside the checkout, including `bioheaders validate` on an FHP example
+- [X] T023 Open the PRs, specification first. Comment briefly with the PR links on #47, #50, #55 and Tools#33. Record follow-ups F-01 to F-07 (plan.md) on #47
+
+## Status (2026-10-11)
+
+- **FHR-Specification#89** (merged) implements T001–T013, T019 and T021.
+- **FAIR-bioHeaders-Tools#48** (merged) implements T014–T018, T020 and T022:
+  - Python 3.13: 1096 passed; Python 3.9: 1055 passed (50 skipped);
+  - V6: 158/158 vectors through the toolkit;
+  - `check_release.py` matches the FHP schema and example copies.
+- **Deviations from the plan as written:**
+  - `verify-links` exits 3, not 1, when a parent does not match, following `bioheaders assess`
+    (contracts/cli.md updated).
+  - SC-002 was split into SC-002 and SC-002a. Strip followed by combine restores the body byte
+    for byte, not the original file: combine writes its own header and places ordinary comments
+    after it.
+  - `fhp.json` leaves out LinkML's `metamodel_version`, which varies with the installed runtime.
+  - The FHP conformance vectors are written from a record dict, so `make_conformance.py` stays
+    standard-library only.
+- Follow-ups F-01 to F-07 (plan.md) are recorded on #47.
 
 ## Dependencies
 
