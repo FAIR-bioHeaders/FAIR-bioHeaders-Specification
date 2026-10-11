@@ -55,6 +55,11 @@ def generate():
 def generate_fhp():
     """The published FHP schema (specs/006-protein-header contracts/fhp-schema.md)."""
     generated = generate_from(ROOT / "fhp_linkml.yml", legacy_open=False)
+    # Identify the schema like fhr.json: its canonical raw-main URL and type name.
+    generated["$id"] = (
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json"
+    )
+    generated["title"] = "FHP"
     # Each header type versions its schema; enum lets later versions be listed.
     for node in (generated, generated["$defs"]["FHP"]):
         version = node["properties"]["schemaVersion"]

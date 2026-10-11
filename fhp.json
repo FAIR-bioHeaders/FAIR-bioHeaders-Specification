@@ -458,7 +458,7 @@
       "type": "object"
     }
   },
-  "$id": "https://w3id.org/fhr/fhp",
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "Metadata for protein FASTA files (proteomes and protein sets).",
@@ -620,7 +620,7 @@
     "dateCreated",
     "checksum"
   ],
-  "title": "FHPLinkML",
+  "title": "FHP",
   "type": "object",
   "version": null
 }

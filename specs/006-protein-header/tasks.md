@@ -104,7 +104,7 @@ and no chain).
 - [X] T019 [P] Update `FHR-Specification/README.md` (family section: FHP draft, link to docs/FHP.md), `AGENTS.md` (repository map: `fhp_linkml.yml`, `fhp.json`, `examples/fhp/`) and `CHANGELOG.md` (Unreleased: FHP draft; no FHR change)
 - [ ] T020 [P] Update `FAIR-bioHeaders-Tools/README.md` and `CHANGELOG.md` (Unreleased: FHP support, `verify-links`, `.faa`)
 - [X] T021 Run every FHR-Specification gate in plan.md and quickstart V1–V5, then V6 with the toolkit branch
-  *Status (2026-10-11):* the spec gates all pass: unittest 126, both example sets, `check_linkml` for both types, both drift baselines, `make_jsonld --check`, `check_conformance --schema` (158 vectors) and `check_release`. fhr 0.3.3 passes with `--skip-format fhp-fasta`, and without the skip it fails the FHP vectors as expected. V6 runs in the toolkit PR
+  *Status (2026-10-11):* the spec gates all pass: unittest 126, both example sets, `check_linkml` for both types, both drift baselines, `make_jsonld --check`, `check_conformance --schema` (158 vectors) and `check_release`. fhr 0.3.3 passes with `--skip-format fhp-fasta`, and without the skip it fails the FHP vectors as expected. V6 with the toolkit branch: 158/158 vectors (`--require-format fhp-fasta --require-format jsonld`), and `check_release.py --converter` matches the FHP schema and example copies
 - [ ] T022 Run every toolkit gate on Python 3.9 and 3.13 (pytest, ruff, isort, black, `poetry build`, `python -m build compat/fhr`), plus the installed-wheel check outside the checkout, including `bioheaders validate` on an FHP example
 - [ ] T023 Open the PRs, specification first. Comment briefly with the PR links on #47, #50, #55 and Tools#33. Record follow-ups F-01 to F-07 (plan.md) on #47
 

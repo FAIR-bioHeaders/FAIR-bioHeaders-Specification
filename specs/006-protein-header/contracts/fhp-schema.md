@@ -12,7 +12,8 @@ closed classes), followed by these post-processing steps:
    `main` keeps open.
 2. `schemaVersion`'s `const: 1` becomes `enum: [1]`.
 3. `checksum` and `seqcol_id` get exact `minLength`/`maxLength`, as for FHR.
-4. `$schema` is `https://json-schema.org/draft/2020-12/schema`.
+4. `$schema` is `https://json-schema.org/draft/2020-12/schema`, `$id` is the raw-main URL
+   of `fhp.json` (as `fhr.json` uses its own), and `title` is `FHP`.
 
 The committed `fhp.json` must equal the generator output (`scripts/check_linkml.py`, which now
 checks both types). Its review baseline is `.github/schema-baseline-fhp.json`, checked by

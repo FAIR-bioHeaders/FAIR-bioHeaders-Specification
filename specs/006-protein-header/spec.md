@@ -142,7 +142,7 @@ stories 1–3.
 
 **Independent Test**: Run the FHP conformance vectors through the toolkit. Every valid vector's
 checksum matches the independently computed value, every invalid vector is rejected with the
-expected rule, and strip followed by combine restores the original bytes.
+expected rule, and stripping removes exactly the header lines and nothing else.
 
 **Acceptance Scenarios**:
 
@@ -321,8 +321,10 @@ report. The website entry shows "Draft" before the release record exists.
   more than the core's required fields plus two (`proteome` and `sourceType`). Each is shown in the
   examples.
 - **SC-002**: 100% of FHP conformance vectors pass in the toolkit: valid vectors give the expected
-  checksums, and invalid vectors are rejected for the expected rule. Strip followed by combine
-  restores the original bytes for every valid vector.
+  checksums, and invalid vectors are rejected for the expected rule.
+- **SC-002a**: For every valid vector, strip removes exactly the FHP header lines and keeps every
+  other byte. Combining the stripped body with the metadata gives a valid file whose body, when
+  stripped again, is byte-identical.
 - **SC-003**: A genome → annotation → protein chain built from public data verifies end to end
   offline. Replacing any parent with another version is detected for that parent only.
 - **SC-004**: Every FHP example converts among JSON, YAML and the embedded header with no loss in

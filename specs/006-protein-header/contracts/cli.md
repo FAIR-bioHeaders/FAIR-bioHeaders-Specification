@@ -52,8 +52,13 @@ Free text after the status is informative and is not a stable interface. The sta
 stable. The last line always says:
 `A match confirms file identity only, not that the translations are correct.`
 
-**Exit status**: 0 if no entry is `not matched` (and, with `--require-all`, none is
-`not checked`); 1 otherwise; 2 for usage errors or unreadable input.
+**Exit status**:
+- 0: no entry is `not matched` and, with `--require-all`, none is `not checked`;
+- 1: FILE or a parent cannot be read, or FILE's header or checksum is invalid;
+- 2: usage error;
+- 3: an entry is `not matched` or, with `--require-all`, `not checked`.
+
+These follow `bioheaders assess`, where 3 means a recorded link did not match.
 
 The command never writes to FILE or to any parent. It applies to any header type with
 `derivedFrom`; FHR schemaVersion 1 has none, so for FHR files it reports `no parent files

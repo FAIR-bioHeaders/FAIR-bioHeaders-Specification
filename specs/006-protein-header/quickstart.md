@@ -41,5 +41,5 @@ pass before the feature is done.
 | V4 | FHP vectors | `python scripts/check_conformance.py --schema` | All vectors, FHR and FHP, agree with the manifest |
 | V5 | FHR untouched | `python scripts/validate_examples.py && python scripts/make_jsonld.py --check && git diff --exit-code main -- fhr.json` | FHR outputs are unchanged |
 | V6 | Toolkit on all vectors | `python ../FHR-Specification/scripts/check_conformance.py --converter . --require-format fhp-fasta` (from the toolkit checkout, which is installed) | 100% of vectors agree (SC-002) |
-| V7 | Byte preservation | `pytest tests/fhp_test.py -k "strip or combine"` | Strip, then combine, restores every FHP vector's bytes |
+| V7 | Byte preservation | `pytest tests/fhp_test.py -k "strip or combine"` | Strip removes exactly the FHP lines of every vector, and combine then strip returns the body byte for byte (SC-002a) |
 | V8 | Link check | `pytest tests/fhp_test.py -k links` | matched, not matched and not checked are reported as contracts/cli.md says; nothing is written |
