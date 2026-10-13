@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08 (draft), rewritten 2026-10-13
 
-**Status**: Draft (specified 2026-10-13; three clarifications open)
+**Status**: Draft (clarified 2026-10-13)
 
 **Input**: User description: "Specify `#~` header lines after `##gff-version 3`, ending at the first
 feature or `##FASTA`. The checksum covers the whole file, including `##FASTA`. Fields: required
@@ -18,6 +18,20 @@ Ontology version, and feature counts." The inputs are:
 
 **Research**: [research-notes.md](research-notes.md) (GFF3 directives, NCBI and Ensembl headers,
 annotation tools, Sequence Ontology releases, genome identity, current FAIR-bioHeaders state).
+
+## Clarifications
+
+### Session 2026-10-13
+
+- Q: How is the accession-plus-SeqCol genome link represented? → A: A separate genome-reference
+  object (accession and SeqCol digest, both required) beside the checksum-only core `derivedFrom`.
+  A schema rule requires at least one of the two genome-link forms. The core is unchanged (FR-006).
+- Q: What do tools do with native GFF3 directives that describe the same thing as the header? →
+  A: They cross-check them (`##species`, `##genome-build`, `#!genome-build`,
+  `#!genome-build-accession`) and report disagreements as warnings, never rewriting either
+  (FR-011).
+- Q: Is there a required field for how the annotation was made? → A: No. Method and origin go in
+  the optional software, protocol and `source` values (FR-013).
 
 ## Purpose and ethos
 
@@ -228,7 +242,8 @@ website shows Draft before a release record exists.
 - **Several genome links**: v0.1 allows exactly one annotated genome per file. An annotation on two
   assemblies is two files.
 - **Disagreement with native directives**: the header's taxon or genome accession may disagree
-  with `##species` or `#!genome-build-accession`. How that is reported is FR-011.
+  with `##species` or `#!genome-build-accession`. Tools warn and change nothing (FR-011). NCBI's
+  `##species` is a taxonomy browser URL, so the comparison is by numeric taxonomy ID.
 - **Header present, toolkit without FHGFF3 support**: the validator reports HDR-002 ("present but
   not validated"), as it does today.
 - **CRLF files**: line endings are hashed as they are. A CRLF and an LF copy have different
@@ -267,11 +282,17 @@ website shows Draft before a release record exists.
   gain `derivedFrom`.
 - **FR-006 (genome link, required)**: Every FHGFF3 record MUST identify the one genome its
   coordinates refer to, either by the genome's FHR checksum or by its accession plus SeqCol digest
-  (#54). The schema MUST enforce this alternative explicitly: a record with neither, or with only
-  half of the accession-plus-SeqCol pair, is invalid. How the two forms are represented is
-  [NEEDS CLARIFICATION: Is the accession-plus-SeqCol genome link a separate object beside the
-  checksum-only core `derivedFrom` (as FHP's `source` list is), or is the core `derivedFrom` item
-  changed so that `checksum` becomes optional when `accessionID` and `seqcol_id` are both present?].
+  (#54). The two forms are:
+  - a core `derivedFrom` item with header type `FHR` and relationship `annotates` (FR-007);
+  - a separate `genomeReference` object with the genome's accession and SeqCol digest, both
+    required, and an optional assembly name. It is never a checksum link and never reported as
+    verified.
+
+  The schema MUST enforce that at least one form is present. A record with neither, or a
+  `genomeReference` with only half of the pair, is invalid. At most one `derivedFrom` item may
+  have the relationship `annotates`. The core `derivedFrom` is unchanged. Both forms MAY be
+  present for the same genome; whether that is allowed, and which is authoritative, is recorded in
+  the plan (research D-03).
 - **FR-007**: A checksum genome link MUST use the core `derivedFrom` item with header type `FHR` and
   the relationship `annotates` from the shared vocabulary (#54). FHGFF3 MAY record further
   FAIR-bioHeaders parents through `derivedFrom`, for example the source annotation of a liftover or
@@ -297,16 +318,22 @@ website shows Draft before a release record exists.
 - **FR-010**: The record MUST identify its header type and schema version through the core `schema`
   URL, so that tools select the FHGFF3 schema without inspecting features.
 - **FR-011**: The header MUST NOT duplicate native GFF3 directives as required fields. Where header
-  values and native directives describe the same thing (taxon versus `##species`, genome accession
-  versus `#!genome-build-accession` or `##genome-build`), [NEEDS CLARIFICATION: do the tools
-  cross-check them and report disagreement as a warning, without rewriting either; or do they
-  ignore native directives entirely in v0.1?].
+  values and native directives describe the same thing, tools MUST cross-check them and report a
+  disagreement as a warning that names both values. They MUST NOT rewrite either, and a
+  disagreement MUST NOT make the file invalid. The pairs are:
+  - the taxon's NCBI Taxonomy ID against `##species`;
+  - the genome accession (from `genomeReference`, or the `annotates` item's accession) against
+    `#!genome-build-accession`;
+  - the assembly name (from `genomeReference`) against `##genome-build` and `#!genome-build`.
+
+  A directive or value that is absent on either side is not compared. A comparison that cannot be
+  made is reported as not checked, never as a match.
 - **FR-012**: FHGFF3 v0.1 covers annotations of a single taxon and a single genome, using the core's
   required `taxon` unchanged.
-- **FR-013**: Beyond the core's required slots, `annotation` and the genome link,
-  [NEEDS CLARIFICATION: is there a required field for how the annotation was made, analogous to FHP's
-  `sourceType` (for example `predicted | lifted | database | mixed`), or are method and origin
-  described only by the optional software, protocol and `source` values?].
+- **FR-013**: Beyond the core's required slots, `annotation` and the genome link, no value is
+  required. How the annotation was made is described only by the optional annotation software,
+  protocol and `source` values. Public annotations mix prediction, evidence and curation, so a
+  required method label would mostly say "mixed" (research G-02, G-03).
 
 **Assertion versus verification**
 
@@ -382,8 +409,7 @@ website shows Draft before a release record exists.
 ### Measurable Outcomes
 
 - **SC-001**: A minimal valid record needs only the core's required fields, `annotation` and the
-  genome link (plus any field FR-013 makes required). Both genome-link forms are shown in the
-  examples.
+  genome link. Both genome-link forms are shown in the examples.
 - **SC-002**: 100% of FHGFF3 conformance vectors pass in the toolkit and in the gff3-validator:
   valid vectors give the expected checksums, and invalid vectors are rejected for the expected rule.
 - **SC-003**: For every valid vector, strip removes exactly the `#~` lines and keeps every other
