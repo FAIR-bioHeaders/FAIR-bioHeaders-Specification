@@ -14,7 +14,7 @@ genomeReference:
   assemblyName: SyntheticAssembly1
 derivedFrom:
 - headerType: FHR
-  checksum: t/MS8w60FOwVTQbed1PRyRfM4Xkuh++wkXNmI11NXzY=
+  checksum: 7awVnOjkeYhYQoeanvDnq20xW+LluNqZkYmB4NnQCNU=
   relationship: annotates
 source:
 - name: Synthetic RNA-seq evidence set (placeholder)

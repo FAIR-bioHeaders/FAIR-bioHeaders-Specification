@@ -10,9 +10,9 @@
 #~- name: Synthetic metadata author (placeholder)
 #~dateCreated: '2026-10-13'
 #~documentation: Synthetic header with no genome link; it fails rule G2.
-#~checksum: 23GrflTtwd0U00AJZ34WW1R1CCTrH0EIYa7PofOGQlo=
+#~checksum: M/oCQJyk3wQmXILrZ0pbtJA2f9Um6H8Rz5sW5WnhzNY=
 ##sequence-region ctg1 1 20
-##species https://identifiers.org/taxonomy:9606
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
 #!genome-build Synthetic SyntheticAssembly1
 ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
 ctg1	synthetic	mRNA	1	20	.	+	.	ID=mrna1;Parent=gene1

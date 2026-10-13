@@ -128,6 +128,6 @@ Follow-ups, beyond F-01 to F-07 in plan.md:
 
 | Id | Follow-up |
 |---|---|
-| F-08 | The examples use `##species https://identifiers.org/taxonomy:9606`. GFF3 prefers NCBI's browser URL, and the gff3-validator warns about it (GFF-DIR-007). Their synthetic CDS also draws BIO-006/BIO-007 warnings with `--genome`. Switching to the NCBI form changes the examples' checksums and the toolkit's companion copies |
+| F-08 | The examples use `##species https://identifiers.org/taxonomy:9606`. GFF3 prefers NCBI's browser URL, and the gff3-validator warns about it (GFF-DIR-007). Their synthetic CDS also draws BIO-006/BIO-007 warnings with `--genome`. Switching to the NCBI form changes the examples' checksums and the toolkit's companion copies. *Done 2026-10-13:* NCBI `##species` URL and a synthetic genome `ATGGCTAAAGGTCTGTAAGC` whose CDS 1–18 is ATG…TAA; checksums recomputed; gff3-validator with `--genome` reports 0 warnings on the valid examples |
 | F-09 | GFF3 support in the toolkit's Nextflow modules (`fairbioheaders/combine`, `verify`) |
 | F-10 | The gff3-validator's `headers` extra pinned to the first fair-bioheaders release with FHGFF3 support, and its CI step replaced by that release |

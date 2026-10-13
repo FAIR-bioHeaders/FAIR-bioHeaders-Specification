@@ -11,12 +11,12 @@
 #~dateCreated: '2026-10-13'
 #~derivedFrom:
 #~- headerType: FHR
-#~  checksum: t/MS8w60FOwVTQbed1PRyRfM4Xkuh++wkXNmI11NXzY=
+#~  checksum: 7awVnOjkeYhYQoeanvDnq20xW+LluNqZkYmB4NnQCNU=
 #~  relationship: annotates
 #~documentation: Synthetic annotation of genome.fhr.fasta; not a real annotation.
-#~checksum: uBReyZVjiLfEBBfELHmCgg6rccRtuEJUDuo3VcQEqx8=
+#~checksum: 0IcSAv4i2QKSb7q/WDZ4BElSYj9koSwr9AIEcJY7NhE=
 ##sequence-region ctg1 1 20
-##species https://identifiers.org/taxonomy:9606
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
 #!genome-build Synthetic SyntheticAssembly1
 ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
 ctg1	synthetic	mRNA	1	20	.	+	.	ID=mrna1;Parent=gene1
@@ -24,4 +24,4 @@ ctg1	synthetic	exon	1	20	.	+	.	ID=exon1;Parent=mrna1
 ctg1	synthetic	CDS	1	18	.	+	0	ID=cds1;Parent=mrna1
 ##FASTA
 >ctg1 synthetic contig
-ACGTACGTACGGTTAACCAT
+ATGGCTAAAGGTCTGTAAGC

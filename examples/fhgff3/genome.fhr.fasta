@@ -12,6 +12,6 @@
 ;~dateCreated: '2026-10-13'
 ;~masking: not-masked
 ;~documentation: Synthetic genome for the FHGFF3 examples; not a real assembly.
-;~checksum: t/MS8w60FOwVTQbed1PRyRfM4Xkuh++wkXNmI11NXzY=
+;~checksum: 7awVnOjkeYhYQoeanvDnq20xW+LluNqZkYmB4NnQCNU=
 >ctg1 synthetic contig
-ACGTACGTACGGTTAACCAT
+ATGGCTAAAGGTCTGTAAGC

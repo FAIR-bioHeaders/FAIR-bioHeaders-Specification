@@ -1,6 +1,6 @@
 ##gff-version 3
 ##sequence-region ctg1 1 20
-##species https://identifiers.org/taxonomy:9606
+##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
 #!genome-build Synthetic SyntheticAssembly1
 ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
 ctg1	synthetic	mRNA	1	20	.	+	.	ID=mrna1;Parent=gene1
