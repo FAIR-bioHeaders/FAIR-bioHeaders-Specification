@@ -60,9 +60,11 @@ def constraints(node, document):
 
 
 # (header type, published schema, generator function name). fhr.json is
-# hand-written and must stay validation-equivalent; fhp.json is generated and
-# must equal the generator's constraints (specs/006-protein-header D-01).
-TYPES = (("FHR", "fhr.json", "generate"), ("FHP", "fhp.json", "generate_fhp"))
+# hand-written and must stay validation-equivalent; fhp.json and fhgff3.json are
+# generated and must equal the generator's constraints (specs/006-protein-header
+# D-01, specs/007-gff3-header D-01).
+TYPES = (("FHR", "fhr.json", "generate"), ("FHP", "fhp.json", "generate_fhp"),
+         ("FHGFF3", "fhgff3.json", "generate_fhgff3"))
 
 
 def main():

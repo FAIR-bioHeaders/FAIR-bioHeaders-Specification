@@ -1,6 +1,8 @@
 # Conformance vectors and their manifest are byte-exact: never convert line endings.
 conformance/** -text
 conformance/**/*.gz binary
+# FHGFF3 examples carry checksums over their exact bytes.
+examples/fhgff3/** -text
 # Assessment fixtures are byte-exact too (specs/010-fair-header-assessment).
 assessment/** -text
 assessment/**/*.gz binary

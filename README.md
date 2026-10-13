@@ -115,6 +115,13 @@ conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-t
   Schema is generated from it. The format is described in [docs/FHP.md](docs/FHP.md),
   with examples in [examples/fhp/](examples/fhp/). FHP is not released; see
   [specs/006-protein-header](specs/006-protein-header/spec.md).
+- `fhgff3_linkml.yml` and `fhgff3.json`: the **draft** FHGFF3 header for GFF3
+  annotations, placed after `##gff-version 3`. The record links the annotation to
+  its genome, by FHR checksum or by accession plus SeqCol digest. The LinkML model
+  imports the core and `schemas/shared.yaml` (software, sources and BUSCO
+  completeness, shared with FHP), and the JSON Schema is generated from it. See
+  [docs/FHGFF3.md](docs/FHGFF3.md) and [examples/fhgff3/](examples/fhgff3/). FHGFF3 is
+  not released; see [specs/007-gff3-header](specs/007-gff3-header/spec.md).
 - `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type
   imports the core.
 

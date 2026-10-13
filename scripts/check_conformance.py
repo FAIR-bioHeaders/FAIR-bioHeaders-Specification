@@ -30,20 +30,28 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATOR = ROOT / "scripts" / "make_conformance.py"
-PREFIXES = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~"}
-# The container whose header-block rules apply to each format (R10).
-CONTAINERS = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta"}
+PREFIXES = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~", "fhgff3": b"#~"}
+# The container whose header-block rules apply to each format (R10, G1).
+CONTAINERS = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta", "fhgff3": "gff3"}
 PLACEHOLDER_CHECKSUMS = {"A" * 43 + "="}
 COMMANDS = {"fasta": "fhr-fasta-validate", "gfa": "fhr-gfa-validate", "microdata": "fhr-convert",
-            "jsonld": "fhr-convert", "fhp-fasta": "fhr-fasta-validate"}
+            "jsonld": "fhr-convert", "fhp-fasta": "fhr-fasta-validate",
+            "fhgff3": "fhr-gff3-validate"}
 ENTRY_POINTS = {"fasta": "fasta_validate_main", "gfa": "gfa_validate_main",
                 "microdata": "convert_main", "jsonld": "convert_main",
-                "fhp-fasta": "fasta_validate_main"}
+                "fhp-fasta": "fasta_validate_main", "fhgff3": "gff3_validate_main"}
+# Formats whose command a converter may lack because it predates them: their
+# vectors are then reported as unsupported, like an unsupported file extension.
+OPTIONAL_COMMANDS = {"fhgff3"}
 # Formats whose vectors the converter writes out as JSON metadata.
 EXTRACTED = {"microdata", "jsonld"}
-RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md", "docs/FHP.md")
-# The schema each format's metadata must validate against (FHP: docs/FHP.md P1).
-SCHEMAS = {"fhp-fasta": "fhp.json"}
+RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md", "docs/FHP.md",
+                  "docs/FHGFF3.md")
+# The schema each format's metadata must validate against (docs/FHP.md P1,
+# docs/FHGFF3.md G2).
+SCHEMAS = {"fhp-fasta": "fhp.json", "fhgff3": "fhgff3.json"}
+# Invalid vectors whose rule names the schema their metadata must fail.
+SCHEMA_RULES = {"P1": "fhp.json", "P2": "fhr.json", "G2": "fhgff3.json", "G3": "fhr.json"}
 
 
 def generated_files(directory):
@@ -96,6 +104,8 @@ def fhr_checksum(data, kind):
         line = data[start:end]
         fasta = CONTAINERS[kind] == "fasta"
         if block and (line[:1] == b">" if fasta else line[:1] != b"#" and line.strip()):
+            block = False
+        if block and CONTAINERS[kind] == "gff3" and line.startswith(b"##FASTA"):
             block = False
         if line.startswith(prefix):
             if not block:
@@ -163,7 +173,7 @@ def check_checksums(conformance, manifest):
 def check_manifest(manifest):
     problems = []
     labelled = [rule for document in RULE_DOCUMENTS
-                for rule in re.findall(r"\[([RMJP]\d+)\]", (ROOT / document).read_text())]
+                for rule in re.findall(r"\[([RMJPG]\d+)\]", (ROOT / document).read_text())]
     if labelled != list(manifest["rules"]):
         problems.append(f"rule ids {labelled} in {', '.join(RULE_DOCUMENTS)} "
                         "differ from the manifest")
@@ -182,7 +192,7 @@ def check_manifest(manifest):
 
 
 def check_schema(conformance, manifest):
-    """Validate the metadata of valid vectors against fhr.json, or fhp.json for FHP."""
+    """Validate the metadata of valid vectors against their type's schema."""
     from jsonschema import Draft202012Validator, FormatChecker
     import yaml
 
@@ -194,10 +204,10 @@ def check_schema(conformance, manifest):
     problems = []
     for vector in manifest["vectors"]:
         validator = validators[SCHEMAS.get(vector["format"], "fhr.json")]
-        if vector["format"] == "fhp-fasta" and vector["expected"] == "invalid" \
-                and vector["rule"] in {"P1", "P2"}:
+        if vector["format"] in SCHEMAS and vector["expected"] == "invalid" \
+                and vector["rule"] in SCHEMA_RULES:
             # The parsed header must match the manifest and fail the schema the
-            # rule names: fhp.json for P1, fhr.json for P2 (docs/FHP.md).
+            # rule names (docs/FHP.md P1-P2, docs/FHGFF3.md G2-G3).
             prefix = PREFIXES[vector["format"]]
             text = "\n".join(
                 line[len(prefix):].rstrip(b"\r\n").decode("utf-8")
@@ -206,7 +216,7 @@ def check_schema(conformance, manifest):
             )
             if not same_json(yaml.safe_load(text), vector["metadata"]):
                 problems.append(f"{vector['id']}: parsed metadata differs from the manifest")
-            schema = "fhp.json" if vector["rule"] == "P1" else "fhr.json"
+            schema = SCHEMA_RULES[vector["rule"]]
             if not list(validators[schema].iter_errors(vector["metadata"])):
                 problems.append(f"{vector['id']}: metadata unexpectedly matches {schema}")
             continue
@@ -254,23 +264,32 @@ def check_schema(conformance, manifest):
 
 def converter_commands(location):
     """Return a function mapping a format to the command list that validates it."""
+    def required_found(found):
+        return all(command for kind, command in found.items() if kind not in OPTIONAL_COMMANDS)
+
+    def run(found):
+        return lambda kind: [found[kind]] if found[kind] else None
+
     if location == "PATH":
         found = {kind: shutil.which(name) for kind, name in COMMANDS.items()}
-        if not all(found.values()):
+        if not required_found(found):
             raise ValueError(f"{', '.join(COMMANDS.values())} are not on PATH")
-        return lambda kind: [found[kind]]
+        return run(found)
     path = Path(location)
     if (path / "fhr" / "cli.py").is_file():  # A converter source checkout.
         def from_checkout(kind):
             code = (f"import sys; sys.path.insert(0, {str(path.resolve())!r}); "
-                    f"sys.argv[0] = {COMMANDS[kind]!r}; "
-                    f"from fhr.cli import {ENTRY_POINTS[kind]} as main; sys.exit(main())")
+                    f"sys.argv[0] = {COMMANDS[kind]!r}\n"
+                    f"try:\n    from fhr.cli import {ENTRY_POINTS[kind]} as main\n"
+                    f"except ImportError:\n"
+                    f"    sys.exit({UNSUPPORTED + ' (no ' + COMMANDS[kind] + ')'!r})\n"
+                    f"sys.exit(main())")
             return [sys.executable, "-c", code]
         return from_checkout
     for directory in (path, path / "bin", path / "Scripts"):
         found = {kind: shutil.which(name, path=str(directory)) for kind, name in COMMANDS.items()}
-        if all(found.values()):
-            return lambda kind: [found[kind]]
+        if required_found(found):
+            return run(found)
     raise ValueError(f"{location}: no converter checkout, environment or bin directory")
 
 
@@ -309,11 +328,16 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             output = Path(temporary) / "metadata.json"
             if vector["format"] in EXTRACTED:
                 arguments.append(str(output))
-            result = subprocess.run(
-                command(vector["format"]) + arguments,
-                capture_output=True, text=True, timeout=120, cwd=temporary,
-                env={**os.environ, "PYTHONSAFEPATH": "1"},
-            )
+            program = command(vector["format"])
+            if program is None:  # The converter has no command for this format.
+                result = subprocess.CompletedProcess(
+                    [], 1, "", f"{UNSUPPORTED} (no {COMMANDS[vector['format']]})")
+            else:
+                result = subprocess.run(
+                    program + arguments,
+                    capture_output=True, text=True, timeout=120, cwd=temporary,
+                    env={**os.environ, "PYTHONSAFEPATH": "1"},
+                )
             accepted = result.returncode == 0
             by_format.setdefault(vector["format"], []).append(
                 not accepted and UNSUPPORTED in (result.stderr + result.stdout))

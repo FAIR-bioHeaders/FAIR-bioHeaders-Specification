@@ -26,3 +26,5 @@ jobs:
         run: python scripts/check_schema_drift.py
       - name: Check the FHP schema against its review baseline
         run: python scripts/check_schema_drift.py --schema fhp.json --baseline .github/schema-baseline-fhp.json
+      - name: Check the FHGFF3 schema against its review baseline
+        run: python scripts/check_schema_drift.py --schema fhgff3.json --baseline .github/schema-baseline-fhgff3.json

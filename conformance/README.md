@@ -8,7 +8,9 @@ how FHR metadata is extracted from microdata, as defined in
 how FHR metadata is read from its JSON-LD form, as defined in
 [docs/JSONLD.md](../docs/JSONLD.md#reading-rules). The `.fhp.fasta` files apply the
 same header and checksum rules to protein FASTA with the draft FHP header
-([docs/FHP.md](../docs/FHP.md#rules)). Use them to check an FHR
+([docs/FHP.md](../docs/FHP.md#rules)). The `.fhgff3.gff3` files apply them to GFF3
+annotations with the draft FHGFF3 header, placed after `##gff-version 3`
+([docs/FHGFF3.md](../docs/FHGFF3.md#rules)). Use them to check an FHR
 reader or writer in any language against the specification.
 
 ## Layout
@@ -26,7 +28,7 @@ open and re-save them in an editor. Run the generator instead.
 
 `rules` maps each stable rule id to a short summary: R1 to R10 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
-docs/JSONLD.md, and P1 to P2 from docs/FHP.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+docs/JSONLD.md, P1 to P2 from docs/FHP.md, and G1 to G3 from docs/FHGFF3.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
@@ -38,13 +40,13 @@ Every entry in `vectors` has these fields:
 | --- | --- |
 | `id` | Stable vector name |
 | `file` | Path relative to this directory |
-| `format` | `fasta`, `gfa`, `microdata` (HTML), `jsonld` or `fhp-fasta` (protein FASTA with an FHP header) |
+| `format` | `fasta`, `gfa`, `microdata` (HTML), `jsonld`, `fhp-fasta` (protein FASTA with an FHP header) or `fhgff3` (GFF3 with an FHGFF3 header) |
 | `compressed` | `true` for gzip/BGZF files; `compression` then gives `gzip` or `bgzf` |
 | `expected` | `valid` or `invalid` |
 | `rules` | Valid vectors only: the rules the file exercises |
 | `description` | Valid vectors only: what the file exercises |
 | `checksum` | Valid FASTA/GFA vectors only: the expected FHR checksum, base64 SHA-512/256 |
-| `metadata` | Valid FASTA/GFA vectors: some expected parsed values (`genome`, `version`, `masking`). Valid `fhp-fasta` vectors: `proteome`, `version` and `sourceType`. Valid microdata and JSON-LD vectors: the complete expected metadata object. `microdata-schema-invalid`, `jsonld-missing-checksum` and the P1/P2 `fhp-fasta` vectors: the metadata they yield, which fails `fhp.json` (P1) or `fhr.json` (the other vectors and P2) |
+| `metadata` | Valid FASTA/GFA vectors: some expected parsed values (`genome`, `version`, `masking`). Valid `fhp-fasta` vectors: `proteome`, `version` and `sourceType`. Valid `fhgff3` vectors: `annotation` and `version`. Valid microdata and JSON-LD vectors: the complete expected metadata object. `microdata-schema-invalid`, `jsonld-missing-checksum` the P1/P2 `fhp-fasta` vectors and the G2/G3 `fhgff3` vectors: the metadata they yield, which fails `fhp.json` (P1), `fhgff3.json` (G2) or `fhr.json` (the other vectors, P2 and G3) |
 | `rule` | Invalid vectors only: the rule the file breaks |
 | `reason` | Invalid vectors only: how the file breaks that rule |
 

@@ -75,8 +75,8 @@ class ConformanceTests(unittest.TestCase):
 
     def test_every_rule_is_labelled_and_covered(self):
         labels = [label for document in ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md",
-                                         "docs/FHP.md")
-                  for label in re.findall(r"\[([RMJP]\d+)\]", (ROOT / document).read_text())]
+                                         "docs/FHP.md", "docs/FHGFF3.md")
+                  for label in re.findall(r"\[([RMJPG]\d+)\]", (ROOT / document).read_text())]
         self.assertEqual(labels, list(self.manifest["rules"]))
         for rule, details in self.manifest["rules"].items():
             outcomes = {
@@ -92,7 +92,8 @@ class ConformanceTests(unittest.TestCase):
     def test_manifest_fields(self):
         required = json.loads((ROOT / "fhr.json").read_text())["required"]
         for vector in self.manifest["vectors"]:
-            self.assertIn(vector["format"], {"fasta", "gfa", "microdata", "jsonld", "fhp-fasta"})
+            self.assertIn(vector["format"],
+                          {"fasta", "gfa", "microdata", "jsonld", "fhp-fasta", "fhgff3"})
             self.assertTrue((CONFORMANCE / vector["file"]).is_file(), vector["file"])
             self.assertEqual(vector["file"].split("/")[0], vector["expected"])
             if vector["format"] in {"microdata", "jsonld"}:
@@ -106,7 +107,8 @@ class ConformanceTests(unittest.TestCase):
                 continue
             if vector["expected"] == "valid":
                 self.assertRegex(vector["checksum"], r"^[A-Za-z0-9+/]{43}=$")
-                subject = "proteome" if vector["format"] == "fhp-fasta" else "genome"
+                subject = {"fhp-fasta": "proteome", "fhgff3": "annotation"}.get(
+                    vector["format"], "genome")
                 self.assertTrue({subject, "version"} <= vector["metadata"].keys())
             else:
                 self.assertIn(vector["rule"], self.manifest["rules"])
@@ -129,6 +131,25 @@ class ConformanceTests(unittest.TestCase):
                 self.assertIn("metadata", vector, vector["id"])
         self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
 
+    def test_fhgff3_vectors(self):
+        """specs/007-gff3-header contracts/conformance.md."""
+        vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
+        self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 13)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 12)
+        for vector in vectors.values():
+            self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
+                            vector["file"])
+            data = (CONFORMANCE / vector["file"]).read_bytes()
+            if not vector["compressed"] and vector["id"] != "fhgff3-header-before-version":
+                self.assertTrue(data.startswith(b"##gff-version 3"), vector["id"])
+            if vector["expected"] == "invalid" and vector["rule"] in {"G2", "G3"}:
+                self.assertIn("metadata", vector, vector["id"])
+        self.assertIn(b"##FASTA", (CONFORMANCE / vectors["fhgff3-embedded-fasta"]["file"]).read_bytes())
+        self.assertEqual(vectors["fhgff3-header-before-version"]["rule"], "G1")
+        self.assertEqual(vectors["fhgff3-header-after-fasta"]["rule"], "G1")
+        self.assertEqual(vectors["fhgff3-cites-fhr-schema"]["rule"], "G3")
+
     def test_compressed_vectors_share_the_plain_checksum(self):
         vectors = {vector["id"]: vector for vector in self.manifest["vectors"]}
         compressed = [vector for vector in vectors.values()
@@ -136,7 +157,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertGreaterEqual(len(compressed), 4)
         for vector in compressed:
             kind = vector["format"]
-            plain = vectors[f"{kind}-lf"]
+            plain = vectors[{"fhgff3": "fhgff3-minimal-checksum-link"}.get(kind, f"{kind}-lf")]
             data = (CONFORMANCE / vector["file"]).read_bytes()
             self.assertEqual(data[3] & 0x08, 0, "no stored file name")
             self.assertEqual(data[4:8], b"\0\0\0\0", "mtime 0")
@@ -174,7 +195,9 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(skipped.returncode, 1)
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
-        self.assertIn("(23 vectors left out: jsonld skipped)", skipped.stdout)
+        # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
+        self.assertIn("(48 vectors left out: fhgff3 not supported by this converter; "
+                      "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
         # An older converter: correct on every format except JSON-LD, which it
@@ -200,13 +223,20 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(23 vectors left out: jsonld not supported by this converter)",
+        self.assertIn("(48 vectors left out: fhgff3 not supported by this converter; "
+                      "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
                             "--converter", bin_directory)
         self.assertEqual(strict.returncode, 1)
         self.assertIn("jsonld-canonical-embedded: converter rejected (FHR: Unsupported file "
                       "extension", strict.stderr)
+        # A converter without fhr-gff3-validate predates FHGFF3: skipped, unless required.
+        gff3 = self.check("--skip-regeneration", "--require-format", "fhgff3",
+                          "--converter", bin_directory)
+        self.assertEqual(gff3.returncode, 1)
+        self.assertIn("fhgff3-minimal-checksum-link: converter rejected (Unsupported file "
+                      "extension (no fhr-gff3-validate))", gff3.stderr)
 
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}

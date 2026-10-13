@@ -1,0 +1,735 @@
+{
+  "$defs": {
+    "AccessionID": {
+      "additionalProperties": false,
+      "description": "Accession identifier",
+      "properties": {
+        "name": {
+          "description": "Accession name",
+          "type": "string"
+        },
+        "url": {
+          "description": "Accession URL",
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "title": "AccessionID",
+      "type": "object"
+    },
+    "Author": {
+      "additionalProperties": false,
+      "description": "Person or organization; uri is an ORCID URI",
+      "properties": {
+        "name": {
+          "description": "Name of the person or organization",
+          "type": "string"
+        },
+        "uri": {
+          "description": "ORCID URI",
+          "format": "uri",
+          "pattern": "^https://orcid.org/[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9X]",
+          "type": "string"
+        }
+      },
+      "title": "Author",
+      "type": "object"
+    },
+    "BuscoMode": {
+      "description": "BUSCO run modes",
+      "enum": [
+        "proteins",
+        "transcriptome",
+        "genome"
+      ],
+      "title": "BuscoMode",
+      "type": "string"
+    },
+    "Completeness": {
+      "additionalProperties": false,
+      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10)",
+      "properties": {
+        "buscoVersion": {
+          "description": "Version of BUSCO",
+          "type": "string"
+        },
+        "completeDuplicated": {
+          "description": "Complete duplicated BUSCOs (D)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "completeSingle": {
+          "description": "Complete single-copy BUSCOs (S)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fragmented": {
+          "description": "Fragmented BUSCOs (F)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lineageDataset": {
+          "description": "BUSCO lineage dataset, including its version suffix",
+          "pattern": "^[a-z0-9_]+_odb[0-9]+$",
+          "type": "string"
+        },
+        "missing": {
+          "description": "Missing BUSCOs (M)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mode": {
+          "$ref": "#/$defs/BuscoMode",
+          "description": "BUSCO mode"
+        },
+        "total": {
+          "description": "Number of BUSCO groups searched (n)",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "lineageDataset",
+        "completeSingle",
+        "completeDuplicated",
+        "fragmented",
+        "missing",
+        "total"
+      ],
+      "title": "Completeness",
+      "type": "object"
+    },
+    "DerivationRelationship": {
+      "description": "Provisional relationship vocabulary for derivedFrom. Values and any PROV-O / Relation Ontology mapping await a maintainer decision (FHR-Specification#54).",
+      "enum": [
+        "annotates",
+        "transcribedFrom",
+        "translatedFrom",
+        "filteredFrom",
+        "assembledFrom"
+      ],
+      "title": "DerivationRelationship",
+      "type": "string"
+    },
+    "DerivedFrom": {
+      "additionalProperties": false,
+      "description": "Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema FR-003). Provisional until the relationship vocabulary is decided (FHR-Specification#54).",
+      "properties": {
+        "accessionID": {
+          "$ref": "#/$defs/AccessionID",
+          "description": "Accession of the parent file"
+        },
+        "checksum": {
+          "description": "FHR-family checksum of the parent file",
+          "pattern": "^[A-Za-z0-9/+=]{44}$",
+          "type": "string",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "headerType": {
+          "$ref": "#/$defs/HeaderType",
+          "description": "FAIR-bioHeaders type of the parent file"
+        },
+        "relationship": {
+          "$ref": "#/$defs/DerivationRelationship",
+          "description": "How this file relates to the parent. Provisional vocabulary: a PROV-O or Relation Ontology mapping is pending a maintainer decision (FHR-Specification#54)."
+        },
+        "seqcol_id": {
+          "description": "Sequence collection digest of the parent, if supplied",
+          "pattern": "^[A-Za-z0-9_-]{32}$",
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "headerType",
+        "checksum",
+        "relationship"
+      ],
+      "title": "DerivedFrom",
+      "type": "object"
+    },
+    "FHGFF3": {
+      "additionalProperties": false,
+      "description": "Metadata for GFF3 annotation files.",
+      "properties": {
+        "accessionID": {
+          "$ref": "#/$defs/AccessionID",
+          "description": "Accession of the annotation"
+        },
+        "annotation": {
+          "description": "Name of the annotation",
+          "type": "string"
+        },
+        "annotationProtocol": {
+          "description": "Annotation protocol or workflow reference URI",
+          "format": "uri",
+          "type": "string"
+        },
+        "annotationSoftware": {
+          "description": "Software that produced or processed the annotation",
+          "items": {
+            "$ref": "#/$defs/Software"
+          },
+          "type": "array"
+        },
+        "checksum": {
+          "description": "sha2-512/256 checksum value for hashing",
+          "pattern": "^[A-Za-z0-9/+=]{44}$",
+          "type": "string",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "completeness": {
+          "$ref": "#/$defs/Completeness",
+          "description": "BUSCO completeness of the annotation, as counts"
+        },
+        "dateCreated": {
+          "description": "Date the annotation was created",
+          "format": "date",
+          "type": "string"
+        },
+        "derivedFrom": {
+          "description": "Parent FAIR-bioHeaders files, by checksum. An item with header type FHR and relationship annotates is the annotated genome (at most one)",
+          "items": {
+            "$ref": "#/$defs/DerivedFrom"
+          },
+          "type": "array"
+        },
+        "documentation": {
+          "description": "Documentation about the annotation",
+          "type": "string"
+        },
+        "featureCounts": {
+          "description": "Number of features of each type in the file, as asserted by the producer",
+          "items": {
+            "$ref": "#/$defs/FeatureCount"
+          },
+          "type": "array"
+        },
+        "funding": {
+          "description": "Grant line item",
+          "type": "string"
+        },
+        "genomeReference": {
+          "$ref": "#/$defs/GenomeReference",
+          "description": "The annotated genome given by its assembly accession and sequence collection digest, when it is not linked by FHR checksum. An identity asserted by the producer, never a checksum link (FR-006)"
+        },
+        "identifier": {
+          "description": "Identifiers of the annotation",
+          "items": {
+            "pattern": "[a-z0-9]*:.*",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "metadataAuthor": {
+          "description": "Authors of the FHGFF3 instance",
+          "items": {
+            "$ref": "#/$defs/Author"
+          },
+          "type": "array"
+        },
+        "relatedLink": {
+          "description": "Related URLs to the annotation",
+          "items": {
+            "format": "uri",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reuseConditions": {
+          "description": "Reuse conditions or license for the annotation",
+          "type": "string"
+        },
+        "schema": {
+          "description": "URL of the FHGFF3 JSON Schema this record follows; it identifies the header type (FR-010)",
+          "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\\.json$",
+          "type": "string"
+        },
+        "schemaVersion": {
+          "description": "Version of the FHGFF3 schema",
+          "type": "number",
+          "enum": [
+            1
+          ]
+        },
+        "scholarlyArticle": {
+          "description": "Scholarly article where the annotation was published",
+          "pattern": "^10.",
+          "type": "string"
+        },
+        "soVersion": {
+          "description": "Sequence Ontology release used for the feature types, as its data-version (for example 2026-08-07)",
+          "type": "string"
+        },
+        "source": {
+          "description": "Sources of the annotation that are not FAIR-bioHeaders files, such as an annotation release or evidence set, as asserted by the producer; never verified by checksum",
+          "items": {
+            "$ref": "#/$defs/Source"
+          },
+          "type": "array"
+        },
+        "taxon": {
+          "$ref": "#/$defs/Taxon",
+          "description": "Species name and URL of the species information at identifiers.org"
+        },
+        "version": {
+          "description": "Version of the annotation",
+          "type": "string"
+        },
+        "voucherSpecimen": {
+          "description": "Description of the physical sample",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "schemaVersion",
+        "annotation",
+        "taxon",
+        "version",
+        "metadataAuthor",
+        "dateCreated",
+        "checksum"
+      ],
+      "title": "FHGFF3",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "genomeReference"
+          ]
+        },
+        {
+          "required": [
+            "derivedFrom"
+          ],
+          "properties": {
+            "derivedFrom": {
+              "contains": {
+                "$ref": "#/$defs/AnnotatesGenome"
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "derivedFrom"
+            ],
+            "properties": {
+              "derivedFrom": {
+                "contains": {
+                  "$ref": "#/$defs/AnnotatesAny"
+                },
+                "minContains": 2
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "derivedFrom": {
+              "items": {
+                "if": {
+                  "$ref": "#/$defs/AnnotatesAny"
+                },
+                "then": {
+                  "properties": {
+                    "headerType": {
+                      "const": "FHR"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FeatureCount": {
+      "additionalProperties": false,
+      "description": "The number of features of one type",
+      "properties": {
+        "count": {
+          "description": "Number of features of this type",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "featureType": {
+          "description": "Feature type as written in column 3 (an SO term name or accession)",
+          "pattern": "^\\S+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "featureType",
+        "count"
+      ],
+      "title": "FeatureCount",
+      "type": "object"
+    },
+    "GenomeReference": {
+      "additionalProperties": false,
+      "description": "An annotated genome identified by its assembly accession and GA4GH sequence collection digest",
+      "properties": {
+        "accession": {
+          "description": "Assembly accession with its version, as published",
+          "pattern": "^\\S+$",
+          "type": "string"
+        },
+        "assemblyName": {
+          "description": "Assembly name, as in the GFF3 genome-build directive",
+          "type": "string"
+        },
+        "seqcol_id": {
+          "description": "Sequence collection digest (sha512t24u, level 0) of the genome, as supplied",
+          "pattern": "^[A-Za-z0-9_-]{32}$",
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "seqcol_id",
+        "accession"
+      ],
+      "title": "GenomeReference",
+      "type": "object"
+    },
+    "HeaderType": {
+      "description": "FAIR-bioHeaders header types",
+      "enum": [
+        "FHR",
+        "FHT",
+        "FHP",
+        "FHGFF3"
+      ],
+      "title": "HeaderType",
+      "type": "string"
+    },
+    "Software": {
+      "additionalProperties": false,
+      "description": "Software with its version and options.",
+      "properties": {
+        "commandLineOption": {
+          "description": "Command-line options given to the software, in order",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Name of the software",
+          "type": "string"
+        },
+        "uri": {
+          "description": "URI of the software",
+          "format": "uri",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the software",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Software",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "description": "A source of sequences that is not a FAIR-bioHeaders file: a database release, set, annotation run or other contribution",
+      "properties": {
+        "assemblyAccession": {
+          "description": "Genome assembly accession that the source states for this set; an assertion by the source, not a checksum link",
+          "type": "string"
+        },
+        "description": {
+          "description": "What was taken from the source, or how the sequences were contributed",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the database, resource or contribution",
+          "type": "string"
+        },
+        "release": {
+          "description": "Release or annotation run of the source, as the source names it",
+          "type": "string"
+        },
+        "sequenceCount": {
+          "description": "Number of sequences in the file that came from this source",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "setIdentifier": {
+          "description": "Identifier of the set taken from the source, for example a UniProt proteome ID",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL of the source or set",
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "Taxon": {
+      "additionalProperties": false,
+      "description": "Species name and taxonomy URI",
+      "properties": {
+        "name": {
+          "description": "Name of the species",
+          "type": "string"
+        },
+        "uri": {
+          "description": "Taxonomy URI",
+          "format": "uri",
+          "pattern": "https://identifiers.org/taxonomy:[0-9]+",
+          "type": "string"
+        }
+      },
+      "title": "Taxon",
+      "type": "object"
+    },
+    "AnnotatesGenome": {
+      "description": "A derivedFrom item that links the annotated FHR genome by checksum",
+      "type": "object",
+      "required": [
+        "headerType",
+        "relationship"
+      ],
+      "properties": {
+        "headerType": {
+          "const": "FHR"
+        },
+        "relationship": {
+          "const": "annotates"
+        }
+      }
+    },
+    "AnnotatesAny": {
+      "description": "A derivedFrom item with the relationship annotates",
+      "type": "object",
+      "required": [
+        "relationship"
+      ],
+      "properties": {
+        "relationship": {
+          "const": "annotates"
+        }
+      }
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Metadata for GFF3 annotation files.",
+  "properties": {
+    "accessionID": {
+      "$ref": "#/$defs/AccessionID",
+      "description": "Accession of the annotation"
+    },
+    "annotation": {
+      "description": "Name of the annotation",
+      "type": "string"
+    },
+    "annotationProtocol": {
+      "description": "Annotation protocol or workflow reference URI",
+      "format": "uri",
+      "type": "string"
+    },
+    "annotationSoftware": {
+      "description": "Software that produced or processed the annotation",
+      "items": {
+        "$ref": "#/$defs/Software"
+      },
+      "type": "array"
+    },
+    "checksum": {
+      "description": "sha2-512/256 checksum value for hashing",
+      "pattern": "^[A-Za-z0-9/+=]{44}$",
+      "type": "string",
+      "minLength": 44,
+      "maxLength": 44
+    },
+    "completeness": {
+      "$ref": "#/$defs/Completeness",
+      "description": "BUSCO completeness of the annotation, as counts"
+    },
+    "dateCreated": {
+      "description": "Date the annotation was created",
+      "format": "date",
+      "type": "string"
+    },
+    "derivedFrom": {
+      "description": "Parent FAIR-bioHeaders files, by checksum. An item with header type FHR and relationship annotates is the annotated genome (at most one)",
+      "items": {
+        "$ref": "#/$defs/DerivedFrom"
+      },
+      "type": "array"
+    },
+    "documentation": {
+      "description": "Documentation about the annotation",
+      "type": "string"
+    },
+    "featureCounts": {
+      "description": "Number of features of each type in the file, as asserted by the producer",
+      "items": {
+        "$ref": "#/$defs/FeatureCount"
+      },
+      "type": "array"
+    },
+    "funding": {
+      "description": "Grant line item",
+      "type": "string"
+    },
+    "genomeReference": {
+      "$ref": "#/$defs/GenomeReference",
+      "description": "The annotated genome given by its assembly accession and sequence collection digest, when it is not linked by FHR checksum. An identity asserted by the producer, never a checksum link (FR-006)"
+    },
+    "identifier": {
+      "description": "Identifiers of the annotation",
+      "items": {
+        "pattern": "[a-z0-9]*:.*",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "metadataAuthor": {
+      "description": "Authors of the FHGFF3 instance",
+      "items": {
+        "$ref": "#/$defs/Author"
+      },
+      "type": "array"
+    },
+    "relatedLink": {
+      "description": "Related URLs to the annotation",
+      "items": {
+        "format": "uri",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "reuseConditions": {
+      "description": "Reuse conditions or license for the annotation",
+      "type": "string"
+    },
+    "schema": {
+      "description": "URL of the FHGFF3 JSON Schema this record follows; it identifies the header type (FR-010)",
+      "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\\.json$",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "description": "Version of the FHGFF3 schema",
+      "type": "number",
+      "enum": [
+        1
+      ]
+    },
+    "scholarlyArticle": {
+      "description": "Scholarly article where the annotation was published",
+      "pattern": "^10.",
+      "type": "string"
+    },
+    "soVersion": {
+      "description": "Sequence Ontology release used for the feature types, as its data-version (for example 2026-08-07)",
+      "type": "string"
+    },
+    "source": {
+      "description": "Sources of the annotation that are not FAIR-bioHeaders files, such as an annotation release or evidence set, as asserted by the producer; never verified by checksum",
+      "items": {
+        "$ref": "#/$defs/Source"
+      },
+      "type": "array"
+    },
+    "taxon": {
+      "$ref": "#/$defs/Taxon",
+      "description": "Species name and URL of the species information at identifiers.org"
+    },
+    "version": {
+      "description": "Version of the annotation",
+      "type": "string"
+    },
+    "voucherSpecimen": {
+      "description": "Description of the physical sample",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "schemaVersion",
+    "annotation",
+    "taxon",
+    "version",
+    "metadataAuthor",
+    "dateCreated",
+    "checksum"
+  ],
+  "title": "FHGFF3",
+  "type": "object",
+  "anyOf": [
+    {
+      "required": [
+        "genomeReference"
+      ]
+    },
+    {
+      "required": [
+        "derivedFrom"
+      ],
+      "properties": {
+        "derivedFrom": {
+          "contains": {
+            "$ref": "#/$defs/AnnotatesGenome"
+          }
+        }
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "not": {
+        "required": [
+          "derivedFrom"
+        ],
+        "properties": {
+          "derivedFrom": {
+            "contains": {
+              "$ref": "#/$defs/AnnotatesAny"
+            },
+            "minContains": 2
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "derivedFrom": {
+          "items": {
+            "if": {
+              "$ref": "#/$defs/AnnotatesAny"
+            },
+            "then": {
+              "properties": {
+                "headerType": {
+                  "const": "FHR"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

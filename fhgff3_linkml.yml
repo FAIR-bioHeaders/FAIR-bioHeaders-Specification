@@ -1,0 +1,155 @@
+id: https://w3id.org/fhr/fhgff3
+name: FHGFF3LinkML
+description: >-
+  FHGFF3 (FAIR Header for GFF3, working name) metadata for GFF3 annotation
+  files (specs/007-gff3-header). The FHGFF3 class imports the FAIR-bioHeaders
+  shared core (schemas/core.yaml) and the shared objects (schemas/shared.yaml),
+  and adds the subject slot annotation, the genome link and the
+  annotation-specific slots. Provenance fields are assertions by the producer,
+  not checks (FR-014). The id is provisional, like the core's. Written fresh in
+  this repository; no file comes from the FHGFF3 fork (FR-023).
+prefixes:
+  linkml: https://w3id.org/linkml/
+  # JSON-LD term IRIs (specs/011-jsonld-mapping research R-05, R-08); slots
+  # without a slot_uri get an fhr: term in the family-wide vocabulary.
+  sdo: http://schema.org/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- schemas/core
+- schemas/shared
+slots:
+  annotation:
+    description: Name of the annotation
+    slot_uri: sdo:name
+    required: true
+  genomeReference:
+    description: >-
+      The annotated genome given by its assembly accession and sequence
+      collection digest, when it is not linked by FHR checksum. An identity
+      asserted by the producer, never a checksum link (FR-006)
+    range: GenomeReference
+    inlined: true
+  source:
+    description: >-
+      Sources of the annotation that are not FAIR-bioHeaders files, such as
+      an annotation release or evidence set, as asserted by the producer; never
+      verified by checksum
+    range: Source
+    multivalued: true
+    inlined_as_list: true
+  annotationSoftware:
+    description: Software that produced or processed the annotation
+    range: Software
+    multivalued: true
+    inlined_as_list: true
+  annotationProtocol:
+    description: Annotation protocol or workflow reference URI
+    range: uri
+  soVersion:
+    description: >-
+      Sequence Ontology release used for the feature types, as its data-version
+      (for example 2026-08-07)
+  featureCounts:
+    description: Number of features of each type in the file, as asserted by the producer
+    range: FeatureCount
+    multivalued: true
+    inlined_as_list: true
+  completeness:
+    description: BUSCO completeness of the annotation, as counts
+    range: Completeness
+    inlined: true
+classes:
+  FHGFF3:
+    description: Metadata for GFF3 annotation files.
+    class_uri: sdo:Dataset
+    tree_root: true
+    slots:
+    - schema
+    - schemaVersion
+    - annotation
+    - taxon
+    - version
+    - metadataAuthor
+    - dateCreated
+    - genomeReference
+    - derivedFrom
+    - source
+    - annotationSoftware
+    - annotationProtocol
+    - soVersion
+    - featureCounts
+    - completeness
+    - voucherSpecimen
+    - accessionID
+    - scholarlyArticle
+    - documentation
+    - identifier
+    - relatedLink
+    - funding
+    - reuseConditions
+    - checksum
+    slot_usage:
+      schema:
+        description: >-
+          URL of the FHGFF3 JSON Schema this record follows; it identifies the
+          header type (FR-010)
+        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\.json$
+      schemaVersion:
+        description: Version of the FHGFF3 schema
+        equals_number: 1
+      version:
+        description: Version of the annotation
+      metadataAuthor:
+        description: Authors of the FHGFF3 instance
+      dateCreated:
+        description: Date the annotation was created
+      derivedFrom:
+        description: >-
+          Parent FAIR-bioHeaders files, by checksum. An item with header type
+          FHR and relationship annotates is the annotated genome (at most one)
+      accessionID:
+        description: Accession of the annotation
+      scholarlyArticle:
+        description: Scholarly article where the annotation was published
+      documentation:
+        description: Documentation about the annotation
+      identifier:
+        description: Identifiers of the annotation
+      relatedLink:
+        description: Related URLs to the annotation
+      reuseConditions:
+        description: Reuse conditions or license for the annotation
+  GenomeReference:
+    description: >-
+      An annotated genome identified by its assembly accession and GA4GH
+      sequence collection digest
+    class_uri: fhr:GenomeReference
+    slots:
+    - seqcol_id
+    slot_usage:
+      seqcol_id:
+        description: Sequence collection digest (sha512t24u, level 0) of the genome, as supplied
+        required: true
+    attributes:
+      accession:
+        description: Assembly accession with its version, as published
+        pattern: ^\S+$
+        required: true
+      assemblyName:
+        description: Assembly name, as in the GFF3 genome-build directive
+  FeatureCount:
+    description: The number of features of one type
+    class_uri: fhr:FeatureCount
+    attributes:
+      featureType:
+        description: Feature type as written in column 3 (an SO term name or accession)
+        pattern: ^\S+$
+        required: true
+      count:
+        description: Number of features of this type
+        range: integer
+        minimum_value: 0
+        required: true

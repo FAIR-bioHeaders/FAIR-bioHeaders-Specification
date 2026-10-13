@@ -1,4 +1,4 @@
-"""Write the FHR FASTA/GFA/microdata/JSON-LD conformance vectors and their manifest (stdlib only).
+"""Write the FHR FASTA/GFA/microdata/JSON-LD, FHP and FHGFF3 conformance vectors and their manifest (stdlib only).
 
 Every vector is built from a small metadata template. Expected checksums are
 computed here with ``hashlib.sha512_256`` and base64 over the bytes the
@@ -80,18 +80,26 @@ RULES = {
     "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
     "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
           "other header is validated as FHR.",
+    "G1": "FHGFF3: line 1 is ##gff-version 3; the leading header block runs from line 2 to "
+          "the first nonblank line that is not a # line, or to ##FASTA; #~ lines may be "
+          "mixed with other # lines inside it, and a #~ line on line 1 or after it is invalid.",
+    "G2": "FHGFF3: the metadata must validate against fhgff3.json, including the genome link "
+          "(an annotates link to an FHR genome, a genomeReference, or both).",
+    "G3": "FHGFF3: a record is read as FHGFF3 only when its schema is an FHGFF3 schema URL; "
+          "any other header is validated as that type.",
 }
 NOT_APPLICABLE = {
     "J7": "J7 constrains writers; a reader has no invalid input for it. The valid vectors "
           "that cite J7 are writer output.",
 }
 
-PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~"}
-# The container whose header-block rules apply to each kind (R10).
-CONTAINER = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta"}
+PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~", "fhgff3": b"#~"}
+# The container whose header-block rules apply to each kind (R10, G1).
+CONTAINER = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta", "fhgff3": "gff3"}
 ITEM_TYPE = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
-COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";"}
+COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";", "fhgff3": b"#"}
 SUFFIX = {"fasta": ".fhr.fasta", "gfa": ".fhr.gfa", "fhp-fasta": ".fhp.fasta",
+          "fhgff3": ".fhgff3.gff3",
           "microdata": ".fhr.html",
           "jsonld": ".fhr.jsonld"}
 MARK = b"@CHECKSUM@"
@@ -248,7 +256,9 @@ def reference_checksum(data, kind):
         if in_block:
             if container == "fasta" and line.startswith(b">"):
                 in_block = False
-            elif container == "gfa" and not line.startswith(b"#") and line.strip():
+            elif container in {"gfa", "gff3"} and not line.startswith(b"#") and line.strip():
+                in_block = False
+            elif container == "gff3" and line.startswith(b"##FASTA"):
                 in_block = False
         if line.startswith(prefix):
             if not in_block:
@@ -517,6 +527,7 @@ def build():
     build_microdata()
     build_jsonld()
     build_fhp()
+    build_fhgff3()
 
 
 # FHP vectors (specs/006-protein-header contracts/conformance.md): the shared
@@ -699,6 +710,171 @@ def build_fhp():
     # P2: the schema URL selects the header type.
     fhp_invalid("fhp-fasta-cites-fhr-schema", fhp_record(schema=ITEM_TYPE),
                 "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
+
+
+# FHGFF3 vectors (specs/007-gff3-header contracts/conformance.md): the shared
+# rules on GFF3, with the header after ##gff-version 3 (G1), and the FHGFF3
+# schema rules G2 and G3.
+
+FHGFF3_SCHEMA = (
+    "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json"
+)
+ANNOTATION = "Synthetic FHGFF3 conformance annotation"
+GENOME_LINK = {"headerType": "FHR", "checksum": PARENT_CHECKSUM, "relationship": "annotates"}
+# Placeholders: no real assembly has this accession or this SeqCol digest.
+GENOME_REFERENCE = {"accession": "SYNTHETIC_ASSEMBLY.1", "seqcol_id": "S" * 32,
+                    "assemblyName": "SyntheticAssembly1"}
+FHGFF3_RECORD = {
+    "schema": FHGFF3_SCHEMA,
+    "schemaVersion": 1,
+    "annotation": ANNOTATION,
+    "taxon": {"name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606"},
+    "version": VERSION,
+    "metadataAuthor": [{"name": "Synthetic metadata author (placeholder)"}],
+    "dateCreated": "2026-10-13",
+    "derivedFrom": [GENOME_LINK],
+    "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
+}
+FHGFF3_EXPECTED = {"annotation": ANNOTATION, "version": VERSION}
+GFF3_VERSION = b"##gff-version 3"
+GFF3_FEATURES = [
+    b"ctg1\tsynthetic\tgene\t1\t20\t.\t+\t.\tID=gene1",
+    b"ctg1\tsynthetic\tmRNA\t1\t20\t.\t+\t.\tID=mrna1;Parent=gene1",
+    b"ctg1\tsynthetic\tCDS\t1\t18\t.\t+\t0\tID=cds1;Parent=mrna1",
+]
+GFF3_FASTA = [b"##FASTA", b">ctg1", b"ACGTACGTACGGTTAACCAT"]
+
+
+def fhgff3_record(drop=(), **changes):
+    """FHGFF3_RECORD with ``changes`` applied and the keys in ``drop`` removed."""
+    record = json.loads(json.dumps(FHGFF3_RECORD))
+    record.update(json.loads(json.dumps(changes)))
+    for key in drop:
+        record.pop(key)
+    return record
+
+
+def fhgff3_lines(record=FHGFF3_RECORD, before=(), after=(), features=True, fasta=False,
+                 version=GFF3_VERSION):
+    """##gff-version, ``before`` lines, the header, ``after`` lines, then the body."""
+    lines = [Line(version)] + [Line(text) for text in before]
+    lines += header("fhgff3", yaml_lines(record) + [None])
+    lines += [Line(text) for text in after]
+    if features:
+        lines += [Line(text) for text in GFF3_FEATURES]
+    if fasta:
+        lines += [Line(text) for text in GFF3_FASTA]
+    return lines
+
+
+def fhgff3_valid(name, lines, rules, description, expected=FHGFF3_EXPECTED, **options):
+    data, value = assemble(lines, **options)
+    valid(name, "fhgff3", data, value, rules, description)
+    VALID[-1]["expected_metadata"] = expected
+    return data, value
+
+
+def fhgff3_invalid(name, record, rule, reason):
+    data, value = assemble(fhgff3_lines(record))
+    invalid(name, "fhgff3", data, rule, reason, metadata=dict(record, checksum=value))
+
+
+def build_fhgff3():
+    k = "fhgff3"
+    region = b"##sequence-region ctg1 1 20"
+    species = b"##species https://identifiers.org/taxonomy:9606"
+    data, value = fhgff3_valid(
+        "fhgff3-minimal-checksum-link", fhgff3_lines(), ["G1", "G2", "G3", "R1", "R2", "R3",
+                                                         "R4", "R7", "R10"],
+        "The genome linked by its FHR checksum (derivedFrom annotates); header after "
+        "##gff-version 3; LF line endings.")
+    plain = data
+    fhgff3_valid("fhgff3-minimal-reference-link",
+                 fhgff3_lines(fhgff3_record(drop=["derivedFrom"],
+                                            genomeReference=GENOME_REFERENCE)),
+                 ["G2"], "The genome given by accession and SeqCol digest (genomeReference).")
+    fhgff3_valid("fhgff3-both-links",
+                 fhgff3_lines(fhgff3_record(genomeReference=GENOME_REFERENCE)),
+                 ["G2"], "Both genome-link forms for the same genome; the checksum is "
+                 "authoritative.")
+    lines = fhgff3_lines(before=[region, b"#!genome-build Synthetic SyntheticAssembly1"])
+    position = next(i for i, line in enumerate(lines) if line.text.startswith(b"#~taxon"))
+    lines.insert(position, Line(species))
+    lines.insert(position + 1, Line(b"# an ordinary comment among the header lines"))
+    fhgff3_valid("fhgff3-directives-interleaved", lines, ["G1", "R3", "R10"],
+                 "##sequence-region, #!genome-build, ##species and a comment before and between "
+                 "#~ lines; all are hashed.")
+    fhgff3_valid("fhgff3-directives-after-header", fhgff3_lines(after=[region, species]),
+                 ["G1"], "Native directives after the #~ lines, before the first feature.")
+    fhgff3_valid("fhgff3-triple-hash-before-features", fhgff3_lines(after=[b"###"]),
+                 ["G1"], "A ### directive before any feature stays inside the leading block.")
+    data, _ = fhgff3_valid("fhgff3-embedded-fasta", fhgff3_lines(fasta=True), ["G1", "R1", "R3"],
+                           "A ##FASTA section after the features; its residues are hashed.")
+    fhgff3_valid("fhgff3-header-only", fhgff3_lines(features=False), ["G1", "G2"],
+                 "A header and no features: an empty annotation.")
+    fhgff3_valid("fhgff3-version-3-1-26", fhgff3_lines(version=b"##gff-version 3.1.26"),
+                 ["G1"], "##gff-version 3.1.26 on line 1.")
+    fhgff3_valid("fhgff3-crlf", fhgff3_lines(), ["G1", "R1", "R3"],
+                 "CRLF line endings; CR bytes are hashed.", endings=b"\r\n")
+    valid("fhgff3-gzip", k, gzip_member(plain), value, ["G1", "R1"],
+          "fhgff3-minimal-checksum-link compressed as one gzip member; same checksum.", "gzip")
+    VALID[-1]["expected_metadata"] = FHGFF3_EXPECTED
+    valid("fhgff3-bgzf", k, bgzf(plain), value, ["G1", "R1"],
+          "fhgff3-minimal-checksum-link compressed as multi-block BGZF; same checksum.", "bgzf")
+    VALID[-1]["expected_metadata"] = FHGFF3_EXPECTED
+    fhgff3_valid("fhgff3-nested-parent-checksum",
+                 fhgff3_lines(fhgff3_record(derivedFrom=[GENOME_LINK, {
+                     "headerType": "FHGFF3", "checksum": "C" * 43 + "=",
+                     "relationship": "filteredFrom"}])),
+                 ["G2", "R2", "R3"], "A second parent (a filtered FHGFF3 annotation); both nested "
+                 "checksums are covered by the root checksum.")
+
+    # Shared rules and G1 placement.
+    data, _ = assemble(fhgff3_lines(fasta=True))
+    invalid("fhgff3-fasta-tampered", k, data.replace(b"GGTTAACCAT", b"GGTTAACCAA"), "R3",
+            "A residue of the ##FASTA section changed after the checksum was computed.")
+    lines = fhgff3_lines()
+    position = next(i for i, line in enumerate(lines) if line.excluded)
+    lines.insert(2, Line(lines[position].text, excluded=True))
+    data, _ = assemble(lines)
+    invalid("fhgff3-two-checksum-lines", k, data, "R2",
+            "Two root-level checksum lines with the same value.")
+    data, _ = assemble(fhgff3_lines() + [Line(b"#~funding: added after the features")])
+    invalid("fhgff3-header-after-feature", k, data, "R10", "A #~ line after the first feature.")
+    lines = fhgff3_lines(features=False) + [Line(b"##FASTA"),
+                                            Line(b"#~funding: added after ##FASTA"),
+                                            Line(b">ctg1"), Line(b"ACGTACGTAC")]
+    data, _ = assemble(lines)
+    invalid("fhgff3-header-after-fasta", k, data, "G1",
+            "A #~ line after ##FASTA, before the first sequence line.")
+    first, _ = assemble(fhgff3_lines())
+    second, _ = assemble(fhgff3_lines())
+    invalid("fhgff3-concatenated", k, first + second, "R10",
+            "Two FHGFF3 files concatenated: the second #~ block follows features.")
+    lines = fhgff3_lines()
+    lines = lines[1:2] + lines[:1] + lines[2:]
+    data, _ = assemble(lines)
+    invalid("fhgff3-header-before-version", k, data, "G1",
+            "A #~ line on line 1, before ##gff-version 3.")
+    # G2: the metadata must validate against fhgff3.json.
+    fhgff3_invalid("fhgff3-no-genome-link", fhgff3_record(drop=["derivedFrom"]), "G2",
+                   "Neither an annotates link nor a genomeReference.")
+    fhgff3_invalid("fhgff3-half-reference",
+                   fhgff3_record(drop=["derivedFrom"],
+                                 genomeReference={"accession": "SYNTHETIC_ASSEMBLY.1"}),
+                   "G2", "A genomeReference without its SeqCol digest.")
+    fhgff3_invalid("fhgff3-two-annotates",
+                   fhgff3_record(derivedFrom=[GENOME_LINK,
+                                              dict(GENOME_LINK, checksum="C" * 43 + "=")]),
+                   "G2", "Two derivedFrom items with the relationship annotates.")
+    fhgff3_invalid("fhgff3-annotates-fhp",
+                   fhgff3_record(derivedFrom=[dict(GENOME_LINK, headerType="FHP")]),
+                   "G2", "An annotates link whose parent is not an FHR genome.")
+    fhgff3_invalid("fhgff3-fhr-only-key", fhgff3_record(genome="Synthetic genome"), "G2",
+                   "The FHR-only key genome.")
+    # G3: the schema URL selects the header type.
+    fhgff3_invalid("fhgff3-cites-fhr-schema", fhgff3_record(schema=ITEM_TYPE), "G3",
+                   "Annotation metadata citing fhr.json is validated as FHR, and fails it.")
 
 
 # Microdata vectors. The checksum is an ordinary value here (the fasta-lf
@@ -1360,8 +1536,9 @@ def manifest():
         "microdataSpecification": "docs/MICRODATA.md",
         "jsonldSpecification": "docs/JSONLD.md",
         "fhpSpecification": "docs/FHP.md",
+        "fhgff3Specification": "docs/FHGFF3.md",
         "checksumDefinition": "base64(SHA-512/256) over the (decompressed) file bytes except the "
-                    "root-level checksum line and its terminator (FASTA, GFA and FHP FASTA only; in "
+                    "root-level checksum line and its terminator (FASTA, GFA, FHP FASTA and FHGFF3 only; in "
                     "microdata and JSON-LD the checksum is an ordinary metadata value)",
         "rules": {
             rule: {"summary": text, **({"notApplicable": NOT_APPLICABLE[rule]}

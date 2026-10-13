@@ -48,6 +48,21 @@ def main():
         note = ", the FHP schema and FHP examples"
     else:
         note = " (this converter has no FHP schema)"
+    # FHGFF3 (specs/007-gff3-header): the same for fhgff3_schema.json and examples/fhgff3/.
+    fhgff3 = args.converter / "bioheaders" / "fhgff3_schema.json"
+    if fhgff3.is_file():
+        if fhgff3.read_bytes() != (ROOT / "fhgff3.json").read_bytes():
+            print(f"FHGFF3 schema copy differs: {fhgff3}", file=sys.stderr)
+            return 1
+        for example in (ROOT / "examples" / "fhgff3").iterdir():
+            copy = args.converter / "examples" / "fhgff3" / example.name
+            if not copy.is_file() or copy.read_bytes() != example.read_bytes():
+                print(f"Companion FHGFF3 example differs or is missing: {example.name}",
+                      file=sys.stderr)
+                return 1
+        note += ", the FHGFF3 schema and FHGFF3 examples"
+    else:
+        note += " (this converter has no FHGFF3 schema)"
     print("Both converter schema copies, the JSON-LD context and all example files match "
           f"the specification{note}.")
     return 0

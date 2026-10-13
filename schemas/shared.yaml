@@ -1,0 +1,115 @@
+id: https://w3id.org/fhr/shared
+name: FAIRBioHeadersShared
+description: >-
+  Objects shared by FAIR-bioHeaders header types other than FHR: software,
+  sources that are not FAIR-bioHeaders files, and BUSCO completeness
+  (specs/007-gff3-header research D-04). Moved unchanged from fhp_linkml.yml.
+  FHR does not import this module, so fhr.json cannot change. The id is
+  provisional, like the core's.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  sdo: http://schema.org/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+classes:
+  Source:
+    description: >-
+      A source of sequences that is not a FAIR-bioHeaders file: a database
+      release, set, annotation run or other contribution
+    class_uri: fhr:Source
+    attributes:
+      name:
+        description: Name of the database, resource or contribution
+        slot_uri: sdo:name
+        required: true
+      release:
+        description: Release or annotation run of the source, as the source names it
+      setIdentifier:
+        description: Identifier of the set taken from the source, for example a UniProt proteome ID
+      url:
+        description: URL of the source or set
+        slot_uri: sdo:url
+        range: uri
+      assemblyAccession:
+        description: >-
+          Genome assembly accession that the source states for this set; an
+          assertion by the source, not a checksum link
+      sequenceCount:
+        description: Number of sequences in the file that came from this source
+        range: integer
+        minimum_value: 0
+      description:
+        description: What was taken from the source, or how the sequences were contributed
+        slot_uri: sdo:description
+  Software:
+    description: Software with its version and options.
+    class_uri: sdo:SoftwareApplication
+    attributes:
+      name:
+        description: Name of the software
+        slot_uri: sdo:name
+        required: true
+      uri:
+        description: URI of the software
+        slot_uri: sdo:url
+        range: uri
+      version:
+        description: Version of the software
+        slot_uri: sdo:softwareVersion
+      commandLineOption:
+        description: Command-line options given to the software, in order
+        multivalued: true
+        list_elements_ordered: true
+  Completeness:
+    description: >-
+      BUSCO completeness as counts, with the lineage dataset whose name gives
+      its version (for example primates_odb10)
+    class_uri: fhr:Completeness
+    attributes:
+      lineageDataset:
+        description: BUSCO lineage dataset, including its version suffix
+        pattern: ^[a-z0-9_]+_odb[0-9]+$
+        required: true
+      buscoVersion:
+        description: Version of BUSCO
+      mode:
+        description: BUSCO mode
+        range: BuscoMode
+      completeSingle:
+        description: Complete single-copy BUSCOs (S)
+        range: integer
+        minimum_value: 0
+        required: true
+      completeDuplicated:
+        description: Complete duplicated BUSCOs (D)
+        range: integer
+        minimum_value: 0
+        required: true
+      fragmented:
+        description: Fragmented BUSCOs (F)
+        range: integer
+        minimum_value: 0
+        required: true
+      missing:
+        description: Missing BUSCOs (M)
+        range: integer
+        minimum_value: 0
+        required: true
+      total:
+        description: Number of BUSCO groups searched (n)
+        range: integer
+        minimum_value: 1
+        required: true
+enums:
+  BuscoMode:
+    description: BUSCO run modes
+    permissible_values:
+      proteins:
+        description: Protein mode
+      transcriptome:
+        description: Transcriptome mode
+      genome:
+        description: Genome mode
