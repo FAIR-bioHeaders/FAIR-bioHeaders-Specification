@@ -49,8 +49,9 @@ An FHGFF3-headed GFF3 is reported with header type FHGFF3 and its schema result.
 
 - `bioheaders.gff3_directives(lines) -> dict`: the native directives of the leading block.
 - `bioheaders.cross_check(metadata, directives) -> list[str]`: warning texts (D-07).
-- `bioheaders.gff3_header_report(path, genome=None) -> dict`: the results the gff3-validator maps
-  to HDR-004 to HDR-010:
+- `bioheaders.gff3.header_report(path, genome=None) -> dict`: the results the gff3-validator
+  maps to HDR-004 to HDR-010. It lives in a submodule because it uses the command
+  implementations. The keys are:
   - `placement`, `checksum`, `yaml` and `schema`, each `{"ok": bool, "message": str}`;
   - `genome_link`, the same shape plus the form used;
   - `genome_match`: `matched`, `not matched`, `not checked` or `None` without a genome;

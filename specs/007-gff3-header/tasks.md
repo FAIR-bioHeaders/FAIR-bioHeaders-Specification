@@ -66,7 +66,7 @@ No task releases, tags, archives a DOI or changes w3id.org.
 
 ## Phase 5: Toolkit (US1–US4, US6)
 
-- [ ] T010 [US4] Tests first, in `FAIR-bioHeaders-Tools/tests/fhgff3_test.py`:
+- [X] T010 [US4] Tests first, in `FAIR-bioHeaders-Tools/tests/fhgff3_test.py`:
   - the `fhgff3` vectors from `FHR-Specification/conformance` (fixtures);
   - combine/strip byte preservation, including `##FASTA`, CRLF, gzip and BGZF;
   - a header before `##gff-version`;
@@ -76,27 +76,58 @@ No task releases, tags, archives a DOI or changes w3id.org.
   - `verify-links` for GFF3 files and `genomeReference`;
   - the FHR → FHGFF3 → FHP chain;
   - FHR and FHP outputs unchanged
-- [ ] T011 [US4] Scanner GFF3 mode, `input_gff3`/`output_gff3`, `FHGFF3_SCHEMA`, `header_type`/`schema_for` in `bioheaders/__init__.py`. Bundle `fhgff3_schema.json`
-- [ ] T012 [US4] The GFF3 kind, `fhr-gff3-combine|strip|validate`, generic-command support and messages in `bioheaders/cli.py`. Add the scripts in `pyproject.toml`
-- [ ] T013 [US1] [US2] `verify-links` for GFF3 FILE and PARENT, and `genomeReference` results (D-08)
-- [ ] T014 [US3] `gff3_directives`, `cross_check` and the warnings in `verify` and `verify-links` (D-07)
-- [ ] T015 [US6] `assess` recognises FHGFF3. Remove the "not specified yet" reason
-- [ ] T016 `gff3_header_report` for the validator (contracts/cli.md, Library)
-- [ ] T017 README and CHANGELOG. Run the toolkit gates on 3.9 and 3.13, and the installed-wheel check
+- [X] T011 [US4] Scanner GFF3 mode, `input_gff3`/`output_gff3`, `FHGFF3_SCHEMA`, `header_type`/`schema_for` in `bioheaders/__init__.py`. Bundle `fhgff3_schema.json`
+- [X] T012 [US4] The GFF3 kind, `fhr-gff3-combine|strip|validate`, generic-command support and messages in `bioheaders/cli.py`. Add the scripts in `pyproject.toml`
+- [X] T013 [US1] [US2] `verify-links` for GFF3 FILE and PARENT, and `genomeReference` results (D-08)
+- [X] T014 [US3] `gff3_directives`, `cross_check` and the warnings in `verify` and `verify-links` (D-07)
+- [X] T015 [US6] `assess` recognises FHGFF3. Remove the "not specified yet" reason
+- [X] T016 `gff3_header_report` for the validator (contracts/cli.md, Library)
+- [X] T017 README and CHANGELOG. Run the toolkit gates on 3.9 and 3.13, and the installed-wheel check
 
 ## Phase 6: User Story 5 (P2): gff3-validator
 
-- [ ] T018 [US5] Tests first: header conformance cases (no header, valid, invalid placement, bad checksum, schema error, no genome link, stale parent with `--genome`, cross-check warning). Header and feature results stay separate
-- [ ] T019 [US5] Implement HDR-004 to HDR-010 in `gff3_validator/header.py` and `engine.py` (contracts/validator.md). Update the catalogue (statuses, HDR-010) in both copies, widen the `headers` extra to `>=0.5,<0.7`, and install the toolkit from a pinned commit in CI for the header tests
-- [ ] T020 [US5] Update the validator README and CHANGELOG, and run its gates
+- [X] T018 [US5] Tests first: header conformance cases (no header, valid, invalid placement, bad checksum, schema error, no genome link, stale parent with `--genome`, cross-check warning). Header and feature results stay separate
+- [X] T019 [US5] Implement HDR-004 to HDR-010 in `gff3_validator/header.py` and `engine.py` (contracts/validator.md). Update the catalogue (statuses, HDR-010) in both copies, widen the `headers` extra to `>=0.5,<0.7`, and install the toolkit from a pinned commit in CI for the header tests
+- [X] T020 [US5] Update the validator README and CHANGELOG, and run its gates
 
 ## Phase 7: Polish
 
-- [ ] T021 Open the PRs in order (specification, toolkit, validator). Comment with links on #48, #50, #55, Tools#33, Tools#34 and FHR-Specification#62
-- [ ] T022 Record the task status and follow-ups F-01 to F-07 in this file
+- [X] T021 Open the PRs in order (specification, toolkit, validator). Comment with links on #48, #50, #55, Tools#33, Tools#34 and FHR-Specification#62
+- [X] T022 Record the task status and follow-ups F-01 to F-07 in this file
 
 ## Dependencies
 
 - Setup → Foundational → US1/US2 → US4 (specification).
 - The toolkit tasks need the specification's vectors and schema.
 - The validator needs the toolkit commit.
+
+## Status (2026-10-13)
+
+All tasks are done:
+- FHR-Specification#94 (T001–T009);
+- FAIR-bioHeaders-Tools#51 (T010–T017);
+- gff3-validator#13 (T018–T020);
+- this record (T021–T022).
+
+No release, tag, DOI or w3id change was made.
+
+Deviations recorded during implementation:
+- `gff3_header_report` is `bioheaders.gff3.header_report`, in a submodule, because it uses the
+  command implementations (contracts/cli.md is updated).
+- The toolkit's usage error for a non-sequence file now names GFF3 (`Expected a FASTA, GFA or
+  GFF3 file`).
+- A GFF3 parent given to `verify-links` is now checksummed instead of reported as "GFF3 headers
+  are not specified yet". Both are intended consequences of GFF3 support. FHR and FHP file
+  output is unchanged.
+- In the gff3-validator, an HDR-009 comparison that cannot be made is listed under skipped
+  checks, not reported as a finding. Conformance cases carry `headers: checked | unavailable`,
+  and tests run without header support unless marked, so results do not depend on the
+  installed toolkit.
+
+Follow-ups, beyond F-01 to F-07 in plan.md:
+
+| Id | Follow-up |
+|---|---|
+| F-08 | The examples use `##species https://identifiers.org/taxonomy:9606`. GFF3 prefers NCBI's browser URL, and the gff3-validator warns about it (GFF-DIR-007). Their synthetic CDS also draws BIO-006/BIO-007 warnings with `--genome`. Switching to the NCBI form changes the examples' checksums and the toolkit's companion copies |
+| F-09 | GFF3 support in the toolkit's Nextflow modules (`fairbioheaders/combine`, `verify`) |
+| F-10 | The gff3-validator's `headers` extra pinned to the first fair-bioheaders release with FHGFF3 support, and its CI step replaced by that release |

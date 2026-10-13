@@ -7,7 +7,7 @@
 - **Otherwise**: HDR-002 as today. Mode `skip` gives HDR-003, and no header with `require` gives
   HDR-001.
 
-| Rule | Level | Result from `gff3_header_report` |
+| Rule | Level | Result from `bioheaders.gff3.header_report` |
 |---|---|---|
 | HDR-004 | error | `placement` |
 | HDR-005 | error | `checksum` |
