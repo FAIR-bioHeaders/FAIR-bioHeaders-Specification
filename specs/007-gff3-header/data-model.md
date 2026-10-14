@@ -6,7 +6,7 @@
 
 | Slot | Required | Range | Source | Notes |
 |---|---|---|---|---|
-| `schema` | yes | string | core | Pattern: raw GitHub URL of `FHR-Specification/<ref>/fhgff3.json` (D-02) |
+| `schema` | yes | string | core | Pattern: raw GitHub URL of `FAIR-bioHeaders-Specification/<ref>/fhgff3.json` (D-02) |
 | `schemaVersion` | yes | `1` | core | `enum: [1]` |
 | `annotation` | yes | string | FHGFF3 | Name of the annotation (`sdo:name`) |
 | `taxon` | yes | `Taxon` | core | One taxon (FR-012) |

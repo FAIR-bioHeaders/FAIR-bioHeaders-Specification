@@ -30,7 +30,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 JSONLD_FILES = ("fhr.context.jsonld", "terms.ttl", "terms.jsonld")
 TAG = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+")
-BLOB = "https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/"
+BLOB = "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/"
 PAGE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,7 +162,7 @@ def index_page(versions):
     items = "\n".join(
         f'<li><a href="fhr/{v}/jsonld/fhr.context.jsonld">{v}</a></li>' for v in versions)
     body = f"""<h1>FAIR-bioHeaders JSON-LD</h1>
-<p>JSON-LD files of the <a href="https://github.com/FAIR-bioHeaders/FHR-Specification">FHR
+<p>JSON-LD files of the <a href="https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification">FAIR-bioHeaders
 specification</a>. Cite them through their persistent URLs:</p>
 <ul>
 <li>Vocabulary: <a href="terms/"><code>https://w3id.org/fair-bioheaders/terms</code></a>

@@ -13,7 +13,7 @@ document is the FHR record itself plus an `@context` and `@type`. Processors rea
 schema.org (and FHR-vocabulary) triples, and FHR tools read it back to the identical record. The
 work has four parts in two repositories:
 
-1. **Semantics in LinkML** (FHR-Specification).
+1. **Semantics in LinkML** (FAIR-bioHeaders-Specification).
    - `schemas/core.yaml` and `fhr_linkml.yml` gain `slot_uri`/`class_uri` annotations, the
      prefixes `sdo:` and `fhr:`, and `default_prefix: fhr`. These are the single source of the
      term IRIs.
@@ -22,7 +22,7 @@ work has four parts in two repositories:
      emits the FHR vocabulary (`jsonld/terms.ttl`, `docs/TERMS.md`) under
      `https://w3id.org/fair-bioheaders/terms#`.
    - `fhr.json` is untouched, and `check_linkml.py` still passes (research R-06, R-08).
-2. **Mapping table** (FHR-Specification, `mappings/fhr-jsonld-dcmi.yml` with a JSON Schema).
+2. **Mapping table** (FAIR-bioHeaders-Specification, `mappings/fhr-jsonld-dcmi.yml` with a JSON Schema).
    - All 45 FHR property paths, each with its JSON-LD term, its DCMI Terms equivalents and a
      mapping kind from #56's vocabulary. 20 paths map to schema.org, 3 become node `@id`s and 22
      use FHR terms. 19 have a DCMI term, and 26 record "none" with a reason. This is the table
@@ -48,10 +48,10 @@ All design decisions, with their alternatives, are in [research.md](research.md)
 **Language/Version**:
 - FAIR-bioHeaders-Tools: Python 3.9–3.13; its gates run on 3.9 and 3.13. The general JSON-LD
   reader needs 3.10 or later (PyLD 3), while the writer and the canonical reader work on 3.9.
-- FHR-Specification scripts and tests: Python 3.13, as in CI.
+- FAIR-bioHeaders-Specification scripts and tests: Python 3.13, as in CI.
 
 **Primary Dependencies**:
-- FHR-Specification:
+- FAIR-bioHeaders-Specification:
   - LinkML 1.11.1 (already pinned) for `make_jsonld.py`;
   - `PyLD==3.3.0` as a **dev-only** test dependency (new `requirements-jsonld.txt`);
   - rdflib, which arrives with LinkML, for parsing Turtle in the tests.
@@ -62,13 +62,13 @@ All design decisions, with their alternatives, are in [research.md](research.md)
     (writer and canonical reader) needs no JSON-LD processor in the toolkit.
 
 **Storage**: Files only.
-- FHR-Specification: the generated context and vocabulary, the curated mapping table, examples
+- FAIR-bioHeaders-Specification: the generated context and vocabulary, the curated mapping table, examples
   and conformance vectors.
 - Toolkit: the bundled `bioheaders/fhr.context.jsonld`, byte-identical to the specification's
   `jsonld/fhr.context.jsonld`.
 
 **Testing**:
-- FHR-Specification: `unittest` (`tests/test_jsonld_*.py`), `scripts/make_jsonld.py --check`, and
+- FAIR-bioHeaders-Specification: `unittest` (`tests/test_jsonld_*.py`), `scripts/make_jsonld.py --check`, and
   the extended `scripts/check_conformance.py`.
 - Toolkit: `pytest` (`tests/jsonld_test.py`) with sockets disabled, run on 3.9 and 3.13. The
   general-path tests skip on 3.9.
@@ -110,7 +110,7 @@ No NEEDS CLARIFICATION remains.
 Both constitutions are **draft** (0.1.0, ratification pending David and Adam). The gates are
 applied as written.
 
-### FHR-Specification constitution (`.specify/memory/constitution.md`)
+### FAIR-bioHeaders-Specification constitution (`.specify/memory/constitution.md`)
 
 | Principle | Gate question | Pre-research | Post-design (re-check) |
 |---|---|---|---|
@@ -122,7 +122,7 @@ applied as written.
 | Verification gates | Are they named? | Yes, see below | Yes, plus `make_jsonld.py --check` and the JSON-LD tests |
 | Decision boundaries | Does anything here need maintainer authority? | The w3id registration, the context URL policy, Bioschemas fields and SC-004 confirmation are maintainer matters | Unchanged. No task submits to w3id.org, publishes, releases or tags. The `.htaccess` text is prepared as an artefact (R-10). Open questions are below |
 
-**FHR-Specification verification gates** (repository root):
+**FAIR-bioHeaders-Specification verification gates** (repository root):
 
 ```bash
 python -m pip install -r requirements-linkml.txt -r requirements-jsonld.txt
@@ -140,7 +140,7 @@ python scripts/check_conformance.py --converter ../FHR-File-Converter   # jsonld
 
 | Principle | Gate question | Pre-research | Post-design (re-check) |
 |---|---|---|---|
-| I. The specification is the contract | Is the behaviour defined in FHR-Specification first? Are the copies byte-identical? | **Pass**. The context, the reading rules, the examples and the vectors are specified here before the toolkit implements them | **Pass**. `bioheaders/fhr.context.jsonld` is byte-identical to `jsonld/fhr.context.jsonld`, checked by a toolkit test and by `check_release.py`. The writer's byte layout and the reading rules are defined in [contracts/cli.md](contracts/cli.md) and `docs/JSONLD.md`. The `fhr_schema.json` copies are untouched |
+| I. The specification is the contract | Is the behaviour defined in FAIR-bioHeaders-Specification first? Are the copies byte-identical? | **Pass**. The context, the reading rules, the examples and the vectors are specified here before the toolkit implements them | **Pass**. `bioheaders/fhr.context.jsonld` is byte-identical to `jsonld/fhr.context.jsonld`, checked by a toolkit test and by `check_release.py`. The writer's byte layout and the reading rules are defined in [contracts/cli.md](contracts/cli.md) and `docs/JSONLD.md`. The `fhr_schema.json` copies are untouched |
 | II. Exact bytes and one reading | Do all commands identify metadata the same way? | **Pass**: no sequence byte handling changes | **Pass**. `combine` with a `.jsonld` metadata file uses the same `read_metadata`, and the header it writes is the YAML of the same record. Strip and verify are unchanged |
 | III. Fail closed on untrusted input | Is ambiguous input rejected? Is resource use bounded? | **Pass, with obligations**: no remote fetch; ambiguity rejected | **Pass**. Duplicate keys are rejected. Contexts that are not bundled are refused, and nothing is fetched. More than one node, flattened form, multiple values for a single field, a wrong datatype and unknown terms are all errors. `--ignore-unknown-terms` is an explicit opt-in that still reports every term. Input size is bounded by the existing metadata reading. The PyLD loader cannot reach the network |
 | IV. Preserve metadata and typed values | Do round trips keep values and types? Are absent optional fields omitted? | **Pass, with an obligation**: an exact round trip | **Pass**. The canonical path is exact for every valid record, compared by value and JSON type (R-12). No nulls or empty nodes are emitted. `commandLineOption` order is kept as `@list`. The RDF-level losses are documented and not hidden (R-12) |
@@ -190,7 +190,7 @@ specs/011-jsonld-mapping/
 ### Source Code (both repositories)
 
 ```text
-FHR-Specification/                          (this repository)
+FAIR-bioHeaders-Specification/                          (this repository)
 ├── schemas/core.yaml                       # + prefixes sdo/fhr/xsd, default_prefix fhr, slot_uri/class_uri, annotations, sha2 uri
 ├── fhr_linkml.yml                          # + the same for FHR-only slots and classes; descriptions from fhr.json
 ├── jsonld/
@@ -230,9 +230,9 @@ FAIR-bioHeaders-Tools/                      (local checkout ../FHR-File-Converte
 ├── bioheaders/
 │   ├── __init__.py                         # fhr.input_jsonld / output_jsonld
 │   ├── jsonld.py                           # CONTEXT, KNOWN_CONTEXT_URLS, to_jsonld, from_jsonld, unmapped_keys, reverse map, offline loader
-│   ├── fhr.context.jsonld                  # byte-identical copy of FHR-Specification jsonld/fhr.context.jsonld
+│   ├── fhr.context.jsonld                  # byte-identical copy of FAIR-bioHeaders-Specification jsonld/fhr.context.jsonld
 │   └── cli.py                              # FORMATS/FORMAT_NAMES + jsonld; --ignore-unknown-terms; help text
-├── examples/example.fhr.jsonld, minimal.fhr.jsonld   # byte-identical with FHR-Specification
+├── examples/example.fhr.jsonld, minimal.fhr.jsonld   # byte-identical with FAIR-bioHeaders-Specification
 ├── tests/jsonld_test.py                    # writer bytes, canonical/general readers, CLI, offline, round trips
 ├── pyproject.toml                          # include context; extras jsonld = pyld (py>=3.10); dev pyld
 ├── README.md, CHANGELOG.md, AGENTS.md      # JSON-LD format, extra, API
@@ -242,7 +242,7 @@ FAIR-bioHeaders-Tools/                      (local checkout ../FHR-File-Converte
 **Structure Decision**: The work spans two existing repositories and creates no new project
 (research R-01).
 - The semantic source (LinkML), the generated context and vocabulary, the curated mapping table,
-  the rules and the vectors live in FHR-Specification.
+  the rules and the vectors live in FAIR-bioHeaders-Specification.
 - The behaviour lives in FAIR-bioHeaders-Tools as one module, `bioheaders/jsonld.py`, behind the
   existing format dispatch.
 - The w3id `terms` registration is a text artefact here (contracts/vocabulary.md). Adam or David

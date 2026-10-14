@@ -1,6 +1,6 @@
 # Implementation Plan: Protein FASTA header (FHP)
 
-**Branch**: `006-protein-header-spec` (FHR-Specification), `fhp-support` (FAIR-bioHeaders-Tools) | **Date**: 2026-10-11 | **Spec**: [spec.md](spec.md)
+**Branch**: `006-protein-header-spec` (FAIR-bioHeaders-Specification), `fhp-support` (FAIR-bioHeaders-Tools) | **Date**: 2026-10-11 | **Spec**: [spec.md](spec.md)
 
 **Input**: Feature specification from `/specs/006-protein-header/spec.md` (clarified 2026-10-11)
 
@@ -9,7 +9,7 @@
 FHP brings the FHR header to protein FASTA without changing FHR or the core. The work has two
 parts.
 
-**FHR-Specification**
+**FAIR-bioHeaders-Specification**
 - `fhp_linkml.yml` imports `schemas/core.yaml` and adds:
   - required `proteome` and `sourceType`;
   - optional `source`, `geneticCode`, `isoformPolicy`, `predictionSoftware`,
@@ -35,7 +35,7 @@ All decisions with alternatives are in [research.md](research.md) (D-01 to D-13)
 ## Technical Context
 
 **Language/Version**:
-- FHR-Specification scripts: Python 3.13 (CI).
+- FAIR-bioHeaders-Specification scripts: Python 3.13 (CI).
 - Toolkit: Python 3.9–3.13; gates run on 3.9 and 3.13.
 
 **Primary Dependencies**:
@@ -46,7 +46,7 @@ All decisions with alternatives are in [research.md](research.md) (D-01 to D-13)
 **Storage**: Files only: schemas, examples and conformance vectors.
 
 **Testing**:
-- FHR-Specification: `unittest`, including new `tests/test_fhp_schema.py` and extended
+- FAIR-bioHeaders-Specification: `unittest`, including new `tests/test_fhp_schema.py` and extended
   conformance tests.
 - Toolkit: pytest, with new `tests/fhp_test.py`.
 
@@ -92,7 +92,7 @@ specs/006-protein-header/
 ### Source Code
 
 ```text
-FHR-Specification/
+FAIR-bioHeaders-Specification/
 ├── fhp_linkml.yml                     # new
 ├── fhp.json                           # new, generated
 ├── json-schema-generator.py           # --type fhp

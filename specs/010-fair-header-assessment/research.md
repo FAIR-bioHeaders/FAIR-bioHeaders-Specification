@@ -19,7 +19,7 @@ requires a declared format before RDA-I1-01D, RDA-R1.3-01D or RDA-R1.3-02D can b
 (R-05).
 
 Two repositories are involved:
-- **FHR-Specification** is this repository.
+- **FAIR-bioHeaders-Specification** is this repository.
 - **FAIR-bioHeaders-Tools** is the `fair-bioheaders` distribution. Its import name and command are
   `bioheaders`, and the local checkout is `../FHR-File-Converter`.
 
@@ -31,14 +31,14 @@ Two repositories are involved:
 
 | Part | Repository | Path | Status |
 |---|---|---|---|
-| Guideline (US3, FR-007) | FHR-Specification | `docs/FAIR_HEADER_GUIDELINE.md` | Guidance only. Changes no schema; uses no MUST/SHOULD |
+| Guideline (US3, FR-007) | FAIR-bioHeaders-Specification | `docs/FAIR_HEADER_GUIDELINE.md` | Guidance only. Changes no schema; uses no MUST/SHOULD |
 | Assessment (US1, US2, US4) | FAIR-bioHeaders-Tools | `bioheaders assess` subcommand, code in `bioheaders/assess/` | New subcommand; no new `fhr-*` entry point |
 | Indicator rubric | FAIR-bioHeaders-Tools | `bioheaders/assess/data/rubric.json` | Versioned data file shipped in the wheel |
 | Synonym table | FAIR-bioHeaders-Tools | `bioheaders/assess/data/synonyms.json` | Versioned data file shipped in the wheel |
 | Reference tables (SPDX, identifier schemes, formats) | FAIR-bioHeaders-Tools | `bioheaders/assess/data/reference/*.json` | Pinned snapshots, version recorded |
 | Report JSON Schema | FAIR-bioHeaders-Tools (design source: `contracts/` here) | `bioheaders/assess/data/assessment-report.schema.json` | Byte-identical to `contracts/assessment-report.schema.json` at release |
-| Shared fixtures (implementation-neutral expected outcomes) | FHR-Specification | `assessment/` (`manifest.json`, `headers/`, `pairs/`, `edge/`) | Same style as `conformance/` |
-| Fixture runner | FHR-Specification | `scripts/check_assessment.py --tool ../FHR-File-Converter` | Same style as `check_conformance.py --converter` |
+| Shared fixtures (implementation-neutral expected outcomes) | FAIR-bioHeaders-Specification | `assessment/` (`manifest.json`, `headers/`, `pairs/`, `edge/`) | Same style as `conformance/` |
+| Fixture runner | FAIR-bioHeaders-Specification | `scripts/check_assessment.py --tool ../FHR-File-Converter` | Same style as `check_conformance.py --converter` |
 
 The tool reuses the toolkit's `open_input`, which detects gzip/BGZF by magic bytes and streams,
 and `read_chunks`. For files that carry a FAIR-bioHeaders header it also reuses
@@ -48,7 +48,7 @@ and `read_chunks`. For files that carry a FAIR-bioHeaders header it also reuses
 **Rationale**:
 - The guideline describes what a header *should* contain for types that have no specification.
   It belongs with the specifications, but it is guidance, so it does not touch `fhr.json` and
-  leaves FHR-Specification constitution I and II untouched.
+  leaves FAIR-bioHeaders-Specification constitution I and II untouched.
 - The assessment is behaviour, and behaviour lives in the toolkit (toolkit constitution I). A
   subcommand of the existing `bioheaders` CLI adds no new public entry point and inherits the
   streaming, gzip/BGZF and stdin support.
@@ -67,8 +67,8 @@ and `read_chunks`. For files that carry a FAIR-bioHeaders header it also reuses
 - *A standalone tool or repository (`fair-header-check`).* Rejected: it would duplicate the
   streaming/gzip reader and the FHR reader, so FHR lines could be read two ways (toolkit
   constitution II), and it adds a package to maintain.
-- *Putting the rubric in FHR-Specification.* Rejected for release 1. The rubric's rule ids are
-  coupled to the code that evaluates them. The guideline, which *is* in FHR-Specification, carries
+- *Putting the rubric in FAIR-bioHeaders-Specification.* Rejected for release 1. The rubric's rule ids are
+  coupled to the code that evaluates them. The guideline, which *is* in FAIR-bioHeaders-Specification, carries
   the human-readable interpretation and cites the same check ids, and a cross-repository check
   keeps the two in step (cross-check task in tasks.md). This is an open question for the maintainers (plan, Open
   questions).
@@ -188,7 +188,7 @@ It is never credited.
 
 **Alternatives considered**:
 - Heuristic "looks like" credit. Rejected: it lowers reviewer agreement and conflicts with
-  FHR-Specification constitution IV.
+  FAIR-bioHeaders-Specification constitution IV.
 - Treating the defline as a header. Rejected: it would over-credit record-level metadata.
 
 ## R-06. Recorded-link ranking (FR-005, US2)
@@ -226,7 +226,7 @@ one verdict: `match`, `mismatch` or `unverifiable` (with a reason).
 | Link kind | How it is verified offline | `unverifiable` reasons |
 |---|---|---|
 | `checksum` (FHR-family) | The related file's FHR checksum is computed with the toolkit's existing checksum code. That is SHA-512/256 over the exact bytes except the root checksum line (docs/FORMAT.md). If the related file has an FHR header, its stated checksum is verified first. Then the computed value is compared with the recorded one | related file unreadable |
-| `seqcol` | Compared with the related file's *stated* `seqcol_id` (FHR field) | `related-file-states-no-seqcol`. Computing a SeqCol digest is deferred: SeqCol is a supplied identifier (FHR-Specification constitution III), and no GA4GH vectors are in the repository yet |
+| `seqcol` | Compared with the related file's *stated* `seqcol_id` (FHR field) | `related-file-states-no-seqcol`. Computing a SeqCol digest is deferred: SeqCol is a supplied identifier (FAIR-bioHeaders-Specification constitution III), and no GA4GH vectors are in the repository yet |
 | `sequence-digests` (VCF contig `md5`, defline `MD5=`) | The MD5 of each named sequence in the related FASTA is computed as the VCF specification defines it (sequence letters upper-cased, no whitespace) and compared | sequence name absent from the related file (reported in the name lists) |
 | `accession` | Compared with an accession the related file *states* about itself: FHR `accessionID`, or a native self-identifying key | `related-file-states-no-identity`. That is the case for every surveyed FASTA (A §R2). A file name that contains the accession is reported as a *hint*, never as a match |
 | `url` / `name` | Compared with an equal URL or name the related file states | `related-file-states-no-identity` |
@@ -242,7 +242,7 @@ correct. The per-sequence MD5 is defined by VCF, and FlyBase already publishes i
 
 **Alternatives considered**:
 - *Treating a file-name match as `match`.* Rejected: it is not recorded (FR-005), and
-  FHR-Specification constitution IV forbids it.
+  FAIR-bioHeaders-Specification constitution IV forbids it.
 - *Computing SeqCol digests now.* Deferred. Implementing the GA4GH algorithm without published
   vectors here risks a wrong digest. This is an open question.
 - *Resolving the accession online to get the expected sequence names.* Rejected for release 1:
@@ -305,7 +305,7 @@ test.
   schema, which is byte-identical to `fhr.json`.
 - The report records:
   - the schema actually used: the canonical raw-main URL
-    `https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`, the
+    `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json`, the
     bundled copy's SHA-256, and the `schemaVersion` the file cites;
   - the result: `valid`, `invalid` (with the JSON path and message) or `not_assessed`.
 
@@ -411,7 +411,7 @@ The suggestion templates live in `rubric.json`, per indicator and per convention
 native and core keys per concept live in `synonyms.json` (`emit`).
 
 **Rationale**: SC-002 requires that a suggestion can be applied without consulting other
-documentation. FHR-Specification constitution IV forbids invented metadata and requires labelled
+documentation. FAIR-bioHeaders-Specification constitution IV forbids invented metadata and requires labelled
 placeholders.
 
 **Alternatives considered**:
@@ -508,7 +508,7 @@ rubric's version changes whenever a rule or a suggestion changes.
   frequent refreshes.
 - *Rules as Python code only.* Rejected: they could not be reviewed as data, and their version
   would be hidden.
-- *A general rule DSL.* Rejected as a speculative framework (FHR-Specification constitution V).
+- *A general rule DSL.* Rejected as a speculative framework (FAIR-bioHeaders-Specification constitution V).
 
 ## R-14. Performance approach (SC-004: 200 files in under 10 minutes on a laptop)
 
@@ -591,7 +591,7 @@ To track improvement between releases, run the tool on both releases and compare
 **Rationale**:
 - US4 asks for a summary across files plus per-file reports.
 - Per-indicator counts show progress without becoming a score.
-- An explicit pairs file avoids guessing which genome goes with which file, which FHR-Specification
+- An explicit pairs file avoids guessing which genome goes with which file, which FAIR-bioHeaders-Specification
   constitution IV forbids.
 
 **Alternatives considered**:
@@ -631,7 +631,7 @@ type.
 
 ## R-18. Fixtures and the SC-001 corpus
 
-**Decision**: The shared fixtures live in FHR-Specification `assessment/`:
+**Decision**: The shared fixtures live in FAIR-bioHeaders-Specification `assessment/`:
 - `headers/`: the raw captured header lines of the A §R3 corpus. These are 17 files, a superset
   of the five required providers and four types. The survey's `# SOURCE-URL`/`# FETCHED` lines
   are removed, and the provenance moves to the manifest (`source_url`, `fetched`).
@@ -726,7 +726,7 @@ fail 4 of the 5 required providers (A §3.7).
 **Decision**:
 - **SC-001**: For the 17 corpus files, a reviewer who is not the implementer checks each reported
   status against the cited lines and the rubric text. The reviewer records agree or disagree in
-  `assessment/review/sc001-<date>.tsv` in FHR-Specification. The criterion is met at ≥ 90%
+  `assessment/review/sc001-<date>.tsv` in FAIR-bioHeaders-Specification. The criterion is met at ≥ 90%
   agreement over the statuses of the offline-assessed indicators.
 - **SC-005**: A maintainer asks a provider, the Alliance first, to run the quickstart on one
   release and report back. Contacting the provider is a maintainer action; a task list does not

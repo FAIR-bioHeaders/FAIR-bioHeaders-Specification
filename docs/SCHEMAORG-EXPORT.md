@@ -11,7 +11,7 @@ splits the record into the entities it describes:
 - the grant and the article.
 
 The design is [specs/013-schemaorg-export](../specs/013-schemaorg-export/spec.md), from David
-Molik's proposals on [#56](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56). The
+Molik's proposals on [#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56). The
 profile is **provisional** until #56 publishes its own export documents.
 
 - Field-by-field table: [`mappings/fhr-schemaorg-export.yml`](../mappings/fhr-schemaorg-export.yml).

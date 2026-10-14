@@ -89,7 +89,7 @@ generated from the LinkML schemas, checked against the conformance vectors.
   Zenodo-archived release, following the FHR release process.
 - **FR-004**: Existing FHR metadata MUST remain valid (FHR schemaVersion 1 stays
   compatible; the core refactor is not a breaking change for FHR users).
-- **FR-005**: Repository layout: a single specification monorepo (FHR-Specification) with a directory per header type; the core, parsing rules, conformance tooling and CI are shared; releases are tagged per type (decided in #54).
+- **FR-005**: Repository layout: a single specification monorepo (FAIR-bioHeaders-Specification) with a directory per header type; the core, parsing rules, conformance tooling and CI are shared; releases are tagged per type (decided in #54).
 
 ## Success Criteria *(mandatory)*
 

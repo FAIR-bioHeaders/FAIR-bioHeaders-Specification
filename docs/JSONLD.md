@@ -64,7 +64,7 @@ assemblies.
 
 Some minimum properties are not FHR fields. A writer may take them from an **export context**
 (`bioheaders convert --export-context FILE`), a small YAML or JSON mapping that is kept outside
-the FHR record. Its format is provisional until FHR-Specification#56 defines the shared export
+the FHR record. Its format is provisional until FAIR-bioHeaders-Specification#56 defines the shared export
 context:
 
 ```yaml
@@ -110,11 +110,11 @@ if any, stays separate ([MICRODATA.md](MICRODATA.md)).
 ## Publication
 
 - The canonical source of the context is `jsonld/fhr.context.jsonld` on `main`:
-  `https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/jsonld/fhr.context.jsonld`.
+  `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/jsonld/fhr.context.jsonld`.
 - Release copies are addressed as
   `https://w3id.org/fair-bioheaders/fhr/vX.Y.Z/jsonld/fhr.context.jsonld`, once a release
   contains the file. That URL redirects to the copy on the
-  [GitHub Pages site](https://fhref.org/FHR-Specification/), which serves it as
+  [GitHub Pages site](https://fhref.org/FAIR-bioHeaders-Specification/), which serves it as
   `application/ld+json` with CORS, so JSON-LD processors can load it.
 - The vocabulary namespace `https://w3id.org/fair-bioheaders/terms` redirects by content
   negotiation: `Accept: text/turtle` gets `terms.ttl`, `Accept: application/ld+json` gets

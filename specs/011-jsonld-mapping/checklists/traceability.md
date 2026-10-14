@@ -105,13 +105,13 @@ The pass found these points. Each one is resolved in the artefacts as noted.
 
 Every FR, SC and acceptance item above has its tasks done:
 
-- MVP (US1, US2): FHR-Specification#80 and #81, FAIR-bioHeaders-Tools#42 (issue Tools#35).
-- US3 (the general reader): FHR-Specification#86, FAIR-bioHeaders-Tools#44.
+- MVP (US1, US2): FAIR-bioHeaders-Specification#80 and #81, FAIR-bioHeaders-Tools#42 (issue Tools#35).
+- US3 (the general reader): FAIR-bioHeaders-Specification#86, FAIR-bioHeaders-Tools#44.
 - Maintainer decisions:
-  - Pages publishing: FHR-Specification#83. The w3id rules were merged in perma-id/w3id.org#6860 (live 2026-10-12).
-  - Decisions recorded in FHR-Specification#78; author typing and the Bioschemas export are in
-    FHR-Specification#80 and FAIR-bioHeaders-Tools#42.
-  - `nameType` on `release-v0.4`: FHR-Specification#85.
+  - Pages publishing: FAIR-bioHeaders-Specification#83. The w3id rules were merged in perma-id/w3id.org#6860 (live 2026-10-12).
+  - Decisions recorded in FAIR-bioHeaders-Specification#78; author typing and the Bioschemas export are in
+    FAIR-bioHeaders-Specification#80 and FAIR-bioHeaders-Tools#42.
+  - `nameType` on `release-v0.4`: FAIR-bioHeaders-Specification#85.
 - V8 on validator.schema.org is recorded under T027. Root type terms were added for JSON-LD 1.0
   tools.
 

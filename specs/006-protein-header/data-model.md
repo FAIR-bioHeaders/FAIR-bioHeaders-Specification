@@ -10,7 +10,7 @@ it is defined in `fhp_linkml.yml`.
 
 | Key | Origin | Required | Type and constraint |
 |---|---|---|---|
-| `schema` | core (FHP usage) | yes | string matching `^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\.json$` (D-02) |
+| `schema` | core (FHP usage) | yes | string matching `^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/[A-Za-z0-9._/-]+/fhp\.json$` (D-02) |
 | `schemaVersion` | core (FHP usage) | yes | number, `enum: [1]` (D-03) |
 | `proteome` | FHP | yes | string: name of the protein set |
 | `sourceType` | FHP | yes | `predicted` \| `database` \| `mixed` (§5) |

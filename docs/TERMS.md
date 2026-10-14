@@ -12,7 +12,7 @@ deprecated.
   [jsonld/terms.jsonld](../jsonld/terms.jsonld) (JSON-LD).
 - How records use the terms: [JSONLD.md](JSONLD.md) and the
   [mapping table](../mappings/fhr-jsonld-dcmi.yml).
-- Licence: MPL-2.0. To cite a term, give its IRI and the FHR-Specification release.
+- Licence: MPL-2.0. To cite a term, give its IRI and the FAIR-bioHeaders-Specification release.
 
 Each heading is the term's local name, so `https://w3id.org/fair-bioheaders/terms#checksum` is the section `#checksum` below.
 

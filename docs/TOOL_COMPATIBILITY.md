@@ -2,9 +2,9 @@
 
 This survey tests how common bioinformatics tools handle FASTA, GFA and GFF3
 files that carry FHR header lines (`;~` in FASTA, `#~` in GFA and GFF3). It
-answers [#40](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/40)
+answers [#40](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/40)
 (FASTA and GFA tools) and
-[#49](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/49) (GFF3
+[#49](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/49) (GFF3
 tools; spec 007 FR-006). Run date: 2026-10-08.
 
 ## Method

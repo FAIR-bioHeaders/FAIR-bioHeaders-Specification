@@ -1,6 +1,6 @@
 # Contract: the FAIR-bioHeaders vocabulary (`terms#`)
 
-**Feature**: 011-jsonld-mapping | **Repository**: FHR-Specification | Research: R-05, R-08, R-10, R-17
+**Feature**: 011-jsonld-mapping | **Repository**: FAIR-bioHeaders-Specification | Research: R-05, R-08, R-10, R-17
 
 The vocabulary defines every FHR-specific term that the JSON-LD context uses (FR-002, FR-008).
 It is **generated** by `scripts/make_jsonld.py` from the LinkML model, and it is committed.
@@ -56,9 +56,9 @@ The ontology header node:
 
 <https://w3id.org/fair-bioheaders/terms> a owl:Ontology ;
     rdfs:label "FAIR-bioHeaders vocabulary"@en ;
-    rdfs:comment "Terms for FAIR-bioHeaders metadata that have no schema.org equivalent. Generated from the FHR-Specification LinkML model; do not edit."@en ;
+    rdfs:comment "Terms for FAIR-bioHeaders metadata that have no schema.org equivalent. Generated from the FAIR-bioHeaders-Specification LinkML model; do not edit."@en ;
     dcterms:license <https://www.mozilla.org/en-US/MPL/2.0/> ;
-    rdfs:seeAlso <https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/TERMS.md> .
+    rdfs:seeAlso <https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/TERMS.md> .
 ```
 
 Example term blocks (illustrative; the generated file is authoritative):
@@ -125,11 +125,11 @@ bullets. A PR may be opened only by Adam Wright or David Molik, the administrato
 
 ```apache
 RewriteCond %{HTTP_ACCEPT} text/turtle
-RewriteRule ^terms/?$ https://fhref.org/FHR-Specification/terms/terms.ttl [R=302,L]
+RewriteRule ^terms/?$ https://fhref.org/FAIR-bioHeaders-Specification/terms/terms.ttl [R=302,L]
 RewriteCond %{HTTP_ACCEPT} application/ld\+json
-RewriteRule ^terms/?$ https://fhref.org/FHR-Specification/terms/terms.jsonld [R=302,L]
-RewriteRule ^terms/?$ https://fhref.org/FHR-Specification/terms/ [R=302,L]
-RewriteRule ^fhr/(v[0-9]+\.[0-9]+\.[0-9]+)/jsonld/([^/]+)$ https://fhref.org/FHR-Specification/fhr/$1/jsonld/$2 [R=302,L]
+RewriteRule ^terms/?$ https://fhref.org/FAIR-bioHeaders-Specification/terms/terms.jsonld [R=302,L]
+RewriteRule ^terms/?$ https://fhref.org/FAIR-bioHeaders-Specification/terms/ [R=302,L]
+RewriteRule ^fhr/(v[0-9]+\.[0-9]+\.[0-9]+)/jsonld/([^/]+)$ https://fhref.org/FAIR-bioHeaders-Specification/fhr/$1/jsonld/$2 [R=302,L]
 ```
 
 The third rule is the 406-safe fallback: a client that accepts neither RDF form gets the HTML
@@ -145,7 +145,7 @@ Checks before submitting (done 2026-10-10 against perma-id/w3id.org master):
    - `fhr/v0.3.1`, `fhr/v0.3.1/schemas/core.yaml`, `gff3-validator` and the root are unchanged.
 3. The targets are live on Pages (the `jsonld-pages` workflow has run on `main`).
 
-## Verification (FHR-Specification)
+## Verification (FAIR-bioHeaders-Specification)
 
 - `python scripts/make_jsonld.py --check`: the context, `terms.ttl` and `TERMS.md` are up to date.
 - `tests/test_jsonld_vocabulary.py`:

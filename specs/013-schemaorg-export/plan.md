@@ -13,7 +13,7 @@ changes.
 
 ## Technical context
 
-- **FHR-Specification**:
+- **FAIR-bioHeaders-Specification**:
   - Python 3.13 scripts.
   - The reference exporter is `to_export` in `scripts/make_jsonld.py`. It uses only the standard
     library, like the canonical writer.
@@ -40,7 +40,7 @@ changes.
 ## Project structure
 
 ```text
-FHR-Specification/
+FAIR-bioHeaders-Specification/
   docs/SCHEMAORG-EXPORT.md                   rules X1–X9
   mappings/fhr-schemaorg-export.yml          export table (R-09)
   scripts/make_jsonld.py                     to_export, export_outputs, subset terms
@@ -59,7 +59,7 @@ FAIR-bioHeaders-Tools/
 
 ## Gates
 
-FHR-Specification:
+FAIR-bioHeaders-Specification:
 - `python -m unittest discover -s tests`
 - `python scripts/make_jsonld.py --check`
 - `python scripts/validate_examples.py`

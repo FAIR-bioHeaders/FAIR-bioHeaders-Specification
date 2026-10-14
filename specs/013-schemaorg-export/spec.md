@@ -7,7 +7,7 @@
 **Status**: Draft
 
 **Input**: David Molik's comment of 2026-10-14 on
-[FHR-Specification#56](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56),
+[FAIR-bioHeaders-Specification#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56),
 "Likely required schema.org mapping additions". It asks for:
 - a separate metadata-record `CreativeWork`;
 - `funding` as a `Grant`;

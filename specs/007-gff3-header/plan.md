@@ -1,6 +1,6 @@
 # Implementation Plan: GFF3 annotation header (FHGFF3)
 
-**Branch**: `007-gff3-header-spec` (FHR-Specification), `fhgff3-support` (FAIR-bioHeaders-Tools), `fhgff3-header-rules` (gff3-validator) | **Date**: 2026-10-13 | **Spec**: [spec.md](spec.md)
+**Branch**: `007-gff3-header-spec` (FAIR-bioHeaders-Specification), `fhgff3-support` (FAIR-bioHeaders-Tools), `fhgff3-header-rules` (gff3-validator) | **Date**: 2026-10-13 | **Spec**: [spec.md](spec.md)
 
 **Input**: Feature specification from `/specs/007-gff3-header/spec.md` (clarified 2026-10-13)
 
@@ -9,7 +9,7 @@
 FHGFF3 brings the FHR header to GFF3 annotations without changing FHR, FHP or the core. The work
 spans three repositories.
 
-**FHR-Specification**
+**FAIR-bioHeaders-Specification**
 - `schemas/shared.yaml` takes FHP's `Software`, `Source` and `Completeness` (D-04), with
   `fhp.json` unchanged.
 - `fhgff3_linkml.yml` imports the core and the shared module, and adds:
@@ -38,7 +38,7 @@ release (F-02, F-03).
 ## Technical Context
 
 **Language/Version**:
-- FHR-Specification scripts: Python 3.13 (CI).
+- FAIR-bioHeaders-Specification scripts: Python 3.13 (CI).
 - Toolkit and validator: Python 3.9–3.13.
 
 **Primary Dependencies**: LinkML 1.11.1 (pinned), jsonschema and PyYAML. No new dependency. The
@@ -92,7 +92,7 @@ specs/007-gff3-header/
 ### Source Code
 
 ```text
-FHR-Specification/
+FAIR-bioHeaders-Specification/
 ├── schemas/shared.yaml                  # new (classes moved from fhp_linkml.yml)
 ├── fhp_linkml.yml                       # imports schemas/shared
 ├── fhgff3_linkml.yml, fhgff3.json       # new (generated)
@@ -134,7 +134,7 @@ implementation, the toolkit's, used by the validator (D-11).
 ## Branches and release
 
 - FHGFF3 is developed on `main`. It joins `release-v0.4` at the next main → `release-v0.4` sync,
-  which the coordinator does. FHGFF3 v0.1 is released with FHR-Specification v0.4.0 (D-13).
+  which the coordinator does. FHGFF3 v0.1 is released with FAIR-bioHeaders-Specification v0.4.0 (D-13).
 - The toolkit's GFF3 support ships in a future 0.6.0 release. The validator's header rules need
   that release before the validator's own next PyPI release (D-11, D-14).
 

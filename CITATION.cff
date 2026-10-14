@@ -25,8 +25,8 @@ identifiers:
 - type: doi
   value: 10.5281/zenodo.23244878
   description: Zenodo version DOI for v0.3.1
-repository-code: https://github.com/FAIR-bioHeaders/FHR-Specification
-repository-artifact: https://github.com/FAIR-bioHeaders/FHR-Specification
+repository-code: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
+repository-artifact: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 abstract: The lack of interoperable data standards among reference genome data-sharing
   platforms inhibits cross-platform analysis while increasing the risk of data provenance
   loss. Here, we describe the FAIR-bioHeaders Reference genome (FHR), a metadata standard
@@ -50,7 +50,7 @@ keywords:
 license: MPL-2.0
 # Historical permissions and third-party exceptions are documented in LICENSE.
 doi: 10.5281/zenodo.6762549
-url: https://github.com/FAIR-bioHeaders/FHR-Specification
+url: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 preferred-citation:
   type: article
   title: 'FAIR Header Reference genome: a TRUSTworthy standard'

@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: Review finding for FHR-Specification#29 (decision 3): the checksum
+**Input**: Review finding for FAIR-bioHeaders-Specification#29 (decision 3): the checksum
 rules in docs/FORMAT.md left cases undefined. Independent implementations need
 shared vectors so they agree on which bytes are hashed and which lines are
 metadata.

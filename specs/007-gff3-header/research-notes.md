@@ -127,7 +127,7 @@ I	R64-1-1	chromosome	1	230218	…
   `/fair-bioheaders/<type>/vX.Y.Z`.
 - **Toolkit** (FAIR-bioHeaders-Tools `main`): reads `#~` headers in GFA. The leading block ends at
   the first nonblank line that is not a `#` comment (`bioheaders/__init__.py` `sequence_parts`).
-  For `.gff3`/`.gff` it currently reports "GFF3 headers are not specified yet (FHR-Specification
+  For `.gff3`/`.gff` it currently reports "GFF3 headers are not specified yet (FAIR-bioHeaders-Specification
   spec 007)" (`bioheaders/cli.py` `GFF3_REASON`). `verify-links` covers FHR and FHP parents.
 - **gff3-validator**:
   - HDR-001 to HDR-003 (header required, present but not validated, skipped) are implemented.

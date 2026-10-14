@@ -17,14 +17,14 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Terms for FAIR-bioHeaders metadata that have no schema.org equivalent. Generated from the FHR-Specification LinkML model; do not edit.",
+        "@value": "Terms for FAIR-bioHeaders metadata that have no schema.org equivalent. Generated from the FAIR-bioHeaders-Specification LinkML model; do not edit.",
         "@language": "en"
       },
       "dcterms:license": {
         "@id": "https://www.mozilla.org/en-US/MPL/2.0/"
       },
       "rdfs:seeAlso": {
-        "@id": "https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/TERMS.md"
+        "@id": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/TERMS.md"
       }
     },
     {

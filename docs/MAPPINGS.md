@@ -7,7 +7,7 @@ FHR metadata is mapped to other vocabularies in separate profiles:
 - [JSON-LD and Dublin Core (DCMI Terms)](#json-ld-and-dublin-core-dcmi-terms): every FHR
   field's JSON-LD term and DCMI Metadata Terms equivalents
   (`mappings/fhr-jsonld-dcmi.yml`), the starting point for the DataCite, Crossref, ARK and
-  bibliographic exports of [#56](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56).
+  bibliographic exports of [#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56).
 
 ## MIxS/MIGS mappings
 

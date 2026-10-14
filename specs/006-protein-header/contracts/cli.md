@@ -5,7 +5,7 @@
 ## Schema selection (every command)
 
 - `bioheaders.FHP_SCHEMA` is loaded from the bundled `fhp_schema.json`, a byte-identical copy of
-  FHR-Specification `fhp.json`.
+  FAIR-bioHeaders-Specification `fhp.json`.
 - `bioheaders.header_type(metadata)` returns `"FHP"` when `metadata["schema"]` is a string that
   fully matches the FHP schema URL pattern (D-02), and `"FHR"` otherwise.
 - `bioheaders.schema_for(metadata)` returns the matching schema.
@@ -31,7 +31,7 @@ validated, and its checksum verified, exactly as `verify` does. Then:
      its header type from its `schema` (FHP, FHR when the URL ends in `/fhr.json`, otherwise
      unknown).
    - Any other container, such as `.gff3`: the parent is unsupported, with the reason
-     `GFF3 headers are not specified yet (FHR-Specification spec 007)` or
+     `GFF3 headers are not specified yet (FAIR-bioHeaders-Specification spec 007)` or
      `unsupported file type`.
 2. For each `derivedFrom` entry, in order:
    - `matched` if a supplied parent's computed checksum equals the entry's `checksum`;
@@ -45,7 +45,7 @@ validated, and its checksum verified, exactly as `verify` does. Then:
 
 ```
 derivedFrom[0] FHR translatedFrom: not matched (genome-v2.fa has checksum Q1x…=)
-derivedFrom[1] FHGFF3 translatedFrom: not checked (annotation.gff3: GFF3 headers are not specified yet (FHR-Specification spec 007))
+derivedFrom[1] FHGFF3 translatedFrom: not checked (annotation.gff3: GFF3 headers are not specified yet (FAIR-bioHeaders-Specification spec 007))
 ```
 
 Free text after the status is informative and is not a stable interface. The status words are

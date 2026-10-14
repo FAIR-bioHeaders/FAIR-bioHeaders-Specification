@@ -3,7 +3,7 @@
 **Status**: draft for discussion. Not filed upstream.
 **Target**: samtools/htslib (`faidx.c`), and through it samtools faidx, bcftools,
 pysam and every other faidx consumer.
-**Context**: FHR-Specification #40; [tool survey](../TOOL_COMPATIBILITY.md).
+**Context**: FAIR-bioHeaders-Specification #40; [tool survey](../TOOL_COMPATIBILITY.md).
 
 ## Problem
 

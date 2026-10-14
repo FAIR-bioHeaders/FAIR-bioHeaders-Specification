@@ -104,7 +104,7 @@ classes:
         description: >-
           URL of the FHP JSON Schema this record follows; it identifies the
           header type (FR-011)
-        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\.json$
+        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/[A-Za-z0-9._/-]+/fhp\.json$
       schemaVersion:
         description: Version of the FHP schema
         equals_number: 1

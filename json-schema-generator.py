@@ -58,7 +58,7 @@ def _generate_type(linkml, name, published):
     generated = generate_from(ROOT / linkml, legacy_open=False)
     # Identify the schema like fhr.json: its canonical raw-main URL and type name.
     generated["$id"] = (
-        "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/"
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/"
         + published
     )
     generated["title"] = name

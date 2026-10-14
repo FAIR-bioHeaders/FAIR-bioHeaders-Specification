@@ -157,7 +157,7 @@ and verifies the recorded link against the genome.
 | VCF | VCF ## | `##contig=<ID=<sequence name>,length=<sequence length>,md5=<MD5 of the sequence>>` | illustrative | native | illustrative |
 | FASTA | FAIR-bioHeaders | `;~derivedFrom: [{headerType: FHR, relationship: <relationship, e.g. transcribedFrom>, checksum: <FHR checksum of the parent genome file>}]` | illustrative | native | illustrative |
 
-The `derivedFrom` slot and its relationship vocabulary are provisional (FHR-Specification#54),
+The `derivedFrom` slot and its relationship vocabulary are provisional (FAIR-bioHeaders-Specification#54),
 and FHR schemaVersion 1 does not include `derivedFrom`; the transcript (FHT) and protein (FHP)
 header types that would use it are drafts. Until a PROV-O or Relation Ontology mapping is
 published, RDA-R1.2-02M can be at most partially evidenced.

@@ -4,7 +4,7 @@
 
 Validation scenarios. Run them from each repository root after the tasks.
 
-## FHR-Specification
+## FAIR-bioHeaders-Specification
 
 ```bash
 python json-schema-generator.py --type fhgff3 --output /tmp/fhgff3.json && cmp /tmp/fhgff3.json fhgff3.json

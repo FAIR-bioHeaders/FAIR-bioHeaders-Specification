@@ -1,6 +1,6 @@
 # Quickstart: schema.org export
 
-Run these from FHR-Specification:
+Run these from FAIR-bioHeaders-Specification:
 
 ```bash
 python scripts/make_jsonld.py --check                       # export example and fixtures current

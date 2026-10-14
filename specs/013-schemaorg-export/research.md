@@ -201,7 +201,7 @@ pending.
 
 - **Decision**:
   - The toolkit's canonical reader sees the export context and refuses with: "this is a one-way
-    schema.org export (FHR-Specification docs/SCHEMAORG-EXPORT.md); it cannot be read back as FHR
+    schema.org export (FAIR-bioHeaders-Specification docs/SCHEMAORG-EXPORT.md); it cannot be read back as FHR
     metadata; use the canonical JSON-LD form".
   - The general reader (PyLD) does the same before expanding.
 - **Rationale**: Silently mapping an export back would lose the record's subjects and order, and

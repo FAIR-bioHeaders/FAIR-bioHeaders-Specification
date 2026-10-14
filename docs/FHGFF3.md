@@ -30,7 +30,7 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 ```
 ##gff-version 3
 #!genome-build Synthetic SyntheticAssembly1
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json
+#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json
 #~schemaVersion: 1
 #~annotation: Synthetic example annotation
 ##sequence-region ctg1 1 20
@@ -62,8 +62,10 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `annotation` | Name of the annotation |
 | the genome link | At least one of the two forms below |
 
-`schema` must be the raw GitHub URL of `fhgff3.json` in FHR-Specification, for example
-`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json`.
+`schema` must be the raw GitHub URL of `fhgff3.json` in FAIR-bioHeaders-Specification, for example
+`https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json`.
+The same URL under the repository's former name, `FHR-Specification`, is also
+recognised (#108): existing files cite it, and it serves the same file.
 `schemaVersion` is `1`.
 
 ### The genome link
@@ -170,8 +172,8 @@ These are recorded as follow-ups F-01 to F-07 in the
 - Header checks in the gff3-validator's browser build.
 - A release.
 
-FHGFF3 v0.1 is released from the `release-v0.4` line with FHR-Specification v0.4.0, as FHP is;
-it is on that line (FHR-Specification#97). Its persistent schema URL is
-`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`, the FHR-Specification release tag
+FHGFF3 v0.1 is released from the `release-v0.4` line with FAIR-bioHeaders-Specification v0.4.0, as FHP is;
+it is on that line (FAIR-bioHeaders-Specification#97). Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`, the FAIR-bioHeaders-Specification release tag
 (registered in perma-id/w3id.org#6890; it resolves once v0.4.0 is tagged). On `main`, it
 inherits the core's v0.3 patterns.

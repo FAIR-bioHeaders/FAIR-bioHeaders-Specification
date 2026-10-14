@@ -91,7 +91,7 @@ FHR: JSON-LD: taxon.checksum has no JSON-LD term; linked-data consumers will ign
 
 The path uses `[i]` for array items, for example `assemblyAuthor[0].affiliation`.
 
-`examples/example.fhr.jsonld` and `examples/minimal.fhr.jsonld` in FHR-Specification are this
+`examples/example.fhr.jsonld` and `examples/minimal.fhr.jsonld` in FAIR-bioHeaders-Specification are this
 output for the two JSON examples. The toolkit's output must be byte-identical (rule J7).
 
 ## Reading
@@ -106,11 +106,11 @@ The document takes this path when all of these hold:
 - its value is either
   - an object equal, as parsed JSON, to the `"@context"` value of a **bundled context**; or
   - a string in `KNOWN_CONTEXT_URLS`:
-    - `https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/jsonld/fhr.context.jsonld`;
-    - `https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/vX.Y.Z/jsonld/fhr.context.jsonld`;
+    - `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/jsonld/fhr.context.jsonld`;
+    - `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/vX.Y.Z/jsonld/fhr.context.jsonld`;
     - `https://w3id.org/fair-bioheaders/fhr/vX.Y.Z/jsonld/fhr.context.jsonld`.
 
-    The release URLs are recognised for each bundled release `vX.Y.Z`. No FHR-Specification
+    The release URLs are recognised for each bundled release `vX.Y.Z`. No FAIR-bioHeaders-Specification
     release contains the context yet, so the MVP bundles only the context of `main` and
     recognises only the raw-main URL. Nothing is fetched;
 - the only keys starting with `@` anywhere are the root `@context`, an optional root `@id` (a
@@ -217,7 +217,7 @@ jsonld.bioschemas_missing(doc) -> list[str]     # missing Bioschemas Dataset min
 ```
 
 `warn` receives messages without the `FHR: ` prefix; the default prints them to stderr with it.
-FHR-Specification's `scripts/make_jsonld.py` has the same reference writer and canonical reader
+FAIR-bioHeaders-Specification's `scripts/make_jsonld.py` has the same reference writer and canonical reader
 (`to_jsonld`, `canonical_record`), which the specification tests and vectors use.
 
 `from_jsonld` raises `ValueError` with the messages above. It never performs I/O except calling
@@ -227,7 +227,7 @@ FHR-Specification's `scripts/make_jsonld.py` has the same reference writer and c
 
 | File | Change |
 |---|---|
-| `bioheaders/fhr.context.jsonld` | New. Byte-identical to FHR-Specification `jsonld/fhr.context.jsonld` |
+| `bioheaders/fhr.context.jsonld` | New. Byte-identical to FAIR-bioHeaders-Specification `jsonld/fhr.context.jsonld` |
 | `pyproject.toml` | `include` gains `bioheaders/fhr.context.jsonld`. With US3: a new extra `[tool.poetry.extras] jsonld = ["pyld"]`, with `pyld = {version = "^3.3", optional = true, python = ">=3.10"}`, and `pyld` in the dev group with the same marker (the MVP adds neither). Runtime `dependencies` are unchanged |
 | `fhr/` and root compatibility copies | None. The context is not a schema copy and is not needed by the checkout-only `fhr/` scripts |
 | `compat/fhr` | No change. The `fhr` distribution requires `fair-bioheaders` without extras |

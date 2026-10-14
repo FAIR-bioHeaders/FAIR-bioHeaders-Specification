@@ -24,7 +24,7 @@ feature. The example files are real files from the Phase 0 survey
   bioheaders assess --help
   ```
 - No network is needed to assess files. The downloads below are only to obtain example files.
-  To try the tool without downloading anything, use the shared fixtures in a FHR-Specification
+  To try the tool without downloading anything, use the shared fixtures in a FAIR-bioHeaders-Specification
   checkout (`assessment/headers/`).
 
 ## 1. One annotation file (User Story 1)
@@ -238,12 +238,12 @@ taxonomy URL on line 8 is requested and its outcome is a note under RDA-I2-01M.
 
 | # | Scenario | Command | Expected | Covers |
 |---|---|---|---|---|
-| V1 | Shared fixtures | `python scripts/check_assessment.py --tool ../FHR-File-Converter` (FHR-Specification) | `ok` for every manifest entry | FR-001–FR-006, FR-008, FR-012, SC-003 |
+| V1 | Shared fixtures | `python scripts/check_assessment.py --tool ../FHR-File-Converter` (FAIR-bioHeaders-Specification) | `ok` for every manifest entry | FR-001–FR-006, FR-008, FR-012, SC-003 |
 | V2 | GFF3 with accession | §1 | RDA-I3-04M evidenced, citing line 5 | US1-1 |
 | V3 | FASTA with no header | §2 | every assessed indicator `not_evidenced`, a suggestion for each, exit 0 | US1-2, FR-003 |
 | V4 | FHR genome | `bioheaders assess conformance/valid/fasta-lf.fhr.fasta` | a conformance section `valid` against `fhr.json` (raw-main URL and bundled SHA-256 recorded), separate from the checklist | US1-3, FR-008 |
 | V5 | Pairs | §3 plus `assessment/pairs/*` | the expected pair classification for correct, version-mismatch, partial and name-mismatch pairs | US2, SC-003 |
-| V6 | Guideline coverage | `python -m unittest tests.test_assessment_guideline -v` (FHR-Specification) | every item has ≥ 2 conventions and check ids; the 41 indicators are covered or out of scope | US3, FR-007 |
+| V6 | Guideline coverage | `python -m unittest tests.test_assessment_guideline -v` (FAIR-bioHeaders-Specification) | every item has ≥ 2 conventions and check ids; the 41 indicators are covered or out of scope | US3, FR-007 |
 | V7 | Release | §4 with a 200-file synthetic release: `python scripts/bench_assess.py --files 200` (toolkit) | done in < 600 s; a second run is byte-identical (2026-10-10: 19.7 s on an i7-1165G7 laptop, Python 3.13) | US4, SC-004, FR-009 |
 | V8 | Offline guarantee | toolkit test suite with sockets disabled | passes; `online_checks: not_requested` | FR-010, FR-011 |
 | V9 | Reviewer agreement | the reviewer copies `assessment/review/sc001-template.tsv` to `sc001-<date>.tsv` and fills it (see `assessment/review/README.md`) | ≥ 90% agree | SC-001, SC-002 |

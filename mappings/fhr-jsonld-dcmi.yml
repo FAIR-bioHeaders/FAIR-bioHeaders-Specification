@@ -6,9 +6,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public License,
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain
 # one at https://mozilla.org/MPL/2.0/.
-id: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/mappings/fhr-jsonld-dcmi.yml
+id: https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/mappings/fhr-jsonld-dcmi.yml
 table_version: 1.0.0
-source_schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
+source_schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json
 source_schema_version: 1.0
 targets:
   jsonld:
@@ -51,8 +51,8 @@ entries:
   notes: 'schema.org: "a particular version of a schema used in some CreativeWork". The URL is copied
     unchanged (research R-16).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/schemaVersion
 - path: schemaVersion
   jsonld:
@@ -68,8 +68,8 @@ entries:
     reason: DCMI has no term for the version of the metadata contract.
   notes: The version of the FHR contract, not of the assembly (#56).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: genome
   jsonld:
     term: http://schema.org/name
@@ -84,8 +84,8 @@ entries:
       title (#56)
   notes: schema.org declares name equivalent to dct:title.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
 - path: genomeSynonym[]
@@ -100,8 +100,8 @@ entries:
     status: dcmi
     kind: exact
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/alternateName
 - path: taxon
   jsonld:
@@ -120,8 +120,8 @@ entries:
   notes: 'schema.org declares about equivalent to dct:subject. sdo:Taxon is pending. sdo:taxonomicRange
     is not used: it is pending and its domain is BioChemEntity only.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/about
   - https://schema.org/Taxon
   - https://schema.org/taxonomicRange
@@ -138,8 +138,8 @@ entries:
     reason: In DCMI the name is the label of the related resource, which has no property of its own.
   notes: The Bioschemas Taxon profile uses name for the accepted name.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
   - https://bioschemas.org/profiles/Taxon/1.0-RELEASE
 - path: taxon.uri
@@ -155,8 +155,8 @@ entries:
     condition: the identifiers.org taxonomy IRI is the object of dcterms:subject
   notes: The identifiers.org IRI identifies the taxon, so records about the same species share the node.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/Taxon/1.0-RELEASE
 - path: version
   jsonld:
@@ -170,8 +170,8 @@ entries:
     reason: DCMI has no version element; dcterms:hasVersion relates two resources.
   notes: Keep apart from schemaVersion (#56).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/version
 - path: metadataAuthor[]
   jsonld:
@@ -196,8 +196,8 @@ entries:
   notes: Never turn metadata authors into assembly authors (#56). Items are typed Person (ORCID), Organization
     (ROR) or Agent (research R-04, R-18).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/sdPublisher
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
 - path: metadataAuthor[].name
@@ -212,8 +212,8 @@ entries:
     kind: unsupported
     reason: In DCMI the name is the label of the related resource, which has no property of its own.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
 - path: metadataAuthor[].uri
@@ -232,8 +232,8 @@ entries:
       object of dcterms:creator
   notes: An ORCID IRI; it makes the agent a Person (research R-04).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
 - path: assemblyAuthor[]
   jsonld:
@@ -253,8 +253,8 @@ entries:
   notes: schema.org declares creator equivalent to dct:creator; the Bioschemas Dataset profile recommends
     creator.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/creator
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
 - path: assemblyAuthor[].name
@@ -268,8 +268,8 @@ entries:
     kind: unsupported
     reason: In DCMI the name is the label of the related resource, which has no property of its own.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
 - path: assemblyAuthor[].uri
@@ -284,8 +284,8 @@ entries:
     kind: exact
   notes: The ORCID IRI is the object of dcterms:creator.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/Person/0.3-DRAFT
 - path: dateCreated
   jsonld:
@@ -299,8 +299,8 @@ entries:
     kind: exact
   notes: The date the assembly was created; not a collection, deposit or publication date (#56, MAPPINGS.md).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/dateCreated
 - path: voucherSpecimen
   jsonld:
@@ -315,8 +315,8 @@ entries:
     kind: unsupported
     reason: A free-text description; dcterms:source would apply only if the value identified the specimen.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: accessionID
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#accessionID
@@ -335,8 +335,8 @@ entries:
   notes: 'fhr:accessionID rdfs:subPropertyOf schema:identifier (jsonld/terms.ttl). MAPPINGS.md: accessionID.name
     can name a repository.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/identifier
   - https://schema.org/PropertyValue
 - path: accessionID.name
@@ -352,8 +352,8 @@ entries:
     kind: conditional
     condition: the value is an accession of the assembly
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
 - path: accessionID.url
   jsonld:
@@ -369,8 +369,8 @@ entries:
     condition: the URL identifies the assembly
   notes: 'Not used as the node @id: in the example it is an institution home page.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/url
 - path: instrument[]
   jsonld:
@@ -386,8 +386,8 @@ entries:
     kind: unsupported
     reason: DCMI has no term for instruments.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/instrument
   - https://schema.org/measurementTechnique
 - path: scholarlyArticle
@@ -403,8 +403,8 @@ entries:
     condition: the DOI identifies an article that describes the assembly, not the assembly
   notes: A bare DOI (^10.), not an IRI, so it stays a literal (research R-06).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/citation
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
 - path: documentation
@@ -423,8 +423,8 @@ entries:
   notes: 'Maintainer decision 3 (plan.md): a URL value maps to sdo:subjectOf, written under the JSON-LD
     key subjectOf and read back as documentation (research R-18).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/description
   - https://schema.org/subjectOf
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
@@ -442,8 +442,8 @@ entries:
   notes: 'Compact identifiers (prefix:accession) stay literals. Bioschemas Dataset: CURIEs that resolve
     through identifiers.org should be used.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/identifier
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
 - path: relatedLink[]
@@ -459,8 +459,8 @@ entries:
     status: dcmi
     kind: exact
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/relatedLink
 - path: funding
   jsonld:
@@ -474,8 +474,8 @@ entries:
     kind: unsupported
     reason: DCMI has no funding term; a free-text grant line does not establish a funder identifier (#56).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/funding
 - path: reuseConditions
   jsonld:
@@ -494,8 +494,8 @@ entries:
     condition: the value identifies a licence
   notes: Preserve text; do not infer a standard licence from prose (#56).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/license
   - https://bioschemas.org/profiles/Dataset/1.0-RELEASE
 - path: masking
@@ -511,8 +511,8 @@ entries:
     kind: unsupported
     reason: DCMI has no term for sequence masking.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#vitalStats
@@ -527,8 +527,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.L50
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#L50
@@ -542,8 +542,8 @@ entries:
     reason: DCMI Metadata Terms have no property for assembly statistics.
   notes: A native JSON integer becomes xsd:integer in RDF.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.N50
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#N50
@@ -556,8 +556,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.L90
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#L90
@@ -570,8 +570,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.totalBasePairs
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#totalBasePairs
@@ -584,8 +584,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.numberContigs
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#numberContigs
@@ -599,8 +599,8 @@ entries:
     reason: DCMI Metadata Terms have no property for assembly statistics.
   notes: MIxS number_contig stays an exact match in LinkML.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.numberScaffolds
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#numberScaffolds
@@ -613,8 +613,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.readTechnology
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#readTechnology
@@ -627,8 +627,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.N90
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#N90
@@ -641,8 +641,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for assembly statistics.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: vitalStats.gcContent
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#gcContent
@@ -656,8 +656,8 @@ entries:
     reason: DCMI Metadata Terms have no property for assembly statistics.
   notes: A percentage from 0 to 100; xsd:double in RDF.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: checksum
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#checksum
@@ -671,9 +671,9 @@ entries:
     kind: unsupported
     reason: DCMI has no checksum term.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/FORMAT.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md
   - https://schema.org/sha256
 - path: assemblySoftware
   jsonld:
@@ -691,8 +691,8 @@ entries:
     reason: DCMI Metadata Terms have no property for software provenance.
   notes: A legacy string value stays a literal, not a node.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://bioschemas.org/profiles/ComputationalTool/1.0-RELEASE
 - path: assemblySoftware[].name
   jsonld:
@@ -705,8 +705,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for software provenance.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/name
   - https://bioschemas.org/profiles/ComputationalTool/1.0-RELEASE
 - path: assemblySoftware[].uri
@@ -723,8 +723,8 @@ entries:
   notes: 'Not the node @id: an @id would merge every record''s node for the same tool, mixing versions
     and options.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/url
   - https://bioschemas.org/profiles/ComputationalTool/1.0-RELEASE
 - path: assemblySoftware[].version
@@ -738,8 +738,8 @@ entries:
     kind: unsupported
     reason: DCMI Metadata Terms have no property for software provenance.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/softwareVersion
   - https://bioschemas.org/profiles/ComputationalTool/1.0-RELEASE
 - path: assemblySoftware[].commandLineOption[]
@@ -755,8 +755,8 @@ entries:
     reason: DCMI Metadata Terms have no property for software provenance.
   notes: Order matters (-t 2), so this is an RDF list.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
 - path: assemblyProtocol
   jsonld:
     term: https://w3id.org/fair-bioheaders/terms#assemblyProtocol
@@ -771,8 +771,8 @@ entries:
   notes: 'MIxS sop is broader (existing broad_mappings in fhr_linkml.yml; fhr_mappings.yml words the same
     pair as relationship: narrow, in the opposite direction).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
   - https://schema.org/measurementTechnique
 - path: seqcol_id
   jsonld:
@@ -790,6 +790,6 @@ entries:
     assembly's sequence collection, not the file (fhr:checksum) or the metadata record. The schema.org export
     writes it as an identifier PropertyValue (docs/SCHEMAORG-EXPORT.md).
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/FORMAT.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/MAPPINGS.md
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md

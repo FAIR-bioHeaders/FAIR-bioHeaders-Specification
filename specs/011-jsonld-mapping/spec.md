@@ -9,7 +9,7 @@
 **Input**: FAIR-bioHeaders-Tools#35 ("JSON-LD serialisation") and spec 008 FR-005. David
 Molik (2026-10-10): "Go ahead and make the JSON-LD mapping. I haven't started the Dublin
 Core, DataCite, Crossref, ARK, and BibTeX/BibLaTeX documentation and mappings yet, and I
-can reuse that in that ticket" (FHR-Specification#56).
+can reuse that in that ticket" (FAIR-bioHeaders-Specification#56).
 
 ## Clarifications
 

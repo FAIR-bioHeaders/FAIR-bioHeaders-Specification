@@ -19,7 +19,7 @@ Within each story, the test tasks come first and must fail before the implementa
 
 ## Path Conventions
 
-- `FHR-Specification/`: this repository.
+- `FAIR-bioHeaders-Specification/`: this repository.
 - `FAIR-bioHeaders-Tools/`: the `fair-bioheaders` package (local checkout `../FHR-File-Converter`).
 - `gff3-validator/`: the validator.
 
@@ -29,12 +29,12 @@ No task releases, tags, archives a DOI or changes w3id.org.
 
 ## Phase 1: Setup
 
-- [X] T001 Create `FHR-Specification/schemas/shared.yaml` with `Software`, `Source`, `Completeness` and `BuscoMode` moved from `fhp_linkml.yml`, and make `fhp_linkml.yml` import it. Regenerate `fhp.json` and confirm it is byte-identical (D-04)
-- [X] T002 Add `--type fhgff3` to `FHR-Specification/json-schema-generator.py` with contracts/fhgff3-schema.md steps 1–5
+- [X] T001 Create `FAIR-bioHeaders-Specification/schemas/shared.yaml` with `Software`, `Source`, `Completeness` and `BuscoMode` moved from `fhp_linkml.yml`, and make `fhp_linkml.yml` import it. Regenerate `fhp.json` and confirm it is byte-identical (D-04)
+- [X] T002 Add `--type fhgff3` to `FAIR-bioHeaders-Specification/json-schema-generator.py` with contracts/fhgff3-schema.md steps 1–5
 
 ## Phase 2: Foundational
 
-- [X] T003 Write `FHR-Specification/tests/test_fhgff3_schema.py` (fails first). It checks:
+- [X] T003 Write `FAIR-bioHeaders-Specification/tests/test_fhgff3_schema.py` (fails first). It checks:
   - the generator output equals `fhgff3.json`;
   - `fhr.json` and `fhp.json` are unchanged;
   - required fields and closed objects;
@@ -43,12 +43,12 @@ No task releases, tags, archives a DOI or changes w3id.org.
   - `featureCounts` and `soVersion` shapes;
   - FHR-only and FHP-only keys rejected;
   - every example valid
-- [X] T004 Write `FHR-Specification/fhgff3_linkml.yml` (data-model.md) and generate `fhgff3.json`. Add `.github/schema-baseline-fhgff3.json` and the drift check to CI
-- [X] T005 Extend `FHR-Specification/scripts/check_linkml.py` and `scripts/check_release.py` to FHGFF3
+- [X] T004 Write `FAIR-bioHeaders-Specification/fhgff3_linkml.yml` (data-model.md) and generate `fhgff3.json`. Add `.github/schema-baseline-fhgff3.json` and the drift check to CI
+- [X] T005 Extend `FAIR-bioHeaders-Specification/scripts/check_linkml.py` and `scripts/check_release.py` to FHGFF3
 
 ## Phase 3: User Stories 1 and 2 (P1): genome links
 
-- [X] T006 [P] [US1] Examples in `FHR-Specification/examples/fhgff3/`:
+- [X] T006 [P] [US1] Examples in `FAIR-bioHeaders-Specification/examples/fhgff3/`:
   - `genome.fhr.fasta` (a synthetic FHR genome);
   - `annotation.fhgff3.gff3` and `.yaml` (checksum link);
   - `minimal-reference.fhgff3.json` (reference link);
@@ -57,17 +57,17 @@ No task releases, tags, archives a DOI or changes w3id.org.
   - `no-header.gff3`, `header-invalid.fhgff3.gff3` and `stale-parent.fhgff3.gff3`.
 
   Placeholders are labelled (D-12)
-- [X] T007 [US1] `FHR-Specification/docs/FHGFF3.md`: status (draft), files, fields, the genome link (both forms, checksum authoritative), rules G1–G3, the native-directive cross-check, examples and follow-ups. Link it from `README.md` (header family section) and `AGENTS.md`
+- [X] T007 [US1] `FAIR-bioHeaders-Specification/docs/FHGFF3.md`: status (draft), files, fields, the genome link (both forms, checksum authoritative), rules G1–G3, the native-directive cross-check, examples and follow-ups. Link it from `README.md` (header family section) and `AGENTS.md`
 
 ## Phase 4: User Story 4 (P2): conformance
 
-- [X] T008 [US4] Extend `FHR-Specification/scripts/make_conformance.py` with the `fhgff3` vectors of contracts/conformance.md, using the standard library only. Regenerate `conformance/`, and extend `tests/test_conformance.py`. `check_conformance.py --converter` skips `fhgff3` for converters without GFF3 support unless `--require-format fhgff3` is given
-- [X] T009 [US4] Update `FHR-Specification/CHANGELOG.md`. Run every specification gate
+- [X] T008 [US4] Extend `FAIR-bioHeaders-Specification/scripts/make_conformance.py` with the `fhgff3` vectors of contracts/conformance.md, using the standard library only. Regenerate `conformance/`, and extend `tests/test_conformance.py`. `check_conformance.py --converter` skips `fhgff3` for converters without GFF3 support unless `--require-format fhgff3` is given
+- [X] T009 [US4] Update `FAIR-bioHeaders-Specification/CHANGELOG.md`. Run every specification gate
 
 ## Phase 5: Toolkit (US1–US4, US6)
 
 - [X] T010 [US4] Tests first, in `FAIR-bioHeaders-Tools/tests/fhgff3_test.py`:
-  - the `fhgff3` vectors from `FHR-Specification/conformance` (fixtures);
+  - the `fhgff3` vectors from `FAIR-bioHeaders-Specification/conformance` (fixtures);
   - combine/strip byte preservation, including `##FASTA`, CRLF, gzip and BGZF;
   - a header before `##gff-version`;
   - late `#~` lines;
@@ -92,7 +92,7 @@ No task releases, tags, archives a DOI or changes w3id.org.
 
 ## Phase 7: Polish
 
-- [X] T021 Open the PRs in order (specification, toolkit, validator). Comment with links on #48, #50, #55, Tools#33, Tools#34 and FHR-Specification#62
+- [X] T021 Open the PRs in order (specification, toolkit, validator). Comment with links on #48, #50, #55, Tools#33, Tools#34 and FAIR-bioHeaders-Specification#62
 - [X] T022 Record the task status and follow-ups F-01 to F-07 in this file
 
 ## Dependencies
@@ -104,7 +104,7 @@ No task releases, tags, archives a DOI or changes w3id.org.
 ## Status (2026-10-13)
 
 All tasks are done:
-- FHR-Specification#94 (T001–T009);
+- FAIR-bioHeaders-Specification#94 (T001–T009);
 - FAIR-bioHeaders-Tools#51 (T010–T017);
 - gff3-validator#13 (T018–T020);
 - this record (T021–T022).

@@ -123,7 +123,7 @@ slots:
     description: >-
       How this file relates to the parent. Provisional vocabulary: a PROV-O or
       Relation Ontology mapping is pending a maintainer decision
-      (FHR-Specification#54).
+      (FAIR-bioHeaders-Specification#54).
     range: DerivationRelationship
 classes:
   Taxon:
@@ -178,7 +178,7 @@ classes:
     description: >-
       Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema
       FR-003). Provisional until the relationship vocabulary is decided
-      (FHR-Specification#54).
+      (FAIR-bioHeaders-Specification#54).
     slots:
     - headerType
     - checksum
@@ -211,7 +211,7 @@ enums:
   DerivationRelationship:
     description: >-
       Provisional relationship vocabulary for derivedFrom. Values and any PROV-O /
-      Relation Ontology mapping await a maintainer decision (FHR-Specification#54).
+      Relation Ontology mapping await a maintainer decision (FAIR-bioHeaders-Specification#54).
     permissible_values:
       annotates:
         description: This file annotates the parent (e.g. GFF3 on a genome).

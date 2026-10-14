@@ -30,7 +30,7 @@ This file records the design decisions, each with its rationale and the alternat
 ## D-02 Header type discrimination
 
 **Decision**: The FHP schema constrains `schema` to a raw GitHub URL of
-`FAIR-bioHeaders/FHR-Specification/<ref>/fhp.json`. Tools select the FHP schema when `schema`
+`FAIR-bioHeaders/FAIR-bioHeaders-Specification/<ref>/fhp.json`. Tools select the FHP schema when `schema`
 matches that pattern, and the FHR schema otherwise.
 
 **Rationale**:

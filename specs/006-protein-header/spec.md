@@ -340,7 +340,7 @@ report. The website entry shows "Draft" before the release record exists.
 ## Assumptions
 
 - The subject slot is `proteome`, as decided in spec 004 FR-002 and #54. "FHP" is the working name.
-- FHP lives in the FHR-Specification monorepo (spec 003 FR-005) with its own schema files,
+- FHP lives in the FAIR-bioHeaders-Specification monorepo (spec 003 FR-005) with its own schema files,
   examples and per-type release tags. The concrete layout and tag form (for example
   `fhp-vX.Y.Z`, with a w3id alias like `/fair-bioheaders/fhp/vX.Y.Z`) is a plan-level choice.
   Publishing a release is a separate maintainer action (constitution, decision boundaries).

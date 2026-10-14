@@ -96,7 +96,7 @@ classes:
         description: >-
           URL of the FHGFF3 JSON Schema this record follows; it identifies the
           header type (FR-010)
-        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\.json$
+        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/[A-Za-z0-9._/-]+/fhgff3\.json$
       schemaVersion:
         description: Version of the FHGFF3 schema
         equals_number: 1

@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: Review finding for FHR-Specification#29 (decision 4): "Review retained
+**Input**: Review finding for FAIR-bioHeaders-Specification#29 (decision 4): "Review retained
 legacy constraints and unknown-property behavior rather than silently tightening
 them."
 

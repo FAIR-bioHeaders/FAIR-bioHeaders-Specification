@@ -174,7 +174,7 @@ Findings never change the statuses by themselves, apart from the caps in §5 ste
 | `guideline_item` | `G1`–`G8` | |
 
 **Rule**: Values never come from outside the file, the related file, or the file name (the last
-labelled as such). Placeholders are written `<…>` (FHR-Specification constitution IV).
+labelled as such). Placeholders are written `<…>` (FAIR-bioHeaders-Specification constitution IV).
 
 ## 8. RelatedFileLink (spec "Related-file link")
 
@@ -266,7 +266,7 @@ OnlineSection lists one OnlineCheck per checked target:
 | `checked_at` | RFC 3339 UTC | |
 | `time_dependent` | constant `true` | |
 
-## 13. GuidelineItem (spec key entity; FHR-Specification `docs/FAIR_HEADER_GUIDELINE.md`)
+## 13. GuidelineItem (spec key entity; FAIR-bioHeaders-Specification `docs/FAIR_HEADER_GUIDELINE.md`)
 
 | Field | Type | Rules |
 |---|---|---|
@@ -278,7 +278,7 @@ OnlineSection lists one OnlineCheck per checked target:
 | `examples` | list `{convention, line, source}` | At least 2 conventions (FR-007, US3 independent test). `source` is a survey file id, or `illustrative` |
 | `checks` | list of Indicator ids | The assessment checks that test this item |
 
-**Validation**: A test in FHR-Specification (`tests/test_assessment_guideline.py`) parses the
+**Validation**: A test in FAIR-bioHeaders-Specification (`tests/test_assessment_guideline.py`) parses the
 guideline's item table and checks it against the rubric indicator list. It checks for missing
 items, unknown ids, fewer than 2 example conventions, and unknown core fields.
 

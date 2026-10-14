@@ -32,8 +32,10 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `proteome` | Name of the protein set |
 | `sourceType` | `predicted`, `database` or `mixed` (see below) |
 
-`schema` must be the raw GitHub URL of `fhp.json` in FHR-Specification, for example
-`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json`.
+`schema` must be the raw GitHub URL of `fhp.json` in FAIR-bioHeaders-Specification, for example
+`https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json`.
+The same URL under the repository's former name, `FHR-Specification`, is also
+recognised (#108): existing files cite it, and it serves the same file.
 `schemaVersion` is `1`.
 
 The following fields are optional. Leave a field out when you do not know its value; tools never
@@ -105,7 +107,7 @@ These are recorded as follow-ups F-01 to F-07 in the
 - A persistent schema alias and a release.
 
 **Release line (maintainer decision, 2026-10-11).** FHP v0.1 is released from the
-`release-v0.4` line, with FHR-Specification v0.4.0, so it starts with the tightened core
+`release-v0.4` line, with FAIR-bioHeaders-Specification v0.4.0, so it starts with the tightened core
 patterns and the optional author `nameType`. Its persistent schema URL is
-`https://w3id.org/fair-bioheaders/fhp/vX.Y.Z` (the FHR-Specification release tag;
+`https://w3id.org/fair-bioheaders/fhp/vX.Y.Z` (the FAIR-bioHeaders-Specification release tag;
 registered in perma-id/w3id.org#6868; it resolves once v0.4.0 is tagged). On `main`, FHP still inherits the core's v0.3 patterns.

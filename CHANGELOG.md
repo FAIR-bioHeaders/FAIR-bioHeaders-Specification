@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Rename the repository from `FHR-Specification` to `FAIR-bioHeaders-Specification`
+  (#108). It holds the released specifications for every header type; each type is
+  developed in its own repository (a new `FHR-Specification` for FHR). Links and
+  generated text use the new name. The FHP and FHGFF3 schemas accept raw GitHub
+  schema URLs under either name, and the JSON-LD context URL under either name is a
+  known context. Raw URLs under the old name remain supported aliases that serve the
+  same files; schema URLs inside existing examples and vectors are unchanged.
 - Add a one-way schema.org export profile (feature 013, #56, from David Molik's
   2026-10-14 proposals). It is separate from the canonical JSON-LD, which does
   not change, and an export document cannot be read back.

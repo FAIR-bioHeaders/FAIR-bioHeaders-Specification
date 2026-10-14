@@ -3,7 +3,7 @@
 **Feature**: 010-fair-header-assessment (Phase 0 research, FR-012, FR-002, FR-011, User Story 3)
 **Date**: 2026-10-10
 **Inputs**: `spec.md` (clarified 2026-10-10); FAIR-bioHeaders `schemas/core.yaml` and `fhr.json`
-at FHR-Specification `origin/main` 21fef56 (2026-10-09); `specs/004-shared-core-schema/spec.md`;
+at FAIR-bioHeaders-Specification `origin/main` 21fef56 (2026-10-09); `specs/004-shared-core-schema/spec.md`;
 captured provider headers in `research/headers/`.
 
 ## 1. Source
@@ -124,7 +124,7 @@ files (GFF3 `##`/`#!`, VCF `##`, GAF `!`).
 | RDA-R1.1-02M | Metadata refers to a standard reuse licence | I | M | OFF | The licence value is an SPDX licence identifier, or the canonical URL of a standard licence (Creative Commons, Open Data Commons), from the pinned SPDX licence list. A recognised licence *name* in free text is partial. | `reuseConditions` |
 | RDA-R1.1-03M | Metadata refers to a machine-understandable reuse licence | I | M | OFF (online upgrade optional) | The value is an SPDX identifier or SPDX/CC licence IRI (both have published machine-readable expressions). RDA suggests resolving the link: the opt-in online check may confirm resolution. | `reuseConditions` |
 | RDA-R1.2-01M | Metadata includes provenance information according to community-specific standards | I | M | OFF | Provenance under keys defined by the convention, in three groups: **who** (`metadataAuthor`, FHR:`assemblyAuthor`, VCF `##source`, GAF `!generated-by`, GFF3 `#!processor`), **when** (`dateCreated`, VCF `##fileDate`, GAF `!date-generated`, GFF3 `#!genebuild-last-updated`), **from what / how** (`derivedFrom`, GFF3 `#!annotation-source`, FHR:`assemblySoftware`). | `metadataAuthor`, `dateCreated`, `version`, `derivedFrom` |
-| RDA-R1.2-02M | Metadata includes provenance information according to a cross-community language | U | M | OFF | Provenance is expressed in or mapped to a cross-domain language (PROV-O). In the core, `derivedFrom.relationship` is to be mapped to PROV-O / Relation Ontology (spec 004 FR-003, FHR-Specification#54, mapping not yet published): until then at most partial. Native conventions: not evidenced. | `derivedFrom.relationship` |
+| RDA-R1.2-02M | Metadata includes provenance information according to a cross-community language | U | M | OFF | Provenance is expressed in or mapped to a cross-domain language (PROV-O). In the core, `derivedFrom.relationship` is to be mapped to PROV-O / Relation Ontology (spec 004 FR-003, FAIR-bioHeaders-Specification#54, mapping not yet published): until then at most partial. Native conventions: not evidenced. | `derivedFrom.relationship` |
 | RDA-R1.3-01M | Metadata complies with a community standard | E | M | OFF | The header meets the requirements of the convention it uses (required keys present, values well-formed): FHR validates against its schema; GFF3 starts with `##gff-version 3`; VCF `##fileformat` is the first line; GAF `!gaf-version` is the first line. FHR schema conformance is computed and reported separately (FR-008) and only *cited* here. | `schema`, `schemaVersion` + required slots |
 | RDA-R1.3-01D | Data complies with a community standard | E | D | OFF | The file's records parse according to the declared format. Release 1: a bounded, deterministic check (header block and the first N records, N fixed and reported). Full validation is left to format validators (e.g. GFF3/VCF validators), whose output may be cited. | (format-native) |
 | RDA-R1.3-02M | Metadata is expressed in compliance with a machine-understandable community standard | E | M | OFF | The header's convention has a machine-readable schema and the header declares it: FHR `schema` → JSON Schema / LinkML (evidenced if it validates). GFF3/VCF/GAF header conventions have prose specifications only (partial). | `schema`, `schemaVersion` |
@@ -302,5 +302,5 @@ F-UJI, FAIRMetrics and FAIR-Checker are cited only, not copied.
 - F-UJI metrics v0.5: https://github.com/pangaea-data-publisher/fuji/blob/master/fuji_server/yaml/metrics_v0.5.yaml; Devaraju & Huber 2022, doi:10.1016/j.patter.2021.100370.
 - FAIR Maturity Indicators Gen2: https://github.com/FAIRMetrics/Metrics/tree/master/MaturityIndicators/Gen2; Wilkinson et al. 2019, doi:10.1038/s41597-019-0184-5.
 - FAIR-Checker: Gaignard et al. 2023, doi:10.1186/s13326-023-00289-5.
-- FAIR-bioHeaders `schemas/core.yaml`, `fhr.json`, `specs/004-shared-core-schema/spec.md` at FHR-Specification 21fef56.
+- FAIR-bioHeaders `schemas/core.yaml`, `fhr.json`, `specs/004-shared-core-schema/spec.md` at FAIR-bioHeaders-Specification 21fef56.
 - Provider headers captured in `research/headers/` (Ensembl and NCBI GFF3, FASTA, VCF).

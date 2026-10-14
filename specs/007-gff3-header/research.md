@@ -26,7 +26,7 @@ licence (#75).
 ## D-02 Header type discrimination
 
 **Decision**: The FHGFF3 schema constrains `schema` to a raw GitHub URL of
-`FAIR-bioHeaders/FHR-Specification/<ref>/fhgff3.json`. Tools select FHGFF3, FHP or FHR from the
+`FAIR-bioHeaders/FAIR-bioHeaders-Specification/<ref>/fhgff3.json`. Tools select FHGFF3, FHP or FHR from the
 `schema` URL, in that order, and default to FHR.
 
 **Rationale**: This is 006 D-02 with one more type. FHR stays the default, so FHR and FHP behaviour
@@ -266,7 +266,7 @@ another assertion of the same kind, and never computed from bytes in v0.1.
 
 **Decision**:
 - FHGFF3 is developed on `main`. It joins `release-v0.4` at the next main → `release-v0.4` sync,
-  done by the coordinator. FHGFF3 v0.1 is released with FHR-Specification v0.4.0, as FHP is.
+  done by the coordinator. FHGFF3 v0.1 is released with FAIR-bioHeaders-Specification v0.4.0, as FHP is.
 - The w3id alias `/fair-bioheaders/fhgff3/vX.Y.Z`, the release and the website entry are
   maintainer follow-ups.
 

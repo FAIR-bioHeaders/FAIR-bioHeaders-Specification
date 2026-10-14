@@ -10,114 +10,114 @@ entries:
   property: sdo:schemaVersion
   transformation: Written as an IRI on the metadata record, not on the assembly.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: schemaVersion
   subject: metadata-record
   property: fhr:schemaVersion
   notes: The metadata contract version; distinct from the assembly version and the schema URL.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: genome
   subject: assembly
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: genomeSynonym[]
   subject: assembly
   property: sdo:alternateName
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: taxon
   subject: assembly
   property: sdo:about
   transformation: A Taxon node.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: taxon.name
   subject: taxon
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: taxon.uri
   subject: taxon
   property: '@id'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: version
   subject: assembly
   property: sdo:version
   notes: The assembly version, not the FHR schemaVersion.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: metadataAuthor[]
   subject: metadata-record
   property: sdo:creator
   transformation: 'Typed like 011: ORCID gives Person, ROR Organization, otherwise fhr:Agent.'
   notes: Authors of the header, not of the assembly.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: metadataAuthor[].name
   subject: author
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: metadataAuthor[].uri
   subject: author
   property: '@id'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblyAuthor[]
   subject: assembly
   property: sdo:creator
   transformation: 'Typed like 011: ORCID gives Person, ROR Organization, otherwise fhr:Agent.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblyAuthor[].name
   subject: author
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblyAuthor[].uri
   subject: author
   property: '@id'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: dateCreated
   subject: assembly
   property: sdo:dateCreated
   notes: Date the assembly was created; never used as an observation date.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: voucherSpecimen
   subject: assembly
   property: fhr:voucherSpecimen
   notes: 'Free text; structured specimens are #101.'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: accessionID
   subject: assembly
   property: sdo:identifier
   transformation: A PropertyValue in the assembly's identifier list.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: accessionID.name
   subject: accession
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: accessionID.url
   subject: accession
   property: sdo:url
   transformation: Written as an IRI.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: instrument[]
   subject: assembly
   property: fhr:instrument
   notes: The sequencing instrument may belong to an upstream sequencing activity, so it is not an instrument
     of the assembly CreateAction.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: scholarlyArticle
   subject: assembly
   property: sdo:subjectOf
@@ -129,7 +129,7 @@ entries:
     property: sdo:citation
   loss: The resource type is asserted from the FHR field definition, not verified.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: documentation
   subject: assembly
   property: sdo:description
@@ -138,36 +138,36 @@ entries:
     subject: assembly
     property: sdo:subjectOf
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: identifier[]
   subject: assembly
   property: sdo:identifier
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: relatedLink[]
   subject: assembly
   property: fhr:relatedLink
   transformation: Each link written as an IRI.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: funding
   subject: assembly
   property: sdo:funding
   transformation: A Grant node with the unchanged text as description.
   loss: No funder, award number, amount or grant identifier is extracted from the text.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: reuseConditions
   subject: assembly
   property: sdo:license
   transformation: An IRI when the value is an absolute URL, otherwise text.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: masking
   subject: assembly
   property: fhr:masking
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats
   subject: observation
   property: sdo:observationAbout
@@ -175,75 +175,75 @@ entries:
     in a reduced fhr:VitalStats node.
   loss: No observation date is written; the record has none.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.L50
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:L50, the number as value, unitCode
     UO_0000189 (count unit).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.N50
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:N50, the number as value, unitCode
     UO_0000244 (base pair).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.L90
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:L90, the number as value, unitCode
     UO_0000189 (count unit).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.totalBasePairs
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:totalBasePairs, the number as
     value, unitCode UO_0000244 (base pair).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.numberContigs
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:numberContigs, the number as value,
     unitCode UO_0000189 (count unit).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.numberScaffolds
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:numberScaffolds, the number as
     value, unitCode UO_0000189 (count unit).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.readTechnology
   subject: vital-stats
   property: fhr:readTechnology
   notes: Text, not a measurement.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.N90
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:N90, the number as value, unitCode
     UO_0000244 (base pair).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: vitalStats.gcContent
   subject: observation
   property: sdo:value
   transformation: 'Observation about the assembly: measuredProperty fhr:gcContent, the number as value,
     unitCode UO_0000187 (percent).'
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: checksum
   subject: assembly
   property: fhr:checksum
   notes: The exact-file checksum; kept apart from the SeqCol identifier and the metadata record.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblySoftware
   subject: activity
   property: sdo:instrument
@@ -251,29 +251,29 @@ entries:
     with that name.
   loss: No start or end time, agent or workflow order is written; the record has none.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblySoftware[].name
   subject: software
   property: sdo:name
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblySoftware[].uri
   subject: software
   property: sdo:url
   transformation: Written as an IRI.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblySoftware[].version
   subject: software
   property: sdo:softwareVersion
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblySoftware[].commandLineOption[]
   subject: software
   property: fhr:commandLineOption
   transformation: An ordered @list.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: assemblyProtocol
   subject: activity
   property: sdo:actionProcess
@@ -283,7 +283,7 @@ entries:
     subject: assembly
     property: fhr:assemblyProtocol
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56
 - path: seqcol_id
   subject: seqcol
   property: sdo:value
@@ -292,4 +292,4 @@ entries:
   notes: Identifies the assembly's sequence collection, not the file or the metadata record; no resolver
     URL is written.
   sources:
-  - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
+  - https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56

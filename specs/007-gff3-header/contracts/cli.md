@@ -43,7 +43,7 @@
 ## `assess`
 
 An FHGFF3-headed GFF3 is reported with header type FHGFF3 and its schema result. The old reason
-`GFF3 headers are not specified yet (FHR-Specification spec 007)` is gone.
+`GFF3 headers are not specified yet (FAIR-bioHeaders-Specification spec 007)` is gone.
 
 ## Library
 

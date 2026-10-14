@@ -20,7 +20,7 @@ maintainer how to reuse the mapping table (US2), and shows a tool how to read JS
   pip install "fair-bioheaders[jsonld]>=<version with jsonld>"    # only to read arbitrary JSON-LD (US3); Python 3.10+
   ```
 - No network is needed. The context is bundled and never fetched.
-- For the specification checks: a FHR-Specification checkout with
+- For the specification checks: a FAIR-bioHeaders-Specification checkout with
   `pip install -r requirements-linkml.txt -r requirements-jsonld.txt`.
 
 ## 1. Publish a record as linked data (User Story 1)
@@ -36,7 +36,7 @@ The output is the FHR record itself, with FHR's keys unchanged, plus an embedded
 {
   "@context": { "@version": 1.1, "@protected": true, "sdo": "http://schema.org/", "...": "..." },
   "@type": "Dataset",
-  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json",
   "schemaVersion": 1.0,
   "taxon": { "@type": "Taxon", "name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606" },
   "genome": "Synthetic human reference example",
@@ -136,7 +136,7 @@ FHR: warning: JSON-LD term not in the FHR mapping: http://schema.org/keywords (a
 
 ## Validation scenarios
 
-Run these from the repository root of FHR-Specification (V1 to V4, V8) and of
+Run these from the repository root of FAIR-bioHeaders-Specification (V1 to V4, V8) and of
 FAIR-bioHeaders-Tools (V5 to V7). Each must pass before the feature is done.
 
 | # | Scenario | Command | Expected |
@@ -146,7 +146,7 @@ FAIR-bioHeaders-Tools (V5 to V7). Each must pass before the feature is done.
 | V3 | Round trip over all examples and conformance metadata (SC-001) | `python -m unittest tests.test_jsonld_roundtrip -v` | Every record is equal after canonical stripping; also after PyLD expansion plus mapping, except the two documented `*-nested-checksum` vectors, which report `checksum` |
 | V4 | Expanded terms only from allowed vocabularies; schema.org domains respected (SC-003) | `python -m unittest tests.test_jsonld_vocabulary -v` | Every predicate is in `sdo:`, `fhr:` or `rdf:`; every `sdo:` property is used on a type in its domain (pinned v30.1 subset); every `fhr:` term is defined |
 | V5 | Toolkit conversions, offline | `poetry run pytest tests/jsonld_test.py` (sockets disabled) | Byte-identical to `examples/*.fhr.jsonld`; all format pairs round-trip; unknown remote context refused |
-| V6 | Conformance vectors through the toolkit | `python scripts/check_conformance.py --converter ../FHR-File-Converter` (from FHR-Specification) | Every `jsonld` vector `ok` |
+| V6 | Conformance vectors through the toolkit | `python scripts/check_conformance.py --converter ../FHR-File-Converter` (from FAIR-bioHeaders-Specification) | Every `jsonld` vector `ok` |
 | V7 | Installed wheel, outside the checkout | `bioheaders convert examples/example.fhr.json /tmp/x.jsonld && bioheaders convert /tmp/x.jsonld /tmp/x.json && cmp <(python -m json.tool --sort-keys /tmp/x.json) <(python -m json.tool --sort-keys examples/example.fhr.json)` | exits 0 |
 | V8 | Manual check with the schema.org validator, recorded in the PR (not a CI gate) | Paste `examples/example.fhr.jsonld` into <https://validator.schema.org/> | Dataset, Taxon, Person, PropertyValue and SoftwareApplication are recognised, with no errors for `sdo:` properties. FHR terms are listed as unrecognised extensions, which is expected |
 

@@ -434,7 +434,7 @@ website shows Draft before a release record exists.
 ## Assumptions
 
 - The subject slot is `annotation` (spec 004 FR-002). "FHGFF3" is the working name (#54).
-- FHGFF3 is a fresh LinkML module in the FHR-Specification monorepo that imports
+- FHGFF3 is a fresh LinkML module in the FAIR-bioHeaders-Specification monorepo that imports
   `schemas/core.yaml`, built the same way as FHP. The FHGFF3 fork (biodatamodels/gff-schema) models
   GFF3 features, not a provenance header. Its upstream licence is unresolved (#75), so it may be
   read for ideas only, and no file is copied.

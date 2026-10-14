@@ -74,6 +74,8 @@ def without(record, *keys):
 
 
 REJECTED = [
+    ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/Other-Specification/"
+     "main/fhgff3.json", "only the two FAIR-bioHeaders specification repositories"),
     ("annotation", DELETE, "annotation is required"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
      "an FHP schema URL is not an FHGFF3 schema URL"),
@@ -92,6 +94,10 @@ REJECTED = [
     ("soVersion", None, "null is not a value"),
 ]
 ACCEPTED = [
+    ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
+     "main/fhgff3.json", "the canonical repository name since #108"),
+    ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
+     "v0.4.0/fhgff3.json", "a release tag under the canonical name"),
     ("soVersion", "2.5.3", "an older numbered SO release"),
     ("featureCounts.0.featureType", "SO:0000704", "an SO accession as the type"),
     ("genomeReference.assemblyName", DELETE, "assemblyName is optional"),

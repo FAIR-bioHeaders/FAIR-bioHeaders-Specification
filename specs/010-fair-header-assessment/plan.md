@@ -12,7 +12,7 @@ Data providers get a way to see how FAIR the headers of their existing download 
 works for files of any common text type, without first adopting a new header format. The work
 has three parts in two repositories:
 
-1. **Guideline** (FHR-Specification, `docs/FAIR_HEADER_GUIDELINE.md`). This is guidance, with no
+1. **Guideline** (FAIR-bioHeaders-Specification, `docs/FAIR_HEADER_GUIDELINE.md`). This is guidance, with no
    normative force. It has 8 items, each mapped to RDA FAIR Data Maturity Model indicators and
    FAIR principles. Each item uses the shared-core field names and gives examples in at least two
    conventions (US3).
@@ -26,7 +26,7 @@ has three parts in two repositories:
    length consistency, and the recorded links can be verified against a supplied genome (US1,
    US2). The tool writes human-readable and JSON reports, and in batch mode a release summary
    (US4). There is never a score.
-3. **Shared fixtures** (FHR-Specification, `assessment/`). Real provider header captures from the
+3. **Shared fixtures** (FAIR-bioHeaders-Specification, `assessment/`). Real provider header captures from the
    Phase 0 survey, plus synthetic pairs and edge cases, with implementation-neutral expected
    outcomes and a runner modelled on `check_conformance.py`.
 
@@ -35,7 +35,7 @@ All design decisions, with their alternatives, are in [research.md](research.md)
 ## Technical Context
 
 **Language/Version**: Python 3.9–3.13. This matches FAIR-bioHeaders-Tools, whose gates run on 3.9
-and 3.13. FHR-Specification scripts and tests run on 3.13, as in the existing CI.
+and 3.13. FAIR-bioHeaders-Specification scripts and tests run on 3.13, as in the existing CI.
 
 **Primary Dependencies**: The standard library, plus the toolkit's existing `jsonschema`
 (validating the report, rubric and synonym files) and `PyYAML` (for FHR headers only). **No new
@@ -46,7 +46,7 @@ runtime dependency.** Online checks use `urllib` (research R-10).
 
 **Testing**:
 - Toolkit: `pytest` (files `tests/*_test.py`), with sockets disabled in the assessment tests.
-- FHR-Specification: `unittest` (`tests/test_*.py`), plus the fixture runner
+- FAIR-bioHeaders-Specification: `unittest` (`tests/test_*.py`), plus the fixture runner
   `scripts/check_assessment.py`.
 
 **Target Platform**: Laptops and pipeline nodes running Linux, macOS or Windows. Providers run the
@@ -87,7 +87,7 @@ No NEEDS CLARIFICATION remains.
 Both constitutions are **draft** (0.1.0, ratification pending David and Adam). The gates are
 applied as written.
 
-### FHR-Specification constitution (`.specify/memory/constitution.md`)
+### FAIR-bioHeaders-Specification constitution (`.specify/memory/constitution.md`)
 
 | Principle | Gate question | Pre-research | Post-design (re-check) |
 |---|---|---|---|
@@ -99,7 +99,7 @@ applied as written.
 | Verification gates | Are they named? | Yes, see below | Yes, plus the new `check_assessment.py` |
 | Decision boundaries | Does anything here need maintainer authority? | Rubric location, SeqCol computation, guideline key advice and the schema-version bundling policy are raised as open questions. SC-005 provider outreach and any release are maintainer actions | Unchanged. No task publishes, releases or contacts a provider |
 
-**FHR-Specification verification gates** (repository root):
+**FAIR-bioHeaders-Specification verification gates** (repository root):
 
 ```bash
 python -m unittest discover -s tests -v          # includes test_assessment_fixtures.py, test_assessment_guideline.py
@@ -115,7 +115,7 @@ python scripts/check_assessment.py --tool ../FHR-File-Converter   # new
 
 | Principle | Gate question | Pre-research | Post-design (re-check) |
 |---|---|---|---|
-| I. The specification is the contract | Is the behaviour defined in FHR-Specification first? Are the schema copies byte-identical? | **Pass**. This plan, the spec, the guideline and the shared fixtures define the behaviour in FHR-Specification before the toolkit implements it | **Pass**. The report schema design source is `contracts/` here, and the toolkit copy is byte-identical (a test checks this against a checkout). All three `fhr_schema.json` copies are untouched. The rubric is the one artefact that lives only in the toolkit (open question 1). The guideline carries the same interpretations, and a cross-repository check compares their ids |
+| I. The specification is the contract | Is the behaviour defined in FAIR-bioHeaders-Specification first? Are the schema copies byte-identical? | **Pass**. This plan, the spec, the guideline and the shared fixtures define the behaviour in FAIR-bioHeaders-Specification before the toolkit implements it | **Pass**. The report schema design source is `contracts/` here, and the toolkit copy is byte-identical (a test checks this against a checkout). All three `fhr_schema.json` copies are untouched. The rubric is the one artefact that lives only in the toolkit (open question 1). The guideline carries the same interpretations, and a cross-repository check compares their ids |
 | II. Exact bytes and one reading | Do all commands identify metadata from the same lines? | **Pass**, with an obligation: reuse the FHR reader | **Pass**. `assess` reads FAIR-bioHeaders lines with `sequence_parts` and `header_lines`, the same functions `validate` and `verify` use. The checksum comes from the existing `checksum()`. Nothing is normalised in the input. The synonym normalisation applies only to *key matching*, and the raw line is kept as evidence |
 | III. Fail closed on untrusted input | Is ambiguous input rejected? Is resource use bounded? | **Justified deviation** (Complexity Tracking): native headers are irregular in 4 of the 5 required providers (survey §3.7). They are *reported*, not rejected | **Pass with justification**. Ambiguity is never *credited*: a duplicate-key or alias FHR header is `invalid` under conformance and contributes no evidence, an identifier in free text gets no credit, and conflicting values cap the status. The resource bounds are 16 MiB of header, 1 MiB per line, a record limit, streamed related files and bounded online requests, with private addresses refused and the header schema URL never fetched (research R-10, R-20) |
 | IV. Preserve metadata and typed values | Do round trips keep their values? | **N/A**. `assess` is read-only and does no conversion | **Pass**. The report JSON keeps typed values (integers stay integers), absent optional values are omitted or explicitly null as the schema says, and the Markdown output escapes the cited lines |
@@ -171,7 +171,7 @@ specs/010-fair-header-assessment/
 ### Source Code (both repositories)
 
 ```text
-FHR-Specification/                          (this repository)
+FAIR-bioHeaders-Specification/                          (this repository)
 ├── docs/
 │   └── FAIR_HEADER_GUIDELINE.md            # US3 guideline (guidance only; 8 items + out-of-scope)
 ├── assessment/                             # Shared fixtures (conformance-style, implementation-neutral)
@@ -238,7 +238,7 @@ FAIR-bioHeaders-Tools/                      (local checkout ../FHR-File-Converte
 
 **Structure Decision**: The work spans two existing repositories and creates no new project
 (research R-01).
-- The specification side (guideline, fixtures, fixture runner) lives in FHR-Specification under
+- The specification side (guideline, fixtures, fixture runner) lives in FAIR-bioHeaders-Specification under
   `docs/`, `assessment/`, `scripts/` and `tests/`.
 - The behaviour lives in FAIR-bioHeaders-Tools as the subpackage `bioheaders/assess/`, which is
   registered as a `bioheaders` subcommand.
@@ -268,8 +268,8 @@ None of these blocks the MVP (US1 and US2). The tasks follow the stated default 
 maintainer decides otherwise.
 
 1. **Where the rubric lives.** The default is the toolkit (`bioheaders/assess/data/rubric.json`),
-   with the guideline in FHR-Specification carrying the same interpretations and a
-   cross-repository id check. The alternative is to publish the rubric in FHR-Specification
+   with the guideline in FAIR-bioHeaders-Specification carrying the same interpretations and a
+   cross-repository id check. The alternative is to publish the rubric in FAIR-bioHeaders-Specification
    (for example `assessment/rubric.json`) and have the toolkit vendor a byte-identical copy, as
    it does with `fhr.json`.
 2. **Bundling several schema versions for FR-008.** Adam's proposal under spec#44 (2026-10-09),

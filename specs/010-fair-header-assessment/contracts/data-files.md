@@ -11,14 +11,14 @@ The version rules:
 
 | File (FAIR-bioHeaders-Tools) | Schema | Owner of meaning |
 |---|---|---|
-| `bioheaders/assess/data/rubric.json` | [rubric.schema.json](rubric.schema.json) | This feature. Its interpretations must agree with FHR-Specification `docs/FAIR_HEADER_GUIDELINE.md` (cross-check task in tasks.md) |
+| `bioheaders/assess/data/rubric.json` | [rubric.schema.json](rubric.schema.json) | This feature. Its interpretations must agree with FAIR-bioHeaders-Specification `docs/FAIR_HEADER_GUIDELINE.md` (cross-check task in tasks.md) |
 | `bioheaders/assess/data/synonyms.json` | [synonyms.schema.json](synonyms.schema.json) | This feature. The keys come from [research/survey.md §4](../research/survey.md) |
 | `bioheaders/assess/data/reference/spdx-licenses.json` | inline (below) | SPDX licence list, pinned |
 | `bioheaders/assess/data/reference/id-schemes.json` | inline (below) | Curated from Bioregistry and identifiers.org, pinned |
 | `bioheaders/assess/data/reference/formats.json` | inline (below) | FAIRsharing format records, pinned |
 | `bioheaders/assess/data/assessment-report.schema.json` | (is a schema) | Byte-identical to [assessment-report.schema.json](assessment-report.schema.json) |
 
-| File (FHR-Specification) | Schema | Purpose |
+| File (FAIR-bioHeaders-Specification) | Schema | Purpose |
 |---|---|---|
 | `assessment/manifest.json` | `assessment/manifest.schema.json` (below) | Expected outcomes of the shared fixtures |
 | `assessment/pairs.tsv` | (below) | Pairs file used by the batch fixture run |
@@ -97,7 +97,7 @@ The version rules:
 - Suggestion `line` templates may use `{value}`, `{related.<field>}` (`name`, `length`, `md5`,
   `checksum`, `seqcol_id`, `accession`) or a placeholder written `<…>`. A template must never
   contain a literal identifier, licence, author or date, except as an example inside a
-  placeholder (FHR-Specification constitution IV).
+  placeholder (FAIR-bioHeaders-Specification constitution IV).
 - Named checks (`derived-link`, `fhr-conformance`, `format-declared`, `record-sample-parse`,
   `resolve`) are implemented in code. Their conditions are still listed, so that a reviewer can
   follow the rule.
@@ -201,7 +201,7 @@ The `version` and `retrieved` values above are illustrative. The implementation 
 real values when it creates each file. Refreshing a table changes its `version`, which every
 report records.
 
-## 4. `assessment/manifest.json` (FHR-Specification shared fixtures)
+## 4. `assessment/manifest.json` (FAIR-bioHeaders-Specification shared fixtures)
 
 ```json
 {
