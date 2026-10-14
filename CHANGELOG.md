@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+- Add a one-way schema.org export profile (feature 013, #56, from David Molik's
+  2026-10-14 proposals). It is separate from the canonical JSON-LD, which does
+  not change, and an export document cannot be read back.
+  `docs/SCHEMAORG-EXPORT.md` gives rules X1 to X9:
+  - the metadata record is a `CreativeWork` `about` the assembly, with the
+    metadata authors and schema;
+  - `funding` is a `Grant` whose description is the unchanged text;
+  - numeric statistics are `Observation` nodes about the assembly, with the FHR
+    metric term and a Units Ontology unit, and no observation date;
+  - `assemblySoftware` is the `instrument` of a `CreateAction` whose result is
+    the assembly; the protocol is a `HowTo` only when the export context says so;
+  - a strict DOI is a `ScholarlyArticle` via `subjectOf`;
+  - `seqcol_id` is a `PropertyValue` identifier labelled "GA4GH refget sequence
+    collection".
+
+  Nothing is invented: no funders, dates, resolver URLs or identity claims.
+  `mappings/fhr-schemaorg-export.yml` places every field. The reference exporter
+  `to_export` (`scripts/make_jsonld.py`) writes `examples/example.fhr.export.jsonld`
+  and one fixture per proposal (`tests/fixtures/schemaorg-export/`).
+  `tests/test_schemaorg_export.py` checks every schema.org term's domain and
+  range against the pinned v30.1 subset, which gains the export terms. The
+  canonical vocabulary gains `fhr:seqcol_id rdfs:subPropertyOf schema:identifier`
+  (LinkML `broad_mappings`; no validation change). `check_release.py` also
+  compares the export fixtures with the toolkit.
 - Update current maintainer contacts to `molik@fhref.org` and `wright@fhref.org` and project Pages links to `https://fhref.org`. Citation/package metadata and private reporting routes are checked; runtime behavior and historical notices are unchanged.
 
 - Add a **draft** FAIR header for GFF3 annotations, FHGFF3 (spec 007, #48, the

@@ -557,6 +557,11 @@
           "@id": "sdo:Text"
         }
       ],
+      "rdfs:subPropertyOf": [
+        {
+          "@id": "sdo:identifier"
+        }
+      ],
       "rdfs:isDefinedBy": {
         "@id": "https://w3id.org/fair-bioheaders/terms"
       }

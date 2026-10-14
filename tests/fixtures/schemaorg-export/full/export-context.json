@@ -1,0 +1,9 @@
+{
+  "id": "https://example.org/datasets/synthetic-human",
+  "url": "https://example.org/genomes/synthetic-human",
+  "keywords": [
+    "genome assembly",
+    "Homo sapiens"
+  ],
+  "assemblyProtocolHowTo": true
+}

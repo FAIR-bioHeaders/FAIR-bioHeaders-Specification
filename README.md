@@ -42,7 +42,10 @@ metadata separately. See [the HTML example](examples/example.microdata.fhr.html)
 and [microdata guidance](docs/MICRODATA.md). The [JSON-LD form](docs/JSONLD.md)
 ([example](examples/example.fhr.jsonld)) is the FHR record plus a JSON-LD context
 that maps every field to schema.org or a [FAIR-bioHeaders term](docs/TERMS.md), so
-the same document is linked data.
+the same document is linked data. A separate, one-way [schema.org export](docs/SCHEMAORG-EXPORT.md)
+([example](examples/example.fhr.export.jsonld)) splits the record into typed entities (assembly,
+metadata record, assembly activity, statistics, grant, article) for search engines and Bioschemas
+tools.
 
 The v0.3 checksum policy is base64 SHA-512/256 over the exact file bytes except
 the scalar FHR checksum line (including that line's newline). Metadata, ordinary

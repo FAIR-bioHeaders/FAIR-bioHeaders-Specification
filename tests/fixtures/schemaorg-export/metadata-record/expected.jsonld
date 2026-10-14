@@ -1,0 +1,51 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "fhr": "https://w3id.org/fair-bioheaders/terms#",
+    "dct": "http://purl.org/dc/terms/"
+  },
+  "@graph": [
+    {
+      "@id": "_:assembly",
+      "@type": "Dataset",
+      "name": "Synthetic export example",
+      "version": "1.0.0",
+      "dateCreated": "2026-10-14",
+      "about": {
+        "@id": "https://identifiers.org/taxonomy:9606",
+        "@type": "Taxon",
+        "name": "Homo sapiens"
+      },
+      "creator": [
+        {
+          "@type": "fhr:Agent",
+          "name": "Synthetic assembly author (placeholder)"
+        }
+      ],
+      "fhr:masking": "soft-masked",
+      "fhr:checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    },
+    {
+      "@id": "_:metadata-record",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "_:assembly"
+      },
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-1825-0097",
+          "@type": "Person",
+          "name": "Josiah Carberry"
+        },
+        {
+          "@type": "fhr:Agent",
+          "name": "Synthetic metadata curator (placeholder)"
+        }
+      ],
+      "schemaVersion": {
+        "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+      },
+      "fhr:schemaVersion": 1.0
+    }
+  ]
+}

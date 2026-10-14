@@ -180,9 +180,11 @@ class MappingTableTests(unittest.TestCase):
     def test_vocabulary_links_agree(self):
         graph = Graph().parse(ROOT / "jsonld/terms.ttl", format="turtle")
         implied = {(str(s), str(o)) for s, o in graph.subject_objects(RDFS.subPropertyOf)}
-        self.assertEqual(implied, {(FHR + "accessionID", SDO + "identifier")})
-        entry = next(e for e in self.entries if e["path"] == "accessionID")
-        self.assertIn("rdfs:subPropertyOf schema:identifier", entry["notes"])
+        self.assertEqual(implied, {(FHR + "accessionID", SDO + "identifier"),
+                                   (FHR + "seqcol_id", SDO + "identifier")})
+        for path in ("accessionID", "seqcol_id"):
+            entry = next(e for e in self.entries if e["path"] == path)
+            self.assertIn("rdfs:subPropertyOf schema:identifier", entry["notes"])
         self.assertIn((URIRef(FHR + "Agent"), SKOS.closeMatch,
                        URIRef("http://purl.org/dc/terms/Agent")), graph)
 

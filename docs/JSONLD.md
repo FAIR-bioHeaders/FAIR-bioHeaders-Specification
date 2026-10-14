@@ -140,6 +140,13 @@ comment saying so, with its canonical URL and the release alias pattern; JSON ca
 comments, so the context and `terms.jsonld` have none. `scripts/build_pages.py` builds the Pages
 site from them and from every release tag (`.github/workflows/jsonld-pages.yml`).
 
+## The schema.org export
+
+The [schema.org export](SCHEMAORG-EXPORT.md) is a separate, one-way profile (feature 013). It
+writes the same record as a schema.org graph with a metadata-record `CreativeWork`, a `Grant`, an
+`Observation` per statistic, a `CreateAction` for the assembly software and a `ScholarlyArticle`.
+It does not change this canonical form. An export document cannot be read back as FHR metadata.
+
 ## What converting to RDF loses
 
 The JSON-LD document round-trips exactly as FHR metadata. Converting it to RDF triples does not:

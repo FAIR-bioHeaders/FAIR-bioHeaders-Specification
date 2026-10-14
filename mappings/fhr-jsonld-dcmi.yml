@@ -786,6 +786,9 @@ entries:
   - term: none
     kind: unsupported
     reason: A supplied GA4GH identifier, not a citation identifier (#56).
+  notes: fhr:seqcol_id rdfs:subPropertyOf schema:identifier (jsonld/terms.ttl); the digest identifies the
+    assembly's sequence collection, not the file (fhr:checksum) or the metadata record. The schema.org export
+    writes it as an identifier PropertyValue (docs/SCHEMAORG-EXPORT.md).
   sources:
   - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
   - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md

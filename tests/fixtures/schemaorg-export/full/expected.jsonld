@@ -1,0 +1,263 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "fhr": "https://w3id.org/fair-bioheaders/terms#",
+    "dct": "http://purl.org/dc/terms/"
+  },
+  "@graph": [
+    {
+      "@id": "https://example.org/datasets/synthetic-human",
+      "@type": "Dataset",
+      "name": "Synthetic human reference example",
+      "alternateName": [
+        "synthetic example"
+      ],
+      "version": "0.0.1",
+      "dateCreated": "2022-03-21",
+      "about": {
+        "@id": "https://identifiers.org/taxonomy:9606",
+        "@type": "Taxon",
+        "name": "Homo sapiens"
+      },
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0003-3192-6538",
+          "@type": "Person",
+          "name": "David Molik"
+        }
+      ],
+      "identifier": [
+        "beetlebase:TC010103",
+        {
+          "@type": "PropertyValue",
+          "name": "PBARC",
+          "url": {
+            "@id": "https://www.ars.usda.gov/pacific-west-area/hilo-hi/daniel-k-inouye-us-pacific-basin-agricultural-research-center/"
+          }
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "GA4GH refget sequence collection",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      ],
+      "description": "Synthetic metadata and sequence; identifiers are placeholders unless explicitly verified.",
+      "subjectOf": [
+        {
+          "@id": "https://doi.org/10.1093/bib/bbae122",
+          "@type": "ScholarlyArticle",
+          "identifier": {
+            "@type": "PropertyValue",
+            "propertyID": "https://registry.identifiers.org/registry/doi",
+            "value": "10.1093/bib/bbae122"
+          }
+        }
+      ],
+      "license": {
+        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "funding": {
+        "@type": "Grant",
+        "description": "Synthetic Research Council, award SRC-0001 (placeholder text)"
+      },
+      "keywords": [
+        "genome assembly",
+        "Homo sapiens"
+      ],
+      "url": {
+        "@id": "https://example.org/genomes/synthetic-human"
+      },
+      "fhr:voucherSpecimen": "Synthetic example; no physical specimen",
+      "fhr:instrument": [
+        "Example sequencer"
+      ],
+      "fhr:masking": "soft-masked",
+      "fhr:relatedLink": [
+        {
+          "@id": "http://wfleabase.org/genome/Daphnia_pulex/dpulex_jgi060905/fasta/"
+        }
+      ],
+      "fhr:vitalStats": {
+        "@type": "fhr:VitalStats",
+        "fhr:readTechnology": "HiFi"
+      },
+      "fhr:checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "dct:conformsTo": {
+        "@id": "https://bioschemas.org/profiles/Dataset/1.0-RELEASE"
+      }
+    },
+    {
+      "@id": "_:metadata-record",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-5719-4024",
+          "@type": "Person",
+          "name": "Adam Wright"
+        }
+      ],
+      "schemaVersion": {
+        "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+      },
+      "fhr:schemaVersion": 1.0
+    },
+    {
+      "@id": "_:assembly-activity",
+      "@type": "CreateAction",
+      "result": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "instrument": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "hifiasm",
+          "softwareVersion": "0.19.8",
+          "url": {
+            "@id": "https://github.com/chhylp123/hifiasm"
+          },
+          "fhr:commandLineOption": {
+            "@list": [
+              "-t",
+              "2"
+            ]
+          }
+        }
+      ],
+      "actionProcess": {
+        "@id": "https://example.org/assembly-protocol",
+        "@type": "HowTo"
+      }
+    },
+    {
+      "@id": "_:observation-N50",
+      "@type": "Observation",
+      "name": "N50",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:N50"
+      },
+      "value": 16,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-N90",
+      "@type": "Observation",
+      "name": "N90",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:N90"
+      },
+      "value": 16,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-L50",
+      "@type": "Observation",
+      "name": "L50",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:L50"
+      },
+      "value": 1,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-L90",
+      "@type": "Observation",
+      "name": "L90",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:L90"
+      },
+      "value": 1,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-totalBasePairs",
+      "@type": "Observation",
+      "name": "totalBasePairs",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:totalBasePairs"
+      },
+      "value": 16,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-numberContigs",
+      "@type": "Observation",
+      "name": "numberContigs",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:numberContigs"
+      },
+      "value": 1,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-numberScaffolds",
+      "@type": "Observation",
+      "name": "numberScaffolds",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:numberScaffolds"
+      },
+      "value": 1,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-gcContent",
+      "@type": "Observation",
+      "name": "gcContent",
+      "observationAbout": {
+        "@id": "https://example.org/datasets/synthetic-human"
+      },
+      "measuredProperty": {
+        "@id": "fhr:gcContent"
+      },
+      "value": 37.5,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000187"
+      },
+      "unitText": "percent"
+    }
+  ]
+}

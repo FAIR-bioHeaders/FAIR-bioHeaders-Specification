@@ -102,6 +102,10 @@ slots:
   # Defined in the core so DerivedFrom can reuse it; header types opt in by listing it.
   seqcol_id:
     description: Unprefixed refget sequence collection top-level digest (sha512t24u).
+    # The digest identifies the sequence content of the described assembly
+    # (specs/013-schemaorg-export research R-08), as accessionID does.
+    broad_mappings:
+    - sdo:identifier
     range: string
     pattern: ^[A-Za-z0-9_-]{32}$
   derivedFrom:

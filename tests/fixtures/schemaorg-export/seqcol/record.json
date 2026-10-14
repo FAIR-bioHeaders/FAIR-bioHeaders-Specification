@@ -1,0 +1,32 @@
+{
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+  "schemaVersion": 1.0,
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "genome": "Synthetic export example",
+  "version": "1.0.0",
+  "metadataAuthor": [
+    {
+      "name": "Josiah Carberry",
+      "uri": "https://orcid.org/0000-0002-1825-0097"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "name": "Synthetic assembly author (placeholder)"
+    }
+  ],
+  "dateCreated": "2026-10-14",
+  "masking": "soft-masked",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "seqcol_id": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "identifier": [
+    "beetlebase:TC010103"
+  ],
+  "accessionID": {
+    "name": "GCA_000000000.0",
+    "url": "https://example.org/accession/GCA_000000000.0"
+  }
+}

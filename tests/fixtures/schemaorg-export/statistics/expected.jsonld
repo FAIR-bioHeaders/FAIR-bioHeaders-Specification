@@ -1,0 +1,179 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "fhr": "https://w3id.org/fair-bioheaders/terms#",
+    "dct": "http://purl.org/dc/terms/"
+  },
+  "@graph": [
+    {
+      "@id": "_:assembly",
+      "@type": "Dataset",
+      "name": "Synthetic export example",
+      "version": "1.0.0",
+      "dateCreated": "2026-10-14",
+      "about": {
+        "@id": "https://identifiers.org/taxonomy:9606",
+        "@type": "Taxon",
+        "name": "Homo sapiens"
+      },
+      "creator": [
+        {
+          "@type": "fhr:Agent",
+          "name": "Synthetic assembly author (placeholder)"
+        }
+      ],
+      "fhr:masking": "soft-masked",
+      "fhr:vitalStats": {
+        "@type": "fhr:VitalStats",
+        "fhr:readTechnology": "HiFi"
+      },
+      "fhr:checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    },
+    {
+      "@id": "_:metadata-record",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "_:assembly"
+      },
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-1825-0097",
+          "@type": "Person",
+          "name": "Josiah Carberry"
+        }
+      ],
+      "schemaVersion": {
+        "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+      },
+      "fhr:schemaVersion": 1.0
+    },
+    {
+      "@id": "_:observation-N50",
+      "@type": "Observation",
+      "name": "N50",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:N50"
+      },
+      "value": 50000000,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-N90",
+      "@type": "Observation",
+      "name": "N90",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:N90"
+      },
+      "value": 1000000,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-L50",
+      "@type": "Observation",
+      "name": "L50",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:L50"
+      },
+      "value": 12,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-L90",
+      "@type": "Observation",
+      "name": "L90",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:L90"
+      },
+      "value": 40,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-totalBasePairs",
+      "@type": "Observation",
+      "name": "totalBasePairs",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:totalBasePairs"
+      },
+      "value": 3100000000,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000244"
+      },
+      "unitText": "base pair"
+    },
+    {
+      "@id": "_:observation-numberContigs",
+      "@type": "Observation",
+      "name": "numberContigs",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:numberContigs"
+      },
+      "value": 500,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-numberScaffolds",
+      "@type": "Observation",
+      "name": "numberScaffolds",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:numberScaffolds"
+      },
+      "value": 24,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000189"
+      },
+      "unitText": "count unit"
+    },
+    {
+      "@id": "_:observation-gcContent",
+      "@type": "Observation",
+      "name": "gcContent",
+      "observationAbout": {
+        "@id": "_:assembly"
+      },
+      "measuredProperty": {
+        "@id": "fhr:gcContent"
+      },
+      "value": 40.9,
+      "unitCode": {
+        "@id": "http://purl.obolibrary.org/obo/UO_0000187"
+      },
+      "unitText": "percent"
+    }
+  ]
+}

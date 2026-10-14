@@ -14,6 +14,8 @@ script writes:
   (contracts/vocabulary.md);
 - ``examples/example.fhr.jsonld`` and ``examples/minimal.fhr.jsonld``: the
   reference writer's output for the JSON examples (rule J7);
+- ``examples/example.fhr.export.jsonld`` and ``tests/fixtures/schemaorg-export/*/expected.jsonld``:
+  the one-way schema.org export profile (specs/013-schemaorg-export, ``to_export``);
 - the summary table in ``docs/MAPPINGS.md`` and the DCMI line of each term in
   ``docs/TERMS.md``, from the curated ``mappings/fhr-jsonld-dcmi.yml``.
 
@@ -515,7 +517,8 @@ ORCID_URI = re.compile(r"https://orcid\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[
 ROR_URI = re.compile(r"https://ror\.org/0[0-9a-z]{6}[0-9]{2}")
 # An absolute URL: a scheme, "://", and no whitespace (maintainer decision 3).
 ABSOLUTE_URL = re.compile(r"[A-Za-z][A-Za-z0-9+.-]*://\S+")
-EXPORT_KEYS = ("id", "url", "keywords")
+# assemblyProtocolHowTo is used only by the export profile (013 research R-06).
+EXPORT_KEYS = ("id", "url", "keywords", "assemblyProtocolHowTo")
 # Root keys of a written document that carry export metadata, not FHR fields.
 EXPORT_OUTPUT = ("@id", "keywords", "url", "conformsTo")
 URL_TERM = "subjectOf"
@@ -544,13 +547,17 @@ def is_absolute_url(value):
 
 
 def check_export(export):
-    """Validate an export context: optional id, url and keywords (provisional)."""
+    """Validate an export context: optional id, url, keywords and assemblyProtocolHowTo
+    (provisional)."""
     if not isinstance(export, dict):
         raise ValueError("export context must be a mapping with id, url and/or keywords")
     unknown = sorted(set(export) - set(EXPORT_KEYS))
     if unknown:
         raise ValueError(f"export context: unknown key {', '.join(map(str, unknown))}; "
-                         "allowed: id, url, keywords")
+                         "allowed: id, url, keywords, assemblyProtocolHowTo")
+    if "assemblyProtocolHowTo" in export and not isinstance(export["assemblyProtocolHowTo"],
+                                                             bool):
+        raise ValueError("export context: assemblyProtocolHowTo must be true or false")
     for key in ("id", "url"):
         if key in export and not is_absolute_url(export[key]):
             raise ValueError(f"export context: {key} must be an absolute URL")
@@ -629,6 +636,222 @@ def jsonld_text(record, export=None, context=None):
     return json.dumps(to_jsonld(record, export, context), ensure_ascii=False, indent=2) + "\n"
 
 
+# The schema.org export profile (specs/013-schemaorg-export, docs/SCHEMAORG-EXPORT.md):
+# a one-way projection, distinct from the canonical form above.
+
+EXPORT_CONTEXT = {"@vocab": SDO, "fhr": FHR, "dct": DCT}
+ASSEMBLY_ID = "_:assembly"
+METADATA_RECORD_ID = "_:metadata-record"
+ACTIVITY_ID = "_:assembly-activity"
+UO = "http://purl.obolibrary.org/obo/"
+UNITS = {
+    "bp": (UO + "UO_0000244", "base pair"),
+    "count": (UO + "UO_0000189", "count unit"),
+    "percent": (UO + "UO_0000187", "percent"),
+}
+# Each numeric statistic and its unit (research R-04). The scaffold statistics are
+# v0.4 fields; listing them here is harmless where the schema lacks them.
+STATISTIC_UNITS = {
+    "N50": "bp", "N90": "bp", "L50": "count", "L90": "count",
+    "totalBasePairs": "bp", "numberContigs": "count", "numberScaffolds": "count",
+    "gcContent": "percent",
+    "scaffoldN50": "bp", "scaffoldN90": "bp", "scaffoldL50": "count", "scaffoldL90": "count",
+}
+SEQCOL_SCHEME = "GA4GH refget sequence collection"
+DOI_REGISTRY = "https://registry.identifiers.org/registry/doi"
+STRICT_DOI = re.compile(r"10\.[0-9]{4,9}/\S+")
+EXPORT_PROFILE_KEYS = ("assemblyProtocolHowTo",)
+EXPORT_REFUSAL = (
+    "this is a one-way schema.org export (FHR-Specification docs/SCHEMAORG-EXPORT.md); it "
+    "cannot be read back as FHR metadata; use the canonical JSON-LD form"
+)
+# Keys of FHR's open nested objects that the export writes (contracts/export.md).
+EXPORT_NESTED_KEYS = {
+    "taxon": ("name", "uri"),
+    "metadataAuthor": ("name", "uri"),
+    "assemblyAuthor": ("name", "uri"),
+    "accessionID": ("name", "url"),
+    "assemblySoftware": ("name", "version", "uri", "commandLineOption"),
+    "vitalStats": tuple(STATISTIC_UNITS) + ("readTechnology",),
+}
+
+
+def _iri(value):
+    return {"@id": value}
+
+
+def _iri_or_text(value):
+    return _iri(value) if is_absolute_url(value) else value
+
+
+def _export_author(item):
+    if not isinstance(item, dict):
+        return copy.deepcopy(item)
+    kind = author_type(item)
+    node = {}
+    if isinstance(item.get("uri"), str):
+        node["@id"] = item["uri"]
+    node["@type"] = "fhr:Agent" if kind == "Agent" else kind
+    if "name" in item:
+        node["name"] = item["name"]
+    return node
+
+
+def _export_software(item):
+    if not isinstance(item, dict):
+        return {"@type": "SoftwareApplication", "name": item}
+    node = {"@type": "SoftwareApplication"}
+    for key, target in (("name", "name"), ("version", "softwareVersion")):
+        if key in item:
+            node[target] = item[key]
+    if "uri" in item:
+        node["url"] = _iri(item["uri"])
+    if "commandLineOption" in item:
+        # Argument order matters, as in the canonical context (@list).
+        node["fhr:commandLineOption"] = {"@list": copy.deepcopy(item["commandLineOption"])}
+    return node
+
+
+def export_unmapped_keys(record):
+    """Nested keys that the export leaves out (contracts/export.md, X9)."""
+    found = []
+    for key, allowed in EXPORT_NESTED_KEYS.items():
+        value = record.get(key)
+        items = ([(key, value)] if isinstance(value, dict) else
+                 [(f"{key}[{index}]", item) for index, item in enumerate(value)
+                  if isinstance(item, dict)] if isinstance(value, list) else [])
+        for path, item in items:
+            found += [f"{path}.{name}" for name in item if name not in allowed]
+    return found
+
+
+def to_export(record, export=None):
+    """The schema.org export graph of an FHR record (contracts/export.md)."""
+    _reserved_keys(record, "")
+    export = check_export(export) if export is not None else {}
+    assembly_id = export.get("id", ASSEMBLY_ID)
+    assembly = {"@id": assembly_id, "@type": "Dataset"}
+    for key, target in (("genome", "name"), ("genomeSynonym", "alternateName"),
+                        ("version", "version"), ("dateCreated", "dateCreated")):
+        if key in record:
+            assembly[target] = copy.deepcopy(record[key])
+    taxon = record.get("taxon")
+    if isinstance(taxon, dict):
+        node = {}
+        if "uri" in taxon:
+            node["@id"] = taxon["uri"]
+        node["@type"] = "Taxon"
+        if "name" in taxon:
+            node["name"] = taxon["name"]
+        assembly["about"] = node
+    if "assemblyAuthor" in record:
+        assembly["creator"] = [_export_author(item) for item in record["assemblyAuthor"]]
+    identifiers = list(copy.deepcopy(record.get("identifier", [])))
+    accession = record.get("accessionID")
+    if isinstance(accession, dict):
+        node = {"@type": "PropertyValue"}
+        if "name" in accession:
+            node["name"] = accession["name"]
+        if "url" in accession:
+            node["url"] = _iri(accession["url"])
+        identifiers.append(node)
+    if "seqcol_id" in record:
+        identifiers.append({"@type": "PropertyValue", "propertyID": SEQCOL_SCHEME,
+                            "value": record["seqcol_id"]})
+    if identifiers:
+        assembly["identifier"] = identifiers
+    subject_of = []
+    documentation = record.get("documentation")
+    if documentation is not None:
+        if is_absolute_url(documentation):
+            subject_of.append(_iri(documentation))
+        else:
+            assembly["description"] = documentation
+    article = record.get("scholarlyArticle")
+    if isinstance(article, str) and STRICT_DOI.fullmatch(article):
+        subject_of.append({
+            "@id": f"https://doi.org/{article}",
+            "@type": "ScholarlyArticle",
+            "identifier": {"@type": "PropertyValue", "propertyID": DOI_REGISTRY,
+                           "value": article},
+        })
+    elif article is not None:
+        assembly["citation"] = article
+    if subject_of:
+        assembly["subjectOf"] = subject_of
+    if "reuseConditions" in record:
+        assembly["license"] = _iri_or_text(record["reuseConditions"])
+    if "funding" in record:
+        assembly["funding"] = {"@type": "Grant", "description": record["funding"]}
+    if "keywords" in export:
+        assembly["keywords"] = copy.deepcopy(export["keywords"])
+    if "url" in export:
+        assembly["url"] = _iri(export["url"])
+    for key in ("voucherSpecimen", "instrument", "masking"):
+        if key in record:
+            assembly[f"fhr:{key}"] = copy.deepcopy(record[key])
+    if "relatedLink" in record:
+        assembly["fhr:relatedLink"] = [_iri(link) for link in record["relatedLink"]]
+    how_to = export.get("assemblyProtocolHowTo") is True and "assemblyProtocol" in record
+    if "assemblyProtocol" in record and not how_to:
+        assembly["fhr:assemblyProtocol"] = _iri(record["assemblyProtocol"])
+    stats = record.get("vitalStats")
+    stats = stats if isinstance(stats, dict) else {}
+    if "readTechnology" in stats:
+        assembly["fhr:vitalStats"] = {"@type": "fhr:VitalStats",
+                                      "fhr:readTechnology": stats["readTechnology"]}
+    if "checksum" in record:
+        assembly["fhr:checksum"] = record["checksum"]
+    complete = {
+        "@id": "id" in export, "description": "description" in assembly,
+        "identifier": "identifier" in assembly, "keywords": "keywords" in assembly,
+        "license": "license" in assembly, "name": "name" in assembly, "url": "url" in assembly,
+    }
+    if all(complete.values()):
+        assembly["dct:conformsTo"] = _iri(BIOSCHEMAS_DATASET_PROFILE)
+
+    metadata = {"@id": METADATA_RECORD_ID, "@type": "CreativeWork",
+                "about": _iri(assembly_id)}
+    if "metadataAuthor" in record:
+        metadata["creator"] = [_export_author(item) for item in record["metadataAuthor"]]
+    if "schema" in record:
+        metadata["schemaVersion"] = _iri(record["schema"])
+    if "schemaVersion" in record:
+        metadata["fhr:schemaVersion"] = record["schemaVersion"]
+    graph = [assembly, metadata]
+
+    activity = {"@id": ACTIVITY_ID, "@type": "CreateAction", "result": _iri(assembly_id)}
+    software = record.get("assemblySoftware")
+    if isinstance(software, str):  # the legacy form: one software name
+        activity["instrument"] = [_export_software(software)]
+    elif isinstance(software, list):
+        activity["instrument"] = [_export_software(item) for item in software]
+    if how_to:
+        activity["actionProcess"] = {"@id": record["assemblyProtocol"], "@type": "HowTo"}
+    if len(activity) > 3:
+        graph.append(activity)
+
+    for key, value in stats.items():
+        if key not in STATISTIC_UNITS or isinstance(value, bool):
+            continue
+        unit, label = UNITS[STATISTIC_UNITS[key]]
+        graph.append({
+            "@id": f"_:observation-{key}", "@type": "Observation", "name": key,
+            "observationAbout": _iri(assembly_id), "measuredProperty": _iri(f"fhr:{key}"),
+            "value": value, "unitCode": _iri(unit), "unitText": label,
+        })
+    return {"@context": copy.deepcopy(EXPORT_CONTEXT), "@graph": graph}
+
+
+def export_text(record, export=None):
+    return json.dumps(to_export(record, export), ensure_ascii=False, indent=2) + "\n"
+
+
+def is_export(document):
+    """True for a document written with the export profile (research R-11)."""
+    return isinstance(document, dict) and document.get("@context") == EXPORT_CONTEXT
+
+
 def scope_terms(context=None):
     """Property terms of the nested scopes whose objects FHR leaves open."""
     root = (load_context() if context is None else context)["@context"]
@@ -700,6 +923,8 @@ def _without_types(value):
 
 def canonical_record(document, warn=None, context=None):
     """Rule J1: set @context and @type aside; restore documentation; drop export terms."""
+    if is_export(document):
+        raise ValueError(EXPORT_REFUSAL)
     if not is_canonical(document, context):
         raise ValueError(NOT_CANONICAL)
     record = {}
@@ -733,6 +958,14 @@ SCHEMAORG_SOURCE = (
 )
 # Superclasses and datatypes, and relatedLink for the negative domain test
 # (research R-03: its domain is WebPage, so it is rejected on Dataset).
+# schema.org terms that only the export profile uses (013 research R-02 to R-08), with
+# the superclasses its domain and range checks need.
+EXPORT_SCHEMAORG_TERMS = (
+    "Action", "CreateAction", "Grant", "HowTo", "Article", "ScholarlyArticle", "Observation",
+    "QuantitativeValue", "Property", "Boolean",
+    "result", "instrument", "actionProcess", "value", "propertyID", "unitCode", "unitText",
+    "measuredProperty", "observationAbout",
+)
 SCHEMAORG_BASE_TERMS = ("Thing", "CreativeWork", "StructuredValue", "Intangible", "Text",
                         "URL", "Number", "Integer", "Date", "DateTime", "relatedLink")
 
@@ -747,7 +980,8 @@ def schemaorg_subset(source, context=None):
         raise ValueError(f"{source}: SHA-256 {digest} is not the pinned schema.org file")
     graph = {node["@id"]: node for node in json.loads(data)["@graph"]}
     context = load_context() if context is None else context
-    names = set(re.findall(r'"sdo:([A-Za-z]+)"', json.dumps(context))) | set(SCHEMAORG_BASE_TERMS)
+    names = (set(re.findall(r'"sdo:([A-Za-z]+)"', json.dumps(context)))
+             | set(SCHEMAORG_BASE_TERMS) | set(EXPORT_SCHEMAORG_TERMS))
 
     def ids(value):
         value = value if isinstance(value, list) else [] if value is None else [value]
@@ -773,6 +1007,22 @@ def schemaorg_subset(source, context=None):
             "_retrieved": "https://schema.org/version/latest/schemaorg-current-https.jsonld "
                           "(2026-10-10, release v30.1)",
             "terms": terms}
+
+
+EXPORT_FIXTURES = ROOT / "tests" / "fixtures" / "schemaorg-export"
+
+
+def export_outputs():
+    """The export profile's example and fixtures (contracts/export.md)."""
+    record = json.loads((ROOT / "examples" / "example.fhr.json").read_text(encoding="utf-8"))
+    outputs = {ROOT / "examples" / "example.fhr.export.jsonld": export_text(record)}
+    for case in sorted(path for path in EXPORT_FIXTURES.iterdir() if path.is_dir()):
+        record = json.loads((case / "record.json").read_text(encoding="utf-8"))
+        context_path = case / "export-context.json"
+        export = (json.loads(context_path.read_text(encoding="utf-8"))
+                  if context_path.exists() else None)
+        outputs[case / "expected.jsonld"] = export_text(record, export)
+    return outputs
 
 
 def example_outputs(context):
@@ -848,6 +1098,7 @@ def generate():
         TERMS_DOC: build_terms_md(classes, properties, dcmi_lines(table)),
         MAPPINGS_DOC: mappings_doc(table),
         **example_outputs(context),
+        **export_outputs(),
     }
 
 
@@ -889,7 +1140,7 @@ def main(argv=None):
             subset = schemaorg_subset(args.schemaorg_subset)
             outputs = {SCHEMAORG_SUBSET: json.dumps(subset, indent=2) + "\n"}
         elif args.examples:
-            outputs = example_outputs(load_context())
+            outputs = {**example_outputs(load_context()), **export_outputs()}
         else:
             outputs = generate()
     except ValueError as error:

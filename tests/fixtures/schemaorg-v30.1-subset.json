@@ -3,6 +3,40 @@
   "_sha256": "0a4b8c4c910fc831ec8695196510973390906a5ee34dc6b862dfec4d21a12f74",
   "_retrieved": "https://schema.org/version/latest/schemaorg-current-https.jsonld (2026-10-10, release v30.1)",
   "terms": {
+    "Action": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Thing"
+      ],
+      "pending": false
+    },
+    "Article": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "CreativeWork"
+      ],
+      "pending": false
+    },
+    "Boolean": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [],
+      "pending": false
+    },
+    "CreateAction": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Action"
+      ],
+      "pending": false
+    },
     "CreativeWork": {
       "type": "Class",
       "domainIncludes": [],
@@ -35,6 +69,24 @@
       "subClassOf": [],
       "pending": false
     },
+    "Grant": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Intangible"
+      ],
+      "pending": false
+    },
+    "HowTo": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "CreativeWork"
+      ],
+      "pending": false
+    },
     "Intangible": {
       "type": "Class",
       "domainIncludes": [],
@@ -60,6 +112,16 @@
       "subClassOf": [],
       "pending": false
     },
+    "Observation": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Intangible",
+        "QuantitativeValue"
+      ],
+      "pending": false
+    },
     "Organization": {
       "type": "Class",
       "domainIncludes": [],
@@ -78,12 +140,39 @@
       ],
       "pending": false
     },
+    "Property": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Intangible"
+      ],
+      "pending": false
+    },
     "PropertyValue": {
       "type": "Class",
       "domainIncludes": [],
       "rangeIncludes": [],
       "subClassOf": [
         "StructuredValue"
+      ],
+      "pending": false
+    },
+    "QuantitativeValue": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "StructuredValue"
+      ],
+      "pending": false
+    },
+    "ScholarlyArticle": {
+      "type": "Class",
+      "domainIncludes": [],
+      "rangeIncludes": [],
+      "subClassOf": [
+        "Article"
       ],
       "pending": false
     },
@@ -149,6 +238,17 @@
       ],
       "rangeIncludes": [
         "Thing"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
+    "actionProcess": {
+      "type": "Property",
+      "domainIncludes": [
+        "Action"
+      ],
+      "rangeIncludes": [
+        "HowTo"
       ],
       "subClassOf": [],
       "pending": false
@@ -244,6 +344,17 @@
       "subClassOf": [],
       "pending": false
     },
+    "instrument": {
+      "type": "Property",
+      "domainIncludes": [
+        "Action"
+      ],
+      "rangeIncludes": [
+        "Thing"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
     "keywords": {
       "type": "Property",
       "domainIncludes": [
@@ -273,6 +384,18 @@
       "subClassOf": [],
       "pending": false
     },
+    "measuredProperty": {
+      "type": "Property",
+      "domainIncludes": [
+        "Observation",
+        "StatisticalVariable"
+      ],
+      "rangeIncludes": [
+        "Property"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
     "name": {
       "type": "Property",
       "domainIncludes": [
@@ -284,6 +407,30 @@
       "subClassOf": [],
       "pending": false
     },
+    "observationAbout": {
+      "type": "Property",
+      "domainIncludes": [
+        "Observation"
+      ],
+      "rangeIncludes": [
+        "Place",
+        "Thing"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
+    "propertyID": {
+      "type": "Property",
+      "domainIncludes": [
+        "PropertyValue"
+      ],
+      "rangeIncludes": [
+        "Text",
+        "URL"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
     "relatedLink": {
       "type": "Property",
       "domainIncludes": [
@@ -291,6 +438,17 @@
       ],
       "rangeIncludes": [
         "URL"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
+    "result": {
+      "type": "Property",
+      "domainIncludes": [
+        "Action"
+      ],
+      "rangeIncludes": [
+        "Thing"
       ],
       "subClassOf": [],
       "pending": false
@@ -330,6 +488,35 @@
       "subClassOf": [],
       "pending": false
     },
+    "unitCode": {
+      "type": "Property",
+      "domainIncludes": [
+        "PropertyValue",
+        "QuantitativeValue",
+        "TypeAndQuantityNode",
+        "UnitPriceSpecification"
+      ],
+      "rangeIncludes": [
+        "Text",
+        "URL"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
+    "unitText": {
+      "type": "Property",
+      "domainIncludes": [
+        "PropertyValue",
+        "QuantitativeValue",
+        "TypeAndQuantityNode",
+        "UnitPriceSpecification"
+      ],
+      "rangeIncludes": [
+        "Text"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
     "url": {
       "type": "Property",
       "domainIncludes": [
@@ -337,6 +524,23 @@
       ],
       "rangeIncludes": [
         "URL"
+      ],
+      "subClassOf": [],
+      "pending": false
+    },
+    "value": {
+      "type": "Property",
+      "domainIncludes": [
+        "MonetaryAmount",
+        "PropertyValue",
+        "QuantitativeValue"
+      ],
+      "rangeIncludes": [
+        "Boolean",
+        "Number",
+        "QualitativeValue",
+        "StructuredValue",
+        "Text"
       ],
       "subClassOf": [],
       "pending": false

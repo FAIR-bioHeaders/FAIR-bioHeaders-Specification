@@ -162,6 +162,7 @@ fhr:seqcol_id a rdf:Property ;
     rdfs:comment "Unprefixed refget sequence collection top-level digest (sha512t24u)."@en ;
     sdo:domainIncludes sdo:Dataset ;
     sdo:rangeIncludes sdo:Text ;
+    rdfs:subPropertyOf sdo:identifier ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:totalBasePairs a rdf:Property ;

@@ -226,6 +226,7 @@ Unprefixed refget sequence collection top-level digest (sha512t24u).
 
 - Used on: Dataset (the FHR record)
 - Value: Text
+- Subproperty of: `sdo:identifier`
 - DCMI: none (see the [mapping table](../mappings/fhr-jsonld-dcmi.yml))
 
 ### totalBasePairs

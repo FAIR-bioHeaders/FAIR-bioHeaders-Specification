@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/specs/013-schemaorg-export/contracts/export-table.schema.json",
+  "title": "FHR schema.org export table",
+  "description": "mappings/fhr-schemaorg-export.yml: for every FHR field, where the schema.org export profile writes it (specs/013-schemaorg-export).",
+  "type": "object",
+  "required": ["profile", "schemaorg_release", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "profile": {"const": "schemaorg-export"},
+    "schemaorg_release": {"const": "v30.1"},
+    "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "subject": {
+      "description": "The export node that carries the property.",
+      "enum": ["assembly", "metadata-record", "activity", "observation", "grant", "article",
+               "taxon", "author", "software", "accession", "seqcol", "vital-stats"]
+    },
+    "property": {
+      "description": "A compact property IRI (sdo: or fhr:) or @id.",
+      "type": "string",
+      "pattern": "^(sdo:[A-Za-z]+|fhr:[A-Za-z0-9_]+|@id)$"
+    },
+    "text": {"type": "string", "minLength": 1},
+    "entry": {
+      "type": "object",
+      "required": ["path", "subject", "property", "sources"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "subject": {"$ref": "#/$defs/subject"},
+        "property": {"$ref": "#/$defs/property"},
+        "condition": {"$ref": "#/$defs/text"},
+        "alternative": {
+          "description": "Where the field goes when the condition does not hold.",
+          "type": "object",
+          "required": ["subject", "property"],
+          "additionalProperties": false,
+          "properties": {
+            "subject": {"$ref": "#/$defs/subject"},
+            "property": {"$ref": "#/$defs/property"}
+          }
+        },
+        "transformation": {"$ref": "#/$defs/text"},
+        "loss": {"$ref": "#/$defs/text"},
+        "notes": {"$ref": "#/$defs/text"},
+        "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "format": "uri"}}
+      },
+      "dependentRequired": {"alternative": ["condition"]}
+    }
+  }
+}

@@ -25,6 +25,8 @@ def main():
         print(f"JSON-LD context copy differs or is missing: {context}", file=sys.stderr)
         return 1
     for example in (ROOT / "examples").iterdir():
+        if example.name.endswith(".export.jsonld"):  # checked with the export fixtures below
+            continue
         if (
             example.is_file()
             and example.read_bytes()
@@ -63,6 +65,23 @@ def main():
         note += ", the FHGFF3 schema and FHGFF3 examples"
     else:
         note += " (this converter has no FHGFF3 schema)"
+    # The schema.org export (specs/013-schemaorg-export): toolkits from the release that
+    # adds it copy its fixtures and example; older ones have neither.
+    fixtures = args.converter / "tests" / "fixtures" / "schemaorg-export"
+    if fixtures.is_dir():
+        published = ROOT / "tests" / "fixtures" / "schemaorg-export"
+        files = [ROOT / "examples" / "example.fhr.export.jsonld"] + sorted(
+            published.glob("*/*"))
+        for path in files:
+            relative = path.relative_to(ROOT)
+            copy = args.converter / relative
+            if not copy.is_file() or copy.read_bytes() != path.read_bytes():
+                print(f"Companion export file differs or is missing: {relative}",
+                      file=sys.stderr)
+                return 1
+        note += ", the schema.org export example and fixtures"
+    else:
+        note += " (this converter has no schema.org export)"
     print("Both converter schema copies, the JSON-LD context and all example files match "
           f"the specification{note}.")
     return 0
