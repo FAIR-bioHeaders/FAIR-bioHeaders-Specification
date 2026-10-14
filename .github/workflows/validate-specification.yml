@@ -55,10 +55,9 @@ jobs:
       - name: Check conformance vectors with the standard library only
         run: python scripts/check_conformance.py
       - name: Install the toolkit with the v0.4 schemas
-        # Until a fair-bioheaders release bundles FHR-Specification v0.4.0, use the
-        # commit of FAIR-bioHeaders-Tools#57 that does (pinned: branches move).
+        # fair-bioheaders 0.7.0 is the first release that bundles v0.4.0.
         run: |
           python -m venv "$RUNNER_TEMP/fhr-converter"
-          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld] @ git+https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools@26580b6fef88f1526f35f824bf82c944894bb42d"
+          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==0.7.0"
       - name: Run the toolkit on every vector
         run: python scripts/check_conformance.py --skip-regeneration --require-format jsonld --require-format fhp-fasta --require-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"
