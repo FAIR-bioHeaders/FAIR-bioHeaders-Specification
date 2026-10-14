@@ -1,8 +1,8 @@
 # FHGFF3: FAIR header for GFF3 annotations (draft)
 
 **Status: draft, not released.** FHGFF3 is the working name (#54). The schema, examples and
-conformance vectors are on `main` for review. No FHGFF3 release, DOI or persistent alias exists
-yet, and the fields may change after curator review. The design is in
+conformance vectors are on `main` for review. No FHGFF3 release or DOI exists yet (the persistent
+schema URL is registered and resolves once v0.4.0 is tagged), and the fields may change after curator review. The design is in
 [specs/007-gff3-header](../specs/007-gff3-header/spec.md).
 
 FHGFF3 is a provenance header around ordinary GFF3. It adds YAML lines that start with `#~` after
@@ -168,7 +168,10 @@ These are recorded as follow-ups F-01 to F-07 in the
 
 - JSON-LD and HTML microdata forms.
 - Header checks in the gff3-validator's browser build.
-- A persistent schema alias (`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`) and a release.
+- A release.
 
-FHGFF3 v0.1 is released from the `release-v0.4` line with FHR-Specification v0.4.0, as FHP is. It
-joins that line at the next sync. On `main`, it inherits the core's v0.3 patterns.
+FHGFF3 v0.1 is released from the `release-v0.4` line with FHR-Specification v0.4.0, as FHP is;
+it is on that line (FHR-Specification#97). Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`, the FHR-Specification release tag
+(registered in perma-id/w3id.org#6890; it resolves once v0.4.0 is tagged). On `main`, it
+inherits the core's v0.3 patterns.
