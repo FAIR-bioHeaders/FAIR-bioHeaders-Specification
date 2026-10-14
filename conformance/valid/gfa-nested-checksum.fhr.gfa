@@ -1,5 +1,5 @@
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Synthetic FHR conformance genome
 #~taxon:
 #~  name: Homo sapiens
@@ -14,6 +14,6 @@
 #~documentation: |-
 #~  Synthetic FHR conformance vector; not a real assembly.
 #~  checksum: nested line, hashed like other metadata
-#~checksum: 7t3CLRLf1nwyB8T0VGFIDsvDKyLDoZto19jNiJARQY4=
+#~checksum: 0PhvCGDMOpbYFfRJwz5Qw8meHwwnCb0FgErasa52NKo=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT

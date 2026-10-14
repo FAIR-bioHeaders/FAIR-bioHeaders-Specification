@@ -1,5 +1,5 @@
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: &name Synthetic FHR conformance genome
 #~genomeSynonym:
 #~- *name
@@ -14,6 +14,6 @@
 #~dateCreated: '2026-10-08'
 #~masking: not-masked
 #~documentation: Synthetic FHR conformance vector; not a real assembly.
-#~checksum: /tkoEEfgKX1DUi0hKQpzWvo3bJEaWxHoIIEiKrZZRU8=
+#~checksum: RRjujDsAI/fvB4UXmJoriLOpgrpNAxAVL7w3UX6GAQ4=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT

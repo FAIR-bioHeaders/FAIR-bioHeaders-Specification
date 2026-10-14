@@ -185,11 +185,12 @@
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of FHR; restricted to 1 (version 2 is reserved for a structural change)",
+      "description": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4 (docs/SCHEMA-VERSIONS.md)",
       "enum": [
-        1
+        "2.0"
       ],
-      "type": "number"
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "type": "string"
     },
     "scholarlyArticle": {
       "description": "DOI (without a resolver prefix) of the scholarly article where the genome was published, e.g. 10.5281/zenodo.6762550",

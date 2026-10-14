@@ -1,6 +1,6 @@
 {
-  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
-  "schemaVersion": 1.0,
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+  "schemaVersion": "2.0",
   "genome": "Synthetic human reference example",
   "taxon": {
     "name": "Homo sapiens",

@@ -15,7 +15,9 @@ provides conversion, validation, and FASTA/GFA header tools.
 
 The v0.3 release adds optional fields and fixes examples; the required metadata
 set and numeric `schemaVersion: 1` remain unchanged. Package/release version,
-schema version, and assembly `version` are distinct.
+schema version, and assembly `version` are distinct. From v0.4 `schemaVersion` is a
+`"MAJOR.MINOR"` string (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`), and a file's `schema` URL
+selects the schema it is checked against: see [schema versions](docs/SCHEMA-VERSIONS.md).
 
 Required fields: `schema`, `schemaVersion`, `genome`, `taxon`, `version`,
 `metadataAuthor`, `assemblyAuthor`, `dateCreated`, `masking`, and `checksum`.
@@ -91,7 +93,7 @@ python scripts/project_mixs.py examples/example.fhr.json
 
 CI checks JSON/YAML examples, the explicit schema review baseline, and LinkML
 validation equivalence. Generation uses pinned LinkML 1.11.1, closes every
-nested object, writes `schemaVersion` as `enum: [1]`, and pins checksum length
+nested object, writes `schemaVersion` as an enum (`["2.0"]` for FHR), and pins checksum length
 constraints. Equivalence checking
 resolves local references and compares validation keywords, ignoring descriptive
 annotations and ordering of required fields. Generated output does not overwrite
@@ -109,7 +111,9 @@ conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-t
   `dateCreated`, `checksum` and the optional provenance slots, plus `Taxon`,
   `Author`, `AccessionID`, the `sha2` type and `seqcol_id`). It also defines a
   provisional `DerivedFrom` class and `derivedFrom` slot that link a file to a
-  parent by checksum; FHR schemaVersion 1 does not use them.
+  parent by checksum; the FHR contract does not use them.
+- `schemas/versions.json`: the schema version of each header type in each release, read by
+  tools that select schemas ([schema versions](docs/SCHEMA-VERSIONS.md)).
 - `fhr_linkml.yml`: the FHR LinkML model. It imports the core and adds FHR-only
   slots (`genome`, `assemblyAuthor`, `masking`, `vitalStats`, ...).
 - `fhp_linkml.yml` and `fhp.json`: the **draft** FHP header for protein FASTA

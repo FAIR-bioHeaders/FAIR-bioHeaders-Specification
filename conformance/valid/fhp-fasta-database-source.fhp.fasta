@@ -1,5 +1,5 @@
-;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
-;~schemaVersion: 1
+;~schema: https://w3id.org/fair-bioheaders/fhp/v0.4.0
+;~schemaVersion: '1.0'
 ;~proteome: Synthetic FHP conformance protein set
 ;~sourceType: database
 ;~taxon:
@@ -14,7 +14,7 @@
 ;~- name: Synthetic protein database (placeholder)
 ;~  release: '2026_03'
 ;~  setIdentifier: SYNTHETIC-SET-1
-;~checksum: TYtYOG+YiR6c2HvdjjmmWXXQoSEiyr+4xoEB5VQgH+o=
+;~checksum: yDeKGkA/esUJoUUfondAJPRB6ZTiAmUh1oJ6z79Nf3Q=
 >prot1 synthetic protein with a terminal stop
 MKTAYIAKQRQISFVKSHFSRQ*
 >prot2 synthetic protein with rare and ambiguous residues

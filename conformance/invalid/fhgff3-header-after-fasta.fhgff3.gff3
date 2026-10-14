@@ -1,6 +1,6 @@
 ##gff-version 3
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json
-#~schemaVersion: 1
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
+#~schemaVersion: '1.0'
 #~annotation: Synthetic FHGFF3 conformance annotation
 #~taxon:
 #~  name: Homo sapiens
@@ -14,7 +14,7 @@
 #~  checksum: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='
 #~  relationship: annotates
 #~documentation: 'Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.'
-#~checksum: 40cFe0uepN5b1H/9/ogBef/9b4uzY/hERB7bbq+YZ68=
+#~checksum: wjGIwumuCRaoepNT5QLWdHPzc/M6Dfw1DNLIKY1J9Yo=
 ##FASTA
 #~funding: added after ##FASTA
 >ctg1

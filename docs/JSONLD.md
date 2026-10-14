@@ -126,6 +126,8 @@ if any, stays separate ([MICRODATA.md](MICRODATA.md)).
   JSON-LD processors must refuse to load as a context, and an embedded context also keeps old
   documents' meaning when the context changes and works offline.
 - Term IRIs never change. The context changes only additively within one FHR `schemaVersion`.
+  `schemaVersion` is the literal `fhr:schemaVersion`; from v0.4 its value is a `"MAJOR.MINOR"`
+  string ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)).
 
 ### Files
 

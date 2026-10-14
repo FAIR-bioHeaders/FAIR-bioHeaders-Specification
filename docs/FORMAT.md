@@ -5,12 +5,12 @@ The header parsing rules below are implemented from converter 0.3.1.
 The assembly's own version string is independent. No required fields were added.
 Top-level metadata is closed; optional fields may be omitted, not replaced by null.
 
-The unreleased v0.4 schema keeps schemaVersion 1 but tightens loose constraints:
-`schemaVersion` must be 1, nested objects reject unknown keys, patterns are
-anchored, the checksum must be padded base64 of 32 bytes, statistics are
-nonnegative, and optional scaffold statistics are added. See
-[SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md) for every change and a
-migration hint.
+The unreleased v0.4 schema is FHR schemaVersion `"2.0"`, a string: nested objects
+reject unknown keys, patterns are anchored, the checksum must be padded base64 of
+32 bytes, statistics are nonnegative, and optional scaffold statistics and author
+`nameType` are added. See [SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md) for every
+change and a migration hint, and [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md) for what
+schemaVersion means and which schema a file's `schema` URL selects.
 
 ## New optional fields
 

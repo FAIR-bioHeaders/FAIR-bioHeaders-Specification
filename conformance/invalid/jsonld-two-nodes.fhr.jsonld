@@ -253,8 +253,8 @@
   "@graph": [
     {
       "@type": "Dataset",
-      "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
-      "schemaVersion": 1.0,
+      "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+      "schemaVersion": "2.0",
       "genome": "Synthetic FHR conformance genome",
       "taxon": {
         "@type": "Taxon",
@@ -278,7 +278,7 @@
       "dateCreated": "2026-10-08",
       "masking": "not-masked",
       "documentation": "Synthetic FHR conformance vector; not a real assembly.",
-      "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+      "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
       "genomeSynonym": [
         "synthetic conformance genome"
       ],
@@ -310,8 +310,8 @@
     },
     {
       "@type": "Dataset",
-      "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
-      "schemaVersion": 1.0,
+      "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+      "schemaVersion": "2.0",
       "genome": "Second synthetic genome",
       "taxon": {
         "@type": "Taxon",
@@ -335,7 +335,7 @@
       "dateCreated": "2026-10-08",
       "masking": "not-masked",
       "documentation": "Synthetic FHR conformance vector; not a real assembly.",
-      "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+      "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
       "genomeSynonym": [
         "synthetic conformance genome"
       ],

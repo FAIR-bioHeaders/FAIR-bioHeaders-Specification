@@ -91,7 +91,8 @@ classes:
     - assemblySoftware
     slot_usage:
       schemaVersion:
-        description: Version of FHR
+        description: Version of the FHR schema contract ("MAJOR.MINOR"); 2.0 from v0.4
+        equals_string: "2.0"
       version:
         description: Version number of the genome
       metadataAuthor:

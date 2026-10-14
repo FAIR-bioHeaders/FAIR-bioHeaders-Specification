@@ -21,13 +21,13 @@ spec = importlib.util.spec_from_file_location("generator", ROOT / "json-schema-g
 generator = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(generator)
 
-URL = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json"
+URL = "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0"
 CHECKSUM = "A" * 43 + "="
 GENOME = {"headerType": "FHR", "checksum": "B" * 43 + "=", "relationship": "annotates"}
 REFERENCE = {"accession": "SYNTHETIC_ASSEMBLY.1", "seqcol_id": "S" * 32}
 MINIMAL = {
     "schema": URL,
-    "schemaVersion": 1,
+    "schemaVersion": "1.0",
     "annotation": "Synthetic annotation (placeholder)",
     "taxon": {"name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606"},
     "version": "1.0",
@@ -75,6 +75,9 @@ def without(record, *keys):
 
 REJECTED = [
     ("annotation", DELETE, "annotation is required"),
+    ("schemaVersion", 1, "schemaVersion is the string 1.0"),
+    ("schemaVersion", "2.0", "FHR's version is not FHGFF3's"),
+    ("schema", "https://w3id.org/fair-bioheaders/fhr/v0.4.0", "an FHR w3id URL"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
      "an FHP schema URL is not an FHGFF3 schema URL"),
     ("genomeReference.seqcol_id", DELETE, "half a genome reference"),
@@ -92,6 +95,10 @@ REJECTED = [
     ("soVersion", None, "null is not a value"),
 ]
 ACCEPTED = [
+    ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json",
+     "the raw-main URL"),
+    ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.4.0/"
+     "fhgff3.json", "a release's raw tag URL"),
     ("soVersion", "2.5.3", "an older numbered SO release"),
     ("featureCounts.0.featureType", "SO:0000704", "an SO accession as the type"),
     ("genomeReference.assemblyName", DELETE, "assemblyName is optional"),

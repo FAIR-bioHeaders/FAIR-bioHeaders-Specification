@@ -1,5 +1,5 @@
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Synthetic FHR conformance genome
 #~taxon:
 #~  name: Homo sapiens
@@ -12,6 +12,6 @@
 #~dateCreated: '2026-10-08'
 #~masking: not-masked
 #~documentation: 'Quoted YAML indicators are text: &anchor *alias <<: merge'
-#~checksum: 9EHe6EVoO5bu0LXMAaUK+26l1McrbJXC9e4THeM7Gk8=
+#~checksum: AtIlihtGL+x9uOfTeZUsamEBl7ez9gP2KH+dDrWrRzw=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT

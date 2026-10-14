@@ -87,6 +87,16 @@ RULES = {
           "(an annotates link to an FHR genome, a genomeReference, or both).",
     "G3": "FHGFF3: a record is read as FHGFF3 only when its schema is an FHGFF3 schema URL; "
           "any other header is validated as that type.",
+    "V1": "Selection: the raw-main URL of a type's schema file selects the current schema of "
+          "that type; there is no fallback to an older release.",
+    "V2": "Selection: a release's raw tag URL (.../FHR-Specification/vX.Y.Z/<file>) selects that "
+          "release's schema of the file's type.",
+    "V3": "Selection: a w3id URL https://w3id.org/fair-bioheaders/<type>/vX.Y.Z (trailing slash "
+          "allowed) selects that release's schema of the type, including older releases.",
+    "V4": "Selection: a release that the reader does not have, a release without a schema of "
+          "that type, or a raw URL with any other ref gives an unsupported-version result, "
+          "never another schema.",
+    "V5": "Selection: any other schema value is FHR, validated against the current FHR schema.",
 }
 NOT_APPLICABLE = {
     "J7": "J7 constrains writers; a reader has no invalid input for it. The valid vectors "
@@ -97,6 +107,12 @@ PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~", "fhgff3": b"#~"}
 # The container whose header-block rules apply to each kind (R10, G1).
 CONTAINER = {"fasta": "fasta", "gfa": "gfa", "fhp-fasta": "fasta", "fhgff3": "gff3"}
 ITEM_TYPE = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+# Schema URLs (docs/SCHEMA-VERSIONS.md): vectors cite the release they target.
+RAW = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
+W3ID = "https://w3id.org/fair-bioheaders/"
+RELEASE = "v0.4.0"
+FHR_SCHEMA = f"{W3ID}fhr/{RELEASE}"
+UNSUPPORTED = "unsupported-version"
 COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";", "fhgff3": b"#"}
 SUFFIX = {"fasta": ".fhr.fasta", "gfa": ".fhr.gfa", "fhp-fasta": ".fhp.fasta",
           "fhgff3": ".fhgff3.gff3",
@@ -109,8 +125,8 @@ MASKING = "not-masked"
 
 # Root-level YAML metadata; ``None`` marks the checksum line.
 METADATA = [
-    "schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
-    "schemaVersion: 1.0",
+    f"schema: {FHR_SCHEMA}",
+    "schemaVersion: '2.0'",
     f"genome: {GENOME}",
     "taxon:",
     "  name: Homo sapiens",
@@ -295,9 +311,10 @@ def valid(name, kind, data, value, rules, description, compression=None):
                       description=description, compression=compression, status="valid"))
 
 
-def invalid(name, kind, data, rule, reason, compression=None, metadata=None):
+def invalid(name, kind, data, rule, reason, compression=None, metadata=None, result=None):
     INVALID.append(dict(name=name, kind=kind, data=data, rule=rule, reason=reason,
-                        compression=compression, status="invalid", metadata=metadata))
+                        compression=compression, status="invalid", metadata=metadata,
+                        result=result))
 
 
 def comments_and_blanks(kind):
@@ -534,19 +551,20 @@ def build():
     build_jsonld()
     build_fhp()
     build_fhgff3()
+    build_selection()
 
 
 # FHP vectors (specs/006-protein-header contracts/conformance.md): the shared
 # rules on amino-acid FASTA, and the FHP schema rules P1 and P2.
 
-FHP_SCHEMA = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json"
+FHP_SCHEMA = f"{W3ID}fhp/{RELEASE}"
 PROTEOME = "Synthetic FHP conformance protein set"
 PARENT_CHECKSUM = "B" * 43 + "="  # Placeholder for a parent genome's checksum.
 # The FHP record as data, so the expected metadata of every vector is exact; the
 # header lines are written from it by ``yaml_lines`` (standard library only).
 FHP_RECORD = {
     "schema": FHP_SCHEMA,
-    "schemaVersion": 1,
+    "schemaVersion": "1.0",
     "proteome": PROTEOME,
     "sourceType": "predicted",
     "taxon": {"name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606"},
@@ -722,9 +740,7 @@ def build_fhp():
 # rules on GFF3, with the header after ##gff-version 3 (G1), and the FHGFF3
 # schema rules G2 and G3.
 
-FHGFF3_SCHEMA = (
-    "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json"
-)
+FHGFF3_SCHEMA = f"{W3ID}fhgff3/{RELEASE}"
 ANNOTATION = "Synthetic FHGFF3 conformance annotation"
 GENOME_LINK = {"headerType": "FHR", "checksum": PARENT_CHECKSUM, "relationship": "annotates"}
 # Placeholders: no real assembly has this accession or this SeqCol digest.
@@ -732,7 +748,7 @@ GENOME_REFERENCE = {"accession": "SYNTHETIC_ASSEMBLY.1", "seqcol_id": "S" * 32,
                     "assemblyName": "SyntheticAssembly1"}
 FHGFF3_RECORD = {
     "schema": FHGFF3_SCHEMA,
-    "schemaVersion": 1,
+    "schemaVersion": "1.0",
     "annotation": ANNOTATION,
     "taxon": {"name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606"},
     "version": VERSION,
@@ -883,6 +899,74 @@ def build_fhgff3():
                    "Annotation metadata citing fhr.json is validated as FHR, and fails it.")
 
 
+
+# Schema-selection vectors (docs/SCHEMA-VERSIONS.md, specs/012-schema-versioning): the same
+# header citing different schema URLs. Every one has a correct checksum, so the outcome
+# depends only on the schema the reader selects.
+
+def selection_metadata(schema, version="'2.0'"):
+    return [f"schema: {schema}" if item == f"schema: {FHR_SCHEMA}" else
+            f"schemaVersion: {version}" if item == "schemaVersion: '2.0'" else item
+            for item in METADATA]
+
+
+def selection_valid(name, schema, version, rules, description, expected_version):
+    data, value = assemble(header("fasta", selection_metadata(schema, version)) + body("fasta"))
+    valid(name, "fasta", data, value, rules, description)
+    VALID[-1]["expected_metadata"] = dict(EXPECTED_METADATA, schema=schema,
+                                          schemaVersion=expected_version)
+
+
+def selection_invalid(name, schema, version, rule, reason, result=None):
+    data, _ = assemble(header("fasta", selection_metadata(schema, version)) + body("fasta"))
+    invalid(name, "fasta", data, rule, reason, result=result)
+
+
+def build_selection():
+    raw_main, raw_tag = f"{RAW}main/fhr.json", f"{RAW}{RELEASE}/fhr.json"
+    selection_valid("fasta-schema-raw-main", raw_main, "'2.0'", ["V1"],
+                    "The raw-main URL selects the current FHR schema (2.0).", "2.0")
+    selection_invalid("fasta-schema-raw-main-version-1", raw_main, "1.0", "V1",
+                      "Raw-main is the current schema (2.0), not v0.3.1, so schemaVersion 1.0 "
+                      "fails it.")
+    selection_valid("fasta-schema-raw-tag", raw_tag, "'2.0'", ["V2"],
+                    f"The {RELEASE} raw tag URL selects the {RELEASE} FHR schema.", "2.0")
+    selection_invalid("fasta-schema-raw-tag-version-1", raw_tag, "1", "V2",
+                      f"The {RELEASE} schema requires schemaVersion '2.0', not 1.")
+    selection_valid("fasta-schema-w3id-trailing-slash", f"{FHR_SCHEMA}/", "'2.0'", ["V3"],
+                    "A w3id release URL with a trailing slash is the same URL.", "2.0")
+    selection_valid("fasta-schema-v0.3.1", f"{W3ID}fhr/v0.3.1", "1", ["V3"],
+                    "A file citing v0.3.1 is checked against the v0.3.1 schema, which "
+                    "requires the number 1, even though the current schema is 2.0.", 1)
+    selection_invalid("fasta-schema-v0.3.1-version-2.0", f"{W3ID}fhr/v0.3.1", "'2.0'", "V3",
+                      "The v0.3.1 schema is selected, and it requires schemaVersion 1.")
+    selection_invalid("fasta-schema-unknown-release", f"{W3ID}fhr/v0.0.0", "'2.0'", "V4",
+                      "v0.0.0 is not a release; the result is unsupported-version, not a check "
+                      "against another schema.", result=UNSUPPORTED)
+    selection_invalid("fasta-schema-branch-ref", f"{RAW}release-v0.4/fhr.json", "'2.0'", "V4",
+                      "A raw URL whose ref is a branch, not main or a release tag, is "
+                      "unsupported-version.", result=UNSUPPORTED)
+    selection_valid("fasta-schema-other-value", "https://example.org/schemas/my-fhr-profile.json",
+                    "'2.0'", ["V5"],
+                    "A schema value that is not a FAIR-bioHeaders schema URL is FHR, checked "
+                    "against the current FHR schema.", "2.0")
+    selection_invalid("fasta-schema-other-value-version-1",
+                      "https://example.org/schemas/my-fhr-profile.json", "1", "V5",
+                      "Any other schema value is checked against the current FHR schema (2.0), "
+                      "so schemaVersion 1 fails.")
+    fhp_valid("fhp-fasta-schema-raw-tag", fhp_lines(fhp_record(schema=f"{RAW}{RELEASE}/fhp.json")),
+              ["V2", "V4"], f"The {RELEASE} release publishes FHP, so its raw tag URL selects "
+              "the FHP 1.0 schema.")
+    data, value = assemble(fhp_lines(fhp_record(schema=f"{W3ID}fhp/v0.3.1")))
+    invalid("fhp-fasta-schema-release-without-type", "fhp-fasta", data, "V4",
+            "v0.3.1 published no FHP schema; the result is unsupported-version.",
+            result=UNSUPPORTED)
+    fhgff3_valid("fhgff3-schema-raw-main", fhgff3_lines(fhgff3_record(schema=f"{RAW}main/fhgff3.json")),
+                 ["V1"], "The raw-main FHGFF3 URL selects the current FHGFF3 schema.")
+    data, value = assemble(fhgff3_lines(fhgff3_record(schema=f"{W3ID}fhgff3/v0.0.0")))
+    invalid("fhgff3-schema-unknown-release", "fhgff3", data, "V4",
+            "v0.0.0 is not a release; the result is unsupported-version.", result=UNSUPPORTED)
+
 # Microdata vectors. The checksum is an ordinary value here (the fasta-lf
 # checksum), so these vectors pin the extracted metadata instead.
 
@@ -893,8 +977,8 @@ PERSON = "https://schema.org/Person"
 
 def md_base():
     return {
-        "schema": ITEM_TYPE,
-        "schemaVersion": 1.0,
+        "schema": FHR_SCHEMA,
+        "schemaVersion": "2.0",
         "genome": GENOME,
         "taxon": {"name": "Homo sapiens", "uri": "https://identifiers.org/taxonomy:9606"},
         "version": VERSION,
@@ -1131,7 +1215,7 @@ def build_microdata():
     md_valid("microdata-utf8-bom", md_page(md_content(), bom=True), md_expect(), ["R7"],
              "HTML metadata beginning with a UTF-8 byte order mark, which is ignored.")
 
-    typed = md_expect(schemaVersion=1.0, version="2")
+    typed = md_expect(version="2")
     typed.update({
         "genomeSynonym": ["2", "true", "null", "1.0"],
         "instrument": [],
@@ -1143,14 +1227,14 @@ def build_microdata():
              "data-fhr-type keeps number-like strings as strings, integers as integers, "
              "numbers as numbers and an empty array as an empty array.")
 
-    untyped = md_expect(schemaVersion=1)
+    untyped = md_expect()
     untyped.update({
         "genomeSynonym": ["only synonym"],
         "identifier": ["example:one", "example:two"],
         "vitalStats": {"N50": 16, "gcContent": 37.5},
     })
     md_valid("microdata-untyped-schema-values", md_page(md_content(untyped, replace={
-        "schemaVersion": '<span itemprop="schemaVersion">1</span>',
+        "schemaVersion": '<span itemprop="schemaVersion">2.0</span>',
         "genomeSynonym": '<span itemprop="genomeSynonym">only synonym</span>',
         "identifier": '<span itemprop="identifier">example:one</span>'
                       '<span itemprop="identifier">example:two</span>',
@@ -1477,7 +1561,7 @@ def self_check():
     for entry in VALID + INVALID:
         if entry["kind"] == "microdata":
             text = entry["data"].decode("utf-8")
-            assert text.count(ITEM_TYPE) >= 1, entry["name"]
+            assert ITEM_TYPE in text or FHR_SCHEMA in text, entry["name"]
         if entry["kind"] in {"microdata", "jsonld"} and entry["status"] == "valid":
             assert set(required) <= entry["metadata"].keys(), entry["name"]
             assert entry["metadata"]["checksum"] == MICRODATA_CHECKSUM[0], entry["name"]
@@ -1538,6 +1622,8 @@ def manifest():
             item.update(expected="invalid", rule=entry["rule"], reason=entry["reason"])
             if entry.get("metadata") is not None:
                 item.update(metadata=entry["metadata"])
+            if entry.get("result"):
+                item.update(result=entry["result"])
             covered.setdefault(entry["rule"], set()).add("invalid")
         vectors.append(item)
     for rule in RULES:
@@ -1550,6 +1636,7 @@ def manifest():
         "jsonldSpecification": "docs/JSONLD.md",
         "fhpSpecification": "docs/FHP.md",
         "fhgff3Specification": "docs/FHGFF3.md",
+        "schemaVersionsSpecification": "docs/SCHEMA-VERSIONS.md",
         "checksumDefinition": "base64(SHA-512/256) over the (decompressed) file bytes except the "
                     "root-level checksum line and its terminator (FASTA, GFA, FHP FASTA and FHGFF3 only; in "
                     "microdata and JSON-LD the checksum is an ordinary metadata value)",

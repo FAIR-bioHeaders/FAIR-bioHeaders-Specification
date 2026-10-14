@@ -1,5 +1,5 @@
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Synthetic FHR conformance genome
 #~taxon:
 #~  name: Homo sapiens
@@ -12,11 +12,11 @@
 #~dateCreated: '2026-10-08'
 #~masking: not-masked
 #~documentation: Synthetic FHR conformance vector; not a real assembly.
-#~checksum: MFWCpXtMevl2ovTZL3v5xTeNrsidQGe2YFey0h6udf8=
+#~checksum: ma1p3crG1VKXSyT7cfllyeFiNrZ5NU3WOODwCEmwASw=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Second concatenated genome
 #~taxon:
 #~  name: Homo sapiens
@@ -29,6 +29,6 @@ S	Contig1	ACGTACGTACGGTTAACCAT
 #~dateCreated: '2026-10-08'
 #~masking: not-masked
 #~documentation: Synthetic FHR conformance vector; not a real assembly.
-#~checksum: 3RkP9/jApjn6jzSW+iZk7EbvHX7gF8AuEuokwN9pBzo=
+#~checksum: hUrvfQPxu7MubSM9kxsWkEHw2ZR7FR1MuS85aE8MPNI=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT

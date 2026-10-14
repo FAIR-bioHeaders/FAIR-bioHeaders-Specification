@@ -1,5 +1,5 @@
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Synthetic FHR conformance genome
 # ordinary comment, Latin-1 bytes: café ÿþ
 #~taxon:
@@ -13,6 +13,6 @@
 #~dateCreated: '2026-10-08'
 #~masking: not-masked
 #~documentation: Synthetic FHR conformance vector; not a real assembly.
-#~checksum: +6bZkJDd/Ofjm4Pb4KRcGHYgxEN3/qyx+Q7BBVbmweM=
+#~checksum: fsm9C1awDscNutlat2qUChFCypCSkWIjUv2iJWnIRDI=
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT	DS:Z:café

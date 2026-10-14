@@ -1,7 +1,7 @@
 # Synthetic FHP example: a proteome predicted from a genome and its annotation.
 # Every name, checksum and identifier here is a placeholder, not real data.
-schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
-schemaVersion: 1
+schema: https://w3id.org/fair-bioheaders/fhp/v0.4.0
+schemaVersion: '1.0'
 proteome: Synthetic predicted proteome, longest isoform per gene (placeholder)
 sourceType: predicted
 taxon:

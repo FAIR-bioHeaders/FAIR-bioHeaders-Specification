@@ -262,10 +262,10 @@ Scaffold N90, the scaffold length in base pairs at 90 percent of the assembly le
 
 `https://w3id.org/fair-bioheaders/terms#schemaVersion`. Property.
 
-Version of FHR
+Version of the FHR schema contract ("MAJOR.MINOR"); 2.0 from v0.4
 
 - Used on: Dataset (the FHR record)
-- Value: Number
+- Value: Text
 - DCMI: none (see the [mapping table](../mappings/fhr-jsonld-dcmi.yml))
 
 ### seqcol_id

@@ -17,6 +17,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+          # Schema-selection vectors cite older releases, whose schemas are read
+          # from their tags (docs/SCHEMA-VERSIONS.md).
+          fetch-depth: 0
+          fetch-tags: true
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.13'
@@ -50,11 +54,11 @@ jobs:
           python-version: '3.13'
       - name: Check conformance vectors with the standard library only
         run: python scripts/check_conformance.py
-      - name: Install the released converter
+      - name: Install the toolkit with the v0.4 schemas
+        # Until a fair-bioheaders release bundles FHR-Specification v0.4.0, use the
+        # commit of FAIR-bioHeaders-Tools#57 that does (pinned: branches move).
         run: |
           python -m venv "$RUNNER_TEMP/fhr-converter"
-          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install fhr==0.3.3
-      - name: Run the released converter on every vector
-        # fhr 0.3.3 predates JSON-LD (feature 011), FHP (spec 006) and FHGFF3
-        # (spec 007), so their vectors are skipped.
-        run: python scripts/check_conformance.py --skip-regeneration --skip-format jsonld --skip-format fhp-fasta --skip-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"
+          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld] @ git+https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools@fb3a0f5c0e008e3bc3cbfc43e7f941e798fd1d20"
+      - name: Run the toolkit on every vector
+        run: python scripts/check_conformance.py --skip-regeneration --require-format jsonld --require-format fhp-fasta --require-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"

@@ -5,9 +5,9 @@
   },
   "@type": "Dataset",
   "schemaVersion": {
-    "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    "@id": "https://w3id.org/fair-bioheaders/fhr/v0.4.0"
   },
-  "fhr:schemaVersion": 1.0,
+  "fhr:schemaVersion": "2.0",
   "name": "Synthetic FHR conformance genome",
   "about": {
     "@id": "https://identifiers.org/taxonomy:9606"
@@ -28,7 +28,7 @@
   },
   "fhr:masking": "not-masked",
   "description": "Synthetic FHR conformance vector; not a real assembly.",
-  "fhr:checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+  "fhr:checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
   "alternateName": "synthetic conformance genome",
   "identifier": "example:conformance-1",
   "fhr:relatedLink": {

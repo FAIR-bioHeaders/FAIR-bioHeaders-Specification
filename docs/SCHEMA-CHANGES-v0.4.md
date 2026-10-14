@@ -5,10 +5,12 @@ resolves [FHR-Specification#35](https://github.com/FAIR-bioHeaders/FHR-Specifica
 and [spec 002](../specs/002-v04-constraint-tightening/spec.md), following the
 maintainer decisions recorded in that issue on 2026-10-09.
 
-`schemaVersion` stays `1`. Each change rejects values that were already
-malformed under the documented meaning of the field, so the changes are fixes
-rather than a new schema version. Version 2 is reserved for a structural change.
-No field becomes required, no field is removed, and no type changes. Every
+`schemaVersion` becomes the string `"2.0"` (maintainer decision on
+[#44](https://github.com/FAIR-bioHeaders/FHR-Specification/issues/44), 2026-10-14;
+[SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)). Each tightening rejects values that were
+already malformed under the documented meaning of the field, but because some files
+valid under v0.3 become invalid, the contract version is a major one. No field becomes
+required and no field is removed; `schemaVersion`'s type changes from number to string. Every
 example in `examples/`, every conformance vector's metadata and the converter's
 test fixtures that carry metadata still validate. One converter test that added
 a `checksum` key under `accessionID` has to change (see Converter copies below).
@@ -24,7 +26,7 @@ example that v0.3 accepted and v0.4 rejects, and how to fix it.
 
 | Location | v0.3 | v0.4 | Now rejected (example) | Migration |
 | --- | --- | --- | --- | --- |
-| `/properties/schemaVersion` | `type: number` | `type: number`, `enum: [1]` | `99`, `2`, `1.5` | Write `1` (or `1.0`). |
+| `/properties/schemaVersion` | `type: number` | `type: string`, `enum: ["2.0"]`, pattern `^(0\|[1-9][0-9]*)\.(0\|[1-9][0-9]*)$` | `1`, `1.0`, `99`, `2`, `"2"` | Write `'2.0'` (quoted in YAML) and cite `https://w3id.org/fair-bioheaders/fhr/v0.4.0`; or pin v0.3.1 by citing `https://w3id.org/fair-bioheaders/fhr/v0.3.1`. Either way recompute the checksum ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md#migrating-files-that-cite-raw-main-with-schemaversion-1)). |
 | `/properties/masking/pattern` | `(not-masked\|hard-masked\|soft-masked\|repeat-masked\|unknown)` (unanchored) | `^(not-masked\|hard-masked\|soft-masked\|repeat-masked\|unknown)$` | `xx-unknown-yy`, `unknown-masked` | Use exactly one of the five values. |
 | `/properties/scholarlyArticle/pattern` | `^10.` (unescaped dot) | `^10\.[0-9]+(\.[0-9]+)*/\S+$` | `10xfoo`, `10.1093`, `10.1093/x y` | Give the bare DOI, `10.<registrant>/<suffix>`, with no spaces. A resolver URL (`https://doi.org/…`) was already rejected. |
 | `/properties/identifier/items/pattern` | `[a-z0-9]*:.*` (unanchored) | `^[A-Za-z0-9._-]+:.+$` | `has a : somewhere`, `:TC010103`, `beetlebase:` | Write `prefix:accession` with a non-empty prefix of letters, digits, `.`, `_` or `-`, and a non-empty accession. Uppercase prefixes (`GO:0008150`, `NCBITaxon:9606`) are now explicitly allowed. |
@@ -79,7 +81,8 @@ because RE2-based validators do not support them.
   `scholarlyArticle`, `Taxon.uri`, `Author.uri`) and `fhr_linkml.yml`
   (`masking`, `VitalStats`). `json-schema-generator.py` no longer reopens the
   `Taxon`, `Author`, `AccessionID` and `VitalStats` objects, and rewrites
-  LinkML's `const: 1` for `schemaVersion` as the published `enum: [1]`.
+  LinkML's `const` for `schemaVersion` as the published enum (`["2.0"]` for FHR,
+  `["1.0"]` for FHP and FHGFF3; spec 012).
   `scripts/check_linkml.py` passes.
 - `.github/schema-baseline.json` was updated deliberately with
   `scripts/check_schema_drift.py --update` after reviewing the diff above.
@@ -95,6 +98,18 @@ because RE2-based validators do not support them.
   and the metadata validates. Their expected checksums changed; no other vector
   changed. The R2 rule about nested checksum properties still applies to
   header types that have them, such as `derivedFrom[].checksum`.
+
+## Schema version and examples (spec 012)
+
+- `schemaVersion` is a `"MAJOR.MINOR"` string in every header type; `schemas/versions.json`
+  records the versions of each release, and `tests/test_schema_versions.py` keeps the schemas
+  equal to it.
+- Every example, conformance vector and assessment fixture cites the v0.4.0 versioned URL of its
+  type (`https://w3id.org/fair-bioheaders/<type>/v0.4.0`) and its type's version; checksums were
+  recomputed. Vectors V1–V5 test which schema a `schema` URL selects.
+- The FHP and FHGFF3 `schema` patterns accept the raw-main, raw tag and w3id forms only; commit
+  and branch refs are no longer schema URLs.
+- All three baselines were updated deliberately after reviewing these diffs.
 
 ## Converter copies
 

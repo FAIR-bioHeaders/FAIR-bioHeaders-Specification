@@ -32,9 +32,10 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `proteome` | Name of the protein set |
 | `sourceType` | `predicted`, `database` or `mixed` (see below) |
 
-`schema` must be the raw GitHub URL of `fhp.json` in FHR-Specification, for example
-`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json`.
-`schemaVersion` is `1`.
+`schema` must be an FHP schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
+versioned `https://w3id.org/fair-bioheaders/fhp/v0.4.0` of the release a file targets, or the raw
+GitHub URL of `fhp.json` on `main` or at a release tag. `schemaVersion` is `'1.0'` (FHP 1.0), quoted
+in YAML.
 
 The following fields are optional. Leave a field out when you do not know its value; tools never
 infer these values from the sequences.
@@ -89,8 +90,10 @@ unchanged, in a FASTA container. The sequence alphabet makes no difference to th
 ordinary bytes, hashed and preserved exactly. In addition:
 
 - [P1] FHP metadata must validate against `fhp.json`.
-- [P2] A record is read as FHP only when its `schema` is an FHP schema URL. Tools validate any
-  other FASTA or GFA header as FHR, so a protein file that cites `fhr.json` is checked against FHR.
+- [P2] A record is read as FHP only when its `schema` is an FHP schema URL: the raw-main or raw
+  tag URL of `fhp.json`, or `https://w3id.org/fair-bioheaders/fhp/vX.Y.Z`. Which FHP schema is used
+  follows [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md). Tools validate any other FASTA or GFA header as
+  FHR, so a protein file that cites `fhr.json` is checked against FHR.
 
 The bracketed ids are stable labels used by the [conformance vectors](../conformance/README.md).
 They add no requirements.

@@ -5,12 +5,12 @@
     ],
     "http://schema.org/schemaVersion": [
       {
-        "@id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+        "@id": "https://w3id.org/fair-bioheaders/fhr/v0.4.0"
       }
     ],
     "https://w3id.org/fair-bioheaders/terms#schemaVersion": [
       {
-        "@value": 1.0
+        "@value": "2.0"
       }
     ],
     "http://schema.org/name": [
@@ -82,7 +82,7 @@
     ],
     "https://w3id.org/fair-bioheaders/terms#checksum": [
       {
-        "@value": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc="
+        "@value": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU="
       }
     ],
     "http://schema.org/alternateName": [

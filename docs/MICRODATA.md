@@ -28,7 +28,9 @@ attributes applies, and `itemtype` and `itemprop` are space-separated token list
 these rules.
 
 - [M1] A document holds exactly one FHR item scope: an element with `itemscope`
-  whose `itemtype` tokens include the `fhr.json` URL. A document with none, or
+  whose `itemtype` tokens include the raw-main `fhr.json` URL. That URL identifies
+  FHR items; the record's `schema` property, usually a versioned URL, selects the
+  schema it is checked against ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)). A document with none, or
   with more than one, is invalid. An element with `itemscope` but no `itemprop`
   inside the FHR scope is a separate item: neither it nor its properties belong
   to the FHR metadata.

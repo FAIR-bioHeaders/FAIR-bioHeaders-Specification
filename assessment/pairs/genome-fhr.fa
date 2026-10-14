@@ -1,5 +1,5 @@
-;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-;~schemaVersion: 1.0
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+;~schemaVersion: '2.0'
 ;~genome: Synthetic WBcel235-style genome (not a real assembly)
 ;~taxon:
 ;~  name: Caenorhabditis elegans
@@ -12,7 +12,7 @@
 ;~dateCreated: '2026-10-10'
 ;~masking: not-masked
 ;~documentation: Synthetic assessment fixture; sequences are not real.
-;~checksum: mM9Acxp7+dkK9mDa8D5XOqTadLtLh+SMJJqRUK3nyew=
+;~checksum: 2BTJkV6bXhcM90Ku4ww0GaEzYgFW5FMvFAH3efF6H+E=
 >I
 AGAGGTCATTCGCAGCAGCGACAATAGACGCCCATTGAGCCTAGGAAGTCTGCGCCTCGA
 GTTGCCTTGCCTAGATACTCAAATTGCCGCCCCCCCGAGAAGTGGATTGTCCACGAATTC

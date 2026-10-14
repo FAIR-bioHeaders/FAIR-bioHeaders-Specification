@@ -102,12 +102,13 @@ classes:
     slot_usage:
       schema:
         description: >-
-          URL of the FHP JSON Schema this record follows; it identifies the
+          URL of the FHP JSON Schema this record follows (raw-main, a release's
+          raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the
           header type (FR-011)
-        pattern: ^https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\.json$
+        pattern: ^(https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/(main|v[0-9]+\.[0-9]+\.[0-9]+)/fhp\.json|https://w3id\.org/fair-bioheaders/fhp/v[0-9]+\.[0-9]+\.[0-9]+/?)$
       schemaVersion:
-        description: Version of the FHP schema
-        equals_number: 1
+        description: Version of the FHP schema contract ("MAJOR.MINOR")
+        equals_string: "1.0"
       version:
         description: Version of the protein set
       metadataAuthor:

@@ -2,6 +2,21 @@
 
 ## Unreleased (v0.4)
 
+- **Schema versions and schema selection** (spec 012, #44). `schemaVersion` is now a
+  `"MAJOR.MINOR"` string: FHR `"2.0"` (a major version, because the v0.4
+  tightening rejects some files v0.3 accepted), FHP `"1.0"` and FHGFF3 `"1.0"`.
+  `docs/SCHEMA-VERSIONS.md` defines major and minor and the rule readers use to
+  choose a schema from a file's `schema` URL: raw-main is the current schema with
+  no fallback to v0.3.1, a release's raw tag or w3id URL selects that release, and
+  a release the reader lacks, a branch or commit ref, or a release without that
+  type is unsupported-version (rules V1-V5). `schemas/versions.json` records each
+  release's versions. Examples, conformance vectors and assessment fixtures cite
+  `https://w3id.org/fair-bioheaders/<type>/v0.4.0`, with recomputed checksums;
+  15 vectors test selection. `check_conformance.py --schema` applies the rule and
+  reads older releases' schemas from git tags. The FHP and FHGFF3 `schema`
+  patterns accept the raw-main, raw tag and w3id forms. Files that cite raw-main
+  with `schemaVersion: 1` must be updated or pinned to v0.3.1 (migration in
+  `docs/SCHEMA-VERSIONS.md`); no tool rewrites them.
 - FHGFF3 v0.1 (draft GFF3 annotation header, spec 007) is released from this
   line too: `fhgff3.json` is generated here from the v0.4 core (tightened
   patterns, optional author `nameType`), with its baseline

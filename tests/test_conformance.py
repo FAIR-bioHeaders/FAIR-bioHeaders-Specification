@@ -75,8 +75,9 @@ class ConformanceTests(unittest.TestCase):
 
     def test_every_rule_is_labelled_and_covered(self):
         labels = [label for document in ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md",
-                                         "docs/FHP.md", "docs/FHGFF3.md")
-                  for label in re.findall(r"\[([RMJPG]\d+)\]", (ROOT / document).read_text())]
+                                         "docs/FHP.md", "docs/FHGFF3.md",
+                                         "docs/SCHEMA-VERSIONS.md")
+                  for label in re.findall(r"\[([RMJPGV]\d+)\]", (ROOT / document).read_text())]
         self.assertEqual(labels, list(self.manifest["rules"]))
         for rule, details in self.manifest["rules"].items():
             outcomes = {
@@ -118,8 +119,8 @@ class ConformanceTests(unittest.TestCase):
         """specs/006-protein-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 9)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 14)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 10)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 15)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
@@ -131,12 +132,44 @@ class ConformanceTests(unittest.TestCase):
                 self.assertIn("metadata", vector, vector["id"])
         self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
 
+    def test_selection_vectors(self):
+        """specs/012-schema-versioning: V1-V5 and the registry they rely on."""
+        vectors = [v for v in self.manifest["vectors"]
+                   if any(rule.startswith("V") for rule in v.get("rules", [v.get("rule", "")]))]
+        self.assertEqual(self.manifest["schemaVersionsSpecification"], "docs/SCHEMA-VERSIONS.md")
+        unsupported = {v["id"] for v in vectors if v.get("result") == "unsupported-version"}
+        self.assertEqual(unsupported, {"fasta-schema-unknown-release", "fasta-schema-branch-ref",
+                                       "fhp-fasta-schema-release-without-type",
+                                       "fhgff3-schema-unknown-release"})
+        for vector in vectors:
+            if vector["id"] in unsupported:
+                self.assertEqual((vector["expected"], vector["rule"]), ("invalid", "V4"))
+        selected = {v["id"]: v for v in vectors if v["expected"] == "valid"}
+        self.assertEqual(selected["fasta-schema-v0.3.1"]["metadata"]["schemaVersion"], 1)
+        self.assertEqual(selected["fasta-schema-raw-main"]["metadata"]["schemaVersion"], "2.0")
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import check_conformance
+        cases = {
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json":
+                ("FHP", "main"),
+            "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0/": ("FHGFF3", "v0.4.0"),
+            "https://w3id.org/fair-bioheaders/fhr/v0.3.1": ("FHR", "v0.3.1"),
+            "https://w3id.org/fair-bioheaders/fhp/v0.3.1": ("FHP", None),
+            "https://w3id.org/fair-bioheaders/fhr/v0.4.0/fhr.json": ("FHR", "main"),
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/abc123/fhr.json":
+                ("FHR", None),
+            None: ("FHR", "main"),
+        }
+        for value, expected in cases.items():
+            with self.subTest(value=value):
+                self.assertEqual(check_conformance.select_schema(value)[:2], expected)
+
     def test_fhgff3_vectors(self):
         """specs/007-gff3-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 13)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 12)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 14)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 13)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -196,7 +229,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(49 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(51 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -212,6 +245,8 @@ class ConformanceTests(unittest.TestCase):
             "if vector['format'] == 'jsonld':\n"
             "    print('FHR: Unsupported file extension: ' + sys.argv[1], file=sys.stderr)\n"
             "    raise SystemExit(1)\n"
+            "if vector.get('result') == 'unsupported-version':\n"
+            "    print('FHR: unsupported schema version: ' + sys.argv[1], file=sys.stderr)\n"
             "if vector['expected'] != 'valid':\n"
             "    raise SystemExit(1)\n"
             "if len(sys.argv) > 2:\n"
@@ -223,7 +258,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(49 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(51 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",

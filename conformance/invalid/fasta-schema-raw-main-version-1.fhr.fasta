@@ -1,0 +1,18 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
+;~schemaVersion: 1.0
+;~genome: Synthetic FHR conformance genome
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: 1.0.0
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~assemblyAuthor:
+;~- name: Synthetic assembly author (placeholder)
+;~dateCreated: '2026-10-08'
+;~masking: not-masked
+;~documentation: Synthetic FHR conformance vector; not a real assembly.
+;~checksum: 3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=
+>Contig1 synthetic sequence
+ACGTACGTAC
+GGTTAACCAT

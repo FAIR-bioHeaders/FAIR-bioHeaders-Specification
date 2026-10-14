@@ -1,6 +1,6 @@
 ##gff-version 3
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json
-#~schemaVersion: 1
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
+#~schemaVersion: '1.0'
 #~annotation: Synthetic FHGFF3 example annotation
 #~taxon:
 #~  name: Homo sapiens
@@ -11,10 +11,10 @@
 #~dateCreated: '2026-10-13'
 #~derivedFrom:
 #~- headerType: FHR
-#~  checksum: 7awVnOjkeYhYQoeanvDnq20xW+LluNqZkYmB4NnQCNU=
+#~  checksum: 8kMW7cFzWbKkOLt0tgS3srVGNuzqNuoGaVqAimI8A2c=
 #~  relationship: annotates
 #~documentation: Synthetic annotation of genome.fhr.fasta; not a real annotation.
-#~checksum: 0IcSAv4i2QKSb7q/WDZ4BElSYj9koSwr9AIEcJY7NhE=
+#~checksum: y8IlStoR1YqqWYrE4NqGMKmwlXbeR0cSJ+ucM2WqYJ4=
 ##sequence-region ctg1 1 20
 ##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
 #!genome-build Synthetic SyntheticAssembly1

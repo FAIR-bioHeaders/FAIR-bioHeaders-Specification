@@ -1,0 +1,20 @@
+##gff-version 3
+#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json
+#~schemaVersion: '1.0'
+#~annotation: Synthetic FHGFF3 conformance annotation
+#~taxon:
+#~  name: Homo sapiens
+#~  uri: https://identifiers.org/taxonomy:9606
+#~version: '1.0.0'
+#~metadataAuthor:
+#~- name: Synthetic metadata author (placeholder)
+#~dateCreated: '2026-10-13'
+#~derivedFrom:
+#~- headerType: FHR
+#~  checksum: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='
+#~  relationship: annotates
+#~documentation: 'Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.'
+#~checksum: ubDdlbWYhSfh/7ofmosNnc+pdsDBPFA/0bYblwZupvA=
+ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
+ctg1	synthetic	mRNA	1	20	.	+	.	ID=mrna1;Parent=gene1
+ctg1	synthetic	CDS	1	18	.	+	0	ID=cds1;Parent=mrna1

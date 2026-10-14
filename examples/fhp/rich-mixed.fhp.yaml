@@ -1,7 +1,7 @@
 # Synthetic FHP example: predicted proteins merged with database entries and
 # manual corrections. Names, checksums and counts are placeholders.
-schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json
-schemaVersion: 1
+schema: https://w3id.org/fair-bioheaders/fhp/v0.4.0
+schemaVersion: '1.0'
 proteome: Synthetic curated protein set (placeholder)
 sourceType: mixed
 taxon:

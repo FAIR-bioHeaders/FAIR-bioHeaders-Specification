@@ -27,7 +27,7 @@
   "genomeSynonym": [
     "synthetic conformance genome"
   ],
-  "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+  "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
   "documentation": "Synthetic FHR conformance vector; not a real assembly.",
   "masking": "not-masked",
   "dateCreated": "2026-10-08",
@@ -51,8 +51,8 @@
     "@type": "Taxon"
   },
   "genome": "Synthetic FHR conformance genome",
-  "schemaVersion": 1.0,
-  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+  "schemaVersion": "2.0",
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
   "@type": "Dataset",
   "@context": {
     "conformsTo": {

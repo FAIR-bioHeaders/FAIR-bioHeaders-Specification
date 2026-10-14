@@ -1,5 +1,5 @@
 ;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-;~schemaVersion: 1
+;~schemaVersion: '1.0'
 ;~proteome: Synthetic FHP conformance protein set
 ;~sourceType: predicted
 ;~taxon:
@@ -14,7 +14,7 @@
 ;~  checksum: 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='
 ;~  relationship: translatedFrom
 ;~documentation: 'Synthetic FHP conformance vector; the parent checksum is a placeholder.'
-;~checksum: kAmyNEcAp+ayAZzKRJdl4j6FbVPDyLiey4vptMoadns=
+;~checksum: Y4Mv2iolMZ54Wk/Qw3290fkCov6/BJqLIbRnSYkn3dM=
 >prot1 synthetic protein with a terminal stop
 MKTAYIAKQRQISFVKSHFSRQ*
 >prot2 synthetic protein with rare and ambiguous residues

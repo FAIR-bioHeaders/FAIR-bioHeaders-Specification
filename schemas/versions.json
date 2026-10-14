@@ -1,0 +1,27 @@
+{
+  "description": "FAIR-bioHeaders schema versions by FHR-Specification release (docs/SCHEMA-VERSIONS.md). 'current' is the release the schemas in this working tree belong to: the release being prepared on a release line, or the latest release on main.",
+  "current": "v0.4.0",
+  "files": {
+    "FHR": "fhr.json",
+    "FHP": "fhp.json",
+    "FHGFF3": "fhgff3.json"
+  },
+  "w3id": {
+    "FHR": "fhr",
+    "FHP": "fhp",
+    "FHGFF3": "fhgff3"
+  },
+  "releases": {
+    "v0.3.0": {
+      "FHR": 1
+    },
+    "v0.3.1": {
+      "FHR": 1
+    },
+    "v0.4.0": {
+      "FHR": "2.0",
+      "FHP": "1.0",
+      "FHGFF3": "1.0"
+    }
+  }
+}

@@ -23,14 +23,15 @@ from make_conformance import bgzf
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADERS = ROOT / "assessment" / "headers"
-FHR_URL = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+# Fixtures cite the release they target (docs/SCHEMA-VERSIONS.md).
+FHR_URL = "https://w3id.org/fair-bioheaders/fhr/v0.4.0"
 FHT_URL = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json"
 REFSEQ_GFF3 = "ncbi-refseq_gff3_GCF_000002985.6_WBcel235_genomic.gff"
 FEATURE = b"ctg1\tsynthetic\tgene\t1\t20\t.\t+\t.\tID=gene1\n"
 # Synthetic FHR metadata, the same as conformance/valid/fasta-lf.fhr.fasta.
 FHR_METADATA = [
     f"schema: {FHR_URL}",
-    "schemaVersion: 1.0",
+    "schemaVersion: '2.0'",
     "genome: Synthetic FHR conformance genome",
     "taxon:",
     "  name: Homo sapiens",
@@ -43,7 +44,7 @@ FHR_METADATA = [
     "dateCreated: '2026-10-08'",
     "masking: not-masked",
     "documentation: Synthetic FHR conformance vector; not a real assembly.",
-    "checksum: 3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+    "checksum: Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
 ]
 
 
@@ -137,7 +138,7 @@ def fhr_genome(body, version):
     """An FHR FASTA whose checksum line is last, so the hash covers the rest."""
     metadata = [
         f"schema: {FHR_URL}",
-        "schemaVersion: 1.0",
+        "schemaVersion: '2.0'",
         "genome: Synthetic WBcel235-style genome (not a real assembly)",
         "taxon:",
         "  name: Caenorhabditis elegans",

@@ -1,7 +1,7 @@
 # ordinary comment before the FHR lines
 
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-#~schemaVersion: 1.0
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
 #~genome: Synthetic FHR conformance genome
 # ordinary comment between FHR lines
 
@@ -18,7 +18,7 @@
 #~masking: not-masked
 #~documentation: Synthetic FHR conformance vector; not a real assembly.
 #
-#~checksum: Wl6zksyEAgrJBIUBH+1uDDJ7ip+JHxKhNRydBPiUjTA=
+#~checksum: JmJyPq+cr8DdgHuHkafxeBmSvyrqDIqTLFDC6CCmcdg=
 
 H	VN:Z:1.0
 S	Contig1	ACGTACGTACGGTTAACCAT

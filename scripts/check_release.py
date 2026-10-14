@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +64,38 @@ def main():
         note += ", the FHGFF3 schema and FHGFF3 examples"
     else:
         note += " (this converter has no FHGFF3 schema)"
+    # Schema selection (specs/012): the converter's bundled release copies must
+    # equal the releases' schemas, and its current copies belong to our current release.
+    bundled_path = args.converter / "bioheaders" / "schemas" / "bundled.json"
+    if bundled_path.is_file():
+        registry = json.loads((ROOT / "schemas" / "versions.json").read_text())
+        bundled = json.loads(bundled_path.read_text())
+        if bundled["current"]["release"] != registry["current"]:
+            print(f"Converter's current schemas are for {bundled['current']['release']}, "
+                  f"not {registry['current']}", file=sys.stderr)
+            return 1
+        for tag, types in bundled["releases"].items():
+            if set(types) != set(registry["releases"].get(tag, {})):
+                print(f"Converter's {tag} header types differ from schemas/versions.json",
+                      file=sys.stderr)
+                return 1
+            for kind, name in types.items():
+                if tag == registry["current"]:
+                    theirs = json.loads((ROOT / registry["files"][kind]).read_text())
+                else:
+                    shown = subprocess.run(["git", "show", f"{tag}:{registry['files'][kind]}"],
+                                           cwd=ROOT, capture_output=True, text=True)
+                    if shown.returncode:
+                        print(f"Cannot read {registry['files'][kind]} at {tag}; fetch the tags",
+                              file=sys.stderr)
+                        return 1
+                    theirs = json.loads(shown.stdout)
+                copy = json.loads((args.converter / "bioheaders" / name).read_text())
+                if copy != theirs:
+                    print(f"Converter's bundled {tag} {kind} schema differs: {name}",
+                          file=sys.stderr)
+                    return 1
+        note += ", and the bundled release schemas"
     print("Both converter schema copies, the JSON-LD context and all example files match "
           f"the specification{note}.")
     return 0

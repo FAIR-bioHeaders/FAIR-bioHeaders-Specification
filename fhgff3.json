@@ -248,15 +248,16 @@
           "type": "string"
         },
         "schema": {
-          "description": "URL of the FHGFF3 JSON Schema this record follows; it identifies the header type (FR-010)",
-          "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\\.json$",
+          "description": "URL of the FHGFF3 JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-010)",
+          "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhgff3\\.json|https://w3id\\.org/fair-bioheaders/fhgff3/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
           "type": "string"
         },
         "schemaVersion": {
-          "description": "Version of the FHGFF3 schema",
-          "type": "number",
+          "description": "Version of the FHGFF3 schema contract (\"MAJOR.MINOR\")",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "type": "string",
           "enum": [
-            1
+            "1.0"
           ]
         },
         "scholarlyArticle": {
@@ -639,15 +640,16 @@
       "type": "string"
     },
     "schema": {
-      "description": "URL of the FHGFF3 JSON Schema this record follows; it identifies the header type (FR-010)",
-      "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhgff3\\.json$",
+      "description": "URL of the FHGFF3 JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-010)",
+      "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhgff3\\.json|https://w3id\\.org/fair-bioheaders/fhgff3/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of the FHGFF3 schema",
-      "type": "number",
+      "description": "Version of the FHGFF3 schema contract (\"MAJOR.MINOR\")",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "type": "string",
       "enum": [
-        1
+        "1.0"
       ]
     },
     "scholarlyArticle": {

@@ -1,6 +1,6 @@
 {
-  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
-  "schemaVersion": 1,
+  "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+  "schemaVersion": "1.0",
   "proteome": "Synthetic predicted proteome (placeholder)",
   "sourceType": "predicted",
   "taxon": {

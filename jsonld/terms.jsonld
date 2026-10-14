@@ -644,7 +644,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Version of FHR",
+        "@value": "Version of the FHR schema contract (\"MAJOR.MINOR\"); 2.0 from v0.4",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -654,7 +654,7 @@
       ],
       "sdo:rangeIncludes": [
         {
-          "@id": "sdo:Number"
+          "@id": "sdo:Text"
         }
       ],
       "rdfs:isDefinedBy": {

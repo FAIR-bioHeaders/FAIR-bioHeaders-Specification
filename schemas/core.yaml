@@ -39,9 +39,11 @@ slots:
       jsonld_iri: true
     required: true
   schemaVersion:
-    description: Version of the header schema; restricted to 1
-    range: float
-    equals_number: 1
+    description: >-
+      Version of the header type's schema contract, as "MAJOR.MINOR"
+      (docs/SCHEMA-VERSIONS.md); each header type pins its accepted values
+    range: string
+    pattern: ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$
     required: true
   taxon:
     description: Species name and URL of the species information at identifiers.org

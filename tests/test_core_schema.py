@@ -66,7 +66,12 @@ class CoreSchemaTests(unittest.TestCase):
         published = constraints(self.published, self.published)["properties"]
         for name in CORE_REQUIRED + CORE_OPTIONAL:
             with self.subTest(slot=name):
-                self.assertEqual(stub[name], published[name])
+                expected = dict(published[name])
+                if name == "schemaVersion":
+                    # The core gives the "MAJOR.MINOR" form; each header type pins its
+                    # accepted values (docs/SCHEMA-VERSIONS.md).
+                    self.assertEqual(expected.pop("enum"), ["2.0"])
+                self.assertEqual(stub[name], expected)
 
     def test_fhr_contract_has_no_derived_from(self):
         self.assertNotIn("derivedFrom", self.fhr["properties"])

@@ -1,5 +1,5 @@
-;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json
-;~schemaVersion: 1
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+;~schemaVersion: '2.0'
 ;~genome: Synthetic FHGFF3 example genome
 ;~taxon:
 ;~  name: Homo sapiens
@@ -12,6 +12,6 @@
 ;~dateCreated: '2026-10-13'
 ;~masking: not-masked
 ;~documentation: Synthetic genome for the FHGFF3 examples; not a real assembly.
-;~checksum: 7awVnOjkeYhYQoeanvDnq20xW+LluNqZkYmB4NnQCNU=
+;~checksum: 8kMW7cFzWbKkOLt0tgS3srVGNuzqNuoGaVqAimI8A2c=
 >ctg1 synthetic contig
 ATGGCTAAAGGTCTGTAAGC

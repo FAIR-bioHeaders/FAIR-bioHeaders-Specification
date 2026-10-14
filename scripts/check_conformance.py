@@ -3,8 +3,9 @@
 Without options this needs only the Python standard library: it regenerates the
 vectors in a temporary directory and compares bytes, and recomputes each valid
 vector's SHA-512/256 checksum with its own reading of docs/FORMAT.md.
-``--schema`` also validates valid vectors' metadata against fhr.json (needs
-PyYAML and jsonschema); JSON-LD vectors are read by rule J1 first.
+``--schema`` also validates vectors' metadata against the schema their ``schema``
+URL selects (docs/SCHEMA-VERSIONS.md; needs PyYAML and jsonschema, and git tags
+for older releases); JSON-LD vectors are read by rule J1 first.
 ``--converter`` runs fhr-fasta-validate/fhr-gfa-validate on every FASTA/GFA
 vector and ``fhr-convert in.html out.json`` or ``fhr-convert in.jsonld out.json``
 on every microdata or JSON-LD vector: valid vectors must exit 0 (microdata and
@@ -46,12 +47,55 @@ OPTIONAL_COMMANDS = {"fhgff3"}
 # Formats whose vectors the converter writes out as JSON metadata.
 EXTRACTED = {"microdata", "jsonld"}
 RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md", "docs/FHP.md",
-                  "docs/FHGFF3.md")
+                  "docs/FHGFF3.md", "docs/SCHEMA-VERSIONS.md")
 # The schema each format's metadata must validate against (docs/FHP.md P1,
 # docs/FHGFF3.md G2).
 SCHEMAS = {"fhp-fasta": "fhp.json", "fhgff3": "fhgff3.json"}
 # Invalid vectors whose rule names the schema their metadata must fail.
 SCHEMA_RULES = {"P1": "fhp.json", "P2": "fhr.json", "G2": "fhgff3.json", "G3": "fhr.json"}
+# Schema selection (docs/SCHEMA-VERSIONS.md V1-V5) and the version registry.
+REGISTRY_PATH = ROOT / "schemas" / "versions.json"
+RAW_SCHEMA = re.compile(r"https://raw\.githubusercontent\.com/FAIR-bioHeaders/FHR-Specification/"
+                        r"([^/]+)/(fhr|fhp|fhgff3)\.json")
+W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3)/"
+                         r"(v[0-9]+\.[0-9]+\.[0-9]+)/?")
+RELEASE_TAG = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+")
+TYPE_NAMES = {"fhr": "FHR", "fhp": "FHP", "fhgff3": "FHGFF3"}
+UNSUPPORTED_VERSION = "unsupported schema version"
+
+
+def select_schema(value, registry=None):
+    """Return (header type, release or "main", file name) or (type, None, None) when the
+    version is unsupported (V4). Any other value is FHR on main (V5)."""
+    registry = registry or json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    if isinstance(value, str):
+        raw, w3id = RAW_SCHEMA.fullmatch(value), W3ID_SCHEMA.fullmatch(value)
+        if raw:
+            ref, header_type = raw.group(1), TYPE_NAMES[raw.group(2)]
+        elif w3id:
+            ref, header_type = w3id.group(2), TYPE_NAMES[w3id.group(1)]
+        else:
+            return "FHR", "main", registry["files"]["FHR"]
+        if ref == "main":
+            return header_type, "main", registry["files"][header_type]
+        if RELEASE_TAG.fullmatch(ref) and header_type in registry["releases"].get(ref, {}):
+            return header_type, ref, registry["files"][header_type]
+        return header_type, None, None
+    return "FHR", "main", registry["files"]["FHR"]
+
+
+def load_schema(release, name, registry=None):
+    """The schema text of ``name`` at ``release``: the working tree for main and the
+    registry's current release, otherwise ``git show <tag>:<name>``."""
+    registry = registry or json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    if release in ("main", registry["current"]):
+        return json.loads((ROOT / name).read_text(encoding="utf-8"))
+    result = subprocess.run(["git", "show", f"{release}:{name}"], cwd=ROOT,
+                            capture_output=True, text=True)
+    if result.returncode:
+        raise ValueError(f"cannot read {name} at {release} (fetch the git tags): "
+                         f"{result.stderr.strip()}")
+    return json.loads(result.stdout)
 
 
 def generated_files(directory):
@@ -173,7 +217,7 @@ def check_checksums(conformance, manifest):
 def check_manifest(manifest):
     problems = []
     labelled = [rule for document in RULE_DOCUMENTS
-                for rule in re.findall(r"\[([RMJPG]\d+)\]", (ROOT / document).read_text())]
+                for rule in re.findall(r"\[([RMJPGV]\d+)\]", (ROOT / document).read_text())]
     if labelled != list(manifest["rules"]):
         problems.append(f"rule ids {labelled} in {', '.join(RULE_DOCUMENTS)} "
                         "differ from the manifest")
@@ -201,9 +245,48 @@ def check_schema(conformance, manifest):
                                    format_checker=FormatChecker())
         for name in {"fhr.json", *SCHEMAS.values()}
     }
+    selected = {}
+
+    def selected_validator(metadata):
+        """The validator for the schema ``metadata`` selects, or None (unsupported)."""
+        _, release, name = select_schema(metadata.get("schema") if isinstance(metadata, dict)
+                                         else None)
+        if release is None:
+            return None
+        if (release, name) not in selected:
+            selected[release, name] = Draft202012Validator(load_schema(release, name),
+                                                           format_checker=FormatChecker())
+        return selected[release, name]
+
+    def header_metadata(vector):
+        prefix = PREFIXES[vector["format"]]
+        text = "\n".join(
+            line[len(prefix):].rstrip(b"\r\n").decode("utf-8")
+            for line in read_vector(conformance, vector).splitlines(keepends=True)
+            if line.startswith(prefix)
+        )
+        return yaml.safe_load(text)
+
     problems = []
     for vector in manifest["vectors"]:
+        if vector["format"] in PREFIXES and vector.get("rule", "").startswith("V"):
+            # Selection vectors (V1-V5): an unsupported version selects no schema;
+            # otherwise the metadata must fail the schema its URL selects.
+            validator = selected_validator(header_metadata(vector))
+            if vector.get("result") == "unsupported-version":
+                if validator is not None:
+                    problems.append(f"{vector['id']}: schema URL is not unsupported")
+            elif validator is None:
+                problems.append(f"{vector['id']}: schema URL is unexpectedly unsupported")
+            elif not list(validator.iter_errors(header_metadata(vector))):
+                problems.append(f"{vector['id']}: metadata unexpectedly matches the selected schema")
+            continue
         validator = validators[SCHEMAS.get(vector["format"], "fhr.json")]
+        if vector["expected"] == "valid" and vector["format"] in PREFIXES:
+            validator = selected_validator(header_metadata(vector))
+            if validator is None:
+                problems.append(f"{vector['id']}: valid vector cites an unsupported schema")
+                continue
         if vector["format"] in SCHEMAS and vector["expected"] == "invalid" \
                 and vector["rule"] in SCHEMA_RULES:
             # The parsed header must match the manifest and fail the schema the
@@ -353,6 +436,11 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             problems.append((vector["format"], f"{vector['id']}: converter does not support "
                              f"the {vector['format']} format"))
             continue
+        if vector.get("result") == "unsupported-version" and not accepted \
+                and UNSUPPORTED_VERSION not in (result.stderr + result.stdout).lower():
+            detail = (result.stderr or result.stdout).strip().splitlines()
+            problems.append(f"{vector['id']}: converter rejected it without an unsupported "
+                            f"schema version message ({detail[-1] if detail else 'no output'})")
         if accepted != (vector["expected"] == "valid"):
             detail = (result.stderr or result.stdout).strip().splitlines()
             detail = detail[-1] if detail else f"exit {result.returncode}"

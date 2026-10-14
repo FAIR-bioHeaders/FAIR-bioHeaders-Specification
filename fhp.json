@@ -259,15 +259,16 @@
           "type": "string"
         },
         "schema": {
-          "description": "URL of the FHP JSON Schema this record follows; it identifies the header type (FR-011)",
-          "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\\.json$",
+          "description": "URL of the FHP JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-011)",
+          "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhp\\.json|https://w3id\\.org/fair-bioheaders/fhp/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
           "type": "string"
         },
         "schemaVersion": {
-          "description": "Version of the FHP schema",
-          "type": "number",
+          "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "type": "string",
           "enum": [
-            1
+            "1.0"
           ]
         },
         "scholarlyArticle": {
@@ -577,15 +578,16 @@
       "type": "string"
     },
     "schema": {
-      "description": "URL of the FHP JSON Schema this record follows; it identifies the header type (FR-011)",
-      "pattern": "^https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/[A-Za-z0-9._/-]+/fhp\\.json$",
+      "description": "URL of the FHP JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-011)",
+      "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHR-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhp\\.json|https://w3id\\.org/fair-bioheaders/fhp/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of the FHP schema",
-      "type": "number",
+      "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "type": "string",
       "enum": [
-        1
+        "1.0"
       ]
     },
     "scholarlyArticle": {

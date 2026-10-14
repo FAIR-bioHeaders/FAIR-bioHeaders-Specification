@@ -10,11 +10,12 @@
       "description": "centralized schema file"
     },
     "schemaVersion": {
-      "type": "number",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
       "enum": [
-        1
+        "2.0"
       ],
-      "description": "Version of FHR; restricted to 1 (version 2 is reserved for a structural change)"
+      "description": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4 (docs/SCHEMA-VERSIONS.md)"
     },
     "genome": {
       "type": "string",

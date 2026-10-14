@@ -28,7 +28,8 @@ open and re-save them in an editor. Run the generator instead.
 
 `rules` maps each stable rule id to a short summary: R1 to R10 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
-docs/JSONLD.md, P1 to P2 from docs/FHP.md, and G1 to G3 from docs/FHGFF3.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V5
+(schema selection) from docs/SCHEMA-VERSIONS.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
@@ -46,9 +47,10 @@ Every entry in `vectors` has these fields:
 | `rules` | Valid vectors only: the rules the file exercises |
 | `description` | Valid vectors only: what the file exercises |
 | `checksum` | Valid FASTA/GFA vectors only: the expected FHR checksum, base64 SHA-512/256 |
-| `metadata` | Valid FASTA/GFA vectors: some expected parsed values (`genome`, `version`, `masking`). Valid `fhp-fasta` vectors: `proteome`, `version` and `sourceType`. Valid `fhgff3` vectors: `annotation` and `version`. Valid microdata and JSON-LD vectors: the complete expected metadata object. `microdata-schema-invalid`, `jsonld-missing-checksum` the P1/P2 `fhp-fasta` vectors and the G2/G3 `fhgff3` vectors: the metadata they yield, which fails `fhp.json` (P1), `fhgff3.json` (G2) or `fhr.json` (the other vectors, P2 and G3) |
+| `metadata` | Valid FASTA/GFA vectors: some expected parsed values (`genome`, `version`, `masking`; the V vectors also `schema` and `schemaVersion`). Valid `fhp-fasta` vectors: `proteome`, `version` and `sourceType`. Valid `fhgff3` vectors: `annotation` and `version`. Valid microdata and JSON-LD vectors: the complete expected metadata object. `microdata-schema-invalid`, `jsonld-missing-checksum` the P1/P2 `fhp-fasta` vectors and the G2/G3 `fhgff3` vectors: the metadata they yield, which fails `fhp.json` (P1), `fhgff3.json` (G2) or `fhr.json` (the other vectors, P2 and G3) |
 | `rule` | Invalid vectors only: the rule the file breaks |
 | `reason` | Invalid vectors only: how the file breaks that rule |
+| `result` | Invalid V4 vectors only: `unsupported-version`. A reader must report that the cited schema version is unsupported (the toolkit prints `unsupported schema version`), not check the file against another schema |
 
 An invalid vector breaks one rule and is otherwise correct. Where possible its
 stated checksum matches the bytes, so an implementation can't pass by failing the

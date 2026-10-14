@@ -66,7 +66,8 @@ entries:
   - term: none
     kind: unsupported
     reason: DCMI has no term for the version of the metadata contract.
-  notes: The version of the FHR contract, not of the assembly (#56).
+  notes: The version of the FHR contract, not of the assembly (#56). From v0.4 it is a "MAJOR.MINOR"
+    string (docs/SCHEMA-VERSIONS.md), still a plain literal.
   sources:
   - https://github.com/FAIR-bioHeaders/FHR-Specification/issues/56
   - https://github.com/FAIR-bioHeaders/FHR-Specification/blob/main/docs/MAPPINGS.md

@@ -30,8 +30,8 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 ```
 ##gff-version 3
 #!genome-build Synthetic SyntheticAssembly1
-#~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json
-#~schemaVersion: 1
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
+#~schemaVersion: '1.0'
 #~annotation: Synthetic example annotation
 ##sequence-region ctg1 1 20
 #~...
@@ -62,9 +62,10 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `annotation` | Name of the annotation |
 | the genome link | At least one of the two forms below |
 
-`schema` must be the raw GitHub URL of `fhgff3.json` in FHR-Specification, for example
-`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhgff3.json`.
-`schemaVersion` is `1`.
+`schema` must be an FHGFF3 schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
+versioned `https://w3id.org/fair-bioheaders/fhgff3/v0.4.0` of the release a file targets, or the raw
+GitHub URL of `fhgff3.json` on `main` or at a release tag. `schemaVersion` is `'1.0'` (FHGFF3 1.0),
+quoted in YAML.
 
 ### The genome link
 
@@ -137,7 +138,9 @@ unchanged, and R10 with the GFF3 block end below. In addition:
   other `#` lines inside it. A `#~` line on line 1 or after the block is invalid.
 - [G2] FHGFF3 metadata must validate against `fhgff3.json`. That includes the genome link: an
   `annotates` link to an FHR genome, a complete `genomeReference`, or both.
-- [G3] A record is read as FHGFF3 only when its `schema` is an FHGFF3 schema URL. Tools validate
+- [G3] A record is read as FHGFF3 only when its `schema` is an FHGFF3 schema URL: the raw-main or
+  raw tag URL of `fhgff3.json`, or `https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`; which FHGFF3
+  schema is used follows [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md). Tools validate
   any other header as that type (FHR by default), so a GFF3 file that cites `fhr.json` is checked
   against FHR.
 
