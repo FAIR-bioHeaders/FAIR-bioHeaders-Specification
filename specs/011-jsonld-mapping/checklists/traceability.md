@@ -27,7 +27,7 @@ that implement (I) or test (T) it.
 | SC-001 | Every example and conformance metadata record converts to JSON-LD and back unchanged | R-12, R-14 | T012 (specification, 34 records), T014, T015 (toolkit), T027 (V3, V5) |
 | SC-002 | 100% of FHR properties have a mapping entry with a DCMI column | R-03, R-15 | T028 (path set equals `fhr.json`, 45), T030 |
 | SC-003 | Expanded JSON-LD uses only schema.org, Bioschemas-endorsed or documented FHR terms | R-03, R-14 | T013 (namespaces and schema.org domains, pinned v30.1), T006 (every `fhr:` term defined), T017, T027 (V4, V8 manual validator check) |
-| SC-004 | #56 can start from the table without re-deriving any field meaning (maintainer confirms) | R-02, R-15 | T030, T031 ("Reusing this table"), T032 (confirmation requested). The confirmation itself is a maintainer action and not a task |
+| SC-004 | #56 can start from the table without re-deriving any field meaning (maintainer confirms) | R-02, R-15 | T030, T031 ("Reusing this table"), T032 (confirmation requested). Confirmed by David Molik on spec#56, 2026-10-10 |
 
 ## Acceptance scenarios and edge cases
 
@@ -118,6 +118,6 @@ Every FR, SC and acceptance item above has its tasks done:
 FR-008 is complete: perma-id/w3id.org#6860 is merged and the namespace resolves by content
 negotiation.
 
-Open items, which no task can close:
-
-- SC-004: David Molik confirms on spec#56 that #56 can start from the mapping table.
+SC-004 is confirmed: David Molik replied on spec#56 on 2026-10-10 that the mapping table is
+correct for starting the export work ("This looks correct, yes"). No open items remain. His
+2026-10-14 proposals for an enriched schema.org export are a new feature (013), not a gap in 011.
