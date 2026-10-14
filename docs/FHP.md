@@ -1,8 +1,9 @@
-# FHP: FAIR header for protein FASTA (draft)
+# FHP: FAIR header for protein FASTA
 
-**Status: draft, not released.** FHP is the working name (#54). The schema, examples and
-conformance vectors are on `main` for review. No FHP release or DOI exists yet (the persistent
-schema URL is registered and resolves once v0.4.0 is tagged), and the fields may change after curator review. The design is in
+**Status: v0.1, first released in FAIR-bioHeaders-Specification v0.4.0** (`schemaVersion`
+`"1.0"`). FHP is the working name (#54), and the fields may still change after curator
+review, through a new schema version. Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhp/v0.4.0`. The design is in
 [specs/006-protein-header](../specs/006-protein-header/spec.md).
 
 FHP brings the FHR header to protein FASTA files: predicted proteomes, sets taken from protein

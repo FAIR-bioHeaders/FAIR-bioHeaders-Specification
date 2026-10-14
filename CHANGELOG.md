@@ -1,6 +1,15 @@
 # Changelog
 
-## Unreleased (v0.4)
+## v0.4.0 — 2026-10-14
+
+The next major public release. FHR's metadata contract moves to `schemaVersion`
+`"2.0"`: the v0.4 tightening rejects some files that v0.3 accepted (see
+docs/SCHEMA-CHANGES-v0.4.md). The protein header FHP and the GFF3 annotation
+header FHGFF3 have their first releases, each at `schemaVersion` `"1.0"`. A file's
+`schema` URL selects the schema it is validated against (docs/SCHEMA-VERSIONS.md):
+the raw-`main` URL means the current schema, a versioned w3id or tag URL selects
+that release, and an unknown version is reported as unsupported. Release-targeted
+files cite `https://w3id.org/fair-bioheaders/<type>/v0.4.0`.
 
 - The repository is now `FAIR-bioHeaders-Specification` (#108). Schema
   selection (docs/SCHEMA-VERSIONS.md V1, V2) recognises raw GitHub URLs under

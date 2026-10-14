@@ -1,8 +1,9 @@
-# FHGFF3: FAIR header for GFF3 annotations (draft)
+# FHGFF3: FAIR header for GFF3 annotations
 
-**Status: draft, not released.** FHGFF3 is the working name (#54). The schema, examples and
-conformance vectors are on `main` for review. No FHGFF3 release or DOI exists yet (the persistent
-schema URL is registered and resolves once v0.4.0 is tagged), and the fields may change after curator review. The design is in
+**Status: v0.1, first released in FAIR-bioHeaders-Specification v0.4.0** (`schemaVersion`
+`"1.0"`). FHGFF3 is the working name (#54), and the fields may still change after curator
+review, through a new schema version. Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhgff3/v0.4.0`. The design is in
 [specs/007-gff3-header](../specs/007-gff3-header/spec.md).
 
 FHGFF3 is a provenance header around ordinary GFF3. It adds YAML lines that start with `#~` after

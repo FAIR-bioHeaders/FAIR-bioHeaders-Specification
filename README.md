@@ -6,7 +6,7 @@
 [![File Converter DOI](https://img.shields.io/badge/File_Converter_DOI-10.5281%2Fzenodo.6762547-blue)](https://doi.org/10.5281/zenodo.6762547)
 
 This repository holds the released FAIR-bioHeaders specifications: FHR (reference
-genomes), the draft FHP (protein FASTA) and FHGFF3 (GFF3 annotation) headers, the
+genomes), FHP (protein FASTA) and FHGFF3 (GFF3 annotation) headers, the
 shared core schema, the format rules, the JSON-LD context and vocabulary, and the
 conformance suite. It was called `FHR-Specification` until 2026-10-14 (#108).
 
@@ -23,7 +23,7 @@ comes here by pull request:
 Schema URLs under the old name
 (`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`
 and the like) keep working and are recognised by the tools; new files should cite a
-versioned w3id URL (see [SCHEMA-VERSIONS](docs/SCHEMA-VERSIONS.md) on `release-v0.4`).
+versioned w3id URL (see [SCHEMA-VERSIONS](docs/SCHEMA-VERSIONS.md)).
 
 FHR (FAIR Header Reference genome) keeps machine-readable and human-readable
 provenance with reference genome data. This repository defines the JSON Schema,
@@ -139,18 +139,19 @@ conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-t
   tools that select schemas ([schema versions](docs/SCHEMA-VERSIONS.md)).
 - `fhr_linkml.yml`: the FHR LinkML model. It imports the core and adds FHR-only
   slots (`genome`, `assemblyAuthor`, `masking`, `vitalStats`, ...).
-- `fhp_linkml.yml` and `fhp.json`: the **draft** FHP header for protein FASTA
+- `fhp_linkml.yml` and `fhp.json`: the FHP header for protein FASTA
   (proteomes and protein sets). The LinkML model imports the core, and the JSON
   Schema is generated from it. The format is described in [docs/FHP.md](docs/FHP.md),
-  with examples in [examples/fhp/](examples/fhp/). FHP is not released; see
+  with examples in [examples/fhp/](examples/fhp/). FHP v0.1 (`schemaVersion` `"1.0"`) is first released in v0.4.0; see
   [specs/006-protein-header](specs/006-protein-header/spec.md).
-- `fhgff3_linkml.yml` and `fhgff3.json`: the **draft** FHGFF3 header for GFF3
+- `fhgff3_linkml.yml` and `fhgff3.json`: the FHGFF3 header for GFF3
   annotations, placed after `##gff-version 3`. The record links the annotation to
   its genome, by FHR checksum or by accession plus SeqCol digest. The LinkML model
   imports the core and `schemas/shared.yaml` (software, sources and BUSCO
   completeness, shared with FHP), and the JSON Schema is generated from it. See
-  [docs/FHGFF3.md](docs/FHGFF3.md) and [examples/fhgff3/](examples/fhgff3/). FHGFF3 is
-  not released; see [specs/007-gff3-header](specs/007-gff3-header/spec.md).
+  [docs/FHGFF3.md](docs/FHGFF3.md) and [examples/fhgff3/](examples/fhgff3/). FHGFF3 v0.1
+  (`schemaVersion` `"1.0"`) is first released in v0.4.0; see
+  [specs/007-gff3-header](specs/007-gff3-header/spec.md).
 - `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type
   imports the core.
 
