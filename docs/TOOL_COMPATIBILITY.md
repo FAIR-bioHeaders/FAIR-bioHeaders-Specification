@@ -277,6 +277,39 @@ metadata in each format's native header lines (GFF3 `##`/`#!`, VCF `##`,
 GAF `!`). `bioheaders assess` reports what a header already provides; its shared
 fixtures are in [assessment/](../assessment/README.md).
 
+## Comment markers: `;`, `#` or none
+
+Is `;` the right marker, or would another convention be better supported? On
+2026-10-15 the FASTA tests above were rerun three times on the same file, changing
+only the lines before the first `>`: the FHR `;~` lines, the same lines starting
+with `#~`, and the same lines with no marker. The tools were the versions listed
+under [Environment](#environment). There were 29 tests across 22 tools;
+UCSC faToTwoBit and the JBrowse CLI gave no result for any variant and are left
+out. `scripts/tool_survey/make_marker_variants.py` writes the variants.
+
+| Result | `;` | `#` | no marker |
+| --- | --- | --- | --- |
+| Works | 11 | 11 | 10 |
+| Fails | 18 | 18 | 19 |
+
+- `;` and `#` gave the same result in every test, with the same errors
+  (htslib names the character: `unexpected ";"` or `unexpected "#"`).
+- The tools that work ignore everything before the first `>`: `samtools dict`,
+  pysam `FastxFile`, seqtk, BWA, minimap2, kallisto, bioawk, MAFFT and Biopython
+  `fasta-pearson`. None of them copies the header lines into its output, and all
+  of them also accept the unmarked lines.
+- BLAST's `makeblastdb` is the one tool that recognises comment markers. It
+  accepts `;` and `#` lines, but for the unmarked file it warns that the input
+  "does NOT appear to be FASTA" and creates no database.
+- The tools that fail, fail on all three variants. Some reject any first line
+  that is not `>` (samtools faidx, UCSC faSize, Bowtie2); others read the leading
+  lines as sequence and then fail on inconsistent line lengths (gffread,
+  pyfaidx, AGAT/BioPerl).
+
+So no competing marker would gain support: tools are either lenient about text
+before the first record or strict. `;` keeps the advantage of being the
+documented FASTA comment form (Pearson and Lipman).
+
 ## Upstream support
 
 This is the inventory of tool support for FAIR-bioHeaders headers. It records which tools work
