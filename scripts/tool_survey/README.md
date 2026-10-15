@@ -9,6 +9,7 @@ Scripts behind [docs/TOOL_COMPATIBILITY.md](../../docs/TOOL_COMPATIBILITY.md).
 | `fp.py` | Reduces tool output to a comparable fingerprint (names, lengths, MD5s) |
 | `gff_probe.mjs` | Parses GFF3 with `@gmod/gff`, the JBrowse 2 parser |
 | `run_all.sh` | Regenerates inputs and reruns everything |
+| `make_marker_variants.py` | Copies the inputs with the leading `;` lines marked `#` or unmarked, for the comment-marker comparison |
 | `environment.yml`, `environment-graph.yml`, `package.json` | Tested tool versions |
 | `results/results.tsv` | Results of the 2026-10-08 run |
 
