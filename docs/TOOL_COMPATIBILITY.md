@@ -277,6 +277,47 @@ metadata in each format's native header lines (GFF3 `##`/`#!`, VCF `##`,
 GAF `!`). `bioheaders assess` reports what a header already provides; its shared
 fixtures are in [assessment/](../assessment/README.md).
 
+## Upstream support
+
+This is the inventory of tool support for FAIR-bioHeaders headers. It records which tools work
+with FHR headers as released and the changes proposed upstream so that the others do. Live status
+is tracked in [#121](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/121).
+
+### Tools that work today
+
+These read FHR-headed files with results identical to the control file in the survey above.
+
+| Format | Tools (surveyed version) |
+| --- | --- |
+| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` formats `fasta-pearson` and `fasta-blast` |
+| GFA | gfatools 0.4 (`view`, `stat`, `gfa2fa`); gfapy 1.2.3; odgi 0.9.4 (`build`, `stats`, `view`); vg 1.76.1 (`stats`, `convert`) |
+| GFF3 | GenomeTools 1.6.5 (`gt gff3 -sort -tidy`, `gt gff3validator`); AGAT 1.7.0 GFF3 tools; gffread 0.12.9 (`-E`, `-T`, `-g -x`); gffutils 0.14; featureCounts 2.1.1; HTSeq 2.1.2 `htseq-count`; bedtools 2.31.1 (`intersect`, `sort`); bgzip and tabix 1.24; `@gmod/gff` 2.1.0; JBrowse CLI 4.3.0 (`add-track`, `text-index`) |
+
+### FASTA tools: changes proposed upstream
+
+Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
+the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
+current meaning, so no file that a tool reads today is read differently.
+
+| Project | Affected tools | Proposal (2026-10-14) | Status |
+| --- | --- | --- | --- |
+| samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Open |
+| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open |
+| samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | Open |
+| shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | Open |
+| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Open |
+| lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
+| ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Open |
+| gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
+| bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | Open |
+| BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open |
+| DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open |
+| alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
+| onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open |
+
+Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
+and keep the FHR file as the record of provenance.
+
 ## Not tested
 
 - **Bandage**: GUI only.

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add an "Upstream support" inventory to docs/TOOL_COMPATIBILITY.md (#121): the tools that already
+  work with FHR headers, and the changes proposed upstream so that FASTA tools skip `;` lines before
+  the first record. Documentation only.
+
 ## v0.4.0 — 2026-10-14
 
 The next major public release. FHR's metadata contract moves to `schemaVersion`
