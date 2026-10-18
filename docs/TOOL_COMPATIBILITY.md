@@ -357,6 +357,14 @@ These read FHR-headed files with results identical to the control file in the su
 `fasta-blast` also skips the header, but in 1.85 to 1.88 it gives every record the first record's ID
 (biopython/biopython#5377), so it is not listed.
 
+**Caveat for kseq-based readers.** kseq starts a record at the first `>` or `@` character
+anywhere, not only at the start of a line. If an FHR header line contains a raw `>` or `@`
+(an email address, `length > 1000`), seqtk, bioawk and `samtools dict` read a bogus extra
+record (checked 2026-10-18: `;~metadataAuthor: someone@example.org` gives a 0-length record
+named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser. Escaping these
+characters in double-quoted YAML (`\x40`, `\x3E`) avoids it without changing the metadata;
+see FAIR-bioHeaders-Specification#127.
+
 | Format | Tools (surveyed version) |
 | --- | --- |
 | FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est` |
