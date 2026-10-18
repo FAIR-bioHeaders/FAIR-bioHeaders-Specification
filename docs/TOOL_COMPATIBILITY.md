@@ -250,7 +250,9 @@ zcat genome.fhr.fa.gz | sed '/^;/d' | bgzip > genome.fa.gz
 Keep the FHR file as the archival copy; the stripped copy is derived. The FHR
 metadata can be kept beside it as JSON/YAML with `fhr-convert`.
 
-- **Biopython**: use `SeqIO.parse(path, "fasta-pearson")`.
+- **Biopython**: use `SeqIO.parse(path, "fasta-pearson")`. Avoid `fasta-blast` in
+  Biopython 1.85 to 1.88: it gives every record the first record's ID
+  (biopython/biopython#5377).
 - **GFA**: no action needed. `fhr-gfa-strip` or `grep -v '^#~'` gives the
   original bytes back.
 - **GFF3**: no action needed. To remove the header use `grep -v '^#~' x.gff3`
@@ -267,8 +269,10 @@ for f in *.fhr.fa; do fhr-fasta-strip "$f" -; done > combined.fa
 
 Then add a new header to the result with `fhr-fasta-combine` if needed.
 
-Native support in htslib would remove most FASTA stripping. The draft proposal
-is [proposals/htslib-fasta-comments.md](proposals/htslib-fasta-comments.md).
+Native support in htslib would remove most FASTA stripping. The proposal
+([proposals/htslib-fasta-comments.md](proposals/htslib-fasta-comments.md),
+samtools/htslib#2103 and #2106) was declined on 2026-10-15, so stripping
+remains the route for faidx-based tools. See [Upstream support](#upstream-support).
 
 Stripping a header removes its metadata from the working copy. For files that
 cannot carry an FHR header, or tools that need a stripped copy, the
@@ -328,17 +332,19 @@ These read FHR-headed files with results identical to the control file in the su
 
 ### FASTA tools: changes proposed upstream
 
+Status as of 2026-10-18; FAIR-bioHeaders-Specification#121 is the live tracker.
+
 Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
 current meaning, so no file that a tool reads today is read differently.
 
 | Project | Affected tools | Proposal (2026-10-14) | Status |
 | --- | --- | --- | --- |
-| samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Open |
-| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open |
+| samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
+| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open. The maintainer will fix the silent `None` record and will consider leading `;` lines if other major projects accept them |
 | samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | Open |
-| shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | Open |
-| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Open |
+| shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
+| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Open |
 | gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
@@ -346,7 +352,7 @@ current meaning, so no file that a tool reads today is read differently.
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open |
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open |
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
-| onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open |
+| onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open. The maintainer prefers skipping all text before the first record (the kseq behaviour) to partial Pearson comment support; we offered to rework the PR |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
