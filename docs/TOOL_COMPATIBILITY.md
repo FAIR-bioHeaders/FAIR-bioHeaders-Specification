@@ -99,6 +99,19 @@ software: Node 20.19.4 with `@jbrowse/cli` 4.3.0 and `@gmod/gff` 2.1.0
 | gffread `-g` | 0.12.9 | `gffread genes.gff3 -g x.fa -x cds.fa` | plain | **c** | `sequence lines in a FASTA record must have the same length!` |
 | AGAT (BioPerl `Bio::DB::Fasta`) | 1.7.0 | `agat_sp_extract_sequences.pl -f x.fa` | plain | **c** | `Each line of the fasta entry must be the same length ... ';~taxon:'`. |
 | JBrowse CLI `add-assembly` | 4.3.0 | `jbrowse add-assembly x.fa` | plain | **c** | Needs a `.fai`, which samtools cannot build for this file. |
+| Bioconductor Biostrings | 2.80.2 | `readDNAStringSet(x)` | plain | a | Added 2026-10-18. Same names and sequences as the control. Biostrings skips leading `;` lines but rejects `#` or unmarked lines (`">" expected at beginning of line 1`). |
+| scikit-bio | 0.7.4 | `skbio.io.read(x, format="fasta")` | plain | **c** | Added 2026-10-18. `FASTAFormatError: Found non-header line when attempting to read the 1st record`. |
+| noodles-fasta (Rust) | 0.68.0 | `noodles_fasta::io::Reader::records()` | plain | **c** | Added 2026-10-18. `invalid prefix`. |
+| rust-bio (Rust) | 4.2.2 | `bio::io::fasta::Reader::records()` | plain | **c** | Added 2026-10-18. `Expected > at record start.` |
+| BioJulia FASTX.jl | 2.2.0 (Julia 1.11.7) | `FASTAReader` | plain | **c** | Added 2026-10-18. `Error when parsing FASTX file. Saw unexpected byte ';' on line 1`. |
+| HMMER/Easel `esl-reformat` | HMMER 3.4 | `esl-reformat fasta x.fa` | plain | **c** | Added 2026-10-18. `Parse failed (sequence file x.fa)`. |
+| EMBOSS `seqret` | 6.6.0 | `seqret -sequence x.fa -auto` | plain | **c** | Added 2026-10-18. `Unable to read sequence`. With `#` lines instead it is **b**: EMBOSS detects GDE format and writes one sequence made of header text and all records. |
+| MMseqs2 `createdb` | 18.8cc5c | `createdb`, then `convert2fasta` | plain | a | Added 2026-10-18. Same sequences as the control. |
+| DIAMOND `makedb` | 2.2.8 | `makedb`, then `getseq` (protein) | plain | **c** | Added 2026-10-18. `First line must begin with '>' (FASTA) or '@' (FASTQ)`. |
+| CD-HIT `cd-hit-est` | 4.8.1 | `cd-hit-est -c 1.0` | plain | a | Added 2026-10-18. Same representative sequences as the control. |
+| Clustal Omega | 1.2.4 | `clustalo -i x.fa` | plain | **c** | Added 2026-10-18. `Can't determine format of sequence file`. |
+| MUSCLE `-align` | 5.3 | `muscle -align x.fa` | plain | **c** | Added 2026-10-18. `Expected '>' in FASTA, got ';~schema: ...'`. |
+| IQ-TREE | 3.1.4 | `iqtree3 -s x.aln.fa` (DNA alignment) | plain | **c** | Added 2026-10-18. `Unknown sequence format`. With `#` lines it tries NEXUS: `Expecting #NEXUS to be the first token`. |
 
 bcftools (for example `bcftools norm -f`), GATK and other htslib/htsjdk
 reference consumers were not run separately. They load references through the
@@ -310,9 +323,27 @@ out. `scripts/tool_survey/make_marker_variants.py` writes the variants.
   lines as sequence and then fail on inconsistent line lengths (gffread,
   pyfaidx, AGAT/BioPerl).
 
-So no competing marker would gain support: tools are either lenient about text
-before the first record or strict. `;` keeps the advantage of being the
-documented FASTA comment form (Pearson and Lipman).
+On 2026-10-18 the same comparison was run for the 13 parsers added to the FASTA table
+(versions in `scripts/tool_survey/environment-extra.yml`; 13 tests across 13 tools,
+results in `scripts/tool_survey/results/results-extra.tsv`):
+
+| Result (2026-10-18 additions) | `;` | `#` | no marker |
+| --- | --- | --- | --- |
+| Works | 3 | 2 | 2 |
+| Misreads (silent) | 0 | 1 | 0 |
+| Fails | 10 | 10 | 11 |
+
+- Bioconductor Biostrings accepts the `;` lines and rejects `#` and unmarked lines, so
+  it implements the Pearson comment form.
+- `#` is already meaningful to some formats: EMBOSS detects GDE and silently merges the
+  header and every record into one sequence, and IQ-TREE expects NEXUS.
+- MMseqs2 and CD-HIT skip anything before the first `>`.
+
+So no competing marker would gain support: most tools are either lenient about text
+before the first record or strict, and the two that tell marked lines apart
+(makeblastdb and Biostrings) accept `;`. `;` keeps the advantage of being the
+documented FASTA comment form (Pearson and Lipman), it is the form Biostrings
+recognises, and unlike `#` it does not collide with GDE or NEXUS.
 
 ## Upstream support
 
@@ -322,11 +353,13 @@ is tracked in [#121](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specific
 
 ### Tools that work today
 
-These read FHR-headed files with results identical to the control file in the survey above.
+These read FHR-headed files with results identical to the control file in the survey above. Biopython's
+`fasta-blast` also skips the header, but in 1.85 to 1.88 it gives every record the first record's ID
+(biopython/biopython#5377), so it is not listed.
 
 | Format | Tools (surveyed version) |
 | --- | --- |
-| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` formats `fasta-pearson` and `fasta-blast` |
+| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est` |
 | GFA | gfatools 0.4 (`view`, `stat`, `gfa2fa`); gfapy 1.2.3; odgi 0.9.4 (`build`, `stats`, `view`); vg 1.76.1 (`stats`, `convert`) |
 | GFF3 | GenomeTools 1.6.5 (`gt gff3 -sort -tidy`, `gt gff3validator`); AGAT 1.7.0 GFF3 tools; gffread 0.12.9 (`-E`, `-T`, `-g -x`); gffutils 0.14; featureCounts 2.1.1; HTSeq 2.1.2 `htseq-count`; bedtools 2.31.1 (`intersect`, `sort`); bgzip and tabix 1.24; `@gmod/gff` 2.1.0; JBrowse CLI 4.3.0 (`add-track`, `text-index`) |
 

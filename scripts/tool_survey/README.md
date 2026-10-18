@@ -10,6 +10,8 @@ Scripts behind [docs/TOOL_COMPATIBILITY.md](../../docs/TOOL_COMPATIBILITY.md).
 | `gff_probe.mjs` | Parses GFF3 with `@gmod/gff`, the JBrowse 2 parser |
 | `run_all.sh` | Regenerates inputs and reruns everything |
 | `make_marker_variants.py` | Copies the inputs with the leading `;` lines marked `#` or unmarked, for the comment-marker comparison |
+| `environment-extra.yml`, `rust/` | The extra FASTA parsers of 2026-10-18; `rust/` builds small noodles-fasta and rust-bio readers |
+| `results/results-extra.tsv` | Results of the extra parsers with the leading lines marked `;`, marked `#` or unmarked (`header_marker` column) |
 | `environment.yml`, `environment-graph.yml`, `package.json` | Tested tool versions |
 | `results/results.tsv` | Results of the 2026-10-08 run |
 
@@ -22,6 +24,21 @@ python -m venv fhrcli && fhrcli/bin/pip install fhr==0.3.3   # fhr-* CLIs
 mkdir node && cp package.json node/ && (cd node && npm install)
 export PATH=$MAMBA_ROOT_PREFIX/envs/survey/bin:$PATH:$MAMBA_ROOT_PREFIX/envs/survey-graph/bin:$PWD/fhrcli/bin
 SURVEY_NODE_DIR=$PWD/node ./run_all.sh /tmp/fhr-survey
+```
+
+Extra FASTA parsers (2026-10-18). FASTX.jl needs the official Julia binary
+(1.11.7) with `FASTX` 2.2.0 installed (`julia -e 'using Pkg; Pkg.add(name="FASTX", version="2.2.0")'`):
+
+```bash
+micromamba create -n survey-extra -f environment-extra.yml
+(cd rust && cargo build --release --locked)
+python3 make_inputs.py /tmp/fhr-survey/inputs --fhr-bin "$(dirname "$(command -v fhr-fasta-combine)")"
+python3 make_marker_variants.py /tmp/fhr-survey/inputs   # writes inputs-hash and inputs-text
+export PATH=$MAMBA_ROOT_PREFIX/envs/survey-extra/bin:$MAMBA_ROOT_PREFIX/envs/survey/bin:$PATH JULIA=/path/to/julia
+ONLY="Biostrings,scikit-bio,noodles,rust-bio,FASTX,Easel,EMBOSS,MMseqs2,DIAMOND,CD-HIT,Clustal,MUSCLE,IQ-TREE"
+for v in inputs inputs-hash inputs-text; do
+  python3 run_survey.py /tmp/fhr-survey/$v /tmp/fhr-survey/results-$v --only "$ONLY"
+done
 ```
 
 ## Classes
