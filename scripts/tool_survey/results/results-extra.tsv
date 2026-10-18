@@ -1,0 +1,40 @@
+header_marker	type	tool	version	inputs	control_rc	fhr_rc	class	header_lines_in_output	note
+semicolon	fasta	Bioconductor Biostrings readDNAStringSet	Biostrings 2.80.2	control.fa vs fhr.fa	0	0	a	0	
+semicolon	fasta	scikit-bio skbio.io.read	scikit-bio 0.7.4	control.fa vs fhr.fa	0	1	c	0	skbio.io.FASTAFormatError: Found non-header line when attempting to read the 1st record
+semicolon	fasta	noodles-fasta (Rust)	noodles-fasta 0.68.0	control.fa vs fhr.fa	0	1	c	0	error: invalid prefix
+semicolon	fasta	rust-bio bio::io::fasta	bio 4.2.2	control.fa vs fhr.fa	0	1	c	0	error: Expected > at record start.
+semicolon	fasta	BioJulia FASTX.jl	FASTX 2.2.0	control.fa vs fhr.fa	0	1	c	0	ERROR: Error when parsing FASTX file. Saw unexpected byte ';' on line 1
+semicolon	fasta	HMMER/Easel esl-reformat	hmmer 3.4	control.fa vs fhr.fa	0	1	c	0	Parse failed (sequence file fhr.fa):
+semicolon	fasta	EMBOSS seqret	EMBOSS 6.6.0.0	control.fa vs fhr.fa	0	1	c		Error: Unable to read sequence 'fhr.fa'
+semicolon	fasta	MMseqs2 createdb	mmseqs 18.8cc5c	control.fa vs fhr.fa	0	0	a	0	
+semicolon	fasta	DIAMOND makedb (protein)	diamond version 2.2.8	control.faa vs fhr.faa	0	1	c		Opening the database file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+semicolon	fasta	CD-HIT cd-hit-est	cd-hit version 4.8.1	control.fa vs fhr.fa	0	0	a	0	
+semicolon	fasta	Clustal Omega	clustalo 1.2.4	control.fa vs fhr.fa	0	1	c		FATAL: Can't determine format of sequence file fhr.fa
+semicolon	fasta	MUSCLE -align	muscle 5.3.linux64 []	control.fa vs fhr.fa	0	1	c		---Fatal error---
+semicolon	fasta	IQ-TREE (alignment)	version 3.1.4	control.aln.fa vs fhr.aln.fa	0	2	c		Reading alignment file fhr.aln.fa ... ERROR: Unknown sequence format, please use PHYLIP, FASTA, CLUSTAL, MSF, or NEXUS format
+hash	fasta	Bioconductor Biostrings readDNAStringSet	Biostrings 2.80.2	control.fa vs fhr.fa	0	1	c		"Error in .Call2(""fasta_index"", filexp_list, nrec, skip, seek.first.rec,  :"
+hash	fasta	scikit-bio skbio.io.read	scikit-bio 0.7.4	control.fa vs fhr.fa	0	1	c	0	skbio.io.FASTAFormatError: Found non-header line when attempting to read the 1st record
+hash	fasta	noodles-fasta (Rust)	noodles-fasta 0.68.0	control.fa vs fhr.fa	0	1	c	0	error: invalid prefix
+hash	fasta	rust-bio bio::io::fasta	bio 4.2.2	control.fa vs fhr.fa	0	1	c	0	error: Expected > at record start.
+hash	fasta	BioJulia FASTX.jl	FASTX 2.2.0	control.fa vs fhr.fa	0	1	c	0	ERROR: Error when parsing FASTX file. Saw unexpected byte '#' on line 1
+hash	fasta	HMMER/Easel esl-reformat	hmmer 3.4	control.fa vs fhr.fa	0	1	c	0	Parse failed (sequence file fhr.fa):
+hash	fasta	EMBOSS seqret	EMBOSS 6.6.0.0	control.fa vs fhr.fa	0	0	b?	0	
+hash	fasta	MMseqs2 createdb	mmseqs 18.8cc5c	control.fa vs fhr.fa	0	0	a	0	
+hash	fasta	DIAMOND makedb (protein)	diamond version 2.2.8	control.faa vs fhr.faa	0	1	c		Opening the database file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+hash	fasta	CD-HIT cd-hit-est	cd-hit version 4.8.1	control.fa vs fhr.fa	0	0	a	0	
+hash	fasta	Clustal Omega	clustalo 1.2.4	control.fa vs fhr.fa	0	1	c		FATAL: File fhr.fa does not appear to be in FASTA format at line 1.
+hash	fasta	MUSCLE -align	muscle 5.3.linux64 []	control.fa vs fhr.fa	0	1	c		---Fatal error---
+hash	fasta	IQ-TREE (alignment)	version 3.1.4	control.aln.fa vs fhr.aln.fa	0	1	c		ERROR:
+unmarked	fasta	Bioconductor Biostrings readDNAStringSet	Biostrings 2.80.2	control.fa vs fhr.fa	0	1	c		"Error in .Call2(""fasta_index"", filexp_list, nrec, skip, seek.first.rec,  :"
+unmarked	fasta	scikit-bio skbio.io.read	scikit-bio 0.7.4	control.fa vs fhr.fa	0	1	c	0	skbio.io.FASTAFormatError: Found non-header line when attempting to read the 1st record
+unmarked	fasta	noodles-fasta (Rust)	noodles-fasta 0.68.0	control.fa vs fhr.fa	0	1	c	0	error: invalid prefix
+unmarked	fasta	rust-bio bio::io::fasta	bio 4.2.2	control.fa vs fhr.fa	0	1	c	0	error: Expected > at record start.
+unmarked	fasta	BioJulia FASTX.jl	FASTX 2.2.0	control.fa vs fhr.fa	0	1	c	0	ERROR: Error when parsing FASTX file. Saw unexpected byte 's' on line 1
+unmarked	fasta	HMMER/Easel esl-reformat	hmmer 3.4	control.fa vs fhr.fa	0	1	c	0	Parse failed (sequence file fhr.fa):
+unmarked	fasta	EMBOSS seqret	EMBOSS 6.6.0.0	control.fa vs fhr.fa	0	1	c		Error: Unable to read sequence 'fhr.fa'
+unmarked	fasta	MMseqs2 createdb	mmseqs 18.8cc5c	control.fa vs fhr.fa	0	0	a	0	
+unmarked	fasta	DIAMOND makedb (protein)	diamond version 2.2.8	control.faa vs fhr.faa	0	1	c		Opening the database file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+unmarked	fasta	CD-HIT cd-hit-est	cd-hit version 4.8.1	control.fa vs fhr.fa	0	0	a	0	
+unmarked	fasta	Clustal Omega	clustalo 1.2.4	control.fa vs fhr.fa	0	1	c		FATAL: Can't determine format of sequence file fhr.fa
+unmarked	fasta	MUSCLE -align	muscle 5.3.linux64 []	control.fa vs fhr.fa	0	1	c		---Fatal error---
+unmarked	fasta	IQ-TREE (alignment)	version 3.1.4	control.aln.fa vs fhr.aln.fa	0	2	c		Reading alignment file fhr.aln.fa ... ERROR: Unknown sequence format, please use PHYLIP, FASTA, CLUSTAL, MSF, or NEXUS format

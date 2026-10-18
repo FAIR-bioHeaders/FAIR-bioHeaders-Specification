@@ -1,0 +1,12 @@
+[package]
+name = "fasta-probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+bio = "4.2.2"
+noodles-fasta = "0.68.0"
+
+# Tiny readers for the FHR tool-compatibility survey: each binary reads the
+# FASTA file given as its first argument and prints every record as FASTA.

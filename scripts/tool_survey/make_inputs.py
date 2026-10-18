@@ -87,6 +87,26 @@ def main():
     one.write_text(f">chrM\n{wrap(recs[2][1])}\n")
     run([fhr("fhr-fasta-combine"), "-o", str(fa / "fhr.single.fa"), str(meta), str(one)])
 
+    # Protein FASTA (DIAMOND) and a DNA alignment (IQ-TREE). They use their own
+    # generator so that every input above stays byte-identical.
+    xrng = random.Random(41)
+    aa = "ACDEFGHIKLMNPQRSTVWY"
+    prots = [(f"prot{i}", "".join(xrng.choice(aa) for _ in range(n)))
+             for i, n in ((1, 300), (2, 180), (3, 120))]
+    (fa / "control.faa").write_text("".join(f">{n} synthetic protein\n{wrap(s)}\n" for n, s in prots))
+    run([fhr("fhr-fasta-combine"), "-o", str(fa / "fhr.faa"), str(meta), str(fa / "control.faa")])
+    base = list(rand_seq(xrng, 600).upper())
+    taxa = []
+    for i in range(1, 6):
+        s = list(base)
+        for _ in range(30 * i):
+            s[xrng.randrange(len(s))] = xrng.choice("ACGT")
+        g = xrng.randrange(0, 560)
+        s[g:g + 6] = "-" * 6
+        taxa.append((f"taxon{i}", "".join(s)))
+    (fa / "control.aln.fa").write_text("".join(f">{n}\n{wrap(s)}\n" for n, s in taxa))
+    run([fhr("fhr-fasta-combine"), "-o", str(fa / "fhr.aln.fa"), str(meta), str(fa / "control.aln.fa")])
+
     # reads (exact substrings of chr1/chr2) for mappers
     with open(out / "reads" / "reads.fq", "w") as fq:
         for i in range(20):

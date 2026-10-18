@@ -1,0 +1,24 @@
+# Additional FASTA parsers tested on 2026-10-18 (docs/TOOL_COMPATIBILITY.md,
+# "More FASTA parsers"). Kept apart from environment.yml so that environment
+# still solves on its own. noodles-fasta and rust-bio are built from rust/
+# (Cargo.lock pins them); FASTX.jl 2.2.0 runs on the official Julia 1.11.7
+# binary (the conda-forge julia 1.13.0 build fails to load libopenlibm on
+# kernels that refuse executable stacks).
+name: survey-extra
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - r-base=4.5.3
+  - bioconductor-biostrings=2.80.2
+  - scikit-bio=0.7.4
+  - hmmer=3.4
+  - emboss=6.6.0
+  - mmseqs2=18.8cc5c
+  - diamond=2.2.8
+  - cd-hit=4.8.1
+  - clustalo=1.2.4
+  - muscle=5.3
+  - iqtree=3.1.4
+  - rust=1.99.0

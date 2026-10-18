@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run the FHR tool-compatibility survey.
 
-Usage: run_survey.py INPUTS OUTDIR [--node-dir DIR] [--only SUBSTRING]
+Usage: run_survey.py INPUTS OUTDIR [--node-dir DIR] [--only SUBSTRING[,SUBSTRING...]]
 
 INPUTS is the directory written by make_inputs.py. Every test is run twice,
 on a header-free control file and on the matching FHR-headed file, each in a
@@ -41,6 +41,8 @@ GFA = [("control.gfa", "fhr.gfa")]
 GFA_NUM = [("control.numeric.gfa", "fhr.numeric.gfa")]
 GFF = [("control.gff3", "fhr.gff3"), ("control.gff3", "fhr.sr-before.gff3")]
 GFF_FA = [("control.fasta.gff3", "fhr.fasta.gff3")]
+FAA = [("control.faa", "fhr.faa")]
+ALN = [("control.aln.fa", "fhr.aln.fa")]
 
 FAFP = '$FP fasta out.fa'
 SAMFP = '$FP sam out.sam'
@@ -135,6 +137,41 @@ TESTS = [
     dict(t="fasta", tool="JBrowse CLI add-assembly", ver="echo @jbrowse/cli $($NODE/node_modules/.bin/jbrowse --version | awk '{print $NF}')",
          cmd="(samtools faidx $IN 2>faidx.txt || true) && mkdir jb && $NODE/node_modules/.bin/jbrowse add-assembly $IN --load copy --out jb -n g > out.txt 2>&1",
          fp="ls jb", pairs=FA_PLAIN + FA_CONCAT),
+    # ------------------------------------------------------------ FASTA, 2026-10-18 additions
+    # environment-extra.yml; Rust probes in rust/ ($RUSTBIN); FASTX.jl ($JULIA)
+    dict(t="fasta", tool="Bioconductor Biostrings readDNAStringSet",
+         ver="Rscript -e 'cat(\"Biostrings\", as.character(packageVersion(\"Biostrings\")), \"\\n\")' 2>/dev/null",
+         cmd="Rscript -e 'suppressMessages(library(Biostrings)); writeXStringSet(readDNAStringSet(commandArgs(TRUE)[1]), \"out.fa\")' $IN",
+         fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="scikit-bio skbio.io.read", ver="$PY -c 'import skbio;print(\"scikit-bio\",skbio.__version__)'",
+         cmd="$PY -I -c 'import skbio,sys\nfor q in skbio.io.read(sys.argv[1], format=\"fasta\"): print(\">\"+q.metadata[\"id\"]); print(str(q))' $IN > out.fa",
+         fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="noodles-fasta (Rust)", ver="echo noodles-fasta $(grep -A1 'name = \"noodles-fasta\"' $RUSTDIR/Cargo.lock | sed -n 2p | cut -d'\"' -f2)",
+         cmd="$RUSTBIN/noodles_fasta $IN > out.fa", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="rust-bio bio::io::fasta", ver="echo bio $(grep -A1 'name = \"bio\"' $RUSTDIR/Cargo.lock | sed -n 2p | cut -d'\"' -f2)",
+         cmd="$RUSTBIN/rust_bio $IN > out.fa", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="BioJulia FASTX.jl", ver="$JULIA --startup-file=no -e 'using FASTX; println(\"FASTX \", pkgversion(FASTX))'",
+         cmd="$JULIA --startup-file=no -e 'using FASTX; FASTAReader(open(ARGS[1])) do r; for x in r; println(\">\", identifier(x)); println(sequence(x)); end; end' $IN > out.fa",
+         fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="HMMER/Easel esl-reformat", ver="echo hmmer $(hmmsearch -h | grep -o 'HMMER [0-9.]*' | head -1 | cut -d' ' -f2)",
+         cmd="esl-reformat fasta $IN > out.fa", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="EMBOSS seqret", ver="echo EMBOSS $(embossversion -auto 2>/dev/null)",
+         cmd="seqret -sequence $IN -outseq out.fa -auto", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="MMseqs2 createdb", ver="echo mmseqs $(mmseqs version)",
+         cmd="mmseqs createdb $IN db > log.txt 2>&1 && mmseqs convert2fasta db out.fa > log.txt 2>&1",
+         fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="DIAMOND makedb (protein)", ver="diamond version",
+         cmd="diamond makedb --in $IN -d db > log.txt 2>&1 && diamond getseq -d db --out out.fa >> log.txt 2>&1",
+         fp=FAFP, pairs=FAA),
+    dict(t="fasta", tool="CD-HIT cd-hit-est", ver="echo cd-hit $(cd-hit-est -h 2>&1 | grep -o 'version [0-9.]*' | head -1)",
+         cmd="cd-hit-est -i $IN -o out.fa -c 1.0 -n 10 > log.txt 2>&1", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="Clustal Omega", ver="echo clustalo $(clustalo --version)",
+         cmd="clustalo -i $IN -o out.fa --force > log.txt 2>&1", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="MUSCLE -align", ver="muscle -version 2>&1 | head -1",
+         cmd="muscle -align $IN -output out.fa > log.txt 2>&1", fp=FAFP, pairs=FA_PLAIN),
+    dict(t="fasta", tool="IQ-TREE (alignment)", ver="iqtree3 --version 2>&1 | grep -o 'version [0-9.]*' | head -1",
+         cmd="iqtree3 -s $IN -m JC -nt 1 -seed 1 --prefix t -redo > log.txt 2>&1",
+         fp="cat t.treefile 2>/dev/null || echo missing-output", pairs=ALN),
     # ------------------------------------------------------------ GFA
     dict(t="gfa", tool="gfatools stat", ver="echo gfatools $(gfatools version 2>&1 | grep gfatools | awk '{print $2}')",
          cmd="gfatools stat $IN > out.txt 2>/dev/null", fp="cat out.txt", pairs=GFA),
@@ -232,14 +269,17 @@ def main():
     env = dict(os.environ, FP=f"python3 -I {HERE / 'fp.py'}", PY="python3",
                READS=str(inp / "reads" / "reads.fq"), GENOME=str(fx / "genome.fa"),
                GFF=str(fx / "genes.gff3"), BAM=str(fx / "reads.bam"),
-               NODE=str(node) if node else "/nonexistent")
+               NODE=str(node) if node else "/nonexistent",
+               RUSTDIR=str(HERE / "rust"),
+               RUSTBIN=os.environ.get("RUSTBIN", str(HERE / "rust" / "target" / "release")),
+               JULIA=os.environ.get("JULIA", "julia"))
     sh("samtools faidx genome.fa && minimap2 -a genome.fa $READS 2>/dev/null | samtools sort -o reads.bam - && samtools index reads.bam",
        fx, env)
     rows = []
     vercache = {}
     last_ver = ""
     for t in TESTS:
-        if a.only and a.only not in t["tool"]:
+        if a.only and not any(o and o in t["tool"] for o in a.only.split(",")):
             continue
         v = t["ver"]
         if v != "true":
