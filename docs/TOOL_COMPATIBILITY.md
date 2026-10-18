@@ -371,7 +371,7 @@ Each proposal asks for the same narrow rule: skip lines starting with `;` **befo
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
 current meaning, so no file that a tool reads today is read differently.
 
-| Project | Affected tools | Proposal (2026-10-14) | Status |
+| Project | Affected tools | Proposal (2026-10-14 unless dated) | Status |
 | --- | --- | --- | --- |
 | samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
 | mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open. The maintainer will fix the silent `None` record and will consider leading `;` lines if other major projects accept them |
@@ -386,6 +386,14 @@ current meaning, so no file that a tool reads today is read differently.
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open |
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
 | onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open. The maintainer prefers skipping all text before the first record (the kseq behaviour) to partial Pearson comment support; we offered to rework the PR |
+| scikit-bio/scikit-bio | `skbio.io.read(format="fasta")` | Issue scikit-bio/scikit-bio#2644 (2026-10-18; their guide asks for an issue first) | Open |
+| zaeleus/noodles | noodles-fasta reader, async reader and indexer | zaeleus/noodles#439 (2026-10-18) | Open |
+| rust-bio/rust-bio | `bio::io::fasta::Reader` | rust-bio/rust-bio#722 (2026-10-18) | Open |
+| BioJulia/FASTX.jl | `FASTA.Reader`, `validate_fasta`, `faidx` | BioJulia/FASTX.jl#132 (2026-10-18) | Open |
+| EddyRivasLab/easel | HMMER and the Easel miniapps | EddyRivasLab/easel#84 (2026-10-18) | Open |
+| bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | Open |
+| iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | Open |
+| rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | Open |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
