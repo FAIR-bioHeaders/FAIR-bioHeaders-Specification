@@ -375,7 +375,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 ### FASTA tools: changes proposed upstream
 
-Status as of 2026-10-18; FAIR-bioHeaders-Specification#121 is the live tracker.
+Status as of 2026-10-19; FAIR-bioHeaders-Specification#121 is the live tracker.
 
 Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
@@ -391,7 +391,7 @@ current meaning, so no file that a tool reads today is read differently.
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Open |
 | gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
-| bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | Open |
+| bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | **Merged 2026-10-19** (`Bio::DB::Fasta` and `Bio::SeqIO::fasta`); reaches AGAT users with the next BioPerl release (the last CPAN release is 1.7.8, 2021) |
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open |
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open |
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
