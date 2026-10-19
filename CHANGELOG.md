@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add `llms.txt`, a short overview of FAIR-bioHeaders for AI assistants (llmstxt.org
+  format), checked against `schemas/versions.json` by `tests/test_llms_txt.py`, and an
+  AGENTS.md section on using FAIR-bioHeaders in another project.
 - Add rule R11 to docs/FORMAT.md (#127, spec 014): in FASTA files (FHR and FHP),
   FHR header lines should not contain a raw `>` or `@`, because kseq-based readers
   (BWA, minimap2, seqtk, `samtools dict`, pysam `FastxFile`) start a record at

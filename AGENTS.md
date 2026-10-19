@@ -20,6 +20,27 @@ This repository (`FAIR-bioHeaders-Specification`, called `FHR-Specification` unt
 
 `fhr.json` is the published contract; `fhr_linkml.yml` is its LinkML model, which imports the family-wide core in `schemas/core.yaml`. The draft protein header FHP has `fhp_linkml.yml`, from which `fhp.json` is generated (`json-schema-generator.py --type fhp`; never edit `fhp.json` by hand), examples in `examples/fhp/`, `docs/FHP.md`, its own drift baseline `.github/schema-baseline-fhp.json`, and `fhp-fasta` conformance vectors. The draft GFF3 header FHGFF3 follows the same pattern: `fhgff3_linkml.yml` → `fhgff3.json` (`--type fhgff3`), `examples/fhgff3/`, `docs/FHGFF3.md` (rules G1–G3), `.github/schema-baseline-fhgff3.json` and `fhgff3` vectors. Classes shared by FHP and FHGFF3 live in `schemas/shared.yaml`, which FHR does not import. `schemaVersion` is a `"MAJOR.MINOR"` string per header type; `schemas/versions.json` records each release's versions and `docs/SCHEMA-VERSIONS.md` gives the version policy and the schema-selection rule (V1–V5) that every tool follows. `json-schema-generator.py` generates a separate schema. `scripts/check_linkml.py` compares validation constraints, and `scripts/check_schema_drift.py` checks the explicit review baseline. `fhr_mappings.yml` and `scripts/project_mixs.py` define a partial MIxS/MIGS projection. `jsonld/` holds the JSON-LD context and the FAIR-bioHeaders vocabulary, generated with `docs/TERMS.md` and `examples/*.fhr.jsonld` by `scripts/make_jsonld.py` from the LinkML annotations (never edit them by hand). `mappings/fhr-jsonld-dcmi.yml` maps every FHR field to its JSON-LD term and DCMI Terms equivalents: term IRIs come from LinkML; the mapping table is curated and test-checked against it. `mappings/fhr-schemaorg-export.yml` gives each field's place in the one-way schema.org export (`docs/SCHEMAORG-EXPORT.md`, `to_export` in `scripts/make_jsonld.py`); it is test-checked against the exporter, and the canonical form must not change for it. Examples, docs, and `Diagram.svg` must agree.
 
+## Using FAIR-bioHeaders in another project
+
+For assistants and people adding FAIR-bioHeaders headers to data elsewhere (summary in
+[`llms.txt`](llms.txt)):
+
+- Use the `fair-bioheaders` tools (`pip install fair-bioheaders`): `bioheaders combine
+  metadata.yaml genome.fa -o genome.fhr.fa` adds a header and computes the checksum;
+  `bioheaders verify` checks it; `bioheaders strip` removes it. Never write or edit a
+  checksum by hand. The Claude Code plugin in FAIR-bioHeaders-Tools
+  (`plugins/fair-bioheaders`) packages these steps as a skill.
+- Cite a versioned schema in `schema` (`https://w3id.org/fair-bioheaders/fhr/v0.4.0`,
+  `.../fhp/v0.4.0`, `.../fhgff3/v0.4.0`) with its `schemaVersion` from
+  `schemas/versions.json`. Required fields are in `fhr.json`, `fhp.json` and
+  `fhgff3.json`; never invent values for them.
+- Strict FASTA readers (samtools faidx and the rest of htslib, Picard, Biopython's default
+  `fasta` format and others in `docs/TOOL_COMPATIBILITY.md`) reject a leading `;~`
+  block: strip it first, or use Biopython's `fasta-pearson`.
+- FASTA header values with `>` or `@` are escaped as `\x3E` and `\x40` (FORMAT.md R11).
+- Keep `llms.txt` current when a release changes schema versions, URLs or commands;
+  `tests/test_llms_txt.py` checks the versions and required fields.
+
 ## Verification
 
 Run relevant checks from the repository root:
