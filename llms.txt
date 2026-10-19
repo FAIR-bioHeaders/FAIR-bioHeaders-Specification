@@ -1,0 +1,63 @@
+# FAIR-bioHeaders
+
+> FAIR-bioHeaders defines machine-readable provenance headers that travel inside bioinformatics data files: FHR for reference genome FASTA and GFA, FHP for protein FASTA, and FHGFF3 for GFF3 annotations. A header is a block of YAML lines at the top of the file (`;~` in FASTA, `#~` in GFA and GFF3), validated against a JSON Schema and covered by a SHA-512/256 checksum of the file. The reference implementation is the `fair-bioheaders` Python package (command `bioheaders`).
+
+Key facts (FAIR-bioHeaders-Specification v0.4.0, fair-bioheaders 0.8.0):
+
+- Schema versions: FHR `schemaVersion: '2.0'`, FHP `'1.0'`, FHGFF3 `'1.0'`. A file's `schema` value selects the schema it is validated against; cite a versioned w3id URL. Raw-`main` URLs mean the current schema; an unknown version is reported as unsupported.
+- The checksum is computed by `bioheaders combine`, never by hand. Changing any byte except the checksum line invalidates it.
+- In FASTA, header values containing `>` or `@` are written as YAML escapes `\x3E` and `\x40` (rule R11), because kseq-based readers start a record at those characters. YAML readers return the real characters.
+- Many FASTA tools reject a leading `;` block, including samtools faidx (htslib), pysam `FastaFile`, bedtools getfasta, Picard, Bowtie2, HISAT2, STAR, salmon and Biopython's default `fasta` format. Use `bioheaders strip` to make a plain copy, or `SeqIO.parse(path, "fasta-pearson")` in Biopython. GFF3 and GFA tools surveyed accept `#~` lines.
+- A SeqCol digest (`seqcol_id`) is an optional, user-supplied identifier, distinct from the file checksum.
+
+## Specification
+
+- [Format rules R1 to R11](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping
+- [Schema versions and selection](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md): versioning policy and how a `schema` URL selects a schema
+- [FHP, protein FASTA](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHP.md): fields, `sourceType`, sources
+- [FHGFF3, GFF3 annotation](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHGFF3.md): header placement after `##gff-version 3`, genome link by checksum or accession plus SeqCol
+- [JSON-LD form](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/JSONLD.md) and [schema.org export](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMAORG-EXPORT.md)
+- [Tool compatibility](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/TOOL_COMPATIBILITY.md): which tools accept headers, workarounds, upstream support status
+- [FAIR header guideline](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FAIR_HEADER_GUIDELINE.md): metadata to put in any file's native header
+- [Specification repository](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification): released schemas, LinkML models, examples and conformance vectors
+
+## Schemas
+
+- [FHR v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0): reference genome header schema (`fhr.json`)
+- [FHP v0.4.0](https://w3id.org/fair-bioheaders/fhp/v0.4.0): protein FASTA header schema (`fhp.json`)
+- [FHGFF3 v0.4.0](https://w3id.org/fair-bioheaders/fhgff3/v0.4.0): GFF3 header schema (`fhgff3.json`)
+- [Current FHR schema](https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json): raw-main canonical URL (also `fhp.json`, `fhgff3.json`)
+- [Vocabulary](https://w3id.org/fair-bioheaders/terms): FAIR-bioHeaders terms (HTML, Turtle or JSON-LD by content negotiation)
+- [JSON-LD context v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0/jsonld/fhr.context.jsonld)
+
+## Tools
+
+- [fair-bioheaders on PyPI](https://pypi.org/project/fair-bioheaders/): `pip install fair-bioheaders` (Python 3.9+). A Bioconda recipe is under review.
+- [FAIR-bioHeaders-Tools](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools): source, README with every command, container image, Nextflow modules
+- [Claude Code plugin](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/tree/main/plugins/fair-bioheaders): `/plugin marketplace add FAIR-bioHeaders/FAIR-bioHeaders-Tools`, then `/plugin install fair-bioheaders@fair-bioheaders`
+- [gff3-validator](https://github.com/FAIR-bioHeaders/gff3-validator): GFF3 and Sequence Ontology validator with FHGFF3 header checks ([web app](https://fhref.org/gff3-validator/), `pip install gff3-validator`)
+
+Common tasks:
+
+```bash
+bioheaders combine metadata.yaml genome.fa -o genome.fhr.fa     # add a header (also .gfa, .gff3, protein .faa); computes the checksum
+bioheaders verify genome.fhr.fa                                  # validate the metadata and verify the checksum
+bioheaders strip genome.fhr.fa genome.fa                         # remove the header; every other byte is kept
+bioheaders convert genome.fhr.fa metadata.json                   # also .yaml, .jsonld, .html
+bioheaders verify-links annotation.fhgff3.gff3 genome.fhr.fa     # check recorded parent files by checksum
+bioheaders assess genome.fa                                      # FAIR checklist for any FASTA, GFF3, GAF, VCF or GFA header (offline)
+```
+
+Required fields: all types need `schema`, `schemaVersion`, `taxon` (`name`, `uri` as `https://identifiers.org/taxonomy:<id>`), `version`, `metadataAuthor` and `dateCreated`. FHR adds `genome`, `assemblyAuthor` and `masking`; FHP adds `proteome` and `sourceType`; FHGFF3 adds `annotation` and a genome link (`genomeReference` with `accession` and `seqcol_id`, or a `derivedFrom` item annotating an FHR genome). `checksum` is written by `combine`.
+
+## Citation
+
+- [Wright et al. 2024, "FAIR Header Reference genome: a TRUSTworthy standard", Briefings in Bioinformatics](https://doi.org/10.1093/bib/bbae122)
+- [Specification on Zenodo (concept DOI)](https://doi.org/10.5281/zenodo.6762549)
+- [Tools on Zenodo (concept DOI)](https://doi.org/10.5281/zenodo.6762547)
+
+## Optional
+
+- [Project website](https://fhref.org/)
+- [Specification website](https://fhref.org/FAIR-bioHeaders-Specification/): vocabulary pages and JSON-LD files
+- [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow): Nextflow DSL2 modules for creating and validating headers

@@ -10,6 +10,8 @@ genomes), FHP (protein FASTA) and FHGFF3 (GFF3 annotation) headers, the
 shared core schema, the format rules, the JSON-LD context and vocabulary, and the
 conformance suite. It was called `FHR-Specification` until 2026-10-14 (#108).
 
+A short machine-readable overview for AI assistants is in [`llms.txt`](llms.txt).
+
 Development of each header type happens in its own repository, and finished work
 comes here by pull request:
 
