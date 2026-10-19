@@ -384,7 +384,7 @@ current meaning, so no file that a tool reads today is read differently.
 | Project | Affected tools | Proposal (2026-10-14 unless dated) | Status |
 | --- | --- | --- | --- |
 | samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
-| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open. The maintainer will fix the silent `None` record and will consider leading `;` lines if other major projects accept them |
+| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Merged 2026-10-19**; to be released as pyfaidx v0.9.1, which also fixes the silent `None` record |
 | samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
