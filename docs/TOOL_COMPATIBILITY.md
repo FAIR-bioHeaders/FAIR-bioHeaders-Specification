@@ -375,7 +375,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 ### FASTA tools: changes proposed upstream
 
-Status as of 2026-10-19; FAIR-bioHeaders-Specification#121 is the live tracker.
+Status as of 2026-10-19 (evening); FAIR-bioHeaders-Specification#121 is the live tracker.
 
 Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
@@ -385,7 +385,7 @@ current meaning, so no file that a tool reads today is read differently.
 | --- | --- | --- | --- |
 | samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
 | mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | Open. The maintainer will fix the silent `None` record and will consider leading `;` lines if other major projects accept them |
-| samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | Open |
+| samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
@@ -397,11 +397,11 @@ current meaning, so no file that a tool reads today is read differently.
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
 | onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open. The maintainer prefers skipping all text before the first record (the kseq behaviour) to partial Pearson comment support; we offered to rework the PR |
 | scikit-bio/scikit-bio | `skbio.io.read(format="fasta")` | Issue scikit-bio/scikit-bio#2644 (2026-10-18; their guide asks for an issue first) | Open |
-| zaeleus/noodles | noodles-fasta reader, async reader and indexer | zaeleus/noodles#439 (2026-10-18) | Open |
+| zaeleus/noodles | noodles-fasta reader, async reader and indexer | zaeleus/noodles#439 (2026-10-18) | Declined 2026-10-19 |
 | rust-bio/rust-bio | `bio::io::fasta::Reader` | rust-bio/rust-bio#722 (2026-10-18) | Open |
 | BioJulia/FASTX.jl | `FASTA.Reader`, `validate_fasta`, `faidx` | BioJulia/FASTX.jl#132 (2026-10-18) | Open |
 | EddyRivasLab/easel | HMMER and the Easel miniapps | EddyRivasLab/easel#84 (2026-10-18) | Open |
-| bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | Open |
+| bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release |
 | iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | Open |
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | Open |
 
