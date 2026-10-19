@@ -1,0 +1,46 @@
+# Annotation and assembly tools in the 2026-10-19 survey
+# (docs/TOOL_COMPATIBILITY.md, "Annotation and assembly tools").
+#
+# The tools conflict, so they were installed as separate micromamba
+# environments; each block below is one environment. run_survey.py finds them
+# through optional PATH-prefix variables (S3, S3PROKKA, S3BUSCO, S3COMPLEASM,
+# S3REPEAT, S3REPEAT41, S3MERQURY), plus BUSCO_LINEAGE (a bacteria_odb12
+# directory from `busco --download bacteria_odb12`) and COMPLEASM_LIB
+# (compleasm's download directory). For example:
+#
+#   micromamba create -n survey3 -c conda-forge -c bioconda python=3.11 quast=5.3.0 \
+#     augustus=3.5.0 liftoff=1.6.3 gffcompare=0.12.10 mash=2.3 sourmash=4.9.4 \
+#     seqfu=1.30.3 transdecoder=6.0.0
+#   export S3=$MAMBA_ROOT_PREFIX/envs/survey3/bin
+#   python3 run_survey.py INPUTS OUTDIR --only "QUAST,AUGUSTUS,Liftoff,..."
+#
+# The survey's standard tools (environment.yml) supply samtools and minimap2 for
+# the shared fixtures.
+channels:
+  - conda-forge
+  - bioconda
+environments:
+  survey3:            # S3
+    - python=3.11
+    - quast=5.3.0
+    - augustus=3.5.0
+    - liftoff=1.6.3      # pulls pyfaidx 0.9.0.4
+    - gffcompare=0.12.10
+    - mash=2.3
+    - sourmash=4.9.4     # pulls screed 1.2.0
+    - seqfu=1.30.3
+    - transdecoder=6.0.0
+  survey3-prokka:     # S3PROKKA
+    - prokka=1.15.6      # pulls perl-bioperl 1.7.8
+  survey3-busco6:     # S3BUSCO
+    - busco=6.1.0        # pulls biopython 1.88
+  survey3-compleasm:  # S3COMPLEASM
+    - compleasm=0.2.10   # pulls miniprot 0.18
+  survey3-repeat2:    # S3REPEAT
+    - repeatmodeler=2.0.9
+    - repeatmasker=4.2.4 # needs a Dfam FamDB download; not used for the RepeatMasker test
+  survey3-repeat:     # S3REPEAT41
+    - repeatmasker=4.1.2.p1  # runs with a custom library and no Dfam database
+  survey3-merqury:    # S3MERQURY
+    - merqury=1.4.1
+    - meryl=1.4.2

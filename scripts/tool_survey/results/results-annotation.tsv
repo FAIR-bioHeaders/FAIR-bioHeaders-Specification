@@ -1,0 +1,65 @@
+header_marker	type	tool	version	inputs	control_rc	fhr_rc	class	header_lines_in_output	note
+semicolon	fasta	QUAST	QUAST v5.3.0	control.fa vs fhr.fa	0	0	b?		
+semicolon	fasta	AUGUSTUS	AUGUSTUS 3.5.0	control.fa vs fhr.fa	0	1	c		augustus: ERROR
+semicolon	fasta	Liftoff (FHR genome as target)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+semicolon	fasta	Liftoff (FHR genome as reference)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+semicolon	fasta	gffcompare -s (genome FASTA)	gffcompare v0.12.10	control.fa vs fhr.fa	0	1	c		Error: sequence lines in a FASTA record must have the same length!
+semicolon	fasta	Mash sketch -i	mash 2.3	control.fa vs fhr.fa	0	0	a		
+semicolon	fasta	sourmash sketch --singleton	sourmash 4.9.4	control.fa vs fhr.fa	0	1	c		"raise ValueError(""unknown file format for '%s'"" % filename)"
+semicolon	fasta	seqfu cat	seqfu 1.30.3	control.fa vs fhr.fa	0	0	a	0	
+semicolon	fasta	TransDecoder.LongOrfs	TransDecoder 6.0.0	control.fa vs fhr.fa	0	0	b?		
+semicolon	fasta	Prokka (BioPerl SeqIO)	prokka 1.15.6	control.fa vs fhr.fa	0	25	c		------------- EXCEPTION -------------
+semicolon	fasta	BUSCO genome mode (Biopython)	BUSCO 6.1.0	control.fa vs fhr.fa	0	1	c		2026-10-19 19:16:06 CRITICAL: Unhandled exception occurred:
+semicolon	fasta	compleasm (miniprot)	compleasm 0.2.10	control.fa vs fhr.fa	0	0	a		
+semicolon	fasta	RepeatModeler BuildDatabase	RepeatModeler 2.0.9	control.fa vs fhr.fa	0	0	a		
+semicolon	fasta	RepeatMasker -lib custom library	RepeatMasker 4.1.2.p1	control.fa vs fhr.fa	0	0	a		
+semicolon	fasta	meryl count (assembly k-mers)	meryl 1.4.2	control.fa vs fhr.fa	0	139	c		Failed with 'Segmentation fault'
+semicolon	fasta	Merqury (QV, completeness)	Merqury 1.4.1	control.fa vs fhr.fa	0	0	c(rc0)		
+hash	fasta	QUAST	QUAST v5.3.0	control.fa vs fhr.fa	0	0	b?		
+hash	fasta	AUGUSTUS	AUGUSTUS 3.5.0	control.fa vs fhr.fa	0	1	c		augustus: ERROR
+hash	fasta	Liftoff (FHR genome as target)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+hash	fasta	Liftoff (FHR genome as reference)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+hash	fasta	gffcompare -s (genome FASTA)	gffcompare v0.12.10	control.fa vs fhr.fa	0	1	c		Error: sequence lines in a FASTA record must have the same length!
+hash	fasta	Mash sketch -i	mash 2.3	control.fa vs fhr.fa	0	0	a		
+hash	fasta	sourmash sketch --singleton	sourmash 4.9.4	control.fa vs fhr.fa	0	1	c		"raise ValueError(""unknown file format for '%s'"" % filename)"
+hash	fasta	seqfu cat	seqfu 1.30.3	control.fa vs fhr.fa	0	0	a	0	
+hash	fasta	TransDecoder.LongOrfs	TransDecoder 6.0.0	control.fa vs fhr.fa	0	0	b?		
+hash	fasta	Prokka (BioPerl SeqIO)	prokka 1.15.6	control.fa vs fhr.fa	0	25	c		------------- EXCEPTION -------------
+hash	fasta	BUSCO genome mode (Biopython)	BUSCO 6.1.0	control.fa vs fhr.fa	0	1	c		2026-10-19 19:19:27 CRITICAL: Unhandled exception occurred:
+hash	fasta	compleasm (miniprot)	compleasm 0.2.10	control.fa vs fhr.fa	0	0	a		
+hash	fasta	RepeatModeler BuildDatabase	RepeatModeler 2.0.9	control.fa vs fhr.fa	0	0	a		
+hash	fasta	RepeatMasker -lib custom library	RepeatMasker 4.1.2.p1	control.fa vs fhr.fa	0	0	a		
+hash	fasta	meryl count (assembly k-mers)	meryl 1.4.2	control.fa vs fhr.fa	0	139	c		Failed with 'Segmentation fault'
+hash	fasta	Merqury (QV, completeness)	Merqury 1.4.1	control.fa vs fhr.fa	0	0	c(rc0)		
+unmarked	fasta	QUAST	QUAST v5.3.0	control.fa vs fhr.fa	0	0	b?		
+unmarked	fasta	AUGUSTUS	AUGUSTUS 3.5.0	control.fa vs fhr.fa	0	1	c		augustus: ERROR
+unmarked	fasta	Liftoff (FHR genome as target)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+unmarked	fasta	Liftoff (FHR genome as reference)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+unmarked	fasta	gffcompare -s (genome FASTA)	gffcompare v0.12.10	control.fa vs fhr.fa	0	1	c		Error: sequence lines in a FASTA record must have the same length!
+unmarked	fasta	Mash sketch -i	mash 2.3	control.fa vs fhr.fa	0	0	a		
+unmarked	fasta	sourmash sketch --singleton	sourmash 4.9.4	control.fa vs fhr.fa	0	1	c		"raise ValueError(""unknown file format for '%s'"" % filename)"
+unmarked	fasta	seqfu cat	seqfu 1.30.3	control.fa vs fhr.fa	0	0	a	0	
+unmarked	fasta	TransDecoder.LongOrfs	TransDecoder 6.0.0	control.fa vs fhr.fa	0	0	b?		
+unmarked	fasta	Prokka (BioPerl SeqIO)	prokka 1.15.6	control.fa vs fhr.fa	0	25	c		------------- EXCEPTION -------------
+unmarked	fasta	BUSCO genome mode (Biopython)	BUSCO 6.1.0	control.fa vs fhr.fa	0	1	c		2026-10-19 19:22:46 CRITICAL: Unhandled exception occurred:
+unmarked	fasta	compleasm (miniprot)	compleasm 0.2.10	control.fa vs fhr.fa	0	0	a		
+unmarked	fasta	RepeatModeler BuildDatabase	RepeatModeler 2.0.9	control.fa vs fhr.fa	0	1	c		The makeblastdb program exited with code 1.  Please check your input file(s) for potential formating errors.
+unmarked	fasta	RepeatMasker -lib custom library	RepeatMasker 4.1.2.p1	control.fa vs fhr.fa	0	0	a		
+unmarked	fasta	meryl count (assembly k-mers)	meryl 1.4.2	control.fa vs fhr.fa	0	139	c		Failed with 'Segmentation fault'
+unmarked	fasta	Merqury (QV, completeness)	Merqury 1.4.1	control.fa vs fhr.fa	0	0	c(rc0)		
+semicolon-raw-markers	fasta	QUAST	QUAST v5.3.0	control.fa vs fhr.fa	0	0	b?		
+semicolon-raw-markers	fasta	AUGUSTUS	AUGUSTUS 3.5.0	control.fa vs fhr.fa	0	1	c		augustus: ERROR
+semicolon-raw-markers	fasta	Liftoff (FHR genome as target)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+semicolon-raw-markers	fasta	Liftoff (FHR genome as reference)	liftoff v1.6.3	control.fa vs fhr.fa	0	1	c		raise FastaIndexingError(
+semicolon-raw-markers	fasta	gffcompare -s (genome FASTA)	gffcompare v0.12.10	control.fa vs fhr.fa	0	1	c		Error: sequence lines in a FASTA record must have the same length!
+semicolon-raw-markers	fasta	Mash sketch -i	mash 2.3	control.fa vs fhr.fa	0	0	b?		
+semicolon-raw-markers	fasta	sourmash sketch --singleton	sourmash 4.9.4	control.fa vs fhr.fa	0	1	c		"raise ValueError(""unknown file format for '%s'"" % filename)"
+semicolon-raw-markers	fasta	seqfu cat	seqfu 1.30.3	control.fa vs fhr.fa	0	0	c(rc0)	0	
+semicolon-raw-markers	fasta	TransDecoder.LongOrfs	TransDecoder 6.0.0	control.fa vs fhr.fa	0	0	b?		
+semicolon-raw-markers	fasta	Prokka (BioPerl SeqIO)	prokka 1.15.6	control.fa vs fhr.fa	0	25	c		------------- EXCEPTION -------------
+semicolon-raw-markers	fasta	BUSCO genome mode (Biopython)	BUSCO 6.1.0	control.fa vs fhr.fa	0	1	c		2026-10-19 19:26:05 CRITICAL: Unhandled exception occurred:
+semicolon-raw-markers	fasta	compleasm (miniprot)	compleasm 0.2.10	control.fa vs fhr.fa	0	0	a		
+semicolon-raw-markers	fasta	RepeatModeler BuildDatabase	RepeatModeler 2.0.9	control.fa vs fhr.fa	0	0	a		
+semicolon-raw-markers	fasta	RepeatMasker -lib custom library	RepeatMasker 4.1.2.p1	control.fa vs fhr.fa	0	0	a		
+semicolon-raw-markers	fasta	meryl count (assembly k-mers)	meryl 1.4.2	control.fa vs fhr.fa	0	139	c		Failed with 'Segmentation fault'
+semicolon-raw-markers	fasta	Merqury (QV, completeness)	Merqury 1.4.1	control.fa vs fhr.fa	0	0	c(rc0)		
