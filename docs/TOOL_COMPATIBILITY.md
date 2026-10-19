@@ -361,9 +361,11 @@ These read FHR-headed files with results identical to the control file in the su
 anywhere, not only at the start of a line. If an FHR header line contains a raw `>` or `@`
 (an email address, `length > 1000`), seqtk, bioawk and `samtools dict` read a bogus extra
 record (checked 2026-10-18: `;~metadataAuthor: someone@example.org` gives a 0-length record
-named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser. Escaping these
-characters in double-quoted YAML (`\x40`, `\x3E`) avoids it without changing the metadata;
-see FAIR-bioHeaders-Specification#127.
+named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser. Rule R11 of
+[FORMAT.md](FORMAT.md) therefore asks FASTA header writers to escape these characters in
+double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the toolkit's
+`combine` does this from the release after 0.7.0, and `verify` warns on a raw `>` or `@`
+(FAIR-bioHeaders-Specification#127).
 
 | Format | Tools (surveyed version) |
 | --- | --- |

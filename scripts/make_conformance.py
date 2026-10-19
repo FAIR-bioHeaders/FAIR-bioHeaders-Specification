@@ -54,6 +54,9 @@ RULES = {
           "itemtype and itemprop are space-separated token lists.",
     "R10": "Header parsing: FHR lines form the leading header block; a later "
            "FHR line, including one from a concatenated file, is invalid.",
+    "R11": "Header writing (FASTA): header lines should not contain a raw '>' or '@'; "
+           "writers escape them as \\x3E and \\x40 in double-quoted YAML scalars, "
+           "which read back as the same characters.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -101,6 +104,9 @@ RULES = {
     "V5": "Selection: any other schema value is FHR, validated against the current FHR schema.",
 }
 NOT_APPLICABLE = {
+    "R11": "R11 is a recommendation: a raw '>' or '@' in a FASTA header line makes a "
+           "validator warn, not reject, so no input is invalid under it. The valid "
+           "vectors that cite R11 show escaped values and a raw value that stays valid.",
     "J7": "J7 constrains writers; a reader has no invalid input for it. The valid vectors "
           "that cite J7 are writer output.",
 }
@@ -156,6 +162,8 @@ BODY = {
                   b"MUOBZJXmkta-yi*AKQR"],
 }
 EXPECTED_METADATA = {"genome": GENOME, "version": VERSION, "masking": MASKING}
+# A value with both FASTA record markers (R11).
+RECORD_MARKER_TEXT = "contact someone@example.org; contigs > 1000 bp"
 
 
 def digest(data):
@@ -426,6 +434,29 @@ def build():
         data, value = assemble(lines + body(k))
         valid(f"{k}-yaml-indicators-in-strings", k, data, value, ["R8"],
               "Anchor, alias and merge-key characters inside a quoted string are text.")
+        if k == "fasta":
+            # R11: '>' and '@' escaped in a double-quoted scalar read back unchanged.
+            lines = with_metadata(k, replacements=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                'documentation: "contact someone\\x40example.org; contigs \\x3E 1000 bp"',
+            )])
+            data, value = assemble(lines + body(k))
+            valid("fasta-escaped-record-markers", k, data, value, ["R11"],
+                  "A value holding '@' and '>' written as \\x40 and \\x3E in a "
+                  "double-quoted scalar; it reads back with the real characters.")
+            VALID[-1]["expected_metadata"] = dict(
+                EXPECTED_METADATA, documentation=RECORD_MARKER_TEXT)
+            lines = with_metadata(k, replacements=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                f"documentation: {RECORD_MARKER_TEXT}",
+            )])
+            data, value = assemble(lines + body(k))
+            valid("fasta-raw-record-markers", k, data, value, ["R11"],
+                  "The same value with a raw '@' and '>': still valid (R11 is a "
+                  "recommendation), but a validator should warn, and kseq-based readers "
+                  "read a bogus record at the '@'.")
+            VALID[-1]["expected_metadata"] = dict(
+                EXPECTED_METADATA, documentation=RECORD_MARKER_TEXT)
 
         # Invalid vectors with otherwise correct checksums unless stated.
         data, _ = standard(k, endings=b"\r\n", hash_data=lambda b: b.replace(b"\r\n", b"\n"))
@@ -659,6 +690,17 @@ def build_fhp():
     lines.insert(1, Line(b""))
     fhp_valid("fhp-fasta-comments-and-blank-lines", lines, ["P1", "R3", "R10"],
               "An ordinary comment and a blank line before the FHP lines; both are hashed.")
+    lines = fhp_lines()
+    doc = [i for i, line in enumerate(lines)
+           if line.text.startswith(b";~documentation:")]
+    assert len(doc) == 1
+    lines[doc[0]] = Line(
+        b';~documentation: "proteins \\x3E 50 aa; contact someone\\x40example.org"')
+    fhp_valid("fhp-fasta-escaped-record-markers", lines, ["P1", "R11"],
+              "An FHP value holding '>' and '@' written as \\x3E and \\x40 in a "
+              "double-quoted scalar; it reads back with the real characters.",
+              expected=dict(FHP_EXPECTED,
+                            documentation="proteins > 50 aa; contact someone@example.org"))
     valid("fhp-fasta-gzip", k, gzip_member(plain), value, ["P1", "R1"],
           "fhp-fasta-lf compressed as one gzip member; same checksum.", "gzip")
     VALID[-1]["expected_metadata"] = FHP_EXPECTED

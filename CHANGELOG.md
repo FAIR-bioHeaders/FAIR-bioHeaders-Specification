@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Add rule R11 to docs/FORMAT.md (#127, spec 014): in FASTA files (FHR and FHP),
+  FHR header lines should not contain a raw `>` or `@`, because kseq-based readers
+  (BWA, minimap2, seqtk, `samtools dict`, pysam `FastxFile`) start a record at
+  either character anywhere in a line and silently read a bogus record. Writers
+  escape them as `\x3E` and `\x40` in double-quoted YAML scalars, which read back
+  as the same characters, so the metadata and every other format are unchanged.
+  A raw `>` or `@` stays valid (validators warn), so no schema or `schemaVersion`
+  change. New conformance vectors `fasta-escaped-record-markers`,
+  `fasta-raw-record-markers` and `fhp-fasta-escaped-record-markers`; R11 is a
+  writer rule with no invalid vector, like J7.
 - Add an "Upstream support" inventory to docs/TOOL_COMPATIBILITY.md (#121): the tools that already
   work with FHR headers, and the changes proposed upstream so that FASTA tools skip `;` lines before
   the first record. Documentation only.
