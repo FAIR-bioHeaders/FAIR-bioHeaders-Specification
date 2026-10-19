@@ -1,0 +1,9 @@
+--- control.fa
++++ fhr.fa
+@@ -1 +1,6 @@
++>;~schema:.p1 type:internal gc:universal
++>;~schema:.p2 type:internal gc:universal
++>;~schema:.p3 type:internal gc:universal
++>;~schema:.p4 type:internal gc:universal
++>;~schema:.p5 type:5prime_partial gc:universal
+ >chr1.p1 type:complete gc:universal
