@@ -73,7 +73,21 @@ reader must agree on what the checksum line contains:
   `;~`/`#~` line after that point, including one from a concatenated file, makes
   the file invalid; it is neither ignored nor merged.
 
-The bracketed ids R1 to R10 are stable labels for the rules above, used by the
+- [R11] In FASTA files (FHR and FHP), FHR header lines should not contain a raw `>`
+  or `@`. Many FASTA readers (kseq: BWA, minimap2, seqtk, `samtools dict`, pysam
+  `FastxFile`) start a record at the first `>` or `@` anywhere in a line, so such a
+  character silently adds a bogus record. Writers put a value that contains `>` or
+  `@` in a double-quoted YAML scalar and write the characters as `\x3E` and `\x40`;
+  YAML readers return the original characters, so the metadata is unchanged and every
+  other format (JSON, YAML, JSON-LD, microdata) holds the real characters. A file with
+  a raw `>` or `@` stays valid; validators warn. Ordinary `;` comment lines before the
+  first record should avoid the characters too. Like R6, this keeps header lines
+  readable the same way by FASTA tools and YAML readers: R6 excludes characters that
+  YAML treats as line breaks, R11 those that FASTA readers treat as record starts.
+  The checksum value (R5) is base64 and never contains either. GFA and GFF3 headers
+  are not affected: their readers treat `#` lines as whole-line comments.
+
+The bracketed ids R1 to R11 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files

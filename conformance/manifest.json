@@ -38,6 +38,10 @@
     "R10": {
       "summary": "Header parsing: FHR lines form the leading header block; a later FHR line, including one from a concatenated file, is invalid."
     },
+    "R11": {
+      "summary": "Header writing (FASTA): header lines should not contain a raw '>' or '@'; writers escape them as \\x3E and \\x40 in double-quoted YAML scalars, which read back as the same characters.",
+      "notApplicable": "R11 is a recommendation: a raw '>' or '@' in a FASTA header line makes a validator warn, not reject, so no input is invalid under it. The valid vectors that cite R11 show escaped values and a raw value that stays valid."
+    },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
     },
@@ -372,6 +376,42 @@
         "genome": "Synthetic FHR conformance genome",
         "version": "1.0.0",
         "masking": "not-masked"
+      }
+    },
+    {
+      "id": "fasta-escaped-record-markers",
+      "file": "valid/fasta-escaped-record-markers.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R11"
+      ],
+      "description": "A value holding '@' and '>' written as \\x40 and \\x3E in a double-quoted scalar; it reads back with the real characters.",
+      "checksum": "6KeO3AN52A6/kOs1DlPfLQnlR39flxYeotG4Ywt3Kxo=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "documentation": "contact someone@example.org; contigs > 1000 bp"
+      }
+    },
+    {
+      "id": "fasta-raw-record-markers",
+      "file": "valid/fasta-raw-record-markers.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R11"
+      ],
+      "description": "The same value with a raw '@' and '>': still valid (R11 is a recommendation), but a validator should warn, and kseq-based readers read a bogus record at the '@'.",
+      "checksum": "2ZlK/Lbp9zUVokZdhq8nJ9cy77HP6G0DZzCg1obixWU=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "documentation": "contact someone@example.org; contigs > 1000 bp"
       }
     },
     {
@@ -2116,6 +2156,25 @@
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
         "sourceType": "predicted"
+      }
+    },
+    {
+      "id": "fhp-fasta-escaped-record-markers",
+      "file": "valid/fhp-fasta-escaped-record-markers.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "P1",
+        "R11"
+      ],
+      "description": "An FHP value holding '>' and '@' written as \\x3E and \\x40 in a double-quoted scalar; it reads back with the real characters.",
+      "checksum": "MzKJfkBFGNsy96UljmFYWpuuW1zkmWfW5ZdR1xpbJZQ=",
+      "metadata": {
+        "proteome": "Synthetic FHP conformance protein set",
+        "version": "1.0.0",
+        "sourceType": "predicted",
+        "documentation": "proteins > 50 aa; contact someone@example.org"
       }
     },
     {

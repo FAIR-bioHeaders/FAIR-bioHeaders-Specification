@@ -26,14 +26,14 @@ open and re-save them in an editor. Run the generator instead.
 
 ## Manifest
 
-`rules` maps each stable rule id to a short summary: R1 to R10 from
+`rules` maps each stable rule id to a short summary: R1 to R11 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
 docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V5
 (schema selection) from docs/SCHEMA-VERSIONS.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
-attributes and token lists) and M1 to M4 are tested by the microdata vectors.
+attributes and token lists) and M1 to M4 are tested by the microdata vectors. R11 is a recommendation for FASTA header writers: its valid vectors show escaped `>` and `@` (read back as the real characters) and a raw value that stays valid, and it has no invalid vector.
 
 Every entry in `vectors` has these fields:
 
