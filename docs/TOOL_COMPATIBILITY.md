@@ -389,7 +389,7 @@ current meaning, so no file that a tool reads today is read differently.
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
-| ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Open |
+| ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Declined 2026-10-19: UCSC's FASTA parsing serves its own pipelines and NCBI input |
 | gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
 | bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | **Merged 2026-10-19** (`Bio::DB::Fasta` and `Bio::SeqIO::fasta`); reaches AGAT users with the next BioPerl release (the last CPAN release is 1.7.8, 2021) |
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open |
