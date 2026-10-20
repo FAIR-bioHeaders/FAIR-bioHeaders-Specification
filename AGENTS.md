@@ -1,24 +1,99 @@
 # Agent instructions
 
-## Strategy and boundaries
+## Repository identity and ownership
 
-Read README, relevant issue requirements, and current code before editing. The
-[2024 FHR paper](https://doi.org/10.1093/bib/bbae122) motivates minimal metadata,
-multiple serializations, provenance tied closely to data, compatibility, FAIR,
-and TRUST. Practical interpretation: preserve user metadata and sequence bytes,
-keep required fields/dependencies small, and prefer interoperable incremental
-changes over speculative frameworks. These are implementation guidelines inferred
-from the paper, not quotations or governance rules.
+Determine the repository from its Git remote before applying this shared file.
+These instructions are maintained in FAIR-bioHeaders-Specification and ported as
+an AGENTS.md-only commit into the type repositories. A copied family tree does
+not make every repository the publication authority, nor justify merging an
+entire unrelated repository history for a guidance update.
 
-David and Adam are the maintainers and jointly hold schema and release authority
-(GOVERNANCE.md). The documented steering-group option is not active; do not treat
-it as current authority.
+| Repository | Current role |
+| --- | --- |
+| FAIR-bioHeaders-Specification | Shared core, format rules, released schemas for all adopted types, version registry, vocabulary, mappings and cross-type conformance. |
+| FHR-Specification | FHR development; preserve compatibility files serving established raw URLs and historical tags. |
+| FHP-Specification | Protein-header development; inherited FHR/family files are compatibility/history, not evidence of FHP ownership of those types. |
+| FHT-Specification | Transcriptome-header development; reconcile the legacy draft with the reviewed family contract before claiming toolkit support. |
+| FHGFF3 | Annotation-header development; inherited biodatamodels/gff-schema feature models are distinct from the FAIR header contract. |
 
-## Repository map
+David and Adam jointly hold schema and release authority. Read the shared
+GOVERNANCE.md; its optional steering group is not active. Read the local README,
+relevant issues, current files and applicable contribution/license instructions.
+Do not let stale copied README, badges or citation identities override current
+repository roles. The retired FHT-File-Converter is an archive; active family
+conversion/validation belongs in FAIR-bioHeaders-Tools. Core GFF3 feature
+validation belongs in gff3-validator, separate from optional FHGFF3 headers.
 
-This repository (`FAIR-bioHeaders-Specification`, called `FHR-Specification` until #108) holds the released specifications of every header type; each type is developed in its own repository (FHR-Specification, FHP-Specification, FHT-Specification, FHGFF3). Raw URLs under the old name are supported aliases: never rewrite schema URLs inside existing examples or vectors (that changes checksums).
+The [2024 FHR paper](https://doi.org/10.1093/bib/bbae122) motivates small required
+metadata, provenance close to data and interoperability. Preserve supplied
+metadata and sequence bytes; do not invent identifiers, authors, source material,
+software, SeqCol digests or scientific relationships.
 
-`fhr.json` is the published contract; `fhr_linkml.yml` is its LinkML model, which imports the family-wide core in `schemas/core.yaml`. The draft protein header FHP has `fhp_linkml.yml`, from which `fhp.json` is generated (`json-schema-generator.py --type fhp`; never edit `fhp.json` by hand), examples in `examples/fhp/`, `docs/FHP.md`, its own drift baseline `.github/schema-baseline-fhp.json`, and `fhp-fasta` conformance vectors. The draft GFF3 header FHGFF3 follows the same pattern: `fhgff3_linkml.yml` → `fhgff3.json` (`--type fhgff3`), `examples/fhgff3/`, `docs/FHGFF3.md` (rules G1–G3), `.github/schema-baseline-fhgff3.json` and `fhgff3` vectors. Classes shared by FHP and FHGFF3 live in `schemas/shared.yaml`, which FHR does not import. `schemaVersion` is a `"MAJOR.MINOR"` string per header type; `schemas/versions.json` records each release's versions and `docs/SCHEMA-VERSIONS.md` gives the version policy and the schema-selection rule (V1–V5) that every tool follows. `json-schema-generator.py` generates a separate schema. `scripts/check_linkml.py` compares validation constraints, and `scripts/check_schema_drift.py` checks the explicit review baseline. `fhr_mappings.yml` and `scripts/project_mixs.py` define a partial MIxS/MIGS projection. `jsonld/` holds the JSON-LD context and the FAIR-bioHeaders vocabulary, generated with `docs/TERMS.md` and `examples/*.fhr.jsonld` by `scripts/make_jsonld.py` from the LinkML annotations (never edit them by hand). `mappings/fhr-jsonld-dcmi.yml` maps every FHR field to its JSON-LD term and DCMI Terms equivalents: term IRIs come from LinkML; the mapping table is curated and test-checked against it. `mappings/fhr-schemaorg-export.yml` gives each field's place in the one-way schema.org export (`docs/SCHEMAORG-EXPORT.md`, `to_export` in `scripts/make_jsonld.py`); it is test-checked against the exporter, and the canonical form must not change for it. Examples, docs, and `Diagram.svg` must agree.
+## Schema additions and their own development cycle
+
+A new optional field, structured alternative, enum value, constraint, required
+field or changed meaning is a schema-contract change, even when motivated by a
+UI, exporter, parser fix or documentation task. Identify it explicitly as a
+**schema addition** or other contract change in its issue and PR. Supporting an
+already adopted field in a consumer is implementation work, not a new field.
+
+Schema additions have their own proposal, review, compatibility, versioning and
+release cycle. Keep them separately reviewable from routine fixes, website work,
+packaging and dependency updates; link dependent implementation PRs rather than
+silently adopting a field downstream. Shared fields/objects and cross-type rules
+belong in FAIR-bioHeaders-Specification; type-specific design starts in the owning
+development repository and is coordinated into shared publication. Name affected
+types, requiredness, semantics, mappings, serializers and conformance fixtures.
+
+During active construction of FHP, FHT and FHGFF3, maintainers may iterate on draft
+fields with lighter process and include coordinated schema/implementation work in
+one clearly scoped PR. Record the proposal and compatibility impact in that PR;
+this flexibility does not make every field adopted or supported. Preserve already
+published contracts and cited versions, label draft behavior, and obtain joint
+maintainer review before publication. FHR additions retain the separate cycle.
+Do not apply draft flexibility to released FHP/FHGFF3 schemas retroactively.
+
+Use the shared specification's `docs/SCHEMA-VERSIONS.md` and
+`schemas/versions.json`: contract versions are per type, distinct from repository
+release tags and biological resource versions. Additive changes that preserve all
+valid values and meanings qualify for a minor increment; invalidating records or
+changing meanings requires a major increment. Do not assign a new version merely
+for implementing an existing contract. Never rewrite immutable releases, fixed
+schema aliases or existing file-bound headers as incidental cleanup. Header edits
+require checksum recomputation and may affect downstream parent links.
+
+Proposals are not adopted contracts: structured vouchers (shared #139 / draft
+#140) and mapping profiles still under review (#56) must remain identified as
+proposals until adopted. Implemented subsets do not establish complete profile
+or header-family support. Website mappings page #29 depends on approved profiles.
+
+## Models, generated artifacts and compatibility
+
+In the shared publication tree, `schemas/core.yaml` defines common slots and
+objects; `schemas/shared.yaml` holds additional objects used by FHP/FHGFF3.
+Root classes opt into slots: changing a shared definition requires checking every
+importing type, not just the motivating FHR example. Keep voucher evidence
+separate from `derivedFrom` parent-file relationships.
+
+`fhr.json` is the published FHR validation contract; `fhr_linkml.yml` must agree.
+Generate `fhp.json` and `fhgff3.json` from their LinkML models using
+`json-schema-generator.py --type fhp` / `--type fhgff3`; do not hand-edit those
+outputs. Review schema diffs before updating drift baselines. Preserve canonical
+JSON-LD round trips separately from one-way schema.org/DCMI/MIxS projections;
+report conditions, unsupported fields and losses rather than invent equivalence.
+Generate contexts/vocabulary via `scripts/make_jsonld.py`, where present.
+
+Only use paths and commands present in the checkout. FHT currently has a legacy
+`fht.json` and examples; FHGFF3 has inherited feature-model sources and generated
+formats. Do not pretend these trees already contain the shared publication
+build/test machinery. Review their README/Makefile and coordinate adoption with
+the shared repository rather than copying incompatible generated artifacts.
+
+Honor cited supported schema releases and shared schema-selection rules; never
+silently substitute current main for an unknown release. Raw-main is a current
+contract link, not an immutable version. Keep supported old-name URL aliases and
+published example/vector bytes intact. Exact file checksum coverage follows
+`docs/FORMAT.md`; SeqCol identifies sequence collections and is not a file checksum.
 
 ## Using FAIR-bioHeaders in another project
 
@@ -43,11 +118,11 @@ For assistants and people adding FAIR-bioHeaders headers to data elsewhere (summ
 
 ## Verification
 
-Run relevant checks from the repository root:
+For AGENTS.md-only changes, inspect the diff, links and repository identity and
+run `git diff --check`; executable/schema suites are unnecessary unless behavior
+changes. For model/schema changes, run relevant commands where available:
 
-```bash
-python -m pip install -r requirements-linkml.txt
-python -m pip install -r requirements-jsonld.txt
+```sh
 python -m unittest discover -s tests -v
 python scripts/validate_examples.py
 python scripts/check_linkml.py
@@ -55,30 +130,20 @@ python scripts/check_schema_drift.py
 python scripts/make_jsonld.py --check
 ```
 
-For schema changes, inspect compatibility of valid existing instances, required
-fields, types, unknown-property policy, patterns, URI/date formats, and optional
-values. Synchronize the published schema and both converter copies. Review the
-schema diff before intentionally updating `.github/schema-baseline.json`; never
-refresh it simply to hide a failed check. For serialization changes, test all
-formats and HTML escaping/typed values. For sequence tools, test metadata and
-sequence tampering, CRLF, ordinary comments, combine/strip, and installed commands
-from outside the checkout. Record environment limitations and failed checks.
+Use the checkout's requirements files to prepare the environment when needed.
+Check legacy and new valid/rejected instances, all affected header types, typed
+serialization round trips and escaping. Coordinate toolkit schema bundles and
+version-aware consumers in linked PRs; do not assume sibling checkout tests use
+installed release bytes. Record checks actually run and environment limitations.
+Update guidance, fixtures, release notes and version records with behavior changes.
+Publishing releases, tags, DOIs or deployments remains a separate maintainer action.
 
-Use exact file bytes for SHA-512/256 coverage except the scalar checksum line;
-read the format policy before editing checksum behavior. SeqCol is a supplied
-collection identifier, not an FHR checksum. Use authoritative pinned MIxS terms
-and report partial/lossy mappings explicitly; do not invent accessions or metadata.
+## Licensing and historical material
 
-Update examples, README, citations, and release notes alongside behavior changes.
-Keep cross-repo PR links current. Publishing, adoption of governance, and reporting
-contact confirmation are separate maintainer actions. Do not fabricate contacts
-or claim a policy has been adopted.
-
-## Licensing policy (2026-10-09)
-
-New FAIR BioHeaders project contributions from March 2025 onward use MPL-2.0.
-David Molik left USDA in February 2025. Preserve historical USDA public-domain
-material, previously granted permissions, and third-party licenses/notices;
-do not label all current contributors as government employees. See LICENSE
-for scope. Do not rewrite historical releases or silently relicense upstream
-material. Keep README badges, package metadata and citation metadata consistent.
+New FAIR BioHeaders contributions from March 2025 onward use MPL-2.0, subject to
+the local LICENSE. Preserve historical USDA public-domain material and third-party
+permissions/notices. David Molik left USDA in February 2025; do not classify all
+contributors as government employees or rewrite historical releases. In FHGFF3,
+MPL-2.0 on FAIR BioHeaders contributions does not resolve the inherited
+biodatamodels/gff-schema licensing question. Preserve upstream notices and do not
+assert permission that has not been established.
