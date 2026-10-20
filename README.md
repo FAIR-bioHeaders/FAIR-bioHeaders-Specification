@@ -33,6 +33,12 @@ LinkML model, examples, and partial MIxS/MIGS mappings. The
 [FAIR-bioHeaders toolkit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools)
 provides conversion, validation, and FASTA/GFA/GFF3 header tools.
 
+## Proposed shared amendments
+
+The [shared voucher descriptions proposal](docs/proposals/shared-voucher-descriptions.md)
+preserves free text and specifies an optional structured alternative for family-wide
+review. It is not yet supported by the released schemas.
+
 ## v0.3 metadata
 
 The v0.3 release adds optional fields and fixes examples; the required metadata
