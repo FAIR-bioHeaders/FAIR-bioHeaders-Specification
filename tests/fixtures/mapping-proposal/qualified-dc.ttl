@@ -1,0 +1,28 @@
+# Draft descriptive example only. MPL-2.0. All example.org identifiers are illustrative.
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.org/assemblies/synthetic-v1>
+    a dctype:Dataset ;
+    dcterms:title "Synthetic human reference assembly, version 0.0.1" ;
+    dcterms:identifier "https://example.org/assemblies/synthetic-v1" ;
+    dcterms:creator [ a dcterms:Agent ; rdfs:label "David Molik" ;
+        dcterms:identifier "https://orcid.org/0000-0003-3192-6538" ] ;
+    dcterms:publisher [ a dcterms:Agent ; rdfs:label "Example Repository" ;
+        dcterms:identifier "https://example.org/repository" ] ;
+    dcterms:created "2022-03-21"^^xsd:date ;
+    dcterms:issued "2026-02-02"^^xsd:date ;
+    dcterms:subject <https://identifiers.org/taxonomy:9606> ;
+    dcterms:relation <https://doi.org/10.1093/bib/bbae122>,
+        <http://wfleabase.org/genome/Daphnia_pulex/dpulex_jgi060905/fasta/>,
+        <https://example.org/assembly-protocol> ;
+    dcterms:rights [ a dcterms:RightsStatement ; rdfs:label "public domain" ] .
+
+<https://example.org/metadata/synthetic-v1>
+    a dctype:Text ;
+    dcterms:subject <https://example.org/assemblies/synthetic-v1> ;
+    dcterms:conformsTo <https://w3id.org/fair-bioheaders/fhr/v0.4.0> ;
+    dcterms:creator [ a dcterms:Agent ; rdfs:label "Adam Wright" ;
+        dcterms:identifier "https://orcid.org/0000-0002-5719-4024" ] .

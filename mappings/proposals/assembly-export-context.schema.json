@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/mappings/proposals/assembly-export-context.schema.json",
+  "title": "Proposed assembly descriptive export context (not an FHR schema)",
+  "description": "Draft for issue #56. Separate supplemental assertions; does not establish registration readiness or add fields to FHR.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profileVersion",
+    "resourceKind",
+    "resourceIRI",
+    "metadataRecordIRI",
+    "title"
+  ],
+  "properties": {
+    "profileVersion": {
+      "const": "0.1.0-draft.1"
+    },
+    "resourceKind": {
+      "const": "assembly"
+    },
+    "resourceIRI": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://\\S+$"
+    },
+    "metadataRecordIRI": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://\\S+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "publisher": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://\\S+$"
+        }
+      }
+    },
+    "publicationDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "publicationYear": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9999
+    },
+    "resourceDOI": {
+      "type": "string",
+      "pattern": "^10\\.[0-9]{4,9}/\\S+$"
+    }
+  }
+}

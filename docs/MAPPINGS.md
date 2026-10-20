@@ -1,5 +1,9 @@
 # Mappings
 
+[Draft citation/deposit profile work for #56](mappings/README.md) now has a
+separate export-context proposal, field inventory and worked descriptive bundle.
+These are not adopted profiles or shipped DataCite/Crossref/ARK/Bib exporters.
+
 FHR metadata is mapped to other vocabularies in separate profiles:
 
 - [MIxS/MIGS](#mixsmigs-mappings): a partial projection to MIxS v7.0.1 terms

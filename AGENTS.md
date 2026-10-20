@@ -148,3 +148,21 @@ contributors as government employees or rewrite historical releases. In FHGFF3,
 MPL-2.0 on FAIR BioHeaders contributions does not resolve the inherited
 biodatamodels/gff-schema licensing question. Preserve upstream notices and do not
 assert permission that has not been established.
+
+## Draft metadata profiles (#56)
+
+`docs/mappings/README.md` and `mappings/proposals/` describe an unadopted
+assembly-profile foundation. Its export-context schema is separate from the FH*
+header contracts. Preserve the existing canonical JSON-LD/DCMI/MIxS/schema.org
+artifacts; do not change core schemas or assign release versions for this draft.
+The first RDF fixture is manually curated, not a shipped exporter or deposit.
+
+Keep source/context and resource subjects separate, report unmapped fields and
+ordering/classification loss, reject date/identity conflicts, and never promote
+an article DOI or metadata author to an assembly DOI/creator. The new inventory
+covers root fields only; it does not adopt deep per-target mappings. FHT has no
+released shared schema and stays explicitly blocked. Tests in
+`tests/test_mapping_proposal.py` check the proposal's context, term inventory,
+source/context/RDF semantics and registry coverage offline. Later adapters,
+registration schemas, Bib rendering/tool round trips, family extensions and
+joint maintainer adoption remain requirements before closing #56.

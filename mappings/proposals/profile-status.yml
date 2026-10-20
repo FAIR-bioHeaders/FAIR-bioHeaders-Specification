@@ -1,0 +1,63 @@
+# Draft delivery matrix for #56; no target adapter is claimed shipped. MPL-2.0.
+profile_version: 0.1.0-draft.1
+status: proposal
+checked_on: '2026-10-20'
+targets:
+  dcmi-qualified:
+    status: draft-fixture
+    candidate_version: '2020-01-20'
+    reference: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/2020-01-20/
+    remaining: Maintainer semantic review; deterministic adapter and complete nested-field loss reporting.
+  datacite:
+    status: planned
+    candidate_version: '4.7'
+    reference: https://schema.datacite.org/meta/kernel-4.7/
+    remaining: Pin XSD and REST envelope contracts; full fixtures; mandatory deposit context and offline
+      validation.
+  crossref:
+    status: planned
+    candidate_version: 5.5.0
+    reference: https://www.crossref.org/documentation/schema-library/metadata-deposit-schema-5-5-0/
+    remaining: Review database/dataset record structure; pin XSD; full deposit XML and registration
+      context; offline validation.
+  ark:
+    status: planned
+    candidate_version: draft-kunze-ark, 2026-05-08 (work in progress)
+    reference: https://arks-org.github.io/arkspec/draft-kunze-ark.html
+    remaining: Select binding/resolver policy; existing-assigned identifier fixtures; optional ERC;
+      no minting.
+  bibtex:
+    status: planned
+    candidate_version: classic @misc; tool/style versions not yet selected
+    reference: https://www.bibtex.org/Using/
+    remaining: Citation-only adapter first; rendering/tool matrix; separately assess metadata-bearing
+      note payload.
+  biblatex:
+    status: planned
+    candidate_version: '@dataset; tool/style versions not yet selected'
+    reference: https://ctan.org/pkg/biblatex
+    remaining: Separate dataset profile; select backend/style/version and test Unicode, corporate
+      authors, and rendering.
+header_types:
+  FHR:
+    status: draft-fixture
+    released_schema_version: '2.0'
+    release: v0.4.0
+  FHP:
+    status: not-yet-profiled
+    released_schema_version: '1.0'
+    release: v0.4.0
+    remaining: Review protein-set resource scope and source/creator roles; do not assume every set
+      is a complete proteome.
+  FHGFF3:
+    status: not-yet-profiled
+    released_schema_version: '1.0'
+    release: v0.4.0
+    remaining: Review annotation-resource creators, source identity and genome-reference relationships.
+  FHT:
+    status: blocked
+    blocking_issues:
+    - https://github.com/FAIR-bioHeaders/FHT-Specification/issues/6
+    - https://github.com/FAIR-bioHeaders/FHT-Specification/issues/7
+    remaining: No adopted released transcriptome schema in the shared registry. Do not copy legacy
+      FHT fields into this profile.

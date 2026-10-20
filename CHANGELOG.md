@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Start the draft #56 mapping-profile foundation: separate proposed assembly
+  export context, root-field DCMI handling inventory, worked descriptive RDF
+  bundle, target/family status matrix and offline semantic tests. No core schema,
+  canonical serialization or release/version changes; target adapters and FHT
+  mapping remain unfinished.
+
 - Add `llms.txt`, a short overview of FAIR-bioHeaders for AI assistants (llmstxt.org
   format), checked against `schemas/versions.json` by `tests/test_llms_txt.py`, and an
   AGENTS.md section on using FAIR-bioHeaders in another project.
