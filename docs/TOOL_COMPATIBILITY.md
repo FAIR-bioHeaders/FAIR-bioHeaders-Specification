@@ -309,7 +309,7 @@ Versions are pinned in `scripts/tool_survey/environment-annotation.yml`; results
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | QUAST | 5.3.0 | `quast.py` report | **b** | **b** | **b** | **b** | Silent misread: 4 contigs and 10705 bp instead of 3 and 9200; the header becomes an unnamed contig. QUAST's own `quast_libs/fastaparser.py` (`get_chr_lengths_from_fastafile`, `create_fai_file`) counts lines before the first `>` |
 | AUGUSTUS | 3.5.0 | `augustus --species=human` | **c** | **c** | **c** | **c** | `GBProcessor::determineFileType(): Couldn't determine input file type. Found bad character ':'`. AUGUSTUS's own format detection |
-| Liftoff (FHR genome as target or reference) | 1.6.3 | `liftoff -g genes.gff3` | **c** | **c** | **c** | **c** | `pyfaidx.FastaIndexingError: … Inconsistent line found in >None` (pyfaidx 0.9.0.4) |
+| Liftoff (FHR genome as target or reference) | 1.6.3 | `liftoff -g genes.gff3` | **c** | **c** | **c** | **c** | `pyfaidx.FastaIndexingError: … Inconsistent line found in >None` (pyfaidx 0.9.0.4) With pyfaidx 0.9.1 (released 2026-10-19) both directions work (class **a**, checked 2026-10-20). |
 | gffcompare | 0.12.10 | `gffcompare -r … -s genome.fa` | **c** | **c** | **c** | **c** | `sequence lines in a FASTA record must have the same length!` (gclib `GFastaIndex`, as gffread) |
 | Mash | 2.3 | `mash sketch -i`, `mash info` | a | a | a | **b** | With a raw `@` it reads a 572 bp record named `example.org;` (kseq-style scan) |
 | sourmash | 4.9.4 | `sourmash sketch dna --singleton` | **c** | **c** | **c** | **c** | `unknown file format` from screed 1.2.0, which decides the format from the first byte |
@@ -327,8 +327,8 @@ Not tested: BRAKER (needs GeneMark and a licence key), Bakta and Kraken2 (large 
 and Trinity's genome-guided mode (heavy); Trinity's Perl utilities share TransDecoder's
 `Fasta_reader.pm`.
 
-Failures that already-merged upstream changes will fix once released: Liftoff (pyfaidx v0.9.1,
-mdshw5/pyfaidx#244) and Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
+Failures fixed by upstream changes: Liftoff (pyfaidx v0.9.1, mdshw5/pyfaidx#244, released
+2026-10-19 and verified 2026-10-20) and, once released, Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
 would be fixed by gpertea/gclib#15, which is open. The raw-`@`/`>` failures of Mash and seqfu do
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
@@ -409,7 +409,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 | Format | Tools (surveyed version) |
 | --- | --- |
-| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings) |
+| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings); pyfaidx 0.9.1; Liftoff 1.6.3 (with pyfaidx 0.9.1 or later) |
 | GFA | gfatools 0.4 (`view`, `stat`, `gfa2fa`); gfapy 1.2.3; odgi 0.9.4 (`build`, `stats`, `view`); vg 1.76.1 (`stats`, `convert`) |
 | GFF3 | GenomeTools 1.6.5 (`gt gff3 -sort -tidy`, `gt gff3validator`); AGAT 1.7.0 GFF3 tools; gffread 0.12.9 (`-E`, `-T`, `-g -x`); gffutils 0.14; featureCounts 2.1.1; HTSeq 2.1.2 `htseq-count`; bedtools 2.31.1 (`intersect`, `sort`); bgzip and tabix 1.24; `@gmod/gff` 2.1.0; JBrowse CLI 4.3.0 (`add-track`, `text-index`) |
 
@@ -424,7 +424,7 @@ current meaning, so no file that a tool reads today is read differently.
 | Project | Affected tools | Proposal (2026-10-14 unless dated) | Status |
 | --- | --- | --- | --- |
 | samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
-| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Merged 2026-10-19**; to be released as pyfaidx v0.9.1, which also fixes the silent `None` record |
+| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Released in pyfaidx v0.9.1 (2026-10-19)**; also fixes the silent `None` record. Verified 2026-10-20 |
 | samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
