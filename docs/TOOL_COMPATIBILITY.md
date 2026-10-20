@@ -427,7 +427,7 @@ current meaning, so no file that a tool reads today is read differently.
 | mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Released in pyfaidx v0.9.1 (2026-10-19)**; also fixes the silent `None` record. Verified 2026-10-20 |
 | samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
-| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | Declined 2026-10-16; use `SeqIO.parse(handle, "fasta-pearson")`. Not `fasta-blast`: in 1.85 to 1.88 it gives every record the first record's ID (biopython/biopython#5377) |
+| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | **Supported without changes** through `SeqIO.parse(handle, "fasta-pearson")`. The default `fasta` reader is unchanged (2026-10-16), so tools built on it, such as BUSCO, are approached individually. Avoid `fasta-blast` in 1.85 to 1.88 (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Declined 2026-10-19: UCSC's FASTA parsing serves its own pipelines and NCBI input |
 | gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
