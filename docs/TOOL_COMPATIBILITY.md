@@ -446,7 +446,7 @@ current meaning, so no file that a tool reads today is read differently.
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | Open |
 | ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
 | ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
-| TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | Open |
+| TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | **Accepted 2026-10-20**: the maintainer will fix it in the next TransDecoder release |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
