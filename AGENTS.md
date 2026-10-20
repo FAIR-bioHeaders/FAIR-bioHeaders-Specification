@@ -62,11 +62,13 @@ for implementing an existing contract. Never rewrite immutable releases, fixed
 schema aliases or existing file-bound headers as incidental cleanup. Header edits
 require checksum recomputation and may affect downstream parent links.
 
-Proposals are not adopted contracts: FAIR-bioHeaders-Specification#139 / draft
-PR #140 (structured vouchers) and profiles still under review in that repository
-(#56) remain proposals until adopted. Implemented subsets do not establish full
-profile or header-family support. The mapping page in fair-bioheaders.github.io#29
-depends on approved profiles.
+Check the adoption decision and released support before implementing a proposal;
+an issue or PR's existence does not establish adoption. Structured vouchers
+(FAIR-bioHeaders-Specification#139/#140) and mapping profiles (#56 in that same
+repository) have their own review history. Implemented subsets do not establish
+full profile or header-family support. The mapping page tracked in
+fair-bioheaders.github.io#29 depends on approved profiles. Recheck these records
+rather than relying on a copied description of their temporary status.
 
 ## Models, generated artifacts and compatibility
 
@@ -148,3 +150,105 @@ contributors as government employees or rewrite historical releases. In FHGFF3,
 MPL-2.0 on FAIR BioHeaders contributions does not resolve the inherited
 biodatamodels/gff-schema licensing question. Preserve upstream notices and do not
 assert permission that has not been established.
+
+## Specification repository workflows
+
+These sections apply according to the Git remote; keep this entire file identical
+in all five specification repositories. Port only the intended guidance changes,
+record the shared source commit and compare the final files byte-for-byte. Shared
+policy can describe every type without importing unrelated code or histories.
+
+### Shared publication and conformance
+
+In FAIR-bioHeaders-Specification, use the existing CI workflows as the complete
+check list. In addition to the verification commands above, validate each type:
+
+```sh
+python scripts/validate_examples.py --schema fhp.json --examples examples/fhp
+python scripts/validate_examples.py --schema fhgff3.json --examples examples/fhgff3
+python scripts/check_conformance.py
+```
+
+For parser/format changes, run the applicable vectors with an explicitly selected
+toolkit environment, for example `python scripts/check_conformance.py
+--skip-regeneration --require-format jsonld --require-format fhp-fasta
+--require-format fhgff3 --converter /path/to/toolkit-venv` (one command).
+Use the toolkit version pinned by the current workflow, not an assumed latest
+release. Fetch historical tags for tests that read schemas from releases; CI's
+validation checkout uses full history and tags for this reason. If changing
+vectors, perform regeneration checks before using `--skip-regeneration`.
+
+For coordinated releases, `python scripts/check_release.py --converter
+/path/to/FAIR-bioHeaders-Tools` (one command) compares companion schema/context,
+example and bundled-release copies. Read its current scope and the release
+workflow; a local companion comparison does not replace installed-package tests
+or establish that release artifacts have been published.
+
+### FHR development and compatibility publication
+
+FHR-Specification development happens on branches. Reviewed schema changes publish
+in FAIR-bioHeaders-Specification first; then synchronize the compatibility files
+on FHR main. `.github/workflows/published-files.yml` checks `fhr.json`, `fhp.json`,
+`fhgff3.json` and `jsonld/*` against shared main. Do not merge an independent schema
+change into FHR main that makes those public raw URLs diverge. Preserve historical
+tags and file-bound examples; schema addition review still follows its own cycle.
+
+Issue/PR links under FHR-Specification from before the October 14, 2026 rename
+refer to the old shared repository, now FAIR-bioHeaders-Specification. The new
+repository reuses the old name, so historical numbers can point at unrelated new
+issues. Resolve these references using the migration record and source history;
+do not treat matching issue numbers as matching identity.
+
+### FHP development
+
+Use `fhp_linkml.yml`, `docs/FHP.md`, `examples/fhp/` and `fhp-fasta` conformance
+vectors in the family tree. Generate `fhp.json` with `python
+json-schema-generator.py --type fhp --output fhp.json` (one command); include its
+schema drift/equivalence checks when changing the model. Inherited FHR fields,
+examples and citation identity do not define protein-header requirements.
+
+Preserve the distinctions among predicted, database and mixed sets. Asserted
+source provenance is not a quality-control result. Do not infer a genome parent,
+genetic code, canonical/longest isoform choice, database release or BUSCO counts
+from the presence of protein sequences. Follow the adopted rules for `sourceType`,
+`source`, `derivedFrom`, `geneticCode` and `isoformPolicy`; unknown values stay
+absent where allowed. Published FHP contracts remain versioned even while newer
+draft fields are iterated with curators.
+
+### FHT legacy draft and adoption
+
+FHT-Specification currently has `fht.json` and `examples/`, without the shared
+generator/test suite. Inspect the schema's declared JSON Schema dialect and use
+a matching validator with format checks when validating its JSON/YAML examples;
+report the validator/version, parsed value types and validation failures. JSON
+syntax checking alone is not schema validation. No adopted local automated test
+command is implied here; document the chosen reproducible procedure in an FHT
+implementation PR rather than claiming the shared scripts ran in this tree.
+
+Reconcile legacy draft field names, author roles, `license`/reuse conditions,
+statistics/units, checksum coverage, schema versions and parent relationships
+against the proposed transcriptome contract. Each semantic or acceptance change
+is explicit draft/schema work, not a spelling fix. Keep RNA/cDNA and de novo versus
+reference-derived use cases distinct; do not invent pooled sources, expression
+measurements or parents. Retired converter behavior and legacy README examples
+are review inputs, not proof of current family-toolkit support.
+
+### FHGFF3 feature model versus FAIR header
+
+In the inherited FHGFF3 feature-model tree, edit `src/schema/gff.yaml` and inspect
+`CONTRIBUTING.md`, `requirements.txt` and the Makefile before generation. `make gen`
+builds artifacts under `target/`; `make stage` copies generated formats into the
+tracked output directories. `make test` invokes `all` (generation/staging), not an
+independent validator suite. Inspect generated diffs; do not hand-edit generated
+Python, JSON Schema, RDF/OWL, ShEx, GraphQL or documentation as primary sources.
+`make clean` removes both `target/` and `docs/`; do not use it as a harmless check.
+Keep the unresolved inherited-license boundary explicit.
+
+The published FAIR header is a separate, freshly written model in the shared
+repository: `fhgff3_linkml.yml`, `docs/FHGFF3.md`, `examples/fhgff3/` and `fhgff3`
+vectors. Its rules keep `##gff-version 3` first, allow documented directive/header
+interleaving and end the header at the defined feature/FASTA boundary. File
+checksum coverage includes embedded FASTA. Preserve the adopted genome-link
+alternative (FHR checksum or accession plus supplied SeqCol digest), including
+cardinality and authority rules. Neither a header nor feature-model generation
+establishes valid features; use gff3-validator for feature/biology checks.
