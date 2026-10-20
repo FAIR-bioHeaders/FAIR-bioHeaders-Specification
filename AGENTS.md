@@ -62,10 +62,11 @@ for implementing an existing contract. Never rewrite immutable releases, fixed
 schema aliases or existing file-bound headers as incidental cleanup. Header edits
 require checksum recomputation and may affect downstream parent links.
 
-Proposals are not adopted contracts: structured vouchers (shared #139 / draft
-#140) and mapping profiles still under review (#56) must remain identified as
-proposals until adopted. Implemented subsets do not establish complete profile
-or header-family support. Website mappings page #29 depends on approved profiles.
+Proposals are not adopted contracts: FAIR-bioHeaders-Specification#139 / draft
+PR #140 (structured vouchers) and profiles still under review in that repository
+(#56) remain proposals until adopted. Implemented subsets do not establish full
+profile or header-family support. The mapping page in fair-bioheaders.github.io#29
+depends on approved profiles.
 
 ## Models, generated artifacts and compatibility
 
@@ -98,7 +99,7 @@ published example/vector bytes intact. Exact file checksum coverage follows
 ## Using FAIR-bioHeaders in another project
 
 For assistants and people adding FAIR-bioHeaders headers to data elsewhere (summary in
-[`llms.txt`](llms.txt)):
+[the shared `llms.txt`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/llms.txt)):
 
 - Use the `fair-bioheaders` tools (`pip install fair-bioheaders`): `bioheaders combine
   metadata.yaml genome.fa -o genome.fhr.fa` adds a header and computes the checksum;
