@@ -444,6 +444,9 @@ current meaning, so no file that a tool reads today is read differently.
 | bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release |
 | iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | Open |
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | Open |
+| ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
+| ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
+| TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | Open |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
