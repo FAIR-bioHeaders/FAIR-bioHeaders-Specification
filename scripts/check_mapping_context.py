@@ -7,6 +7,7 @@ Draft issue #56 helper. No transformation, network lookup or identifier minting.
 import argparse
 import json
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -18,6 +19,17 @@ SOURCE_ALIASES = {
     "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.4.0/fhr.json",
     "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.4.0/fhr.json",
 }
+
+
+def resolver_doi(iri):
+    """Extract a DOI from an HTTP(S) DOI resolver URL without resolving it."""
+    try:
+        parts = urlsplit(iri)
+    except ValueError:
+        return None
+    if parts.scheme.casefold() not in {"http", "https"} or parts.hostname not in {"doi.org", "dx.doi.org"}:
+        return None
+    return unquote(parts.path.removeprefix("/")).casefold()
 
 
 def context_errors(context, source):
@@ -38,8 +50,11 @@ def context_errors(context, source):
             errors.append("publicationDate and publicationYear conflict; neither takes precedence")
     doi = context.get("resourceDOI")
     article = source.get("scholarlyArticle")
-    if doi and isinstance(article, str) and doi.casefold() == article.casefold():
-        errors.append("resourceDOI identifies the assembly; scholarlyArticle identifies a distinct article")
+    if isinstance(article, str):
+        if doi and doi.casefold() == article.casefold():
+            errors.append("resourceDOI identifies the assembly; scholarlyArticle identifies a distinct article")
+        if resolver_doi(context["resourceIRI"]) == article.casefold():
+            errors.append("resourceIRI identifies the assembly; scholarlyArticle identifies a distinct article")
     return errors
 
 

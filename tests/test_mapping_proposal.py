@@ -76,6 +76,34 @@ class MappingProposalTests(unittest.TestCase):
             self.assertTrue(any(message in error for error in context_errors(context, self.source)))
             self.assertEqual(context, before)
 
+    def test_article_resolver_cannot_identify_assembly_without_optional_doi(self):
+        for iri in [
+            "https://doi.org/10.1093/bib/bbae122",
+            "http://doi.org/10.1093/bib/bbae122",
+            "https://DX.DOI.ORG/10.1093/BIB/BBAE122",
+            "https://doi.org/10.1093%2Fbib%2Fbbae122",
+            "https://doi.org/10.1093/bib/bbae122?download=1#article",
+        ]:
+            with self.subTest(iri=iri):
+                context = {**deepcopy(self.context), "resourceIRI": iri}
+                before = deepcopy(context)
+                source_before = deepcopy(self.source)
+                self.assertNotIn("resourceDOI", context)
+                self.assertTrue(any("resourceIRI" in error and "distinct article" in error
+                                    for error in context_errors(context, self.source)))
+                self.assertEqual(context, before)
+                self.assertEqual(self.source, source_before)
+
+    def test_distinct_assembly_identifiers_remain_valid(self):
+        for iri in [
+            self.context["resourceIRI"],
+            "https://doi.org/10.1234/assembly",
+            "https://example.org/10.1093/bib/bbae122",
+            "https://doi.org.example.org/10.1093/bib/bbae122",
+        ]:
+            with self.subTest(iri=iri):
+                self.assertEqual(context_errors({**self.context, "resourceIRI": iri}, self.source), [])
+
     def test_other_types_versions_and_moving_main_are_not_silently_reinterpreted(self):
         for schema in [self.source["schema"].replace("fhr/", "fhp/"),
                        self.source["schema"].replace("fhr/", "fht/"),

@@ -73,7 +73,10 @@ releases and other header types are unsupported by this initial profile; none
 silently falls back to v0.4.0. Use the
 ordinary source validator separately. It rejects duplicate JSON keys, invalid
 JSON constants, equal record/resource IRIs, conflicting publication date/year,
-and an article DOI reused as the assembly DOI (case-insensitive comparison).
+and an article DOI reused as the assembly DOI or resource IRI. DOI comparisons
+are case-insensitive; resource IRIs recognize HTTP(S) `doi.org` and `dx.doi.org`
+resolver paths, including percent-encoded paths, without network lookups. This
+check applies even when optional `resourceDOI` is absent.
 No source/context conflict is silently overwritten. Publisher identities and
 name classifications are not guessed. No network operation or registration
 occurs.
