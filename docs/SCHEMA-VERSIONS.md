@@ -36,6 +36,47 @@ The schema of version M.N accepts `schemaVersion` values `"M.0"` to `"M.N"`.
 In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0` is the number
 2.0 and fails. The toolkit quotes it when it writes YAML.
 
+## Values the schema does not check
+
+The schemas are the validation contract, but two requirements are not expressed by their
+keywords. They are normative for a conforming record and validator.
+
+### Required values are non-empty
+
+`required` makes a key present; it does not give the key a value. A record with `genome: ""`,
+`version: ""`, `taxon: {}`, `metadataAuthor: []` or `assemblyAuthor: [{}]` still passes
+`fhr.json` 2.0, and the same emptiness passes the equivalent fields of `fhp.json` and
+`fhgff3.json`. Such a record does not describe the data. Required values must be non-empty:
+
+- `genome`, `version`, `proteome` and `annotation` are non-empty strings;
+- `taxon` has a non-empty `name` or `uri`;
+- `metadataAuthor` and, where the type has it, `assemblyAuthor` are non-empty lists, and every
+  author has a non-empty `name`.
+
+Starting from `examples/minimal.fhr.json` and emptying all of those fields at once still
+validates with jsonschema 4.x and `bioheaders validate` 0.8.0. Such a record is schema-valid
+under 2.0 but not conforming: validators should warn and must not report it as invalid until the
+next major `schemaVersion` can reject it. `minLength: 1` on the required strings,
+`minItems: 1` on the author lists, `required: [name]` on an author and at least one of
+`name`/`uri` on `taxon` are planned for the next major `schemaVersion` (FHR 3.0, and the next
+major of FHP and FHGFF3). They are a major change because they invalidate records that are
+valid under 2.0, so they do not belong in a minor release.
+
+### `format` is asserted
+
+The schemas use JSON Schema draft 2020-12, where `format` is an annotation: a validator that
+does not opt in ignores it. A conforming validator must assert every `format` the schemas
+declare (currently `date` and `uri`): `date` on `dateCreated`, and `uri` on every URI or URL
+field, including `relatedLink` items, `taxon.uri`, author, accession and software `uri`/`url`
+values, `assemblyProtocol`, `predictionProtocol`, `annotationProtocol`, and FHP/FHGFF3
+`source[].url`.
+`dateCreated: "2022-13-45"` and `relatedLink: ["not a URI"]` are invalid even though a bare
+`Draft202012Validator` accepts them; `bioheaders validate` and this repository's scripts pass a
+`FormatChecker` and reject them. A validator that cannot assert `format` must report that
+limitation instead of calling the record valid.
+
+Numbers are covered by rule R13 in [FORMAT.md](FORMAT.md): NaN and infinities are invalid.
+
 ## Versions by release
 
 The machine-readable form is [`schemas/versions.json`](../schemas/versions.json).
@@ -52,6 +93,24 @@ FHR 2.0 is a major version because the v0.4 tightening
 ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)) rejects some values v0.3 accepted. The additive
 v0.4 changes (author `nameType`, scaffold statistics) are part of 2.0. FHP and FHGFF3 are first
 released in v0.4.0.
+
+## Schema files on main
+
+A schema change has its own release. The three schema files in the working tree are therefore
+byte-identical to the copies at the release named by `current` in `schemas/versions.json`:
+`fhr.json`, `fhp.json` and `fhgff3.json` equal `git show <current>:<file>`.
+`tests/test_schema_versions.py` checks this. It skips when `git` cannot read the tag: a shallow
+checkout that did not fetch tags, or the documented pre-release exception below where `current`
+names a release before its tag exists. The skip reports which tag was missing. CI checks out
+full history and tags, so the check runs there. A shallow clone can fetch them with
+`git fetch --tags` and run the check again.
+
+The exception is a deliberate, reviewed schema change that must be prepared before its release
+tag exists. Record it in the pull request and the release tracker, set `current` and its
+`releases` entry to the release being prepared (so the check skips until the tag exists), and
+create the tag from the release branch. Do not edit a released file, delete the check or weaken
+it. Tags and released files are immutable, and publishing a tag is a maintainer action; once the
+release reaches main, the working tree and the tag agree again.
 
 ## Choosing the schema
 

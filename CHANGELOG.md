@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Document the open schema-contract questions from #150 and add conformance coverage:
+  required values must be non-empty (the matching schema constraints are deferred to the
+  next major `schemaVersion`), `format` must be asserted by a conforming validator, NaN and
+  infinities are invalid (new rule R13, invalid vectors `fasta-nan-vital-stats` and
+  `fasta-infinity-vital-stats`), `nameType` wins over an ORCID for JSON-LD typing while the
+  combination stays accepted, the J1/J4 export-term difference is intended, and FHGFF3 G1
+  now gives the full `##gff-version` grammar with a valid trailing-whitespace vector. The
+  near-miss `##gff-version` vectors (`fhgff3-version-30`, `-3x`, `-3-1`) are deferred until
+  the toolkit implements the grammar (FAIR-bioHeaders-Tools#75).
+  `tests/test_schema_versions.py` now checks that the schema bytes on main equal the current
+  release tag. Documentation, vectors and tests only; no schema or `schemaVersion` change.
+
 ## v0.4.1 — 2026-10-21
 
 A patch release of the format rules. The JSON schemas and every `schemaVersion` are

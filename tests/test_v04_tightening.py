@@ -123,7 +123,8 @@ ACCEPTED = [
     ("masking", "hard-masked", "each masking value"),
     ("masking", "repeat-masked", "each masking value"),
     ("metadataAuthor.0.nameType", "Personal", "optional author nameType"),
-    ("assemblyAuthor.0.nameType", "Organizational", "optional author nameType"),
+    ("assemblyAuthor.0.nameType", "Organizational",
+     "nameType with an ORCID iD; accepted, and nameType wins for typing (docs/JSONLD.md)"),
 ]
 
 
