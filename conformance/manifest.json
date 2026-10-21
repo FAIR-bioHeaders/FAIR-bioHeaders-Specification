@@ -9,7 +9,7 @@
   "checksumDefinition": "base64(SHA-512/256) over the (decompressed) file bytes except the root-level checksum line and its terminator (FASTA, GFA, FHP FASTA and FHGFF3 only; in microdata and JSON-LD the checksum is an ordinary metadata value)",
   "rules": {
     "R1": {
-      "summary": "Checksum rule 1: hash the exact file bytes without normalization; for gzip/BGZF input, the decompressed bytes."
+      "summary": "Checksum rule 1: hash the exact file bytes without normalization; for gzip/BGZF input, the decompressed bytes. A line ends at LF, CRLF or a CR not followed by LF."
     },
     "R2": {
       "summary": "Checksum rule 2: exactly one root-level checksum line with an unquoted key; spaces only to match root indentation and before the colon; nested checksum properties stay covered."
@@ -18,10 +18,10 @@
       "summary": "Checksum rule 3: exclude that entire line and its terminator; hash every other byte, so changing covered bytes invalidates the checksum."
     },
     "R4": {
-      "summary": "Checksum rule 4: SHA-512/256 digest in standard padded base64, no prefix."
+      "summary": "Checksum rule 4: SHA-512/256 digest in standard padded base64, no prefix; the encoding is canonical (the unused bits are zero) and checksums compare as exact strings."
     },
     "R5": {
-      "summary": "Header parsing: the checksum value is a single-line YAML scalar on the checksum line; block scalars and continuation lines are invalid."
+      "summary": "Header parsing: the checksum line holds only the 44-character value, plain or quoted, with optional spaces or tabs; comments, tags, other text, block scalars and continuation lines are invalid."
     },
     "R6": {
       "summary": "Header parsing: FHR header lines are UTF-8 without U+0085, U+2028 or U+2029; bytes outside header lines are not decoded."
@@ -41,6 +41,9 @@
     "R11": {
       "summary": "Header writing (FASTA): header lines should not contain a raw '>' or '@'; writers escape them as \\x3E and \\x40 in double-quoted YAML scalars, which read back as the same characters.",
       "notApplicable": "R11 is a recommendation: a raw '>' or '@' in a FASTA header line makes a validator warn, not reject, so no input is invalid under it. The valid vectors that cite R11 show escaped values and a raw value that stays valid."
+    },
+    "R12": {
+      "summary": "Header parsing: YAML metadata is read with YAML 1.2 core-schema types and must read the same under YAML 1.1; explicit tags and plain scalars that the two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid."
     },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
@@ -379,6 +382,23 @@
       }
     },
     {
+      "id": "fasta-yaml-portable-types",
+      "file": "valid/fasta-yaml-portable-types.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R12"
+      ],
+      "description": "Values every YAML version reads alike: a plain date (a string, as written), a quoted '010' (the string 010), and plain 10 and 41.5.",
+      "checksum": "6Wo3VOQd8/9seVnt+1OuehKyjcBnaf+dFFsGDcl0nSs=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "010",
+        "masking": "not-masked"
+      }
+    },
+    {
       "id": "fasta-escaped-record-markers",
       "file": "valid/fasta-escaped-record-markers.fhr.fasta",
       "format": "fasta",
@@ -681,6 +701,23 @@
       "metadata": {
         "genome": "Synthetic FHR conformance genome",
         "version": "1.0.0",
+        "masking": "not-masked"
+      }
+    },
+    {
+      "id": "gfa-yaml-portable-types",
+      "file": "valid/gfa-yaml-portable-types.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R12"
+      ],
+      "description": "Values every YAML version reads alike: a plain date (a string, as written), a quoted '010' (the string 010), and plain 10 and 41.5.",
+      "checksum": "mQcG5H3Hta09J28IpDPslqWg4xDBG+Dx6UhoHwK1pyc=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "010",
         "masking": "not-masked"
       }
     },
@@ -2697,6 +2734,15 @@
       }
     },
     {
+      "id": "fasta-tab-on-checksum-line",
+      "file": "invalid/fasta-tab-on-checksum-line.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A tab, not a space, separates the colon from the checksum value."
+    },
+    {
       "id": "fasta-crlf-normalized-checksum",
       "file": "invalid/fasta-crlf-normalized-checksum.fhr.fasta",
       "format": "fasta",
@@ -2832,6 +2878,87 @@
       "reason": "A double-quoted checksum value continues on a second FHR line."
     },
     {
+      "id": "fasta-comment-on-checksum-line",
+      "file": "invalid/fasta-comment-on-checksum-line.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A YAML comment follows the checksum value on the checksum line."
+    },
+    {
+      "id": "fasta-record-marker-on-checksum-line",
+      "file": "invalid/fasta-record-marker-on-checksum-line.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A comment holding a raw '>' follows the checksum value; the checksum line is excluded from the checksum and holds only the value."
+    },
+    {
+      "id": "fasta-tagged-checksum",
+      "file": "invalid/fasta-tagged-checksum.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "The checksum value carries an explicit !!str tag."
+    },
+    {
+      "id": "fasta-noncanonical-checksum",
+      "file": "invalid/fasta-noncanonical-checksum.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R4",
+      "reason": "The checksum decodes to the right digest but sets an unused bit, so it is not the canonical base64 string."
+    },
+    {
+      "id": "fasta-yaml-leading-zero",
+      "file": "invalid/fasta-yaml-leading-zero.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 010: YAML 1.1 reads octal 8, YAML 1.2 reads 10."
+    },
+    {
+      "id": "fasta-yaml-underscore",
+      "file": "invalid/fasta-yaml-underscore.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 1_000: YAML 1.1 reads 1000, YAML 1.2 a string."
+    },
+    {
+      "id": "fasta-yaml-sexagesimal",
+      "file": "invalid/fasta-yaml-sexagesimal.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 1:30: YAML 1.1 reads 90, YAML 1.2 a string."
+    },
+    {
+      "id": "fasta-yaml-boolean-word",
+      "file": "invalid/fasta-yaml-boolean-word.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "documentation is the plain scalar yes: YAML 1.1 reads true, YAML 1.2 a string."
+    },
+    {
+      "id": "fasta-yaml-tag",
+      "file": "invalid/fasta-yaml-tag.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "The genome value carries an explicit !!str tag."
+    },
+    {
       "id": "fasta-u0085-in-header",
       "file": "invalid/fasta-u0085-in-header.fhr.fasta",
       "format": "fasta",
@@ -2929,6 +3056,15 @@
       "expected": "invalid",
       "rule": "R10",
       "reason": "Two complete FHR files concatenated; each part has a correct checksum."
+    },
+    {
+      "id": "gfa-tab-on-checksum-line",
+      "file": "invalid/gfa-tab-on-checksum-line.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A tab, not a space, separates the colon from the checksum value."
     },
     {
       "id": "gfa-crlf-normalized-checksum",
@@ -3064,6 +3200,78 @@
       "expected": "invalid",
       "rule": "R5",
       "reason": "A double-quoted checksum value continues on a second FHR line."
+    },
+    {
+      "id": "gfa-comment-on-checksum-line",
+      "file": "invalid/gfa-comment-on-checksum-line.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A YAML comment follows the checksum value on the checksum line."
+    },
+    {
+      "id": "gfa-tagged-checksum",
+      "file": "invalid/gfa-tagged-checksum.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "The checksum value carries an explicit !!str tag."
+    },
+    {
+      "id": "gfa-noncanonical-checksum",
+      "file": "invalid/gfa-noncanonical-checksum.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R4",
+      "reason": "The checksum decodes to the right digest but sets an unused bit, so it is not the canonical base64 string."
+    },
+    {
+      "id": "gfa-yaml-leading-zero",
+      "file": "invalid/gfa-yaml-leading-zero.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 010: YAML 1.1 reads octal 8, YAML 1.2 reads 10."
+    },
+    {
+      "id": "gfa-yaml-underscore",
+      "file": "invalid/gfa-yaml-underscore.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 1_000: YAML 1.1 reads 1000, YAML 1.2 a string."
+    },
+    {
+      "id": "gfa-yaml-sexagesimal",
+      "file": "invalid/gfa-yaml-sexagesimal.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "vitalStats.L50 is the plain scalar 1:30: YAML 1.1 reads 90, YAML 1.2 a string."
+    },
+    {
+      "id": "gfa-yaml-boolean-word",
+      "file": "invalid/gfa-yaml-boolean-word.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "documentation is the plain scalar yes: YAML 1.1 reads true, YAML 1.2 a string."
+    },
+    {
+      "id": "gfa-yaml-tag",
+      "file": "invalid/gfa-yaml-tag.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "The genome value carries an explicit !!str tag."
     },
     {
       "id": "gfa-u0085-in-header",
