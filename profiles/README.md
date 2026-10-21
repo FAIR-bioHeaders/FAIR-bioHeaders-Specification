@@ -40,3 +40,11 @@ python -m unittest tests.test_profiles -v
 The tests confirm the profile keeps every published FHR constraint, adds only
 its documented requirements, accepts the valid instances and rejects the invalid
 ones, and reports an unknown profile instead of silently passing.
+
+`profile_schema.py` also reuses `json-schema-generator.py`'s post-generation
+rules for the profile's base type, so constraints LinkML cannot express are not
+lost. In particular, an FHGFF3-based profile keeps the genome-link rule
+(genomeReference or exactly one `annotates` parent of type FHR). FHP needs no
+type-specific rule; the tests pin that a profile keeps the published FHP
+constraints too. A profile root that inherits none of FHR, FHP or FHGFF3 is
+rejected with `UnsupportedProfileError`.

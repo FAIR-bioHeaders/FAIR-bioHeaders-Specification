@@ -1,0 +1,22 @@
+# Regression fixture: a profile that layers on FHGFF3 (issue #51 review).
+# FHGFF3 adds its genome-link rule after LinkML generation, so a profile root
+# that subclasses FHGFF3 must receive that rule too. See tests/test_profiles.py.
+id: https://example.org/fair-bioheaders/profiles/test-fhgff3
+name: TestFHGFF3Profile
+description: >-
+  Test-only FHGFF3 profile with no community requirements of its own. It exists
+  to check that a profile root inherits the published base constraints,
+  including the post-generated FHGFF3 genome-link rule.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- fhgff3_linkml
+classes:
+  TestFHGFF3Profile:
+    description: An FHGFF3 record validated through this test profile.
+    is_a: FHGFF3
+    tree_root: true

@@ -20,6 +20,7 @@ The module is usable without the network: it reads only files in this checkout.
 """
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -30,14 +31,19 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "profiles" / "registry.yaml"
-DIALECT = "https://json-schema.org/draft/2020-12/schema"
-# The same post-processing json-schema-generator.py applies to the published
-# schemas, so a profile's inherited constraints match the base contract.
-EXACT_LENGTHS = {"checksum": 44, "seqcol_id": 32}
+# ``json-schema-generator.py`` has a hyphen in its name, so load it by path. A
+# profile root reuses that generator's type-specific post-processing; copying
+# the rules here would let a profile silently drift from the base contract.
+_generator_spec = importlib.util.spec_from_file_location(
+    "profile_json_schema_generator", ROOT / "json-schema-generator.py"
+)
+GENERATOR = importlib.util.module_from_spec(_generator_spec)
+_generator_spec.loader.exec_module(GENERATOR)
+DIALECT = GENERATOR.DIALECT
 
 
 class UnsupportedProfileError(LookupError):
-    """The requested profile is not in the registry of this checkout."""
+    """The profile is not in the registry, or does not layer on a supported type."""
 
 
 def load_yaml(path):
@@ -131,6 +137,30 @@ def root_class(profile_path):
     return roots[0]
 
 
+# Published header types a profile may layer on, most specific first, and the
+# post-generation rules each one needs. FHP has no rule beyond the common
+# post-processing; FHR and FHGFF3 do. A type added later must be listed here so
+# its rules are applied to a profile root instead of being silently dropped.
+BASE_RULES = {
+    "FHGFF3": GENERATOR.apply_fhgff3_rules,
+    "FHP": None,
+    "FHR": GENERATOR.apply_fhr_rules,
+}
+
+
+def base_header_type(view, root):
+    """The published header type ``root`` inherits, or raise if there is none."""
+    ancestors = set(view.class_ancestors(root))
+    for name in BASE_RULES:
+        if name in ancestors:
+            return name
+    raise UnsupportedProfileError(
+        f"profile root class {root!r} does not inherit a published header type "
+        f"({', '.join(sorted(BASE_RULES))}); a profile must layer on one type's "
+        "tree_root class so its base constraints are preserved"
+    )
+
+
 def generate_profile(profile, registry=None):
     """Generate the JSON Schema for a profile, layered on its type's model.
 
@@ -140,29 +170,24 @@ def generate_profile(profile, registry=None):
     """
     path = resolve_profile(profile, registry)
     view = load_schema_view(path)
+    root = root_class(path)
     generated = json.loads(
         JsonSchemaGenerator(
             view.schema,
             include_null=False,
             not_closed=False,
-            top_class=root_class(path),
+            top_class=root,
         ).serialize()
     )
     # Match the published schemas: schemaVersion is an enum so later versions
     # can be listed, and LinkML cannot express the exact digest lengths.
-    for node in (generated, *generated.get("$defs", {}).values()):
-        properties = node.get("properties", {})
-        version = properties.get("schemaVersion", {})
-        if "const" in version:
-            version["enum"] = [version.pop("const")]
-        for name, length in EXACT_LENGTHS.items():
-            if name in properties:
-                properties[name].update(minLength=length, maxLength=length)
-        # LinkML emits a scalar type beside the heterogeneous union; the
-        # published fhr.json keeps only the union (json-schema-generator.py).
-        if "assemblySoftware" in properties:
-            properties["assemblySoftware"].pop("type", None)
-    generated["$schema"] = DIALECT
+    GENERATOR.apply_common_rules(generated)
+    # A base type's constraints that LinkML cannot express are added by the same
+    # function the published schema uses (for example FHGFF3's genome link).
+    base = base_header_type(view, root)
+    postprocess = BASE_RULES[base]
+    if postprocess is not None:
+        postprocess(generated, root, base)
     for key in ("metamodel_version", "version"):
         generated.pop(key, None)
     return generated

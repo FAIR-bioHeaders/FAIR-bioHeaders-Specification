@@ -64,6 +64,18 @@ models are `<name>.yml`; the loader reads the imported models into memory and
 passes them through a `SchemaView` importmap rather than renaming or copying a
 published file. No network access is needed.
 
+Some published constraints cannot be expressed in LinkML and are added by
+[`json-schema-generator.py`](../json-schema-generator.py) after generation: the
+exact checksum/SeqCol lengths and the `schemaVersion` enum for every type, the
+`assemblySoftware` union for FHR, and the genome-link rule for FHGFF3. The
+profile generator loads that script and applies the same post-processing to the
+profile's `tree_root` class, choosing the rules from the class's inherited type
+(FHGFF3, FHP or FHR). FHP needs no type-specific rule today. A profile root that
+does not inherit one of those published types is rejected with
+`UnsupportedProfileError` instead of producing a schema that silently loses base
+constraints. `tests/test_profiles.py` pins both the FHGFF3 genome-link rule and
+the complete published FHP constraints.
+
 The toolkit command named in spec 008 FR-004 (`validate --profile`) is a
 downstream implementation in
 [FAIR-bioHeaders-Tools](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools),
