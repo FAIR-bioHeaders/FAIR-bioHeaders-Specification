@@ -48,8 +48,8 @@ raw results are in [results.tsv](../scripts/tool_survey/results/results.tsv).
 - **GFA**: GFA1 with four segments, four links and two paths. The FHR copy is
   made with `fhr-gfa-combine`. A copy with numeric segment IDs is used for odgi.
 - **GFF3**: three genes (one with two mRNAs), multi-line CDS features, and two
-  `##sequence-region` lines. FHGFF3 is unreleased, so the 25 `#~` lines are
-  hand-written, schema-like YAML. The lines follow `##gff-version 3` and come
+  `##sequence-region` lines. The survey predates the FHGFF3 release, so the 25 `#~` lines are
+  hand-written, schema-like YAML rather than toolkit output. The lines follow `##gff-version 3` and come
   either before (`fhr.gff3`) or after (`fhr.sr-before.gff3`) the
   `##sequence-region` lines. A third variant has a `##FASTA` section.
 - **Mapping**: 20 exact 150 bp reads. A small BAM for the counting tools is made

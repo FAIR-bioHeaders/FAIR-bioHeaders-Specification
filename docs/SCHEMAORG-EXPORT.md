@@ -49,8 +49,9 @@ The bracketed ids are stable labels used by the tests.
      - `observationAbout` → the assembly;
      - `measuredProperty` → the FHR term (`fhr:N50`, …);
      - `value`, `unitCode` (Units Ontology) and `unitText`.
-   - Units: base pair (`UO_0000244`) for N50, N90 and totalBasePairs; count unit (`UO_0000189`)
-     for L50, L90, numberContigs and numberScaffolds; percent (`UO_0000187`) for gcContent.
+   - Units: base pair (`UO_0000244`) for N50, N90, scaffoldN50, scaffoldN90 and totalBasePairs;
+     count unit (`UO_0000189`) for L50, L90, scaffoldL50, scaffoldL90, numberContigs and
+     numberScaffolds; percent (`UO_0000187`) for gcContent.
    - No observation date is written.
    - The statistics are not `variableMeasured` of the dataset, because they describe the
      assembly, not variables measured within its sequence data.

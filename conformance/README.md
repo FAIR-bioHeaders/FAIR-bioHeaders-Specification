@@ -80,7 +80,7 @@ JSON-LD vector, it must extract exactly `metadata`. For an `invalid` vector, it
 must reject the file. Reporting the rule id is optional. Treat any difference as
 a bug in the implementation or the vectors, and report it as an issue.
 
-To run the FHR File Converter (or another CLI with the same commands and exit
+To run the FAIR-bioHeaders toolkit (or another CLI with the same commands and exit
 codes) over the vectors. FASTA and GFA vectors go to `fhr-fasta-validate` and
 `fhr-gfa-validate`. Microdata and JSON-LD vectors go to `fhr-convert in.html out.json`
 or `fhr-convert in.jsonld out.json`, and the JSON it writes must equal `metadata`.
@@ -89,7 +89,7 @@ or `fhr-convert in.jsonld out.json`, and the JSON it writes must equal `metadata
 ```bash
 python scripts/check_conformance.py --converter           # commands on PATH
 python scripts/check_conformance.py --converter .venv     # a virtual environment
-python scripts/check_conformance.py --converter ../FHR-File-Converter  # a checkout
+python scripts/check_conformance.py --converter ../FAIR-bioHeaders-Tools  # a checkout
 ```
 
 ## Regenerating and checking

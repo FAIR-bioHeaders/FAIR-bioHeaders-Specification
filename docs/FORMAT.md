@@ -1,11 +1,12 @@
-# FHR v0.3 format and compatibility
+# FHR format and compatibility
 
 FHR release v0.3 and the converter 0.3.x packages retain numeric schemaVersion 1.
-The header parsing rules below are implemented from converter 0.3.1.
+FHR release v0.4 uses the string schemaVersion `"2.0"`. The header parsing rules
+below apply to both releases and are implemented from converter 0.3.1.
 The assembly's own version string is independent. No required fields were added.
 Top-level metadata is closed; optional fields may be omitted, not replaced by null.
 
-The unreleased v0.4 schema is FHR schemaVersion `"2.0"`, a string: nested objects
+The v0.4 schema is FHR schemaVersion `"2.0"`, a string: nested objects
 reject unknown keys, patterns are anchored, the checksum must be padded base64 of
 32 bytes, statistics are nonnegative, and optional scaffold statistics and author
 `nameType` are added. See [SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md) for every
@@ -30,7 +31,9 @@ sequence letters. FHR stores a user-supplied digest and does not compute it,
 resolve it, or verify it against a local genome. Different attribute profiles can
 produce different digests; record that context in external documentation.
 
-## Checksum decision for v0.3
+<a id="checksum-decision-for-v03"></a>
+
+## Checksum decision
 
 The [FHR paper](https://doi.org/10.1093/bib/bbae122) describes identity covering
 metadata and sequence data together. The published schema specifies SHA-512/256

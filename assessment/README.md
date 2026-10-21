@@ -62,8 +62,8 @@ the report format (specs/010-fair-header-assessment/contracts/).
 ## Running
 
 ```bash
-python scripts/check_assessment.py --tool ../FHR-File-Converter
-python scripts/check_assessment.py --tool ../FHR-File-Converter --batch --guideline
+python scripts/check_assessment.py --tool ../FAIR-bioHeaders-Tools
+python scripts/check_assessment.py --tool ../FAIR-bioHeaders-Tools --batch --guideline
 ```
 
 `--tool` takes a toolkit checkout, a virtual environment or bin directory, or

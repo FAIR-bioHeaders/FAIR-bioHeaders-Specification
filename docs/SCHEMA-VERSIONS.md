@@ -104,10 +104,16 @@ it, because any change to the header changes the checksum. Choose one:
 - **Pin v0.3.1**: set `schema` to `https://w3id.org/fair-bioheaders/fhr/v0.3.1`, keep
   `schemaVersion: 1`, and recompute the checksum.
 
-With the toolkit:
+With the toolkit and standard shell tools (checked with `bioheaders` 0.8.0):
 
 ```bash
-bioheaders convert genome.fa metadata.yaml   # write the header as YAML; edit schema and schemaVersion
-bioheaders strip genome.fa -o plain.fa
+grep '^;~' legacy.fa | cut -c3- > metadata.yaml   # recover the YAML header (use '^#~' for GFA)
+# edit schema and schemaVersion in metadata.yaml as above
+bioheaders strip legacy.fa plain.fa               # output is positional, not -o
 bioheaders combine metadata.yaml plain.fa -o genome.fhr.fa   # new checksum
 ```
+
+`bioheaders convert legacy.fa metadata.yaml` cannot replace the first step: `convert`
+validates the metadata before writing it, so a file that still cites raw-main with
+`schemaVersion: 1` fails with `1.0 is not of type 'string'`. Recover the header text,
+edit it, and recombine instead.

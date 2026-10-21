@@ -1,9 +1,9 @@
 # FHGFF3: FAIR header for GFF3 annotations
 
-**Status: v0.1, first released in FAIR-bioHeaders-Specification v0.4.0** (`schemaVersion`
-`"1.0"`). FHGFF3 is the working name (#54), and the fields may still change after curator
-review, through a new schema version. Its persistent schema URL is
-`https://w3id.org/fair-bioheaders/fhgff3/v0.4.0`. The design is in
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.0"`), first
+released in FAIR-bioHeaders-Specification v0.4.0.** FHGFF3 is the working name (#54), and the
+fields may still change after curator review, through a new schema version. Its persistent
+schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.4.0`. The design is in
 [specs/007-gff3-header](../specs/007-gff3-header/spec.md).
 
 FHGFF3 is a provenance header around ordinary GFF3. It adds YAML lines that start with `#~` after
@@ -35,7 +35,7 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 #~schemaVersion: '1.0'
 #~annotation: Synthetic example annotation
 ##sequence-region ctg1 1 20
-#~...
+#~# more fields
 #~checksum: …
 ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
 ```
@@ -167,15 +167,17 @@ checksum-linked examples cite.
 
 ## Not yet available
 
-These are recorded as follow-ups F-01 to F-07 in the
-[plan](../specs/007-gff3-header/plan.md):
+These remain follow-ups in the [plan](../specs/007-gff3-header/plan.md):
 
-- JSON-LD and HTML microdata forms.
-- Header checks in the gff3-validator's browser build.
-- A release.
+- JSON-LD and HTML microdata forms (F-01).
+- Header checks in the gff3-validator's browser build (F-04).
 
-FHGFF3 v0.1 is released from the `release-v0.4` line with FAIR-bioHeaders-Specification v0.4.0, as FHP is;
-it is on that line (FAIR-bioHeaders-Specification#97). Its persistent schema URL is
-`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`, the FAIR-bioHeaders-Specification release tag
-(registered in perma-id/w3id.org#6890; it resolves once v0.4.0 is tagged). On `main`, it
-inherits the core's v0.3 patterns.
+F-02 (the persistent schema alias, with the release) is complete: v0.4.0 is tagged, and
+`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z` selects that release's `fhgff3.json`
+(registered in perma-id/w3id.org#6890).
+
+FHGFF3 v0.1 was released from the `release-v0.4` line with FAIR-bioHeaders-Specification
+v0.4.0, as FHP was (FAIR-bioHeaders-Specification#97). Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhgff3/vX.Y.Z`, the FAIR-bioHeaders-Specification release
+tag, and it serves the v0.4.0 release. `fhgff3.json` on `main` is generated from the same
+v0.4 core, not the core's v0.3 patterns.

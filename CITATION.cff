@@ -1,7 +1,8 @@
 cff-version: 1.2.0
-title: FHR Specification
+title: FAIR-bioHeaders Specification
 message: For a general description of FHR, cite the preferred paper; cite this resource
-  DOI for direct use. Historical USDA public-domain material remains public domain;
+  DOI for direct use. The Zenodo concept record for this resource is published as
+  'FHR Specification'. Historical USDA public-domain material remains public domain;
   applicable subsequent project contributions from March 2025 onward use MPL-2.0.
   Third-party terms and provenance details are documented in LICENSE.
 type: dataset
