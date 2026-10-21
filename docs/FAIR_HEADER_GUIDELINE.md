@@ -158,8 +158,9 @@ and verifies the recorded link against the genome.
 | FASTA | FAIR-bioHeaders | `;~derivedFrom: [{headerType: FHR, relationship: <relationship, e.g. transcribedFrom>, checksum: <FHR checksum of the parent genome file>}]` | illustrative | native | illustrative |
 
 The `derivedFrom` slot and its relationship vocabulary are provisional (FAIR-bioHeaders-Specification#54),
-and FHR schemaVersion 1 does not include `derivedFrom`; the transcript (FHT) and protein (FHP)
-header types that would use it are drafts. Until a PROV-O or Relation Ontology mapping is
+and FHR does not include `derivedFrom` in v0.3 (`schemaVersion` 1) or v0.4 (`"2.0"`); the
+released FHP and FHGFF3 headers use it, and the transcript (FHT) header remains a legacy
+draft. Until a PROV-O or Relation Ontology mapping is
 published, RDA-R1.2-02M can be at most partially evidenced.
 
 Checked by RDA-I3-02M (a reference to other data), RDA-I3-04M (a qualified reference: an
@@ -229,7 +230,7 @@ from the header, never file contents.
 | GFF3 | `##` directives from the GFF3 specification, then `#!` pragmas (NCBI, Ensembl and Alliance practice), before the first feature | Use the directive or the established pragma, for example `##species`, `##feature-ontology`, `#!genome-build-accession`, `#!processor`, `#!date-produced` | `#!<core field name> <value>`, for example `#!reuseConditions` |
 | VCF | `##key=value` meta-information lines after `##fileformat` | Use the VCF key, for example `##fileDate`, `##source`, `##reference`, and `##contig=<ID=…,length=…,md5=…>` | `##<core field name>=<value>` |
 | GAF | `!key: value` lines after `!gaf-version`; the first block is the file's own | Use the GAF key, for example `!generated-by`, `!date-generated`, `!go-version` | `!<core field name>: <value>` |
-| FASTA | No native header; deflines describe single records | Not applicable | FAIR-bioHeaders `;~` lines before the first `>`: FHR for genomes (`bioheaders combine` writes a complete header); FHT and FHP for transcripts and proteins are drafts |
+| FASTA | No native header; deflines describe single records | Not applicable | FAIR-bioHeaders `;~` lines before the first `>`: FHR for genomes (`bioheaders combine` writes a complete header); FHP for proteins is released in v0.4.0; FHT for transcripts is a legacy draft |
 | GFA | No native header metadata | Not applicable | FAIR-bioHeaders `#~` lines (FHR) |
 | Other text formats | The format's own comment lines | Use the format's own key | A FAIR-bioHeaders-style `key: value` line in the format's comment syntax |
 

@@ -48,11 +48,14 @@ it the type follows the identifier: an ORCID identifies a person and a ROR ID an
 A name alone implies neither, so it is typed `fhr:Agent`. `fhr.json` currently allows only
 ORCID URIs for authors.
 
-Nested objects that FHR leaves open (`taxon`, author items, `accessionID`, `vitalStats`) may
-carry keys that the context does not define, such as `taxon.checksum`. They stay in the
-document, so the FHR round trip is exact, but JSON-LD processors ignore them. The toolkit
-prints one warning per key, for example
+In v0.3 documents (`schemaVersion` 1), nested objects that FHR left open (`taxon`, author
+items, `accessionID`, `vitalStats`) may carry keys that the context does not define, such as
+`taxon.checksum`. They stay in the document, so the FHR round trip is exact, but JSON-LD
+processors ignore them. The toolkit prints one warning per key, for example
 `FHR: JSON-LD: taxon.checksum has no JSON-LD term; linked-data consumers will ignore it`.
+In v0.4 (`schemaVersion` `"2.0"`) those four objects are closed
+(`additionalProperties: false`), so an undefined key fails schema validation before it reaches
+the JSON-LD writer. This warning therefore applies only to v0.3 documents.
 
 ### Export context and Bioschemas
 
