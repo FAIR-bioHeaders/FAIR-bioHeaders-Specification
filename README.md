@@ -39,6 +39,12 @@ The [shared voucher descriptions proposal](docs/proposals/shared-voucher-descrip
 preserves free text and specifies an optional structured alternative for family-wide
 review. It is not yet supported by the released schemas.
 
+The [community profiles proposal](docs/PROFILES.md) lets a community add
+required fields and naming rules on top of a header type without editing the
+published schemas, with a draft AgBioData example under
+[`profiles/`](profiles/). It is a proposal; no profile is adopted and the
+published contracts are unchanged.
+
 ## Metadata
 
 The v0.3 release added optional fields and fixed examples; the required metadata
@@ -165,6 +171,9 @@ conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-t
   [specs/007-gff3-header](specs/007-gff3-header/spec.md).
 - `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type
   imports the core.
+- `profiles/`: the draft [community profile](docs/PROFILES.md) mechanism, the
+  worked AgBioData FHR example and its conformance cases. A proposal only; it
+  does not change any published schema.
 
 For intentional schema edits, explain compatibility and update the review baseline:
 

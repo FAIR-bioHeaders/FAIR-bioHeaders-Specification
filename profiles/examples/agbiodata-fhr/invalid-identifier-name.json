@@ -1,0 +1,31 @@
+{
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+  "schemaVersion": "2.0",
+  "genome": "Synthetic example assembly",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "0.0.1",
+  "metadataAuthor": [
+    {
+      "name": "Adam Wright",
+      "uri": "https://orcid.org/0000-0002-5719-4024"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "name": "David Molik",
+      "uri": "https://orcid.org/0000-0003-3192-6538"
+    }
+  ],
+  "dateCreated": "2022-03-21",
+  "accessionID": {
+    "name": "GCA_000000001.1"
+  },
+  "identifier": [
+    "BeetleBase:TC010103"
+  ],
+  "masking": "soft-masked",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}

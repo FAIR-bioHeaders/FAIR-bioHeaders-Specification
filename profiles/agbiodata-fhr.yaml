@@ -1,0 +1,69 @@
+# DRAFT illustrative community profile for FHR. Proposal for
+# FAIR-bioHeaders-Specification#51, spec 008 FR-004; not adopted, not published,
+# and not endorsed by AgBioData. See docs/PROFILES.md and profiles/README.md.
+#
+# This model imports the published FHR type model (fhr_linkml.yml) and adds
+# requirements on top of it. It never edits fhr.json, fhr_linkml.yml or any
+# published bytes. The requirements below are placeholders for review; the
+# community has not been consulted and may replace every one of them.
+id: https://w3id.org/fair-bioheaders/profiles/agbiodata-fhr
+name: AgBioDataFHRProfile
+description: >-
+  Draft FHR profile: an assembly must carry a named accession, and identifiers
+  must use a registered lowercase prefix. Illustrative only.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- fhr_linkml
+slots:
+  # A community-only slot: it is not part of the published FHR contract, so a
+  # record that uses it is not valid under the unchanged fhr.json. This shows
+  # the extension boundary documented in docs/PROFILES.md.
+  sampleIdentifier:
+    description: >-
+      Community sample or specimen identifiers for the assembly's biological
+      material, as prefix:accession with a registered lowercase prefix
+      (for example agbiodata:SAM-1). Optional; the concrete prefix vocabulary
+      is a community decision, not fixed here.
+    multivalued: true
+    pattern: ^[a-z][a-z0-9]*:[A-Za-z0-9._-]+$
+classes:
+  AgBioDataFHR:
+    description: >-
+      An FHR record that also meets the draft AgBioData profile requirements.
+    is_a: FHR
+    tree_root: true
+    # Inherited from FHR and kept required: taxon, version and the rest of the
+    # published required set. The profile does not relax any base constraint.
+    slots:
+    - sampleIdentifier
+    slot_usage:
+      accessionID:
+        description: >-
+          Required by this profile: the assembly must carry an accession. The
+          published FHR contract keeps accessionID optional.
+        required: true
+        range: AgBioDataAssemblyAccession
+      identifier:
+        description: >-
+          Naming rule: each identifier, when present, uses a registered
+          lowercase prefix (prefix:accession).
+        pattern: ^[a-z][a-z0-9]*:[A-Za-z0-9._-]+$
+  AgBioDataAssemblyAccession:
+    description: >-
+      An assembly accession that is either an INSDC assembly accession
+      (GCA_/GCF_) or a community accession with a registered lowercase prefix.
+    is_a: AccessionID
+    slot_usage:
+      name:
+        description: >-
+          Naming rule: an INSDC assembly accession or a lowercase community
+          CURIE.
+        required: true
+        any_of:
+        - pattern: ^GC[AF]_[0-9]{9}\.[0-9]+$
+        - pattern: ^[a-z][a-z0-9]*:[A-Za-z0-9._-]+$
