@@ -1,6 +1,14 @@
 # Changelog
 
-## Unreleased
+## v0.4.1 — 2026-10-22
+
+A patch release of the format rules. The JSON schemas and every `schemaVersion` are
+unchanged (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`); `https://w3id.org/fair-bioheaders/<type>/v0.4.1`
+selects the same schemas as v0.4.0, and `schemas/versions.json` keeps `current`
+at v0.4.0 so the examples are unchanged. The checksum-line and YAML rules below close a gap in
+what the checksum covers; see GHSA-4hc8-hc87-xvc8 (FAIR-bioHeaders-Tools), fixed in
+fair-bioheaders 0.8.1.
+
 
 - docs/FORMAT.md defines the checksum line exactly (R5): after the key and colon it
   holds only the 44-character value, plain or quoted, and spaces. A comment, tag,

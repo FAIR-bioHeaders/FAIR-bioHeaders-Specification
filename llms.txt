@@ -2,7 +2,7 @@
 
 > FAIR-bioHeaders defines machine-readable provenance headers that travel inside bioinformatics data files: FHR for reference genome FASTA and GFA, FHP for protein FASTA, and FHGFF3 for GFF3 annotations. A header is a block of YAML lines at the top of the file (`;~` in FASTA, `#~` in GFA and GFF3), validated against a JSON Schema and covered by a SHA-512/256 checksum of the file. The reference implementation is the `fair-bioheaders` Python package (command `bioheaders`).
 
-Key facts (FAIR-bioHeaders-Specification v0.4.0, fair-bioheaders 0.8.0):
+Key facts (FAIR-bioHeaders-Specification v0.4.1, fair-bioheaders 0.8.1):
 
 - Schema versions: FHR `schemaVersion: '2.0'`, FHP `'1.0'`, FHGFF3 `'1.0'`. A file's `schema` value selects the schema it is validated against; cite a versioned w3id URL. Raw-`main` URLs mean the current schema; an unknown version is reported as unsupported.
 - The checksum is computed by `bioheaders combine`, never by hand. Changing any byte except the checksum line invalidates it.
