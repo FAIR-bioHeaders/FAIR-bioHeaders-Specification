@@ -31,6 +31,8 @@ sequence letters. FHR stores a user-supplied digest and does not compute it,
 resolve it, or verify it against a local genome. Different attribute profiles can
 produce different digests; record that context in external documentation.
 
+<a id="checksum-decision-for-v03"></a>
+
 ## Checksum decision
 
 The [FHR paper](https://doi.org/10.1093/bib/bbae122) describes identity covering
