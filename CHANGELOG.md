@@ -14,6 +14,10 @@
   schemas and `schemaVersion` are unchanged; files written by fair-bioheaders
   already follow these rules. New conformance vectors for R4, R5 and R12. These
   match fair-bioheaders 0.8.1 (security advisory to follow).
+- docs/FORMAT.md states which containers each header type goes in (FHR: FASTA and
+  GFA; FHP: FASTA; FHGFF3: GFF3), as fair-bioheaders enforces since #73, and the
+  input limits that readers may apply (1 MiB and 10,000 lines of header, 20,000
+  YAML nodes nested at most 64 deep, 64 MiB metadata files).
 - Add `llms.txt`, a short overview of FAIR-bioHeaders for AI assistants (llmstxt.org
   format), checked against `schemas/versions.json` by `tests/test_llms_txt.py`, and an
   AGENTS.md section on using FAIR-bioHeaders in another project.

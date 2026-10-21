@@ -124,6 +124,17 @@ reader must agree on what the checksum line contains:
   strings, exactly as written. Quote such a value to keep it as text. Writers
   quote every string that either YAML version would read as another type.
 
+Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
+headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
+(chosen by its `schema` URL, see [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)) does not
+match the file it is in makes the file invalid, even when its checksum matches.
+
+Readers may refuse input beyond these limits, which real headers stay far below: a
+header block larger than 1 MiB or longer than 10,000 lines, YAML metadata with more
+than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
+YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
+them.
+
 The bracketed ids R1 to R12 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each rule valid and invalid files: FASTA/GFA files with expected
