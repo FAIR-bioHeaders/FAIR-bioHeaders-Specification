@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4.1 — 2026-10-22
+## v0.4.1 — 2026-10-21
 
 A patch release of the format rules. The JSON schemas and every `schemaVersion` are
 unchanged (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`); `https://w3id.org/fair-bioheaders/<type>/v0.4.1`
