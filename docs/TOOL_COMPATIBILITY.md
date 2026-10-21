@@ -177,10 +177,17 @@ so the survey also ran the FASTA tools on these files.
 
 ## Silent corruption
 
-**Valid FHR files.** No tool silently changed sequence data, names or
-features. Every class **a** result had a fingerprint identical to its control.
-This covers BWA, minimap2, kallisto, makeblastdb, MAFFT, seqtk, bioawk,
-pysam.FastxFile, Biopython `fasta-pearson`, and all GFA and GFF3 tools.
+**Valid FHR files.** In the FASTA, GFA and GFF3 surveys above, no tool silently
+changed sequence data, names or features. Every class **a** result had a
+fingerprint identical to its control. This covers BWA, minimap2, kallisto,
+makeblastdb, MAFFT, seqtk, bioawk, pysam.FastxFile, Biopython `fasta-pearson`,
+and all GFA and GFF3 tools.
+
+The later [annotation and assembly survey](#annotation-and-assembly-tools) found
+two silent misreads of valid files, both in the tools' own FASTA parsers: QUAST
+counts the header as an extra contig in its threshold rows (ablab/quast#300), and
+TransDecoder 6.0.0 predicts ORFs on the header text (fixed on master,
+TransDecoder/TransDecoder#213). See [Upstream support](#upstream-support).
 
 **Concatenated files (above).** These are the main corruption risk. Most
 tools that accept a leading header silently append a later header to the
@@ -238,6 +245,9 @@ Related, smaller risks:
 4. **GFA and GFF3 headers are compatible** with every tool tested. GFF3 tools
    either drop `#~` comments or keep them (some reordered). Failures seen with
    `##FASTA` sections come from the `##FASTA` section, not from the header.
+5. **Some annotation tools misread valid files silently.** QUAST and
+   TransDecoder 6.0.0 read the header as sequence (see
+   [Annotation and assembly tools](#annotation-and-assembly-tools)).
 
 ## Recommended workarounds
 
@@ -416,7 +426,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 ### FASTA tools: changes proposed upstream
 
-Status as of 2026-10-19 (evening); FAIR-bioHeaders-Specification#121 is the live tracker.
+Status as of 2026-10-21; FAIR-bioHeaders-Specification#121 is the live tracker.
 
 Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
@@ -459,9 +469,8 @@ and keep the FHR file as the record of provenance.
 - **Bandage**: GUI only.
 - **GATK**: large install; it uses htsjdk, as Picard does.
 - **pybedtools**: wraps bedtools.
-- **EMBOSS**: the bioconda package failed to extract.
 - **GFA2 and rGFA tags**: only GFA1 was tested.
-- **Protein FASTA and MAFFT/MUSCLE protein modes**: not needed for #40.
+- **Protein FASTA beyond DIAMOND**: MAFFT/MUSCLE protein modes were not tested (not needed for #40).
 - **GFF3 and GFA concatenation**: `#~` lines after features are ordinary
   comments to these tools, so data cannot be corrupted. The result is still
   invalid FHR.
