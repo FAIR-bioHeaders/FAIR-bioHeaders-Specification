@@ -46,13 +46,13 @@ class SchemaVersionTests(unittest.TestCase):
         """docs/SCHEMA-VERSIONS.md: a schema change does not land on main before its release."""
         tag = REGISTRY["current"]
         try:
-            tagged = {
-                name: subprocess.run(
-                    ["git", "show", f"{tag}:{name}"], cwd=ROOT, check=True,
-                    capture_output=True,
-                ).stdout
-                for name in REGISTRY["files"].values()
-            }
+            # A missing tag (shallow checkout) is the only reason to skip. A tag
+            # that exists but lacks a schema file is an incomplete release and
+            # must fail, not pass silently.
+            subprocess.run(
+                ["git", "rev-parse", "--verify", f"{tag}^{{commit}}"],
+                cwd=ROOT, check=True, capture_output=True,
+            )
         except (OSError, subprocess.CalledProcessError) as error:
             self.skipTest(
                 f"cannot read the {tag!r} tag ({error}). This is either a shallow checkout "
@@ -63,8 +63,17 @@ class SchemaVersionTests(unittest.TestCase):
             )
         for header_type, name in REGISTRY["files"].items():
             with self.subTest(header_type=header_type, tag=tag):
+                result = subprocess.run(
+                    ["git", "show", f"{tag}:{name}"], cwd=ROOT, capture_output=True,
+                )
                 self.assertEqual(
-                    (ROOT / name).read_bytes(), tagged[name],
+                    result.returncode, 0,
+                    f"{tag} exists but {name} cannot be read from it "
+                    f"({result.stderr.decode(errors='replace').strip()}). An incomplete "
+                    "release must not pass the release-identity check.",
+                )
+                self.assertEqual(
+                    (ROOT / name).read_bytes(), result.stdout,
                     f"{name} differs from {tag}:{name}. A schema change needs its own release; "
                     "see docs/SCHEMA-VERSIONS.md#schema-files-on-main for the exception process.",
                 )
