@@ -29,6 +29,9 @@ identifiers:
 - type: doi
   value: 10.5281/zenodo.23376528
   description: Zenodo version DOI for v0.4.0
+- type: doi
+  value: 10.5281/zenodo.23548492
+  description: Zenodo version DOI for v0.4.1
 repository-code: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 repository-artifact: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 abstract: The lack of interoperable data standards among reference genome data-sharing
