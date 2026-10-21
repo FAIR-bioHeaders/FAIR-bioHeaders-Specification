@@ -103,7 +103,8 @@ byte-identical to the copies at the release named by `current` in `schemas/versi
 checkout that did not fetch tags, or the documented pre-release exception below where `current`
 names a release before its tag exists. The skip reports which tag was missing. CI checks out
 full history and tags, so the check runs there. A shallow clone can fetch them with
-`git fetch --tags` and run the check again.
+`git fetch --tags` and run the check again. If the tag exists but a schema file is missing from
+it, the check fails: an incomplete release is not an exception.
 
 The exception is a deliberate, reviewed schema change that must be prepared before its release
 tag exists. Record it in the pull request and the release tracker, set `current` and its
