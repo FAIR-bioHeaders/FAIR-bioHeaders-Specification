@@ -26,7 +26,7 @@ open and re-save them in an editor. Run the generator instead.
 
 ## Manifest
 
-`rules` maps each stable rule id to a short summary: R1 to R11 from
+`rules` maps each stable rule id to a short summary: R1 to R12 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
 docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V5
 (schema selection) from docs/SCHEMA-VERSIONS.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical

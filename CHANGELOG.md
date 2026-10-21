@@ -1,7 +1,31 @@
 # Changelog
 
-## Unreleased
+## v0.4.1 — 2026-10-22
 
+A patch release of the format rules. The JSON schemas and every `schemaVersion` are
+unchanged (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`); `https://w3id.org/fair-bioheaders/<type>/v0.4.1`
+selects the same schemas as v0.4.0, and `schemas/versions.json` keeps `current`
+at v0.4.0 so the examples are unchanged. The checksum-line and YAML rules below close a gap in
+what the checksum covers; see GHSA-4hc8-hc87-xvc8 (FAIR-bioHeaders-Tools), fixed in
+fair-bioheaders 0.8.1.
+
+
+- docs/FORMAT.md defines the checksum line exactly (R5): after the key and colon it
+  holds only the 44-character value, plain or quoted, and spaces. A comment, tag,
+  tab or other text on that line now makes the file invalid, because the line is
+  excluded from the checksum. R4 requires the canonical base64 form and exact
+  string comparison; R1 defines line terminators (LF, CRLF, or a CR not followed by
+  LF); R3 states that the checksum line's position within the header block is not
+  covered. New rule R12: YAML metadata is read with YAML 1.2 core-schema types and
+  must read the same under YAML 1.1, so explicit tags and plain scalars such as
+  `010`, `1_000`, `1:30`, `yes`, `on` or `1e3` are invalid (quote them). The JSON
+  schemas and `schemaVersion` are unchanged; files written by fair-bioheaders
+  already follow these rules. New conformance vectors for R4, R5 and R12. These
+  match fair-bioheaders 0.8.1 (security advisory to follow).
+- docs/FORMAT.md states which containers each header type goes in (FHR: FASTA and
+  GFA; FHP: FASTA; FHGFF3: GFF3), as fair-bioheaders enforces since #73, and the
+  input limits that readers may apply (1 MiB and 10,000 lines of header, 20,000
+  YAML nodes nested at most 64 deep, 64 MiB metadata files).
 - Add `llms.txt`, a short overview of FAIR-bioHeaders for AI assistants (llmstxt.org
   format), checked against `schemas/versions.json` by `tests/test_llms_txt.py`, and an
   AGENTS.md section on using FAIR-bioHeaders in another project.

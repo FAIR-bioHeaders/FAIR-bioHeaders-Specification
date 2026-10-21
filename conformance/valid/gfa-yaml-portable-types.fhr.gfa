@@ -1,0 +1,20 @@
+#~schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+#~schemaVersion: '2.0'
+#~genome: Synthetic FHR conformance genome
+#~taxon:
+#~  name: Homo sapiens
+#~  uri: https://identifiers.org/taxonomy:9606
+#~version: '010'
+#~metadataAuthor:
+#~- name: Synthetic metadata author (placeholder)
+#~assemblyAuthor:
+#~- name: Synthetic assembly author (placeholder)
+#~dateCreated: 2026-10-08
+#~masking: not-masked
+#~documentation: Synthetic FHR conformance vector; not a real assembly.
+#~vitalStats:
+#~  L50: 10
+#~  gcContent: 41.5
+#~checksum: mQcG5H3Hta09J28IpDPslqWg4xDBG+Dx6UhoHwK1pyc=
+H	VN:Z:1.0
+S	Contig1	ACGTACGTACGGTTAACCAT

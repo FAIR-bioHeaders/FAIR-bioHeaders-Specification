@@ -242,6 +242,18 @@ def check_schema(conformance, manifest):
     from jsonschema import Draft202012Validator, FormatChecker
     import yaml
 
+    class Loader(yaml.SafeLoader):
+        """YAML with dates and times read as strings, as written (FORMAT.md R12)."""
+
+    Loader.yaml_implicit_resolvers = {
+        first: [(tag, regexp) for tag, regexp in resolvers
+                if tag != "tag:yaml.org,2002:timestamp"]
+        for first, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()
+    }
+
+    def load_yaml(text):
+        return yaml.load(text, Loader=Loader)
+
     validators = {
         name: Draft202012Validator(json.loads((ROOT / name).read_text()),
                                    format_checker=FormatChecker())
@@ -267,7 +279,7 @@ def check_schema(conformance, manifest):
             for line in read_vector(conformance, vector).splitlines(keepends=True)
             if line.startswith(prefix)
         )
-        return yaml.safe_load(text)
+        return load_yaml(text)
 
     problems = []
     for vector in manifest["vectors"]:
@@ -299,7 +311,7 @@ def check_schema(conformance, manifest):
                 for line in read_vector(conformance, vector).splitlines(keepends=True)
                 if line.startswith(prefix)
             )
-            if not same_json(yaml.safe_load(text), vector["metadata"]):
+            if not same_json(load_yaml(text), vector["metadata"]):
                 problems.append(f"{vector['id']}: parsed metadata differs from the manifest")
             schema = SCHEMA_RULES[vector["rule"]]
             if not list(validators[schema].iter_errors(vector["metadata"])):
@@ -334,7 +346,7 @@ def check_schema(conformance, manifest):
             line[len(prefix):].rstrip(b"\r\n").decode("utf-8")
             for line in data.splitlines(keepends=True) if line.startswith(prefix)
         )
-        metadata = yaml.safe_load(text)
+        metadata = load_yaml(text)
         for error in validator.iter_errors(metadata):
             problems.append(f"{vector['id']}: {error.json_path}: {error.message}")
         for key, value in vector["metadata"].items():

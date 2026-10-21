@@ -43,24 +43,48 @@ helpers used MD5 and described different coverage. v0.3 explicitly adopts:
 1. [R1] Read the FASTA/GFA as bytes; do not normalize line endings, encoding, comments,
    sequence wrapping, ordering, or whitespace. For a gzip- or bgzip-compressed
    file, these are the decompressed bytes: compression is transport, so the same
-   content has the same checksum whatever tool or level compressed it.
+   content has the same checksum whatever tool or level compressed it. A line ends
+   at LF, at CRLF, or at a CR that is not followed by LF; the terminator belongs to
+   the line. Every rule below uses lines in this sense. Writers should use LF or
+   CRLF, because some FASTA readers treat a lone CR as an ordinary byte.
 2. [R2] Require exactly one root-level header line matching `;~checksum:` (FASTA) or
-   `#~checksum:` (GFA), with an unquoted key. Spaces or tabs may appear before
-   the key only to match the root indentation of the other header lines, and
-   before the colon.
+   `#~checksum:` (GFA), with an unquoted key. Spaces may appear before the key
+   only to match the root indentation of the other header lines, and before the
+   colon.
    Nested properties named checksum remain covered. (From v0.4 FHR's nested
    objects reject unknown keys, so in FHR such a line occurs only inside a
    scalar; header types with nested checksums, such as `derivedFrom`, keep it.)
 3. [R3] Exclude that entire line and its line terminator. Hash every other byte,
-   including all other metadata and ordinary comments.
+   including all other metadata and ordinary comments. The checksum covers the
+   bytes of every other line but not where the checksum line sits among them, so
+   moving it within the header block changes neither the checksum nor the
+   metadata. Writers put it last in the header block.
 4. [R4] Apply SHA-512/256 (the SHA-512/256 algorithm, not SHA-512 truncated manually).
    Encode its 32-byte digest using standard padded base64, with no `md5:` prefix.
+   The encoding is canonical: 32 bytes leave two unused bits, which are zero, so
+   the character before `=` is one of `AEIMQUYcgkosw048`. Any other value is
+   invalid. Compare checksums as exact strings, never by decoding them.
 
 Header lines are identified on the same byte lines that are hashed, so every
 reader must agree on what the checksum line contains:
 
-- [R5] The checksum value must appear on the checksum line itself as a single-line
-  YAML scalar; block scalars and continuation lines are invalid.
+- [R5] The checksum line holds the checksum value and nothing else, because the
+  whole line is excluded from the checksum (R3). After the prefix and the root
+  indentation it has the unquoted key `checksum`, optional spaces, a colon, one or
+  more spaces, the 44-character value (R4) either plain or in single or double
+  quotes, and optional trailing spaces before the line terminator:
+
+  ```
+  checksum-line = prefix indent "checksum" *SP ":" 1*SP value *SP
+  value         = b64 / "'" b64 "'" / DQUOTE b64 DQUOTE
+  b64           = 42(ALPHA / DIGIT / "+" / "/") ("A" / "E" / "I" / "M" / "Q" / "U" /
+                  "Y" / "c" / "g" / "k" / "o" / "s" / "w" / "0" / "4" / "8") "="
+  ```
+
+  (ABNF, RFC 5234; `prefix` is `;~` or `#~` and `indent` the root indentation.)
+  Anything else on the line makes the file invalid: a tab, a YAML comment, a tag,
+  other text, a block scalar indicator, or a value continued on the next line. Writers
+  emit exactly `;~checksum: <value>` (`#~checksum: <value>` in GFA and GFF3).
 - [R6] FHR header lines must be UTF-8 and must not contain U+0085, U+2028, or U+2029,
   which YAML treats as line breaks. Bytes outside header lines are not decoded.
 - [R7] A FASTA/GFA file must not begin with a UTF-8 byte order mark. JSON, YAML, and
@@ -89,8 +113,32 @@ reader must agree on what the checksum line contains:
   YAML treats as line breaks, R11 those that FASTA readers treat as record starts.
   The checksum value (R5) is base64 and never contains either. GFA and GFF3 headers
   are not affected: their readers treat `#` lines as whole-line comments.
+  A raw `>` or `@` can't occur on the checksum line, which R5 limits to the value.
 
-The bracketed ids R1 to R11 are stable labels for the rules above, used by the
+- [R12] FHR metadata written as YAML, in header lines or in a YAML file, is read
+  with YAML 1.2 core-schema types, and must read the same way under YAML 1.1, so
+  that every YAML library returns the same values. Explicit tags (`!...`,
+  including `!!str`, `!!binary` and `!!timestamp`) are invalid. A plain (unquoted)
+  scalar that YAML 1.1 and YAML 1.2 read as different values is invalid: for
+  example integers with a leading zero (`010`, which YAML 1.1 reads as octal 8),
+  with `_` (`1_000`), or written `0b...` or `0o...`; sexagesimal numbers (`1:30`);
+  `yes`, `no`, `on`, `off`, `y` and `n` in any letter case; and exponents written
+  without a decimal point (`1e3`). Plain scalars that look like dates or times are
+  strings, exactly as written. Quote such a value to keep it as text. Writers
+  quote every string that either YAML version would read as another type.
+
+Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
+headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
+(chosen by its `schema` URL, see [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)) does not
+match the file it is in makes the file invalid, even when its checksum matches.
+
+Readers may refuse input beyond these limits, which real headers stay far below: a
+header block larger than 1 MiB or longer than 10,000 lines, YAML metadata with more
+than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
+YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
+them.
+
+The bracketed ids R1 to R12 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files

@@ -131,7 +131,7 @@ A match establishes identity, not that the annotation is correct.
 
 ## Rules
 
-FHGFF3 files follow the shared header and checksum rules R1 to R9 of [FORMAT.md](FORMAT.md)
+FHGFF3 files follow the shared header and checksum rules R1 to R9 and R12 of [FORMAT.md](FORMAT.md)
 unchanged, and R10 with the GFF3 block end below. In addition:
 
 - [G1] Line 1 is `##gff-version 3`. The leading header block runs from line 2 to the first
