@@ -126,6 +126,12 @@ reader must agree on what the checksum line contains:
   without a decimal point (`1e3`). Plain scalars that look like dates or times are
   strings, exactly as written. Quote such a value to keep it as text. Writers
   quote every string that either YAML version would read as another type.
+- [R13] A numeric metadata value must be a finite number. YAML's `.nan`, `.inf`
+  and `-.inf`, and `NaN` or `Infinity` written as a JSON extension, make the
+  record invalid, as does a value that overflows to infinity. JSON cannot
+  represent them, and JSON Schema's `minimum` and `maximum` comparisons with NaN
+  are false, so a range check does not catch them; validators still report the
+  record invalid.
 
 Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
 headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
@@ -138,13 +144,17 @@ than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
 YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
 them.
 
-The bracketed ids R1 to R12 are stable labels for the rules above, used by the
+The bracketed ids R1 to R13 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
-The vectors give each rule valid and invalid files: FASTA/GFA files with expected
+The vectors give each applicable rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files
 with the expected extracted metadata (see [MICRODATA.md](MICRODATA.md)).
 The JSON-LD form of FHR metadata and its reading rules J1 to J7 are in
 [JSONLD.md](JSONLD.md).
+
+The schemas do not express every requirement. Required values must be non-empty, `format` must
+be asserted by the validator, and NaN and infinities are invalid (R13); see
+[SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md#values-the-schema-does-not-check).
 
 Changing any covered metadata or data bytes invalidates the checksum. The
 checksum does not authenticate an author or protect against malicious rewriting.

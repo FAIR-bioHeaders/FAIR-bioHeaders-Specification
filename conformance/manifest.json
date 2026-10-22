@@ -45,6 +45,9 @@
     "R12": {
       "summary": "Header parsing: YAML metadata is read with YAML 1.2 core-schema types and must read the same under YAML 1.1; explicit tags and plain scalars that the two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid."
     },
+    "R13": {
+      "summary": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and -.inf, and NaN or Infinity written as a JSON extension, make the record invalid."
+    },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
     },
@@ -86,7 +89,7 @@
       "summary": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any other header is validated as FHR."
     },
     "G1": {
-      "summary": "FHGFF3: line 1 is ##gff-version 3; the leading header block runs from line 2 to the first nonblank line that is not a # line, or to ##FASTA; #~ lines may be mixed with other # lines inside it, and a #~ line on line 1 or after it is invalid."
+      "summary": "FHGFF3: line 1 matches ##gff-version 3 or ##gff-version 3.x.y (three numeric components), optionally followed by spaces or tabs; the leading header block runs from line 2 to the first nonblank line that is not a # line, or to ##FASTA; #~ lines may be mixed with other # lines inside it, and a #~ line on line 1 or after it is invalid."
     },
     "G2": {
       "summary": "FHGFF3: the metadata must validate against fhgff3.json, including the genome link (an annotates link to an FHR genome, a genomeReference, or both)."
@@ -838,7 +841,8 @@
       "rules": [
         "M1",
         "M3",
-        "M4"
+        "M4",
+        "R13"
       ],
       "description": "The converter's typed serialization: nested objects, arrays, an empty array, integers and numbers.",
       "metadata": {
@@ -2462,6 +2466,22 @@
       }
     },
     {
+      "id": "fhgff3-version-3-trailing-whitespace",
+      "file": "valid/fhgff3-version-3-trailing-whitespace.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "G1"
+      ],
+      "description": "##gff-version 3 followed by a space and a tab; G1 allows trailing spaces or tabs.",
+      "checksum": "AZKTL2vPK6JZRJN5EmCOVWGaaZrnC+w/m2SVWtXz2WQ=",
+      "metadata": {
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "version": "1.0.0"
+      }
+    },
+    {
       "id": "fhgff3-crlf",
       "file": "valid/fhgff3-crlf.fhgff3.gff3",
       "format": "fhgff3",
@@ -3056,6 +3076,24 @@
       "expected": "invalid",
       "rule": "R10",
       "reason": "Two complete FHR files concatenated; each part has a correct checksum."
+    },
+    {
+      "id": "fasta-nan-vital-stats",
+      "file": "invalid/fasta-nan-vital-stats.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R13",
+      "reason": "vitalStats.gcContent is the YAML .nan, which is not a finite JSON number."
+    },
+    {
+      "id": "fasta-infinity-vital-stats",
+      "file": "invalid/fasta-infinity-vital-stats.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R13",
+      "reason": "vitalStats.gcContent is the YAML .inf: not a finite JSON number, and also above gcContent's maximum of 100."
     },
     {
       "id": "gfa-tab-on-checksum-line",

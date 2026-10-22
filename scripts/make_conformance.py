@@ -64,6 +64,8 @@ RULES = {
     "R12": "Header parsing: YAML metadata is read with YAML 1.2 core-schema types and "
            "must read the same under YAML 1.1; explicit tags and plain scalars that the "
            "two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid.",
+    "R13": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and "
+           "-.inf, and NaN or Infinity written as a JSON extension, make the record invalid.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -90,9 +92,11 @@ RULES = {
     "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
     "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
           "other header is validated as FHR.",
-    "G1": "FHGFF3: line 1 is ##gff-version 3; the leading header block runs from line 2 to "
-          "the first nonblank line that is not a # line, or to ##FASTA; #~ lines may be "
-          "mixed with other # lines inside it, and a #~ line on line 1 or after it is invalid.",
+    "G1": "FHGFF3: line 1 matches ##gff-version 3 or ##gff-version 3.x.y (three numeric "
+          "components), optionally followed by spaces or tabs; the leading header block runs "
+          "from line 2 to the first nonblank line that is not a # line, or to ##FASTA; #~ lines "
+          "may be mixed with other # lines inside it, and a #~ line on line 1 or after it is "
+          "invalid.",
     "G2": "FHGFF3: the metadata must validate against fhgff3.json, including the genome link "
           "(an annotates link to an FHR genome, a genomeReference, or both).",
     "G3": "FHGFF3: a record is read as FHGFF3 only when its schema is an FHGFF3 schema URL; "
@@ -640,6 +644,22 @@ def build():
         data = plain[k][0] + second
         invalid(f"{k}-concatenated", k, data, "R10",
                 "Two complete FHR files concatenated; each part has a correct checksum.")
+        if k == "fasta":
+            lines = with_metadata(k, insert=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                ["vitalStats:", "  gcContent: .nan"],
+            )])
+            data, _ = assemble(lines + body(k))
+            invalid(f"{k}-nan-vital-stats", k, data, "R13",
+                    "vitalStats.gcContent is the YAML .nan, which is not a finite JSON number.")
+            lines = with_metadata(k, insert=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                ["vitalStats:", "  gcContent: .inf"],
+            )])
+            data, _ = assemble(lines + body(k))
+            invalid(f"{k}-infinity-vital-stats", k, data, "R13",
+                    "vitalStats.gcContent is the YAML .inf: not a finite JSON number, and also "
+                    "above gcContent's maximum of 100.")
 
     for k in ("fasta", "gfa"):
         data, value = plain[k]
@@ -956,6 +976,10 @@ def build_fhgff3():
                  "A header and no features: an empty annotation.")
     fhgff3_valid("fhgff3-version-3-1-26", fhgff3_lines(version=b"##gff-version 3.1.26"),
                  ["G1"], "##gff-version 3.1.26 on line 1.")
+    fhgff3_valid("fhgff3-version-3-trailing-whitespace",
+                 fhgff3_lines(version=b"##gff-version 3 \t"),
+                 ["G1"], "##gff-version 3 followed by a space and a tab; G1 allows trailing "
+                 "spaces or tabs.")
     fhgff3_valid("fhgff3-crlf", fhgff3_lines(), ["G1", "R1", "R3"],
                  "CRLF line endings; CR bytes are hashed.", endings=b"\r\n")
     valid("fhgff3-gzip", k, gzip_member(plain), value, ["G1", "R1"],
@@ -998,6 +1022,10 @@ def build_fhgff3():
     data, _ = assemble(lines)
     invalid("fhgff3-header-before-version", k, data, "G1",
             "A #~ line on line 1, before ##gff-version 3.")
+    # Invalid near misses for the G1 version grammar (##gff-version 30, 3x, 3.1)
+    # are added once the released toolkit enforces the grammar: adding them now
+    # would make check_conformance.py --converter fail against fair-bioheaders
+    # 0.8.0, which checks only the "##gff-version 3" prefix.
     # G2: the metadata must validate against fhgff3.json.
     fhgff3_invalid("fhgff3-no-genome-link", fhgff3_record(drop=["derivedFrom"]), "G2",
                    "Neither an annotates link nor a genomeReference.")
@@ -1201,7 +1229,7 @@ def build_microdata():
                        "readTechnology": "synthetic"},
     })
     md_valid("microdata-canonical", md_page(md_content(canonical)), canonical,
-             ["M1", "M3", "M4"],
+             ["M1", "M3", "M4", "R13"],
              "The converter's typed serialization: nested objects, arrays, an empty "
              "array, integers and numbers.")
 

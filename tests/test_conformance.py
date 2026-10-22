@@ -115,6 +115,15 @@ class ConformanceTests(unittest.TestCase):
                 self.assertIn(vector["rule"], self.manifest["rules"])
                 self.assertTrue(vector["reason"])
 
+    def test_numeric_vectors_cite_r13(self):
+        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        for name, value in (("fasta-nan-vital-stats", b"gcContent: .nan"),
+                            ("fasta-infinity-vital-stats", b"gcContent: .inf")):
+            with self.subTest(vector=name):
+                vector = vectors[name]
+                self.assertEqual((vector["expected"], vector["rule"]), ("invalid", "R13"))
+                self.assertIn(value, (CONFORMANCE / vector["file"]).read_bytes())
+
     def test_fhp_vectors(self):
         """specs/006-protein-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
@@ -168,7 +177,7 @@ class ConformanceTests(unittest.TestCase):
         """specs/007-gff3-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 15)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 16)
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 13)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
@@ -182,6 +191,25 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhgff3-header-before-version"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-header-after-fasta"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-cites-fhr-schema"]["rule"], "G3")
+        # Invalid near misses for the G1 grammar (##gff-version 30, 3x, 3.1) are
+        # added when the released toolkit enforces the grammar; adding them now
+        # would fail check_conformance.py --converter against fair-bioheaders
+        # 0.8.0, which checks only the "##gff-version 3" prefix.
+        self.assertEqual(vectors["fhgff3-version-3-1-26"]["expected"], "valid")
+        self.assertEqual(vectors["fhgff3-version-3-trailing-whitespace"]["expected"], "valid")
+
+    def test_g1_version_grammar_rejects_near_misses(self):
+        """docs/FHGFF3.md G1: only 3 or 3.x.y is a valid ##gff-version line."""
+        text = (ROOT / "docs" / "FHGFF3.md").read_text(encoding="utf-8")
+        documented = re.search(r"`\^##gff-version[^`]+`", text)
+        self.assertIsNotNone(documented, "G1 does not state the version grammar")
+        grammar = re.compile(documented.group(0).strip("`"))
+        for line in ("##gff-version 3", "##gff-version 3.1.26", "##gff-version 3 \t"):
+            with self.subTest(valid=line):
+                self.assertRegex(line, grammar)
+        for line in ("##gff-version 30", "##gff-version 3x", "##gff-version 3.1"):
+            with self.subTest(invalid=line):
+                self.assertNotRegex(line, grammar)
 
     def test_compressed_vectors_share_the_plain_checksum(self):
         vectors = {vector["id"]: vector for vector in self.manifest["vectors"]}
@@ -229,7 +257,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(52 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(53 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -258,7 +286,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(52 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(53 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
@@ -289,6 +317,8 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(exported["conformsTo"],
                          "https://bioschemas.org/profiles/Dataset/1.0-RELEASE")
         self.assertNotIn("conformsTo", vectors["jsonld-export-terms"]["metadata"])
+        self.assertEqual(vectors["jsonld-export-terms"]["expected"], "valid")
+        self.assertEqual(vectors["jsonld-root-id"]["rule"], "J4")
         linked = json.loads((CONFORMANCE / vectors["jsonld-documentation-url"]["file"]).read_text())
         self.assertNotIn("documentation", linked)
         self.assertEqual(linked["subjectOf"],

@@ -40,7 +40,8 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 ctg1	synthetic	gene	1	20	.	+	.	ID=gene1
 ```
 
-- Line 1 is `##gff-version 3` (or `3.x.y`), as GFF3 requires.
+- Line 1 is `##gff-version 3`, or `##gff-version 3.x.y` with three numeric components, as GFF3
+  requires. No other text is allowed on the line; trailing spaces or tabs are ignored.
 - The header block runs from line 2 to the first line that is neither blank nor starts with `#`
   (the first feature, or a `>` line), or to the `##FASTA` line, whichever comes first.
 - Inside it, `#~` lines can be mixed with native directives (`##sequence-region`, `##species`,
@@ -131,10 +132,16 @@ A match establishes identity, not that the annotation is correct.
 
 ## Rules
 
-FHGFF3 files follow the shared header and checksum rules R1 to R9 and R12 of [FORMAT.md](FORMAT.md)
-unchanged, and R10 with the GFF3 block end below. In addition:
+FHGFF3 files follow the shared header, checksum and number rules R1 to R9, R12 and R13 of
+[FORMAT.md](FORMAT.md) unchanged, and R10 with the GFF3 block end below. In addition:
 
-- [G1] Line 1 is `##gff-version 3`. The leading header block runs from line 2 to the first
+- [G1] Line 1 matches `^##gff-version 3(\.[0-9]+\.[0-9]+)?[ \t]*$`: `##gff-version 3`, or
+  `##gff-version 3.MINOR.PATCH` where each component after `3` is one or more ASCII digits,
+  optionally followed by spaces or tabs. The pattern applies to the line content before its
+  terminator, so LF, CRLF and lone-CR endings all match. `##gff-version 30` and
+  `##gff-version 3x` are invalid for the same reason as any other extra text. `##gff-version
+  3.1` is invalid because the accepted extension is the three-component `3.x.y` form, not a
+  two-component version. The leading header block runs from line 2 to the first
   nonblank line that is not a `#` line, or to the `##FASTA` line. `#~` lines may be mixed with
   other `#` lines inside it. A `#~` line on line 1 or after the block is invalid.
 - [G2] FHGFF3 metadata must validate against `fhgff3.json`. That includes the genome link: an

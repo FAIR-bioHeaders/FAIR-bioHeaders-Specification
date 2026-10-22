@@ -28,6 +28,12 @@ The bracketed ids are stable labels used by the tests.
    - It never replaces the canonical form, and it cannot be read back as FHR metadata. Readers
      refuse it.
    - The canonical context and examples do not change.
+   - The export terms `@id`, `keywords`, `url` and `conformsTo` are not FHR fields. In the
+     canonical form they are set aside with a warning (J1); in any other JSON-LD form they are
+     unknown terms and the document is invalid (J4). That difference is intended: the canonical
+     form is writer output with a documented place for export annotations, while an expanded or
+     compacted document is read generically. See
+     [JSONLD.md](JSONLD.md#export-terms-in-the-canonical-form-and-in-other-forms).
 2. **[X2] Shape.**
    - The document is `{"@context": {"@vocab": "http://schema.org/", "fhr": ..., "dct": ...},
      "@graph": [...]}`. That is a JSON-LD 1.0 context with no scoped contexts and no coercions, so
@@ -43,7 +49,11 @@ The bracketed ids are stable labels used by the tests.
    - Authors are typed as in the canonical form: an explicit `nameType` (v0.4) decides first
      (`Personal` gives `Person`, `Organizational` gives `Organization`); otherwise ORCID gives `Person`, ROR gives `Organization`,
      and an author with neither stays `fhr:Agent`. `fhr:Agent` is outside `creator`'s expected
-     range, but classifying the author would invent metadata.
+     range, but classifying the author would invent metadata. A `nameType` that contradicts the
+     identifier, such as `Organizational` with an ORCID, is accepted by `fhr.json` 2.0 and is
+     typed by `nameType` here and in the canonical writer; the contradiction is a known accepted
+     combination, and rejecting it needs the next major `schemaVersion`
+     ([JSONLD.md](JSONLD.md#what-the-document-contains)).
 4. **[X4] Statistics are observations of the assembly.**
    - Each numeric `vitalStats` value becomes an `Observation` with:
      - `observationAbout` → the assembly;
