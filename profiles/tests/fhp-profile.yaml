@@ -1,0 +1,21 @@
+# Regression fixture: a profile that layers on FHP (issue #51 review audit).
+# FHP has no post-generation constraint rules beyond the common ones, so this
+# profile's constraints must equal fhp.json. See tests/test_profiles.py.
+id: https://example.org/fair-bioheaders/profiles/test-fhp
+name: TestFHPProfile
+description: >-
+  Test-only FHP profile with no community requirements of its own. It exists to
+  check that a profile root keeps every published FHP constraint.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- fhp_linkml
+classes:
+  TestFHPProfile:
+    description: An FHP record validated through this test profile.
+    is_a: FHP
+    tree_root: true
