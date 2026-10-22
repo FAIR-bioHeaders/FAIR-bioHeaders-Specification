@@ -6,19 +6,29 @@
 # validator report an unsupported profile by name instead of silently passing.
 #
 # Fields:
-#   header_type  the base type the profile layers on
-#   model        the LinkML profile model, relative to this file
-#   base_model   the published type model the profile imports
-#   status       draft (proposed, unreviewed) | reviewed | adopted
-#   community    who the requirements are attributed to (and whether they have
-#                been consulted; no entry here claims endorsement)
-#   owner        a maintainer or community contact, unassigned until review
-#   issue        where the proposal is tracked
+#   header_type     the base type the profile layers on
+#   model           the LinkML profile model, relative to this file and confined
+#                   under profiles/ (absolute paths and '..' are rejected)
+#   base_model      the published type model the profile imports; must match
+#                   header_type
+#   profileVersion  the profile's own version, MAJOR.MINOR.PATCH, reviewed
+#                   independently of the base type's schemaVersion
+#   applicability   which records the profile covers and which it does not
+#   status          draft (proposed, unreviewed) | reviewed | adopted
+#   community       who the requirements are attributed to (and whether they
+#                   have been consulted; no entry here claims endorsement)
+#   owner           a maintainer or community contact, unassigned until review
+#   issue           where the proposal is tracked
 profiles:
   agbiodata-fhr:
     header_type: FHR
     model: agbiodata-fhr.yaml
     base_model: fhr_linkml.yml
+    profileVersion: '0.1.0'
+    applicability: >-
+      FHR records for a single assembled genome assembly. Does not apply to FHP
+      protein sets, FHGFF3 annotations, or relaxed non-genome nucleotide-set
+      records that need a separate derived schema.
     status: draft
     community: AgBioData (illustrative; not consulted, no endorsement claimed)
     owner: unassigned

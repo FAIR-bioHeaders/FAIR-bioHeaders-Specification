@@ -10,7 +10,8 @@ id: https://w3id.org/fair-bioheaders/profiles/agbiodata-fhr
 name: AgBioDataFHRProfile
 description: >-
   Draft FHR profile: an assembly must carry a named accession, and identifiers
-  must use a registered lowercase prefix. Illustrative only.
+  must match a lowercase prefix:accession pattern. Illustrative only; no prefix
+  vocabulary is enforced.
 prefixes:
   linkml: https://w3id.org/linkml/
   fhr: https://w3id.org/fair-bioheaders/terms#
@@ -26,9 +27,9 @@ slots:
   sampleIdentifier:
     description: >-
       Community sample or specimen identifiers for the assembly's biological
-      material, as prefix:accession with a registered lowercase prefix
-      (for example agbiodata:SAM-1). Optional; the concrete prefix vocabulary
-      is a community decision, not fixed here.
+      material, as a lowercase prefix:accession pattern (for example
+      agbiodata:SAM-1). Optional; this is a syntactic rule. The concrete prefix
+      vocabulary is a community decision, not fixed or enforced here.
     multivalued: true
     pattern: ^[a-z][a-z0-9]*:[A-Za-z0-9._-]+$
 classes:
@@ -50,13 +51,13 @@ classes:
         range: AgBioDataAssemblyAccession
       identifier:
         description: >-
-          Naming rule: each identifier, when present, uses a registered
-          lowercase prefix (prefix:accession).
+          Naming rule: each identifier, when present, matches the syntactic
+          lowercase prefix:accession pattern. No prefix vocabulary is enforced.
         pattern: ^[a-z][a-z0-9]*:[A-Za-z0-9._-]+$
   AgBioDataAssemblyAccession:
     description: >-
       An assembly accession that is either an INSDC assembly accession
-      (GCA_/GCF_) or a community accession with a registered lowercase prefix.
+      (GCA_/GCF_) or a community accession with a lowercase prefix.
     is_a: AccessionID
     slot_usage:
       name:

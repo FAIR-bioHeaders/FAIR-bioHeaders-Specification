@@ -76,6 +76,16 @@ does not inherit one of those published types is rejected with
 constraints. `tests/test_profiles.py` pins both the FHGFF3 genome-link rule and
 the complete published FHP constraints.
 
+A profile is selected by registry id only; the command-line tool does not accept
+a filesystem path. The loader resolves every import from the repository root,
+verifies the declared base model's `id`/`name` and `tree_root` class, rejects a
+profile that redefines (shadows) a class from an imported published model, and
+cross-checks the registry's `header_type` and `base_model` against the model's
+actual imports. Tests may load a model under `profiles/` with an explicit
+`allow_path=True`; absolute paths and `..` are always rejected. These checks stop
+a profile from defining its own class `FHR` (or pointing an import at a sibling
+file) and claiming published constraints it never imported.
+
 The toolkit command named in spec 008 FR-004 (`validate --profile`) is a
 downstream implementation in
 [FAIR-bioHeaders-Tools](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools),
@@ -89,10 +99,15 @@ conformance cases; the base install keeps working without any profile.
 2. Add `profiles/<community>-<type>.yaml` importing the type's model, with one
    `tree_root` class and `slot_usage` for each tightened slot.
 3. Register it in [`profiles/registry.yaml`](../profiles/registry.yaml) with
-   `status: draft` and the tracking issue.
-4. Add valid and invalid instances under `profiles/examples/<profile>/` and a
+   `profileVersion` (MAJOR.MINOR.PATCH), `applicability`, `status: draft` and the
+   tracking issue. The loader rejects a missing field, a malformed version, or a
+   `base_model` that does not match `header_type`.
+4. Use class names that are not already defined by the imported published
+   models. A profile extends the base with a new `tree_root` subclass; it does
+   not redefine `FHR`, `FHP`, `FHGFF3` or their shared classes.
+5. Add valid and invalid instances under `profiles/examples/<profile>/` and a
    test (see `tests/test_profiles.py`).
-5. Review with the community and the maintainers. Do not claim consultation or
+6. Review with the community and the maintainers. Do not claim consultation or
    endorsement that has not happened.
 
 ## Relationship to `schemaVersion`
@@ -106,8 +121,9 @@ by the consumer, not encoded in the record. Two consequences:
   contract takes its own minor or major increment per
   [SCHEMA-VERSIONS](SCHEMA-VERSIONS.md), and the profile should then drop the
   now-redundant constraint.
-- A profile needs its own reviewable version. The draft registry records only
-  `status`; assigning a profile version is an open question below.
+- A profile has its own reviewable `profileVersion` in the registry, independent
+  of the base type. It records the community requirements, not a new
+  `schemaVersion`, and should change when those requirements change.
 
 ## Why a profile is not a new header type
 
@@ -169,10 +185,14 @@ checked by `tests/test_profiles.py`:
 | `valid-with-sample-identifiers.json` | invalid | valid | an extending profile's own field |
 | `invalid-missing-accession.json` | valid | invalid | base-valid but missing a required community slot |
 | `invalid-accession-name.json` | valid | invalid | a naming rule on a base slot |
-| `invalid-identifier-name.json` | valid | invalid | a naming rule on a base slot |
-| `invalid-sample-identifier.json` | invalid | invalid | a naming rule on a community slot |
-| `unsupported-profile.json` | valid | invalid | a record for a profile this checkout does not provide |
+| `invalid-identifier-name.json` | valid | invalid | a syntactic naming rule on a base slot |
+| `invalid-sample-identifier.json` | invalid | invalid | a syntactic naming rule on a community slot |
 | `relaxed-nucleotide-set.json` | invalid | invalid | a relaxed case that needs a derived schema |
+
+An unregistered profile has no record-level marker to inspect: the profile is
+chosen by the consumer, not encoded in the record. `tests/test_profiles.py`
+therefore checks the loader directly and requires `UnsupportedProfileError` for
+an unknown id.
 
 All values are synthetic placeholders and no AgBioData endorsement is implied.
 
@@ -188,8 +208,10 @@ All values are synthetic placeholders and no AgBioData endorsement is implied.
 
 ## Open questions for maintainers
 
-- Profile identity and versioning: is a profile id enough, or does a profile
-  need a `profileVersion` and a versioned URL?
+- When exactly should a profile's `profileVersion` get a major, minor or patch
+  bump, and should draft versions follow the same rules as reviewed versions?
+- Does a published profile need its own versioned URL in addition to the
+  registry id and `profileVersion`?
 - Should the registry record a consultation date and a community owner before
   `reviewed`, and who signs off for the community?
 - For extending profiles, should the toolkit validate the base contract and the

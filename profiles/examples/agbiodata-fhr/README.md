@@ -14,9 +14,8 @@ and the generated profile schema.
 | `valid-with-sample-identifiers.json` | invalid | valid | uses the profile-only `sampleIdentifier` field (extension boundary) |
 | `invalid-missing-accession.json` | valid | invalid | base-valid record missing the community-required `accessionID` |
 | `invalid-accession-name.json` | valid | invalid | `accessionID.name` is neither an INSDC nor a community accession |
-| `invalid-identifier-name.json` | valid | invalid | an identifier does not use a registered lowercase prefix |
-| `invalid-sample-identifier.json` | invalid | invalid | a `sampleIdentifier` does not use a registered lowercase prefix |
-| `unsupported-profile.json` | valid | invalid | a record governed by a profile this checkout does not provide |
+| `invalid-identifier-name.json` | valid | invalid | an identifier does not match the syntactic lowercase `prefix:accession` rule |
+| `invalid-sample-identifier.json` | invalid | invalid | a `sampleIdentifier` does not match the syntactic lowercase `prefix:accession` rule |
 | `relaxed-nucleotide-set.json` | invalid | invalid | a non-genome nucleotide set that needs a separately reviewed relaxed derived schema |
 
 A profile result never replaces a base result: `valid-with-sample-identifiers.json`
