@@ -14,7 +14,7 @@ entire unrelated repository history for a guidance update.
 | FHR-Specification | FHR development; preserve compatibility files serving established raw URLs and historical tags. |
 | FHP-Specification | Protein-header development; inherited FHR/family files are compatibility/history, not evidence of FHP ownership of those types. |
 | FHT-Specification | Transcriptome-header development; reconcile the legacy draft with the reviewed family contract before claiming toolkit support. |
-| FHGFF3 | Annotation-header development; inherited biodatamodels/gff-schema feature models are distinct from the FAIR header contract. |
+| FHGFF3 | Annotation-header development; inherited biodatamodels/gff-schema feature models are distinct from the FAIR header contract, and the pinned `header/` tree mirrors the shared publication copy under a parity check. |
 
 David and Adam jointly hold schema and release authority. Read the shared
 GOVERNANCE.md; its optional steering group is not active. Read the local README,
@@ -86,11 +86,17 @@ JSON-LD round trips separately from one-way schema.org/DCMI/MIxS projections;
 report conditions, unsupported fields and losses rather than invent equivalence.
 Generate contexts/vocabulary via `scripts/make_jsonld.py`, where present.
 
-Only use paths and commands present in the checkout. FHT currently has a legacy
-`fht.json` and examples; FHGFF3 has inherited feature-model sources and generated
-formats. Do not pretend these trees already contain the shared publication
-build/test machinery. Review their README/Makefile and coordinate adoption with
-the shared repository rather than copying incompatible generated artifacts.
+Only use paths and commands present in the checkout, and fetch before relying on
+it: a checkout can lag origin. FHT currently has a legacy `fht.json` and
+examples, without repository CI or the shared build/test machinery; FHGFF3 has
+inherited feature-model sources plus a separate `header/` development tree
+copied byte-for-byte from a pinned shared-publication revision
+(`header/provenance.json`), checked by `scripts/check_header_parity.py` under
+`.github/workflows/header-parity.yml`. Do not pretend these trees contain the
+full shared publication machinery, and do not treat FHGFF3 header parity as
+independent schema generation. Review their README/Makefile and coordinate
+adoption with the shared repository rather than copying incompatible generated
+artifacts.
 
 Honor cited supported schema releases and shared schema-selection rules; never
 silently substitute current main for an unknown release. Raw-main is a current
@@ -171,10 +177,14 @@ joint maintainer adoption remain requirements before closing #56.
 
 ## Specification repository workflows
 
-These sections apply according to the Git remote; keep this entire file identical
-in all five specification repositories. Port only the intended guidance changes,
-record the shared source commit and compare the final files byte-for-byte. Shared
-policy can describe every type without importing unrelated code or histories.
+These sections apply according to the Git remote. Keep the shared sections of
+this file identical in all five specification repositories; a repository may
+carry sections that describe only its own tree (currently the shared
+repository's "Draft metadata profiles (#56)" section and FHR-Specification's
+development-tree paragraph). Port only intended shared-guidance changes, record
+the shared source commit, compare the shared sections byte-for-byte, and never
+delete another repository's local section to restore identity. Shared policy can
+describe every type without importing unrelated code or histories.
 
 ### Shared publication and conformance
 
@@ -268,5 +278,40 @@ vectors. Its rules keep `##gff-version 3` first, allow documented directive/head
 interleaving and end the header at the defined feature/FASTA boundary. File
 checksum coverage includes embedded FASTA. Preserve the adopted genome-link
 alternative (FHR checksum or accession plus supplied SeqCol digest), including
-cardinality and authority rules. Neither a header nor feature-model generation
-establishes valid features; use gff3-validator for feature/biology checks.
+cardinality and authority rules. In the FHGFF3 repository, the `header/` tree
+is a byte-for-byte copy of this model at a pinned shared revision
+(`header/provenance.json`), verified by `scripts/check_header_parity.py` on
+pushes and PRs; edit the shared source, never the copy. Typed FHGFF3
+HTML-microdata fixtures and tests (`tests/test_fhgff3_microdata.py`) live
+beside it. Neither a header nor feature-model generation establishes valid
+features; use gff3-validator for feature/biology checks.
+
+## Issue, project and code-review behavior
+
+### Issues and the connected project
+
+- Add every issue you work on to the connected project (project #9, "FAIR
+  BioHeaders — 2026 refresh") and set `Status` to `In Progress` when work starts.
+- Keep `Status` current as the work moves (`Todo`, `In Progress`, `Blocked`,
+  `Blocked - In Progress`, `Done`), and set `Outcome` when it closes.
+- Link every PR to its issue (`Closes #N` or `Refs #N`). Do not do unreported work.
+- After each work run (implementation, tests, review pass), post a status comment
+  on the issue or PR: what changed, checks run and results, commit/PR links,
+  blockers, and the next action. Do not rely on chat history.
+
+### Code review on a PR
+
+When a PR receives code review (human or Copilot):
+
+1. Read the overall review and every inline comment before changing anything.
+2. Make each fix in a **new commit**. Do not amend or force-push over reviewed
+   commits; if a rebase is required, cite the new head in the replies.
+3. Reply to each inline finding with the fix and the relevant commit hash.
+4. Resolve that inline comment/thread.
+5. After all findings are handled, post an overall reply to the review
+   summarizing each finding's disposition and the commits.
+6. Treat optional suggestions as required unless they are genuinely out of
+   scope; state why and link a follow-up issue.
+
+Do not push to a repository's main branch or merge a PR without maintainer
+approval.
