@@ -33,6 +33,13 @@ LinkML model, examples, and partial MIxS/MIGS mappings. The
 [FAIR-bioHeaders toolkit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools)
 provides conversion, validation, and FASTA/GFA/GFF3 header tools.
 
+## Draft metadata crosswalks
+
+The [mapping-profile proposal](docs/mappings/README.md) starts issue #56 with
+a separate assembly export context, qualified Dublin Core fixture and a delivery
+matrix for DataCite, Crossref, ARK and bibliographic profiles. It is incomplete
+and not an adopted mapping/export suite; FHT remains blocked on its contract.
+
 ## Proposed shared amendments
 
 The [shared voucher descriptions proposal](docs/proposals/shared-voucher-descriptions.md)

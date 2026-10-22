@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Start the draft #56 mapping-profile foundation: separate proposed assembly
+  export context, root-field DCMI handling inventory, worked descriptive RDF
+  bundle, target/family status matrix and offline semantic tests. No core schema,
+  canonical serialization or release/version changes; target adapters and FHT
+  mapping remain unfinished.
+
 - Document the open schema-contract questions from #150 and add conformance coverage:
   required values must be non-empty (the matching schema constraints are deferred to the
   next major `schemaVersion`), `format` must be asserted by a conforming validator, NaN and

@@ -1,0 +1,40 @@
+{
+  "profileVersion": "0.1.0-draft.1",
+  "status": "illustrative-descriptive-fixture",
+  "source": "source.json",
+  "context": "context.json",
+  "output": "qualified-dc.ttl",
+  "preserved_source": "source.json",
+  "source_root_fields_not_projected": [
+    "/schemaVersion",
+    "/genome",
+    "/genomeSynonym",
+    "/version",
+    "/voucherSpecimen",
+    "/accessionID",
+    "/instrument",
+    "/documentation",
+    "/identifier",
+    "/funding",
+    "/masking",
+    "/vitalStats",
+    "/checksum",
+    "/assemblySoftware",
+    "/seqcol_id"
+  ],
+  "limitations": [
+    "The RDF graph alone does not preserve author/link order, nameType, nested source structures or all domain values; retain source.json and context.json.",
+    "The graph does not create a resource version relationship from a literal version.",
+    "Rights text remains a RightsStatement label, not a standardized license assertion.",
+    "No schema validation of a DOI-agency deposit or actual identifier registration was performed.",
+    "The source checksum is a placeholder copied from the existing synthetic example; no sequence bytes are provided or verified."
+  ],
+  "registration_readiness": {
+    "datacite": "not-assessed: adapter and deposit context/schema validation remain to implement",
+    "crossref": "not-assessed: adapter and deposit context/schema validation remain to implement"
+  },
+  "not_supplied_context": [
+    "resourceDOI"
+  ],
+  "conflict_policy": "Reject conflicting scoped identifiers or publication date/year; never silently prefer source or context."
+}

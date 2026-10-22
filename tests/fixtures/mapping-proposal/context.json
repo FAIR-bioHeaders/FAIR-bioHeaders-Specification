@@ -1,0 +1,13 @@
+{
+  "profileVersion": "0.1.0-draft.1",
+  "resourceKind": "assembly",
+  "resourceIRI": "https://example.org/assemblies/synthetic-v1",
+  "metadataRecordIRI": "https://example.org/metadata/synthetic-v1",
+  "title": "Synthetic human reference assembly, version 0.0.1",
+  "publisher": {
+    "name": "Example Repository",
+    "uri": "https://example.org/repository"
+  },
+  "publicationDate": "2026-02-02",
+  "publicationYear": 2026
+}

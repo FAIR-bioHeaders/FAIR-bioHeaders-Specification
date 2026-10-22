@@ -1,0 +1,275 @@
+# Draft handling inventory, not an adopted equivalence table or executable exporter. MPL-2.0.
+profile_version: 0.1.0-draft.1
+status: proposal
+source_schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
+source_schema_version: '2.0'
+resource_scope: assembly
+coverage: root fields only; nested details stay in the preserved source and existing canonical mapping
+  table
+existing_mapping_table: mappings/fhr-jsonld-dcmi.yml
+target:
+  namespace: http://purl.org/dc/terms/
+  version: '2020-01-20'
+  reference: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/2020-01-20/
+entries:
+- path: /schema
+  source_cardinality: '1'
+  subject: metadata-record
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/conformsTo
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Use the cited fixed schema IRI only on the separately identified metadata record.
+  loss_or_limitation: Record identity must be supplied separately; never assert that the assembly
+    is a JSON metadata record.
+- path: /schemaVersion
+  source_cardinality: '1'
+  subject: metadata-record
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: DCMI has no direct metadata-contract version property; keep the cited contract
+    version separately from resource version.
+- path: /genome
+  source_cardinality: '1'
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: An organism/reference label is not necessarily a citation title; title comes
+    from explicit context.
+- path: /genomeSynonym
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Do not promote common genome names to alternative assembly citation titles without
+    a reviewed assertion.
+- path: /taxon
+  source_cardinality: '1'
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/subject
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Use the supplied taxonomy IRI as a subject when present, without resolving it.
+  loss_or_limitation: Taxon name and object structure remain in the source; no invented subject scheme
+    or geographic data.
+- path: /version
+  source_cardinality: '1'
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: No literal dcterms:version exists; hasVersion/isVersionOf require resource relationships,
+    not a version string.
+- path: /metadataAuthor
+  source_cardinality: '1'
+  subject: metadata-record
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/creator
+  target_cardinality: 0..n
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Create dcterms:Agent nodes with supplied labels/identifiers; do not infer person
+    kinds or split names.
+  loss_or_limitation: RDF creator links are unordered; preserve source array order and nameType in
+    the source sidecar.
+- path: /assemblyAuthor
+  source_cardinality: '1'
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/creator
+  target_cardinality: 0..n
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Create dcterms:Agent nodes for assembly creators, retaining supplied labels/identifiers.
+  loss_or_limitation: Do not use metadataAuthor as assembly creator; preserve order/nameType separately.
+- path: /dateCreated
+  source_cardinality: '1'
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/created
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Copy the assembly creation date as an xsd:date literal.
+  loss_or_limitation: This is not the publication, deposit, metadata-record creation, or specimen
+    collection date.
+- path: /voucherSpecimen
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Keep the current free text; no structured specimen or source-material assertion
+    is introduced.
+- path: /accessionID
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: The name may identify a repository, and its URL may be a repository landing
+    page; do not manufacture an accession.
+- path: /instrument
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: No direct instrument slot is asserted in this descriptive DCMI profile.
+- path: /scholarlyArticle
+  source_cardinality: 0..1
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/relation
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Use a supplied syntactically valid article DOI as a related-resource IRI.
+  loss_or_limitation: An untyped relation does not assert isDescribedBy; the article DOI never becomes
+    the assembly identifier.
+- path: /documentation
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: This field is free text and is not necessarily a resolvable documentation URI.
+- path: /identifier
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Identifier scheme, resource/version scope and identity equivalence need separate
+    review before projection.
+- path: /relatedLink
+  source_cardinality: 0..1
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/relation
+  target_cardinality: 0..n
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Preserve supplied URI links as generic related resources without fetching them.
+  loss_or_limitation: Original order is retained in the source; no derivation or citation direction
+    is inferred.
+- path: /funding
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Free text does not supply funder identities, award numbers or grant relationships.
+- path: /reuseConditions
+  source_cardinality: 0..1
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/rights
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Represent supplied rights text as the label of a dcterms:RightsStatement node.
+  loss_or_limitation: Do not infer a standard license URI or reuse the software/site license.
+- path: /masking
+  source_cardinality: '1'
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Keep the reported masking category; it is not a license, identifier or controlled
+    DCMI subject.
+- path: /vitalStats
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Keep typed metrics/units and source context; no general-purpose bibliographic
+    identifier mapping.
+- path: /checksum
+  source_cardinality: '1'
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: File checksum is not a DOI/ARK; no file verification is performed.
+- path: /assemblySoftware
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: Keep the ordered structured software provenance, including versions and command-line
+    arrays.
+- path: /assemblyProtocol
+  source_cardinality: 0..1
+  subject: resource
+  kind: conditional
+  terms:
+  - http://purl.org/dc/terms/relation
+  target_cardinality: 0..1
+  condition: The assembly profile applies and the source value is supplied with the documented scope.
+  transformation: Carry the supplied protocol URI as a generic related resource.
+  loss_or_limitation: A protocol reference is not automatically a HowTo, source dataset, or derivation
+    relation.
+- path: /seqcol_id
+  source_cardinality: 0..1
+  subject: resource
+  kind: unsupported
+  terms: []
+  target_cardinality: 0..1
+  condition: No direct projection is proposed in this initial descriptive fixture.
+  transformation: Preserve unchanged in source.json; do not emit an unrelated DCMI property.
+  loss_or_limitation: A supplied sequence-collection digest is not a file checksum or registered resource
+    DOI/ARK.
+context_entries:
+- path: /title
+  subject: resource
+  term: http://purl.org/dc/terms/title
+  condition: Explicit resource citation title; no fallback from genome.
+- path: /publisher
+  subject: resource
+  term: http://purl.org/dc/terms/publisher
+  condition: Only when supplied; emit an Agent, not an invented repository.
+- path: /publicationDate
+  subject: resource
+  term: http://purl.org/dc/terms/issued
+  condition: Only when explicitly supplied; never substitute dateCreated.
+- path: /resourceIRI
+  subject: resource
+  term: http://purl.org/dc/terms/identifier
+  condition: Explicit identifier of this resource, not of its metadata record or related paper.
