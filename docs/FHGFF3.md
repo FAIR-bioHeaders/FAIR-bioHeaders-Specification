@@ -135,7 +135,7 @@ A match establishes identity, not that the annotation is correct.
 FHGFF3 files follow the shared header, checksum and number rules R1 to R9, R12 and R13 of
 [FORMAT.md](FORMAT.md) unchanged, and R10 with the GFF3 block end below. In addition:
 
-- [G1] Line 1 matches `^##gff-version 3(\.\d+\.\d+)?[ \t]*$`: `##gff-version 3`, or
+- [G1] Line 1 matches `^##gff-version 3(\.[0-9]+\.[0-9]+)?[ \t]*$`: `##gff-version 3`, or
   `##gff-version 3.MINOR.PATCH` where each component after `3` is one or more ASCII digits,
   optionally followed by spaces or tabs. The pattern applies to the line content before its
   terminator, so LF, CRLF and lone-CR endings all match. `##gff-version 30` and

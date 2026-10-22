@@ -53,14 +53,15 @@ keywords. They are normative for a conforming record and validator.
 - `metadataAuthor` and, where the type has it, `assemblyAuthor` are non-empty lists, and every
   author has a non-empty `name`.
 
-Starting from `examples/minimal.fhr.json` and emptying all of those fields at once still
-validates with jsonschema 4.x and `bioheaders validate` 0.8.0. Such a record is schema-valid
-under 2.0 but not conforming: validators should warn and must not report it as invalid until the
-next major `schemaVersion` can reject it. `minLength: 1` on the required strings,
-`minItems: 1` on the author lists, `required: [name]` on an author and at least one of
-`name`/`uri` on `taxon` are planned for the next major `schemaVersion` (FHR 3.0, and the next
-major of FHP and FHGFF3). They are a major change because they invalidate records that are
-valid under 2.0, so they do not belong in a minor release.
+Starting from `examples/minimal.fhr.json` and emptying the applicable fields for each type at
+once still validates with jsonschema 4.x and `bioheaders validate` 0.8.0 and later. Such a record
+is schema-valid under 2.0 but not conforming: validators should warn and must not report it as
+invalid until the next major `schemaVersion` can reject it. `minLength: 1` on the required
+strings, `minItems: 1` on the author lists, `required: [name]` plus `minLength: 1` on an author's
+`name`, and `minLength: 1` on both `taxon.name` and `taxon.uri` with at least one of them present,
+are planned for the next major `schemaVersion` (FHR 3.0, and the next major of FHP and FHGFF3).
+They are a major change because they invalidate records that are valid under 2.0, so they do not
+belong in a minor release.
 
 ### `format` is asserted
 
@@ -108,10 +109,12 @@ it, the check fails: an incomplete release is not an exception.
 
 The exception is a deliberate, reviewed schema change that must be prepared before its release
 tag exists. Record it in the pull request and the release tracker, set `current` and its
-`releases` entry to the release being prepared (so the check skips until the tag exists), and
-create the tag from the release branch. Do not edit a released file, delete the check or weaken
-it. Tags and released files are immutable, and publishing a tag is a maintainer action; once the
-release reaches main, the working tree and the tag agree again.
+`releases` entry to the release being prepared, and update every example and `llms.txt` to the
+prepared release's URL and version: the example and `llms.txt` tests follow `current`, so they
+do not skip. The schema-byte check skips until the tag exists. Create the tag from the release
+branch. Do not edit a released file, delete the check or weaken it. Tags and released files are
+immutable, and publishing a tag is a maintainer action; once the release reaches main, the
+working tree and the tag agree again.
 
 ## Choosing the schema
 
@@ -167,7 +170,7 @@ it, because any change to the header changes the checksum. Choose one:
 - **Pin v0.3.1**: set `schema` to `https://w3id.org/fair-bioheaders/fhr/v0.3.1`, keep
   `schemaVersion: 1`, and recompute the checksum.
 
-With the toolkit and standard shell tools (checked with `bioheaders` 0.8.0):
+With the toolkit and standard shell tools (checked with `bioheaders` 0.8.0 and later):
 
 ```bash
 grep '^;~' legacy.fa | cut -c3- > metadata.yaml   # recover the YAML header (use '^#~' for GFA)

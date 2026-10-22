@@ -198,6 +198,19 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhgff3-version-3-1-26"]["expected"], "valid")
         self.assertEqual(vectors["fhgff3-version-3-trailing-whitespace"]["expected"], "valid")
 
+    def test_g1_version_grammar_rejects_near_misses(self):
+        """docs/FHGFF3.md G1: only 3 or 3.x.y is a valid ##gff-version line."""
+        text = (ROOT / "docs" / "FHGFF3.md").read_text(encoding="utf-8")
+        documented = re.search(r"`\^##gff-version[^`]+`", text)
+        self.assertIsNotNone(documented, "G1 does not state the version grammar")
+        grammar = re.compile(documented.group(0).strip("`"))
+        for line in ("##gff-version 3", "##gff-version 3.1.26", "##gff-version 3 \t"):
+            with self.subTest(valid=line):
+                self.assertRegex(line, grammar)
+        for line in ("##gff-version 30", "##gff-version 3x", "##gff-version 3.1"):
+            with self.subTest(invalid=line):
+                self.assertNotRegex(line, grammar)
+
     def test_compressed_vectors_share_the_plain_checksum(self):
         vectors = {vector["id"]: vector for vector in self.manifest["vectors"]}
         compressed = [vector for vector in vectors.values()

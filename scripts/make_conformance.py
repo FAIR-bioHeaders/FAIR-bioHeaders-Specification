@@ -658,7 +658,8 @@ def build():
             )])
             data, _ = assemble(lines + body(k))
             invalid(f"{k}-infinity-vital-stats", k, data, "R13",
-                    "vitalStats.gcContent is the YAML .inf, which is not a finite JSON number.")
+                    "vitalStats.gcContent is the YAML .inf: not a finite JSON number, and also "
+                    "above gcContent's maximum of 100.")
 
     for k in ("fasta", "gfa"):
         data, value = plain[k]

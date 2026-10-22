@@ -3093,7 +3093,7 @@
       "compressed": false,
       "expected": "invalid",
       "rule": "R13",
-      "reason": "vitalStats.gcContent is the YAML .inf, which is not a finite JSON number."
+      "reason": "vitalStats.gcContent is the YAML .inf: not a finite JSON number, and also above gcContent's maximum of 100."
     },
     {
       "id": "gfa-tab-on-checksum-line",

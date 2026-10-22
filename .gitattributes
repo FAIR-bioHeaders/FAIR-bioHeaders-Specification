@@ -1,6 +1,8 @@
 # Conformance vectors and their manifest are byte-exact: never convert line endings.
 conformance/** -text
 conformance/**/*.gz binary
+# This vector intentionally ends line 1 with a space and a tab (G1 optional whitespace).
+conformance/valid/fhgff3-version-3-trailing-whitespace.fhgff3.gff3 -whitespace
 # FHGFF3 examples carry checksums over their exact bytes.
 examples/fhgff3/** -text
 # Assessment fixtures are byte-exact too (specs/010-fair-header-assessment).
