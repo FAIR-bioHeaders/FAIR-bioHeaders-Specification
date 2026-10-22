@@ -342,8 +342,8 @@ Failures fixed by upstream changes: Liftoff (pyfaidx v0.9.1, mdshw5/pyfaidx#244,
 would be fixed by gpertea/gclib#15, which is open. The raw-`@`/`>` failures of Mash and seqfu do
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
-are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder and meryl/Merqury
-have been contacted; see [Upstream support](#upstream-support)).
+are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury and
+screed/sourmash have been contacted; see [Upstream support](#upstream-support)).
 
 ## Comment markers: `;`, `#` or none
 
@@ -460,6 +460,7 @@ current meaning, so no file that a tool reads today is read differently.
 | TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | **Accepted 2026-10-20**: the maintainer will fix it in the next TransDecoder release |
 | marbl/meryl (marbl/meryl-utility) | `meryl count` (segfault on any input it can't open, e.g. a leading `;` block) | Issue marbl/meryl#58 (2026-10-21; tested null check and `;`-skipping in `bufSeqFile`, PRs offered) | Open |
 | marbl/merqury | `merqury.sh` exits 0 with no QV or completeness when `meryl count` fails | Issue marbl/merqury#182 (2026-10-21; tested exit-status checks, PR offered) | Open |
+| dib-lab/screed (used by sourmash) | `screed.open()` / `sourmash sketch dna`: "unknown file format" for a leading `;` block | Issue dib-lab/screed#123 (2026-10-22; tested patch, identical sketches; PR offered) | Open |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
