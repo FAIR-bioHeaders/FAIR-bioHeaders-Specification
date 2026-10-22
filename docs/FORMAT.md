@@ -6,6 +6,9 @@ below apply to both releases and are implemented from converter 0.3.1.
 The assembly's own version string is independent. No required fields were added.
 Top-level metadata is closed; optional fields may be omitted, not replaced by null.
 
+The consolidated status of the known schema-contract gaps, including R13, is in
+[SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md).
+
 The v0.4 schema is FHR schemaVersion `"2.0"`, a string: nested objects
 reject unknown keys, patterns are anchored, the checksum must be padded base64 of
 32 bytes, statistics are nonnegative, and optional scaffold statistics and author
