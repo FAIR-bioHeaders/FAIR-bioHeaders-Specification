@@ -7,6 +7,10 @@ gff3-validator header checks and the website follow it. The design is in
 [specs/012-schema-versioning](../specs/012-schema-versioning/spec.md) (maintainer decision on
 [#44](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/44), 2026-10-14).
 
+Known gaps between this normative text and what the current schemas can express, with
+their status, target release and decisions, are tracked in
+[SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md).
+
 ## Three different versions
 
 | Value | Example | What it versions |

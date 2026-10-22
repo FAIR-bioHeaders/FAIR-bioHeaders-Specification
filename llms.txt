@@ -14,6 +14,7 @@ Key facts (FAIR-bioHeaders-Specification v0.4.1, fair-bioheaders 0.8.1):
 
 - [Format rules R1 to R13](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping
 - [Schema versions and selection](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md): versioning policy and how a `schema` URL selects a schema
+- [Schema-contract gap audit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-GAP-AUDIT.md): status of the #150 findings and what waits for the next major `schemaVersion`
 - [FHP, protein FASTA](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHP.md): fields, `sourceType`, sources
 - [FHGFF3, GFF3 annotation](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHGFF3.md): header placement after `##gff-version 3`, genome link by checksum or accession plus SeqCol
 - [JSON-LD form](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/JSONLD.md) and [schema.org export](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMAORG-EXPORT.md)
