@@ -1,7 +1,8 @@
 cff-version: 1.2.0
-title: FHR Specification
+title: FAIR-bioHeaders Specification
 message: For a general description of FHR, cite the preferred paper; cite this resource
-  DOI for direct use. Historical USDA public-domain material remains public domain;
+  DOI for direct use. The Zenodo concept record for this resource is published as
+  'FHR Specification'. Historical USDA public-domain material remains public domain;
   applicable subsequent project contributions from March 2025 onward use MPL-2.0.
   Third-party terms and provenance details are documented in LICENSE.
 type: dataset
@@ -28,6 +29,9 @@ identifiers:
 - type: doi
   value: 10.5281/zenodo.23376528
   description: Zenodo version DOI for v0.4.0
+- type: doi
+  value: 10.5281/zenodo.23548492
+  description: Zenodo version DOI for v0.4.1
 repository-code: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 repository-artifact: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
 abstract: The lack of interoperable data standards among reference genome data-sharing
@@ -91,5 +95,5 @@ preferred-citation:
   start: bbae122
   year: 2024
 
-version: 0.4.0
-date-released: 2026-10-14
+version: 0.4.1
+date-released: 2026-10-21

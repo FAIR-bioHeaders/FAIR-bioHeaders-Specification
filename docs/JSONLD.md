@@ -48,11 +48,24 @@ it the type follows the identifier: an ORCID identifies a person and a ROR ID an
 A name alone implies neither, so it is typed `fhr:Agent`. `fhr.json` currently allows only
 ORCID URIs for authors.
 
-Nested objects that FHR leaves open (`taxon`, author items, `accessionID`, `vitalStats`) may
-carry keys that the context does not define, such as `taxon.checksum`. They stay in the
-document, so the FHR round trip is exact, but JSON-LD processors ignore them. The toolkit
-prints one warning per key, for example
+An ORCID identifies a person, but the schemas do not couple `nameType` to `uri`:
+`nameType: Organizational` with an ORCID iD validates. This is a known accepted combination,
+not an endorsement. Rejecting it would invalidate records that are valid under FHR 2.0, so it
+needs the next major `schemaVersion`.
+For writing, `nameType` decides first (J7), so such a node is `Organization`; the ORCID stays as
+`uri`, and a reader sets the `@type` aside, so a round trip preserves both values. The
+[FAIR-bioHeaders-Tools#74](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/issues/74)
+change ships in fair-bioheaders 0.8.1 and makes the toolkit's typing follow the same
+nameType-first rule. Validators must not reject the combination under FHR 2.0.
+
+In v0.3 documents (`schemaVersion` 1), nested objects that FHR left open (`taxon`, author
+items, `accessionID`, `vitalStats`) may carry keys that the context does not define, such as
+`taxon.checksum`. They stay in the document, so the FHR round trip is exact, but JSON-LD
+processors ignore them. The toolkit prints one warning per key, for example
 `FHR: JSON-LD: taxon.checksum has no JSON-LD term; linked-data consumers will ignore it`.
+In v0.4 (`schemaVersion` `"2.0"`) those four objects are closed
+(`additionalProperties: false`), so an undefined key fails schema validation before it reaches
+the JSON-LD writer. This warning therefore applies only to v0.3 documents.
 
 ### Export context and Bioschemas
 
@@ -95,6 +108,25 @@ Without an export context, or with an incomplete one, there is no `conformsTo`, 
 says which properties are missing. The Taxon, ComputationalTool and Person profiles also need
 properties that FHR lacks (`taxonRank`, a tool `description`, a person `description` and
 `mainEntityOfPage`, and their own `dct:conformsTo`), so they are followed but not claimed.
+
+### Export terms in the canonical form and in other forms
+
+The export terms `@id`, `keywords`, `url` and `conformsTo` are not FHR fields. Their treatment
+depends on which reading rule applies, and the difference is intended:
+
+- In the canonical form (J1), the writer may attach them from the export context, and a reader
+  sets them aside with a warning. The canonical form is writer output; setting the terms aside
+  keeps that output readable as FHR metadata without pretending the terms are FHR values.
+- In any other form (J3/J4), they are unknown terms and make the document invalid, and so does a
+  root `@id`. Those forms are read by JSON-LD expansion, where there is no writer contract that
+  says the terms are export annotations. Dropping them would silently discard data, and a
+  document that is really a schema.org export would look like FHR metadata. The reader reports
+  them instead.
+
+A canonical document may therefore carry the export terms with a warning, while an expanded or
+differently compacted document that carries the same terms is invalid. A tool that reads an
+export-shaped document must remove or map the terms explicitly; it must not rely on J1's
+set-aside.
 
 ## Embedding in a web page
 
@@ -176,8 +208,10 @@ compacted with another context, or a single record in a `@graph`.
   every `@type` value is a string or an array of strings. A reader sets the root `@context` and
   every `@type` aside. A root `subjectOf` string is the FHR `documentation` value; a document
   with both `documentation` and `subjectOf` is invalid. The export terms `@id`, `keywords`, `url`
-  and `conformsTo` at the root are not FHR fields: they are set aside, with a warning. What
-  remains is FHR JSON, including nested keys without a term.
+  and `conformsTo` at the root are not FHR fields: they are set aside, with a warning (the
+  writer-only allowance explained under
+  [Export terms in the canonical form and in other forms](#export-terms-in-the-canonical-form-and-in-other-forms)).
+  What remains is FHR JSON, including nested keys without a term.
 - [J2] Duplicate object keys are invalid, as in JSON.
 - [J3] **Other forms.** A document that is not canonical is interpreted by JSON-LD 1.1
   expansion, using bundled contexts only: a context given by URL must be a known FHR context URL,
@@ -188,9 +222,11 @@ compacted with another context, or a single record in a `@graph`.
   nested nodes, must map to an FHR field in its scope through the reverse of the FHR context: the
   record (24 fields; `subjectOf` is read as `documentation`), the taxon, an author, the
   accession, `vitalStats` or an `assemblySoftware` item. A term that expansion drops (it has no
-  IRI), an IRI with no FHR field in its scope, and a root `@id` are unknown terms. They are
-  reported, and the document is invalid; a reader may offer to report them as warnings instead,
-  but never drops them silently.
+  IRI), an IRI with no FHR field in its scope, a root `@id` and the export terms are unknown
+  terms. They are reported, and the document is invalid; a reader may offer to report them as
+  warnings instead, but never drops them silently. This differs from the canonical J1 set-aside
+  on purpose: see
+  [Export terms in the canonical form and in other forms](#export-terms-in-the-canonical-form-and-in-other-forms).
 - [J5] **Values.**
   - An IRI-valued field (`schema`, `relatedLink`, `assemblyProtocol`, a taxon or author `uri`,
     an accession `url`, a software `uri`) accepts `{"@id": ...}` or a string value.

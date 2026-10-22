@@ -26,14 +26,14 @@ open and re-save them in an editor. Run the generator instead.
 
 ## Manifest
 
-`rules` maps each stable rule id to a short summary: R1 to R11 from
+`rules` maps each stable rule id to a short summary: R1 to R13 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
 docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V5
 (schema selection) from docs/SCHEMA-VERSIONS.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
-attributes and token lists) and M1 to M4 are tested by the microdata vectors. R11 is a recommendation for FASTA header writers: its valid vectors show escaped `>` and `@` (read back as the real characters) and a raw value that stays valid, and it has no invalid vector.
+attributes and token lists) and M1 to M4 are tested by the microdata vectors. R11 is a recommendation for FASTA header writers: its valid vectors show escaped `>` and `@` (read back as the real characters) and a raw value that stays valid, and it has no invalid vector. R12 requires YAML 1.1 and YAML 1.2 readers to agree on metadata types. R13 rules out NaN and infinities in numeric metadata; `fasta-nan-vital-stats` and `fasta-infinity-vital-stats` are its invalid vectors, and the valid vectors with numeric `vitalStats` (for example `microdata-canonical`) cite it.
 
 Every entry in `vectors` has these fields:
 
@@ -80,7 +80,7 @@ JSON-LD vector, it must extract exactly `metadata`. For an `invalid` vector, it
 must reject the file. Reporting the rule id is optional. Treat any difference as
 a bug in the implementation or the vectors, and report it as an issue.
 
-To run the FHR File Converter (or another CLI with the same commands and exit
+To run the FAIR-bioHeaders toolkit (or another CLI with the same commands and exit
 codes) over the vectors. FASTA and GFA vectors go to `fhr-fasta-validate` and
 `fhr-gfa-validate`. Microdata and JSON-LD vectors go to `fhr-convert in.html out.json`
 or `fhr-convert in.jsonld out.json`, and the JSON it writes must equal `metadata`.
@@ -89,7 +89,7 @@ or `fhr-convert in.jsonld out.json`, and the JSON it writes must equal `metadata
 ```bash
 python scripts/check_conformance.py --converter           # commands on PATH
 python scripts/check_conformance.py --converter .venv     # a virtual environment
-python scripts/check_conformance.py --converter ../FHR-File-Converter  # a checkout
+python scripts/check_conformance.py --converter ../FAIR-bioHeaders-Tools  # a checkout
 ```
 
 ## Regenerating and checking

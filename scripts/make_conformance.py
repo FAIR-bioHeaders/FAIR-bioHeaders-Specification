@@ -35,15 +35,19 @@ MANIFEST_VERSION = 1
 # Stable, non-normative labels for the docs/FORMAT.md rules.
 RULES = {
     "R1": "Checksum rule 1: hash the exact file bytes without normalization; "
-          "for gzip/BGZF input, the decompressed bytes.",
+          "for gzip/BGZF input, the decompressed bytes. A line ends at LF, CRLF or "
+          "a CR not followed by LF.",
     "R2": "Checksum rule 2: exactly one root-level checksum line with an unquoted "
           "key; spaces only to match root indentation and before the colon; nested "
           "checksum properties stay covered.",
     "R3": "Checksum rule 3: exclude that entire line and its terminator; hash every "
           "other byte, so changing covered bytes invalidates the checksum.",
-    "R4": "Checksum rule 4: SHA-512/256 digest in standard padded base64, no prefix.",
-    "R5": "Header parsing: the checksum value is a single-line YAML scalar on the "
-          "checksum line; block scalars and continuation lines are invalid.",
+    "R4": "Checksum rule 4: SHA-512/256 digest in standard padded base64, no prefix; "
+          "the encoding is canonical (the unused bits are zero) and checksums compare "
+          "as exact strings.",
+    "R5": "Header parsing: the checksum line holds only the 44-character value, plain "
+          "or quoted, with optional spaces or tabs; comments, tags, other text, block "
+          "scalars and continuation lines are invalid.",
     "R6": "Header parsing: FHR header lines are UTF-8 without U+0085, U+2028 or "
           "U+2029; bytes outside header lines are not decoded.",
     "R7": "Header parsing: a FASTA/GFA file must not begin with a UTF-8 byte "
@@ -57,6 +61,11 @@ RULES = {
     "R11": "Header writing (FASTA): header lines should not contain a raw '>' or '@'; "
            "writers escape them as \\x3E and \\x40 in double-quoted YAML scalars, "
            "which read back as the same characters.",
+    "R12": "Header parsing: YAML metadata is read with YAML 1.2 core-schema types and "
+           "must read the same under YAML 1.1; explicit tags and plain scalars that the "
+           "two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid.",
+    "R13": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and "
+           "-.inf, and NaN or Infinity written as a JSON extension, make the record invalid.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -83,9 +92,11 @@ RULES = {
     "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
     "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
           "other header is validated as FHR.",
-    "G1": "FHGFF3: line 1 is ##gff-version 3; the leading header block runs from line 2 to "
-          "the first nonblank line that is not a # line, or to ##FASTA; #~ lines may be "
-          "mixed with other # lines inside it, and a #~ line on line 1 or after it is invalid.",
+    "G1": "FHGFF3: line 1 matches ##gff-version 3 or ##gff-version 3.x.y (three numeric "
+          "components), optionally followed by spaces or tabs; the leading header block runs "
+          "from line 2 to the first nonblank line that is not a # line, or to ##FASTA; #~ lines "
+          "may be mixed with other # lines inside it, and a #~ line on line 1 or after it is "
+          "invalid.",
     "G2": "FHGFF3: the metadata must validate against fhgff3.json, including the genome link "
           "(an annotates link to an FHR genome, a genomeReference, or both).",
     "G3": "FHGFF3: a record is read as FHGFF3 only when its schema is an FHGFF3 schema URL; "
@@ -274,6 +285,11 @@ def decompress(data):
 
 # Reference reading of the rules, used to self-check valid vectors.
 
+# R5: after the colon, the value (canonical base64, R4) plain or quoted, and spaces.
+_B64 = rb"[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]="
+CHECKSUM_VALUE = re.compile(
+    rb" +(?:(" + _B64 + rb")|'(" + _B64 + rb")'|\"(" + _B64 + rb")\") *")
+
 def reference_checksum(data, kind):
     """Return (stated value, computed value) or raise ValueError."""
     prefix = PREFIX[kind]
@@ -297,7 +313,7 @@ def reference_checksum(data, kind):
         len(text) - len(text.lstrip(b" \t")) for text in contents
         if text.strip() and not text.lstrip().startswith(b"#")
     ]
-    pattern = re.compile(rb"^" + re.escape(prefix) + rb"([ \t]*)checksum[ \t]*:(.*)$", re.S)
+    pattern = re.compile(rb"^" + re.escape(prefix) + rb"([ \t]*)checksum( *):(.*)$", re.S)
     matches = [
         line for line in header_lines
         if (found := pattern.match(line.rstrip(b"\r\n"))) and len(found.group(1)) == min(indents)
@@ -308,8 +324,12 @@ def reference_checksum(data, kind):
     position = data.index(excluded) if lines.count(excluded) == 1 else None
     if position is None:
         raise ValueError("ambiguous checksum line")
-    value = pattern.match(excluded.rstrip(b"\r\n")).group(2).strip().strip(b"'\"").decode()
-    return value, digest(data[:position] + data[position + len(excluded):])
+    value = pattern.match(excluded.rstrip(b"\r\n")).group(3)
+    found = CHECKSUM_VALUE.fullmatch(value)
+    if not found:
+        raise ValueError("the checksum line holds more than the checksum value (R4, R5)")
+    stated = (found.group(1) or found.group(2) or found.group(3)).decode()
+    return stated, digest(data[:position] + data[position + len(excluded):])
 
 
 # The vectors.
@@ -434,6 +454,21 @@ def build():
         data, value = assemble(lines + body(k))
         valid(f"{k}-yaml-indicators-in-strings", k, data, value, ["R8"],
               "Anchor, alias and merge-key characters inside a quoted string are text.")
+        lines = with_metadata(k, replacements=[
+            ("dateCreated: '2026-10-08'", "dateCreated: 2026-10-08"),
+            (f"version: {VERSION}", "version: '010'"),
+        ], insert=[("documentation: Synthetic FHR conformance vector; not a real assembly.",
+                    ["vitalStats:", "  L50: 10", "  gcContent: 41.5"])])
+        data, value = assemble(lines + body(k))
+        valid(f"{k}-yaml-portable-types", k, data, value, ["R12"],
+              "Values every YAML version reads alike: a plain date (a string, as written), "
+              "a quoted '010' (the string 010), and plain 10 and 41.5.")
+        VALID[-1]["expected_metadata"] = dict(EXPECTED_METADATA, version="010")
+        lines = header(k)
+        lines[-1].text = lines[-1].text.replace(b"checksum: ", b"checksum:\t")
+        data, _ = assemble(lines + body(k))
+        invalid(f"{k}-tab-on-checksum-line", k, data, "R5",
+                "A tab, not a space, separates the colon from the checksum value.")
         if k == "fasta":
             # R11: '>' and '@' escaped in a double-quoted scalar read back unchanged.
             lines = with_metadata(k, replacements=[(
@@ -528,6 +563,49 @@ def build():
         data = data.replace(value.encode(), f'"{head}\n'.encode() + PREFIX[k] + f'  {rest}"'.encode())
         invalid(f"{k}-quoted-continued-checksum", k, data, "R5",
                 "A double-quoted checksum value continues on a second FHR line.")
+        data, value = standard(k)
+        data = data.replace(value.encode(), value.encode() + b" # reviewed")
+        invalid(f"{k}-comment-on-checksum-line", k, data, "R5",
+                "A YAML comment follows the checksum value on the checksum line.")
+        if k == "fasta":
+            data, value = standard(k)
+            data = data.replace(value.encode(), value.encode() + b" # see >notes")
+            invalid("fasta-record-marker-on-checksum-line", k, data, "R5",
+                    "A comment holding a raw '>' follows the checksum value; the "
+                    "checksum line is excluded from the checksum and holds only the value.")
+        data, value = standard(k)
+        data = data.replace(b"checksum: " + value.encode(), b"checksum: !!str " + value.encode())
+        invalid(f"{k}-tagged-checksum", k, data, "R5",
+                "The checksum value carries an explicit !!str tag.")
+        data, value = standard(k)
+        last = value[-2]
+        group = "AEIMQUYcgkosw048"
+        sibling = chr(ord(last) + 1)
+        assert last in group and sibling not in group
+        data = data.replace(value.encode(), (value[:-2] + sibling + "=").encode())
+        invalid(f"{k}-noncanonical-checksum", k, data, "R4",
+                "The checksum decodes to the right digest but sets an unused bit, so it "
+                "is not the canonical base64 string.")
+        # R12: YAML read the same by YAML 1.1 and YAML 1.2 readers.
+        documentation = "documentation: Synthetic FHR conformance vector; not a real assembly."
+        for name, item, reason in (
+            ("leading-zero", "  L50: 010",
+             "vitalStats.L50 is the plain scalar 010: YAML 1.1 reads octal 8, YAML 1.2 reads 10."),
+            ("underscore", "  L50: 1_000",
+             "vitalStats.L50 is the plain scalar 1_000: YAML 1.1 reads 1000, YAML 1.2 a string."),
+            ("sexagesimal", "  L50: 1:30",
+             "vitalStats.L50 is the plain scalar 1:30: YAML 1.1 reads 90, YAML 1.2 a string."),
+        ):
+            lines = with_metadata(k, insert=[(documentation, ["vitalStats:", item])])
+            data, _ = assemble(lines + body(k))
+            invalid(f"{k}-yaml-{name}", k, data, "R12", reason)
+        lines = with_metadata(k, replacements=[(documentation, "documentation: yes")])
+        data, _ = assemble(lines + body(k))
+        invalid(f"{k}-yaml-boolean-word", k, data, "R12",
+                "documentation is the plain scalar yes: YAML 1.1 reads true, YAML 1.2 a string.")
+        lines = with_metadata(k, replacements=[(f"genome: {GENOME}", f"genome: !!str {GENOME}")])
+        data, _ = assemble(lines + body(k))
+        invalid(f"{k}-yaml-tag", k, data, "R12", "The genome value carries an explicit !!str tag.")
         for code, label in (("\u0085", "u0085"), (" ", "u2028"), (" ", "u2029")):
             lines = with_metadata(k, replacements=[(
                 "documentation: Synthetic FHR conformance vector; not a real assembly.",
@@ -566,6 +644,22 @@ def build():
         data = plain[k][0] + second
         invalid(f"{k}-concatenated", k, data, "R10",
                 "Two complete FHR files concatenated; each part has a correct checksum.")
+        if k == "fasta":
+            lines = with_metadata(k, insert=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                ["vitalStats:", "  gcContent: .nan"],
+            )])
+            data, _ = assemble(lines + body(k))
+            invalid(f"{k}-nan-vital-stats", k, data, "R13",
+                    "vitalStats.gcContent is the YAML .nan, which is not a finite JSON number.")
+            lines = with_metadata(k, insert=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                ["vitalStats:", "  gcContent: .inf"],
+            )])
+            data, _ = assemble(lines + body(k))
+            invalid(f"{k}-infinity-vital-stats", k, data, "R13",
+                    "vitalStats.gcContent is the YAML .inf: not a finite JSON number, and also "
+                    "above gcContent's maximum of 100.")
 
     for k in ("fasta", "gfa"):
         data, value = plain[k]
@@ -882,6 +976,10 @@ def build_fhgff3():
                  "A header and no features: an empty annotation.")
     fhgff3_valid("fhgff3-version-3-1-26", fhgff3_lines(version=b"##gff-version 3.1.26"),
                  ["G1"], "##gff-version 3.1.26 on line 1.")
+    fhgff3_valid("fhgff3-version-3-trailing-whitespace",
+                 fhgff3_lines(version=b"##gff-version 3 \t"),
+                 ["G1"], "##gff-version 3 followed by a space and a tab; G1 allows trailing "
+                 "spaces or tabs.")
     fhgff3_valid("fhgff3-crlf", fhgff3_lines(), ["G1", "R1", "R3"],
                  "CRLF line endings; CR bytes are hashed.", endings=b"\r\n")
     valid("fhgff3-gzip", k, gzip_member(plain), value, ["G1", "R1"],
@@ -924,6 +1022,10 @@ def build_fhgff3():
     data, _ = assemble(lines)
     invalid("fhgff3-header-before-version", k, data, "G1",
             "A #~ line on line 1, before ##gff-version 3.")
+    # Invalid near misses for the G1 version grammar (##gff-version 30, 3x, 3.1)
+    # are added once the released toolkit enforces the grammar: adding them now
+    # would make check_conformance.py --converter fail against fair-bioheaders
+    # 0.8.0, which checks only the "##gff-version 3" prefix.
     # G2: the metadata must validate against fhgff3.json.
     fhgff3_invalid("fhgff3-no-genome-link", fhgff3_record(drop=["derivedFrom"]), "G2",
                    "Neither an annotates link nor a genomeReference.")
@@ -1127,7 +1229,7 @@ def build_microdata():
                        "readTechnology": "synthetic"},
     })
     md_valid("microdata-canonical", md_page(md_content(canonical)), canonical,
-             ["M1", "M3", "M4"],
+             ["M1", "M3", "M4", "R13"],
              "The converter's typed serialization: nested objects, arrays, an empty "
              "array, integers and numbers.")
 

@@ -1,9 +1,9 @@
 # FHP: FAIR header for protein FASTA
 
-**Status: v0.1, first released in FAIR-bioHeaders-Specification v0.4.0** (`schemaVersion`
-`"1.0"`). FHP is the working name (#54), and the fields may still change after curator
-review, through a new schema version. Its persistent schema URL is
-`https://w3id.org/fair-bioheaders/fhp/v0.4.0`. The design is in
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.0"`), first
+released in FAIR-bioHeaders-Specification v0.4.0.** FHP is the working name (#54), and the
+fields may still change after curator review, through a new schema version. Its persistent
+schema URL is `https://w3id.org/fair-bioheaders/fhp/v0.4.0`. The design is in
 [specs/006-protein-header](../specs/006-protein-header/spec.md).
 
 FHP brings the FHR header to protein FASTA files: predicted proteomes, sets taken from protein
@@ -85,7 +85,7 @@ stated by a source, cannot be verified this way.
 
 ## Rules
 
-FHP files follow the shared header and checksum rules R1 to R11 of [FORMAT.md](FORMAT.md)
+FHP files follow the shared header, checksum and number rules R1 to R13 of [FORMAT.md](FORMAT.md)
 unchanged, in a FASTA container. The sequence alphabet makes no difference to them: stop symbols
 (`*`), the rare residues U and O, the ambiguity codes B, Z, J and X, lower case and gaps are
 ordinary bytes, hashed and preserved exactly. In addition:
@@ -101,17 +101,19 @@ They add no requirements.
 
 ## Not yet available
 
-These are recorded as follow-ups F-01 to F-07 in the
-[plan](../specs/006-protein-header/plan.md):
+These remain follow-ups in the [plan](../specs/006-protein-header/plan.md):
 
-- JSON-LD and HTML microdata forms. The model already carries the term annotations.
-- Checking GFF3 parents (spec 007).
-- A persistent schema alias and a release.
+- JSON-LD and HTML microdata forms (F-01). The model already carries the term annotations.
+- Checking GFF3 parents (F-03, spec 007).
 
-**Release line (maintainer decision, 2026-10-11).** FHP v0.1 is released from the
-`release-v0.4` line, with FAIR-bioHeaders-Specification v0.4.0, so it starts with the tightened core
-patterns (anchored ORCID and taxon URLs, padded checksums, bare DOIs) and the optional author
-`nameType`. Its persistent schema URL is `https://w3id.org/fair-bioheaders/fhp/vX.Y.Z`, where
-`vX.Y.Z` is the FAIR-bioHeaders-Specification release tag, as for `/fhr/vX.Y.Z` (registered in
-perma-id/w3id.org#6868; it resolves once v0.4.0 is tagged). On `main`, FHP still inherits the
-core's v0.3 patterns.
+F-05 (the persistent schema alias) and F-07 (the release) are complete: v0.4.0 is tagged,
+and `https://w3id.org/fair-bioheaders/fhp/vX.Y.Z` selects that release's `fhp.json`
+(registered in perma-id/w3id.org#6868).
+
+**Release line (maintainer decision, 2026-10-11).** FHP v0.1 was released from the
+`release-v0.4` line, with FAIR-bioHeaders-Specification v0.4.0, so it starts with the tightened
+core patterns (anchored ORCID and taxon URLs, padded checksums, bare DOIs) and the optional
+author `nameType`. Its persistent schema URL is
+`https://w3id.org/fair-bioheaders/fhp/vX.Y.Z`, where `vX.Y.Z` is the
+FAIR-bioHeaders-Specification release tag, as for `/fhr/vX.Y.Z`; it serves the v0.4.0 release.
+`fhp.json` on `main` is generated from the same v0.4 core, not the core's v0.3 patterns.

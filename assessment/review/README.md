@@ -21,7 +21,7 @@ The packet was generated with `bioheaders assess` 0.4.0 (FAIR-bioHeaders-Tools, 
 branch) and rubric 1.1.0, from the 17 captures in `../headers/`:
 
 ```bash
-python scripts/check_assessment.py --tool ../FHR-File-Converter --review-packet assessment/review
+python scripts/check_assessment.py --tool ../FAIR-bioHeaders-Tools --review-packet assessment/review
 ```
 
 Regenerate it if the tool or the rubric changes before the review starts; the reports name the

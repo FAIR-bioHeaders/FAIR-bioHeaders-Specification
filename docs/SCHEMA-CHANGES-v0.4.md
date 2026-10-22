@@ -1,6 +1,7 @@
-# FHR v0.4 schema changes (unreleased)
+# FHR v0.4 schema changes
 
-This is the explained diff between the v0.3 `fhr.json` and the v0.4 schema. It
+This is the explained diff between the v0.3 `fhr.json` and the v0.4 schema, released in
+FAIR-bioHeaders-Specification v0.4.0. It
 resolves [FAIR-bioHeaders-Specification#35](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/35)
 and [spec 002](../specs/002-v04-constraint-tightening/spec.md), following the
 maintainer decisions recorded in that issue on 2026-10-09.
@@ -13,7 +14,7 @@ valid under v0.3 become invalid, the contract version is a major one. No field b
 required and no field is removed; `schemaVersion`'s type changes from number to string. Every
 example in `examples/`, every conformance vector's metadata and the converter's
 test fixtures that carry metadata still validate. One converter test that added
-a `checksum` key under `accessionID` has to change (see Converter copies below).
+a `checksum` key under `accessionID` has to change (see Toolkit copies below).
 
 The checks are syntactic. A matching DOI, ORCID or checksum does not prove that
 the identifier resolves, that the person is the author, or that the file is
@@ -111,13 +112,13 @@ because RE2-based validators do not support them.
   and branch refs are no longer schema URLs.
 - All three baselines were updated deliberately after reviewing these diffs.
 
-## Converter copies
+## Toolkit copies
 
-The FHR File Converter (`bioheaders` package) bundles three identical copies of
+The FAIR-bioHeaders toolkit (`bioheaders` package) bundles three identical copies of
 the schema: `fhr_schema.json`, `fhr/fhr_schema.json` and
 `bioheaders/fhr_schema.json`. All three must be replaced with the v0.4
 `fhr.json` in the same release, as `scripts/check_release.py --converter`
-requires (it checks the first two; the converter's own test checks all three
-match). The converter test `test_nested_checksum_names_stay_covered` puts a
+requires (it checks the first two; the toolkit's own test checks all three
+match). The toolkit test `test_nested_checksum_names_stay_covered` puts a
 `checksum` key under `accessionID` and fails under v0.4. It needs to move that
 key to a still-valid place, such as a `documentation` block scalar.

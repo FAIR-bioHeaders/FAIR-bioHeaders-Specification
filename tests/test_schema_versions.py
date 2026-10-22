@@ -6,6 +6,7 @@
 import json
 from pathlib import Path
 import re
+import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,6 +41,42 @@ class SchemaVersionTests(unittest.TestCase):
             with self.subTest(header_type=header_type):
                 self.assertEqual(schema["properties"]["schemaVersion"]["enum"], accepted(version))
                 self.assertEqual(schema["properties"]["schemaVersion"]["type"], "string")
+
+    def test_schema_bytes_match_the_current_release_tag(self):
+        """docs/SCHEMA-VERSIONS.md: a schema change does not land on main before its release."""
+        tag = REGISTRY["current"]
+        try:
+            # A missing tag (shallow checkout) is the only reason to skip. A tag
+            # that exists but lacks a schema file is an incomplete release and
+            # must fail, not pass silently.
+            subprocess.run(
+                ["git", "rev-parse", "--verify", f"{tag}^{{commit}}"],
+                cwd=ROOT, check=True, capture_output=True,
+            )
+        except (OSError, subprocess.CalledProcessError) as error:
+            self.skipTest(
+                f"cannot read the {tag!r} tag ({error}). This is either a shallow checkout "
+                "(run `git fetch --tags`) or the documented pre-release exception where "
+                "schemas/versions.json `current` names a release before its tag exists "
+                "(docs/SCHEMA-VERSIONS.md#schema-files-on-main); check the spelling of "
+                "`current` if neither applies"
+            )
+        for header_type, name in REGISTRY["files"].items():
+            with self.subTest(header_type=header_type, tag=tag):
+                result = subprocess.run(
+                    ["git", "show", f"{tag}:{name}"], cwd=ROOT, capture_output=True,
+                )
+                self.assertEqual(
+                    result.returncode, 0,
+                    f"{tag} exists but {name} cannot be read from it "
+                    f"({result.stderr.decode(errors='replace').strip()}). An incomplete "
+                    "release must not pass the release-identity check.",
+                )
+                self.assertEqual(
+                    (ROOT / name).read_bytes(), result.stdout,
+                    f"{name} differs from {tag}:{name}. A schema change needs its own release; "
+                    "see docs/SCHEMA-VERSIONS.md#schema-files-on-main for the exception process.",
+                )
 
     def test_v04_versions(self):
         self.assertEqual(REGISTRY["releases"]["v0.4.0"],
