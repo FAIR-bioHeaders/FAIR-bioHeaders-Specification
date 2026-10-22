@@ -32,7 +32,7 @@ Key facts (FAIR-bioHeaders-Specification v0.4.1, fair-bioheaders 0.8.1):
 
 ## Tools
 
-- [fair-bioheaders on PyPI](https://pypi.org/project/fair-bioheaders/): `pip install fair-bioheaders` (Python 3.9+). A Bioconda recipe is under review.
+- [fair-bioheaders on PyPI](https://pypi.org/project/fair-bioheaders/): `pip install fair-bioheaders` (Python 3.9+). A Bioconda recipe is merged upstream; the packaged version can trail PyPI.
 - [FAIR-bioHeaders-Tools](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools): source, README with every command, container image, Nextflow modules
 - [Claude Code plugin](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/tree/main/plugins/fair-bioheaders): `/plugin marketplace add FAIR-bioHeaders/FAIR-bioHeaders-Tools`, then `/plugin install fair-bioheaders@fair-bioheaders`
 - [gff3-validator](https://github.com/FAIR-bioHeaders/gff3-validator): GFF3 and Sequence Ontology validator with FHGFF3 header checks ([web app](https://fhref.org/gff3-validator/), `pip install gff3-validator`)
