@@ -104,19 +104,22 @@ released in v0.4.0.
 A schema change has its own release. The three schema files in the working tree are therefore
 byte-identical to the copies at the release named by `current` in `schemas/versions.json`:
 `fhr.json`, `fhp.json` and `fhgff3.json` equal `git show <current>:<file>`.
-`tests/test_schema_versions.py` checks this. It skips when `git` cannot read the tag: a shallow
-checkout that did not fetch tags, or the documented pre-release exception below where `current`
-names a release before its tag exists. The skip reports which tag was missing. CI checks out
-full history and tags, so the check runs there. A shallow clone can fetch them with
-`git fetch --tags` and run the check again. If the tag exists but a schema file is missing from
-it, the check fails: an incomplete release is not an exception.
+`tests/test_schema_versions.py` checks this. A missing tag is skipped only when
+`schemas/versions.json` sets `preRelease` to the same tag as `current` (the documented
+pre-release exception below). A missing tag without that marker fails, so a typo in `current`
+cannot look like a shallow checkout; fetch tags with `git fetch --tags` in a shallow clone.
+Setting `preRelease` while its tag already exists also fails, so the marker must be cleared
+when the release is tagged. CI checks out full history and tags, so the byte comparison runs
+there. If the tag exists but a schema file is missing from it, the check fails: an incomplete
+release is not an exception.
 
 The exception is a deliberate, reviewed schema change that must be prepared before its release
 tag exists. Record it in the pull request and the release tracker, set `current` and its
-`releases` entry to the release being prepared, and update every example and `llms.txt` to the
-prepared release's URL and version: the example and `llms.txt` tests follow `current`, so they
-do not skip. The schema-byte check skips until the tag exists. Create the tag from the release
-branch. Do not edit a released file, delete the check or weaken it. Tags and released files are
+`releases` entry to the release being prepared, set `preRelease` to the same tag, and update
+every example and `llms.txt` to the prepared release's URL and version: the example and
+`llms.txt` tests follow `current`, so they do not skip. The schema-byte check skips only for
+that explicit marker until the tag exists. Create the tag from the release branch, then clear
+`preRelease` on main. Do not edit a released file, delete the check or weaken it. Tags and released files are
 immutable, and publishing a tag is a maintainer action; once the release reaches main, the
 working tree and the tag agree again.
 

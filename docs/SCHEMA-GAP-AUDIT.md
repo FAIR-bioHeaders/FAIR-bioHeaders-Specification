@@ -31,8 +31,8 @@ normative rules stay in [FORMAT.md](FORMAT.md), [SCHEMA-VERSIONS.md](SCHEMA-VERS
 | GAP-2 | `nameType: Organizational` with an ORCID iD validates | [JSON-LD, author typing and the accepted combination](JSONLD.md#json-ld) (J7) | Accepted under 2.0; no coupling between `nameType` and `uri` | Types from explicit `nameType` first, then ORCID/ROR/Agent (Tools#74/#79) | Documented + Decision pending | Decide in the next major whether to forbid the combination |
 | GAP-3 | G1 `##gff-version` grammar is under-specified | [FHGFF3 G1](FHGFF3.md) | Grammar is documentation only; schemas do not parse line 1 | `main` enforces the full grammar (Tools#91); 0.8.1 checks only the prefix | Release-gated | Ship in 0.8.2; then enable the deferred near-miss vectors |
 | GAP-4 | J1 and J4 disagree on root export terms (`@id`, `keywords`, `url`, `conformsTo`) | [JSON-LD reading rules](JSONLD.md#json-ld) | No schema effect | Canonical J1 sets them aside with a warning; J3/J4 reject them | Done (intended difference documented) | No change; keep the decision test/docs cross-check |
-| GAP-5 | Nothing asserts that schemas on `main` equal the current release tag | [Schema files on main](SCHEMA-VERSIONS.md#schema-files-on-main) | No schema effect | Byte-identity test exists; skips when the tag is unavailable | Documented (skip can hide a typo) | Add an explicit pre-release marker or CI tag check in Phase 1 |
-| GAP-6 | `format` (`date`, `uri`) is an annotation unless the validator opts in | [format is asserted](SCHEMA-VERSIONS.md) | `format` assertions require opt-in; some URI fields also have anchored patterns | Toolkit uses `FormatChecker`; a bare draft 2020-12 validator does not | Documented + test pending | Add a test covering every declared `format` field; consider patterns only in a major |
+| GAP-5 | Nothing asserts that schemas on `main` equal the current release tag | [Schema files on main](SCHEMA-VERSIONS.md#schema-files-on-main) | No schema effect | Byte-identity test; a missing tag now fails unless `preRelease` explicitly names it, and an existing tag clears the marker | Done | No further change |
+| GAP-6 | `format` (`date`, `uri`) is an annotation unless the validator opts in | [format is asserted](SCHEMA-VERSIONS.md) | `format` declarations; some URI fields also have anchored patterns | Toolkit uses `FormatChecker`; a bare draft 2020-12 validator does not | Done (every declared format tested) | No further change; consider patterns only in a major |
 | GAP-7 | NaN and infinities are not ruled out for numeric statistics | [R13](FORMAT.md) | `minimum`/`maximum` do not catch NaN | `main` rejects them explicitly with a field path (Tools#92); 0.8.1 relies on serialisation failure | Release-gated | Ship in 0.8.2; keep the invalid vectors |
 
 ## Decisions
@@ -47,11 +47,13 @@ normative rules stay in [FORMAT.md](FORMAT.md), [SCHEMA-VERSIONS.md](SCHEMA-VERS
 - **GAP-4:** the difference is intentional: J1 is writer output with a documented
   export-annotation allowance; J3/J4 have no writer contract and must reject unknown
   terms rather than drop them silently.
-- **GAP-5:** a missing release tag is the only skip. A tag that exists but lacks a
-  schema file must fail. A typo in `current` should not be indistinguishable from a
-  shallow checkout, hence the pre-release marker or CI tag check.
-- **GAP-6:** conforming validators must assert `format`. Do not claim a record valid
-  from a validator that ignores it.
+- **GAP-5:** a missing release tag is skipped only when `preRelease` explicitly
+  names it. A tag that exists but lacks a schema file fails, and a stale marker
+  fails once the tag exists. A typo in `current` is therefore not indistinguishable
+  from a shallow checkout.
+- **GAP-6:** conforming validators must assert `format`. The test suite now exercises
+  every declared `format` field with a malformed and a valid value; do not claim a
+  record valid from a validator that ignores it.
 - **GAP-7:** JSON Schema cannot express NaN/infinity, so R13 remains a validator rule
   even after the next major.
 

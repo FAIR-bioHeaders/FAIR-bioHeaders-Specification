@@ -20,9 +20,50 @@ def accepted(version):
     return [f"{major}.{n}" for n in range(minor + 1)]
 
 
+def git_tag_exists(tag):
+    """Whether this checkout can read ``tag`` (a shallow clone may not)."""
+    try:
+        subprocess.run(
+            ["git", "rev-parse", "--verify", f"{tag}^{{commit}}"],
+            cwd=ROOT, check=True, capture_output=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return False
+    return True
+
+
+def release_identity_mode(registry, tag_available=None):
+    """Return ``"release"`` or ``"pre-release"``, or raise on an invalid state.
+
+    A missing tag is only acceptable when ``preRelease`` names that same tag.
+    Otherwise a typo in ``current`` would look exactly like a shallow checkout.
+    """
+    tag = registry["current"]
+    pre_release = registry.get("preRelease")
+    available = tag_available or git_tag_exists
+    if pre_release is not None:
+        if pre_release != tag:
+            raise AssertionError("`preRelease` must be null or equal `current`")
+        if available(tag):
+            raise AssertionError(
+                f"`preRelease` names {tag}, but that tag exists; remove the marker"
+            )
+        return "pre-release"
+    if not available(tag):
+        raise AssertionError(
+            f"{tag} does not exist. For a shallow checkout run `git fetch --tags`; "
+            "when preparing a release, set `preRelease` to the same tag as `current`"
+        )
+    return "release"
+
+
 class SchemaVersionTests(unittest.TestCase):
     def test_registry_shape(self):
         self.assertIn(REGISTRY["current"], REGISTRY["releases"])
+        pre_release = REGISTRY.get("preRelease")
+        if pre_release is not None:
+            self.assertEqual(pre_release, REGISTRY["current"])
+            self.assertRegex(pre_release, r"^v[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertEqual(set(REGISTRY["files"]), {"FHR", "FHP", "FHGFF3"})
         self.assertEqual(REGISTRY["w3id"], {"FHR": "fhr", "FHP": "fhp", "FHGFF3": "fhgff3"})
         for tag, types in REGISTRY["releases"].items():
@@ -46,20 +87,14 @@ class SchemaVersionTests(unittest.TestCase):
         """docs/SCHEMA-VERSIONS.md: a schema change does not land on main before its release."""
         tag = REGISTRY["current"]
         try:
-            # A missing tag (shallow checkout) is the only reason to skip. A tag
-            # that exists but lacks a schema file is an incomplete release and
-            # must fail, not pass silently.
-            subprocess.run(
-                ["git", "rev-parse", "--verify", f"{tag}^{{commit}}"],
-                cwd=ROOT, check=True, capture_output=True,
-            )
-        except (OSError, subprocess.CalledProcessError) as error:
+            mode = release_identity_mode(REGISTRY)
+        except AssertionError as error:
+            self.fail(str(error))
+        if mode == "pre-release":
             self.skipTest(
-                f"cannot read the {tag!r} tag ({error}). This is either a shallow checkout "
-                "(run `git fetch --tags`) or the documented pre-release exception where "
-                "schemas/versions.json `current` names a release before its tag exists "
-                "(docs/SCHEMA-VERSIONS.md#schema-files-on-main); check the spelling of "
-                "`current` if neither applies"
+                f"{tag} is the documented pre-release target in schemas/versions.json "
+                "and its tag has not been created yet; see "
+                "docs/SCHEMA-VERSIONS.md#schema-files-on-main"
             )
         for header_type, name in REGISTRY["files"].items():
             with self.subTest(header_type=header_type, tag=tag):
@@ -77,6 +112,27 @@ class SchemaVersionTests(unittest.TestCase):
                     f"{name} differs from {tag}:{name}. A schema change needs its own release; "
                     "see docs/SCHEMA-VERSIONS.md#schema-files-on-main for the exception process.",
                 )
+
+    def test_missing_tag_without_a_pre_release_marker_fails(self):
+        registry = {"current": "v9.9.9", "preRelease": None}
+        with self.assertRaisesRegex(AssertionError, "does not exist"):
+            release_identity_mode(registry, lambda tag: False)
+
+    def test_documented_pre_release_may_skip_a_missing_tag(self):
+        registry = {"current": "v9.9.9", "preRelease": "v9.9.9"}
+        self.assertEqual(
+            release_identity_mode(registry, lambda tag: False), "pre-release"
+        )
+
+    def test_pre_release_marker_must_match_current(self):
+        registry = {"current": "v9.9.9", "preRelease": "v9.9.8"}
+        with self.assertRaisesRegex(AssertionError, "must be null or equal"):
+            release_identity_mode(registry, lambda tag: False)
+
+    def test_pre_release_marker_must_be_cleared_when_the_tag_exists(self):
+        registry = {"current": "v9.9.9", "preRelease": "v9.9.9"}
+        with self.assertRaisesRegex(AssertionError, "remove the marker"):
+            release_identity_mode(registry, lambda tag: True)
 
     def test_v04_versions(self):
         self.assertEqual(REGISTRY["releases"]["v0.4.0"],

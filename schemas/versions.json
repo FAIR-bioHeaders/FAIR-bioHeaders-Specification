@@ -1,6 +1,7 @@
 {
-  "description": "FAIR-bioHeaders schema versions by FAIR-bioHeaders-Specification release (docs/SCHEMA-VERSIONS.md). 'current' is the release the schemas in this working tree belong to: the release being prepared on a release line, or the latest release on main.",
+  "description": "FAIR-bioHeaders schema versions by FAIR-bioHeaders-Specification release (docs/SCHEMA-VERSIONS.md). 'current' is the release the schemas in this working tree belong to: the release being prepared on a release line, or the latest release on main. 'preRelease' is null for a published release; while preparing a release before its tag exists it names the same tag as 'current', so the release-identity check can skip that explicit case instead of treating a typo as a shallow checkout.",
   "current": "v0.4.0",
+  "preRelease": null,
   "files": {
     "FHR": "fhr.json",
     "FHP": "fhp.json",
