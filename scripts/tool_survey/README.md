@@ -14,6 +14,9 @@ Scripts behind [docs/TOOL_COMPATIBILITY.md](../../docs/TOOL_COMPATIBILITY.md).
 | `results/results-extra.tsv` | Results of the extra parsers with the leading lines marked `;`, marked `#` or unmarked (`header_marker` column) |
 | `environment-annotation.yml` | The annotation and assembly tools of 2026-10-19, as separate environments; `run_survey.py` finds them through the `S3*` PATH-prefix variables, `BUSCO_LINEAGE` and `COMPLEASM_LIB` (see the file's header) |
 | `results/results-annotation.tsv` | Results of the annotation and assembly tools with the leading lines marked `;` (R11 header), marked `#`, unmarked, or `;` with a raw `@`/`>` value (`header_marker` column) |
+| `round4/` | The 2026-10-22 survey (R and Bioconductor readers, JBrowse 2 FASTA code, Bakta, Kraken2, BWA-MEM2, Ensembl VEP): `make_round4_inputs.py` writes the inputs from a control FASTA, `run_round4.py` runs and classifies the tests, with small probes (`r_probe.R`, `indexedfasta_probe.mjs`, `header_fai.py`) and `package.json` |
+| `environment-round4.yml` | The 2026-10-22 tools, as separate environments; `run_round4.py` finds them through the `R4*` PATH-prefix variables (see the file's header) |
+| `results/results-round4.tsv` | Results of the 2026-10-22 survey with the leading lines marked `;` (R11 header), one `;comment` line, `#`, unmarked, or `;` with a raw `@`/`>` value (`header_marker` column) |
 | `environment.yml`, `environment-graph.yml`, `package.json` | Tested tool versions |
 | `results/results.tsv` | Results of the 2026-10-08 run |
 

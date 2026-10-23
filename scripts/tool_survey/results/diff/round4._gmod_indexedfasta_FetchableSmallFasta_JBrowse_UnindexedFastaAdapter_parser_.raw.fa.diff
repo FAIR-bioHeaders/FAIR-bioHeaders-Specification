@@ -1,0 +1,8 @@
+--- control.fa
++++ raw.fa
+@@ -1,2 +1,4 @@
+-1 records
++3 records
++;~schema:	745	3f818080efa0976375104b7acc751c5b	region:d41d8cd98f00b204e9800998ecf8427e
++	551	315b6c44516626fdffe94011e98cfd2c	region:d41d8cd98f00b204e9800998ecf8427e
+ NC_000908.2	580076	447aa6e653ea41d2a0d87e702230fe88	region:b1bad54519df717a0f7eafe43e182173

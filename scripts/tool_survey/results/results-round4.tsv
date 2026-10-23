@@ -1,0 +1,90 @@
+header_marker	type	tool	version	inputs	control_rc	fhr_rc	class	header_lines_in_output	note
+semicolon	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs comment1.fa	0	0	a		
+hash	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs hash.fa	0	1	c		Error: reading FASTA file hash.fa: ">" expected at beginning of line 1
+unmarked	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs text.fa	0	1	c		Error: reading FASTA file text.fa: ">" expected at beginning of line 1
+semicolon-raw-markers	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	Biostrings readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs comment1.fa	0	0	a		
+hash	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs hash.fa	0	1	c		Error: reading FASTA file hash.fa: ">" expected at beginning of line 1
+unmarked	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs text.fa	0	1	c		Error: reading FASTA file text.fa: ">" expected at beginning of line 1
+semicolon-raw-markers	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	Biostrings fasta.index + readDNAStringSet	Biostrings 2.80.2 (R 4.5.3)	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa vs comment1.fa	0	0	a		
+hash	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	seqinr read.fasta	seqinr 4.2.44 (R 4.5.3)	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa vs comment1.fa	0	0	a		
+hash	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa vs raw.fa	0	0	b?		
+semicolon	fasta	ape read.FASTA	ape 5.8.1 (R 4.5.3)	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa vs comment1.fa	0	0	a		
+hash	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa vs raw.fa	0	0	b?		
+semicolon	fasta	ape read.dna(format=fasta)	ape 5.8.1 (R 4.5.3)	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.fa vs fhr.fa	0	1	c		Error: Could not resolve to a file or a URL: "fhr.fa.fai"
+semicolon-1line	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.fa vs comment1.fa	0	1	c		Error: Could not resolve to a file or a URL: "comment1.fa.fai"
+hash	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.fa vs hash.fa	0	1	c		Error: Could not resolve to a file or a URL: "hash.fa.fai"
+unmarked	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.fa vs text.fa	0	1	c		Error: Could not resolve to a file or a URL: "text.fa.fai"
+semicolon-raw-markers	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.fa vs raw.fa	0	1	c		Error: Could not resolve to a file or a URL: "raw.fa.fai"
+semicolon	fasta	JBrowse CLI add-assembly (.fai from samtools faidx)	@jbrowse/cli 4.3.0	control.bgzf.fa.gz vs fhr.bgzf.fa.gz	0	1	c		Error: Could not resolve to a file or a URL: "fhr.bgzf.fa.gz.fai"
+semicolon	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.fa vs comment1.fa	0	0	a		
+hash	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	JBrowse CLI add-assembly + @gmod/indexedfasta read (header-aware .fai)	@gmod/indexedfasta 5.0.13	control.bgzf.fa.gz vs fhr.bgzf.fa.gz	0	0	a		
+semicolon	fasta	@gmod/indexedfasta FetchableSmallFasta (JBrowse UnindexedFastaAdapter parser)	@gmod/indexedfasta 5.0.13	control.fa vs fhr.fa	0	0	b?		
+semicolon-1line	fasta	@gmod/indexedfasta FetchableSmallFasta (JBrowse UnindexedFastaAdapter parser)	@gmod/indexedfasta 5.0.13	control.fa vs comment1.fa	0	0	b?		
+hash	fasta	@gmod/indexedfasta FetchableSmallFasta (JBrowse UnindexedFastaAdapter parser)	@gmod/indexedfasta 5.0.13	control.fa vs hash.fa	0	0	b?		
+unmarked	fasta	@gmod/indexedfasta FetchableSmallFasta (JBrowse UnindexedFastaAdapter parser)	@gmod/indexedfasta 5.0.13	control.fa vs text.fa	0	0	b?		
+semicolon-raw-markers	fasta	@gmod/indexedfasta FetchableSmallFasta (JBrowse UnindexedFastaAdapter parser)	@gmod/indexedfasta 5.0.13	control.fa vs raw.fa	0	0	b?		
+semicolon	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa vs fhr.fa	0	1	c		ERROR: wrong genome file format!
+semicolon-1line	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa vs comment1.fa	0	1	c		ERROR: wrong genome file format!
+hash	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa vs hash.fa	0	1	c		ERROR: wrong genome file format!
+unmarked	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa vs text.fa	0	1	c		ERROR: wrong genome file format!
+semicolon-raw-markers	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa vs raw.fa	0	1	c		ERROR: wrong genome file format!
+semicolon	fasta	Bakta genome import (stub DB, all annotation steps skipped)	bakta 1.12.2	control.fa.gz vs fhr.fa.gz	0	1	c		ERROR: wrong genome file format!
+semicolon	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa vs comment1.fa	0	0	a		
+hash	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	Kraken2 add-to-library + build + classify reads	Kraken version 2.17.2	control.fa.gz vs fhr.fa.gz	25	25	n/a		control also fails: scan_fasta_file.pl: unable to determine taxonomy ID for sequence (gzip bytes; add-to-library reads only plain FASTA)
+semicolon	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa vs comment1.fa	0	0	a		
+hash	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa vs raw.fa	0	0	b?		
+semicolon	fasta	Kraken2 classify (genome FASTA as query)	Kraken version 2.17.2	control.fa.gz vs fhr.fa.gz	0	0	a		
+semicolon	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa vs fhr.fa	0	0	a	0	
+semicolon-1line	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa vs comment1.fa	0	0	a	0	
+hash	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa vs hash.fa	0	0	a	0	
+unmarked	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa vs text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa vs raw.fa	0	1	c	0	[bns_restore_core] Parse error reading raw.fa.amb
+semicolon	fasta	BWA-MEM2 index + mem	bwa-mem2 2.3 (binary reports 2.2.1)	control.fa.gz vs fhr.fa.gz	0	0	a	0	
+semicolon	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa vs fhr.fa	0	0	a	0	
+semicolon-1line	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa vs comment1.fa	0	0	a	0	
+hash	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa vs hash.fa	0	0	a	0	
+unmarked	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa vs text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa vs raw.fa	0	1	c	0	[bns_restore_core] Parse error reading raw.fa.amb
+semicolon	fasta	BWA index + mem	bwa 0.7.19-r1273	control.fa.gz vs fhr.fa.gz	0	0	a	0	
+semicolon	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs fhr.fa	0	139	c		[E::fai_build_core] Format error, unexpected ";" at line 1
+semicolon-1line	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs comment1.fa	0	139	c		[E::fai_build_core] Format error, unexpected ";" at line 1
+hash	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs hash.fa	0	139	c		[E::fai_build_core] Format error, unexpected "#" at line 1
+unmarked	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs text.fa	0	139	c		[E::fai_build_core] Format error, unexpected "s" at line 1
+semicolon-raw-markers	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs raw.fa	0	139	c		[E::fai_build_core] Format error, unexpected ";" at line 1
+semicolon	fasta	Ensembl VEP --gff --fasta (Bio::DB::HTS::Faidx)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.bgzf.fa.gz vs fhr.bgzf.fa.gz	0	139	c		[E::fai_build_core] Format error, unexpected ";" at line 1
+semicolon	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs fhr.fa	0	0	a		
+semicolon-1line	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs comment1.fa	0	0	a		
+hash	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs hash.fa	0	0	a		
+unmarked	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs text.fa	0	0	a		
+semicolon-raw-markers	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.fa vs raw.fa	0	0	a		
+semicolon	fasta	Ensembl VEP --gff --fasta (header-aware .fai)	ensembl-vep 116.3, Bio::DB::HTS 3.01	control.bgzf.fa.gz vs fhr.bgzf.fa.gz	0	0	a		

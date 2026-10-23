@@ -1,0 +1,37 @@
+# Tools of the 2026-10-22 survey (docs/TOOL_COMPATIBILITY.md, "More tools (2026-10-22)").
+#
+# The tools were installed as separate micromamba environments; each block
+# below is one environment. round4/run_round4.py finds them through the
+# PATH-prefix variables R4R, R4BAKTA, R4KRAKEN, R4BWA, R4VEP and R4HTS
+# (samtools/bgzip; the survey used survey3 from environment-annotation.yml),
+# plus R4NODE, a directory holding `npm install` of round4/package.json
+# (Node 20.19.4: @jbrowse/cli 4.3.0, @gmod/indexedfasta 5.0.13). For example:
+#
+#   micromamba create -n survey4-r -c conda-forge -c bioconda r-base=4.5.3 \
+#     bioconductor-biostrings=2.80.2 r-seqinr=4.2_44 r-ape=5.8_1
+#   python3 round4/make_round4_inputs.py mgen.fa example.fhr.yaml in4   # bioheaders 0.8.1
+#   R4R=$MAMBA_ROOT_PREFIX/envs/survey4-r/bin ... python3 round4/run_round4.py in4 out4
+#
+# No Bakta database was used: db-light 6.0 is 1.34 GB compressed but
+# 3.8 GB unpacked. run_round4.py gives Bakta a stub database and skips every
+# annotation step, which is enough to run its genome import.
+channels:
+  - conda-forge
+  - bioconda
+environments:
+  survey4-r:          # R4R
+    - r-base=4.5.3
+    - bioconductor-biostrings=2.80.2
+    - r-seqinr=4.2_44
+    - r-ape=5.8_1
+  survey4-bakta:      # R4BAKTA
+    - python=3.12
+    - bakta=1.12.2       # pulls biopython 1.88, pyrodigal 3.7.1
+  survey4-kraken2:    # R4KRAKEN
+    - kraken2=2.17.2
+  survey4-bwamem2:    # R4BWA
+    - bwa-mem2=2.3       # the binary reports 2.2.1
+    - bwa=0.7.19
+  survey4-vep:        # R4VEP
+    - ensembl-vep=116.3  # pulls perl-bio-db-hts 3.01, perl-bioperl 1.7.8
+    - htslib=1.21

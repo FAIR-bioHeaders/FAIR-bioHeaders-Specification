@@ -1,0 +1,7 @@
+--- control.fa
++++ text.fa
+@@ -1,2 +1,3 @@
+-1 records
++2 records
++schema:	1240	c957fd4185e14adb8b343b6073ae6a5b	region:abeff3cdfc3ed1b4bd3ed5cd52688cf2
+ NC_000908.2	580076	447aa6e653ea41d2a0d87e702230fe88	region:b1bad54519df717a0f7eafe43e182173
