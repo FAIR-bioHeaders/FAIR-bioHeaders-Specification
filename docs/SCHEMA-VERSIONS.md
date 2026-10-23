@@ -118,8 +118,10 @@ tag exists. Record it in the pull request and the release tracker, set `current`
 `releases` entry to the release being prepared, set `preRelease` to the same tag, and update
 every example and `llms.txt` to the prepared release's URL and version: the example and
 `llms.txt` tests follow `current`, so they do not skip. The schema-byte check skips only for
-that explicit marker until the tag exists. Create the tag from the release branch, then clear
-`preRelease` on main. Do not edit a released file, delete the check or weaken it. Tags and released files are
+that explicit marker until the tag exists. For publication, clear `preRelease` in the final
+release-branch commit, tag that commit, and then run the release-identity check. The check
+will fail between clearing the marker and creating the tag. Carry the cleared registry to
+main. Do not edit a released file, delete the check or weaken it. Tags and released files are
 immutable, and publishing a tag is a maintainer action; once the release reaches main, the
 working tree and the tag agree again.
 
