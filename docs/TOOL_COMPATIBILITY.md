@@ -188,6 +188,9 @@ two silent misreads of valid files, both in the tools' own FASTA parsers: QUAST
 counts the header as an extra contig in its threshold rows (ablab/quast#300), and
 TransDecoder 6.0.0 predicts ORFs on the header text (fixed on master,
 TransDecoder/TransDecoder#213). See [Upstream support](#upstream-support).
+The [2026-10-22 survey](#more-tools-2026-10-22) found a third: JBrowse 2's unindexed FASTA
+adapter (`UnindexedFastaAdapter`, the `parseSmallFasta()` code of `@gmod/indexedfasta`) shows
+the header as an extra reference sequence named `;~schema:`.
 
 **Concatenated files (above).** These are the main corruption risk. Most
 tools that accept a leading header silently append a later header to the
@@ -231,13 +234,16 @@ Related, smaller risks:
 
 1. **FASTA indexing is the main gap for valid files.** htslib faidx rejects the
    file, and so does everything built on it: samtools faidx, pysam.FastaFile,
-   bedtools getfasta, JBrowse assemblies, and bcftools/GATK-style reference
-   loading. htsjdk (Picard), pyfaidx, seqkit, pyfastx, UCSC tools, gffread,
-   BioPerl `Bio::DB::Fasta`, the Burrows-Wheeler builders (bowtie2, HISAT2),
-   STAR and salmon all reject it too. All of these fail loudly.
-2. **kseq-based tools work.** BWA, minimap2, seqtk, bioawk, pysam.FastxFile and
-   kallisto, plus makeblastdb, MAFFT and Biopython `fasta-pearson`, ignore the
-   leading `;` block.
+   bedtools getfasta, JBrowse assemblies, Ensembl VEP (which then crashes in
+   `Bio::DB::HTS`), and bcftools/GATK-style reference loading. A `.fai` that
+   skips the header, as pyfaidx 0.9.1 writes it, lets the region readers work.
+   htsjdk (Picard), pyfaidx, seqkit, pyfastx, UCSC tools, gffread, BioPerl
+   `Bio::DB::Fasta`, the Burrows-Wheeler builders (bowtie2, HISAT2), STAR,
+   salmon and Bakta (Biopython `fasta`) all reject it too. All of these fail
+   loudly.
+2. **kseq-based tools work.** BWA, BWA-MEM2, minimap2, seqtk, bioawk,
+   pysam.FastxFile and kallisto, plus makeblastdb, MAFFT, Kraken2, R's seqinr and
+   ape, Biostrings and Biopython `fasta-pearson`, ignore the leading `;` block.
 3. **Concatenation corrupts data silently.** A header after the first record
    is read as sequence by most tools, including samtools dict, minimap2,
    STAR, salmon, kallisto and Picard. R10 forbids this layout; validation
@@ -247,7 +253,8 @@ Related, smaller risks:
    `##FASTA` sections come from the `##FASTA` section, not from the header.
 5. **Some annotation tools misread valid files silently.** QUAST and
    TransDecoder 6.0.0 read the header as sequence (see
-   [Annotation and assembly tools](#annotation-and-assembly-tools)).
+   [Annotation and assembly tools](#annotation-and-assembly-tools)), and so does
+   JBrowse 2's unindexed FASTA adapter ([More tools](#more-tools-2026-10-22)).
 
 ## Recommended workarounds
 
@@ -297,6 +304,17 @@ Native support in htslib would remove most FASTA stripping. The proposal
 samtools/htslib#2103 and #2106) was declined on 2026-10-15, so stripping
 remains the route for faidx-based tools. See [Upstream support](#upstream-support).
 
+For region reads there is a second route (checked 2026-10-22): htslib uses an existing `.fai`
+rather than rebuilding it, and pyfaidx 0.9.1 writes a `.fai` that skips the header. With that
+index, `samtools faidx x.fa chr:start-end`, Ensembl VEP `--fasta` and JBrowse `add-assembly`
+read the FHR file unchanged ([More tools](#more-tools-2026-10-22)). Commands that build the
+index themselves, such as `samtools faidx x.fa` without a region, still fail.
+
+```bash
+python -c 'import pyfaidx; pyfaidx.Fasta("genome.fhr.fa")'   # writes genome.fhr.fa.fai
+samtools faidx genome.fhr.fa chr1:1000-2000                  # uses that .fai
+```
+
 Stripping a header removes its metadata from the working copy. For files that
 cannot carry an FHR header, or tools that need a stripped copy, the
 [FAIR header guideline](FAIR_HEADER_GUIDELINE.md) shows how to keep the same
@@ -333,9 +351,10 @@ Versions are pinned in `scripts/tool_survey/environment-annotation.yml`; results
 | meryl (Merqury's assembly k-mers) | 1.4.2 | `meryl count k=21` | **c** | **c** | **c** | **c** | Segmentation fault |
 | Merqury | 1.4.1 | `merqury.sh` | **c (exit 0)** | **c (exit 0)** | **c (exit 0)** | **c (exit 0)** | Exits 0 but writes no QV or completeness: the meryl crash inside `spectra-cn.sh` is not reported |
 
-Not tested: BRAKER (needs GeneMark and a licence key), Bakta and Kraken2 (large databases),
-and Trinity's genome-guided mode (heavy); Trinity's Perl utilities share TransDecoder's
-`Fasta_reader.pm`.
+Not tested: BRAKER (needs GeneMark and a licence key) and Trinity's genome-guided mode (heavy);
+Trinity's Perl utilities share TransDecoder's `Fasta_reader.pm`. Bakta and Kraken2 (large
+databases) were tested later with a stub or tiny database; see
+[More tools (2026-10-22)](#more-tools-2026-10-22).
 
 Failures fixed by upstream changes: Liftoff (pyfaidx v0.9.1, mdshw5/pyfaidx#244, released
 2026-10-19 and verified 2026-10-20) and, once released, Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
@@ -344,6 +363,55 @@ not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining fail
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
 are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury and
 screed/sourmash have been contacted; see [Upstream support](#upstream-support)).
+
+## More tools (2026-10-22)
+
+On 2026-10-22 ten more tools were run on a real genome, *Mycoplasmoides genitalium* G37
+(NC_000908.2, one 580,076 bp record): the R and Bioconductor FASTA readers, JBrowse 2's FASTA
+code, Bakta, Kraken2, BWA-MEM2 and Ensembl VEP. The FHR file was written by
+fair-bioheaders 0.8.1 (`bioheaders combine` with FAIR-bioHeaders-Tools
+`examples/example.fhr.yaml`; 53 `;~` lines, R11-escaped). Each tool also read the control with a
+single `;comment` line, the header marked `#` or unmarked, the header with a raw `@`/`>` value
+(as in [Annotation and assembly tools](#annotation-and-assembly-tools)), and gzip or BGZF copies
+where the tool reads them. Outputs were fingerprinted as above (record names, lengths and MD5s;
+SAM alignments; Kraken2 classifications and `hash.k2d`; VEP consequences and HGVS). Versions are
+in `scripts/tool_survey/environment-round4.yml`, inputs and runner in `scripts/tool_survey/round4/`,
+and results in `scripts/tool_survey/results/results-round4.tsv`.
+
+| Tool | Version | Operation | `;` (R11) | one `;` line | `#` | unmarked | raw `@`/`>` | gzip / BGZF | Cause and notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Biostrings | 2.80.2 (R 4.5.3) | `readDNAStringSet()`; `fasta.index()` then `readDNAStringSet()` | a | a | **c** | **c** | a | a (gzip) | Skips leading `;` lines only; `#` and unmarked lines give `">" expected at beginning of line 1`. The index offset points at the `>` line |
+| seqinr | 4.2.44 | `read.fasta()` | a | a | a | a | a | a (gzip) | Skips everything before the first line that starts with `>` |
+| ape | 5.8.1 | `read.FASTA()`, `read.dna(format = "fasta")` | a | a | a | a | **b** | a (gzip) | Starts a record at any `>` byte: a raw `>` gives an extra 253 bp record named `1000`. Not seen with R11 headers |
+| JBrowse CLI `add-assembly` | 4.3.0 | `jbrowse add-assembly x.fa --load copy` | **c** | **c** | **c** | **c** | **c** | **c** (BGZF) | `Error: Could not resolve to a file or a URL: "x.fa.fai"`. The CLI builds no index; it needs a `.fai` (and `.gzi`) made beforehand, normally by `samtools faidx`, which rejects the file (htslib, samtools/htslib#2106, declined) |
+| JBrowse CLI + `@gmod/indexedfasta` `IndexedFasta`, `BgzipIndexedFasta` | 4.3.0; 5.0.13 | `add-assembly` and region reads, with a `.fai` that skips the header | a | a | a | a | a | a (BGZF) | JBrowse's own indexed reader only follows the `.fai` offsets. With a header-aware `.fai` (pyfaidx 0.9.1 writes one) every variant matches the control |
+| `@gmod/indexedfasta` `FetchableSmallFasta` (the parser copied into JBrowse 2's `UnindexedFastaAdapter`) | 5.0.13; `@jbrowse/plugin-sequence` 4.3.0 | `getSequenceNames()`, `fetch()` | **b** | **b** | **b** | **b** | **b** | n/a | Silent misread: an extra reference sequence `;~schema:` of 1,344 bp made of header text. `parseSmallFasta()` splits the whole file on `>`, so text before the first `>` becomes a record (and a raw `>` inside a header line splits it again) |
+| Bakta | 1.12.2 | `bakta` genome import | **c** | **c** | **c** | **c** | **c** | **c** (gzip) | `ERROR: wrong genome file format!` `bakta/io/fasta.py` `import_sequences()` uses Biopython `SeqIO.parse(fh, 'fasta')`, which raises `This FASTA file contains comments at the beginning of the file`; `fasta-pearson` would accept it |
+| Kraken2 | 2.17.2 | `kraken2-build --add-to-library`, `--build`; `kraken2` on 50 reads | a | a | a | a | a | n/a | `scan_fasta_file.pl` reads taxids only from `>` lines, and the build counts 1 sequence of 580,076 bp; `hash.k2d` and every read classification match the control. `--add-to-library` does not read gzip (control too) |
+| Kraken2 | 2.17.2 | `kraken2` with the genome FASTA as the query | a | a | a | a | **b** | a (gzip) | With a raw `@` it classifies an extra 600 bp sequence named `example.org;` (kseq-style scan). Not seen with R11 headers |
+| BWA-MEM2 | 2.3 (binary reports 2.2.1) | `bwa-mem2 index`; `bwa-mem2 mem` on 50 reads | a | a | a | a | **c** | a (gzip) | Same as BWA 0.7.19, rerun alongside: `@SQ` and every alignment match. With a raw `@` the index gains a record `example.org;` and `mem` stops with `[bns_restore_core] Parse error reading x.fa.amb` |
+| Ensembl VEP | 116.3 (Bio::DB::HTS 3.01, htslib 1.21) | `vep --gff genes.gff.gz --fasta x.fa` (no cache) | **c** | **c** | **c** | **c** | **c** | **c** (BGZF) | `[E::fai_build_core] Format error, unexpected ";" at line 1`, then a segmentation fault (exit 139). VEP loads FASTA through `Bio::DB::HTS::Faidx` (htslib faidx; BioPerl `Bio::DB::Fasta` only when that is missing). `Faidx.xs` does not check `fai_load()` for NULL, so any FASTA that htslib cannot index crashes Perl instead of raising an error. With a header-aware `.fai` VEP gives the control's consequences and HGVS |
+
+**Where the JBrowse failure comes from.** The earlier JBrowse result (`add-assembly`, above) is
+htslib's: the CLI only copies an existing `.fai`, and `samtools faidx` cannot make one. That is the
+behaviour samtools/htslib#2106 proposed to change. JBrowse's indexed readers work once a `.fai`
+exists. JBrowse's own bug is the unindexed path, which silently shows the header as an extra
+sequence.
+
+**A header-aware `.fai` unblocks htslib readers.** htslib uses an existing `.fai` instead of
+rebuilding it. The `.fai` that pyfaidx 0.9.1 writes for an FHR file
+(`python -c 'import pyfaidx; pyfaidx.Fasta("x.fa")'`) skips the header, and with it
+`samtools faidx x.fa chr:1000-1010` (1.24), VEP and JBrowse give the same results as for the
+control. `samtools faidx x.fa` without a region still tries to rebuild the index and fails.
+
+Not tested: a full Bakta annotation. Its smallest database (db-light 6.0) is 1.34 GB compressed
+but 3.8 GB unpacked, so Bakta was run with a stub database and every annotation step skipped.
+That runs the genome import, which is where the file is rejected. VEP was run without a cache.
+Kraken2 used a minimal custom taxonomy with one genome.
+
+The failures in Bakta, the JBrowse unindexed adapter and `Bio::DB::HTS::Faidx` are in the
+projects' own code and are listed as candidates in FAIR-bioHeaders-Specification#121 (none has been
+contacted). The JBrowse `add-assembly` failure is htslib's.
 
 ## Comment markers: `;`, `#` or none
 
@@ -390,6 +458,21 @@ results in `scripts/tool_survey/results/results-extra.tsv`):
   header and every record into one sequence, and IQ-TREE expects NEXUS.
 - MMseqs2 and CD-HIT skip anything before the first `>`.
 
+The [2026-10-22 tools](#more-tools-2026-10-22) give the same picture (13 tests across 10 tools,
+counting the plain-file runs and leaving out the two header-aware `.fai` runs):
+
+| Result (2026-10-22 additions) | `;` | `#` | no marker |
+| --- | --- | --- | --- |
+| Works | 9 | 7 | 7 |
+| Misreads (silent) | 1 | 1 | 1 |
+| Fails | 3 | 5 | 5 |
+
+- Biostrings again accepts `;` and rejects `#` and unmarked lines, in both
+  `readDNAStringSet()` and `fasta.index()`.
+- seqinr, ape, Kraken2 and BWA-MEM2 skip anything before the first `>`.
+- The JBrowse unindexed parser misreads all three variants; JBrowse `add-assembly`
+  (htslib), Bakta (Biopython) and VEP (htslib) reject all three.
+
 So no competing marker would gain support: most tools are either lenient about text
 before the first record or strict, and the two that tell marked lines apart
 (makeblastdb and Biostrings) accept `;`. `;` keeps the advantage of being the
@@ -412,7 +495,9 @@ These read FHR-headed files with results identical to the control file in the su
 anywhere, not only at the start of a line. If an FHR header line contains a raw `>` or `@`
 (an email address, `length > 1000`), seqtk, bioawk and `samtools dict` read a bogus extra
 record (checked 2026-10-18: `;~metadataAuthor: someone@example.org` gives a 0-length record
-named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser. Rule R11 of
+named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser, and
+BWA-MEM2, Kraken2 classification and R's ape (which starts a record at any `>`) behave the
+same way (checked 2026-10-22). Rule R11 of
 [FORMAT.md](FORMAT.md) therefore asks FASTA header writers to escape these characters in
 double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the toolkit's
 `combine` does this from the release after 0.7.0, and `verify` warns on a raw `>` or `@`
@@ -420,7 +505,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 | Format | Tools (surveyed version) |
 | --- | --- |
-| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings); pyfaidx 0.9.1; Liftoff 1.6.3 (with pyfaidx 0.9.1 or later) |
+| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings); pyfaidx 0.9.1; Liftoff 1.6.3 (with pyfaidx 0.9.1 or later); Biostrings 2.80.2 `fasta.index`; seqinr 4.2.44 `read.fasta`; ape 5.8.1 `read.FASTA`, `read.dna`; BWA-MEM2 2.3 (`index`, `mem`); Kraken2 2.17.2 (`kraken2-build --add-to-library`, `--build`, `kraken2`); JBrowse CLI 4.3.0 `add-assembly`, `@gmod/indexedfasta` 5.0.13 `IndexedFasta` and Ensembl VEP 116.3 `--fasta` (each with a `.fai` written by pyfaidx 0.9.1) |
 | GFA | gfatools 0.4 (`view`, `stat`, `gfa2fa`); gfapy 1.2.3; odgi 0.9.4 (`build`, `stats`, `view`); vg 1.76.1 (`stats`, `convert`) |
 | GFF3 | GenomeTools 1.6.5 (`gt gff3 -sort -tidy`, `gt gff3validator`); AGAT 1.7.0 GFF3 tools; gffread 0.12.9 (`-E`, `-T`, `-g -x`); gffutils 0.14; featureCounts 2.1.1; HTSeq 2.1.2 `htseq-count`; bedtools 2.31.1 (`intersect`, `sort`); bgzip and tabix 1.24; `@gmod/gff` 2.1.0; JBrowse CLI 4.3.0 (`add-track`, `text-index`) |
 

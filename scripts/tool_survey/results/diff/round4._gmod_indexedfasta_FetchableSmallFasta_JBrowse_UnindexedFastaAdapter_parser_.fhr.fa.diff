@@ -1,0 +1,7 @@
+--- control.fa
++++ fhr.fa
+@@ -1,2 +1,3 @@
+-1 records
++2 records
++;~schema:	1344	fde247208f781d72973068bb0c4c71bc	region:23c1edd58b222234837053defec7c3c2
+ NC_000908.2	580076	447aa6e653ea41d2a0d87e702230fe88	region:b1bad54519df717a0f7eafe43e182173

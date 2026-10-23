@@ -1,0 +1,9 @@
+{
+  "name": "fhr-tool-survey-round4-node",
+  "private": true,
+  "description": "JBrowse 2 CLI and @gmod/indexedfasta used by run_round4.py (node 20)",
+  "dependencies": {
+    "@gmod/indexedfasta": "5.0.13",
+    "@jbrowse/cli": "4.3.0"
+  }
+}

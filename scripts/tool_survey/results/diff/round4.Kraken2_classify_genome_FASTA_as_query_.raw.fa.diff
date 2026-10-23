@@ -1,0 +1,5 @@
+--- control.fa
++++ raw.fa
+@@ -1 +1,2 @@
++U	example.org;	0	600
+ C	NC_000908.2	2097	580076
