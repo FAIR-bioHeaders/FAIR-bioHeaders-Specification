@@ -362,7 +362,7 @@ would be fixed by gpertea/gclib#15, which is open. The raw-`@`/`>` failures of M
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
 are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury,
-screed/sourmash and AUGUSTUS have been contacted; see [Upstream support](#upstream-support)).
+screed/sourmash, AUGUSTUS and Bakta have been contacted; see [Upstream support](#upstream-support)).
 
 ## More tools (2026-10-22)
 
@@ -386,7 +386,7 @@ and results in `scripts/tool_survey/results/results-round4.tsv`.
 | JBrowse CLI `add-assembly` | 4.3.0 | `jbrowse add-assembly x.fa --load copy` | **c** | **c** | **c** | **c** | **c** | **c** (BGZF) | `Error: Could not resolve to a file or a URL: "x.fa.fai"`. The CLI builds no index; it needs a `.fai` (and `.gzi`) made beforehand, normally by `samtools faidx`, which rejects the file (htslib, samtools/htslib#2106, declined) |
 | JBrowse CLI + `@gmod/indexedfasta` `IndexedFasta`, `BgzipIndexedFasta` | 4.3.0; 5.0.13 | `add-assembly` and region reads, with a `.fai` that skips the header | a | a | a | a | a | a (BGZF) | JBrowse's own indexed reader only follows the `.fai` offsets. With a header-aware `.fai` (pyfaidx 0.9.1 writes one) every variant matches the control |
 | `@gmod/indexedfasta` `FetchableSmallFasta` (the parser copied into JBrowse 2's `UnindexedFastaAdapter`) | 5.0.13; `@jbrowse/plugin-sequence` 4.3.0 | `getSequenceNames()`, `fetch()` | **b** | **b** | **b** | **b** | **b** | n/a | Silent misread: an extra reference sequence `;~schema:` of 1,344 bp made of header text. `parseSmallFasta()` splits the whole file on `>`, so text before the first `>` becomes a record (and a raw `>` inside a header line splits it again) |
-| Bakta | 1.12.2 | `bakta` genome import | **c** | **c** | **c** | **c** | **c** | **c** (gzip) | `ERROR: wrong genome file format!` `bakta/io/fasta.py` `import_sequences()` uses Biopython `SeqIO.parse(fh, 'fasta')`, which raises `This FASTA file contains comments at the beginning of the file`; `fasta-pearson` would accept it |
+| Bakta | 1.12.2 | `bakta` genome import | **c** | **c** | **c** | **c** | **c** | **c** (gzip) | `ERROR: wrong genome file format!` `bakta/io/fasta.py` `import_sequences()` uses Biopython `SeqIO.parse(fh, 'fasta')`, which raises `This FASTA file contains comments at the beginning of the file`; `fasta-pearson` would accept it, but Bakta supports Biopython 1.78 and later and `fasta-pearson` only exists from 1.85, so the proposed fix skips the leading lines instead |
 | Kraken2 | 2.17.2 | `kraken2-build --add-to-library`, `--build`; `kraken2` on 50 reads | a | a | a | a | a | n/a | `scan_fasta_file.pl` reads taxids only from `>` lines, and the build counts 1 sequence of 580,076 bp; `hash.k2d` and every read classification match the control. `--add-to-library` does not read gzip (control too) |
 | Kraken2 | 2.17.2 | `kraken2` with the genome FASTA as the query | a | a | a | a | **b** | a (gzip) | With a raw `@` it classifies an extra 600 bp sequence named `example.org;` (kseq-style scan). Not seen with R11 headers |
 | BWA-MEM2 | 2.3 (binary reports 2.2.1) | `bwa-mem2 index`; `bwa-mem2 mem` on 50 reads | a | a | a | a | **c** | a (gzip) | Same as BWA 0.7.19, rerun alongside: `@SQ` and every alignment match. With a raw `@` the index gains a record `example.org;` and `mem` stops with `[bns_restore_core] Parse error reading x.fa.amb` |
@@ -523,7 +523,7 @@ current meaning, so no file that a tool reads today is read differently.
 | mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Released in pyfaidx v0.9.1 (2026-10-19)**; also fixes the silent `None` record. Verified 2026-10-20 |
 | samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
 | shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
-| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | **Supported without changes** through `SeqIO.parse(handle, "fasta-pearson")`. The default `fasta` reader is unchanged (2026-10-16), so tools built on it, such as BUSCO, are approached individually. Avoid `fasta-blast` in 1.85 to 1.88 (biopython/biopython#5377) |
+| biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | **Supported without changes** through `SeqIO.parse(handle, "fasta-pearson")`. The default `fasta` reader is unchanged (2026-10-16): 1.78 to 1.84 skip text before the first record silently, 1.85 and 1.86 warn, and 1.87 (2026-03-30) and later raise an error, so tools built on it, such as BUSCO, are approached individually. Avoid `fasta-blast` in 1.85 to 1.88 (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Declined 2026-10-19: UCSC's FASTA parsing serves its own pipelines and NCBI input |
 | gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
@@ -547,6 +547,7 @@ current meaning, so no file that a tool reads today is read differently.
 | marbl/merqury | `merqury.sh` exits 0 with no QV or completeness when `meryl count` fails | Issue marbl/merqury#182 (2026-10-21; tested exit-status checks, PR offered) | Open |
 | dib-lab/screed (used by sourmash) | `screed.open()` / `sourmash sketch dna`: "unknown file format" for a leading `;` block | Issue dib-lab/screed#123 (2026-10-22; tested patch, identical sketches; PR offered) | Open |
 | Gaius-Augustus/Augustus | `augustus`: leading `;` lines fail type detection ("Found bad character") or, without punctuation, become an extra `unnamed-1` sequence | Issue Gaius-Augustus/Augustus#452 (2026-10-22; tested patch, identical predictions; PR offered) | Open |
+| oschwengers/bakta | `bakta` genome import, `bakta_proteins` input and `--proteins` (Biopython `fasta`, which raises from 1.87): "wrong genome file format!" | Issue oschwengers/bakta#458 (2026-10-23; tested patch keeping Biopython ≥1.78 support, identical outputs; PR offered) | Open |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
