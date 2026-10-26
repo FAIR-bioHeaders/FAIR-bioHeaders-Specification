@@ -531,7 +531,7 @@ current meaning, so no file that a tool reads today is read differently.
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open; the maintainer pushed a follow-up commit (2026-10-23) so debug builds also accept `;` |
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open; the same debug-build follow-up added 2026-10-23 |
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
-| onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Open. The maintainer prefers skipping all text before the first record (the kseq behaviour) to partial Pearson comment support; we offered to rework the PR |
+| onecodex/needletail | salmon `index` (through piscem-rs), other needletail users | onecodex/needletail#122; salmon then needs a dependency update | Declined 2026-10-26: the change implements only part of Pearson-style FASTA, and the maintainer has not seen `;` comments in real-world files (INSDC, One Codex uploads); will reconsider if they appear from sources other than FHR. salmon's index therefore still rejects FHR headers (strip first) |
 | scikit-bio/scikit-bio | `skbio.io.read(format="fasta")` | Issue scikit-bio/scikit-bio#2644 (2026-10-18; their guide asks for an issue first) | Maybe (2026-10-20): the maintainer will leave the parser as is while watching consensus; an explicit opt-in would avoid changing the format sniffer |
 | zaeleus/noodles | noodles-fasta reader, async reader and indexer | zaeleus/noodles#439 (2026-10-18) | Declined 2026-10-19 |
 | rust-bio/rust-bio | `bio::io::fasta::Reader` | rust-bio/rust-bio#722 (2026-10-18) | Open |
