@@ -4175,6 +4175,33 @@
       "reason": "A #~ line on line 1, before ##gff-version 3."
     },
     {
+      "id": "fhgff3-version-30",
+      "file": "invalid/fhgff3-version-30.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G1",
+      "reason": "##gff-version 30 on line 1: G1 allows only 3 or 3.x.y."
+    },
+    {
+      "id": "fhgff3-version-3x",
+      "file": "invalid/fhgff3-version-3x.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G1",
+      "reason": "##gff-version 3x on line 1: G1 allows only 3 or 3.x.y."
+    },
+    {
+      "id": "fhgff3-version-3-1",
+      "file": "invalid/fhgff3-version-3-1.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G1",
+      "reason": "##gff-version 3.1 on line 1: G1 allows only 3 or 3.x.y."
+    },
+    {
       "id": "fhgff3-no-genome-link",
       "file": "invalid/fhgff3-no-genome-link.fhgff3.gff3",
       "format": "fhgff3",

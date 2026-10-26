@@ -178,7 +178,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 16)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 13)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 16)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -191,10 +191,11 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhgff3-header-before-version"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-header-after-fasta"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-cites-fhr-schema"]["rule"], "G3")
-        # Invalid near misses for the G1 grammar (##gff-version 30, 3x, 3.1) are
-        # added when the released toolkit enforces the grammar; adding them now
-        # would fail check_conformance.py --converter against fair-bioheaders
-        # 0.8.0, which checks only the "##gff-version 3" prefix.
+        # Invalid near misses for the G1 grammar, enforced from fair-bioheaders
+        # 0.8.2 (FAIR-bioHeaders-Tools#91).
+        for name in ("fhgff3-version-30", "fhgff3-version-3x", "fhgff3-version-3-1"):
+            self.assertEqual(vectors[name]["expected"], "invalid", name)
+            self.assertEqual(vectors[name]["rule"], "G1", name)
         self.assertEqual(vectors["fhgff3-version-3-1-26"]["expected"], "valid")
         self.assertEqual(vectors["fhgff3-version-3-trailing-whitespace"]["expected"], "valid")
 
@@ -257,7 +258,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(53 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(56 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -286,7 +287,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(53 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(56 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",

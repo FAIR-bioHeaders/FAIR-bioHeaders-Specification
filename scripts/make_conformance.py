@@ -1022,10 +1022,14 @@ def build_fhgff3():
     data, _ = assemble(lines)
     invalid("fhgff3-header-before-version", k, data, "G1",
             "A #~ line on line 1, before ##gff-version 3.")
-    # Invalid near misses for the G1 version grammar (##gff-version 30, 3x, 3.1)
-    # are added once the released toolkit enforces the grammar: adding them now
-    # would make check_conformance.py --converter fail against fair-bioheaders
-    # 0.8.0, which checks only the "##gff-version 3" prefix.
+    # Invalid near misses for the G1 version grammar; fair-bioheaders 0.8.2
+    # enforces the full grammar (FAIR-bioHeaders-Tools#91), earlier releases
+    # checked only the "##gff-version 3" prefix.
+    for suffix, version in (("30", b"##gff-version 30"), ("3x", b"##gff-version 3x"),
+                            ("3-1", b"##gff-version 3.1")):
+        data, _ = assemble(fhgff3_lines(version=version))
+        invalid(f"fhgff3-version-{suffix}", k, data, "G1",
+                f"{version.decode()} on line 1: G1 allows only 3 or 3.x.y.")
     # G2: the metadata must validate against fhgff3.json.
     fhgff3_invalid("fhgff3-no-genome-link", fhgff3_record(drop=["derivedFrom"]), "G2",
                    "Neither an annotates link nor a genomeReference.")
