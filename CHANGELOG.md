@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Enable the deferred FHGFF3 G1 near-miss vectors `fhgff3-version-30`,
+  `fhgff3-version-3x` and `fhgff3-version-3-1` (invalid, G1), now that fair-bioheaders
+  0.8.2 enforces the full `##gff-version` grammar (FAIR-bioHeaders-Tools#91), and pin
+  the conformance CI to fair-bioheaders 0.8.2 (#171). Vectors and tests only; no schema
+  or `schemaVersion` change.
+
 - Start the draft #56 mapping-profile foundation: separate proposed assembly
   export context, root-field DCMI handling inventory, worked descriptive RDF
   bundle, target/family status matrix and offline semantic tests. No core schema,
