@@ -56,8 +56,11 @@ jobs:
         run: python scripts/check_conformance.py
       - name: Install the toolkit with the v0.4 schemas
         # fair-bioheaders 0.7.0 is the first release that bundles v0.4.0; 0.8.0 adds R11; 0.8.1 adds R4, R5 and R12 (v0.4.1); 0.8.2 enforces the G1 grammar.
+        # TEMPORARY, DO NOT MERGE: V6 (#177) is implemented in FAIR-bioHeaders-Tools#114, not yet
+        # released. Replace this commit pin with "fair-bioheaders[jsonld]==0.8.4" (the release
+        # that ships V6) before merging; released 0.8.3 fails the five valid V6 vectors.
         run: |
           python -m venv "$RUNNER_TEMP/fhr-converter"
-          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==0.8.2"
+          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld] @ git+https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools@d2151c6cb79c03148ddbdcb2d16500b5801df172"
       - name: Run the toolkit on every vector
         run: python scripts/check_conformance.py --skip-regeneration --require-format jsonld --require-format fhp-fasta --require-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"
