@@ -142,7 +142,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
 
     def test_selection_vectors(self):
-        """specs/012-schema-versioning: V1-V5 and the registry they rely on."""
+        """specs/012-schema-versioning: V1-V6 and the registry they rely on."""
         vectors = [v for v in self.manifest["vectors"]
                    if any(rule.startswith("V") for rule in v.get("rules", [v.get("rule", "")]))]
         self.assertEqual(self.manifest["schemaVersionsSpecification"], "docs/SCHEMA-VERSIONS.md")
@@ -172,6 +172,47 @@ class ConformanceTests(unittest.TestCase):
         for value, expected in cases.items():
             with self.subTest(value=value):
                 self.assertEqual(check_conformance.select_schema(value)[:2], expected)
+
+    def test_fhr1_raw_main_vectors(self):
+        """docs/SCHEMA-VERSIONS.md V6: FHR 1 records citing raw-main are read as v0.3.1."""
+        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        fhr1 = {name for name, v in vectors.items() if "V6" in v.get("rules", [v.get("rule")])}
+        self.assertEqual(fhr1, {
+            "fasta-schema-raw-main-version-1", "fasta-schema-raw-main-version-1-integer",
+            "fasta-schema-canonical-raw-main-version-1", "fasta-schema-raw-main-version-1-invalid",
+            "microdata-schema-raw-main-version-1", "jsonld-schema-raw-main-version-1"})
+        # The FHR 1 writers' form, 1.0, was invalid before V6; the file bytes are unchanged.
+        self.assertEqual(vectors["fasta-schema-raw-main-version-1"]["expected"], "valid")
+        self.assertIn(b";~schemaVersion: 1.0\n",
+                      (CONFORMANCE / vectors["fasta-schema-raw-main-version-1"]["file"]).read_bytes())
+        for name in fhr1 - {"fasta-schema-raw-main-version-1-invalid"}:
+            self.assertEqual(vectors[name]["expected"], "valid", name)
+            self.assertEqual(vectors[name]["metadata"]["schemaVersion"], 1, name)
+        self.assertEqual(vectors["fasta-schema-raw-main-version-1-invalid"]["expected"], "invalid")
+        # V6 needs the number 1: the string and a boolean stay with V1, and raw-main "2.0"
+        # is unchanged.
+        for name in ("fasta-schema-raw-main-version-string-1", "fasta-schema-raw-main-version-true"):
+            self.assertEqual((vectors[name]["expected"], vectors[name]["rule"]), ("invalid", "V1"))
+        self.assertEqual(vectors["fasta-schema-raw-main"]["metadata"]["schemaVersion"], "2.0")
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import check_conformance
+        raw = "https://raw.githubusercontent.com/FAIR-bioHeaders/{}/main/{}"
+        cases = [
+            (raw.format("FHR-Specification", "fhr.json"), 1, ("FHR", "v0.3.1")),
+            (raw.format("FHR-Specification", "fhr.json"), 1.0, ("FHR", "v0.3.1")),
+            (raw.format("FAIR-bioHeaders-Specification", "fhr.json"), 1, ("FHR", "v0.3.1")),
+            (raw.format("FHR-Specification", "fhr.json"), "1", ("FHR", "main")),
+            (raw.format("FHR-Specification", "fhr.json"), True, ("FHR", "main")),
+            (raw.format("FHR-Specification", "fhr.json"), 2, ("FHR", "main")),
+            (raw.format("FHR-Specification", "fhr.json"), "2.0", ("FHR", "main")),
+            (raw.format("FHR-Specification", "fhp.json"), 1, ("FHP", "main")),
+            ("https://w3id.org/fair-bioheaders/fhr/v0.4.0", 1, ("FHR", "v0.4.0")),
+            ("https://example.org/fhr.json", 1, ("FHR", "main")),
+        ]
+        for schema, version, expected in cases:
+            with self.subTest(schema=schema, version=version):
+                record = {"schema": schema, "schemaVersion": version}
+                self.assertEqual(check_conformance.select_record(record)[:2], expected)
 
     def test_fhgff3_vectors(self):
         """specs/007-gff3-header contracts/conformance.md."""
@@ -258,7 +299,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(56 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(57 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -287,7 +328,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(56 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(57 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
@@ -305,7 +346,7 @@ class ConformanceTests(unittest.TestCase):
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
-        self.assertEqual(len(vectors), 24)
+        self.assertEqual(len(vectors), 25)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])
         for vector in vectors.values():
             document = json.loads((CONFORMANCE / vector["file"]).read_text(encoding="utf-8")) \

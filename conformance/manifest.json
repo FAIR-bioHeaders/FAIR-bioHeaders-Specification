@@ -111,6 +111,9 @@
     },
     "V5": {
       "summary": "Selection: any other schema value is FHR, validated against the current FHR schema."
+    },
+    "V6": {
+      "summary": "Selection, FHR 1 compatibility: a record whose schema is the raw-main fhr.json URL (either repository name) and whose schemaVersion is the number 1 (1 or 1.0, not the string \"1\" or a boolean) is an FHR 1 record, validated against the v0.3.1 FHR schema; the citation is deprecated, not invalid."
     }
   },
   "vectors": [
@@ -2573,6 +2576,63 @@
       }
     },
     {
+      "id": "fasta-schema-raw-main-version-1",
+      "file": "valid/fasta-schema-raw-main-version-1.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "V6"
+      ],
+      "description": "An FHR 1 record: raw-main with schemaVersion 1.0, as FHR 1 writers wrote it, is checked against the v0.3.1 schema (deprecated, not invalid). Before V6 this vector was invalid.",
+      "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "id": "fasta-schema-raw-main-version-1-integer",
+      "file": "valid/fasta-schema-raw-main-version-1-integer.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "V6"
+      ],
+      "description": "An FHR 1 record: raw-main with schemaVersion 1 is checked against the v0.3.1 schema; 1 and 1.0 are the same number.",
+      "checksum": "uLUfoely+J7DI9Sx/jqgoeC//2laaG/wXEU4bl0mKIE=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "id": "fasta-schema-canonical-raw-main-version-1",
+      "file": "valid/fasta-schema-canonical-raw-main-version-1.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "V6"
+      ],
+      "description": "The raw-main URL under the repository's current name with schemaVersion 1 is an FHR 1 record too.",
+      "checksum": "TJ5XF7JXu28nqf/3lR1svPVHRe4d7KRp6VGuosPwKKg=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json",
+        "schemaVersion": 1
+      }
+    },
+    {
       "id": "fasta-schema-raw-tag",
       "file": "valid/fasta-schema-raw-tag.fhr.fasta",
       "format": "fasta",
@@ -2751,6 +2811,78 @@
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
+      }
+    },
+    {
+      "id": "microdata-schema-raw-main-version-1",
+      "file": "valid/microdata-schema-raw-main-version-1.fhr.html",
+      "format": "microdata",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "M3",
+        "V6"
+      ],
+      "description": "An FHR 1 record with an untyped schemaVersion: 1 is read as the number the selected v0.3.1 schema defines, and the record is checked against v0.3.1.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Synthetic assembly author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU="
+      }
+    },
+    {
+      "id": "jsonld-schema-raw-main-version-1",
+      "file": "valid/jsonld-schema-raw-main-version-1.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J1",
+        "V6"
+      ],
+      "description": "An FHR 1 record in canonical JSON-LD: raw-main with schemaVersion the number 1 is checked against the v0.3.1 schema.",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": 1,
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Synthetic assembly author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU="
       }
     },
     {
@@ -4401,13 +4533,31 @@
       }
     },
     {
-      "id": "fasta-schema-raw-main-version-1",
-      "file": "invalid/fasta-schema-raw-main-version-1.fhr.fasta",
+      "id": "fasta-schema-raw-main-version-1-invalid",
+      "file": "invalid/fasta-schema-raw-main-version-1-invalid.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V6",
+      "reason": "An FHR 1 record whose vitalStats.N50 is not an integer: the v0.3.1 schema it is checked against rejects it."
+    },
+    {
+      "id": "fasta-schema-raw-main-version-string-1",
+      "file": "invalid/fasta-schema-raw-main-version-string-1.fhr.fasta",
       "format": "fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "V1",
-      "reason": "Raw-main is the current schema (2.0), not v0.3.1, so schemaVersion 1.0 fails it."
+      "reason": "schemaVersion is the string '1', not the number 1, so V6 does not apply: raw-main selects the current schema (2.0), which rejects it."
+    },
+    {
+      "id": "fasta-schema-raw-main-version-true",
+      "file": "invalid/fasta-schema-raw-main-version-true.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V1",
+      "reason": "schemaVersion is a boolean, not the number 1, so V6 does not apply: raw-main selects the current schema (2.0), which rejects it."
     },
     {
       "id": "fasta-schema-raw-tag-version-1",

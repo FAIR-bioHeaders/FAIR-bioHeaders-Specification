@@ -53,7 +53,7 @@ RULE_DOCUMENTS = ("docs/FORMAT.md", "docs/MICRODATA.md", "docs/JSONLD.md", "docs
 SCHEMAS = {"fhp-fasta": "fhp.json", "fhgff3": "fhgff3.json"}
 # Invalid vectors whose rule names the schema their metadata must fail.
 SCHEMA_RULES = {"P1": "fhp.json", "P2": "fhr.json", "G2": "fhgff3.json", "G3": "fhr.json"}
-# Schema selection (docs/SCHEMA-VERSIONS.md V1-V5) and the version registry.
+# Schema selection (docs/SCHEMA-VERSIONS.md V1-V6) and the version registry.
 REGISTRY_PATH = ROOT / "schemas" / "versions.json"
 # Either repository name (#108): FAIR-bioHeaders-Specification, or FHR-Specification
 # as it was called before; the old URLs stay supported aliases.
@@ -84,6 +84,26 @@ def select_schema(value, registry=None):
             return header_type, ref, registry["files"][header_type]
         return header_type, None, None
     return "FHR", "main", registry["files"]["FHR"]
+
+
+# V6: an FHR 1 record citing raw-main is read against the last FHR 1 release.
+FHR1_RELEASE = "v0.3.1"
+
+
+def is_fhr1_version(version):
+    """The number 1 (1 or 1.0); not the string "1" and not a boolean (V6)."""
+    return isinstance(version, (int, float)) and not isinstance(version, bool) and version == 1
+
+
+def select_record(metadata, registry=None):
+    """Like select_schema for a record's ``schema``, with rule V6: a raw-main fhr.json URL
+    and schemaVersion the number 1 select the v0.3.1 FHR schema."""
+    registry = registry or json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+    value = metadata.get("schema") if isinstance(metadata, dict) else None
+    raw = RAW_SCHEMA.fullmatch(value) if isinstance(value, str) else None
+    if raw and raw.groups() == ("main", "fhr") and is_fhr1_version(metadata.get("schemaVersion")):
+        return "FHR", FHR1_RELEASE, registry["files"]["FHR"]
+    return select_schema(value, registry)
 
 
 def load_schema(release, name, registry=None):
@@ -263,8 +283,7 @@ def check_schema(conformance, manifest):
 
     def selected_validator(metadata):
         """The validator for the schema ``metadata`` selects, or None (unsupported)."""
-        _, release, name = select_schema(metadata.get("schema") if isinstance(metadata, dict)
-                                         else None)
+        _, release, name = select_record(metadata)
         if release is None:
             return None
         if (release, name) not in selected:
@@ -284,7 +303,7 @@ def check_schema(conformance, manifest):
     problems = []
     for vector in manifest["vectors"]:
         if vector["format"] in PREFIXES and vector.get("rule", "").startswith("V"):
-            # Selection vectors (V1-V5): an unsupported version selects no schema;
+            # Selection vectors (V1-V6): an unsupported version selects no schema;
             # otherwise the metadata must fail the schema its URL selects.
             validator = selected_validator(header_metadata(vector))
             if vector.get("result") == "unsupported-version":
@@ -327,6 +346,8 @@ def check_schema(conformance, manifest):
                                                         vector["metadata"]):
                 problems.append(f"{vector['id']}: rule J1 reading differs from the manifest metadata")
         if vector["format"] in EXTRACTED:
+            # The extracted metadata is checked against the schema it selects (V1-V6).
+            validator = selected_validator(vector.get("metadata", {})) or validator
             errors = list(validator.iter_errors(vector.get("metadata", {})))
             if vector["expected"] == "valid":
                 problems += [f"{vector['id']}: {error.json_path}: {error.message}"
@@ -336,7 +357,7 @@ def check_schema(conformance, manifest):
                 if "seqcol_id" in vector["metadata"]:
                     problems.append(f"{vector['id']}: valid vectors must not carry a SeqCol placeholder")
             elif "metadata" in vector and not errors:
-                problems.append(f"{vector['id']}: extracted metadata unexpectedly matches fhr.json")
+                problems.append(f"{vector['id']}: extracted metadata unexpectedly matches its schema")
             continue
         if vector["expected"] != "valid":
             continue

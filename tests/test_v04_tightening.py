@@ -192,6 +192,8 @@ class V04TighteningTests(unittest.TestCase):
         validator = self.validators["fhr.json"]
         for vector in manifest["vectors"]:
             if vector["format"] == "microdata" and vector["expected"] == "valid":
+                if "V6" in vector["rules"]:
+                    continue  # An FHR 1 record, read as v0.3.1 (check_conformance.py --schema).
                 with self.subTest(vector=vector["id"]):
                     validator.validate(vector["metadata"])
 

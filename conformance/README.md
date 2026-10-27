@@ -28,8 +28,8 @@ open and re-save them in an editor. Run the generator instead.
 
 `rules` maps each stable rule id to a short summary: R1 to R13 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
-docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V5
-(schema selection) from docs/SCHEMA-VERSIONS.md. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V6
+(schema selection) from docs/SCHEMA-VERSIONS.md. V6 reads an FHR 1 record that cites the raw-main `fhr.json` URL with `schemaVersion` the number 1 against the v0.3.1 schema; `fasta-schema-raw-main-version-1`, which states `1.0` as FHR 1 writers did, was invalid before V6 and is now valid with the same bytes. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
