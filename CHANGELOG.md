@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+- **Normative (schema selection):** add rule V6 to docs/SCHEMA-VERSIONS.md, FHR 1
+  compatibility. FHR 1 (releases up to v0.3.1) told writers to cite the raw-main
+  `fhr.json` URL with `schemaVersion: 1`, and existing FHR 1 files in the wild do; since
+  v0.4.0 raw-main selects FHR 2.0, so V1 alone made those files fail on `schemaVersion`
+  even when they were valid FHR 1. A record whose `schema` is the raw-main `fhr.json`
+  URL (either repository name) and whose `schemaVersion` is the number 1 (`1` or `1.0`;
+  not the string `"1"` or a boolean) is now an FHR 1 record, checked against the v0.3.1
+  schema: deprecated (readers should warn), not invalid. Every other record selects as
+  before, and FHP and FHGFF3 are unaffected. The migration section now describes such
+  files as deprecated. No schema bytes, `schemaVersion` or `versions.json` change.
+- Conformance vectors for V6 (233 -> 240 vectors): the invalid vector
+  `fasta-schema-raw-main-version-1` (raw-main with `schemaVersion: 1.0`) is retired,
+  because V6 changes its outcome, and the same bytes are the new valid vector
+  `fasta-schema-raw-main-version-1-0`. Vector ids are never reused: the manifest gains a
+  `retired` list (id, former outcome, replacement, reason), and `check_conformance.py`
+  rejects a vector that reuses a retired id. New valid
+  `fasta-schema-raw-main-version-1-integer`,
+  `fasta-schema-canonical-raw-main-version-1`, `microdata-schema-raw-main-version-1`
+  (untyped `schemaVersion`) and `jsonld-schema-raw-main-version-1`; new invalid
+  `fasta-schema-raw-main-version-1-invalid` (an FHR 1 record that v0.3.1 rejects),
+  `fasta-schema-raw-main-version-string-1` and `fasta-schema-raw-main-version-true`
+  (V6 needs the number 1, so V1 applies). `check_conformance.py --schema` applies V6, and
+  validates microdata and JSON-LD metadata against the schema it selects. The
+  conformance CI now runs fair-bioheaders 0.8.4, the first release that implements V6
+  (FAIR-bioHeaders-Tools#114).
+
 - Enable the deferred FHGFF3 G1 near-miss vectors `fhgff3-version-30`,
   `fhgff3-version-3x` and `fhgff3-version-3-1` (invalid, G1), now that fair-bioheaders
   0.8.2 enforces the full `##gff-version` grammar (FAIR-bioHeaders-Tools#91), and pin

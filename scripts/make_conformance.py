@@ -32,6 +32,19 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "conformance"
 MANIFEST_VERSION = 1
 
+# Vector ids are never reused. A vector whose expected outcome changes is retired and
+# replaced by a vector with a new id, so a published id always means one outcome.
+RETIRED = {
+    "fasta-schema-raw-main-version-1": {
+        "expected": "invalid",
+        "rule": "V1",
+        "replacedBy": "fasta-schema-raw-main-version-1-0",
+        "reason": "Rule V6 made the FHR 1 record it carries (raw-main with schemaVersion "
+                  "1.0) valid, so its expected outcome changed; the same bytes are now the "
+                  "valid vector fasta-schema-raw-main-version-1-0.",
+    },
+}
+
 # Stable, non-normative labels for the docs/FORMAT.md rules.
 RULES = {
     "R1": "Checksum rule 1: hash the exact file bytes without normalization; "
@@ -113,6 +126,10 @@ RULES = {
           "that type, or a raw URL with any other ref gives an unsupported-version result, "
           "never another schema.",
     "V5": "Selection: any other schema value is FHR, validated against the current FHR schema.",
+    "V6": "Selection, FHR 1 compatibility: a record whose schema is the raw-main fhr.json URL "
+          "(either repository name) and whose schemaVersion is the number 1 (1 or 1.0, not "
+          "the string \"1\" or a boolean) is an FHR 1 record, validated against the v0.3.1 "
+          "FHR schema; the citation is deprecated, not invalid.",
 }
 NOT_APPLICABLE = {
     "R11": "R11 is a recommendation: a raw '>' or '@' in a FASTA header line makes a "
@@ -1078,9 +1095,29 @@ def build_selection():
     raw_main, raw_tag = f"{RAW}main/fhr.json", f"{RAW}{RELEASE}/fhr.json"
     selection_valid("fasta-schema-raw-main", raw_main, "'2.0'", ["V1"],
                     "The raw-main URL selects the current FHR schema (2.0).", "2.0")
-    selection_invalid("fasta-schema-raw-main-version-1", raw_main, "1.0", "V1",
-                      "Raw-main is the current schema (2.0), not v0.3.1, so schemaVersion 1.0 "
-                      "fails it.")
+    # V6: FHR 1 writers cited raw-main with the number 1, usually written 1.0.
+    # It replaces the retired fasta-schema-raw-main-version-1 (invalid before V6).
+    selection_valid("fasta-schema-raw-main-version-1-0", raw_main, "1.0", ["V6"],
+                    "An FHR 1 record: raw-main with schemaVersion 1.0, as FHR 1 writers wrote "
+                    "it, is checked against the v0.3.1 schema (deprecated, not invalid). It "
+                    "replaces the retired invalid vector fasta-schema-raw-main-version-1.", 1)
+    selection_valid("fasta-schema-raw-main-version-1-integer", raw_main, "1", ["V6"],
+                    "An FHR 1 record: raw-main with schemaVersion 1 is checked against the "
+                    "v0.3.1 schema; 1 and 1.0 are the same number.", 1)
+    selection_valid("fasta-schema-canonical-raw-main-version-1", f"{RAW_CANONICAL}main/fhr.json",
+                    "1", ["V6"], "The raw-main URL under the repository's current name with "
+                    "schemaVersion 1 is an FHR 1 record too.", 1)
+    data, _ = assemble(header("fasta", selection_metadata(raw_main, "1")[:-1] + [
+        "vitalStats:", "  N50: not recorded", None]) + body("fasta"))
+    invalid("fasta-schema-raw-main-version-1-invalid", "fasta", data, "V6",
+            "An FHR 1 record whose vitalStats.N50 is not an integer: the v0.3.1 schema it is "
+            "checked against rejects it.")
+    selection_invalid("fasta-schema-raw-main-version-string-1", raw_main, "'1'", "V1",
+                      "schemaVersion is the string '1', not the number 1, so V6 does not apply: "
+                      "raw-main selects the current schema (2.0), which rejects it.")
+    selection_invalid("fasta-schema-raw-main-version-true", raw_main, "true", "V1",
+                      "schemaVersion is a boolean, not the number 1, so V6 does not apply: "
+                      "raw-main selects the current schema (2.0), which rejects it.")
     selection_valid("fasta-schema-raw-tag", raw_tag, "'2.0'", ["V2"],
                     f"The {RELEASE} raw tag URL selects the {RELEASE} FHR schema.", "2.0")
     selection_invalid("fasta-schema-raw-tag-version-1", raw_tag, "1", "V2",
@@ -1132,6 +1169,17 @@ def build_selection():
     data, value = assemble(fhgff3_lines(fhgff3_record(schema=f"{W3ID}fhgff3/v0.0.0")))
     invalid("fhgff3-schema-unknown-release", "fhgff3", data, "V4",
             "v0.0.0 is not a release; the result is unsupported-version.", result=UNSUPPORTED)
+    # V6 in microdata and JSON-LD: the same FHR 1 record.
+    import make_jsonld
+
+    fhr1 = md_expect(schema=raw_main, schemaVersion=1)
+    md_valid("microdata-schema-raw-main-version-1", md_page(md_content(fhr1, replace={
+        "schemaVersion": '<span itemprop="schemaVersion">1</span>'})), fhr1, ["M3", "V6"],
+             "An FHR 1 record with an untyped schemaVersion: 1 is read as the number the "
+             "selected v0.3.1 schema defines, and the record is checked against v0.3.1.")
+    jsonld_valid("jsonld-schema-raw-main-version-1", make_jsonld.to_jsonld(fhr1), fhr1,
+                 ["J1", "V6"], "An FHR 1 record in canonical JSON-LD: raw-main with "
+                 "schemaVersion the number 1 is checked against the v0.3.1 schema.")
 
 # Microdata vectors. The checksum is an ordinary value here (the fasta-lf
 # checksum), so these vectors pin the extracted metadata instead.
@@ -1722,7 +1770,10 @@ def self_check():
     names = set()
     for entry in VALID + INVALID:
         assert entry["name"] not in names, entry["name"]
+        assert entry["name"] not in RETIRED, entry["name"]
         names.add(entry["name"])
+    for name, retired in RETIRED.items():
+        assert retired["replacedBy"] in names, name
     required = json.loads((ROOT / "fhr.json").read_text())["required"]
     for entry in VALID + INVALID:
         if entry["kind"] == "microdata":
@@ -1812,6 +1863,7 @@ def manifest():
             for rule, text in RULES.items()
         },
         "vectors": vectors,
+        "retired": [{"id": name, **retired} for name, retired in RETIRED.items()],
     }
 
 

@@ -136,7 +136,7 @@ same; existing files cite the old form, and it keeps serving the same files.
 
 - [V1] `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/<file>` selects
   the reader's **current** schema of that type: the copy of `main` the reader has. There is no
-  fallback to an older release.
+  fallback to an older release, except for FHR 1 records (V6).
 - [V2] `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/vX.Y.Z/<file>` selects
   **release vX.Y.Z's** schema of that type.
 - [V3] `https://w3id.org/fair-bioheaders/<type>/vX.Y.Z`, with or without a trailing slash, selects
@@ -150,6 +150,27 @@ same; existing files cite the old form, and it keeps serving the same files.
 - [V5] Any other value, including the w3id path form `…/fhr/v0.4.0/fhr.json`, is **FHR**, checked
   against the current FHR schema. FHR's `schema` field has never been constrained; this keeps that
   behaviour.
+- [V6] **FHR 1 compatibility.** A record whose `schema` is the raw-main `fhr.json` URL (V1, under
+  either repository name) and whose `schemaVersion` is the number 1 is an **FHR 1** record. It is
+  checked against release v0.3.1's FHR schema, the last FHR 1 contract, and the result is that
+  schema's result. `1` and `1.0` are the same number (JSON, and YAML's `1` and `1.0`, give the
+  number 1); the string `"1"`, a boolean and any other number are not 1, so V1 applies to them
+  unchanged. The record is **deprecated, not invalid**: readers should warn and name the two
+  fixes in [Migrating](#migrating-files-that-cite-raw-main-with-schemaversion-1), for example
+  `FHR: warning: schemaVersion 1 via the raw-main schema URL is read as FHR 1 (v0.3.1); cite
+  https://w3id.org/fair-bioheaders/fhr/v0.3.1 or move to schemaVersion "2.0"`. V6 applies only
+  to FHR: FHP and FHGFF3 were first released in v0.4.0 with `schemaVersion` `"1.0"`, so they have
+  no earlier raw-main contract. For microdata without `data-fhr-type`, `schemaVersion` text that
+  reads as the JSON number 1 counts as the number 1 (rule M3 then converts it with the v0.3.1
+  schema, whose `schemaVersion` is a number).
+
+V6 exists because FHR 1 (releases up to v0.3.1) told writers to cite the raw-main URL with
+`schemaVersion: 1`, and FHR 1 writers commonly wrote `1.0`. When raw-main moved to FHR 2.0 in
+v0.4.0, V1 alone made every such file fail on its `schemaVersion`, even when it was valid FHR 1.
+The record's own `schemaVersion` says which contract it was written for, and FHR 2.0 requires the
+string `"2.0"`, so no record that FHR 2.0 accepts is read differently: V6 only turns a certain
+failure into the FHR 1 result. v0.3.0 and v0.3.1 publish the same FHR schema; v0.3.1 is named
+as the later release. A reader that predates V6 reports these files as invalid.
 
 Readers use copies of the released schemas (tags are the source) and say which release their
 current copy is; they do not fetch schemas at run time. Microdata keeps the raw-main `fhr.json`
@@ -170,8 +191,10 @@ The raw-main URL stays the canonical "current schema" link in documentation. Too
 
 ## Migrating files that cite raw-main with schemaVersion 1
 
-Once the current FHR schema is 2.0, such a file fails with a `schemaVersion` error. No tool rewrites
-it, because any change to the header changes the checksum. Choose one:
+Such a file is an FHR 1 file, read against v0.3.1 by rule V6 with a deprecation warning. It stays
+valid while it is valid FHR 1, but raw-main is the current-schema link, so new and updated files
+should cite a versioned URL. No tool rewrites it, because any change to the header changes the
+checksum. To clear the warning, choose one:
 
 - **Move to v0.4**: set `schema` to `https://w3id.org/fair-bioheaders/fhr/v0.4.0` and
   `schemaVersion` to `'2.0'`, fix anything the v0.4 tightening rejects
@@ -188,7 +211,7 @@ bioheaders strip legacy.fa plain.fa               # output is positional, not -o
 bioheaders combine metadata.yaml plain.fa -o genome.fhr.fa   # new checksum
 ```
 
-`bioheaders convert legacy.fa metadata.yaml` cannot replace the first step: `convert`
-validates the metadata before writing it, so a file that still cites raw-main with
-`schemaVersion: 1` fails with `1.0 is not of type 'string'`. Recover the header text,
-edit it, and recombine instead.
+With a toolkit that implements V6, `bioheaders convert legacy.fa metadata.yaml` can replace
+the first step, since an FHR 1 header now validates. Older toolkits (before V6) reject such a
+file with `1.0 is not of type 'string'`; with them, recover the header text with `grep`, edit
+it, and recombine.
