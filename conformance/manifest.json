@@ -2576,15 +2576,15 @@
       }
     },
     {
-      "id": "fasta-schema-raw-main-version-1",
-      "file": "valid/fasta-schema-raw-main-version-1.fhr.fasta",
+      "id": "fasta-schema-raw-main-version-1-0",
+      "file": "valid/fasta-schema-raw-main-version-1-0.fhr.fasta",
       "format": "fasta",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "V6"
       ],
-      "description": "An FHR 1 record: raw-main with schemaVersion 1.0, as FHR 1 writers wrote it, is checked against the v0.3.1 schema (deprecated, not invalid). Before V6 this vector was invalid.",
+      "description": "An FHR 1 record: raw-main with schemaVersion 1.0, as FHR 1 writers wrote it, is checked against the v0.3.1 schema (deprecated, not invalid). It replaces the retired invalid vector fasta-schema-raw-main-version-1.",
       "checksum": "3an6Cqo2eomqlt75XIpyWXDtls3GhA8EOpjK97S+ykc=",
       "metadata": {
         "genome": "Synthetic FHR conformance genome",
@@ -4625,6 +4625,15 @@
       "rule": "V4",
       "reason": "v0.0.0 is not a release; the result is unsupported-version.",
       "result": "unsupported-version"
+    }
+  ],
+  "retired": [
+    {
+      "id": "fasta-schema-raw-main-version-1",
+      "expected": "invalid",
+      "rule": "V1",
+      "replacedBy": "fasta-schema-raw-main-version-1-0",
+      "reason": "Rule V6 made the FHR 1 record it carries (raw-main with schemaVersion 1.0) valid, so its expected outcome changed; the same bytes are now the valid vector fasta-schema-raw-main-version-1-0."
     }
   ]
 }

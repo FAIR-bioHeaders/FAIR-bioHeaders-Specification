@@ -178,13 +178,20 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"]}
         fhr1 = {name for name, v in vectors.items() if "V6" in v.get("rules", [v.get("rule")])}
         self.assertEqual(fhr1, {
-            "fasta-schema-raw-main-version-1", "fasta-schema-raw-main-version-1-integer",
+            "fasta-schema-raw-main-version-1-0", "fasta-schema-raw-main-version-1-integer",
             "fasta-schema-canonical-raw-main-version-1", "fasta-schema-raw-main-version-1-invalid",
             "microdata-schema-raw-main-version-1", "jsonld-schema-raw-main-version-1"})
-        # The FHR 1 writers' form, 1.0, was invalid before V6; the file bytes are unchanged.
-        self.assertEqual(vectors["fasta-schema-raw-main-version-1"]["expected"], "valid")
+        # The FHR 1 writers' form, 1.0, was invalid before V6. Its old id is retired, never
+        # reused, and the same record is the new valid vector.
+        self.assertEqual(vectors["fasta-schema-raw-main-version-1-0"]["expected"], "valid")
         self.assertIn(b";~schemaVersion: 1.0\n",
-                      (CONFORMANCE / vectors["fasta-schema-raw-main-version-1"]["file"]).read_bytes())
+                      (CONFORMANCE / vectors["fasta-schema-raw-main-version-1-0"]["file"]).read_bytes())
+        retired = {entry["id"]: entry for entry in self.manifest["retired"]}
+        self.assertNotIn("fasta-schema-raw-main-version-1", vectors)
+        self.assertEqual(retired["fasta-schema-raw-main-version-1"]["expected"], "invalid")
+        self.assertEqual(retired["fasta-schema-raw-main-version-1"]["replacedBy"],
+                         "fasta-schema-raw-main-version-1-0")
+        self.assertFalse(retired.keys() & vectors.keys())
         for name in fhr1 - {"fasta-schema-raw-main-version-1-invalid"}:
             self.assertEqual(vectors[name]["expected"], "valid", name)
             self.assertEqual(vectors[name]["metadata"]["schemaVersion"], 1, name)

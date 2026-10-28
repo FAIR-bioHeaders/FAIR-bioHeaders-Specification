@@ -254,6 +254,13 @@ def check_manifest(manifest):
     for rule, outcomes in coverage.items():
         if "notApplicable" not in manifest["rules"][rule] and outcomes != {"valid", "invalid"}:
             problems.append(f"{rule}: needs at least one valid and one invalid vector")
+    # Vector ids are never reused: a retired id names no vector.
+    ids = {vector["id"] for vector in manifest["vectors"]}
+    for retired in manifest.get("retired", []):
+        if retired["id"] in ids:
+            problems.append(f"{retired['id']}: retired id reused by a vector")
+        if retired.get("replacedBy") and retired["replacedBy"] not in ids:
+            problems.append(f"{retired['id']}: replacement {retired['replacedBy']} is not a vector")
     return problems
 
 

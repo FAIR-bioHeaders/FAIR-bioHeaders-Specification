@@ -12,9 +12,13 @@
   schema: deprecated (readers should warn), not invalid. Every other record selects as
   before, and FHP and FHGFF3 are unaffected. The migration section now describes such
   files as deprecated. No schema bytes, `schemaVersion` or `versions.json` change.
-- Conformance vectors for V6 (233 -> 240 vectors): `fasta-schema-raw-main-version-1`
-  (raw-main with `schemaVersion: 1.0`) moves from invalid to valid with the same bytes;
-  new valid `fasta-schema-raw-main-version-1-integer`,
+- Conformance vectors for V6 (233 -> 240 vectors): the invalid vector
+  `fasta-schema-raw-main-version-1` (raw-main with `schemaVersion: 1.0`) is retired,
+  because V6 changes its outcome, and the same bytes are the new valid vector
+  `fasta-schema-raw-main-version-1-0`. Vector ids are never reused: the manifest gains a
+  `retired` list (id, former outcome, replacement, reason), and `check_conformance.py`
+  rejects a vector that reuses a retired id. New valid
+  `fasta-schema-raw-main-version-1-integer`,
   `fasta-schema-canonical-raw-main-version-1`, `microdata-schema-raw-main-version-1`
   (untyped `schemaVersion`) and `jsonld-schema-raw-main-version-1`; new invalid
   `fasta-schema-raw-main-version-1-invalid` (an FHR 1 record that v0.3.1 rejects),

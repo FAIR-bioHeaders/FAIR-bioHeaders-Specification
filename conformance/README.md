@@ -29,7 +29,7 @@ open and re-save them in an editor. Run the generator instead.
 `rules` maps each stable rule id to a short summary: R1 to R13 from
 docs/FORMAT.md, M1 to M4 from docs/MICRODATA.md, J1 to J7 from
 docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V6
-(schema selection) from docs/SCHEMA-VERSIONS.md. V6 reads an FHR 1 record that cites the raw-main `fhr.json` URL with `schemaVersion` the number 1 against the v0.3.1 schema; `fasta-schema-raw-main-version-1`, which states `1.0` as FHR 1 writers did, was invalid before V6 and is now valid with the same bytes. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+(schema selection) from docs/SCHEMA-VERSIONS.md. V6 reads an FHR 1 record that cites the raw-main `fhr.json` URL with `schemaVersion` the number 1 against the v0.3.1 schema; `fasta-schema-raw-main-version-1`, which states `1.0` as FHR 1 writers did, was invalid before V6, so it is retired and the same bytes are the valid vector `fasta-schema-raw-main-version-1-0`. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. J7 constrains writers, so it is
 `notApplicable` for invalid input; the valid vectors citing it are writer output. The same ids appear in
 brackets in those documents, where the rule text is authoritative. R9 (repeated
@@ -51,6 +51,12 @@ Every entry in `vectors` has these fields:
 | `rule` | Invalid vectors only: the rule the file breaks |
 | `reason` | Invalid vectors only: how the file breaks that rule |
 | `result` | Invalid V4 vectors only: `unsupported-version`. A reader must report that the cited schema version is unsupported (the toolkit prints `unsupported schema version`), not check the file against another schema |
+
+Vector ids are stable and never reused. When a rule change alters a vector's expected
+outcome, the vector is retired and a vector with a new id takes its place. `retired`
+lists each retired id with the outcome it had (`expected`, and `rule` if it was
+invalid), the id that replaces it (`replacedBy`) and the `reason`. No entry in
+`vectors` uses a retired id.
 
 An invalid vector breaks one rule and is otherwise correct. Where possible its
 stated checksum matches the bytes, so an implementation can't pass by failing the

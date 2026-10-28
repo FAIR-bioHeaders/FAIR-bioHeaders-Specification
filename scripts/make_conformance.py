@@ -32,6 +32,19 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "conformance"
 MANIFEST_VERSION = 1
 
+# Vector ids are never reused. A vector whose expected outcome changes is retired and
+# replaced by a vector with a new id, so a published id always means one outcome.
+RETIRED = {
+    "fasta-schema-raw-main-version-1": {
+        "expected": "invalid",
+        "rule": "V1",
+        "replacedBy": "fasta-schema-raw-main-version-1-0",
+        "reason": "Rule V6 made the FHR 1 record it carries (raw-main with schemaVersion "
+                  "1.0) valid, so its expected outcome changed; the same bytes are now the "
+                  "valid vector fasta-schema-raw-main-version-1-0.",
+    },
+}
+
 # Stable, non-normative labels for the docs/FORMAT.md rules.
 RULES = {
     "R1": "Checksum rule 1: hash the exact file bytes without normalization; "
@@ -1083,10 +1096,11 @@ def build_selection():
     selection_valid("fasta-schema-raw-main", raw_main, "'2.0'", ["V1"],
                     "The raw-main URL selects the current FHR schema (2.0).", "2.0")
     # V6: FHR 1 writers cited raw-main with the number 1, usually written 1.0.
-    selection_valid("fasta-schema-raw-main-version-1", raw_main, "1.0", ["V6"],
+    # It replaces the retired fasta-schema-raw-main-version-1 (invalid before V6).
+    selection_valid("fasta-schema-raw-main-version-1-0", raw_main, "1.0", ["V6"],
                     "An FHR 1 record: raw-main with schemaVersion 1.0, as FHR 1 writers wrote "
-                    "it, is checked against the v0.3.1 schema (deprecated, not invalid). "
-                    "Before V6 this vector was invalid.", 1)
+                    "it, is checked against the v0.3.1 schema (deprecated, not invalid). It "
+                    "replaces the retired invalid vector fasta-schema-raw-main-version-1.", 1)
     selection_valid("fasta-schema-raw-main-version-1-integer", raw_main, "1", ["V6"],
                     "An FHR 1 record: raw-main with schemaVersion 1 is checked against the "
                     "v0.3.1 schema; 1 and 1.0 are the same number.", 1)
@@ -1756,7 +1770,10 @@ def self_check():
     names = set()
     for entry in VALID + INVALID:
         assert entry["name"] not in names, entry["name"]
+        assert entry["name"] not in RETIRED, entry["name"]
         names.add(entry["name"])
+    for name, retired in RETIRED.items():
+        assert retired["replacedBy"] in names, name
     required = json.loads((ROOT / "fhr.json").read_text())["required"]
     for entry in VALID + INVALID:
         if entry["kind"] == "microdata":
@@ -1846,6 +1863,7 @@ def manifest():
             for rule, text in RULES.items()
         },
         "vectors": vectors,
+        "retired": [{"id": name, **retired} for name, retired in RETIRED.items()],
     }
 
 
