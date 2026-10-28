@@ -47,6 +47,8 @@ repository and must not be treated as an INSDC accession. Taxonomy and accession
 crosswalks need additional source context. The earlier speculative NCBI/RefSeq/JGI
 mappings have been removed rather than emitting misleading accession values.
 
+**Identifier Conventions:** To link to INSDC projects or samples, use the CURIE convention in the `identifier` or `accessionID` fields (e.g., `bioproject:PRJNAXXXXXX`, `biosample:SAMNXXXXXX`). These follow the anchored pattern `^[A-Za-z0-9._-]+:.+$` defined in the current schema.
+
 Check the target checklist's required fields, controlled vocabularies, and resource
 submission rules before using the projection in a submission. Updating MIxS versions
 requires reviewing term definitions and running the mapping fixtures again.
