@@ -47,7 +47,15 @@ repository and must not be treated as an INSDC accession. Taxonomy and accession
 crosswalks need additional source context. The earlier speculative NCBI/RefSeq/JGI
 mappings have been removed rather than emitting misleading accession values.
 
-**Identifier Conventions:** To link to INSDC projects or samples, use the CURIE convention in the `identifier` or `accessionID` fields (e.g., `bioproject:PRJNAXXXXXX`, `biosample:SAMNXXXXXX`). These follow the anchored pattern `^[A-Za-z0-9._-]+:.+$` defined in the current schema.
+**Identifier Conventions:** The shared core reserves `identifier` (a CURIE list) and
+`accessionID` (a `{name, url}` object) for the described data itself
+(`schemas/core.yaml`); they must not carry related project, sample or publication
+identifiers. Links to related INSDC records — BioProject, BioSample, SRA studies —
+belong in `relatedLink` as URLs (e.g. `https://www.ebi.ac.uk/bioproject/PRJNA…`,
+`https://www.ncbi.nlm.nih.gov/biosample/SAMN…`). Publications are recorded with
+`scholarlyArticle` (a bare DOI, no resolver prefix) or a `relatedLink` URL. The
+CURIE pattern `^[A-Za-z0-9._-]+:.+$` applies to `identifier` entries of the
+described data.
 
 Check the target checklist's required fields, controlled vocabularies, and resource
 submission rules before using the projection in a submission. Updating MIxS versions

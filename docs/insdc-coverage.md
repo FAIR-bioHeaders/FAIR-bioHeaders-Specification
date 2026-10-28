@@ -6,8 +6,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 - **INSDC side**: [insdc/minimum-specifcations](https://github.com/insdc/minimum-specifcations) at commit `41f0dc4` (2026-07-06). All categories are at v1.0.
 - **FAIR-bioHeaders side**:
     - FHR `schemaVersion "2.0"`, FHP `"1.0"`, FHGFF3 `"1.0"`.
-    - FHT: Reviewed against the draft [specs/005-rna-transcriptome-header](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/specs/005-rna-transcriptome-header/spec.md).
-    - gff3-validator rule catalogue.
+    - FHT: Reviewed against the draft [specs/005-rna-transcriptome-header @ `9a87e5c`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/9a87e5cfe0ce3e024508ff8fdb58e6fe9042dffe/specs/005-rna-transcriptome-header/spec.md). Spec 005 is an evolving draft; the revision above is the one assessed, and it was identical to `main` when the assessment was written.
+    - [gff3-validator rule catalogue @ `c753f45`](https://github.com/FAIR-bioHeaders/gff3-validator/blob/c753f451d28b80b5f84c042e0f0486c3b1049adf/gff3_validator/catalogue.yaml) (`catalogue_version 0.1.0-draft`, dated 2026-10-08; DRAFT for Sequence Ontology review).
 
 **Coverage Key:**
 ✅ covered · ◐ partially covered · ✗ not covered · — not applicable (out of scope by design)
@@ -20,8 +20,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 | [Assembly](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Assembly) | FHR | Direct | FHR is the file-bound description of an assembled sequence set; INSDC Assembly is the database-level object for the same set |
 | [Annotations](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Annotations) | FHGFF3 header + gff3-validator | Direct | Header carries provenance; feature-level rules belong to the validator, not the header |
 | [Analysis](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Analysis) | FHR on GFA/FASTA (toolkit formats), `derivedFrom` (FHP/FHGFF3) | Partial | Mandatory checksum/type/title philosophy aligns closely; STUDY_REF has no FH field; BASE_MODIFICATION TSV/CSV and GENOME_MAP formats are unsupported |
-| [Sample](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Sample) | `voucherSpecimen`, `taxon`, `identifier` CURIEs, profiles machinery (draft) | Partial | No released type has a sample object; the draft AgBioData profile demonstrates the community-slot route |
-| [Project](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Project) | `identifier`, `relatedLink`, `accessionID`, `scholarlyArticle`, `funding` | Partial | No project field in any released type; BioProject links are possible by CURIE convention only |
+| [Sample](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Sample) | `voucherSpecimen`, `taxon`, `relatedLink` (sample record URLs), profiles machinery (draft) | Partial | No released type has a sample object; the draft AgBioData profile demonstrates the community-slot route |
+| [Project](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Project) | `relatedLink` (project record URLs), `scholarlyArticle`, `funding` | Partial | No project field in any released type; BioProject links are possible as `relatedLink` URLs only |
 | [Package-Checklist](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Package-Checklist) | `schema`+`schemaVersion`, TERMS.md, `profiles/registry.yaml` (draft) | Conceptual analogue | FH community profiles are the direct counterpart: layered requirements with their own versioning, never relaxing the base contract |
 | [Experiment](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Experiment) | FHT draft `libraryStrategy`/`strandedness`; FHR `instrument`, `vitalStats.readTechnology` | Marginal | The family has no experiment object |
 | [Raw Reads](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Raw%20Reads) | — | N/A | No FASTQ/BAM/CRAM header type exists or is proposed |
@@ -53,7 +53,7 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 | # | INSDC requirement | Cov. | Location in FH | Disposition |
 | --- | --- | --- | --- |
-| A.a | Link to a public BioProject | ◐ | no field; `identifier` CURIE (`bioproject:PRJ…`), `relatedLink` or `accessionID` can carry it | Document the convention. |
+| A.a | Link to a public BioProject | ◐ | no field; the BioProject record URL belongs in `relatedLink` | Document the convention. |
 | A.b | Link to a public BioSample | ◐ | no field; `voucherSpecimen` is free-text; structured vouchers (#139/#140) are separate. | Profile route; document. |
 | A.c | Submitter/owner/consortium/center identity | ✅ | `metadataAuthor`, `assemblyAuthor` (required in FHR) | none |
 | A.d | BioSample associated with a taxID at species rank or below | ◐ | `taxon` required; rank is not schema-checkable | Document the limitation. |
@@ -68,13 +68,13 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 ### Annotation Minimum Specification v1.0
 
-*Boundary note: FHGFF3 headers carry provenance only; feature-level rules live in gff3-validator.*
+*Boundary note: FHGFF3 headers carry provenance only; feature-level rules live in gff3-validator. Catalogue rules cited below are implemented at the pinned catalogue revision unless marked (planned); STR-012 and STR-013 are planned.*
 
 | # | INSDC requirement | Cov. | Location | Disposition |
 | --- | --- | --- | --- |
 | AN.a | Conform to the INSDC GFF3 specification | ◐ | FHGFF3 header lines are ordinary GFF3; validator checks GFF3 1.26 syntax against a pinned SO release. | Compatibility test + TOOL_COMPATIBILITY.md entry. |
 | AN.b.iii | Feature locations: start/end/strand present; within sequence length... | ◐ | SYN-013…015, STR-002, STR-008/011 + BIO-001/002/003. | gff3-validator catalogue cross-check. |
-| AN.b.iv | Overlaps: feature intervals must not overlap... | ✗ | STR-012/013 cover parent–child containment only | Validator candidate rules |
+| AN.b.iv | Overlaps: feature intervals must not overlap... | ✗ | no implemented rule; STR-012 (planned, info-level) flags a child extending beyond its parent and STR-013 (planned) checks parent/child seqid agreement — neither checks interval overlap | Validator candidate rule |
 | AN.b.v | Lengths: complete CDS ≥30 aa; tRNA 50–150 bp; introns ≥10 bp | ✗ | BIO-009 checks multiple-of-three only | Validator candidate rules |
 | AN.b.vi | Coding regions: translation matches /translation... | ◐ | BIO-004, BIO-005, BIO-006/007, BIO-008, BIO-010. | Validator candidates. |
 | AN.b.vii | parent:child via `Parent=` (GFF3) / `transcript_id` (FT) | ◐ | STR-003…007, ATT-004/006. | Validator cross-check |
@@ -103,14 +103,14 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 | INSDC requirement | Cov. | Location in FH | Disposition |
 | --- | --- | --- | --- |
-| Sample Alias | ◐ | no released field; `identifier`/`accessionID` by convention; draft AgBioData profile adds `sampleIdentifier` | Profile/documentation route. |
+| Sample Alias | ◐ | no released field; the BioSample record URL belongs in `relatedLink`; draft AgBioData profile adds `sampleIdentifier` | Profile/documentation route. |
 | Organism name (NCBI Taxonomy) | ◐ | `taxon` required, identifiers.org/taxonomy URI pinned | Document limitation. |
 | Geographic location | ✗ | absent from every type | Keep external; document. |
 | Collection date | ✗ | absent | Keep external; document. |
 | Checklist/Package name | ◐ | mechanism analogue: required `schema` + `schemaVersion` | Document the analogy |
 | Package-defined mandatory attributes | ◐ | profiles can make optional fields required | Await #51/#56 review. |
 | Submitter name and affiliation | ◐ | `metadataAuthor` name/uri/nameType | Document |
-| No HTML markup in metadata | ✅ | YAML values; FASTA R11 escaping | none |
+| No HTML markup in metadata | ✗ | YAML string values may contain HTML; R11 escapes only the transport characters `>`/`@` (a raw one stays valid with a warning), so a `documentation` value with embedded HTML passes the released contract | Not covered by the contract; a submission-side check (profile constraint or assess convention) is the route |
 | Syntactic validation against schema | ✅ | per-type JSON Schema contracts + `bioheaders verify` | none |
 
 ### Project Minimum Specification v1.0
@@ -121,8 +121,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 | Submitter name | ✅ | `metadataAuthor` | none |
 | Project type | — | no analogue | N/A |
 | Contributor names/affiliations | ◐ | author lists | Document |
-| Publication (PubMed ID or DOI) | ✅ | `scholarlyArticle` (bare DOI), `identifier` (PubMed) | none |
-| Accessioning PRJ…, no versioning | ◐ | `identifier` `bioproject:PRJ…` by convention | Document convention |
+| Publication (PubMed ID or DOI) | ◐ | `scholarlyArticle` accepts a DOI only (`^10\.` pattern); a bare PubMed ID has no released slot — record the PubMed URL in `relatedLink` | Document the limitation |
+| Accessioning PRJ…, no versioning | ◐ | the PRJ… record URL belongs in `relatedLink` (`bioproject:` record) | Document convention |
 
 ### Package-Checklist Minimum Specification v1.0
 
