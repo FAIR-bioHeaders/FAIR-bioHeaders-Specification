@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Docs: shortened J3/J8 rationale.
+
 ## v0.4.2 — 2026-10-28
 
 A patch release of the format rules: hardening that accepts only the FHR JSON-LD context,

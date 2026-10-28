@@ -237,14 +237,10 @@ the FHR context or none: expanded, with value objects or explicit IRIs, or a sin
   `@nest` is not allowed either: it gives its properties to the enclosing object, so a value
   that a JSON reader does not see at its key would still be read as that field.
 
-  The reason is that every FHR key must mean the same thing to every reader. A JSON reader, a
-  schema validator and a canonical (J1) reader take a key such as `genome` at face value. A
-  context of the document's own choosing could map that key, through expansion, to another
-  field's IRI: an embedded context that swaps the term definitions of `genome` and
-  `documentation` would make a JSON-LD reader take each value as the other field. With only the
-  FHR context, a key that is an FHR field name always expands to that field; other keys (full
-  or compact IRIs) are not FHR keys to a JSON reader. A document written with another context
-  must be rewritten in the canonical form, or expanded, before it is read as FHR metadata.
+  The reason is that a non-FHR context can change what terms mean, so JSON readers and
+  JSON-LD readers could read different values from one document. A document written with
+  another context must be rewritten in the canonical form, or expanded, before it is read as
+  FHR metadata.
 - [J4] **One record, every term mapped.** The expanded document must have exactly one top-level
   node object, directly or as the only item of `@graph`. Every property of that node, and of its
   nested nodes, must map to an FHR field in its scope through the reverse of the FHR context: the
@@ -280,9 +276,7 @@ the FHR context or none: expanded, with value objects or explicit IRIs, or a sin
   ([Embedding in a web page](#embedding-in-a-web-page)), a writer must write every `<`, `>` and
   `&` in the JSON text as `\u003c`, `\u003e` and `\u0026`, and should write U+2028 and U+2029
   as `\u2028` and `\u2029`. JSON allows these characters only inside strings, where the
-  escapes stand for the same characters, so the document reads back unchanged. Escaping only
-  `</` (as `<\/`) is not enough: a value containing `<!--` followed by `<script` puts the HTML
-  parser in its script-data-double-escaped state, where the next `</script>` does not end the
-  element, so the rest of the page is read as script data or the element ends somewhere else.
-  HTML character references such as `&lt;` must not be used, because script content is not
-  decoded.
+  escapes stand for the same characters, so the document reads back unchanged. Unescaped `<`,
+  `>` and `&` can break out of or alter an HTML script element, so escaping only `</` (as
+  `<\/`) is not enough. HTML character references such as `&lt;` must not be used, because
+  script content is not decoded.
