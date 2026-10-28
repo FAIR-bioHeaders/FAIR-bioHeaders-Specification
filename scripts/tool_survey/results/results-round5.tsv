@@ -1,0 +1,127 @@
+header_marker	type	tool	version	inputs	control_rc	fhr_rc	class	header_lines_in_output	note
+semicolon	fasta	Prodigal	prodigal 2.6.3	genome.control.fa vs genome.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	Prodigal	prodigal 2.6.3	genome.control.fa vs genome.comment1.fa	0	0	a	0	
+hash	fasta	Prodigal	prodigal 2.6.3	genome.control.fa vs genome.hash.fa	0	0	a	0	
+unmarked	fasta	Prodigal	prodigal 2.6.3	genome.control.fa vs genome.text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	Prodigal	prodigal 2.6.3	genome.control.fa vs genome.raw.fa	0	0	a	0	
+semicolon-gzip	fasta	Prodigal	prodigal 2.6.3	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa vs genome.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa vs genome.comment1.fa	0	0	a	0	
+hash	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa vs genome.hash.fa	0	0	a	0	
+unmarked	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa vs genome.text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa vs genome.raw.fa	0	0	a	0	
+semicolon-gzip	fasta	pyrodigal CLI	pyrodigal 3.7.1	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa vs genome.fhr.fa	0	0	a		
+semicolon-1line	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa vs genome.comment1.fa	0	0	a		
+hash	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa vs genome.hash.fa	0	0	a		
+unmarked	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa vs genome.text.fa	0	0	a		
+semicolon-raw-markers	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa vs genome.raw.fa	0	0	a		
+semicolon-gzip	fasta	pyrodigal API (GeneFinder; pyrodigal's bundled FASTA reader)	pyrodigal 3.7.1	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	a		
+semicolon	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa vs genome.fhr.fa	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+semicolon-1line	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa vs genome.comment1.fa	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+hash	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa vs genome.hash.fa	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+unmarked	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa vs genome.text.fa	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+semicolon-raw-markers	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa vs genome.raw.fa	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+semicolon-gzip	fasta	pyrodigal API (GeneFinder; Biopython SeqIO fasta, as in the README)	pyrodigal 3.7.1, Biopython 1.88	genome.control.fa.gz vs genome.fhr.fa.gz	0	1	c		ValueError: This FASTA file contains comments at the beginning of the file, which are not
+semicolon	fasta	Barrnap	barrnap 1.10.6	genome.control.fa vs genome.fhr.fa	0	2	c		[barrnap] ERROR: No sequences found in input
+semicolon-1line	fasta	Barrnap	barrnap 1.10.6	genome.control.fa vs genome.comment1.fa	0	2	c		[barrnap] ERROR: No sequences found in input
+hash	fasta	Barrnap	barrnap 1.10.6	genome.control.fa vs genome.hash.fa	0	2	c		[barrnap] ERROR: No sequences found in input
+unmarked	fasta	Barrnap	barrnap 1.10.6	genome.control.fa vs genome.text.fa	0	2	c		[barrnap] ERROR: No sequences found in input
+semicolon-raw-markers	fasta	Barrnap	barrnap 1.10.6	genome.control.fa vs genome.raw.fa	0	2	c		[barrnap] ERROR: No sequences found in input
+semicolon-gzip	fasta	Barrnap	barrnap 1.10.6	genome.control.fa.gz vs genome.fhr.fa.gz	0	2	c		[barrnap] ERROR: No sequences found in input
+semicolon	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa vs genome.fhr.fa	0	2	c		[barrnap] ERROR: nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file genome.fhr.fa
+semicolon-1line	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa vs genome.comment1.fa	0	2	c		[barrnap] ERROR: nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file genome.comment1.fa
+hash	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa vs genome.hash.fa	0	2	c		[barrnap] ERROR: nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file genome.hash.fa
+unmarked	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa vs genome.text.fa	0	2	c		[barrnap] ERROR: nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file genome.text.fa
+semicolon-raw-markers	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa vs genome.raw.fa	0	2	c		[barrnap] ERROR: nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file genome.raw.fa
+semicolon-gzip	fasta	Barrnap 0.9 (nhmmer; the version Prokka 1.15 uses)	barrnap 0.9	genome.control.fa.gz vs genome.fhr.fa.gz	2	2	n/a		control also fails: [barrnap] ERROR: bad line in nhmmer output - Target sequence file genome.control.fa.gz isn't rewindable; can't search it with multiple queries
+semicolon	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa vs genome.fhr.fa	0	0	a		
+semicolon-1line	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa vs genome.comment1.fa	0	0	a		
+hash	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa vs genome.hash.fa	0	0	a		
+unmarked	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa vs genome.text.fa	0	0	a		
+semicolon-raw-markers	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa vs genome.raw.fa	0	0	a		
+semicolon-gzip	fasta	tRNAscan-SE	trnascan-se 2.0.13	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	n/a		control also fails: 
+semicolon	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa vs genome.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa vs genome.comment1.fa	0	0	a	0	
+hash	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa vs genome.hash.fa	0	0	a	0	
+unmarked	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa vs genome.text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa vs genome.raw.fa	0	0	b?	1	
+semicolon-gzip	fasta	MMseqs2 createdb + convert2fasta (genome)	mmseqs2 18.8cc5c	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	MMseqs2 createdb + convert2fasta (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	MMseqs2 createdb + convert2fasta (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.comment1.fa	0	0	a	0	
+hash	fasta	MMseqs2 createdb + convert2fasta (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.hash.fa	0	0	a	0	
+unmarked	fasta	MMseqs2 createdb + convert2fasta (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.text.fa	0	0	a	0	
+semicolon-gzip	fasta	MMseqs2 createdb + convert2fasta (proteins)	mmseqs2 18.8cc5c	proteins.control.fa.gz vs proteins.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	MMseqs2 easy-cluster (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	MMseqs2 easy-cluster (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.comment1.fa	0	0	a	0	
+hash	fasta	MMseqs2 easy-cluster (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.hash.fa	0	0	a	0	
+unmarked	fasta	MMseqs2 easy-cluster (proteins)	mmseqs2 18.8cc5c	proteins.control.fa vs proteins.text.fa	0	0	a	0	
+semicolon-gzip	fasta	MMseqs2 easy-cluster (proteins)	mmseqs2 18.8cc5c	proteins.control.fa.gz vs proteins.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	MMseqs2 easy-search (8 proteins as query)	mmseqs2 18.8cc5c	small.control.fa vs small.fhr.fa	0	0	a		
+semicolon-1line	fasta	MMseqs2 easy-search (8 proteins as query)	mmseqs2 18.8cc5c	small.control.fa vs small.comment1.fa	0	0	a		
+hash	fasta	MMseqs2 easy-search (8 proteins as query)	mmseqs2 18.8cc5c	small.control.fa vs small.hash.fa	0	0	a		
+unmarked	fasta	MMseqs2 easy-search (8 proteins as query)	mmseqs2 18.8cc5c	small.control.fa vs small.text.fa	0	0	a		
+semicolon-gzip	fasta	MMseqs2 easy-search (8 proteins as query)	mmseqs2 18.8cc5c	small.control.fa.gz vs small.fhr.fa.gz	0	0	a		
+semicolon	fasta	CD-HIT cd-hit (proteins)	cd-hit 4.8.1	proteins.control.fa vs proteins.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	CD-HIT cd-hit (proteins)	cd-hit 4.8.1	proteins.control.fa vs proteins.comment1.fa	0	0	a	0	
+hash	fasta	CD-HIT cd-hit (proteins)	cd-hit 4.8.1	proteins.control.fa vs proteins.hash.fa	0	0	a	0	
+unmarked	fasta	CD-HIT cd-hit (proteins)	cd-hit 4.8.1	proteins.control.fa vs proteins.text.fa	0	0	a	0	
+semicolon-gzip	fasta	CD-HIT cd-hit (proteins)	cd-hit 4.8.1	proteins.control.fa.gz vs proteins.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa vs genome.fhr.fa	0	0	a	0	
+semicolon-1line	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa vs genome.comment1.fa	0	0	a	0	
+hash	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa vs genome.hash.fa	0	0	a	0	
+unmarked	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa vs genome.text.fa	0	0	a	0	
+semicolon-raw-markers	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa vs genome.raw.fa	0	0	a	0	
+semicolon-gzip	fasta	CD-HIT cd-hit-est (genome)	cd-hit 4.8.1	genome.control.fa.gz vs genome.fhr.fa.gz	0	0	a	0	
+semicolon	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa vs genome.fhr.fa	0	134	c		what():  First character must be a '>', got ';'
+semicolon-1line	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa vs genome.comment1.fa	0	134	c		what():  First character must be a '>', got ';'
+hash	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa vs genome.hash.fa	0	134	c		what():  First character must be a '>', got '#'
+unmarked	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa vs genome.text.fa	0	134	c		what():  First character must be a '>', got 's'
+semicolon-raw-markers	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa vs genome.raw.fa	0	134	c		what():  First character must be a '>', got ';'
+semicolon-gzip	fasta	MUMmer4 nucmer + show-coords (variant as reference)	mummer4 4.0.1	genome.control.fa.gz vs genome.fhr.fa.gz	134	134	n/a		control also fails: what():  First character must be a '>', got ''
+semicolon	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa vs genome.fhr.fa	0	134	c		what():  Unsupported format
+semicolon-1line	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa vs genome.comment1.fa	0	134	c		what():  Unsupported format
+hash	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa vs genome.hash.fa	0	134	c		what():  Unsupported format
+unmarked	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa vs genome.text.fa	0	134	c		what():  Unsupported format
+semicolon-raw-markers	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa vs genome.raw.fa	0	134	c		what():  Unsupported format
+semicolon-gzip	fasta	MUMmer4 nucmer + show-coords (variant as query)	mummer4 4.0.1	genome.control.fa.gz vs genome.fhr.fa.gz	134	134	n/a		control also fails: what():  Unsupported format
+semicolon	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa vs genome.fhr.fa	0	1	c		
+semicolon-1line	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa vs genome.comment1.fa	0	1	c		** FATAL ERROR **: Cannot read file [;comment]
+hash	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa vs genome.hash.fa	0	1	c		
+unmarked	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa vs genome.text.fa	0	1	c		
+semicolon-raw-markers	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa vs genome.raw.fa	0	1	c		
+semicolon-gzip	fasta	Exonerate protein2genome (variant as target)	exonerate 2.4.0	genome.control.fa.gz vs genome.fhr.fa.gz	1	1	n/a		control also fails: ** FATAL ERROR **: Cannot read file [�]
+semicolon	fasta	Exonerate ungapped (8 proteins as query)	exonerate 2.4.0	small.control.fa vs small.fhr.fa	0	1	c		
+semicolon-1line	fasta	Exonerate ungapped (8 proteins as query)	exonerate 2.4.0	small.control.fa vs small.comment1.fa	0	1	c		** FATAL ERROR **: Cannot read file [;comment]
+hash	fasta	Exonerate ungapped (8 proteins as query)	exonerate 2.4.0	small.control.fa vs small.hash.fa	0	1	c		
+unmarked	fasta	Exonerate ungapped (8 proteins as query)	exonerate 2.4.0	small.control.fa vs small.text.fa	0	1	c		
+semicolon-gzip	fasta	Exonerate ungapped (8 proteins as query)	exonerate 2.4.0	small.control.fa.gz vs small.fhr.fa.gz	1	1	n/a		control also fails: ** FATAL ERROR **: Cannot read file [�]
+semicolon	fasta	Clustal Omega (8 proteins)	clustalo 1.2.4	small.control.fa vs small.fhr.fa	0	1	c		FATAL: Can't determine format of sequence file small.fhr.fa
+semicolon-1line	fasta	Clustal Omega (8 proteins)	clustalo 1.2.4	small.control.fa vs small.comment1.fa	0	1	c		FATAL: Can't determine format of sequence file small.comment1.fa
+hash	fasta	Clustal Omega (8 proteins)	clustalo 1.2.4	small.control.fa vs small.hash.fa	0	1	c		FATAL: File small.hash.fa does not appear to be in FASTA format at line 1.
+unmarked	fasta	Clustal Omega (8 proteins)	clustalo 1.2.4	small.control.fa vs small.text.fa	0	1	c		FATAL: Can't determine format of sequence file small.text.fa
+semicolon-gzip	fasta	Clustal Omega (8 proteins)	clustalo 1.2.4	small.control.fa.gz vs small.fhr.fa.gz	0	1	c		FATAL: File small.fhr.fa.gz does not appear to be in FASTA format at line 1.
+semicolon	fasta	RAxML-NG --search1 (6-taxon DNA alignment)	raxml-ng 2.0.3	aln.control.fa vs aln.fhr.fa	0	1	c		ERROR: Error loading MSA: cannot parse any format supported by RAxML-NG!
+semicolon-1line	fasta	RAxML-NG --search1 (6-taxon DNA alignment)	raxml-ng 2.0.3	aln.control.fa vs aln.comment1.fa	0	1	c		ERROR: Error loading MSA: cannot parse any format supported by RAxML-NG!
+hash	fasta	RAxML-NG --search1 (6-taxon DNA alignment)	raxml-ng 2.0.3	aln.control.fa vs aln.hash.fa	0	1	c		ERROR: Error loading MSA: cannot parse any format supported by RAxML-NG!
+unmarked	fasta	RAxML-NG --search1 (6-taxon DNA alignment)	raxml-ng 2.0.3	aln.control.fa vs aln.text.fa	0	1	c		ERROR: Error loading MSA: cannot parse any format supported by RAxML-NG!
+semicolon	fasta	CheckM2 genome reader (SeqReader.read_nucleotide_sequences, before Prodigal)	CheckM2 1.1.0	genome.control.fa vs genome.fhr.fa	0	0	a		
+semicolon-1line	fasta	CheckM2 genome reader (SeqReader.read_nucleotide_sequences, before Prodigal)	CheckM2 1.1.0	genome.control.fa vs genome.comment1.fa	0	0	a		
+hash	fasta	CheckM2 genome reader (SeqReader.read_nucleotide_sequences, before Prodigal)	CheckM2 1.1.0	genome.control.fa vs genome.hash.fa	0	0	a		
+unmarked	fasta	CheckM2 genome reader (SeqReader.read_nucleotide_sequences, before Prodigal)	CheckM2 1.1.0	genome.control.fa vs genome.text.fa	0	0	a		
+semicolon-raw-markers	fasta	CheckM2 genome reader (SeqReader.read_nucleotide_sequences, before Prodigal)	CheckM2 1.1.0	genome.control.fa vs genome.raw.fa	0	0	a		
+semicolon	fasta	eggNOG-mapper input step (diamond mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, DIAMOND 2.2.8	small.control.fa vs small.fhr.fa	0	1	c		Error running diamond: Opening the input file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+semicolon-1line	fasta	eggNOG-mapper input step (diamond mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, DIAMOND 2.2.8	small.control.fa vs small.comment1.fa	0	1	c		Error running diamond: Opening the input file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+hash	fasta	eggNOG-mapper input step (diamond mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, DIAMOND 2.2.8	small.control.fa vs small.hash.fa	0	1	c		Error running diamond: Opening the input file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+unmarked	fasta	eggNOG-mapper input step (diamond mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, DIAMOND 2.2.8	small.control.fa vs small.text.fa	0	1	c		Error running diamond: Opening the input file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+semicolon-gzip	fasta	eggNOG-mapper input step (diamond mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, DIAMOND 2.2.8	small.control.fa.gz vs small.fhr.fa.gz	0	1	c		Error running diamond: Opening the input file... Error: Error detecting input file format (when treating as text file). First line must begin with '>' (FASTA) or '@' (FASTQ).
+semicolon	fasta	eggNOG-mapper input step (mmseqs mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, MMseqs2 18.8cc5c	small.control.fa vs small.fhr.fa	0	0	a		
+semicolon-1line	fasta	eggNOG-mapper input step (mmseqs mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, MMseqs2 18.8cc5c	small.control.fa vs small.comment1.fa	0	0	a		
+hash	fasta	eggNOG-mapper input step (mmseqs mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, MMseqs2 18.8cc5c	small.control.fa vs small.hash.fa	0	0	a		
+unmarked	fasta	eggNOG-mapper input step (mmseqs mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, MMseqs2 18.8cc5c	small.control.fa vs small.text.fa	0	0	a		
+semicolon-gzip	fasta	eggNOG-mapper input step (mmseqs mode, custom DB, --no_annot)	eggnog-mapper 2.1.12, MMseqs2 18.8cc5c	small.control.fa.gz vs small.fhr.fa.gz	0	0	a		
+semicolon	fasta	eggNOG-mapper iter_fasta_seqs (its own reader: hmmer mode, --md5, novel_fams)	eggnog-mapper 2.1.12	small.control.fa vs small.fhr.fa	0	1	c		Exception: Error reading sequences: Wrong format.
+semicolon-1line	fasta	eggNOG-mapper iter_fasta_seqs (its own reader: hmmer mode, --md5, novel_fams)	eggnog-mapper 2.1.12	small.control.fa vs small.comment1.fa	0	1	c		Exception: Error reading sequences: Wrong format.
+hash	fasta	eggNOG-mapper iter_fasta_seqs (its own reader: hmmer mode, --md5, novel_fams)	eggnog-mapper 2.1.12	small.control.fa vs small.hash.fa	0	0	a		
+unmarked	fasta	eggNOG-mapper iter_fasta_seqs (its own reader: hmmer mode, --md5, novel_fams)	eggnog-mapper 2.1.12	small.control.fa vs small.text.fa	0	1	c		Exception: Error reading sequences: Wrong format.
+semicolon-gzip	fasta	eggNOG-mapper iter_fasta_seqs (its own reader: hmmer mode, --md5, novel_fams)	eggnog-mapper 2.1.12	small.control.fa.gz vs small.fhr.fa.gz	0	1	c		Exception: Error reading sequences: Wrong format.

@@ -1,0 +1,5 @@
+--- genome.control.fa
++++ genome.raw.fa
+@@ -1 +1,2 @@
++example.org;	600	a8705d70a0515753e70514fc52142b3d
+ NC_000908.2	580076	447aa6e653ea41d2a0d87e702230fe88

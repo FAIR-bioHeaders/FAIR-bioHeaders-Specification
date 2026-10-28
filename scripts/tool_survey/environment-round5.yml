@@ -1,0 +1,45 @@
+# Tools of the round-5 survey (docs/TOOL_COMPATIBILITY.md, "More tools (round 5, 2026-10-28)").
+#
+# The tools were installed as separate micromamba environments, one at a time;
+# each block below is one environment. round5/run_round5.py finds them through
+# the PATH-prefix variables R5GENE, R5BARRNAP09, R5CLUST, R5ALIGN and R5EMAPPER,
+# plus R5CHECKM2SRC, a directory holding checkm2/sequenceClasses.py and
+# checkm2/version.py from CheckM2 1.1.0 (commit f0a9eb2). For example:
+#
+#   micromamba create -n survey5-gene -c conda-forge -c bioconda python=3.12 \
+#     prodigal=2.6.3 pyrodigal=3.7.1 biopython=1.88 numpy barrnap=1.10.6 trnascan-se=2.0.13
+#   pyrodigal -i mgen.fa -a mgen.faa -g 4 -o /dev/null      # the protein input
+#   python3 round5/make_round5_inputs.py mgen.fa mgen.faa example.fhr.yaml in5   # bioheaders 0.8.3
+#   R5GENE=$MAMBA_ROOT_PREFIX/envs/survey5-gene/bin python3 round5/run_round5.py in5 out5 \
+#     --only Prodigal,pyrodigal,Barrnap,tRNAscan
+#
+# No CheckM2 database was used: the CheckM2 database is 1.7 GB compressed and
+# about 3 GB unpacked, and the CheckM2 environment pulls TensorFlow. Only the
+# genome reader that runs before Prodigal was tested. eggNOG-mapper ran with a
+# DIAMOND or MMseqs2 database of the plain proteins instead of the eggNOG
+# databases (tens of GB).
+channels:
+  - conda-forge
+  - bioconda
+environments:
+  survey5-gene:       # R5GENE
+    - python=3.12
+    - prodigal=2.6.3
+    - pyrodigal=3.7.1
+    - biopython=1.88
+    - numpy
+    - barrnap=1.10.6     # pulls any2fasta 0.8.1, seqkit 2.14.0, infernal 1.1.5
+    - trnascan-se=2.0.13
+  survey5-barrnap09:  # R5BARRNAP09
+    - barrnap=0.9        # pulls hmmer 3.4
+  survey5-clust:      # R5CLUST
+    - mmseqs2=18.8cc5c
+    - cd-hit=4.8.1
+  survey5-align:      # R5ALIGN
+    - mummer4=4.0.1
+    - exonerate=2.4.0
+    - clustalo=1.2.4
+    - raxml-ng=2.0.3
+  survey5-emapper:    # R5EMAPPER
+    - python=3.11        # eggnog-mapper 2.1.12 imports distutils
+    - eggnog-mapper=2.1.12   # pulls diamond 2.2.8, mmseqs2 18.8cc5c
