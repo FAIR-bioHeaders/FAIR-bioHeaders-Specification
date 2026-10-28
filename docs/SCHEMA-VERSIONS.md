@@ -63,8 +63,9 @@ once still validates with jsonschema 4.x and `bioheaders validate` 0.8.0 and lat
 is schema-valid under 2.0 but not conforming: validators should warn and must not report it as
 invalid until the next major `schemaVersion` can reject it. `minLength: 1` on the required
 strings, `minItems: 1` on the author lists, `required: [name]` plus `minLength: 1` on an author's
-`name`, and `minLength: 1` on both `taxon.name` and `taxon.uri` with at least one of them present,
-are planned for the next major `schemaVersion` (FHR 3.0, and the next major of FHP and FHGFF3).
+`name`, and a required, non-empty `taxon.uri` that identifies an NCBI Taxonomy or ITIS taxon
+(decided in [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189);
+see [SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md#gap-1-taxon-identifier-decided-189)), are planned for the next major `schemaVersion` (FHR 3.0, and the next major of FHP and FHGFF3).
 They are a major change because they invalidate records that are valid under 2.0, so they do not
 belong in a minor release.
 
