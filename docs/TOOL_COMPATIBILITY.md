@@ -358,7 +358,7 @@ databases) were tested later with a stub or tiny database; see
 
 Failures fixed by upstream changes: Liftoff (pyfaidx v0.9.1, mdshw5/pyfaidx#244, released
 2026-10-19 and verified 2026-10-20) and, once released, Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
-would be fixed by gpertea/gclib#15, which is open. The raw-`@`/`>` failures of Mash and seqfu do
+is fixed by gpertea/gclib#15 (merged 2026-10-28), from the next gffcompare release. The raw-`@`/`>` failures of Mash and seqfu do
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
 are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury,
@@ -526,7 +526,7 @@ current meaning, so no file that a tool reads today is read differently.
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | **Supported without changes** through `SeqIO.parse(handle, "fasta-pearson")`. The default `fasta` reader is unchanged (2026-10-16): 1.78 to 1.84 skip text before the first record silently, 1.85 and 1.86 warn, and 1.87 (2026-03-30) and later raise an error, so tools built on it, such as BUSCO, are approached individually. Avoid `fasta-blast` in 1.85 to 1.88 (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Declined 2026-10-19: UCSC's FASTA parsing serves its own pipelines and NCBI input |
-| gpertea/gclib | gffread `-g` | gpertea/gclib#15 | Open |
+| gpertea/gclib | gffread `-g`, gffcompare `-s` | gpertea/gclib#15 | **Merged 2026-10-28**; reaches gffread and gffcompare with their next releases |
 | bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | **Merged 2026-10-19** (`Bio::DB::Fasta` and `Bio::SeqIO::fasta`); reaches AGAT users with the next BioPerl release (the last CPAN release is 1.7.8, 2021) |
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open; the maintainer pushed a follow-up commit (2026-10-23) so debug builds also accept `;` |
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open; the same debug-build follow-up added 2026-10-23 |
