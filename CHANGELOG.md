@@ -24,7 +24,9 @@
   `fasta-schema-raw-main-version-1-invalid` (an FHR 1 record that v0.3.1 rejects),
   `fasta-schema-raw-main-version-string-1` and `fasta-schema-raw-main-version-true`
   (V6 needs the number 1, so V1 applies). `check_conformance.py --schema` applies V6, and
-  validates microdata and JSON-LD metadata against the schema it selects.
+  validates microdata and JSON-LD metadata against the schema it selects. The
+  conformance CI now runs fair-bioheaders 0.8.4, the first release that implements V6
+  (FAIR-bioHeaders-Tools#114).
 
 - Enable the deferred FHGFF3 G1 near-miss vectors `fhgff3-version-30`,
   `fhgff3-version-3x` and `fhgff3-version-3-1` (invalid, G1), now that fair-bioheaders
