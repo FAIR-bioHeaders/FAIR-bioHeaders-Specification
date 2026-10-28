@@ -190,7 +190,9 @@ TransDecoder 6.0.0 predicts ORFs on the header text (fixed on master,
 TransDecoder/TransDecoder#213). See [Upstream support](#upstream-support).
 The [2026-10-22 survey](#more-tools-2026-10-22) found a third: JBrowse 2's unindexed FASTA
 adapter (`UnindexedFastaAdapter`, the `parseSmallFasta()` code of `@gmod/indexedfasta`) shows
-the header as an extra reference sequence named `;~schema:`.
+the header as an extra reference sequence named `;~schema:`. The
+[round-5 survey](#more-tools-round-5-2026-10-28) (gene callers, clustering, alignment and
+phylogeny tools, including FHP protein files) found none.
 
 **Concatenated files (above).** These are the main corruption risk. Most
 tools that accept a leading header silently append a later header to the
@@ -240,10 +242,14 @@ Related, smaller risks:
    htsjdk (Picard), pyfaidx, seqkit, pyfastx, UCSC tools, gffread, BioPerl
    `Bio::DB::Fasta`, the Burrows-Wheeler builders (bowtie2, HISAT2), STAR,
    salmon and Bakta (Biopython `fasta`) all reject it too. All of these fail
-   loudly.
+   loudly. So do, among the round-5 tools, MUMmer4 `nucmer` (which aborts), Barrnap
+   (through `any2fasta`, or Easel in 0.9), RAxML-NG (coraxlib), Exonerate, Clustal Omega
+   and eggNOG-mapper's DIAMOND mode and own reader.
 2. **kseq-based tools work.** BWA, BWA-MEM2, minimap2, seqtk, bioawk,
    pysam.FastxFile and kallisto, plus makeblastdb, MAFFT, Kraken2, R's seqinr and
-   ape, Biostrings and Biopython `fasta-pearson`, ignore the leading `;` block.
+   ape, Biostrings and Biopython `fasta-pearson`, ignore the leading `;` block, and so
+   do Prodigal, pyrodigal, tRNAscan-SE, MMseqs2, CD-HIT and CheckM2's genome reader
+   (round 5).
 3. **Concatenation corrupts data silently.** A header after the first record
    is read as sequence by most tools, including samtools dict, minimap2,
    STAR, salmon, kallisto and Picard. R10 forbids this layout; validation
@@ -413,6 +419,65 @@ The failures in Bakta, the JBrowse unindexed adapter and `Bio::DB::HTS::Faidx` a
 projects' own code and are listed as candidates in FAIR-bioHeaders-Specification#121 (none has been
 contacted). The JBrowse `add-assembly` failure is htslib's.
 
+## More tools (round 5, 2026-10-28)
+
+On 2026-10-28 twelve more tools were run: gene and RNA callers (Prodigal, pyrodigal, Barrnap,
+tRNAscan-SE), clustering and search (MMseqs2, CD-HIT), alignment and phylogeny (MUMmer4, Exonerate,
+Clustal Omega, RAxML-NG), and the input steps of eggNOG-mapper and CheckM2. The genome is the
+*M. genitalium* G37 control of [More tools (2026-10-22)](#more-tools-2026-10-22) (NC_000908.2), and
+its FHR copy was written by fair-bioheaders 0.8.3 (`bioheaders combine`, FAIR-bioHeaders-Tools
+`examples/example.fhr.yaml`; 53 `;~` lines, R11-escaped). The protein tools read the genome's 527
+proteins predicted by pyrodigal (`-g 4`), or the first 8 of them, without a header and with an FHP
+header written by `bioheaders combine` from FHP metadata (24 `;~` lines; `bioheaders verify` checks
+the checksum). RAxML-NG read a 6-taxon, 600-column DNA alignment derived from the genome. Each file
+also had variants with a single `;comment` line, the header marked `#` or unmarked, a raw `@`/`>`
+value (genome only), and gzip copies. Outputs were fingerprinted as before: record names, lengths
+and MD5s of predicted proteins or database contents; GFF coordinates; cluster tables; search hits;
+`show-coords` and Exonerate `vulgar` lines; RAxML-NG's tree topology and log-likelihood. Versions are in
+`scripts/tool_survey/environment-round5.yml`, inputs and runner in `scripts/tool_survey/round5/`, and
+results in `scripts/tool_survey/results/results-round5.tsv`.
+
+| Tool | Version | Operation | Input | `;` (R11) | one `;` line | `#` | unmarked | raw `@`/`>` | gzip | Cause and notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Prodigal | 2.6.3 (bioconda build) | `prodigal -i x.fa -g 4 -a p.faa -f gff` | genome | a | a | a | a | a | a | Same proteins and coordinates. Prodigal's own reader ignores lines before the first `>` |
+| pyrodigal | 3.7.1 | CLI `pyrodigal -i x.fa -g 4 -a p.faa -f gff`; API `GeneFinder.train()`/`find_genes()` on records from pyrodigal's bundled reader | genome | a | a | a | a | a | a | The bundled reader (`pyrodigal/tests/fasta.py`, used by the CLI) drops text before the first `>` |
+| pyrodigal API with Biopython | 3.7.1; Biopython 1.88 | `GeneFinder` on `SeqIO.parse(x, "fasta")`, as in pyrodigal's README | genome | **c** | **c** | **c** | **c** | **c** | **c** | `ValueError: This FASTA file contains comments at the beginning of the file`. The API takes sequences, not files; the error is Biopython's default `fasta` reader, and `fasta-pearson` works (biopython/biopython#5375) |
+| Barrnap | 1.10.6 | `barrnap --kingdom bac x.fa` | genome | **c** | **c** | **c** | **c** | **c** | **c** | `[barrnap] ERROR: No sequences found in input`. Barrnap 1.10 normalises its input with `any2fasta -k` (0.8.1), which detects the format from the first line (`qr/^>\S/`, `any2fasta` lines 91 and 136-153; the same on master, 0.9.0) and skips the file with `WARNING: Unfamilar format with first line: ;~schema: ...`. If `any2fasta` passed the lines through, the next step, `seqkit seq`, would reject them until a SeqKit release includes shenwei356/bio#12 |
+| Barrnap | 0.9 (the version Prokka 1.15 uses) | `barrnap --kingdom bac x.fa` | genome | **c** | **c** | **c** | **c** | **c** | n/a | `nhmmer failed to run - Error: Unable to guess alphabet for target sequence database file x.fa`: HMMER 3.4's Easel reader, which EddyRivasLab/easel#84 would fix. gzip fails for the control too |
+| tRNAscan-SE | 2.0.13 (Infernal 1.1.5) | `tRNAscan-SE -B x.fa` | genome | a | a | a | a | a | n/a | Same 36 tRNAs. tRNAscan-SE reads the FASTA itself before calling Infernal. It does not read gzip (control too) |
+| MMseqs2 | 18.8cc5c | `createdb` then `convert2fasta` | genome, proteins | a | a | a | a | **b** | a | Skips text before the first `>`. With a raw `@` it adds a 600 bp record named `example.org;` (kseq-style scan, as Mash and Kraken2); not seen with R11 headers |
+| MMseqs2 | 18.8cc5c | `easy-cluster` on the proteins; `easy-search` with 8 proteins as query | proteins | a | a | a | a | n/a | a | Same clusters, representatives and hits |
+| CD-HIT | 4.8.1 | `cd-hit -c 0.9` (proteins); `cd-hit-est -c 0.95` (genome) | proteins, genome | a | a | a | a | a | a | Same representatives and cluster members |
+| MUMmer4 | 4.0.1 | `nucmer` (FHR file as reference or as query), `show-coords -rclTH` | genome | **c** | **c** | **c** | **c** | **c** | n/a | Aborts (exit 134, core dump). As reference: `what(): First character must be a '>', got ';'` from nucmer's own reader (`src/umd/nucmer.cc:124-126`). As query: `what(): Unsupported format` from the vendored Jellyfish parser (`include/jellyfish/whole_sequence_parser.hpp:106-117`, which accepts only `>` or `@` as the first byte). The `mummer` binary's reader (`src/essaMEM/fasta.cpp:60`) has the same check. nucmer does not read gzip (control too) |
+| Exonerate | 2.4.0 | `--model protein2genome` (FHR genome as target); `--model ungapped` (FHP proteins as query) | genome, proteins | **c** | **c** | **c** | **c** | **c** | n/a | A file whose first non-blank byte is not `>` is read as a list of file or server names (`Analysis_FOSN_expand_path_list()`, `src/hub/analysis.c:1128`). For the FHR file it exits 1 after only `looking up hostname: Success`; for `;comment` it gives `** FATAL ERROR **: Cannot read file [;comment]`. Exonerate does not read gzip (control too) |
+| Clustal Omega | 1.2.4 | `clustalo -i x.fa --outfmt fa` (8 proteins) | proteins | **c** | **c** | **c** | **c** | n/a | **c** | `FATAL: Can't determine format of sequence file x.fa`; with `#` lines `does not appear to be in FASTA format at line 1`. The bundled SQUID library detects the format from the first non-blank line (`src/squid/sqio.c`, `SeqfileFormat()` line 1224) and its FASTA reader requires `>` there (line 898). Not Easel, so EddyRivasLab/easel#84 does not cover it |
+| RAxML-NG | 2.0.3 | `raxml-ng --search1 --msa x.fa --model GTR+G` | alignment | **c** | **c** | **c** | **c** | n/a | n/a | `ERROR: Error loading MSA: cannot parse any format supported by RAxML-NG!`; with `--msa-format FASTA`: `(CORAX-203): Illegal header line in query fasta file`. coraxlib's FASTA reader requires every record to start with `>` (`src/corax/io/fasta.c:162-165`, `corax_fasta_getnext()`); the same code is in libpll-2 |
+| eggNOG-mapper | 2.1.12 (DIAMOND 2.2.8) | `emapper.py -m diamond --dmnd_db custom.dmnd --no_annot` (8 proteins) | proteins | **c** | **c** | **c** | **c** | n/a | **c** | `Error running diamond: ... First line must begin with '>' (FASTA) or '@' (FASTQ)`. The query goes straight to DIAMOND, which will accept `;` lines from its next release (bbuchfink/diamond#992) |
+| eggNOG-mapper | 2.1.12 (MMseqs2 18.8cc5c) | `emapper.py -m mmseqs --mmseqs_db custom --no_annot` | proteins | a | a | a | a | n/a | a | Same hits: MMseqs2 skips the header |
+| eggNOG-mapper `iter_fasta_seqs` | 2.1.12 | its own reader (used by `-m hmmer`, `--md5` and the novel-families mode) | proteins | **c** | **c** | a | **c** | n/a | **c** | `Exception: Error reading sequences: Wrong format.` The reader skips `#` lines but no others before the first `>` (`eggnogmapper/search/hmmer/hmmer_seqio.py:34` and `:61`; lines 45 and 72 on master, v3.0.0-beta6) |
+| CheckM2 genome reader | 1.1.0 | `SeqReader().read_nucleotide_sequences()` (contig lengths and GC before Prodigal) | genome | a | a | a | a | a | n/a | A copy of lh3's `readfq.py`: lines before the first line starting with `>` or `@` are skipped. CheckM2 then runs Prodigal (class a above) and DIAMOND on Prodigal's header-free proteins. Prediction itself was not run (no database) |
+
+No tool in this round misread a valid FHR or FHP file silently. The only misread, MMseqs2 with a raw
+`@`, does not occur with R11 headers.
+
+**Where the failures come from.** All are in the projects' own readers or in small libraries they
+bundle, except where noted: Barrnap 1.10 (`any2fasta`, then SeqKit), Barrnap 0.9 (Easel, covered by
+EddyRivasLab/easel#84), the pyrodigal README pattern (Biopython `fasta`), and eggNOG-mapper's default
+DIAMOND mode (covered by bbuchfink/diamond#992). MUMmer4, Exonerate, Clustal Omega (SQUID), RAxML-NG
+(coraxlib) and eggNOG-mapper's `iter_fasta_seqs` are not covered by any proposal so far. The same
+Jellyfish parser that rejects the header as a nucmer query is also the reader of the Jellyfish k-mer
+counter (not run).
+
+Not tested: CheckM2 prediction (its database is 1.7 GB compressed and about 3 GB unpacked, and the
+environment pulls TensorFlow), eggNOG-mapper annotation (the eggNOG databases are tens of GB) and
+InterProScan (Java distribution with several GB of member databases). InterProScan 5's FASTA loader
+was read but not run: `LoadFastaFileImpl.java` (lines 131-142) stops with `Error: All input sequences
+should include their FASTA header lines` and exit 999 on any non-empty line before the first `>`, so
+it would fail loudly on FHP input.
+
+The failures in MUMmer4, Barrnap (`any2fasta`), RAxML-NG (coraxlib), eggNOG-mapper, Exonerate and
+Clustal Omega are listed as candidates in FAIR-bioHeaders-Specification#121 (none has been contacted).
+
 ## Comment markers: `;`, `#` or none
 
 Is `;` the right marker, or would another convention be better supported? On
@@ -473,9 +538,25 @@ counting the plain-file runs and leaving out the two header-aware `.fai` runs):
 - The JBrowse unindexed parser misreads all three variants; JBrowse `add-assembly`
   (htslib), Bakta (Biopython) and VEP (htslib) reject all three.
 
+The [round-5 tools](#more-tools-round-5-2026-10-28) (23 tests across 12 tools, counting the
+plain-file runs):
+
+| Result (round-5 additions) | `;` | `#` | no marker |
+| --- | --- | --- | --- |
+| Works | 12 | 13 | 12 |
+| Misreads (silent) | 0 | 0 | 0 |
+| Fails | 11 | 10 | 11 |
+
+- Prodigal, pyrodigal, tRNAscan-SE, MMseqs2, CD-HIT and CheckM2's reader skip anything
+  before the first `>`; MUMmer4, Barrnap, Exonerate, Clustal Omega, RAxML-NG and
+  eggNOG-mapper's DIAMOND mode reject all three variants.
+- eggNOG-mapper's own reader (`iter_fasta_seqs`) is the first tool seen that accepts `#`
+  lines and rejects `;` lines: it skips lines starting with `#` anywhere, a convention of
+  its own rather than a FASTA comment form.
+
 So no competing marker would gain support: most tools are either lenient about text
-before the first record or strict, and the two that tell marked lines apart
-(makeblastdb and Biostrings) accept `;`. `;` keeps the advantage of being the
+before the first record or strict. Of the three that tell marked lines apart, makeblastdb
+and Biostrings accept `;`, and only eggNOG-mapper's own reader prefers `#`. `;` keeps the advantage of being the
 documented FASTA comment form (Pearson and Lipman), it is the form Biostrings
 recognises, and unlike `#` it does not collide with GDE or NEXUS.
 
@@ -497,7 +578,7 @@ anywhere, not only at the start of a line. If an FHR header line contains a raw 
 record (checked 2026-10-18: `;~metadataAuthor: someone@example.org` gives a 0-length record
 named `example.org`). BWA, minimap2 and pysam `FastxFile` use the same parser, and
 BWA-MEM2, Kraken2 classification and R's ape (which starts a record at any `>`) behave the
-same way (checked 2026-10-22). Rule R11 of
+same way (checked 2026-10-22), and so does MMseqs2 `createdb` (checked 2026-10-28). Rule R11 of
 [FORMAT.md](FORMAT.md) therefore asks FASTA header writers to escape these characters in
 double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the toolkit's
 `combine` does this from the release after 0.7.0, and `verify` warns on a raw `>` or `@`
@@ -505,7 +586,7 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 | Format | Tools (surveyed version) |
 | --- | --- |
-| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings); pyfaidx 0.9.1; Liftoff 1.6.3 (with pyfaidx 0.9.1 or later); Biostrings 2.80.2 `fasta.index`; seqinr 4.2.44 `read.fasta`; ape 5.8.1 `read.FASTA`, `read.dna`; BWA-MEM2 2.3 (`index`, `mem`); Kraken2 2.17.2 (`kraken2-build --add-to-library`, `--build`, `kraken2`); JBrowse CLI 4.3.0 `add-assembly`, `@gmod/indexedfasta` 5.0.13 `IndexedFasta` and Ensembl VEP 116.3 `--fasta` (each with a `.fai` written by pyfaidx 0.9.1) |
+| FASTA | BWA 0.7.19 (`index`, `mem`); minimap2 2.31; seqtk 1.5 (`seq`, `comp`); bioawk 1.0; kallisto 0.52.0; MAFFT 7.526; makeblastdb 2.17.0+; samtools 1.24 `dict`; pysam 0.24.0 `FastxFile`; Biopython 1.88 `SeqIO` format `fasta-pearson`; Bioconductor Biostrings 2.80.2 `readDNAStringSet`; MMseqs2 18.8cc5c `createdb`; CD-HIT 4.8.1 `cd-hit-est`; Mash 2.3 `sketch`; seqfu 1.30.3 `cat`; compleasm 0.2.10; RepeatModeler 2.0.9 `BuildDatabase`; RepeatMasker 4.1.2.p1 (with warnings); pyfaidx 0.9.1; Liftoff 1.6.3 (with pyfaidx 0.9.1 or later); Biostrings 2.80.2 `fasta.index`; seqinr 4.2.44 `read.fasta`; ape 5.8.1 `read.FASTA`, `read.dna`; BWA-MEM2 2.3 (`index`, `mem`); Kraken2 2.17.2 (`kraken2-build --add-to-library`, `--build`, `kraken2`); JBrowse CLI 4.3.0 `add-assembly`, `@gmod/indexedfasta` 5.0.13 `IndexedFasta` and Ensembl VEP 116.3 `--fasta` (each with a `.fai` written by pyfaidx 0.9.1); Prodigal 2.6.3; pyrodigal 3.7.1 (CLI, and the API with its bundled reader); tRNAscan-SE 2.0.13; MMseqs2 18.8cc5c `easy-cluster`, `easy-search` (FHP proteins); CD-HIT 4.8.1 `cd-hit` (FHP proteins); eggNOG-mapper 2.1.12 `-m mmseqs` (input step); CheckM2 1.1.0 genome reader (prediction not run) |
 | GFA | gfatools 0.4 (`view`, `stat`, `gfa2fa`); gfapy 1.2.3; odgi 0.9.4 (`build`, `stats`, `view`); vg 1.76.1 (`stats`, `convert`) |
 | GFF3 | GenomeTools 1.6.5 (`gt gff3 -sort -tidy`, `gt gff3validator`); AGAT 1.7.0 GFF3 tools; gffread 0.12.9 (`-E`, `-T`, `-g -x`); gffutils 0.14; featureCounts 2.1.1; HTSeq 2.1.2 `htseq-count`; bedtools 2.31.1 (`intersect`, `sort`); bgzip and tabix 1.24; `@gmod/gff` 2.1.0; JBrowse CLI 4.3.0 (`add-track`, `text-index`) |
 
@@ -560,7 +641,9 @@ and keep the FHR file as the record of provenance.
 - **GATK**: large install; it uses htsjdk, as Picard does.
 - **pybedtools**: wraps bedtools.
 - **GFA2 and rGFA tags**: only GFA1 was tested.
-- **Protein FASTA beyond DIAMOND**: MAFFT/MUSCLE protein modes were not tested (not needed for #40).
+- **Protein FASTA**: MAFFT/MUSCLE protein modes were not tested (not needed for #40). FHP
+  protein files were tested in [round 5](#more-tools-round-5-2026-10-28) with MMseqs2,
+  CD-HIT, Exonerate, Clustal Omega and eggNOG-mapper.
 - **GFF3 and GFA concatenation**: `#~` lines after features are ordinary
   comments to these tools, so data cannot be corrupted. The result is still
   invalid FHR.

@@ -17,6 +17,9 @@ Scripts behind [docs/TOOL_COMPATIBILITY.md](../../docs/TOOL_COMPATIBILITY.md).
 | `round4/` | The 2026-10-22 survey (R and Bioconductor readers, JBrowse 2 FASTA code, Bakta, Kraken2, BWA-MEM2, Ensembl VEP): `make_round4_inputs.py` writes the inputs from a control FASTA, `run_round4.py` runs and classifies the tests, with small probes (`r_probe.R`, `indexedfasta_probe.mjs`, `header_fai.py`) and `package.json` |
 | `environment-round4.yml` | The 2026-10-22 tools, as separate environments; `run_round4.py` finds them through the `R4*` PATH-prefix variables (see the file's header) |
 | `results/results-round4.tsv` | Results of the 2026-10-22 survey with the leading lines marked `;` (R11 header), one `;comment` line, `#`, unmarked, or `;` with a raw `@`/`>` value (`header_marker` column) |
+| `round5/` | The round-5 survey of 2026-10-28 (gene callers, clustering, alignment and phylogeny tools, eggNOG-mapper, CheckM2's genome reader, with genome, protein (FHP) and alignment inputs): `make_round5_inputs.py` writes the inputs from a control genome and its proteins, `run_round5.py` runs and classifies the tests, with the probe `pyrodigal_api.py` |
+| `environment-round5.yml` | The round-5 tools, as separate environments; `run_round5.py` finds them through the `R5*` PATH-prefix variables (see the file's header) |
+| `results/results-round5.tsv` | Results of the round-5 survey with the leading lines marked `;` (R11 FHR or FHP header), one `;comment` line, `#`, unmarked, `;` with a raw `@`/`>` value, or gzip (`header_marker` column) |
 | `environment.yml`, `environment-graph.yml`, `package.json` | Tested tool versions |
 | `results/results.tsv` | Results of the 2026-10-08 run |
 
