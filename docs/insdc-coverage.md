@@ -20,8 +20,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 | [Assembly](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Assembly) | FHR | Direct | FHR is the file-bound description of an assembled sequence set; INSDC Assembly is the database-level object for the same set |
 | [Annotations](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Annotations) | FHGFF3 header + gff3-validator | Direct | Header carries provenance; feature-level rules belong to the validator, not the header |
 | [Analysis](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Analysis) | FHR on GFA/FASTA (toolkit formats), `derivedFrom` (FHP/FHGFF3) | Partial | Mandatory checksum/type/title philosophy aligns closely; STUDY_REF has no FH field; BASE_MODIFICATION TSV/CSV and GENOME_MAP formats are unsupported |
-| [Sample](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Sample) | `voucherSpecimen`, `taxon`, `identifier` CURIEs, profiles machinery (draft) | Partial | No released type has a sample object; the draft AgBioData profile demonstrates the community-slot route |
-| [Project](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Project) | `identifier`, `relatedLink`, `accessionID`, `scholarlyArticle`, `funding` | Partial | No project field in any released type; BioProject links are possible by CURIE convention only |
+| [Sample](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Sample) | `voucherSpecimen`, `taxon`, `relatedLink` (sample record URLs), profiles machinery (draft) | Partial | No released type has a sample object; the draft AgBioData profile demonstrates the community-slot route |
+| [Project](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Project) | `relatedLink` (project record URLs), `scholarlyArticle`, `funding` | Partial | No project field in any released type; BioProject links are possible as `relatedLink` URLs only |
 | [Package-Checklist](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Package-Checklist) | `schema`+`schemaVersion`, TERMS.md, `profiles/registry.yaml` (draft) | Conceptual analogue | FH community profiles are the direct counterpart: layered requirements with their own versioning, never relaxing the base contract |
 | [Experiment](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Experiment) | FHT draft `libraryStrategy`/`strandedness`; FHR `instrument`, `vitalStats.readTechnology` | Marginal | The family has no experiment object |
 | [Raw Reads](https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Raw%20Reads) | — | N/A | No FASTQ/BAM/CRAM header type exists or is proposed |
@@ -53,7 +53,7 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 | # | INSDC requirement | Cov. | Location in FH | Disposition |
 | --- | --- | --- | --- |
-| A.a | Link to a public BioProject | ◐ | no field; `identifier` CURIE (`bioproject:PRJ…`), `relatedLink` or `accessionID` can carry it | Document the convention. |
+| A.a | Link to a public BioProject | ◐ | no field; the BioProject record URL belongs in `relatedLink` | Document the convention. |
 | A.b | Link to a public BioSample | ◐ | no field; `voucherSpecimen` is free-text; structured vouchers (#139/#140) are separate. | Profile route; document. |
 | A.c | Submitter/owner/consortium/center identity | ✅ | `metadataAuthor`, `assemblyAuthor` (required in FHR) | none |
 | A.d | BioSample associated with a taxID at species rank or below | ◐ | `taxon` required; rank is not schema-checkable | Document the limitation. |
@@ -103,7 +103,7 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 | INSDC requirement | Cov. | Location in FH | Disposition |
 | --- | --- | --- | --- |
-| Sample Alias | ◐ | no released field; `identifier`/`accessionID` by convention; draft AgBioData profile adds `sampleIdentifier` | Profile/documentation route. |
+| Sample Alias | ◐ | no released field; the BioSample record URL belongs in `relatedLink`; draft AgBioData profile adds `sampleIdentifier` | Profile/documentation route. |
 | Organism name (NCBI Taxonomy) | ◐ | `taxon` required, identifiers.org/taxonomy URI pinned | Document limitation. |
 | Geographic location | ✗ | absent from every type | Keep external; document. |
 | Collection date | ✗ | absent | Keep external; document. |
@@ -121,8 +121,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 | Submitter name | ✅ | `metadataAuthor` | none |
 | Project type | — | no analogue | N/A |
 | Contributor names/affiliations | ◐ | author lists | Document |
-| Publication (PubMed ID or DOI) | ✅ | `scholarlyArticle` (bare DOI), `identifier` (PubMed) | none |
-| Accessioning PRJ…, no versioning | ◐ | `identifier` `bioproject:PRJ…` by convention | Document convention |
+| Publication (PubMed ID or DOI) | ◐ | `scholarlyArticle` accepts a DOI only (`^10\.` pattern); a bare PubMed ID has no released slot — record the PubMed URL in `relatedLink` | Document the limitation |
+| Accessioning PRJ…, no versioning | ◐ | the PRJ… record URL belongs in `relatedLink` (`bioproject:` record) | Document convention |
 
 ### Package-Checklist Minimum Specification v1.0
 
