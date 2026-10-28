@@ -68,13 +68,13 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 
 ### Annotation Minimum Specification v1.0
 
-*Boundary note: FHGFF3 headers carry provenance only; feature-level rules live in gff3-validator.*
+*Boundary note: FHGFF3 headers carry provenance only; feature-level rules live in gff3-validator. Catalogue rules cited below are implemented at the pinned catalogue revision unless marked (planned); STR-012 and STR-013 are planned.*
 
 | # | INSDC requirement | Cov. | Location | Disposition |
 | --- | --- | --- | --- |
 | AN.a | Conform to the INSDC GFF3 specification | ◐ | FHGFF3 header lines are ordinary GFF3; validator checks GFF3 1.26 syntax against a pinned SO release. | Compatibility test + TOOL_COMPATIBILITY.md entry. |
 | AN.b.iii | Feature locations: start/end/strand present; within sequence length... | ◐ | SYN-013…015, STR-002, STR-008/011 + BIO-001/002/003. | gff3-validator catalogue cross-check. |
-| AN.b.iv | Overlaps: feature intervals must not overlap... | ✗ | STR-012/013 cover parent–child containment only | Validator candidate rules |
+| AN.b.iv | Overlaps: feature intervals must not overlap... | ✗ | no implemented rule; STR-012 (planned, info-level) flags a child extending beyond its parent and STR-013 (planned) checks parent/child seqid agreement — neither checks interval overlap | Validator candidate rule |
 | AN.b.v | Lengths: complete CDS ≥30 aa; tRNA 50–150 bp; introns ≥10 bp | ✗ | BIO-009 checks multiple-of-three only | Validator candidate rules |
 | AN.b.vi | Coding regions: translation matches /translation... | ◐ | BIO-004, BIO-005, BIO-006/007, BIO-008, BIO-010. | Validator candidates. |
 | AN.b.vii | parent:child via `Parent=` (GFF3) / `transcript_id` (FT) | ◐ | STR-003…007, ATT-004/006. | Validator cross-check |
