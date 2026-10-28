@@ -43,7 +43,8 @@ In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0
 ## Values the schema does not check
 
 The schemas are the validation contract, but two requirements are not expressed by their
-keywords. They are normative for a conforming record and validator.
+keywords. They are normative for a conforming record and validator. A third, link schemes,
+is a recommendation that validators report as a warning.
 
 ### Required values are non-empty
 
@@ -82,6 +83,16 @@ limitation instead of calling the record valid.
 
 Numbers are covered by rule R13 in [FORMAT.md](FORMAT.md): NaN and infinities are invalid.
 
+### Link schemes
+
+`format: uri` accepts any URI scheme, including `javascript:`, `data:` and `file:`. Rule R14 in
+[FORMAT.md](FORMAT.md) says these values should use `http` or `https` (with `ftp`, `urn:`,
+`doi:` and `info:` also accepted). Validators warn about any other scheme, and the JSON-LD
+writers refuse to write it as a link, but such a record stays valid under FHR 2.0 and FHP and
+FHGFF3 1.0. A `pattern` that restricts the schemes is a candidate for the next major
+`schemaVersion` of each type: it would invalidate records that are valid now, so it does not
+belong in a minor or patch release.
+
 ## Versions by release
 
 The machine-readable form is [`schemas/versions.json`](../schemas/versions.json).
@@ -89,10 +100,11 @@ The machine-readable form is [`schemas/versions.json`](../schemas/versions.json)
 | Release | FHR | FHP | FHGFF3 |
 | --- | --- | --- | --- |
 | v0.3.0, v0.3.1 | `1` (a number) | – | – |
-| v0.4.0, v0.4.1 | `"2.0"` | `"1.0"` | `"1.0"` |
+| v0.4.0, v0.4.1, v0.4.2 | `"2.0"` | `"1.0"` | `"1.0"` |
 
-v0.4.1 changed only format rules (docs/FORMAT.md), not the schemas, so its schemas are the
-v0.4.0 ones and `current` in `versions.json` stays `v0.4.0`; examples keep citing v0.4.0.
+v0.4.1 and v0.4.2 changed only format rules (docs/FORMAT.md, docs/JSONLD.md and schema
+selection), not the schemas, so their schemas are the v0.4.0 ones and `current` in
+`versions.json` stays `v0.4.0`; examples keep citing v0.4.0.
 
 FHR 2.0 is a major version because the v0.4 tightening
 ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)) rejects some values v0.3 accepted. The additive
@@ -146,7 +158,7 @@ same; existing files cite the old form, and it keeps serving the same files.
   file is not checked against another schema. The message names the value and the releases the
   reader has, for example
   `FHR: unsupported schema version: https://w3id.org/fair-bioheaders/fhr/v0.0.0 (this tool has FHR
-  schemas for main (v0.4.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1)`.
+  schemas for main (v0.4.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1, v0.4.2)`.
 - [V5] Any other value, including the w3id path form `…/fhr/v0.4.0/fhr.json`, is **FHR**, checked
   against the current FHR schema. FHR's `schema` field has never been constrained; this keeps that
   behaviour.

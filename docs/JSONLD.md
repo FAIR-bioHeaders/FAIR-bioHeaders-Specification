@@ -37,9 +37,12 @@ The writer (rule J7) emits, in this order:
    | an object item of `assemblySoftware` | `SoftwareApplication` (`schema:SoftwareApplication`); a legacy string stays a string |
    | `vitalStats` | `VitalStats` (`fhr:VitalStats`) |
 
-   A `documentation` value that is an absolute URL (a scheme, `://`, and no whitespace) is
-   written under the key `subjectOf` (`schema:subjectOf`) in the same position. Text stays
-   under `documentation` (`schema:description`).
+   A `documentation` value that is an absolute `http`, `https` or `ftp` URL (the scheme,
+   in any letter case, at the very start, then `//`, a host and no whitespace or control
+   character; [FORMAT.md](FORMAT.md) R14) is written under the key `subjectOf`
+   (`schema:subjectOf`) in the same position. Anything else stays text under
+   `documentation` (`schema:description`), including text with another scheme such as
+   `file:///…` or `javascript:…`.
 4. Nothing else. Absent optional fields stay absent; no `null` and no empty node is emitted.
 
 From v0.4 an author may state its kind in `nameType`, with the DataCite values `Personal` and
@@ -124,7 +127,7 @@ depends on which reading rule applies, and the difference is intended:
   them instead.
 
 A canonical document may therefore carry the export terms with a warning, while an expanded or
-differently compacted document that carries the same terms is invalid. A tool that reads an
+otherwise non-canonical document that carries the same terms is invalid. A tool that reads an
 export-shaped document must remove or map the terms explicitly; it must not rely on J1's
 set-aside.
 
@@ -138,8 +141,11 @@ Put the document in a script element of the landing page:
 </script>
 ```
 
-If any value could contain `</`, write it as `<\/` inside the element. The page's microdata,
-if any, stays separate ([MICRODATA.md](MICRODATA.md)).
+Inside the element, every `<`, `>` and `&` in the JSON text must be written as a `\u`
+escape (rule J8 below). Escaping only `</` is not enough. The page's microdata, if any, stays
+separate ([MICRODATA.md](MICRODATA.md)) and is escaped as ordinary HTML text.
+
+The toolkit's `bioheaders.jsonld.script_element(document)` writes such an element.
 
 ## Publication
 
@@ -197,12 +203,13 @@ The JSON-LD document round-trips exactly as FHR metadata. Converting it to RDF t
 
 Readers turn a JSON-LD document into FHR metadata as follows. The rule ids are stable; the
 conformance vectors in [conformance/](../conformance/README.md) cite them. A canonical
-document (J1) needs no JSON-LD processor. Rules J3 to J5 read JSON-LD in other forms: expanded,
-compacted with another context, or a single record in a `@graph`.
+document (J1) needs no JSON-LD processor. Rules J3 to J5 read JSON-LD in other forms that use
+the FHR context or none: expanded, with value objects or explicit IRIs, or a single record in a
+`@graph`. J7 and J8 are writing rules.
 
 - [J1] **Canonical form.** A document is canonical when its root is an object whose `@context`
   is a published FHR context, embedded (equal as parsed JSON to the `@context` value of
-  `jsonld/fhr.context.jsonld`) or referenced by a known FHR context URL (the raw-main URL above,
+  `jsonld/fhr.context.jsonld`, comparing JSON types exactly, so `true` is not `1`) or referenced by a known FHR context URL (the raw-main URL above,
   or a release URL once releases contain the file); when the only keys starting with `@`
   anywhere are that root `@context`, an optional root `@id` and `@type` on any object; and when
   every `@type` value is a string or an array of strings. A reader sets the root `@context` and
@@ -214,9 +221,30 @@ compacted with another context, or a single record in a `@graph`.
   What remains is FHR JSON, including nested keys without a term.
 - [J2] Duplicate object keys are invalid, as in JSON.
 - [J3] **Other forms.** A document that is not canonical is interpreted by JSON-LD 1.1
-  expansion, using bundled contexts only: a context given by URL must be a known FHR context URL,
-  which the reader serves from its own copy. Any other context URL, remote or unknown (for
-  example `https://schema.org/`), makes the document invalid. Nothing is fetched.
+  expansion, and the only context it may use is the FHR context. A top-level object (the
+  document, or an item of a top-level array) may have a `@context` that is a known FHR context
+  URL, which the reader serves from its own copy, or an embedded copy of the FHR context, equal
+  as parsed JSON as in J1, or an array whose only item is one of those. A document with no
+  context at all (expanded form) is allowed. Any other context makes the document invalid,
+  before expansion and whatever it would expand to:
+  - a remote or unknown context URL (for example `https://schema.org/`); nothing is fetched;
+  - an embedded context that differs from the FHR context in any way, for example one with
+    other term definitions, `@vocab`, `@base`, `@import`, `@propagate` or a changed
+    `@protected`;
+  - the FHR context followed or preceded by another context in an array;
+  - a `@context` anywhere below the top level, in a node, a `@graph` item or a value.
+
+  `@nest` is not allowed either: it gives its properties to the enclosing object, so a value
+  that a JSON reader does not see at its key would still be read as that field.
+
+  The reason is that every FHR key must mean the same thing to every reader. A JSON reader, a
+  schema validator and a canonical (J1) reader take a key such as `genome` at face value. A
+  context of the document's own choosing could map that key, through expansion, to another
+  field's IRI: an embedded context that swaps the term definitions of `genome` and
+  `documentation` would make a JSON-LD reader take each value as the other field. With only the
+  FHR context, a key that is an FHR field name always expands to that field; other keys (full
+  or compact IRIs) are not FHR keys to a JSON reader. A document written with another context
+  must be rewritten in the canonical form, or expanded, before it is read as FHR metadata.
 - [J4] **One record, every term mapped.** The expanded document must have exactly one top-level
   node object, directly or as the only item of `@graph`. Every property of that node, and of its
   nested nodes, must map to an FHR field in its scope through the reverse of the FHR context: the
@@ -229,7 +257,8 @@ compacted with another context, or a single record in a `@graph`.
   [Export terms in the canonical form and in other forms](#export-terms-in-the-canonical-form-and-in-other-forms).
 - [J5] **Values.**
   - An IRI-valued field (`schema`, `relatedLink`, `assemblyProtocol`, a taxon or author `uri`,
-    an accession `url`, a software `uri`) accepts `{"@id": ...}` or a string value.
+    an accession `url`, a software `uri`) accepts `{"@id": ...}` or a string value. A value
+    without an accepted link scheme is kept, and reported as [FORMAT.md](FORMAT.md) R14 says.
   - `dateCreated` accepts a value typed `xsd:date` or an untyped string. Any other datatype, on
     any field, is invalid, and so is a language-tagged value.
   - A field that takes one value must have exactly one; two values, for example two `genome`
@@ -243,4 +272,17 @@ compacted with another context, or a single record in a `@graph`.
 - [J7] **Writing.** A writer emits the document described in
   [What the document contains](#what-the-document-contains), serialised as JSON with two-space
   indentation, non-ASCII characters unescaped and a final newline. For the JSON examples the
-  result is byte-identical to `examples/*.fhr.jsonld`.
+  result is byte-identical to `examples/*.fhr.jsonld`. The context makes every IRI-valued
+  field an IRI, so a writer refuses a record in which such a field holds a value without an
+  accepted link scheme ([FORMAT.md](FORMAT.md) R14), such as `javascript:…` or `file:…`,
+  rather than write it as a link.
+- [J8] **Embedding in HTML.** Inside a `<script type="application/ld+json">` element
+  ([Embedding in a web page](#embedding-in-a-web-page)), a writer must write every `<`, `>` and
+  `&` in the JSON text as `\u003c`, `\u003e` and `\u0026`, and should write U+2028 and U+2029
+  as `\u2028` and `\u2029`. JSON allows these characters only inside strings, where the
+  escapes stand for the same characters, so the document reads back unchanged. Escaping only
+  `</` (as `<\/`) is not enough: a value containing `<!--` followed by `<script` puts the HTML
+  parser in its script-data-double-escaped state, where the next `</script>` does not end the
+  element, so the rest of the page is read as script data or the element ends somewhere else.
+  HTML character references such as `&lt;` must not be used, because script content is not
+  decoded.

@@ -2,7 +2,7 @@
 
 > FAIR-bioHeaders defines machine-readable provenance headers that travel inside bioinformatics data files: FHR for reference genome FASTA and GFA, FHP for protein FASTA, and FHGFF3 for GFF3 annotations. A header is a block of YAML lines at the top of the file (`;~` in FASTA, `#~` in GFA and GFF3), validated against a JSON Schema and covered by a SHA-512/256 checksum of the file. The reference implementation is the `fair-bioheaders` Python package (command `bioheaders`).
 
-Key facts (FAIR-bioHeaders-Specification v0.4.1, fair-bioheaders 0.8.1):
+Key facts (FAIR-bioHeaders-Specification v0.4.2, fair-bioheaders 0.8.5):
 
 - Schema versions: FHR `schemaVersion: '2.0'`, FHP `'1.0'`, FHGFF3 `'1.0'`. A file's `schema` value selects the schema it is validated against; cite a versioned w3id URL. Raw-`main` URLs mean the current schema; an unknown version is reported as unsupported.
 - The checksum is computed by `bioheaders combine`, never by hand. Changing any byte except the checksum line invalidates it.
@@ -12,7 +12,7 @@ Key facts (FAIR-bioHeaders-Specification v0.4.1, fair-bioheaders 0.8.1):
 
 ## Specification
 
-- [Format rules R1 to R13](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping
+- [Format rules R1 to R14](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping, link schemes
 - [Schema versions and selection](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md): versioning policy and how a `schema` URL selects a schema
 - [Schema-contract gap audit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-GAP-AUDIT.md): status of the #150 findings and what waits for the next major `schemaVersion`
 - [FHP, protein FASTA](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHP.md): fields, `sourceType`, sources

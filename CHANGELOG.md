@@ -2,6 +2,45 @@
 
 ## Unreleased
 
+## v0.4.2 — 2026-10-28
+
+A patch release of the format rules: hardening that accepts only the FHR JSON-LD context,
+restricts link schemes, and escapes JSON-LD in HTML script elements, plus FHR 1
+compatibility (V6). The JSON schemas and every `schemaVersion` are unchanged (FHR `"2.0"`,
+FHP and FHGFF3 `"1.0"`); `https://w3id.org/fair-bioheaders/<type>/v0.4.2` selects the same
+schemas as v0.4.0, and `schemas/versions.json` keeps `current` at v0.4.0 so the examples
+are unchanged. These rules match fair-bioheaders 0.8.5.
+
+- docs/JSONLD.md J3: a document read by JSON-LD expansion may use only the FHR context
+  (a known URL or an embedded copy equal as parsed JSON, alone or as the only item of an
+  array, on a top-level object). Any other context, embedded, extended, `@import`ed,
+  nested or with a schema.org `@vocab`, is invalid, and so is `@nest`: such a context could map an FHR key such as
+  `genome` to another field's IRI, so JSON readers and JSON-LD readers would read
+  different values from one document. J1's "equal as parsed JSON" now compares JSON types
+  exactly. Conformance: the valid vector `jsonld-schemaorg-vocab-compaction` is now the
+  invalid `jsonld-context-schemaorg-vocab`; `jsonld-iri-as-string` keeps its id but now
+  uses the FHR context with value objects; new invalid J3 vectors `jsonld-context-remapped`,
+  `jsonld-context-extended`, `jsonld-context-import`, `jsonld-context-nested` and
+  `jsonld-nest`, and a new
+  valid `jsonld-context-url-array`. `jsonld-unknown-term`, `jsonld-flattened` and
+  `jsonld-datetime-datecreated` are now built on the expanded form, so they still break
+  only their own rule.
+- docs/FORMAT.md R14 (new): a `format: uri` value should use `http` or `https`; `ftp`,
+  `urn:`, `doi:` and `info:` are also accepted. Other schemes (`javascript:`, `data:`,
+  `file:`, ...) stay schema-valid, but validators warn, and JSON-LD and schema.org export
+  writers refuse to write them as links (J7, X5). Text becomes an IRI (documentation as
+  `subjectOf`; documentation and the licence in the export) only when it is an `http`,
+  `https` or `ftp` URL, instead of any `scheme://` text. New valid vectors
+  `fasta-link-scheme-warning`, `jsonld-link-scheme-warning` (both with the new optional
+  manifest field `warnings`) and `jsonld-documentation-other-scheme`;
+  `check_conformance.py --converter` checks that the converter warns.
+- docs/JSONLD.md J8 (new): JSON-LD embedded in `<script type="application/ld+json">` must
+  have every `<`, `>` and `&` written as `\u003c`, `\u003e` and `\u0026` (and should
+  have U+2028/U+2029 escaped). Escaping only `</`, as advised before, does not cover every
+  value. New valid vector
+  `jsonld-script-escaped`; `scripts/make_jsonld.py` gains the reference `script_text`.
+- 250 vectors (109 valid, 141 invalid), from 240. The conformance CI now runs fair-bioheaders 0.8.5, the first release
+  with these rules.
 - **Normative (schema selection):** add rule V6 to docs/SCHEMA-VERSIONS.md, FHR 1
   compatibility. FHR 1 (releases up to v0.3.1) told writers to cite the raw-main
   `fhr.json` URL with `schemaVersion: 1`, and existing FHR 1 files in the wild do; since
@@ -24,9 +63,8 @@
   `fasta-schema-raw-main-version-1-invalid` (an FHR 1 record that v0.3.1 rejects),
   `fasta-schema-raw-main-version-string-1` and `fasta-schema-raw-main-version-true`
   (V6 needs the number 1, so V1 applies). `check_conformance.py --schema` applies V6, and
-  validates microdata and JSON-LD metadata against the schema it selects. The
-  conformance CI now runs fair-bioheaders 0.8.4, the first release that implements V6
-  (FAIR-bioHeaders-Tools#114).
+  validates microdata and JSON-LD metadata against the schema it selects. fair-bioheaders
+  0.8.4 is the first release that implements V6 (FAIR-bioHeaders-Tools#114).
 
 - Enable the deferred FHGFF3 G1 near-miss vectors `fhgff3-version-30`,
   `fhgff3-version-3x` and `fhgff3-version-3-1` (invalid, G1), now that fair-bioheaders

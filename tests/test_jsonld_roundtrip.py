@@ -55,9 +55,14 @@ def records():
         "minimal.fhr.json": json.loads((ROOT / "examples/minimal.fhr.json").read_text()),
         "example.fhr.yaml": yaml.safe_load((ROOT / "examples/example.fhr.yaml").read_text()),
     }
+    # Vectors whose links have no accepted scheme (R14) are valid, but writers refuse
+    # them; test_writer_refuses_links_without_an_accepted_scheme covers them.
+    manifest = json.loads((ROOT / "conformance/manifest.json").read_text())
+    unwritable = {v["id"] for v in manifest["vectors"] if "R14" in v.get("warnings", ())}
     for kind in ("fasta", "gfa"):
         for path in sorted((ROOT / "conformance/valid").glob(f"*.fhr.{kind}")):
-            found[path.name.split(".")[0]] = header_record(path, kind)
+            if path.name.split(".")[0] not in unwritable:
+                found[path.name.split(".")[0]] = header_record(path, kind)
     for record in found.values():
         if hasattr(record.get("dateCreated"), "isoformat"):
             record["dateCreated"] = record["dateCreated"].isoformat()
@@ -217,6 +222,77 @@ class MaintainerDecisionTests(unittest.TestCase):
                 document = make_jsonld.to_jsonld(dict(self.record, documentation=value))
                 self.assertEqual(document["documentation"], value)
 
+    def test_documentation_with_another_scheme_stays_text(self):
+        """J7 and R14: only an http, https or ftp URL becomes subjectOf."""
+        for value in ("HTTPS://EXAMPLE.ORG/README", "Ftp://example.org/readme"):
+            with self.subTest(url=value):
+                document = make_jsonld.to_jsonld(dict(self.record, documentation=value))
+                self.assertEqual(document["subjectOf"], value)
+        for value in ("file:///data/README", "javascript://example.org/%0A", " https://example.org/x",
+                      "https://example.org/\u2028x", "data://text/plain,x", "https:///no-host",
+                      "\uff48ttps://example.org/fullwidth-h"):
+            with self.subTest(text=value):
+                document = make_jsonld.to_jsonld(dict(self.record, documentation=value))
+                self.assertEqual(document["documentation"], value)
+                self.assertNotIn("subjectOf", document)
+
+    def test_writer_refuses_links_without_an_accepted_scheme(self):
+        """J7, X5 and R14: an IRI-valued field is written as a link only with an accepted
+        scheme; the record is refused otherwise."""
+        accepted = ["https://example.org/a", "HTTP://example.org/b", "ftp://example.org/c",
+                    "urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66", "doi:10.1000/182",
+                    "info:doi/10.1000/182"]
+        record = dict(self.record, relatedLink=accepted)
+        self.assertEqual(make_jsonld.to_jsonld(record)["relatedLink"], accepted)
+        make_jsonld.to_export(record)
+        changes = {
+            "relatedLink": ["https://example.org/a", "javascript:void(0)"],
+            "assemblyProtocol": "file:///etc/hosts",
+            "accessionID": {"name": "x", "url": "data:text/plain,x"},
+            "assemblySoftware": [{"name": "x", "uri": "JavaScript:void(0)"}],
+        }
+        variants = {key: dict(self.record, **{key: value}) for key, value in changes.items()}
+        variants["padded"] = dict(self.record, assemblyProtocol=" https://example.org/p")
+        variants["tab"] = dict(self.record, relatedLink=["java\tscript:void(0)"])
+        variants["no-host"] = dict(self.record, relatedLink=["https:/example.org"])
+        variants["bidi"] = dict(self.record, relatedLink=["https://example.org/\u202eevil"])
+        for name, variant in variants.items():
+            with self.subTest(variant=name):
+                with self.assertRaisesRegex(ValueError, "R14"):
+                    make_jsonld.to_jsonld(variant)
+                with self.assertRaisesRegex(ValueError, "R14"):
+                    make_jsonld.to_export(variant)
+        with self.assertRaisesRegex(ValueError, "absolute http, https or ftp URL"):
+            make_jsonld.check_export({"id": "javascript://example.org/x"})
+
+    def test_script_text_keeps_values_inside_the_element(self):
+        """J8: '<', '>' and '&' are escaped, so no value ends or re-opens the element."""
+        from html.parser import HTMLParser
+
+        hostile = ["</script>", "<!--<script>", "]]>", "a & b < c > d", "x\u2028y\u2029z",
+                   "</SCRIPT >", "<\\/script>"]
+        record = dict(self.record, genomeSynonym=hostile)
+        text = make_jsonld.script_text(make_jsonld.jsonld_text(record))
+        self.assertFalse(set("<>&\u2028\u2029") & set(text))
+        self.assertEqual(json.loads(text), make_jsonld.to_jsonld(record))
+
+        class Scripts(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.data, self.ends = [], 0
+
+            def handle_data(self, data):
+                self.data.append(data)
+
+            def handle_endtag(self, tag):
+                self.ends += tag == "script"
+
+        page = Scripts()
+        page.feed(f'<script type="application/ld+json">{text}</script><p>after</p>')
+        page.close()
+        self.assertEqual(page.ends, 1)
+        self.assertEqual(json.loads(page.data[0])["genomeSynonym"], hostile)
+
     def test_documentation_and_subject_of_together_are_invalid(self):
         document = make_jsonld.to_jsonld(self.record)
         document["subjectOf"] = "https://example.org/readme"
@@ -372,6 +448,21 @@ class ProcessorTests(unittest.TestCase):
 
         with self.assertRaises(pyld.JsonLdError):
             expand("jsonld-remote-context")
+        # J3: these contexts would make expansion read the keys as other fields, which
+        # is why a reader refuses them before expanding.
+        swapped = expand("jsonld-context-remapped")[0]
+        canonical = read("jsonld-context-remapped")
+        self.assertEqual(swapped["http://schema.org/description"],
+                         [{"@value": canonical["genome"]}])
+        self.assertEqual(swapped["http://schema.org/name"],
+                         [{"@value": canonical["documentation"]}])
+        # The extended and nested vectors build on the protected FHR context, where
+        # PyLD 3.3 fails (KeyError) instead of expanding them as JSON-LD 1.1 allows.
+        for name in ("jsonld-context-remapped", "jsonld-context-import",
+                     "jsonld-context-extended", "jsonld-context-nested",
+                     "jsonld-context-schemaorg-vocab", "jsonld-nest"):
+            with self.subTest(vector=name):
+                self.assertIsNotNone(make_jsonld.context_problem(read(name)))
         self.assertEqual(len(expand("jsonld-two-nodes")), 2)
         self.assertIn("http://schema.org/keywords", expand("jsonld-unknown-term")[0])
         self.assertEqual(len(expand("jsonld-two-genome-values")[0]["http://schema.org/name"]), 2)

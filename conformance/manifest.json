@@ -48,6 +48,10 @@
     "R13": {
       "summary": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and -.inf, and NaN or Infinity written as a JSON extension, make the record invalid."
     },
+    "R14": {
+      "summary": "Links: a value whose schema format is uri should use http or https (ftp, urn, doi and info are also accepted); any other scheme, such as javascript:, data: or file:, stays schema-valid, but validators warn and JSON-LD writers do not write it as a link.",
+      "notApplicable": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"]."
+    },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
     },
@@ -67,7 +71,7 @@
       "summary": "JSON-LD: duplicate object keys are invalid."
     },
     "J3": {
-      "summary": "JSON-LD: any other form is read by JSON-LD 1.1 expansion with bundled contexts only; a context that is not bundled, remote or unknown, is invalid."
+      "summary": "JSON-LD: any other form is read by JSON-LD 1.1 expansion with bundled contexts only. The only context allowed is the FHR context (a known URL or an embedded copy equal as parsed JSON, alone or as the only item of an array) on a top-level object; any other context, remote, unknown, embedded, extended or nested, is invalid."
     },
     "J4": {
       "summary": "JSON-LD: exactly one top-level node (directly or the only item of @graph); every property must map to an FHR field in its scope, and unknown terms or a root @id make the document invalid."
@@ -81,6 +85,10 @@
     "J7": {
       "summary": "JSON-LD: writers emit the record with an embedded context and typed nodes, byte for byte as docs/JSONLD.md describes.",
       "notApplicable": "J7 constrains writers; a reader has no invalid input for it. The valid vectors that cite J7 are writer output."
+    },
+    "J8": {
+      "summary": "JSON-LD in HTML: inside <script type=\"application/ld+json\">, '<', '>' and '&' in the JSON text are written as \\u003c, \\u003e and \\u0026; the document reads back to the same metadata.",
+      "notApplicable": "J8 constrains writers that embed JSON-LD in HTML; the escaped text is ordinary JSON, so a reader has no invalid input for it. Its valid vector shows that the escapes read back to the real characters."
     },
     "P1": {
       "summary": "FHP: the metadata of a protein FASTA header must validate against fhp.json."
@@ -438,6 +446,30 @@
         "version": "1.0.0",
         "masking": "not-masked",
         "documentation": "contact someone@example.org; contigs > 1000 bp"
+      }
+    },
+    {
+      "id": "fasta-link-scheme-warning",
+      "file": "valid/fasta-link-scheme-warning.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R14"
+      ],
+      "description": "relatedLink holds an https URL and a javascript: URI. Both are URIs, so the file is valid, but a validator should warn about the javascript: scheme.",
+      "warnings": [
+        "R14"
+      ],
+      "checksum": "l1x24EGsOT2ae4fUg6ZP8q17vfMNwkrtEi3dSNDYR4o=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "relatedLink": [
+          "https://example.org/synthetic",
+          "javascript:void(0)"
+        ]
       }
     },
     {
@@ -1871,18 +1903,149 @@
       }
     },
     {
-      "id": "jsonld-expanded",
-      "file": "valid/jsonld-expanded.fhr.jsonld",
+      "id": "jsonld-documentation-other-scheme",
+      "file": "valid/jsonld-documentation-other-scheme.fhr.jsonld",
       "format": "jsonld",
       "compressed": false,
       "expected": "valid",
       "rules": [
-        "J3",
-        "J4",
-        "J5",
-        "J6"
+        "J1",
+        "J7"
       ],
-      "description": "The canonical document in JSON-LD expanded form: full IRIs, value objects, @id for IRI fields, @list for commandLineOption and no context.",
+      "description": "documentation is a file: URL, not an http, https or ftp URL, so the writer keeps it as documentation text instead of a subjectOf link.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+        "schemaVersion": "2.0",
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "file:///data/synthetic/README",
+        "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
+      "id": "jsonld-script-escaped",
+      "file": "valid/jsonld-script-escaped.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J1",
+        "J8"
+      ],
+      "description": "Writer output escaped for a script element: every '<', '>', '&', U+2028 and U+2029 in the values is written as a \\u escape, so values such as '</script>' and '<!--<script>' cannot end or re-open the element. It reads back with the real characters.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+        "schemaVersion": "2.0",
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
+        "genomeSynonym": [
+          "</script>",
+          "<!--<script>",
+          "]]>",
+          "a & b < c > d",
+          "line\u2028separator\u2029end"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
+      "id": "jsonld-link-scheme-warning",
+      "file": "valid/jsonld-link-scheme-warning.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J1",
+        "R14"
+      ],
+      "description": "A canonical document whose relatedLink holds a javascript: URI. It is valid, but a reader should warn, and a writer refuses to write it as a link (R14).",
+      "warnings": [
+        "R14"
+      ],
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
         "schemaVersion": "2.0",
@@ -1914,7 +2077,8 @@
           "example:conformance-1"
         ],
         "relatedLink": [
-          "https://example.org/synthetic"
+          "https://example.org/synthetic",
+          "javascript:void(0)"
         ],
         "reuseConditions": "CC0-1.0",
         "assemblySoftware": [
@@ -1936,16 +2100,18 @@
       }
     },
     {
-      "id": "jsonld-schemaorg-vocab-compaction",
-      "file": "valid/jsonld-schemaorg-vocab-compaction.fhr.jsonld",
+      "id": "jsonld-expanded",
+      "file": "valid/jsonld-expanded.fhr.jsonld",
       "format": "jsonld",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "J3",
-        "J5"
+        "J4",
+        "J5",
+        "J6"
       ],
-      "description": "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR context; dateCreated is a value object typed xsd:date.",
+      "description": "The canonical document in JSON-LD expanded form: full IRIs, value objects, @id for IRI fields, @list for commandLineOption and no context.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
         "schemaVersion": "2.0",
@@ -2061,15 +2227,79 @@
       }
     },
     {
+      "id": "jsonld-context-url-array",
+      "file": "valid/jsonld-context-url-array.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "J3",
+        "J4"
+      ],
+      "description": "The FHR context URL as the only item of a context array: the FHR context alone, read by expansion; nothing is fetched.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+        "schemaVersion": "2.0",
+        "genome": "Synthetic FHR conformance genome",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "assemblyAuthor": [
+          {
+            "name": "Josiah Carberry (ORCID example iD)",
+            "uri": "https://orcid.org/0000-0002-1825-0097"
+          }
+        ],
+        "dateCreated": "2026-10-08",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+        "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
+        "genomeSynonym": [
+          "synthetic conformance genome"
+        ],
+        "identifier": [
+          "example:conformance-1"
+        ],
+        "relatedLink": [
+          "https://example.org/synthetic"
+        ],
+        "reuseConditions": "CC0-1.0",
+        "assemblySoftware": [
+          {
+            "name": "synthetic-assembler",
+            "version": "1.2.3",
+            "commandLineOption": [
+              "-t",
+              "2"
+            ]
+          }
+        ],
+        "vitalStats": {
+          "N50": 20,
+          "L50": 1,
+          "totalBasePairs": 20,
+          "gcContent": 45.5
+        }
+      }
+    },
+    {
       "id": "jsonld-iri-as-string",
       "file": "valid/jsonld-iri-as-string.fhr.jsonld",
       "format": "jsonld",
       "compressed": false,
       "expected": "valid",
       "rules": [
+        "J3",
         "J5"
       ],
-      "description": "Under the schema.org @vocab, the IRI fields schema (schema.org schemaVersion) and relatedLink, and dateCreated, are plain strings.",
+      "description": "The FHR context with value objects: the IRI fields schema and relatedLink are plain strings, and dateCreated is a value typed xsd:date.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
         "schemaVersion": "2.0",
@@ -3817,13 +4047,58 @@
       "reason": "Both documentation and subjectOf give the documentation value."
     },
     {
-      "id": "jsonld-unknown-term",
-      "file": "invalid/jsonld-unknown-term.fhr.jsonld",
+      "id": "jsonld-context-remapped",
+      "file": "invalid/jsonld-context-remapped.fhr.jsonld",
       "format": "jsonld",
       "compressed": false,
       "expected": "invalid",
-      "rule": "J4",
-      "reason": "http://schema.org/keywords has no FHR field (it is export metadata only)."
+      "rule": "J3",
+      "reason": "An embedded copy of the FHR context whose genome and documentation terms exchange their IRIs, so JSON-LD expansion would read each key as the other field."
+    },
+    {
+      "id": "jsonld-context-schemaorg-vocab",
+      "file": "invalid/jsonld-context-schemaorg-vocab.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR context: the keys (name, description, ...) are not the FHR keys their values are read as."
+    },
+    {
+      "id": "jsonld-context-extended",
+      "file": "invalid/jsonld-context-extended.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "The FHR context URL followed by a local context that adds the term title for schema.org name, used in place of genome."
+    },
+    {
+      "id": "jsonld-context-import",
+      "file": "invalid/jsonld-context-import.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "A context that @imports the FHR context URL and overrides the genome and documentation terms, which @import allows despite @protected."
+    },
+    {
+      "id": "jsonld-context-nested",
+      "file": "invalid/jsonld-context-nested.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "The FHR context at the top, and a second context with a schema.org @vocab on the record inside @graph, where description stands for documentation."
+    },
+    {
+      "id": "jsonld-nest",
+      "file": "invalid/jsonld-nest.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J3",
+      "reason": "The FHR context, with documentation moved into @nest, where a JSON reader does not see it but JSON-LD expansion reads it as the record's documentation."
     },
     {
       "id": "jsonld-remote-context",
@@ -3833,6 +4108,15 @@
       "expected": "invalid",
       "rule": "J3",
       "reason": "The context is a remote URL that is not a bundled FHR context; nothing may be fetched."
+    },
+    {
+      "id": "jsonld-unknown-term",
+      "file": "invalid/jsonld-unknown-term.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J4",
+      "reason": "http://schema.org/keywords has no FHR field (it is export metadata only)."
     },
     {
       "id": "jsonld-two-nodes",

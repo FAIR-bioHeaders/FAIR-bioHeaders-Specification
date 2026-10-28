@@ -489,6 +489,9 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             outcome = "accepted" if accepted else f"rejected ({detail})"
             expected = vector["expected"] + (f", {vector['rule']}" if "rule" in vector else "")
             problems.append(f"{vector['id']}: converter {outcome}; expected {expected}")
+        elif accepted and vector.get("warnings") and "warning" not in result.stderr.lower():
+            problems.append(f"{vector['id']}: converter printed no warning; expected one "
+                            f"under {', '.join(vector['warnings'])}")
         elif extracted is not None and not same_json(extracted, vector["metadata"]):
             differences = sorted(
                 key for key in extracted.keys() | vector["metadata"].keys()

@@ -85,7 +85,7 @@ stated by a source, cannot be verified this way.
 
 ## Rules
 
-FHP files follow the shared header, checksum and number rules R1 to R13 of [FORMAT.md](FORMAT.md)
+FHP files follow the shared header, checksum, number and link rules R1 to R14 of [FORMAT.md](FORMAT.md)
 unchanged, in a FASTA container. The sequence alphabet makes no difference to them: stop symbols
 (`*`), the rare residues U and O, the ambiguity codes B, Z, J and X, lower case and gaps are
 ordinary bytes, hashed and preserved exactly. In addition:
