@@ -100,10 +100,11 @@ The machine-readable form is [`schemas/versions.json`](../schemas/versions.json)
 | Release | FHR | FHP | FHGFF3 |
 | --- | --- | --- | --- |
 | v0.3.0, v0.3.1 | `1` (a number) | – | – |
-| v0.4.0, v0.4.1 | `"2.0"` | `"1.0"` | `"1.0"` |
+| v0.4.0, v0.4.1, v0.4.2 | `"2.0"` | `"1.0"` | `"1.0"` |
 
-v0.4.1 changed only format rules (docs/FORMAT.md), not the schemas, so its schemas are the
-v0.4.0 ones and `current` in `versions.json` stays `v0.4.0`; examples keep citing v0.4.0.
+v0.4.1 and v0.4.2 changed only format rules (docs/FORMAT.md, docs/JSONLD.md and schema
+selection), not the schemas, so their schemas are the v0.4.0 ones and `current` in
+`versions.json` stays `v0.4.0`; examples keep citing v0.4.0.
 
 FHR 2.0 is a major version because the v0.4 tightening
 ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)) rejects some values v0.3 accepted. The additive
@@ -157,7 +158,7 @@ same; existing files cite the old form, and it keeps serving the same files.
   file is not checked against another schema. The message names the value and the releases the
   reader has, for example
   `FHR: unsupported schema version: https://w3id.org/fair-bioheaders/fhr/v0.0.0 (this tool has FHR
-  schemas for main (v0.4.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1)`.
+  schemas for main (v0.4.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1, v0.4.2)`.
 - [V5] Any other value, including the w3id path form `…/fhr/v0.4.0/fhr.json`, is **FHR**, checked
   against the current FHR schema. FHR's `schema` field has never been constrained; this keeps that
   behaviour.
