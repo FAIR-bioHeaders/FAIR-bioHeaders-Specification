@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- docs/SCHEMA-GAP-AUDIT.md (#189): recorded the maintainer decision that the next major
+  of FHR, FHP and FHGFF3 requires `taxon.uri` with an NCBI Taxonomy or ITIS identifier,
+  replacing GAP-1's "`name` or `uri`" plan. Adds the proposed rule (recognised URI forms),
+  NCBI taxa for unclassified and environmental material, the ITIS caveats (separate
+  numbering, limited microbial coverage, no FHGFF3 `##species` comparison) and migration
+  notes. docs/insdc-coverage.md rows A.c, A.d, SA.T2, SA.T7 and the follow-ups, and the
+  planned constraints in docs/SCHEMA-VERSIONS.md, now say this is decided for the next
+  major; the INSDC profile (#190) requires the NCBI form. No schema, `schemaVersion`,
+  example, vector or validation change.
 - Docs: shortened J3/J8 rationale.
 - docs/insdc-coverage.md (#157): assessment v1 of the INSDC minimum-specification
   review. Every requirement of the ten categories at insdc/minimum-specifcations
