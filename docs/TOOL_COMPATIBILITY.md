@@ -362,7 +362,7 @@ would be fixed by gpertea/gclib#15, which is open. The raw-`@`/`>` failures of M
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
 TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
 are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury,
-screed/sourmash, AUGUSTUS, Bakta and JBrowse 2 have been contacted; see [Upstream support](#upstream-support)).
+screed/sourmash, AUGUSTUS, Bakta, JBrowse 2 and BBTools have been contacted; see [Upstream support](#upstream-support)).
 
 ## More tools (2026-10-22)
 
@@ -549,6 +549,7 @@ current meaning, so no file that a tool reads today is read differently.
 | Gaius-Augustus/Augustus | `augustus`: leading `;` lines fail type detection ("Found bad character") or, without punctuation, become an extra `unnamed-1` sequence | Issue Gaius-Augustus/Augustus#452 (2026-10-22; tested patch, identical predictions; PR offered) | Open |
 | oschwengers/bakta | `bakta` genome import, `bakta_proteins` input and `--proteins` (Biopython `fasta`, which raises from 1.87): "wrong genome file format!" | Issue oschwengers/bakta#458 (2026-10-23; tested patch keeping Biopython ≥1.78 support, identical outputs; PR offered) | Open |
 | GMOD/jbrowse-components, GMOD/indexedfasta-js | `UnindexedFastaAdapter` and `parseSmallFasta`: leading `;` lines become an extra reference sequence (silent) | Issue GMOD/jbrowse-components#5638 (2026-10-27; tested patches for both repos, identical names/lengths/sequences) | **Accepted 2026-10-27**: fixed by the maintainer the same day in jbrowse-components (672a2cf, next release) and indexedfasta-js (18674c2), **released in `@gmod/indexedfasta` 5.0.14** |
+| bbushnell/BBTools | `stats.sh` (used by BUSCO for assembly statistics): leading `;` lines counted as an extra contig (2 contigs / 581,581 bp for an FHR file; silent), `AssertionError` on non-ASCII comments; `bbmap.sh` index gains an extra `null` scaffold | Issue bbushnell/BBTools#38 (2026-10-27; tested patch for both readers, outputs identical to the plain file; PR offered) | Open |
 
 Until these are released, the workarounds above apply: strip the header for the tool (`fhr-fasta-strip`)
 and keep the FHR file as the record of provenance.
