@@ -19,6 +19,7 @@ Key facts (FAIR-bioHeaders-Specification v0.4.2, fair-bioheaders 0.8.5):
 - [FHGFF3, GFF3 annotation](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHGFF3.md): header placement after `##gff-version 3`, genome link by checksum or accession plus SeqCol
 - [JSON-LD form](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/JSONLD.md) and [schema.org export](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMAORG-EXPORT.md)
 - [Tool compatibility](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/TOOL_COMPATIBILITY.md): which tools accept headers, workarounds, upstream support status
+- [INSDC coverage review](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/insdc-coverage.md): which INSDC minimum-specification requirements FH covers, and how to use headers alongside an INSDC submission (strip before upload; a header is not deposit readiness)
 - [FAIR header guideline](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FAIR_HEADER_GUIDELINE.md): metadata to put in any file's native header
 - [Specification repository](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification): released schemas, LinkML models, examples and conformance vectors
 

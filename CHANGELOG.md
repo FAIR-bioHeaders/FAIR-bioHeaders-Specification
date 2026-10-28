@@ -3,6 +3,24 @@
 ## Unreleased
 
 - Docs: shortened J3/J8 rationale.
+- docs/insdc-coverage.md (#157): assessment v1 of the INSDC minimum-specification
+  review. Every requirement of the ten categories at insdc/minimum-specifcations
+  `41f0dc4` has an ID and a final disposition (covered, partial, out of scope or a linked
+  follow-up). Corrected claims: A.c submitter identity and A.j assembly metadata are
+  partial (required author lists may be empty; method and technology fields are optional),
+  A.d and SA.T2 note that `taxon.uri` is optional, the Analysis checksum (AY7) is not the
+  whole-file digest INSDC records, and BioSample XSD validation (SA.4) is out of scope.
+  FHT rows cite the FHT 1.0 development contract and stay marked draft. Follow-ups:
+  #189 (next major: taxonomy identifier), #190 (draft INSDC profile), #191 (INSDC
+  submission tools), gff3-validator#27 (Annotation rules). New section on using FH headers
+  alongside an INSDC submission, linked from README, MAPPINGS.md and llms.txt.
+- tests/test_insdc_coverage.py: checks that the matrix has one row for each requirement ID
+  pinned in tests/fixtures/insdc-requirements.json, that dispositions are final and match
+  the coverage symbol, that follow-up links are well formed and listed, that FHT rows are
+  marked draft, and that the assessed `schemaVersion`s match the schemas.
+- AGENTS.md: review proposed schema revisions against the INSDC coverage review.
+- scripts/make_assessment_fixtures.py: pin the gzip header OS byte to 255, so the
+  generated assessment fixtures match the committed files on Python 3.12 as well as 3.13.
 
 ## v0.4.2 — 2026-10-28
 

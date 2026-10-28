@@ -77,7 +77,8 @@ rubric with the item table of
 writes the SC-001 review packet.
 
 `python scripts/make_assessment_fixtures.py [--output DIR]` regenerates `pairs/` and
-`edge/` deterministically (gzip members with `mtime=0`); `tests/test_assessment_fixtures.py`
+`edge/` deterministically (gzip members with `mtime=0` and OS byte 255, on any
+Python version); `tests/test_assessment_fixtures.py`
 checks that the committed files match its output and that every file is listed once.
 
 ## Other implementations
