@@ -1,61 +1,167 @@
-{
-  "@context": {
-    "@vocab": "http://schema.org/",
-    "fhr": "https://w3id.org/fair-bioheaders/terms#"
-  },
-  "@type": "Dataset",
-  "schemaVersion": {
-    "@id": "https://w3id.org/fair-bioheaders/fhr/v0.4.0"
-  },
-  "fhr:schemaVersion": "2.0",
-  "name": "Synthetic FHR conformance genome",
-  "about": {
-    "@type": "Taxon",
-    "name": "Homo sapiens",
-    "@id": "https://identifiers.org/taxonomy:9606"
-  },
-  "version": "1.0.0",
-  "fhr:metadataAuthor": {
-    "@type": "fhr:Agent",
-    "name": "Synthetic metadata author (placeholder)"
-  },
-  "creator": {
-    "@type": "Person",
-    "name": "Josiah Carberry (ORCID example iD)",
-    "@id": "https://orcid.org/0000-0002-1825-0097"
-  },
-  "dateCreated": {
-    "@type": "http://www.w3.org/2001/XMLSchema#date",
-    "@value": "2026-10-08"
-  },
-  "fhr:masking": "not-masked",
-  "description": "Synthetic FHR conformance vector; not a real assembly.",
-  "fhr:checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
-  "alternateName": "synthetic conformance genome",
-  "identifier": "example:conformance-1",
-  "fhr:relatedLink": {
-    "@id": "https://example.org/synthetic"
-  },
-  "license": "CC0-1.0",
-  "fhr:assemblySoftware": {
-    "@type": "SoftwareApplication",
-    "name": "synthetic-assembler",
-    "softwareVersion": "1.2.3",
-    "fhr:commandLineOption": {
-      "@list": [
-        "-t",
-        "2"
-      ]
-    }
-  },
-  "fhr:vitalStats": {
-    "@type": "fhr:VitalStats",
-    "fhr:N50": 20,
-    "fhr:L50": 1,
-    "fhr:totalBasePairs": 20,
-    "fhr:gcContent": 45.5
-  },
-  "keywords": [
-    "synthetic"
-  ]
-}
+[
+  {
+    "@type": [
+      "http://schema.org/Dataset"
+    ],
+    "http://schema.org/schemaVersion": [
+      {
+        "@id": "https://w3id.org/fair-bioheaders/fhr/v0.4.0"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#schemaVersion": [
+      {
+        "@value": "2.0"
+      }
+    ],
+    "http://schema.org/name": [
+      {
+        "@value": "Synthetic FHR conformance genome"
+      }
+    ],
+    "http://schema.org/about": [
+      {
+        "@type": [
+          "http://schema.org/Taxon"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Homo sapiens"
+          }
+        ],
+        "@id": "https://identifiers.org/taxonomy:9606"
+      }
+    ],
+    "http://schema.org/version": [
+      {
+        "@value": "1.0.0"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#metadataAuthor": [
+      {
+        "@type": [
+          "https://w3id.org/fair-bioheaders/terms#Agent"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Synthetic metadata author (placeholder)"
+          }
+        ]
+      }
+    ],
+    "http://schema.org/creator": [
+      {
+        "@type": [
+          "http://schema.org/Person"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "Josiah Carberry (ORCID example iD)"
+          }
+        ],
+        "@id": "https://orcid.org/0000-0002-1825-0097"
+      }
+    ],
+    "http://schema.org/dateCreated": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#date",
+        "@value": "2026-10-08"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#masking": [
+      {
+        "@value": "not-masked"
+      }
+    ],
+    "http://schema.org/description": [
+      {
+        "@value": "Synthetic FHR conformance vector; not a real assembly."
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#checksum": [
+      {
+        "@value": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU="
+      }
+    ],
+    "http://schema.org/alternateName": [
+      {
+        "@value": "synthetic conformance genome"
+      }
+    ],
+    "http://schema.org/identifier": [
+      {
+        "@value": "example:conformance-1"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#relatedLink": [
+      {
+        "@id": "https://example.org/synthetic"
+      }
+    ],
+    "http://schema.org/license": [
+      {
+        "@value": "CC0-1.0"
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#assemblySoftware": [
+      {
+        "@type": [
+          "http://schema.org/SoftwareApplication"
+        ],
+        "http://schema.org/name": [
+          {
+            "@value": "synthetic-assembler"
+          }
+        ],
+        "http://schema.org/softwareVersion": [
+          {
+            "@value": "1.2.3"
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#commandLineOption": [
+          {
+            "@list": [
+              {
+                "@value": "-t"
+              },
+              {
+                "@value": "2"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "https://w3id.org/fair-bioheaders/terms#vitalStats": [
+      {
+        "@type": [
+          "https://w3id.org/fair-bioheaders/terms#VitalStats"
+        ],
+        "https://w3id.org/fair-bioheaders/terms#N50": [
+          {
+            "@value": 20
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#L50": [
+          {
+            "@value": 1
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#totalBasePairs": [
+          {
+            "@value": 20
+          }
+        ],
+        "https://w3id.org/fair-bioheaders/terms#gcContent": [
+          {
+            "@value": 45.5
+          }
+        ]
+      }
+    ],
+    "http://schema.org/keywords": [
+      {
+        "@value": "synthetic"
+      }
+    ]
+  }
+]

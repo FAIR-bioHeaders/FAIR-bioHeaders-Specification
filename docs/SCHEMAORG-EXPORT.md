@@ -71,9 +71,14 @@ The bracketed ids are stable labels used by the tests.
      profile.
    - `funding` becomes a `Grant` whose `description` is the unchanged text. No funder, award
      number or amount is extracted.
-   - `reuseConditions` and `documentation` become IRIs only when they are absolute URLs.
-     Otherwise they stay text: a non-URL documentation is `description`, and a URL is
-     `subjectOf`.
+   - `reuseConditions` and `documentation` become IRIs only when they are absolute `http`,
+     `https` or `ftp` URLs, as in the canonical form ([JSONLD.md](JSONLD.md#what-the-document-contains)).
+     Otherwise they stay text: other documentation is `description`, and a URL is `subjectOf`.
+     Text with another scheme, such as `file:///…` or `javascript:…`, stays text.
+   - The IRI-valued fields (`schema`, `relatedLink`, `assemblyProtocol`, the taxon and author
+     `uri`, the accession `url`, a software `uri`) are written as IRIs, so a writer refuses a
+     record in which one of them has no accepted link scheme ([FORMAT.md](FORMAT.md) R14). The
+     export context's `id` and `url` must be `http`, `https` or `ftp` URLs.
    - A licence that is text is kept as text, and validator.schema.org reports it. Use a licence
      URL.
 6. **[X6] Identifiers keep their scope.**

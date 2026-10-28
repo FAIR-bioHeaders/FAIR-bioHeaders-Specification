@@ -9,8 +9,12 @@ The converter's HTML representation adds `data-fhr-type` annotations (`object`,
 JSON/YAML mapping recoverable. An array container holds children with
 `itemprop="item"`. These are FHR serialization conventions, not a claim that a
 generic Schema.org consumer understands FHR properties or these extensions.
-HTML values and attribute text must be escaped; command-line strings are data
-and are never executed. Unicode and whitespace in typed strings are preserved.
+HTML values and attribute text must be escaped (`&`, `<` and `>` in text, and the
+quote character as well in attributes); command-line strings are data and are never
+executed. Unicode and whitespace in typed strings are preserved. The converter writes
+every value as element text, never as an `href` or `src`, so a value is not a link in
+the page. A reader that takes a value from an `href` applies the link-scheme rule R14
+of [FORMAT.md](FORMAT.md) like any other.
 
 To embed metadata, copy the generated item-scope element into a page:
 

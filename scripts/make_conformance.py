@@ -79,6 +79,10 @@ RULES = {
            "two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid.",
     "R13": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and "
            "-.inf, and NaN or Infinity written as a JSON extension, make the record invalid.",
+    "R14": "Links: a value whose schema format is uri should use http or https (ftp, urn, doi "
+           "and info are also accepted); any other scheme, such as javascript:, data: or "
+           "file:, stays schema-valid, but validators warn and JSON-LD writers do not write it "
+           "as a link.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -92,7 +96,9 @@ RULES = {
           "subjectOf is documentation, and export terms are set aside.",
     "J2": "JSON-LD: duplicate object keys are invalid.",
     "J3": "JSON-LD: any other form is read by JSON-LD 1.1 expansion with bundled contexts "
-          "only; a context that is not bundled, remote or unknown, is invalid.",
+          "only. The only context allowed is the FHR context (a known URL or an embedded copy "
+          "equal as parsed JSON, alone or as the only item of an array) on a top-level object; "
+          "any other context, remote, unknown, embedded, extended or nested, is invalid.",
     "J4": "JSON-LD: exactly one top-level node (directly or the only item of @graph); every "
           "property must map to an FHR field in its scope, and unknown terms or a root @id "
           "make the document invalid.",
@@ -102,6 +108,9 @@ RULES = {
     "J6": "JSON-LD: the resulting metadata must validate against fhr.json.",
     "J7": "JSON-LD: writers emit the record with an embedded context and typed nodes, "
           "byte for byte as docs/JSONLD.md describes.",
+    "J8": "JSON-LD in HTML: inside <script type=\"application/ld+json\">, '<', '>' and '&' "
+          "in the JSON text are written as \\u003c, \\u003e and \\u0026; the document "
+          "reads back to the same metadata.",
     "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
     "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
           "other header is validated as FHR.",
@@ -137,6 +146,11 @@ NOT_APPLICABLE = {
            "vectors that cite R11 show escaped values and a raw value that stays valid.",
     "J7": "J7 constrains writers; a reader has no invalid input for it. The valid vectors "
           "that cite J7 are writer output.",
+    "J8": "J8 constrains writers that embed JSON-LD in HTML; the escaped text is ordinary "
+          "JSON, so a reader has no invalid input for it. Its valid vector shows that the "
+          "escapes read back to the real characters.",
+    "R14": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid "
+           "in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"].",
 }
 
 PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~", "fhgff3": b"#~"}
@@ -192,6 +206,8 @@ BODY = {
 EXPECTED_METADATA = {"genome": GENOME, "version": VERSION, "masking": MASKING}
 # A value with both FASTA record markers (R11).
 RECORD_MARKER_TEXT = "contact someone@example.org; contigs > 1000 bp"
+# A URI with a scheme that is not a link scheme (R14); it does nothing when followed.
+OTHER_SCHEME_LINK = "javascript:void(0)"
 
 
 def digest(data):
@@ -355,9 +371,10 @@ VALID = []
 INVALID = []
 
 
-def valid(name, kind, data, value, rules, description, compression=None):
+def valid(name, kind, data, value, rules, description, compression=None, warnings=None):
     VALID.append(dict(name=name, kind=kind, data=data, checksum=value, rules=rules,
-                      description=description, compression=compression, status="valid"))
+                      description=description, compression=compression, status="valid",
+                      warnings=warnings))
 
 
 def invalid(name, kind, data, rule, reason, compression=None, metadata=None, result=None):
@@ -509,6 +526,19 @@ def build():
                   "read a bogus record at the '@'.")
             VALID[-1]["expected_metadata"] = dict(
                 EXPECTED_METADATA, documentation=RECORD_MARKER_TEXT)
+            # R14: a link scheme other than http(s) is schema-valid but reported.
+            lines = with_metadata(k, insert=[(
+                "documentation: Synthetic FHR conformance vector; not a real assembly.",
+                ["relatedLink:", "- https://example.org/synthetic", f"- '{OTHER_SCHEME_LINK}'"],
+            )])
+            data, value = assemble(lines + body(k))
+            valid("fasta-link-scheme-warning", k, data, value, ["R14"],
+                  "relatedLink holds an https URL and a javascript: URI. Both are URIs, so the "
+                  "file is valid, but a validator should warn about the javascript: scheme.",
+                  warnings=["R14"])
+            VALID[-1]["expected_metadata"] = dict(
+                EXPECTED_METADATA, relatedLink=["https://example.org/synthetic",
+                                                OTHER_SCHEME_LINK])
 
         # Invalid vectors with otherwise correct checksums unless stated.
         data, _ = standard(k, endings=b"\r\n", hash_data=lambda b: b.replace(b"\r\n", b"\n"))
@@ -1509,6 +1539,10 @@ def build_microdata():
 # JSON-LD vectors (docs/JSONLD.md). The checksum is an ordinary value, as in microdata.
 
 ORCID_EXAMPLE = "https://orcid.org/0000-0002-1825-0097"  # ORCID's documented example iD.
+# Values that end or re-open an HTML script element unless '<', '>' and '&' are
+# escaped (J8), with CDATA's end and the line and paragraph separators.
+SCRIPT_HOSTILE = ("</script>", "<!--<script>", "]]>", "a & b < c > d",
+                  "line\u2028separator\u2029end")
 EXPORT_CONTEXT = {
     "id": "https://example.org/datasets/synthetic-conformance",
     "url": "https://example.org/genomes/synthetic-conformance",
@@ -1545,9 +1579,11 @@ def reordered(value):
     return value
 
 
-def jsonld_valid(name, document, metadata, rules, description):
-    VALID.append(dict(name=name, kind="jsonld", data=jsonld_bytes(document), metadata=metadata,
-                      rules=rules, description=description, compression=None, status="valid"))
+def jsonld_valid(name, document, metadata, rules, description, data=None, warnings=None):
+    VALID.append(dict(name=name, kind="jsonld",
+                      data=jsonld_bytes(document) if data is None else data,
+                      metadata=metadata, rules=rules, description=description,
+                      compression=None, status="valid", warnings=warnings))
 
 
 def jsonld_invalid(name, data, rule, reason, metadata=None):
@@ -1670,8 +1706,8 @@ def build_jsonld():
     versioned = jsonld_record(schema="https://w3id.org/fair-bioheaders/fhr/v0.4.0")
     jsonld_valid("jsonld-schema-versioned-url", write(versioned), versioned, ["J1", "J6"],
                  "The record cites a versioned schema URL, which is kept unchanged.")
-    linked = jsonld_record(documentation="https://example.org/synthetic/README")
-    jsonld_valid("jsonld-documentation-url", write(linked), linked, ["J1", "J7"],
+    documented = jsonld_record(documentation="https://example.org/synthetic/README")
+    jsonld_valid("jsonld-documentation-url", write(documented), documented, ["J1", "J7"],
                  "documentation is an absolute URL, so it is written as subjectOf and read "
                  "back as documentation.")
     typed = jsonld_record(assemblyAuthor=[{"name": "Example Sequencing Centre",
@@ -1683,6 +1719,26 @@ def build_jsonld():
                  ["J1", "J7"],
                  "Export-context terms @id, keywords, url and conformsTo (Bioschemas Dataset "
                  "1.0-RELEASE) are not FHR fields and are set aside.")
+    local = jsonld_record(documentation="file:///data/synthetic/README")
+    jsonld_valid("jsonld-documentation-other-scheme", write(local), local, ["J1", "J7"],
+                 "documentation is a file: URL, not an http, https or ftp URL, so the writer "
+                 "keeps it as documentation text instead of a subjectOf link.")
+    hostile = jsonld_record(genomeSynonym=list(SCRIPT_HOSTILE))
+    text = jsonld_bytes(write(hostile)).decode("utf-8")
+    escaped = make_jsonld.script_text(text)
+    assert "<" not in escaped and ">" not in escaped and "&" not in escaped
+    jsonld_valid("jsonld-script-escaped", None, hostile, ["J1", "J8"],
+                 "Writer output escaped for a script element: every '<', '>', '&', U+2028 and "
+                 "U+2029 in the values is written as a \\u escape, so values such as "
+                 "'</script>' and '<!--<script>' cannot end or re-open the element. It reads "
+                 "back with the real characters.", data=escaped.encode("utf-8"))
+    linked = write(record)
+    linked["relatedLink"] = record["relatedLink"] + [OTHER_SCHEME_LINK]
+    links = jsonld_record(relatedLink=record["relatedLink"] + [OTHER_SCHEME_LINK])
+    jsonld_valid("jsonld-link-scheme-warning", linked, links, ["J1", "R14"],
+                 "A canonical document whose relatedLink holds a javascript: URI. It is valid, "
+                 "but a reader should warn, and a writer refuses to write it as a link (R14).",
+                 warnings=["R14"])
 
     text = jsonld_bytes(write(record)).decode("utf-8")
     duplicate = text.replace(f'  "genome": "{GENOME}",',
@@ -1705,37 +1761,89 @@ def build_jsonld():
     build_jsonld_general(write, record)
 
 
+def remapped_context(context, swaps):
+    """A copy of the FHR context whose listed terms exchange their definitions."""
+    body = copy.deepcopy(context)
+    for left, right in swaps:
+        body[left], body[right] = body[right], body[left]
+    return body
+
+
 def build_jsonld_general(write, record):
     """Rules J3 to J5: JSON-LD in other forms than the canonical one."""
+    import make_jsonld
+
     expanded = expand_canonical(write(record))
     jsonld_valid("jsonld-expanded", expanded, record, ["J3", "J4", "J5", "J6"],
                  "The canonical document in JSON-LD expanded form: full IRIs, value objects, "
                  "@id for IRI fields, @list for commandLineOption and no context.")
-    vocab = vocab_compact(expanded)
-    assert isinstance(vocab["dateCreated"], dict)
-    jsonld_valid("jsonld-schemaorg-vocab-compaction", vocab, record, ["J3", "J5"],
-                 "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR "
-                 "context; dateCreated is a value object typed xsd:date.")
     canonical = write(record)
     context = canonical.pop("@context")
     jsonld_valid("jsonld-graph-single-node", {"@context": context, "@graph": [canonical]},
                  record, ["J4"],
                  "The FHR context with the record as the only node of @graph.")
-    strings = copy.deepcopy(vocab)
-    strings["schemaVersion"] = record["schema"]
-    strings["fhr:relatedLink"] = record["relatedLink"][0]
-    strings["dateCreated"] = record["dateCreated"]
-    jsonld_valid("jsonld-iri-as-string", strings, record, ["J5"],
-                 "Under the schema.org @vocab, the IRI fields schema (schema.org schemaVersion) "
-                 "and relatedLink, and dateCreated, are plain strings.")
+    jsonld_valid("jsonld-context-url-array",
+                 {"@context": [make_jsonld.RAW_MAIN_CONTEXT_URL], **canonical}, record,
+                 ["J3", "J4"],
+                 "The FHR context URL as the only item of a context array: the FHR context "
+                 "alone, read by expansion; nothing is fetched.")
+    values = {"@context": context, **copy.deepcopy(canonical)}
+    values["schema"] = {"@value": record["schema"]}
+    values["relatedLink"] = [{"@value": link} for link in record["relatedLink"]]
+    values["dateCreated"] = {"@value": record["dateCreated"], "@type": "xsd:date"}
+    jsonld_valid("jsonld-iri-as-string", values, record, ["J3", "J5"],
+                 "The FHR context with value objects: the IRI fields schema and relatedLink are "
+                 "plain strings, and dateCreated is a value typed xsd:date.")
 
-    unknown = dict(copy.deepcopy(vocab), keywords=["synthetic"])
-    jsonld_invalid("jsonld-unknown-term", jsonld_bytes(unknown), "J4",
-                   "http://schema.org/keywords has no FHR field (it is export metadata only).")
+    # J3: any context but the FHR context alone is invalid, however it is given.
+    swapped = {"@context": remapped_context(context, [("genome", "documentation")]),
+               **copy.deepcopy(canonical)}
+    swapped["documentation"] = "Synthetic FHR conformance vector; not a real assembly."
+    jsonld_invalid("jsonld-context-remapped", jsonld_bytes(swapped), "J3",
+                   "An embedded copy of the FHR context whose genome and documentation terms "
+                   "exchange their IRIs, so JSON-LD expansion would read each key as the other "
+                   "field.")
+    vocab = vocab_compact(expanded)
+    assert isinstance(vocab["dateCreated"], dict)
+    jsonld_invalid("jsonld-context-schemaorg-vocab", jsonld_bytes(vocab), "J3",
+                   "Compacted with a schema.org @vocab and an fhr prefix instead of the FHR "
+                   "context: the keys (name, description, ...) are not the FHR keys their "
+                   "values are read as.")
+    extended = {"@context": [make_jsonld.RAW_MAIN_CONTEXT_URL,
+                             {"title": "http://schema.org/name"}],
+                **{("title" if k == "genome" else k): v for k, v in canonical.items()}}
+    jsonld_invalid("jsonld-context-extended", jsonld_bytes(extended), "J3",
+                   "The FHR context URL followed by a local context that adds the term title "
+                   "for schema.org name, used in place of genome.")
+    imported = {"@context": {"@version": 1.1, "@import": make_jsonld.RAW_MAIN_CONTEXT_URL,
+                             "genome": {"@id": "sdo:description"},
+                             "documentation": {"@id": "sdo:name"}},
+                **{k: v for k, v in swapped.items() if k != "@context"}}
+    jsonld_invalid("jsonld-context-import", jsonld_bytes(imported), "J3",
+                   "A context that @imports the FHR context URL and overrides the genome and "
+                   "documentation terms, which @import allows despite @protected.")
+    nested = {"@context": context,
+              "@graph": [dict({"@context": {"@vocab": SDO_IRI}},
+                              **{("description" if k == "documentation" else k): v
+                                 for k, v in swapped.items() if k != "@context"})]}
+    jsonld_invalid("jsonld-context-nested", jsonld_bytes(nested), "J3",
+                   "The FHR context at the top, and a second context with a schema.org @vocab "
+                   "on the record inside @graph, where description stands for documentation.")
+    nest = {"@context": context, **copy.deepcopy(canonical)}
+    nest["@nest"] = {"documentation": nest.pop("documentation")}
+    jsonld_invalid("jsonld-nest", jsonld_bytes(nest), "J3",
+                   "The FHR context, with documentation moved into @nest, where a JSON reader "
+                   "does not see it but JSON-LD expansion reads it as the record's "
+                   "documentation.")
     remote = {"@context": "https://schema.org/", "@type": "Dataset", "name": GENOME}
     jsonld_invalid("jsonld-remote-context", jsonld_bytes(remote), "J3",
                    "The context is a remote URL that is not a bundled FHR context; nothing "
                    "may be fetched.")
+
+    unknown = copy.deepcopy(expanded)
+    unknown[0][SDO_IRI + "keywords"] = [{"@value": "synthetic"}]
+    jsonld_invalid("jsonld-unknown-term", jsonld_bytes(unknown), "J4",
+                   "http://schema.org/keywords has no FHR field (it is export metadata only).")
     second = dict(copy.deepcopy(canonical), genome="Second synthetic genome")
     jsonld_invalid("jsonld-two-nodes",
                    jsonld_bytes({"@context": context, "@graph": [canonical, second]}), "J4",
@@ -1745,14 +1853,14 @@ def build_jsonld_general(write, record):
     jsonld_invalid("jsonld-two-genome-values", jsonld_bytes(two), "J5",
                    "Expanded form with two values for genome (schema.org name), a "
                    "single-valued field.")
-    flattened = copy.deepcopy(vocab)
-    flattened["about"] = {"@id": record["taxon"]["uri"]}
+    flattened = copy.deepcopy(expanded)
+    flattened[0][SDO_IRI + "about"] = [{"@id": record["taxon"]["uri"]}]
     jsonld_invalid("jsonld-flattened", jsonld_bytes(flattened), "J5",
                    "The taxon is given only by its @id, as in flattened form; its name is "
                    "not in the document.")
-    dated = copy.deepcopy(vocab)
-    dated["dateCreated"] = {"@value": record["dateCreated"] + "T00:00:00Z",
-                            "@type": XSD_IRI + "dateTime"}
+    dated = copy.deepcopy(expanded)
+    dated[0][SDO_IRI + "dateCreated"] = [{"@value": record["dateCreated"] + "T00:00:00Z",
+                                          "@type": XSD_IRI + "dateTime"}]
     jsonld_invalid("jsonld-datetime-datecreated", jsonld_bytes(dated), "J5",
                    "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed.")
     identified = copy.deepcopy(expanded)
@@ -1812,6 +1920,14 @@ def jsonld_self_check():
                 assert make_jsonld.canonical_record(document) == entry["metadata"], entry["name"]
             else:
                 assert not make_jsonld.is_canonical(document), entry["name"]
+            assert make_jsonld.context_problem(document) is None, entry["name"]
+    for entry in INVALID:
+        if entry["kind"] == "jsonld" and entry["rule"] == "J3":
+            problem = make_jsonld.context_problem(json.loads(entry["data"]))
+            remote = json.loads(entry["data"])["@context"] == "https://schema.org/"
+            assert problem is not None or remote, entry["name"]
+        elif entry["kind"] == "jsonld" and entry["rule"] != "J2":
+            assert make_jsonld.context_problem(json.loads(entry["data"])) is None, entry["name"]
 
 
 def manifest():
@@ -1828,6 +1944,8 @@ def manifest():
             item["compression"] = entry["compression"]
         if entry["status"] == "valid":
             item.update(expected="valid", rules=entry["rules"], description=entry["description"])
+            if entry.get("warnings"):
+                item.update(warnings=entry["warnings"])
             if entry["kind"] in {"microdata", "jsonld"}:
                 item.update(metadata=entry["metadata"])
             else:

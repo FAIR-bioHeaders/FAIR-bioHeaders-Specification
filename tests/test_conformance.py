@@ -300,13 +300,16 @@ class ConformanceTests(unittest.TestCase):
         self.assertIn("jsonld-canonical-embedded: converter extracted different metadata",
                       result.stderr)
         self.assertNotIn("fasta-lf:", result.stderr)
+        # R14 vectors are valid, but a validator must also warn about them.
+        self.assertIn("fasta-link-scheme-warning: converter printed no warning; expected one "
+                      "under R14", result.stderr)
         skipped = self.check("--skip-regeneration", "--skip-format", "jsonld",
                              "--converter", bin_directory)
         self.assertEqual(skipped.returncode, 1)
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(57 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(66 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -326,6 +329,8 @@ class ConformanceTests(unittest.TestCase):
             "    print('FHR: unsupported schema version: ' + sys.argv[1], file=sys.stderr)\n"
             "if vector['expected'] != 'valid':\n"
             "    raise SystemExit(1)\n"
+            "if vector.get('warnings'):\n"
+            "    print('FHR: warning: link scheme', file=sys.stderr)\n"
             "if len(sys.argv) > 2:\n"
             "    json.dump(vector['metadata'], open(sys.argv[2], 'w'))\n"
         )
@@ -335,7 +340,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(57 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(66 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
@@ -353,8 +358,31 @@ class ConformanceTests(unittest.TestCase):
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
-        self.assertEqual(len(vectors), 25)
+        self.assertEqual(len(vectors), 34)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])
+        self.assertIn("notApplicable", self.manifest["rules"]["J8"])
+        self.assertIn("notApplicable", self.manifest["rules"]["R14"])
+        # J3: only the FHR context alone, at the top level.
+        self.assertEqual(
+            sorted(v["id"] for v in vectors.values()
+                   if v["expected"] == "invalid" and v["rule"] == "J3"),
+            ["jsonld-context-extended", "jsonld-context-import", "jsonld-context-nested",
+             "jsonld-context-remapped", "jsonld-context-schemaorg-vocab", "jsonld-nest",
+             "jsonld-remote-context"])
+        self.assertEqual(vectors["jsonld-context-url-array"]["expected"], "valid")
+        # J8: the escaped text holds no '<', '>' or '&' but reads back to them.
+        script = vectors["jsonld-script-escaped"]
+        text = (CONFORMANCE / script["file"]).read_text(encoding="utf-8")
+        self.assertFalse(set("<>&\u2028\u2029") & set(text))
+        self.assertIn("</script>", script["metadata"]["genomeSynonym"])
+        self.assertIn("<!--<script>", script["metadata"]["genomeSynonym"])
+        self.assertEqual(json.loads(text)["genomeSynonym"], script["metadata"]["genomeSynonym"])
+        # R14: valid, with a warning; a non-web documentation value stays text.
+        self.assertEqual(vectors["jsonld-link-scheme-warning"]["warnings"], ["R14"])
+        other = json.loads((CONFORMANCE / vectors["jsonld-documentation-other-scheme"]["file"])
+                           .read_text())
+        self.assertNotIn("subjectOf", other)
+        self.assertTrue(other["documentation"].startswith("file:"))
         for vector in vectors.values():
             document = json.loads((CONFORMANCE / vector["file"]).read_text(encoding="utf-8")) \
                 if vector["id"] != "jsonld-duplicate-key" else None

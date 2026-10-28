@@ -43,7 +43,8 @@ In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0
 ## Values the schema does not check
 
 The schemas are the validation contract, but two requirements are not expressed by their
-keywords. They are normative for a conforming record and validator.
+keywords. They are normative for a conforming record and validator. A third, link schemes,
+is a recommendation that validators report as a warning.
 
 ### Required values are non-empty
 
@@ -81,6 +82,16 @@ values, `assemblyProtocol`, `predictionProtocol`, `annotationProtocol`, and FHP/
 limitation instead of calling the record valid.
 
 Numbers are covered by rule R13 in [FORMAT.md](FORMAT.md): NaN and infinities are invalid.
+
+### Link schemes
+
+`format: uri` accepts any URI scheme, including `javascript:`, `data:` and `file:`. Rule R14 in
+[FORMAT.md](FORMAT.md) says these values should use `http` or `https` (with `ftp`, `urn:`,
+`doi:` and `info:` also accepted). Validators warn about any other scheme, and the JSON-LD
+writers refuse to write it as a link, but such a record stays valid under FHR 2.0 and FHP and
+FHGFF3 1.0. A `pattern` that restricts the schemes is a candidate for the next major
+`schemaVersion` of each type: it would invalidate records that are valid now, so it does not
+belong in a minor or patch release.
 
 ## Versions by release
 

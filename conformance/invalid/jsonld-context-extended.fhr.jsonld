@@ -1,0 +1,63 @@
+{
+  "@context": [
+    "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/jsonld/fhr.context.jsonld",
+    {
+      "title": "http://schema.org/name"
+    }
+  ],
+  "@type": "Dataset",
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+  "schemaVersion": "2.0",
+  "title": "Synthetic FHR conformance genome",
+  "taxon": {
+    "@type": "Taxon",
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "1.0.0",
+  "metadataAuthor": [
+    {
+      "@type": "Agent",
+      "name": "Synthetic metadata author (placeholder)"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "@type": "Person",
+      "name": "Josiah Carberry (ORCID example iD)",
+      "uri": "https://orcid.org/0000-0002-1825-0097"
+    }
+  ],
+  "dateCreated": "2026-10-08",
+  "masking": "not-masked",
+  "documentation": "Synthetic FHR conformance vector; not a real assembly.",
+  "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
+  "genomeSynonym": [
+    "synthetic conformance genome"
+  ],
+  "identifier": [
+    "example:conformance-1"
+  ],
+  "relatedLink": [
+    "https://example.org/synthetic"
+  ],
+  "reuseConditions": "CC0-1.0",
+  "assemblySoftware": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "synthetic-assembler",
+      "version": "1.2.3",
+      "commandLineOption": [
+        "-t",
+        "2"
+      ]
+    }
+  ],
+  "vitalStats": {
+    "@type": "VitalStats",
+    "N50": 20,
+    "L50": 1,
+    "totalBasePairs": 20,
+    "gcContent": 45.5
+  }
+}

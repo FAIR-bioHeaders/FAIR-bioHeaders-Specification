@@ -135,6 +135,24 @@ reader must agree on what the checksum line contains:
   represent them, and JSON Schema's `minimum` and `maximum` comparisons with NaN
   are false, so a range check does not catch them; validators still report the
   record invalid.
+- [R14] A value whose schema `format` is `uri` should be an `http` or `https` URL.
+  These are `relatedLink`, `assemblyProtocol`, `accessionID.url`, a software `uri`,
+  the taxon and author `uri`, and their FHP and FHGFF3 counterparts
+  (`predictionProtocol`, `annotationProtocol`, a `source` `url`). `ftp` URLs and
+  `urn:`, `doi:` and `info:` identifiers are also accepted. A value is checked as
+  written: the scheme must start the value and is compared without regard to
+  letter case, and a value with whitespace (Unicode whitespace included), a
+  control character or a bidirectional formatting character (RFC 3987 section 4.1)
+  anywhere has no accepted scheme. `http`, `https` and `ftp`
+  also need `//` and a host. Any other value, for example a `javascript:`,
+  `data:`, `vbscript:` or `file:` URI, stays schema-valid in FHR 2.0 (and FHP and
+  FHGFF3 1.0), but validators warn about it. Writers of linked-data forms do not
+  write it as a link: a JSON-LD or schema.org export writer refuses the record
+  ([JSONLD.md](JSONLD.md) J7, [SCHEMAORG-EXPORT.md](SCHEMAORG-EXPORT.md) X5). A
+  tool that renders FHR metadata, for example as HTML, should make a link only
+  from an accepted scheme. Such a value can't be rejected outright without
+  invalidating records that the released schemas accept, so that waits for the
+  next major `schemaVersion` of each type.
 
 Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
 headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
@@ -147,12 +165,12 @@ than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
 YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
 them.
 
-The bracketed ids R1 to R13 are stable labels for the rules above, used by the
+The bracketed ids R1 to R14 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each applicable rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files
 with the expected extracted metadata (see [MICRODATA.md](MICRODATA.md)).
-The JSON-LD form of FHR metadata and its reading rules J1 to J7 are in
+The JSON-LD form of FHR metadata and its rules J1 to J8 are in
 [JSONLD.md](JSONLD.md).
 
 The schemas do not express every requirement. Required values must be non-empty, `format` must

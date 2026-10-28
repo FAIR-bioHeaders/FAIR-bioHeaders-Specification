@@ -525,6 +525,17 @@ ORCID_URI = re.compile(r"https://orcid\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[
 ROR_URI = re.compile(r"https://ror\.org/0[0-9a-z]{6}[0-9]{2}")
 # An absolute URL: a scheme, "://", and no whitespace (maintainer decision 3).
 ABSOLUTE_URL = re.compile(r"[A-Za-z][A-Za-z0-9+.-]*://\S+")
+# Link schemes (docs/FORMAT.md R14). A URI-shaped value: an ASCII scheme at the very
+# start, a colon, then no whitespace (Unicode whitespace included), no control
+# character and no bidirectional formatting character (RFC 3987 section 4.1).
+# Schemes compare case-insensitively.
+URI_FORM = re.compile(r"([A-Za-z][A-Za-z0-9+.-]*):"
+                      r"([^\s\x00-\x1f\x7f-\x9f\u200e\u200f\u202a-\u202e\u2066-\u2069]+)")
+# The schemes written as IRIs (R14), and of those the URL schemes, which need "//"
+# and a host. Only text that is a URL with a URL scheme is promoted to an IRI
+# (documentation as subjectOf in J7; documentation and the licence in X5).
+LINK_SCHEMES = ("http", "https", "ftp", "urn", "doi", "info")
+URL_SCHEMES = ("http", "https", "ftp")
 # assemblyProtocolHowTo is used only by the export profile (013 research R-06).
 EXPORT_KEYS = ("id", "url", "keywords", "assemblyProtocolHowTo")
 # Root keys of a written document that carry export metadata, not FHR fields.
@@ -560,6 +571,122 @@ def is_absolute_url(value):
     return isinstance(value, str) and ABSOLUTE_URL.fullmatch(value) is not None
 
 
+def uri_scheme(value):
+    """The lower-case scheme of a URI-shaped string, else None (R14)."""
+    match = URI_FORM.fullmatch(value) if isinstance(value, str) else None
+    return match.group(1).lower() if match else None
+
+
+def is_link(value, schemes=LINK_SCHEMES):
+    """R14: a URI with one of ``schemes``; a URL scheme also needs "//" and a host."""
+    scheme = uri_scheme(value)
+    if scheme not in schemes:
+        return False
+    rest = value[len(scheme) + 1:]
+    return scheme not in URL_SCHEMES or (len(rest) > 2 and rest[:2] == "//" and rest[2] != "/")
+
+
+def is_url(value):
+    """An absolute http, https or ftp URL: the only text promoted to an IRI (J7, X5)."""
+    return is_link(value, URL_SCHEMES)
+
+
+def iri_values(record, body):
+    """(path, value) for every value that the context terms ``body`` make an IRI."""
+    found = []
+    for key, value in record.items():
+        term = body.get(key)
+        items = value if isinstance(value, list) else [value]
+        paths = ([f"{key}[{index}]" for index in range(len(items))]
+                 if isinstance(value, list) else [key])
+        if term == "@id" or isinstance(term, dict) and term.get("@type") == "@id":
+            found += list(zip(paths, items))
+        elif isinstance(term, dict) and isinstance(term.get("@context"), list):
+            child = term["@context"][-1]
+            for path, item in zip(paths, items):
+                if isinstance(item, dict):
+                    found += [(f"{path}.{sub}", v) for sub, v in iri_values(item, child)]
+    return found
+
+
+def check_links(record, context=None, what="JSON-LD"):
+    """R14: refuse to write an IRI-valued field whose value is not a link."""
+    body = (load_context() if context is None else context)["@context"]
+    for path, value in iri_values(record, body):
+        if isinstance(value, str) and not is_link(value):
+            raise ValueError(f"{what}: {path} is not a link with an allowed scheme "
+                             f"({', '.join(LINK_SCHEMES)}; docs/FORMAT.md R14)")
+
+
+# Characters escaped in JSON-LD text inside an HTML script element (rule J8).
+SCRIPT_ESCAPES = {"<": "\\u003c", ">": "\\u003e", "&": "\\u0026",
+                  "\u2028": "\\u2028", "\u2029": "\\u2029"}
+
+
+def script_text(text):
+    """J8: JSON text that is safe inside <script type="application/ld+json">."""
+    return re.sub("[<>&\u2028\u2029]", lambda match: SCRIPT_ESCAPES[match.group()], text)
+
+
+def same_json(left, right):
+    """Equality of parsed JSON values; true is not 1 (J1, J3)."""
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(same_json(left[k], right[k]) for k in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(map(same_json, left, right))
+    if isinstance(left, bool) or isinstance(right, bool):
+        return left is right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return left == right
+    return type(left) is type(right) and left == right
+
+
+def is_fhr_context(value, context=None):
+    """A known FHR context URL, or an embedded copy equal as parsed JSON (J1, J3)."""
+    if isinstance(value, str):
+        return value in KNOWN_CONTEXT_URLS
+    return same_json(value, (load_context() if context is None else context)["@context"])
+
+
+def context_problem(document, context=None):
+    """J3: why a document uses a context other than the FHR context, else None.
+
+    Each top-level object may have a @context that is the FHR context (a known URL
+    or an embedded copy) or an array of exactly one of those; no @context may
+    appear anywhere else, and no @nest anywhere. A document without a context is
+    allowed.
+    """
+    def nested(value, path):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in ("@context", "@nest"):
+                    return f"{path}.{key}" if path else key
+                found = nested(item, f"{path}.{key}" if path else key)
+                if found:
+                    return found
+        elif isinstance(value, list):
+            for index, item in enumerate(value):
+                found = nested(item, f"{path}[{index}]")
+                if found:
+                    return found
+        return None
+
+    for top in document if isinstance(document, list) else [document]:
+        if not isinstance(top, dict):
+            continue
+        if "@context" in top:
+            value = top["@context"]
+            if isinstance(value, list) and len(value) == 1:
+                value = value[0]
+            if not is_fhr_context(value, context):
+                return "the root @context is not the FHR context alone"
+        found = nested({k: v for k, v in top.items() if k != "@context"}, "")
+        if found:
+            return (f"{found} is not allowed" if found.endswith("@nest")
+                    else f"{found} is a context below the top level")
+    return None
+
+
 def check_export(export):
     """Validate an export context: optional id, url, keywords and assemblyProtocolHowTo
     (provisional)."""
@@ -573,8 +700,8 @@ def check_export(export):
                                                              bool):
         raise ValueError("export context: assemblyProtocolHowTo must be true or false")
     for key in ("id", "url"):
-        if key in export and not is_absolute_url(export[key]):
-            raise ValueError(f"export context: {key} must be an absolute URL")
+        if key in export and not (is_absolute_url(export[key]) and is_url(export[key])):
+            raise ValueError(f"export context: {key} must be an absolute http, https or ftp URL")
     keywords = export.get("keywords", ["x"])
     if not (isinstance(keywords, list) and keywords
             and all(isinstance(word, str) and word.strip() for word in keywords)):
@@ -626,14 +753,15 @@ def to_jsonld(record, export=None, context=None):
     for key in (URL_TERM, *EXPORT_OUTPUT):
         if key in record:
             raise ValueError(f"JSON-LD: the root key {key} is reserved for JSON-LD output")
+    context = load_context() if context is None else context
+    check_links(record, context)
     if export is not None:
         export = check_export(export)
-    context = load_context() if context is None else context
     document = {"@context": context["@context"], "@type": "Dataset"}
     if export and "id" in export:
         document["@id"] = export["id"]
     for key, value in record.items():
-        if key == "documentation" and is_absolute_url(value):
+        if key == "documentation" and is_url(value):
             document[URL_TERM] = value
         else:
             document[key] = _typed(key, value)
@@ -696,7 +824,7 @@ def _iri(value):
 
 
 def _iri_or_text(value):
-    return _iri(value) if is_absolute_url(value) else value
+    return _iri(value) if is_url(value) else value
 
 
 def _export_author(item):
@@ -743,6 +871,7 @@ def export_unmapped_keys(record):
 def to_export(record, export=None):
     """The schema.org export graph of an FHR record (contracts/export.md)."""
     _reserved_keys(record, "")
+    check_links(record, what="JSON-LD export")
     export = check_export(export) if export is not None else {}
     assembly_id = export.get("id", ASSEMBLY_ID)
     assembly = {"@id": assembly_id, "@type": "Dataset"}
@@ -778,7 +907,7 @@ def to_export(record, export=None):
     subject_of = []
     documentation = record.get("documentation")
     if documentation is not None:
-        if is_absolute_url(documentation):
+        if is_url(documentation):
             subject_of.append(_iri(documentation))
         else:
             assembly["description"] = documentation
@@ -902,8 +1031,7 @@ def is_canonical(document, context=None):
     if not isinstance(document, dict) or "@context" not in document:
         return False
     bundled = (load_context() if context is None else context)["@context"]
-    value = document["@context"]
-    if not (value == bundled or (isinstance(value, str) and value in KNOWN_CONTEXT_URLS)):
+    if not is_fhr_context(document["@context"], {"@context": bundled}):
         return False
     if "@id" in document and not isinstance(document["@id"], str):
         return False
