@@ -70,6 +70,14 @@ full profile or header-family support. The mapping page tracked in
 fair-bioheaders.github.io#29 depends on approved profiles. Recheck these records
 rather than relying on a copied description of their temporary status.
 
+Review a proposed schema revision against the pinned INSDC minimum-specification
+assessment, [`docs/insdc-coverage.md`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/insdc-coverage.md)
+in the shared specification (FAIR-bioHeaders-Specification#157). Name the matrix
+rows the change affects and update their coverage and disposition with it; a new
+`schemaVersion` fails `tests/test_insdc_coverage.py` there until the assessment is
+re-pinned. Keep FHT rows marked draft until FHT is released. A profile or an optional
+field is not evidence that a file is ready for INSDC deposit.
+
 ## Models, generated artifacts and compatibility
 
 In the shared publication tree, `schemas/core.yaml` defines common slots and

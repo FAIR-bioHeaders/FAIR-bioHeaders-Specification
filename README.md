@@ -148,6 +148,9 @@ partial/lossy terms and omissions; the output is not a complete MIGS submission.
 The [JSON-LD and DCMI mapping table](mappings/fhr-jsonld-dcmi.yml) gives every FHR
 field's JSON-LD term and its Dublin Core (DCMI Terms) equivalents, with mapping kinds,
 conditions and losses ([summary](docs/MAPPINGS.md#json-ld-and-dublin-core-dcmi-terms)).
+The [INSDC coverage review](docs/insdc-coverage.md) gives a disposition for every INSDC
+minimum-specification requirement and explains how to use FH headers alongside an INSDC
+submission; a valid header is not a deposit-ready submission.
 
 ### Schema files
 

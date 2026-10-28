@@ -1,0 +1,158 @@
+{
+  "description": "Requirement IDs that docs/insdc-coverage.md assigns to the INSDC minimum specifications at the pinned commit, with where each comes from. tests/test_insdc_coverage.py checks that the matrix has exactly these IDs. Annotation b.ii and e (exception lists) qualify other rules and have no row of their own. Update this file, the pin and the matrix together when re-assessing.",
+  "repository": "https://github.com/insdc/minimum-specifcations",
+  "commit": "41f0dc424748c9f7e50a8b6bda9b888218c4b65e",
+  "categories": {
+    "Sequence": {
+      "version": "v1.0",
+      "document": "Sequence/Current version/Sequence minimum standards v1.0.docx.pdf",
+      "requirements": {
+        "S1": "Minimum validation requirement 1",
+        "S2": "Minimum validation requirement 2",
+        "S3": "Minimum validation requirement 3",
+        "S4": "Minimum validation requirement 4",
+        "S5": "Minimum validation requirement 5",
+        "S6": "Minimum validation requirement 6",
+        "S7": "Minimum validation requirement 7",
+        "S8": "Minimum validation requirement 8",
+        "S9": "Minimum validation requirement 9",
+        "S10": "Minimum validation requirement 10",
+        "S11": "Minimum validation requirement 11",
+        "S12": "Minimum validation requirement 12",
+        "S13": "Minimum validation requirement 13",
+        "S14": "Minimum validation requirement 14",
+        "S15": "Minimum validation requirement 15",
+        "S-fmt": "Data Format(s)",
+        "S-xref": "Standards 1, cross reference requirements",
+        "S-ver": "Standards 3, accessioning and versioning"
+      }
+    },
+    "Assembly": {
+      "version": "v1.0",
+      "document": "Assembly/Current version/Assembly Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "A.a": "Minimum validation requirement a",
+        "A.b": "Minimum validation requirement b",
+        "A.c": "Minimum validation requirement c",
+        "A.d": "Minimum validation requirement d",
+        "A.e": "Minimum validation requirement e",
+        "A.f": "Minimum validation requirement f",
+        "A.g": "Minimum validation requirement g",
+        "A.h": "Minimum validation requirement h",
+        "A.i": "Minimum validation requirement i",
+        "A.j": "Minimum validation requirement j",
+        "A.k": "Minimum validation requirement k",
+        "A.l": "Minimum validation requirement l",
+        "A-ver": "Standards, accessioning and versioning"
+      }
+    },
+    "Annotations": {
+      "version": "v1.0",
+      "document": "Annotations/Current version/Annotation Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "AN.a": "a.i syntactic validation",
+        "AN.b.i": "b.i feature table limits",
+        "AN.b.iii": "b.iii feature location (1-6)",
+        "AN.b.iv": "b.iv feature overlaps (1-3)",
+        "AN.b.v": "b.v feature lengths (1-3)",
+        "AN.b.vi": "b.vi coding regions (1-9)",
+        "AN.b.vii": "b.vii parent:child relationship (1-2)",
+        "AN.b.viii": "b.viii feature/molecule type prohibitions",
+        "AN.b.ix": "b.ix locus tags (1-4)",
+        "AN.c.i": "c.i prokaryote partiality",
+        "AN.c.ii": "c.ii artificial_location",
+        "AN.c.iii": "c.iii translation table",
+        "AN.d": "d.i-d.v sequence-dependent validation",
+        "AN-xref": "Standards 1, cross reference requirements",
+        "AN-std": "Standards 2, existing standards"
+      }
+    },
+    "Analysis": {
+      "version": "v1.0",
+      "document": "Analysis/Current version/Analysis Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "AY1": "Minimum validation bullets 1-2, BioProject/BioSample links",
+        "AY2": "Minimum validation bullet 3, SRA schema",
+        "AY3": "Mandatory fields TITLE, DESCRIPTION",
+        "AY4": "Mandatory field ANALYSIS_TYPE",
+        "AY5": "Mandatory field STUDY_REF",
+        "AY6": "Mandatory fields filename, filetype",
+        "AY7": "Mandatory field checksum",
+        "AY8": "Minimum validation bullet 5, decompressed files",
+        "AY9": "Minimum validation bullet 6 and Table 1, file types",
+        "AY-xref": "Standards 1, cross reference requirements",
+        "AY-ver": "Standards 3, accessioning and versioning"
+      }
+    },
+    "Sample": {
+      "version": "v1.0",
+      "document": "Sample/Current version/Sample - Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "SA.1": "Metadata content: ASCII",
+        "SA.2": "Metadata content: unique for a submitter",
+        "SA.T1": "Table 1 field 1",
+        "SA.T2": "Table 1 field 2",
+        "SA.T3": "Table 1 field 3",
+        "SA.T4": "Table 1 field 4",
+        "SA.T5": "Table 1 field 5",
+        "SA.T6": "Table 1 field 6",
+        "SA.T7": "Table 1 field 7",
+        "SA.3": "Metadata content: no HTML markup",
+        "SA.4": "Attribute validation 1, syntactic validation",
+        "SA.5": "Attribute validation 2, naming conventions",
+        "SA-ver": "Standards 2, versioning"
+      }
+    },
+    "Project": {
+      "version": "v1.0",
+      "document": "Project/Current version/Project Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "P.1": "Metadata content: ASCII",
+        "P.2": "Metadata content: unique for a submitter",
+        "P.T1": "Table 1 field 1",
+        "P.T2": "Table 1 field 2",
+        "P.T3": "Table 1 field 3",
+        "P.T4": "Table 1 field 4",
+        "P.T5": "Table 1 field 5",
+        "P.T6": "Table 1 field 6",
+        "P.T7": "Table 1 field 7",
+        "P.H": "2. Project hierarchy",
+        "P-xref": "3. Cross references",
+        "P-ver": "4. Accessioning and versioning"
+      }
+    },
+    "Package-Checklist": {
+      "version": "v1.0",
+      "document": "Package-Checklist/Current version/Package-Checklist Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "PC.a": "Minimum requirement a",
+        "PC.b": "Minimum requirement b",
+        "PC.c": "Minimum requirement c",
+        "PC.d": "Minimum requirement d",
+        "PC-fed": "INSDC Availability, federation with synonymization",
+        "PC-std": "Standards a-f"
+      }
+    },
+    "Experiment": {
+      "version": "v1.0",
+      "document": "Experiment/Current version/Experiment Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "EX": "Whole category"
+      }
+    },
+    "Raw Reads": {
+      "version": "v1.0",
+      "document": "Raw Reads/Current version/Raw Reads Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "RR": "Whole category"
+      }
+    },
+    "Compressed Reads": {
+      "version": "v1.0",
+      "document": "Compressed Reads/Current version/Compressed Reads Minimum Specification v1.0.docx.pdf",
+      "requirements": {
+        "CR": "Whole category"
+      }
+    }
+  }
+}

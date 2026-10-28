@@ -3,10 +3,10 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """Generate the synthetic FAIR header assessment fixtures (assessment/pairs, edge).
 
-The output is deterministic: gzip members carry mtime 0 and no file name, tar
-members are owned by uid/gid 0 with mtime 0. Real provider captures in
-assessment/headers are copied, not generated. Their expected outcomes, and those
-of the generated files, are listed in assessment/manifest.json.
+The output is deterministic: gzip members carry mtime 0, no file name and OS
+byte 255 (unknown), and tar members are owned by uid/gid 0 with mtime 0. Real
+provider captures in assessment/headers are copied, not generated. Their expected
+outcomes, and those of the generated files, are listed in assessment/manifest.json.
 
 Usage: python scripts/make_assessment_fixtures.py [--output DIR]
 """
@@ -49,7 +49,11 @@ FHR_METADATA = [
 
 
 def gzip_bytes(data):
-    return gzip.compress(data, mtime=0)
+    # Python 3.12 writes OS byte 3 (Unix) in the gzip header; 3.13 and later
+    # write 255 (unknown). Pin 255 so the output is the same on every version.
+    member = bytearray(gzip.compress(data, mtime=0))
+    member[9] = 255
+    return bytes(member)
 
 
 def tar_gz(name, data):
