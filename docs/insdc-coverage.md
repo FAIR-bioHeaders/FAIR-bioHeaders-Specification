@@ -110,7 +110,7 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 | Checklist/Package name | ◐ | mechanism analogue: required `schema` + `schemaVersion` | Document the analogy |
 | Package-defined mandatory attributes | ◐ | profiles can make optional fields required | Await #51/#56 review. |
 | Submitter name and affiliation | ◐ | `metadataAuthor` name/uri/nameType | Document |
-| No HTML markup in metadata | ✅ | YAML values; FASTA R11 escaping | none |
+| No HTML markup in metadata | ✗ | YAML string values may contain HTML; R11 escapes only the transport characters `>`/`@` (a raw one stays valid with a warning), so a `documentation` value with embedded HTML passes the released contract | Not covered by the contract; a submission-side check (profile constraint or assess convention) is the route |
 | Syntactic validation against schema | ✅ | per-type JSON Schema contracts + `bioheaders verify` | none |
 
 ### Project Minimum Specification v1.0
