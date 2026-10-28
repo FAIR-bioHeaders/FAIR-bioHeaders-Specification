@@ -6,8 +6,8 @@ This document records the extent to which the FAIR-bioHeaders specifications cov
 - **INSDC side**: [insdc/minimum-specifcations](https://github.com/insdc/minimum-specifcations) at commit `41f0dc4` (2026-07-06). All categories are at v1.0.
 - **FAIR-bioHeaders side**:
     - FHR `schemaVersion "2.0"`, FHP `"1.0"`, FHGFF3 `"1.0"`.
-    - FHT: Reviewed against the draft [specs/005-rna-transcriptome-header](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/specs/005-rna-transcriptome-header/spec.md).
-    - gff3-validator rule catalogue.
+    - FHT: Reviewed against the draft [specs/005-rna-transcriptome-header @ `9a87e5c`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/9a87e5cfe0ce3e024508ff8fdb58e6fe9042dffe/specs/005-rna-transcriptome-header/spec.md). Spec 005 is an evolving draft; the revision above is the one assessed, and it was identical to `main` when the assessment was written.
+    - [gff3-validator rule catalogue @ `c753f45`](https://github.com/FAIR-bioHeaders/gff3-validator/blob/c753f451d28b80b5f84c042e0f0486c3b1049adf/gff3_validator/catalogue.yaml) (`catalogue_version 0.1.0-draft`, dated 2026-10-08; DRAFT for Sequence Ontology review).
 
 **Coverage Key:**
 ✅ covered · ◐ partially covered · ✗ not covered · — not applicable (out of scope by design)
