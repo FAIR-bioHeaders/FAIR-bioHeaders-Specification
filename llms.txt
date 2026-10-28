@@ -62,4 +62,4 @@ Required fields: all types need `schema`, `schemaVersion`, `taxon` (`name`, `uri
 
 - [Project website](https://fhref.org/)
 - [Specification website](https://fhref.org/FAIR-bioHeaders-Specification/): vocabulary pages and JSON-LD files
-- [FHR-Nextflow](https://github.com/FAIR-bioHeaders/FHR-Nextflow): Nextflow DSL2 modules for creating and validating headers
+- [FAIR-bioHeaders-Nextflow](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Nextflow): Nextflow DSL2 modules and Dockstore workflow for creating and validating headers (formerly FHR-Nextflow)
