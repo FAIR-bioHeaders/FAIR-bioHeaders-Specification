@@ -111,7 +111,7 @@ software: Node 20.19.4 with `@jbrowse/cli` 4.3.0 and `@gmod/gff` 2.1.0
 | CD-HIT `cd-hit-est` | 4.8.1 | `cd-hit-est -c 1.0` | plain | a | Added 2026-10-18. Same representative sequences as the control. |
 | Clustal Omega | 1.2.4 | `clustalo -i x.fa` | plain | **c** | Added 2026-10-18. `Can't determine format of sequence file`. |
 | MUSCLE `-align` | 5.3 | `muscle -align x.fa` | plain | **c** | Added 2026-10-18. `Expected '>' in FASTA, got ';~schema: ...'`. |
-| IQ-TREE | 3.1.4 | `iqtree3 -s x.aln.fa` (DNA alignment) | plain | **c** | Added 2026-10-18. `Unknown sequence format`. With `#` lines it tries NEXUS: `Expecting #NEXUS to be the first token`. |
+| IQ-TREE | 3.1.4 | `iqtree3 -s x.aln.fa` (DNA alignment) | plain | **c** | Added 2026-10-18. `Unknown sequence format`. With `#` lines it tries NEXUS: `Expecting #NEXUS to be the first token`. Fixed on master by iqtree/iqtree3#235 (merged 2026-11-02; next release). |
 
 bcftools (for example `bcftools norm -f`), GATK and other htslib/htsjdk
 reference consumers were not run separately. They load references through the
@@ -619,8 +619,8 @@ current meaning, so no file that a tool reads today is read differently.
 | BioJulia/FASTX.jl | `FASTA.Reader`, `validate_fasta`, `faidx` | BioJulia/FASTX.jl#132 (2026-10-18) | Open |
 | EddyRivasLab/easel | HMMER and the Easel miniapps | EddyRivasLab/easel#84 (2026-10-18) | Open |
 | bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release |
-| iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | Open |
-| rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | Open |
+| iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | **Accepted 2026-11-02**: merged into iqtree3 master; in the next IQ-TREE release |
+| rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | **Declined 2026-10-18**: the author is moving the code to a new repository and suggested stripping the header first; issue closed |
 | ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
 | ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
 | TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | **Accepted 2026-10-20**: the maintainer will fix it in the next TransDecoder release |
