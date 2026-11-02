@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- specs/005-rna-transcriptome-header (#107): synced the shared copy with the FHT 1.0
+  development contract in FHT-Specification (`9dae29b`, model merged in its PR #21),
+  replacing the original draft's required `moleculeType` (`mRNA | total RNA | cDNA |
+  ncRNA`). It now records the nine required fields, optional `moleculeType`
+  (`mRNA | rRNA | tRNA | transcribed RNA`), the `sample` array and its rules, the two
+  allowed `derivedFrom` pairs with a required parent checksum, the legacy-compatible
+  `transcriptomeSynonym`, `assemblyAuthor` and `instrument`, and the dotted BUSCO lineage
+  limitation (#170). Documentation only: no shared schema, `schemaVersion`, example,
+  vector or validation change. FHT stays draft and unreleased.
 - docs/SCHEMA-GAP-AUDIT.md (#189): recorded the maintainer decision that the next major
   of FHR, FHP and FHGFF3 requires `taxon.uri` with an NCBI Taxonomy or ITIS identifier,
   replacing GAP-1's "`name` or `uri`" plan. Adds the proposed rule (recognised URI forms),
