@@ -28,12 +28,12 @@ def main():
     for example in (ROOT / "examples").iterdir():
         if example.name.endswith(".export.jsonld"):  # checked with the export fixtures below
             continue
-        if (
-            example.is_file()
-            and example.read_bytes()
-            != (args.converter / "examples" / example.name).read_bytes()
-        ):
-            print(f"Companion example differs: {example.name}", file=sys.stderr)
+        if not example.is_file():
+            continue
+        copy = args.converter / "examples" / example.name
+        if not copy.is_file() or copy.read_bytes() != example.read_bytes():
+            print(f"Companion example differs or is missing: {example.name}",
+                  file=sys.stderr)
             return 1
     # FHP (specs/006-protein-header): toolkits from the release that adds FHP
     # bundle fhp_schema.json and copy examples/fhp/; older ones have neither.

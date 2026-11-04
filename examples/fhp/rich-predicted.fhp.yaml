@@ -11,6 +11,8 @@ version: '1.0'
 metadataAuthor:
 - name: Synthetic metadata author (placeholder)
   uri: https://orcid.org/0000-0002-1825-0097
+  # FHP 1.0 and later (shared v0.4.0 and later): an explicit DataCite nameType is preserved as-is.
+  nameType: Personal
 dateCreated: '2026-10-11'
 derivedFrom:
 - headerType: FHR
