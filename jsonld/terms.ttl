@@ -187,7 +187,7 @@ fhr:scaffoldN90 a rdf:Property ;
 
 fhr:schemaVersion a rdf:Property ;
     rdfs:label "schemaVersion"@en ;
-    rdfs:comment "Version of the FHR schema contract (\"MAJOR.MINOR\"); 2.0 from v0.4"@en ;
+    rdfs:comment "Version of the FHR schema contract (\"MAJOR.MINOR\"); 2.0 from v0.4, 2.1 (extension fields) from v0.5"@en ;
     sdo:domainIncludes sdo:Dataset ;
     sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .

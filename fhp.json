@@ -264,12 +264,13 @@
           "type": "string"
         },
         "schemaVersion": {
-          "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
-          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
-          "type": "string",
+          "description": "Version of the FHP schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5",
           "enum": [
-            "1.0"
-          ]
+            "1.0",
+            "1.1"
+          ],
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "type": "string"
         },
         "scholarlyArticle": {
           "description": "Scholarly article where the protein set was published",
@@ -316,7 +317,39 @@
         "checksum"
       ],
       "title": "FHP",
-      "type": "object"
+      "type": "object",
+      "patternProperties": {
+        "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+          "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+        }
+      },
+      "propertyNames": {
+        "not": {
+          "pattern": "\n"
+        }
+      },
+      "allOf": [
+        {
+          "description": "A record that states schemaVersion 1.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+          "if": {
+            "required": [
+              "schemaVersion"
+            ],
+            "properties": {
+              "schemaVersion": {
+                "const": "1.0"
+              }
+            }
+          },
+          "then": {
+            "propertyNames": {
+              "not": {
+                "pattern": "^x-"
+              }
+            }
+          }
+        }
+      ]
     },
     "HeaderType": {
       "description": "FAIR-bioHeaders header types",
@@ -583,12 +616,13 @@
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
-      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
-      "type": "string",
+      "description": "Version of the FHP schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5",
       "enum": [
-        "1.0"
-      ]
+        "1.0",
+        "1.1"
+      ],
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "type": "string"
     },
     "scholarlyArticle": {
       "description": "Scholarly article where the protein set was published",
@@ -635,5 +669,37 @@
     "checksum"
   ],
   "title": "FHP",
-  "type": "object"
+  "type": "object",
+  "patternProperties": {
+    "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+      "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+    }
+  },
+  "propertyNames": {
+    "not": {
+      "pattern": "\n"
+    }
+  },
+  "allOf": [
+    {
+      "description": "A record that states schemaVersion 1.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+      "if": {
+        "required": [
+          "schemaVersion"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": "1.0"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "not": {
+            "pattern": "^x-"
+          }
+        }
+      }
+    }
+  ]
 }

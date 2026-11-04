@@ -343,6 +343,17 @@ def check_schema(conformance, manifest):
             if not list(validators[schema].iter_errors(vector["metadata"])):
                 problems.append(f"{vector['id']}: metadata unexpectedly matches {schema}")
             continue
+        if vector["format"] in PREFIXES and vector["expected"] == "invalid" \
+                and vector["rule"] == "R15":
+            # Extension fields (docs/FORMAT.md R15): the header must fail the schema
+            # its record selects, whether that is the current or an older release's.
+            metadata = header_metadata(vector)
+            validator = selected_validator(metadata)
+            if validator is None:
+                problems.append(f"{vector['id']}: schema URL is unexpectedly unsupported")
+            elif not list(validator.iter_errors(metadata)):
+                problems.append(f"{vector['id']}: metadata unexpectedly matches the selected schema")
+            continue
         if vector["format"] == "jsonld" and vector["expected"] == "valid":
             from make_jsonld import canonical_record, is_canonical
 

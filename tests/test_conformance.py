@@ -128,8 +128,8 @@ class ConformanceTests(unittest.TestCase):
         """specs/006-protein-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 12)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 15)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 13)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 17)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
@@ -225,8 +225,8 @@ class ConformanceTests(unittest.TestCase):
         """specs/007-gff3-header contracts/conformance.md."""
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 16)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 16)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 17)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 18)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -309,7 +309,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(66 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(72 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -340,7 +340,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(66 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(72 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
@@ -358,7 +358,7 @@ class ConformanceTests(unittest.TestCase):
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
-        self.assertEqual(len(vectors), 34)
+        self.assertEqual(len(vectors), 37)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])
         self.assertIn("notApplicable", self.manifest["rules"]["J8"])
         self.assertIn("notApplicable", self.manifest["rules"]["R14"])

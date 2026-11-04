@@ -4,7 +4,8 @@ FHR release v0.3 and the converter 0.3.x packages retain numeric schemaVersion 1
 FHR release v0.4 uses the string schemaVersion `"2.0"`. The header parsing rules
 below apply to both releases and are implemented from converter 0.3.1.
 The assembly's own version string is independent. No required fields were added.
-Top-level metadata is closed; optional fields may be omitted, not replaced by null.
+Top-level metadata is closed, except for extension fields whose keys start with `x-` (R15,
+from FHR 2.1, FHP 1.1 and FHGFF3 1.1); optional fields may be omitted, not replaced by null.
 
 The consolidated status of the known schema-contract gaps, including R13, is in
 [SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md).
@@ -153,6 +154,37 @@ reader must agree on what the checksum line contains:
   from an accepted scheme. Such a value can't be rejected outright without
   invalidating records that the released schemas accept, so that waits for the
   next major `schemaVersion` of each type.
+- [R15] **Extension fields.** A top-level key that matches `^x-[A-Za-z0-9][A-Za-z0-9_.-]*$`
+  is an extension field: a value the standard does not define, recorded by a producer for its
+  own use. The prefix is `x-` in lower case, followed by an ASCII letter or digit and then
+  ASCII letters, digits, `_`, `.` or `-`; no key may contain a line feed. Extension fields are
+  allowed in FHR from `schemaVersion` `"2.1"`, in FHP and FHGFF3 from `"1.1"`, and in the FHT
+  draft. A record that states an earlier `schemaVersion`, or that cites the schema of a release
+  before v0.5.0, has no extension fields; in it an `x-` key is an unknown key, as before.
+  - Every other unknown key is still invalid, so a misspelt standard field (`genom`, `X-genome`)
+    is still caught. Nested objects (`taxon`, authors, `accessionID`, `vitalStats`, software,
+    `derivedFrom`, `source`, `genomeReference` and the others) stay closed: an `x-` key inside
+    one is invalid.
+  - The value may be any JSON or YAML value: a string, number, boolean, `null`, array or
+    object. R8, R11, R12 and R13 apply to extension keys and values as to every other key and
+    value, and the checksum covers them like every other header byte (R3). A key in the
+    pattern never needs quoting in YAML, and YAML 1.1 and 1.2 always read it as a string.
+  - Validators accept extension fields and attach no meaning to them. Tools must not rely on
+    them for anything the standard defines, and keep them as written when they combine, strip
+    or convert to JSON or YAML.
+  - An extension field never overrides a standard field. `x-genome` does not replace or qualify
+    `genome`; the standard field always governs.
+  - Use a namespace after the prefix, `x-<project>-<field>` (for example `x-refget-commonName`),
+    so that independent groups do not choose the same name, such as `x-source`, for different
+    things. The namespace is a recommendation; validators do not check it or warn about it.
+  - If an extension becomes widely used, it is proposed as a standard field under its own,
+    unprefixed name in a later minor `schemaVersion`. The `x-` key is not reserved, renamed or
+    reinterpreted by that, so files that use it keep their meaning; writers move to the
+    standard field.
+  - JSON-LD, the schema.org export and HTML microdata carry no extension fields: writers leave
+    them out and say which keys they left out, and a JSON-LD or microdata document that holds
+    one is invalid ([JSONLD.md](JSONLD.md) J9, [MICRODATA.md](MICRODATA.md) M5,
+    [SCHEMAORG-EXPORT.md](SCHEMAORG-EXPORT.md) X9). Use JSON or YAML to exchange them.
 
 Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
 headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
@@ -165,12 +197,12 @@ than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
 YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
 them.
 
-The bracketed ids R1 to R14 are stable labels for the rules above, used by the
+The bracketed ids R1 to R15 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each applicable rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files
 with the expected extracted metadata (see [MICRODATA.md](MICRODATA.md)).
-The JSON-LD form of FHR metadata and its rules J1 to J8 are in
+The JSON-LD form of FHR metadata and its rules J1 to J9 are in
 [JSONLD.md](JSONLD.md).
 
 The schemas do not express every requirement. Required values must be non-empty, `format` must

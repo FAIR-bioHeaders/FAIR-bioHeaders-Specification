@@ -107,8 +107,11 @@ classes:
           header type (FR-011)
         pattern: ^(https://raw\.githubusercontent\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\.[0-9]+\.[0-9]+)/fhp\.json|https://w3id\.org/fair-bioheaders/fhp/v[0-9]+\.[0-9]+\.[0-9]+/?)$
       schemaVersion:
-        description: Version of the FHP schema contract ("MAJOR.MINOR")
-        equals_string: "1.0"
+        description: Version of the FHP schema contract ("MAJOR.MINOR"); 1.1 (extension
+          fields) from v0.5
+        equals_string_in:
+        - "1.0"
+        - "1.1"
       version:
         description: Version of the protein set
       metadataAuthor:

@@ -70,7 +70,7 @@ class CoreSchemaTests(unittest.TestCase):
                 if name == "schemaVersion":
                     # The core gives the "MAJOR.MINOR" form; each header type pins its
                     # accepted values (docs/SCHEMA-VERSIONS.md).
-                    self.assertEqual(expected.pop("enum"), ["2.0"])
+                    self.assertEqual(expected.pop("enum"), ["2.0", "2.1"])
                 self.assertEqual(stub[name], expected)
 
     def test_fhr_contract_has_no_derived_from(self):

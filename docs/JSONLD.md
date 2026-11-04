@@ -26,7 +26,8 @@ The writer (rule J7) emits, in this order:
 1. `"@context"`: the context object, embedded rather than referenced by URL (see
    [Publication](#publication)).
 2. `"@type": "Dataset"` (`schema:Dataset`).
-3. Every FHR key of the record, in record order, with its value unchanged except that nested
+3. Every FHR key of the record, in record order, except extension fields (`x-` keys,
+   [FORMAT.md](FORMAT.md) R15), which are left out (J9). Values are unchanged except that nested
    objects gain a first key `@type`:
 
    | FHR value | `@type` |
@@ -205,7 +206,7 @@ Readers turn a JSON-LD document into FHR metadata as follows. The rule ids are s
 conformance vectors in [conformance/](../conformance/README.md) cite them. A canonical
 document (J1) needs no JSON-LD processor. Rules J3 to J5 read JSON-LD in other forms that use
 the FHR context or none: expanded, with value objects or explicit IRIs, or a single record in a
-`@graph`. J7 and J8 are writing rules.
+`@graph`. J7 and J8 are writing rules; J9 constrains writers and readers.
 
 - [J1] **Canonical form.** A document is canonical when its root is an object whose `@context`
   is a published FHR context, embedded (equal as parsed JSON to the `@context` value of
@@ -280,3 +281,14 @@ the FHR context or none: expanded, with value objects or explicit IRIs, or a sin
   `>` and `&` can break out of or alter an HTML script element, so escaping only `</` (as
   `<\/`) is not enough. HTML character references such as `&lt;` must not be used, because
   script content is not decoded.
+- [J9] **No extension fields.** Extension fields ([FORMAT.md](FORMAT.md) R15: top-level keys
+  that start with `x-`) are not part of the JSON-LD form. A writer leaves every one of them out,
+  with its value, and reports the keys it left out; it does not map them to any term, so the
+  context and vocabulary have none. A document with a root key that starts with `x-` is
+  invalid, in the canonical form as in any other (where J4 already makes it an unknown term,
+  because the FHR context does not define it and has no `@vocab`). Without this rule a
+  canonical reader would keep the key and a JSON-LD processor would drop it, so the two would
+  read different records from one document, which J3 rules out. Because writers never emit
+  extension values, none of them (an `@context` or `@id` inside a value, or `<`, `>` and `&`
+  that J8 escapes) reaches JSON-LD processing or a web page through a writer. A JSON-LD round
+  trip therefore drops extension fields; use JSON or YAML to keep them.

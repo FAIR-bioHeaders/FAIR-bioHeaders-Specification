@@ -83,7 +83,7 @@ REJECTED = [
     ("schemaVersion", 1, "schemaVersion is the string 1.0"),
     ("schemaVersion", 1.0, "schemaVersion is the string 1.0, not a number"),
     ("schemaVersion", "1", "MAJOR.MINOR"),
-    ("schemaVersion", "1.1", "FHP 1.0 accepts only 1.0"),
+    ("schemaVersion", "1.2", "FHP 1.1 accepts only 1.0 and 1.1"),
     ("schemaVersion", "2.0", "FHR's version is not FHP's"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
      "0123abc/fhp.json", "only main and release tags are schema refs"),

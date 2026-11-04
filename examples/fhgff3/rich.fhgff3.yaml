@@ -1,5 +1,5 @@
-schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
-schemaVersion: '1.0'
+schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0
+schemaVersion: '1.1'
 annotation: Synthetic FHGFF3 example annotation (every optional field)
 taxon:
   name: Homo sapiens
@@ -14,7 +14,7 @@ genomeReference:
   assemblyName: SyntheticAssembly1
 derivedFrom:
 - headerType: FHR
-  checksum: 8kMW7cFzWbKkOLt0tgS3srVGNuzqNuoGaVqAimI8A2c=
+  checksum: 6iEfbweXbENZ/x7c66kT6wUAMaXStwVhZFJbMMyr98A=
   relationship: annotates
 source:
 - name: Synthetic RNA-seq evidence set (placeholder)

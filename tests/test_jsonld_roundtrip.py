@@ -59,10 +59,13 @@ def records():
     # them; test_writer_refuses_links_without_an_accepted_scheme covers them.
     manifest = json.loads((ROOT / "conformance/manifest.json").read_text())
     unwritable = {v["id"] for v in manifest["vectors"] if "R14" in v.get("warnings", ())}
+    # Writers leave extension fields out (J9), so records with them do not round-trip;
+    # tests/test_extension_fields.py covers them.
     for kind in ("fasta", "gfa"):
         for path in sorted((ROOT / "conformance/valid").glob(f"*.fhr.{kind}")):
-            if path.name.split(".")[0] not in unwritable:
-                found[path.name.split(".")[0]] = header_record(path, kind)
+            record = header_record(path, kind)
+            if path.name.split(".")[0] not in unwritable and not make_jsonld.extension_keys(record):
+                found[path.name.split(".")[0]] = record
     for record in found.values():
         if hasattr(record.get("dateCreated"), "isoformat"):
             record["dateCreated"] = record["dateCreated"].isoformat()

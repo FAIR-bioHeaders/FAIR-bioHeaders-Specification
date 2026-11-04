@@ -83,6 +83,10 @@ RULES = {
            "and info are also accepted); any other scheme, such as javascript:, data: or "
            "file:, stays schema-valid, but validators warn and JSON-LD writers do not write it "
            "as a link.",
+    "R15": "Extension fields: from FHR 2.1 and FHP and FHGFF3 1.1, a top-level key matching "
+           "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$ may hold any value; every other unknown key, an x- "
+           "key in a nested object and an x- key in a record that states the older minor or "
+           "cites an older release stay invalid; R8, R11, R12 and R13 apply to them.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -91,6 +95,8 @@ RULES = {
           "typed strings are exact; untyped schema numbers and lists are converted.",
     "M4": "Microdata: the extracted metadata must validate against fhr.json; a "
           "repeated property cannot fill a single-valued field.",
+    "M5": "Microdata: no extension fields; writers leave x- keys out, and an FHR item with an "
+          "x- itemprop is invalid.",
     "J1": "JSON-LD: a canonical document has a published FHR context (embedded or a known "
           "URL) and no keyword but @type and a root @id; @context and @type are set aside, "
           "subjectOf is documentation, and export terms are set aside.",
@@ -111,6 +117,8 @@ RULES = {
     "J8": "JSON-LD in HTML: inside <script type=\"application/ld+json\">, '<', '>' and '&' "
           "in the JSON text are written as \\u003c, \\u003e and \\u0026; the document "
           "reads back to the same metadata.",
+    "J9": "JSON-LD: no extension fields; writers leave x- keys out, and a document with a root "
+          "x- key is invalid in the canonical form as in any other.",
     "P1": "FHP: the metadata of a protein FASTA header must validate against fhp.json.",
     "P2": "FHP: a record is read as FHP only when its schema is an FHP schema URL; any "
           "other header is validated as FHR.",
@@ -728,6 +736,7 @@ def build():
     build_fhp()
     build_fhgff3()
     build_selection()
+    build_extensions()
 
 
 # FHP vectors (specs/006-protein-header contracts/conformance.md): the shared
@@ -1907,6 +1916,202 @@ def self_check():
             continue
         if entry["rule"] in {"R1", "R3", "R4"}:
             assert stated != computed, entry["name"]
+
+
+# Extension fields (docs/FORMAT.md R15, JSONLD.md J9, MICRODATA.md M5; specs/015).
+# Every existing vector cites v0.4.0; these cite v0.5.0, the release that adds them.
+EXTENSION_RELEASE = "v0.5.0"
+FHR_EXTENSION_SCHEMA = f"{W3ID}fhr/{EXTENSION_RELEASE}"
+FHP_EXTENSION_SCHEMA = f"{W3ID}fhp/{EXTENSION_RELEASE}"
+FHGFF3_EXTENSION_SCHEMA = f"{W3ID}fhgff3/{EXTENSION_RELEASE}"
+# Extension values of every JSON type; '@' and '>' are escaped (R11), and the
+# '\x40id' key shows that a JSON-LD keyword inside a value is ordinary data.
+EXTENSION_LINES = [
+    "x-refget-assemblySource: Synthetic conformance source (placeholder)",
+    'x-example-contact: "someone\\x40example.org; contigs \\x3E 1000 bp"',
+    "x-example-count: 3",
+    "x-example-ratio: 0.5",
+    "x-example-flags:",
+    "- true",
+    "- null",
+    "x-example-object:",
+    '  "\\x40id": https://example.org/extension-only',
+    "  list:",
+    "  - a",
+    "  - 2",
+    "x-example-empty: ''",
+]
+EXTENSION_VALUES = {
+    "x-refget-commonName": "human",
+    "x-refget-assemblySource": "Synthetic conformance source (placeholder)",
+    "x-example-contact": "someone@example.org; contigs > 1000 bp",
+    "x-example-count": 3,
+    "x-example-ratio": 0.5,
+    "x-example-flags": [True, None],
+    "x-example-object": {"@id": "https://example.org/extension-only", "list": ["a", 2]},
+    "x-example-empty": "",
+}
+
+
+def extension_metadata(extra=(), version="'2.1'", schema=FHR_EXTENSION_SCHEMA, first=True,
+                       taxon=()):
+    """METADATA citing ``schema`` with ``version``; ``x-refget-commonName`` right after
+    schemaVersion when ``first``, ``extra`` lines before the checksum line, ``taxon``
+    lines inside the taxon object."""
+    lines = []
+    for item in selection_metadata(schema, version):
+        if item is None:
+            lines += list(extra)
+        lines.append(item)
+        if first and item == f"schemaVersion: {version}":
+            lines.append("x-refget-commonName: human")
+        if item == "  uri: https://identifiers.org/taxonomy:9606":
+            lines += list(taxon)
+    return lines
+
+
+def extension_valid(name, kind, lines, rules, description, expected):
+    data, value = assemble(header(kind, lines) + body(kind))
+    valid(name, kind, data, value, rules, description)
+    VALID[-1]["expected_metadata"] = expected
+
+
+def extension_invalid(name, lines, rule, reason, kind="fasta"):
+    data, _ = assemble(header(kind, lines) + body(kind))
+    invalid(name, kind, data, rule, reason)
+
+
+def build_extensions():
+    import make_jsonld
+
+    expected = dict(EXPECTED_METADATA, **EXTENSION_VALUES)
+    for kind in ("fasta", "gfa"):
+        extension_valid(f"{kind}-extension-fields", kind, extension_metadata(EXTENSION_LINES),
+                        ["R15", "R11", "R12", "V3"],
+                        "FHR 2.1 (v0.5.0) with extension fields of every JSON type, one before "
+                        "the standard fields and the rest after them; their bytes are covered "
+                        "by the checksum like any other header line.", expected)
+    raw_main = f"{RAW_CANONICAL}main/fhr.json"
+    extension_valid("fasta-extension-fields-raw-main", "fasta",
+                    extension_metadata(schema=raw_main), ["R15", "V1"],
+                    "The raw-main URL selects the current schema, FHR 2.1, which accepts an "
+                    "extension field in a record that states schemaVersion '2.1'.",
+                    dict(EXPECTED_METADATA, schema=raw_main, schemaVersion="2.1",
+                         **{"x-refget-commonName": "human"}))
+    extension_valid("fasta-extension-named-like-standard-field", "fasta",
+                    extension_metadata(["x-genome: Another name (extension only)"]), ["R15"],
+                    "x-genome is an extension field like any other; it does not replace "
+                    "genome, which keeps its value.",
+                    dict(EXPECTED_METADATA, **{"x-genome": "Another name (extension only)"}))
+    fhp = fhp_record(schema=FHP_EXTENSION_SCHEMA, schemaVersion="1.1",
+                     **{"x-example-curation": {"reviewed": True, "round": 2}})
+    fhp_valid("fhp-fasta-extension-fields", fhp_lines(fhp), ["R15", "P1"],
+              "FHP 1.1 (v0.5.0) with an extension field holding an object.",
+              dict(FHP_EXPECTED, **{"x-example-curation": {"reviewed": True, "round": 2}}))
+    fhgff3 = fhgff3_record(schema=FHGFF3_EXTENSION_SCHEMA, schemaVersion="1.1",
+                           **{"x-example-pipeline": ["synthetic-step-1", "synthetic-step-2"]})
+    fhgff3_valid("fhgff3-extension-fields", fhgff3_lines(fhgff3), ["R15", "G2"],
+                 "FHGFF3 1.1 (v0.5.0) with an extension field holding a list.",
+                 dict(FHGFF3_EXPECTED,
+                      **{"x-example-pipeline": ["synthetic-step-1", "synthetic-step-2"]}))
+
+    # Every other unknown key stays invalid, and so does an x- key where 2.1 does not apply.
+    extension_invalid("fasta-unknown-key", extension_metadata(["genomeName: Synthetic"]),
+                      "R15", "genomeName is not an FHR field and does not start with x-.")
+    for suffix, key, reason in (
+        ("uppercase-prefix", "X-refget-commonName", "The prefix is X-, not x-."),
+        ("empty-name", "x-", "Nothing follows the x- prefix."),
+        ("punctuation-first", "x-_note", "The name after x- starts with _, not a letter or "
+                                         "digit."),
+        ("space", "'x-common name'", "The key contains a space."),
+        ("non-ascii", "x-commonN\u00e4me", "The key contains a non-ASCII letter."),
+        ("trailing-line-feed", '"x-note\\n"', "The key ends with a line feed. Python's $ "
+                                                "would match before it; no key may contain one."),
+    ):
+        extension_invalid(f"fasta-extension-key-{suffix}",
+                          extension_metadata([f"{key}: value"], first=False), "R15", reason)
+    extension_invalid("fasta-extension-nested", extension_metadata(
+        taxon=["  x-example-note: placeholder"]), "R15",
+        "An x- key inside taxon: nested objects stay closed.")
+    lines = extension_metadata()
+    lines.insert(lines.index("- name: Synthetic metadata author (placeholder)") + 1,
+                 "  x-example-role: placeholder")
+    extension_invalid("fasta-extension-nested-author", lines, "R15",
+                      "An x- key inside a metadataAuthor item: nested objects stay closed.")
+    extension_invalid("fasta-extension-older-version", extension_metadata(version="'2.0'"), "R15",
+                      "The record cites v0.5.0 but states schemaVersion '2.0', which has no "
+                      "extension fields.")
+    extension_invalid("fasta-extension-older-release",
+                      extension_metadata(version="'2.0'", schema=FHR_SCHEMA), "R15",
+                      f"The record cites {RELEASE}, whose schema (FHR 2.0) has no extension "
+                      "fields.")
+    extension_invalid("fasta-extension-older-release-new-version",
+                      extension_metadata(schema=FHR_SCHEMA), "R15",
+                      f"The record cites {RELEASE}, whose schema accepts only schemaVersion "
+                      "'2.0' and no extension fields.")
+    extension_invalid("fasta-extension-older-version-raw-main",
+                      extension_metadata(version="'2.0'", schema=raw_main), "R15",
+                      "Raw-main selects the current schema (2.1), but the record states "
+                      "schemaVersion '2.0', which has no extension fields.")
+    extension_invalid("fasta-extension-yaml-boolean-word",
+                      extension_metadata(["x-example-flag: yes"]), "R12",
+                      "An extension value written as plain yes, a boolean in YAML 1.1 and a "
+                      "string in YAML 1.2.")
+    extension_invalid("fasta-extension-nan", extension_metadata(["x-example-ratio: .nan"]),
+                      "R13", "An extension value is NaN.")
+    extension_invalid("fasta-extension-duplicate-key",
+                      extension_metadata(["x-refget-commonName: other"]), "R8",
+                      "The extension key x-refget-commonName appears twice.")
+    for kind, record, nested in (
+        ("fhp-fasta", fhp_record(schema=FHP_EXTENSION_SCHEMA, schemaVersion="1.0",
+                                 **{"x-example-note": "placeholder"}), None),
+        ("fhgff3", fhgff3_record(schema=FHGFF3_EXTENSION_SCHEMA, schemaVersion="1.0",
+                                 **{"x-example-note": "placeholder"}), None),
+        ("fhp-fasta", fhp_record(schema=FHP_EXTENSION_SCHEMA, schemaVersion="1.1",
+                                 derivedFrom=[dict(FHP_RECORD["derivedFrom"][0],
+                                                   **{"x-example-note": "placeholder"})]),
+         "derivedFrom"),
+        ("fhgff3", fhgff3_record(schema=FHGFF3_EXTENSION_SCHEMA, schemaVersion="1.1",
+                                 derivedFrom=[dict(GENOME_LINK,
+                                                   **{"x-example-note": "placeholder"})]),
+         "derivedFrom"),
+    ):
+        lines = fhp_lines(record) if kind == "fhp-fasta" else fhgff3_lines(record)
+        data, _ = assemble(lines)
+        name = f"{kind}-extension-{'nested' if nested else 'older-version'}"
+        reason = ("An x- key inside a derivedFrom item: nested objects stay closed." if nested
+                  else "The record cites v0.5.0 but states schemaVersion '1.0', which has no "
+                       "extension fields.")
+        invalid(name, kind, data, "R15", reason)
+
+    # JSON-LD and microdata carry no extension fields (J9, M5).
+    record = jsonld_record(schema=FHR_EXTENSION_SCHEMA, schemaVersion="2.1")
+    extended = dict(record, **{"x-refget-commonName": "human",
+                               "x-example-object": {"@context": {"@vocab": "https://example.org/"},
+                                                    "@id": "https://example.org/extension-only"}})
+    jsonld_valid("jsonld-extension-fields-left-out", make_jsonld.to_jsonld(extended), record,
+                 ["J7", "J9"], "Writer output for an FHR 2.1 record with extension fields, one "
+                 "holding JSON-LD keywords: the writer left them out, so the document holds "
+                 "only standard fields.")
+    document = dict(make_jsonld.to_jsonld(record), **{"x-refget-commonName": "human"})
+    jsonld_invalid("jsonld-extension-field", jsonld_bytes(document), "J9",
+                   "A canonical document with the root key x-refget-commonName, which a "
+                   "JSON reader would keep and a JSON-LD processor would drop.")
+    document = make_jsonld.to_jsonld(record)
+    document = {"@context": [document.pop("@context")], **document,
+                "x-refget-commonName": "human"}
+    jsonld_invalid("jsonld-extension-field-general", jsonld_bytes(document), "J9",
+                   "The FHR context as the only item of an array, so the document is read by "
+                   "expansion, with the root key x-refget-commonName: the context has no term "
+                   "for it (J4).")
+    metadata = md_expect(schema=FHR_EXTENSION_SCHEMA, schemaVersion="2.1")
+    md_valid("microdata-extension-fields-left-out", md_page(md_content(metadata)), metadata,
+             ["M4", "M5"], "Writer output for an FHR 2.1 record with extension fields: the "
+             "writer left them out, so the item holds only standard fields.")
+    md_invalid("microdata-extension-field", md_page(md_content(metadata, after={
+        "genome": md_property("x-refget-commonName", "human")})), "M5",
+               "The FHR item has the property x-refget-commonName, although the selected "
+               "schema (FHR 2.1) would accept it in JSON or YAML.")
 
 
 def jsonld_self_check():

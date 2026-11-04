@@ -78,7 +78,7 @@ PUBLISHED_BASES = {
         "id": "https://w3id.org/fhr/fhp",
         "name": "FHPLinkML",
         "root": "FHP",
-        "postprocess": None,
+        "postprocess": GENERATOR.apply_fhp_rules,
     },
     "FHR": {
         "model": "fhr_linkml.yml",

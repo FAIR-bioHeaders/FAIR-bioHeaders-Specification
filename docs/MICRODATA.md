@@ -53,8 +53,14 @@ these rules.
 - [M4] The extracted metadata must validate against `fhr.json`. A property that
   appears more than once becomes a list, so a repeated property whose field
   takes a single value is invalid.
+- [M5] Microdata carries no extension fields ([FORMAT.md](FORMAT.md) R15). A
+  writer leaves every top-level `x-` key out, with its value, and reports the keys
+  it left out. A document whose FHR item has an `itemprop` that starts with `x-` is
+  invalid, even where the selected schema would accept the key in JSON or YAML, so
+  that HTML pages never hold values that the standard does not define. A microdata
+  round trip therefore drops extension fields; use JSON or YAML to keep them.
 
-The ids M1 to M4 are stable labels used by the
+The ids M1 to M5 are stable labels used by the
 [conformance vectors](../conformance/README.md); they add no requirements beyond
 the converter behaviour described here.
 

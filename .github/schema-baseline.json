@@ -2,6 +2,28 @@
   "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "A record that states schemaVersion 2.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "2.0"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ]
+      },
+      "then": {
+        "propertyNames": {
+          "not": {
+            "pattern": "^x-"
+          }
+        }
+      }
+    }
+  ],
   "definitions": {
     "orcidUri": {
       "format": "uri",
@@ -17,6 +39,11 @@
     }
   },
   "description": "FAIR Header Reference genome Schema for Genome Assemblies",
+  "patternProperties": {
+    "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+      "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+    }
+  },
   "properties": {
     "accessionID": {
       "additionalProperties": false,
@@ -185,9 +212,10 @@
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4 (docs/SCHEMA-VERSIONS.md)",
+      "description": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4, 2.1 (extension fields) from v0.5 (docs/SCHEMA-VERSIONS.md)",
       "enum": [
-        "2.0"
+        "2.0",
+        "2.1"
       ],
       "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
       "type": "string"
@@ -298,6 +326,11 @@
     "voucherSpecimen": {
       "description": "Description of the physical sample",
       "type": "string"
+    }
+  },
+  "propertyNames": {
+    "not": {
+      "pattern": "\n"
     }
   },
   "required": [

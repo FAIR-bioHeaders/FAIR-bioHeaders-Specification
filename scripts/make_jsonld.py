@@ -722,6 +722,24 @@ def bioschemas_missing(document):
     return [name for name, key in BIOSCHEMAS_MINIMUM if not _present(document.get(key))]
 
 
+# Extension fields (docs/FORMAT.md R15): top-level keys that start with "x-". JSON-LD
+# carries none of them (docs/JSONLD.md J9): writers leave them out, readers reject them.
+EXTENSION_PREFIX = "x-"
+
+
+def extension_keys(record):
+    """The record's top-level extension keys, in record order."""
+    return [key for key in record if isinstance(key, str) and key.startswith(EXTENSION_PREFIX)]
+
+
+def without_extensions(record, warn=None, what="JSON-LD"):
+    """The record without its extension fields (J9); ``warn`` gets the keys left out."""
+    left_out = extension_keys(record)
+    if left_out and warn is not None:
+        warn(f"extension fields are not written to {what}: {', '.join(left_out)}")
+    return {key: value for key, value in record.items() if key not in left_out}
+
+
 def _reserved_keys(value, path):
     if isinstance(value, dict):
         for key, item in value.items():
@@ -747,8 +765,11 @@ def _typed(key, value):
     return copy.deepcopy(value)
 
 
-def to_jsonld(record, export=None, context=None):
-    """The JSON-LD document for an FHR record (contracts/cli.md "Writing")."""
+def to_jsonld(record, export=None, context=None, warn=None):
+    """The JSON-LD document for an FHR record (contracts/cli.md "Writing").
+
+    Extension fields are left out (J9); ``warn`` is told which."""
+    record = without_extensions(record, warn)
     _reserved_keys(record, "")
     for key in (URL_TERM, *EXPORT_OUTPUT):
         if key in record:
@@ -774,8 +795,9 @@ def to_jsonld(record, export=None, context=None):
     return document
 
 
-def jsonld_text(record, export=None, context=None):
-    return json.dumps(to_jsonld(record, export, context), ensure_ascii=False, indent=2) + "\n"
+def jsonld_text(record, export=None, context=None, warn=None):
+    return json.dumps(to_jsonld(record, export, context, warn), ensure_ascii=False,
+                      indent=2) + "\n"
 
 
 # The schema.org export profile (specs/013-schemaorg-export, docs/SCHEMAORG-EXPORT.md):
@@ -868,8 +890,11 @@ def export_unmapped_keys(record):
     return found
 
 
-def to_export(record, export=None):
-    """The schema.org export graph of an FHR record (contracts/export.md)."""
+def to_export(record, export=None, warn=None):
+    """The schema.org export graph of an FHR record (contracts/export.md).
+
+    Extension fields are left out (X9, J9); ``warn`` is told which."""
+    record = without_extensions(record, warn, "the schema.org export")
     _reserved_keys(record, "")
     check_links(record, what="JSON-LD export")
     export = check_export(export) if export is not None else {}
@@ -1070,6 +1095,9 @@ def canonical_record(document, warn=None, context=None):
         raise ValueError(EXPORT_REFUSAL)
     if not is_canonical(document, context):
         raise ValueError(NOT_CANONICAL)
+    found = extension_keys(document)
+    if found:
+        raise ValueError(f"JSON-LD carries no extension fields (J9): {', '.join(found)}")
     record = {}
     for key, value in document.items():
         if key in ("@context", "@type"):

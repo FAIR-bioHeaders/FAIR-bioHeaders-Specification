@@ -75,7 +75,7 @@ REJECTED = [
     ("schemaVersion", 2, "a number, not the string 2.0"),
     ("schemaVersion", 2.0, "the number 2.0, as unquoted YAML 2.0 reads"),
     ("schemaVersion", "2", "MAJOR.MINOR has two parts"),
-    ("schemaVersion", "2.1", "FHR 2.0 accepts only 2.0"),
+    ("schemaVersion", "2.2", "FHR 2.1 accepts only 2.0 and 2.1"),
     ("schemaVersion", "02.0", "no leading zeros"),
     ("schemaVersion", 1.5, "fractional schemaVersion"),
     ("schemaVersion", "1", "the old version as a string"),
@@ -208,7 +208,10 @@ class V04TighteningTests(unittest.TestCase):
                 for index, child in enumerate(node):
                     yield from objects(child, f"{path}/{index}")
 
-        found = list(objects(self.published, ""))
+        # The extension-field conditional (docs/FORMAT.md R15) tests schemaVersion
+        # in a subschema; it is not an object definition.
+        found = [(path, node) for path, node in objects(self.published, "")
+                 if not path.startswith("/allOf/")]
         self.assertGreaterEqual(len(found), 7)
         for path, node in found:
             with self.subTest(path=path or "/"):

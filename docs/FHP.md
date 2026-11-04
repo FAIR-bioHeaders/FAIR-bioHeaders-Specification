@@ -1,9 +1,9 @@
 # FHP: FAIR header for protein FASTA
 
-**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.0"`), first
-released in FAIR-bioHeaders-Specification v0.4.0.** FHP is the working name (#54), and the
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, prepared for
+FAIR-bioHeaders-Specification v0.5.0; `"1.0"` was first released in v0.4.0).** FHP is the working name (#54), and the
 fields may still change after curator review, through a new schema version. Its persistent
-schema URL is `https://w3id.org/fair-bioheaders/fhp/v0.4.0`. The design is in
+schema URL is `https://w3id.org/fair-bioheaders/fhp/v0.5.0` (v0.4.0 for FHP 1.0). The design is in
 [specs/006-protein-header](../specs/006-protein-header/spec.md).
 
 FHP brings the FHR header to protein FASTA files: predicted proteomes, sets taken from protein
@@ -34,8 +34,8 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `sourceType` | `predicted`, `database` or `mixed` (see below) |
 
 `schema` must be an FHP schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
-versioned `https://w3id.org/fair-bioheaders/fhp/v0.4.0` of the release a file targets, or the raw
-GitHub URL of `fhp.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.0'` (FHP 1.0), quoted
+versioned `https://w3id.org/fair-bioheaders/fhp/v0.5.0` of the release a file targets, or the raw
+GitHub URL of `fhp.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.1'` (FHP 1.1; `'1.0'` with the v0.4.x schemas), quoted
 in YAML.
 
 The following fields are optional. Leave a field out when you do not know its value; tools never
@@ -55,7 +55,8 @@ infer these values from the sequences.
 The optional core fields (`voucherSpecimen`, `accessionID`, `scholarlyArticle`, `documentation`,
 `identifier`, `relatedLink`, `funding`, `reuseConditions`) mean the same as in FHR. Genome-only
 FHR fields (`genome`, `assemblyAuthor`, `masking`, `vitalStats`, `assemblySoftware` and the
-others) are not FHP fields. Every object rejects unknown keys and `null`.
+others) are not FHP fields. Every object rejects unknown keys and `null`, except that from FHP 1.1
+the top level accepts extension fields, keys that start with `x-` ([FORMAT.md](FORMAT.md) R15).
 
 Quote release names such as `'2026_03'` in YAML. Unquoted, YAML 1.1 reads `2026_03` as the
 number 202603.
@@ -85,7 +86,7 @@ stated by a source, cannot be verified this way.
 
 ## Rules
 
-FHP files follow the shared header, checksum, number and link rules R1 to R14 of [FORMAT.md](FORMAT.md)
+FHP files follow the shared header, checksum, number and link rules R1 to R15 of [FORMAT.md](FORMAT.md)
 unchanged, in a FASTA container. The sequence alphabet makes no difference to them: stop symbols
 (`*`), the rare residues U and O, the ambiguity codes B, Z, J and X, lower case and gaps are
 ordinary bytes, hashed and preserved exactly. In addition:

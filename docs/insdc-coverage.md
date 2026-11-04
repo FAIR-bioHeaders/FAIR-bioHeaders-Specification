@@ -6,12 +6,12 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 
 ## Assessment version
 
-**Assessment v1, 2026-10-28.** Every row below has a final disposition. Re-assess (and bump this version) when the pinned INSDC commit or any FAIR-bioHeaders `schemaVersion` changes; `tests/test_insdc_coverage.py` fails until the pins below are updated.
+**Assessment v2, 2026-11-03.** Every row below has a final disposition. Re-assess (and bump this version) when the pinned INSDC commit or any FAIR-bioHeaders `schemaVersion` changes; `tests/test_insdc_coverage.py` fails until the pins below are updated.
 
 **Pinned inputs:**
 
 - **INSDC**: [insdc/minimum-specifcations](https://github.com/insdc/minimum-specifcations) (the repository name is spelled this way upstream) at commit `41f0dc424748c9f7e50a8b6bda9b888218c4b65e` (2026-07-06). All ten categories are at v1.0. Text was read from the per-category PDFs in each `Current version/` folder.
-- **FAIR-bioHeaders, released**: FHR `schemaVersion` `2.0`, FHP `1.0` and FHGFF3 `1.0` (`fhr.json`, `fhp.json`, `fhgff3.json`; release line v0.4.x, unchanged in v0.4.2).
+- **FAIR-bioHeaders, released**: FHR `schemaVersion` `2.1`, FHP `1.1` and FHGFF3 `1.1` (`fhr.json`, `fhp.json`, `fhgff3.json`; release v0.5.0, prepared and not yet tagged). They add only top-level `x-` extension fields ([FORMAT.md](FORMAT.md) R15) to FHR `2.0`, FHP `1.0` and FHGFF3 `1.0` (release line v0.4.x), and every row reads the same for both. An extension field never carries an INSDC requirement: rows count only standard fields, because tools attach no meaning to extensions.
 - **FHT, draft (not released)**: the FHT 1.0 development contract, [`fht.json` at FHT-Specification `0ceb6f4`](https://github.com/FAIR-bioHeaders/FHT-Specification/blob/0ceb6f460e1f749f9eb2afb0a8b2f83cddb0e07a/fht.json), and the shared draft [specs/005-rna-transcriptome-header at `9a87e5c`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/9a87e5cfe0ce3e024508ff8fdb58e6fe9042dffe/specs/005-rna-transcriptome-header/spec.md). FHT rows are marked **FHT (draft)** and describe a contract that can still change.
 - **gff3-validator**: [rule catalogue at `c753f45`](https://github.com/FAIR-bioHeaders/gff3-validator/blob/c753f451d28b80b5f84c042e0f0486c3b1049adf/gff3_validator/catalogue.yaml) (`catalogue_version 0.1.0-draft`, 2026-10-08, a draft for Sequence Ontology review). Rules cited as implemented are implemented at that revision; planned rules are marked (planned).
 
@@ -22,6 +22,7 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 | v0 | 2026-10-22 | First-pass matrix posted on #157 with provisional dispositions. |
 | v0 | 2026-10-28 | Landed in [#183](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/pull/183); review fixes in [#184](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/pull/184). |
 | v1 | 2026-10-28 | Every requirement given an ID and a final disposition; coverage claims rechecked against the pinned sources; follow-ups opened; submission guidance and `tests/test_insdc_coverage.py` added. |
+| v2 | 2026-11-03 | Re-pinned to FHR `2.1`, FHP `1.1` and FHGFF3 `1.1` (extension fields, #197). No row's coverage or disposition changes: extension fields carry no meaning the standard defines. |
 
 ## Keys
 
@@ -195,9 +196,9 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 
 | Repository / type | Contract assessed | Rows | Open follow-ups |
 | --- | --- | --- | --- |
-| FAIR-bioHeaders-Specification: FHR | `2.0` (released) | Sequence, Assembly, Analysis, Sample, Project, Package-Checklist | [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190) profile; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHP | `1.0` (released) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHGFF3 | `1.0` (released) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHR | `2.1` (prepared for v0.5.0; `2.0` released, the same rows) | Sequence, Assembly, Analysis, Sample, Project, Package-Checklist | [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190) profile; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHP | `1.1` (prepared for v0.5.0; `1.0` released, the same rows) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHGFF3 | `1.1` (prepared for v0.5.0; `1.0` released, the same rows) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
 | FHT-Specification: FHT (draft) | `1.0` development contract at `0ceb6f4` (unreleased) | Sequence S1–S4, S11–S13, S-fmt; Sample SA.T1; Experiment | none; rows are re-checked when FHT is released |
 | gff3-validator | catalogue `0.1.0-draft` at `c753f45` | Annotation | [gff3-validator#27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27) |
 

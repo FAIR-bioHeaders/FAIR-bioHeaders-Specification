@@ -12,6 +12,9 @@ normative rules stay in [FORMAT.md](FORMAT.md), [SCHEMA-VERSIONS.md](SCHEMA-VERS
 - Last audited: 2026-10-22, against released specification **v0.4.1** (schemas from
   v0.4.0), released toolkit **0.8.1**, and toolkit `main` after Tools#91–#94 (not yet
   released). GAP-1 taxon decision recorded 2026-10-28 ([#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189)).
+- The minor versions prepared for v0.5.0 (FHR 2.1, FHP and FHGFF3 1.1) add only top-level
+  extension fields ([FORMAT.md](FORMAT.md) R15, #197). Every finding below applies to them
+  unchanged; where a finding names 2.0 or 1.0, it applies to 2.1 and 1.1 as well.
 
 ## Status legend
 

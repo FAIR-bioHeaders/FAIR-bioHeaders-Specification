@@ -2,6 +2,44 @@
 
 ## Unreleased
 
+- **Schema addition (minor), prepared for v0.5.0: extension fields** (#197,
+  [specs/015-extension-fields](specs/015-extension-fields/spec.md)). A top-level key that
+  matches `^x-[A-Za-z0-9][A-Za-z0-9_.-]*$` may hold any JSON/YAML value that the standard
+  does not define, for example `x-refget-commonName`. New rule R15 in docs/FORMAT.md:
+  every other unknown key is still invalid, nested objects stay closed, R8, R11, R12 and
+  R13 apply to extension keys and values, the checksum covers them, validators attach no
+  meaning to them, an extension never overrides a standard field, a namespace
+  `x-<project>-<field>` is recommended but not checked, and a widely used extension is
+  promoted under its own standard name. New schema versions FHR `"2.1"`, FHP `"1.1"` and
+  FHGFF3 `"1.1"`: `patternProperties` for the pattern, no key with a line feed (Python's `$`
+  matches before one), and a record that states `"2.0"`/`"1.0"` may not use extension
+  fields, so it keeps exactly its 2.0/1.0 outcome. Every record valid under FHR 2.0, FHP 1.0
+  and FHGFF3 1.0 stays valid with the same meaning. Records that cite a v0.4.x schema URL
+  are still checked against the v0.4.x schemas (V2, V3), where `x-` keys are unknown keys;
+  the selection rules V1 to V6 are unchanged.
+- docs/JSONLD.md J9 and docs/MICRODATA.md M5 (new): JSON-LD, the schema.org export (X9)
+  and microdata carry no extension fields. Writers leave them out and report the keys, and
+  a JSON-LD document (canonical or not) or microdata item with an `x-` key is invalid, so
+  JSON readers and JSON-LD processors still read the same record (J3) and no extension
+  value reaches a JSON-LD processor or a web page through a writer. The JSON-LD context is
+  unchanged; the vocabulary's `schemaVersion` comment names 2.1. The reference writers in
+  `scripts/make_jsonld.py` leave extension fields out and its canonical reader rejects
+  them.
+- `schemas/versions.json`: v0.5.0 (`FHR` `"2.1"`, `FHP` and `FHGFF3` `"1.1"`) is prepared
+  on `main` with `current` and `preRelease` set to `v0.5.0` (docs/SCHEMA-VERSIONS.md,
+  "Schema files on main"), so the examples and `llms.txt` cite v0.5.0 and the new versions,
+  with recomputed checksums for the headed examples and the FHGFF3 parent links. New
+  example `examples/extension-fields.fhr.yaml`. docs/SCHEMA-VERSIONS.md: a record that
+  states an earlier minor is held to it. The INSDC coverage assessment is re-pinned (v2);
+  no row changes. The mapping-proposal fixture stays pinned to its source commit.
+- 31 new conformance vectors (281: 117 valid, 164 invalid), the only ones that cite
+  v0.5.0; every existing vector keeps its id, bytes and outcome. `check_conformance.py
+  --schema` checks that each invalid R15 vector fails the schema it selects. The
+  conformance CI runs the FAIR-bioHeaders-Tools commit that bundles the v0.5.0 schemas,
+  pinned by hash, until fair-bioheaders 0.9.0 is released.
+- `json-schema-generator.py` adds the extension rules (LinkML cannot express them) for
+  every header type and for profile roots; drift baselines updated.
+
 - specs/005-rna-transcriptome-header (#107): synced the shared copy with the FHT 1.0
   development contract in FHT-Specification (`9dae29b`, model merged in its PR #21),
   replacing the original draft's required `moleculeType` (`mRNA | total RNA | cDNA |

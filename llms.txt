@@ -2,17 +2,18 @@
 
 > FAIR-bioHeaders defines machine-readable provenance headers that travel inside bioinformatics data files: FHR for reference genome FASTA and GFA, FHP for protein FASTA, and FHGFF3 for GFF3 annotations. A header is a block of YAML lines at the top of the file (`;~` in FASTA, `#~` in GFA and GFF3), validated against a JSON Schema and covered by a SHA-512/256 checksum of the file. The reference implementation is the `fair-bioheaders` Python package (command `bioheaders`).
 
-Key facts (FAIR-bioHeaders-Specification v0.4.2, fair-bioheaders 0.8.5):
+Key facts (FAIR-bioHeaders-Specification v0.5.0 with fair-bioheaders 0.9.0, both prepared and not yet released; the released v0.4.2 and fair-bioheaders 0.8.6 use FHR `'2.0'`, FHP and FHGFF3 `'1.0'` and the v0.4.0 schema URLs):
 
-- Schema versions: FHR `schemaVersion: '2.0'`, FHP `'1.0'`, FHGFF3 `'1.0'`. A file's `schema` value selects the schema it is validated against; cite a versioned w3id URL. Raw-`main` URLs mean the current schema; an unknown version is reported as unsupported.
+- Schema versions: FHR `schemaVersion: '2.1'`, FHP `'1.1'`, FHGFF3 `'1.1'`. A file's `schema` value selects the schema it is validated against; cite a versioned w3id URL. Raw-`main` URLs mean the current schema; an unknown version is reported as unsupported.
 - The checksum is computed by `bioheaders combine`, never by hand. Changing any byte except the checksum line invalidates it.
 - In FASTA, header values containing `>` or `@` are written as YAML escapes `\x3E` and `\x40` (rule R11), because kseq-based readers start a record at those characters. YAML readers return the real characters.
 - Many FASTA tools reject a leading `;` block, including samtools faidx (htslib), pysam `FastaFile`, bedtools getfasta, Picard, Bowtie2, HISAT2, STAR, salmon and Biopython's default `fasta` format. Use `bioheaders strip` to make a plain copy, or `SeqIO.parse(path, "fasta-pearson")` in Biopython. GFF3 and GFA tools surveyed accept `#~` lines.
 - A SeqCol digest (`seqcol_id`) is an optional, user-supplied identifier, distinct from the file checksum.
+- Extension fields (rule R15, from FHR 2.1 and FHP/FHGFF3 1.1): a top-level key matching `^x-[A-Za-z0-9][A-Za-z0-9_.-]*$`, preferably `x-<project>-<field>`, may hold any value the standard does not define. Every other unknown key is invalid, nested objects stay closed, and JSON-LD and HTML output leave extension fields out. Never put a standard field's value only in an `x-` key.
 
 ## Specification
 
-- [Format rules R1 to R14](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping, link schemes
+- [Format rules R1 to R15](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping, link schemes, extension fields
 - [Schema versions and selection](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md): versioning policy and how a `schema` URL selects a schema
 - [Schema-contract gap audit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-GAP-AUDIT.md): status of the #150 findings and what waits for the next major `schemaVersion`
 - [FHP, protein FASTA](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHP.md): fields, `sourceType`, sources
@@ -25,9 +26,10 @@ Key facts (FAIR-bioHeaders-Specification v0.4.2, fair-bioheaders 0.8.5):
 
 ## Schemas
 
-- [FHR v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0): reference genome header schema (`fhr.json`)
-- [FHP v0.4.0](https://w3id.org/fair-bioheaders/fhp/v0.4.0): protein FASTA header schema (`fhp.json`)
-- [FHGFF3 v0.4.0](https://w3id.org/fair-bioheaders/fhgff3/v0.4.0): GFF3 header schema (`fhgff3.json`)
+- [FHR v0.5.0](https://w3id.org/fair-bioheaders/fhr/v0.5.0): reference genome header schema (`fhr.json`, FHR 2.1; resolves once v0.5.0 is tagged)
+- [FHP v0.5.0](https://w3id.org/fair-bioheaders/fhp/v0.5.0): protein FASTA header schema (`fhp.json`, FHP 1.1)
+- [FHGFF3 v0.5.0](https://w3id.org/fair-bioheaders/fhgff3/v0.5.0): GFF3 header schema (`fhgff3.json`, FHGFF3 1.1)
+- [FHR v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0), [FHP v0.4.0](https://w3id.org/fair-bioheaders/fhp/v0.4.0) and [FHGFF3 v0.4.0](https://w3id.org/fair-bioheaders/fhgff3/v0.4.0): the released FHR 2.0, FHP 1.0 and FHGFF3 1.0 schemas
 - [Current FHR schema](https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhr.json): raw-main canonical URL (also `fhp.json`, `fhgff3.json`)
 - [Vocabulary](https://w3id.org/fair-bioheaders/terms): FAIR-bioHeaders terms (HTML, Turtle or JSON-LD by content negotiation)
 - [JSON-LD context v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0/jsonld/fhr.context.jsonld)
