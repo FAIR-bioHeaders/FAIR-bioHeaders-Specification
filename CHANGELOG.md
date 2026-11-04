@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The conformance CI runs the released `fair-bioheaders[jsonld]==0.9.0`, the first release
+  that bundles the v0.5.0 schemas (R15, J9, M5), instead of the pinned FAIR-bioHeaders-Tools
+  commit `5b05b65`.
 - `examples/fhp/rich-predicted.fhp.yaml`: the author gains `nameType: Personal`, as in the
   FHP-Specification copy (its #12) that FAIR-bioHeaders-Tools bundles, so the two companion
   copies match again and `check_release.py` passes. The example stays valid FHP 1.1 (author
