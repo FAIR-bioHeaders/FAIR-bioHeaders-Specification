@@ -148,6 +148,11 @@ the published schemas setting `additionalProperties: false`:
   contract. This is allowed only as an explicit, reviewed profile extension, and
   consumers must report base validity separately from profile validity. See
   `valid-with-sample-identifiers.json`, which is profile-valid and base-invalid.
+  From FHR 2.1 and FHP and FHGFF3 1.1, base and profile schemas also accept
+  top-level extension fields ([FORMAT.md](FORMAT.md) R15). A community value kept
+  under a namespaced `x-` key stays base-valid, but it carries no meaning for the
+  standard, so a profile that needs the value checked or exchanged as data should
+  still propose a reviewed slot.
 
 A **relaxed profile** is different again: removing a base requirement (for
 example dropping `genome`, `assemblyAuthor` or `masking` for a non-genome

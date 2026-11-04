@@ -40,14 +40,17 @@ class MappingProposalTests(unittest.TestCase):
         self.assertEqual(context_errors(self.context, self.source), [])
         schema = json.loads((ROOT / "fhr.json").read_text())
         Draft202012Validator(schema, format_checker=FormatChecker()).validate(self.source)
-        # source.json is pinned to examples/example.fhr.json at commit 2da7c96 (README);
-        # the example itself moves with the release it cites (FHR 2.1 from v0.5.0).
-        pinned = subprocess.run(["git", "show", "2da7c96:examples/example.fhr.json"],
-                                cwd=ROOT, capture_output=True)
-        if pinned.returncode == 0:
-            self.assertEqual((BUNDLE / "source.json").read_bytes(), pinned.stdout)
         self.assertEqual(self.context["profileVersion"], self.table["profile_version"])
         self.assertEqual(self.report["profileVersion"], self.table["profile_version"])
+
+    def test_source_fixture_is_the_pinned_example(self):
+        """source.json is examples/example.fhr.json at commit 2da7c96 (README); the
+        example itself moves with the release it cites (FHR 2.1 from v0.5.0)."""
+        pinned = subprocess.run(["git", "show", "2da7c96:examples/example.fhr.json"],
+                                cwd=ROOT, capture_output=True)
+        if pinned.returncode:
+            self.skipTest("commit 2da7c96 is not available (shallow clone); fetch the history")
+        self.assertEqual((BUNDLE / "source.json").read_bytes(), pinned.stdout)
 
     def test_no_title_fallback_or_unknown_context(self):
         for key in self.schema["required"]:

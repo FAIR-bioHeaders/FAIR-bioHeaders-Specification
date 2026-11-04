@@ -12,6 +12,7 @@ import sys
 import unittest
 
 from jsonschema import Draft202012Validator, FormatChecker
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -168,24 +169,50 @@ class ExtensionFieldTests(unittest.TestCase):
                     self.assertTrue(list(check.iter_errors(record)))
 
     def test_older_minor_outcomes_are_unchanged(self):
-        """Every record stating the older minor has its v0.4.0 outcome under the new schema."""
-        records = []
+        """Every record stating the older minor has its v0.4.0 outcome under the new schema.
+
+        The corpus is the header metadata of every FASTA, GFA, FHP and FHGFF3 vector,
+        the extracted metadata of the microdata and JSON-LD vectors and every JSON or
+        YAML example, plus records with each probe key added."""
+        import check_conformance
+
+        class Loader(yaml.SafeLoader):
+            """Dates stay strings, as written (FORMAT.md R12)."""
+
+        Loader.yaml_implicit_resolvers = {
+            first: [(tag, regexp) for tag, regexp in resolvers
+                    if tag != "tag:yaml.org,2002:timestamp"]
+            for first, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()
+        }
+        corpus = []
         manifest = load("conformance/manifest.json")
         for vector in manifest["vectors"]:
-            metadata = vector.get("metadata")
-            if isinstance(metadata, dict) and "schema" in metadata:
-                records.append(metadata)
-        for path in sorted((ROOT / "examples").rglob("*.json")):
-            records.append(json.loads(path.read_text(encoding="utf-8")))
-        compared = 0
+            prefix = check_conformance.PREFIXES.get(vector["format"])
+            if prefix is None:
+                metadata = vector.get("metadata")
+            else:
+                data = check_conformance.read_vector(ROOT / "conformance", vector)
+                try:
+                    text = "\n".join(line[len(prefix):].rstrip(b"\r\n").decode("utf-8")
+                                     for line in data.splitlines(keepends=True)
+                                     if line.startswith(prefix))
+                    metadata = yaml.load(text, Loader=Loader)
+                except (UnicodeDecodeError, yaml.YAMLError):
+                    continue  # Broken on purpose (R6, R8, R12): no record to compare.
+            if isinstance(metadata, dict):
+                corpus.append(metadata)
+        for path in sorted((ROOT / "examples").rglob("*")):
+            if path.suffix in {".json", ".yaml"}:
+                corpus.append(yaml.load(path.read_text(encoding="utf-8"), Loader=Loader))
+        compared = real = 0
         for header_type, (name, minimal, first, _, nested) in TYPES.items():
             old = released(name)
             if old is None:
                 self.skipTest("v0.4.0 is not available; run git fetch --tags")
             before, after = validator(old), validator(load(name))
-            candidates = [record for record in records
-                          if str(record.get("schema", "")).endswith(name.split(".")[0])
-                          or str(record.get("schema", "")).endswith(name)]
+            candidates = [record for record in corpus
+                          if check_conformance.select_record(record)[0] == header_type]
+            real += len(candidates)
             base = load(minimal)
             for key in INVALID_KEYS + VALID_KEYS + ["unknown", "@context", "x-", "X-A"]:
                 for value in VALUES[:4]:
@@ -197,7 +224,8 @@ class ExtensionFieldTests(unittest.TestCase):
                     self.assertEqual(not list(before.iter_errors(record)),
                                      not list(after.iter_errors(record)))
                     compared += 1
-        self.assertGreater(compared, 300)
+        self.assertGreater(real, 200)
+        self.assertGreater(compared, 500)
 
 
 class JsonLdExtensionTests(unittest.TestCase):

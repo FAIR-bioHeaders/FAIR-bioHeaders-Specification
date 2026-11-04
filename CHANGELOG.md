@@ -32,7 +32,7 @@
   example `examples/extension-fields.fhr.yaml`. docs/SCHEMA-VERSIONS.md: a record that
   states an earlier minor is held to it. The INSDC coverage assessment is re-pinned (v2);
   no row changes. The mapping-proposal fixture stays pinned to its source commit.
-- 31 new conformance vectors (281: 117 valid, 164 invalid), the only ones that cite
+- 34 new conformance vectors (284: 117 valid, 167 invalid), the only ones that cite
   v0.5.0; every existing vector keeps its id, bytes and outcome. `check_conformance.py
   --schema` checks that each invalid R15 vector fails the schema it selects. The
   conformance CI runs the FAIR-bioHeaders-Tools commit that bundles the v0.5.0 schemas,

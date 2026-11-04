@@ -5283,6 +5283,15 @@
       "reason": "The record cites v0.4.0, whose schema accepts only schemaVersion '2.0' and no extension fields."
     },
     {
+      "id": "gfa-extension-older-version",
+      "file": "invalid/gfa-extension-older-version.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R15",
+      "reason": "A GFA header that cites v0.5.0 but states schemaVersion '2.0', which has no extension fields."
+    },
+    {
       "id": "fasta-extension-older-version-raw-main",
       "file": "invalid/fasta-extension-older-version-raw-main.fhr.fasta",
       "format": "fasta",
@@ -5335,6 +5344,24 @@
       "expected": "invalid",
       "rule": "R15",
       "reason": "The record cites v0.5.0 but states schemaVersion '1.0', which has no extension fields."
+    },
+    {
+      "id": "fhp-fasta-extension-older-release",
+      "file": "invalid/fhp-fasta-extension-older-release.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R15",
+      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields."
+    },
+    {
+      "id": "fhgff3-extension-older-release",
+      "file": "invalid/fhgff3-extension-older-release.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R15",
+      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields."
     },
     {
       "id": "fhp-fasta-extension-nested",

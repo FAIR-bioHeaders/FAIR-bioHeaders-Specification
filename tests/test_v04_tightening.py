@@ -209,9 +209,13 @@ class V04TighteningTests(unittest.TestCase):
                     yield from objects(child, f"{path}/{index}")
 
         # The extension-field conditional (docs/FORMAT.md R15) tests schemaVersion
-        # in a subschema; it is not an object definition.
+        # in its if/then subschemas; they are not object definitions.
+        gates = [f"/allOf/{index}/{part}"
+                 for index, item in enumerate(self.published.get("allOf", []))
+                 if "then" in item and "propertyNames" in item["then"]
+                 for part in ("if", "then")]
         found = [(path, node) for path, node in objects(self.published, "")
-                 if not path.startswith("/allOf/")]
+                 if not any(path == gate or path.startswith(gate + "/") for gate in gates)]
         self.assertGreaterEqual(len(found), 7)
         for path, node in found:
             with self.subTest(path=path or "/"):

@@ -2049,6 +2049,9 @@ def build_extensions():
                       extension_metadata(schema=FHR_SCHEMA), "R15",
                       f"The record cites {RELEASE}, whose schema accepts only schemaVersion "
                       "'2.0' and no extension fields.")
+    extension_invalid("gfa-extension-older-version", extension_metadata(version="'2.0'"), "R15",
+                      "A GFA header that cites v0.5.0 but states schemaVersion '2.0', which has "
+                      "no extension fields.", kind="gfa")
     extension_invalid("fasta-extension-older-version-raw-main",
                       extension_metadata(version="'2.0'", schema=raw_main), "R15",
                       "Raw-main selects the current schema (2.1), but the record states "
@@ -2067,6 +2070,8 @@ def build_extensions():
                                  **{"x-example-note": "placeholder"}), None),
         ("fhgff3", fhgff3_record(schema=FHGFF3_EXTENSION_SCHEMA, schemaVersion="1.0",
                                  **{"x-example-note": "placeholder"}), None),
+        ("fhp-fasta", fhp_record(**{"x-example-note": "placeholder"}), "release"),
+        ("fhgff3", fhgff3_record(**{"x-example-note": "placeholder"}), "release"),
         ("fhp-fasta", fhp_record(schema=FHP_EXTENSION_SCHEMA, schemaVersion="1.1",
                                  derivedFrom=[dict(FHP_RECORD["derivedFrom"][0],
                                                    **{"x-example-note": "placeholder"})]),
@@ -2078,10 +2083,15 @@ def build_extensions():
     ):
         lines = fhp_lines(record) if kind == "fhp-fasta" else fhgff3_lines(record)
         data, _ = assemble(lines)
-        name = f"{kind}-extension-{'nested' if nested else 'older-version'}"
-        reason = ("An x- key inside a derivedFrom item: nested objects stay closed." if nested
-                  else "The record cites v0.5.0 but states schemaVersion '1.0', which has no "
-                       "extension fields.")
+        name = f"{kind}-extension-" + {None: "older-version", "release": "older-release",
+                                       "derivedFrom": "nested"}[nested]
+        reason = {
+            None: "The record cites v0.5.0 but states schemaVersion '1.0', which has no "
+                  "extension fields.",
+            "release": f"The record cites {RELEASE}, whose schema (1.0) has no extension "
+                       "fields.",
+            "derivedFrom": "An x- key inside a derivedFrom item: nested objects stay closed.",
+        }[nested]
         invalid(name, kind, data, "R15", reason)
 
     # JSON-LD and microdata carry no extension fields (J9, M5).

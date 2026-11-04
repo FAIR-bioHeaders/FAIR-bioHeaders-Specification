@@ -57,7 +57,11 @@ FHP and FHGFF3 follow the same table with `"1.0"`/`"1.1"`.
 
 ## Toolkit messages
 
-- An `x-` key under the older minor: `x-refget-commonName: extension fields (x-...) need
-  schemaVersion "2.1"` (or `"1.1"`), instead of jsonschema's default `not` message.
+- An `x-` key under the older minor: `x-refget-commonName: extension fields (x- keys) are not
+  allowed in a record that states the older schemaVersion; state the version that adds them
+  (FHR '2.1', FHP and FHGFF3 '1.1') (...R15)`, instead of jsonschema's default `not` message;
+  under a v0.4.x schema, which has no extension fields, the message says to cite v0.5.0 or later.
+- An unknown key: `unknown field 'genom': not a field of this schema, and not an extension
+  field (...)`; a key with a line feed: `the key 'x-a\n' contains a line feed (...)`.
 - Writers: `FHR: warning: extension fields are not written to JSON-LD: x-a, x-b` (and the same
   for microdata and the export).
