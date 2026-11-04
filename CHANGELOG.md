@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- `examples/fhp/rich-predicted.fhp.yaml`: the author gains `nameType: Personal`, as in the
+  FHP-Specification copy (its #12) that FAIR-bioHeaders-Tools bundles, so the two companion
+  copies match again and `check_release.py` passes. The example stays valid FHP 1.1 (author
+  `nameType` is part of FHP since 1.0). `check_release.py` now reports a missing top-level
+  companion example instead of stopping with a traceback.
+
 ## v0.5.0 — 2026-11-04
 
 A minor schema release: extension fields. FHR `"2.1"`, FHP `"1.1"` and FHGFF3 `"1.1"` accept
