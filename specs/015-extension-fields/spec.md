@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-03
 
-**Status**: Implemented (release v0.5.0 prepared, not tagged)
+**Status**: Implemented (released in v0.5.0)
 
 **Input**: [FAIR-bioHeaders-Specification#197](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/197).
 Every header type rejects unknown top-level keys (`additionalProperties: false`), so a producer has

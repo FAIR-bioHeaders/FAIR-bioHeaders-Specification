@@ -107,7 +107,7 @@ The machine-readable form is [`schemas/versions.json`](../schemas/versions.json)
 | --- | --- | --- | --- |
 | v0.3.0, v0.3.1 | `1` (a number) | – | – |
 | v0.4.0, v0.4.1, v0.4.2 | `"2.0"` | `"1.0"` | `"1.0"` |
-| v0.5.0 (prepared, not yet tagged) | `"2.1"` | `"1.1"` | `"1.1"` |
+| v0.5.0 | `"2.1"` | `"1.1"` | `"1.1"` |
 
 v0.4.1 and v0.4.2 changed only format rules (docs/FORMAT.md, docs/JSONLD.md and schema
 selection), not the schemas, so their schemas are the v0.4.0 ones; `current` in
@@ -119,8 +119,7 @@ That is a minor change for each type (FHR 2.1, FHP 1.1, FHGFF3 1.1): every recor
 record that states `'2.0'` or `'1.0'`. A record that cites a v0.4.x schema URL is checked against
 the v0.4.x schema (V2, V3), where an `x-` key is an unknown key, so files with extension fields
 cite v0.5.0 or later and state the new version. Readers that predate v0.5.0 report such files as
-an unsupported schema version (V4), or as invalid if they cite raw-main. v0.5.0 is prepared on `main` under
-the pre-release exception below (`preRelease` in `schemas/versions.json`) until its tag exists.
+an unsupported schema version (V4), or as invalid if they cite raw-main.
 
 FHR 2.0 is a major version because the v0.4 tightening
 ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)) rejects some values v0.3 accepted. The additive

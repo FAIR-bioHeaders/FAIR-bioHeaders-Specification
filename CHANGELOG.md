@@ -2,7 +2,15 @@
 
 ## Unreleased
 
-- **Schema addition (minor), prepared for v0.5.0: extension fields** (#197,
+## v0.5.0 — 2026-11-04
+
+A minor schema release: extension fields. FHR `"2.1"`, FHP `"1.1"` and FHGFF3 `"1.1"` accept
+top-level keys that start with `x-` (docs/FORMAT.md R15); every record valid under FHR `"2.0"`,
+FHP `"1.0"` and FHGFF3 `"1.0"` stays valid with the same meaning. The schemas are published at
+`https://w3id.org/fair-bioheaders/<type>/v0.5.0`, and `schemas/versions.json` sets `current` to
+v0.5.0 with `preRelease` cleared. These rules match fair-bioheaders 0.9.0.
+
+- **Schema addition (minor): extension fields** (#197,
   [specs/015-extension-fields](specs/015-extension-fields/spec.md)). A top-level key that
   matches `^x-[A-Za-z0-9][A-Za-z0-9_.-]*$` may hold any JSON/YAML value that the standard
   does not define, for example `x-refget-commonName`. New rule R15 in docs/FORMAT.md:
@@ -25,10 +33,11 @@
   unchanged; the vocabulary's `schemaVersion` comment names 2.1. The reference writers in
   `scripts/make_jsonld.py` leave extension fields out and its canonical reader rejects
   them.
-- `schemas/versions.json`: v0.5.0 (`FHR` `"2.1"`, `FHP` and `FHGFF3` `"1.1"`) is prepared
-  on `main` with `current` and `preRelease` set to `v0.5.0` (docs/SCHEMA-VERSIONS.md,
-  "Schema files on main"), so the examples and `llms.txt` cite v0.5.0 and the new versions,
-  with recomputed checksums for the headed examples and the FHGFF3 parent links. New
+- `schemas/versions.json`: v0.5.0 (`FHR` `"2.1"`, `FHP` and `FHGFF3` `"1.1"`) was prepared
+  on `main` under the `preRelease` exception (docs/SCHEMA-VERSIONS.md, "Schema files on
+  main") and the marker is cleared for the release, so the examples and `llms.txt` cite
+  v0.5.0 and the new versions, with recomputed checksums for the headed examples and the
+  FHGFF3 parent links. New
   example `examples/extension-fields.fhr.yaml`. docs/SCHEMA-VERSIONS.md: a record that
   states an earlier minor is held to it. The INSDC coverage assessment is re-pinned (v2);
   no row changes. The mapping-proposal fixture stays pinned to its source commit.
