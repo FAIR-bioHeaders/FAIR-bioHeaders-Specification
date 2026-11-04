@@ -35,7 +35,12 @@ A release tag alone never changes `schemaVersion`, and neither ever changes the 
 - **No change**: descriptions, examples, documentation and generated files that change no
   validation outcome.
 
-The schema of version M.N accepts `schemaVersion` values `"M.0"` to `"M.N"`.
+The schema of version M.N accepts `schemaVersion` values `"M.0"` to `"M.N"`. A record that states
+an earlier minor is held to that minor: what a later minor allows is invalid in it. For example,
+the FHR 2.1 schema accepts `schemaVersion: '2.0'`, but extension fields
+([FORMAT.md](FORMAT.md) R15), added in 2.1, are invalid in a record that states `'2.0'`, exactly
+as under the 2.0 schema. A record that uses a feature states the minor that added it, or a later
+one.
 
 In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0` is the number
 2.0 and fails. The toolkit quotes it when it writes YAML.
@@ -89,8 +94,8 @@ Numbers are covered by rule R13 in [FORMAT.md](FORMAT.md): NaN and infinities ar
 `format: uri` accepts any URI scheme, including `javascript:`, `data:` and `file:`. Rule R14 in
 [FORMAT.md](FORMAT.md) says these values should use `http` or `https` (with `ftp`, `urn:`,
 `doi:` and `info:` also accepted). Validators warn about any other scheme, and the JSON-LD
-writers refuse to write it as a link, but such a record stays valid under FHR 2.0 and FHP and
-FHGFF3 1.0. A `pattern` that restricts the schemes is a candidate for the next major
+writers refuse to write it as a link, but such a record stays valid under FHR 2.0 and 2.1 and
+FHP and FHGFF3 1.0 and 1.1. A `pattern` that restricts the schemes is a candidate for the next major
 `schemaVersion` of each type: it would invalidate records that are valid now, so it does not
 belong in a minor or patch release.
 
@@ -102,10 +107,20 @@ The machine-readable form is [`schemas/versions.json`](../schemas/versions.json)
 | --- | --- | --- | --- |
 | v0.3.0, v0.3.1 | `1` (a number) | – | – |
 | v0.4.0, v0.4.1, v0.4.2 | `"2.0"` | `"1.0"` | `"1.0"` |
+| v0.5.0 (prepared, not yet tagged) | `"2.1"` | `"1.1"` | `"1.1"` |
 
 v0.4.1 and v0.4.2 changed only format rules (docs/FORMAT.md, docs/JSONLD.md and schema
-selection), not the schemas, so their schemas are the v0.4.0 ones and `current` in
-`versions.json` stays `v0.4.0`; examples keep citing v0.4.0.
+selection), not the schemas, so their schemas are the v0.4.0 ones; `current` in
+`versions.json` stayed `v0.4.0` and the examples cited v0.4.0 until v0.5.0.
+
+v0.5.0 adds extension fields ([FORMAT.md](FORMAT.md) R15): top-level keys that start with `x-`.
+That is a minor change for each type (FHR 2.1, FHP 1.1, FHGFF3 1.1): every record valid under
+2.0 or 1.0 stays valid with the same meaning, and the new schemas reject extension fields in a
+record that states `'2.0'` or `'1.0'`. A record that cites a v0.4.x schema URL is checked against
+the v0.4.x schema (V2, V3), where an `x-` key is an unknown key, so files with extension fields
+cite v0.5.0 or later and state the new version. Readers that predate v0.5.0 report such files as
+an unsupported schema version (V4), or as invalid if they cite raw-main. v0.5.0 is prepared on `main` under
+the pre-release exception below (`preRelease` in `schemas/versions.json`) until its tag exists.
 
 FHR 2.0 is a major version because the v0.4 tightening
 ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)) rejects some values v0.3 accepted. The additive
@@ -159,7 +174,7 @@ same; existing files cite the old form, and it keeps serving the same files.
   file is not checked against another schema. The message names the value and the releases the
   reader has, for example
   `FHR: unsupported schema version: https://w3id.org/fair-bioheaders/fhr/v0.0.0 (this tool has FHR
-  schemas for main (v0.4.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1, v0.4.2)`.
+  schemas for main (v0.5.0), v0.3.0, v0.3.1, v0.4.0, v0.4.1, v0.4.2, v0.5.0)`.
 - [V5] Any other value, including the w3id path form `…/fhr/v0.4.0/fhr.json`, is **FHR**, checked
   against the current FHR schema. FHR's `schema` field has never been constrained; this keeps that
   behaviour.
@@ -195,8 +210,8 @@ versioned URL.
 New files and examples cite the versioned URL of the release they target, preferably the w3id form:
 
 ```yaml
-schema: https://w3id.org/fair-bioheaders/fhr/v0.4.0
-schemaVersion: '2.0'
+schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+schemaVersion: '2.1'
 ```
 
 The raw-main URL stays the canonical "current schema" link in documentation. Tools keep a file's

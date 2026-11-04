@@ -1,9 +1,9 @@
 # FHGFF3: FAIR header for GFF3 annotations
 
-**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.0"`), first
-released in FAIR-bioHeaders-Specification v0.4.0.** FHGFF3 is the working name (#54), and the
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, prepared for
+FAIR-bioHeaders-Specification v0.5.0; `"1.0"` was first released in v0.4.0).** FHGFF3 is the working name (#54), and the
 fields may still change after curator review, through a new schema version. Its persistent
-schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.4.0`. The design is in
+schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.5.0` (v0.4.0 for FHGFF3 1.0). The design is in
 [specs/007-gff3-header](../specs/007-gff3-header/spec.md).
 
 FHGFF3 is a provenance header around ordinary GFF3. It adds YAML lines that start with `#~` after
@@ -31,8 +31,8 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 ```
 ##gff-version 3
 #!genome-build Synthetic SyntheticAssembly1
-#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
-#~schemaVersion: '1.0'
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0
+#~schemaVersion: '1.1'
 #~annotation: Synthetic example annotation
 ##sequence-region ctg1 1 20
 #~# more fields
@@ -65,8 +65,8 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | the genome link | At least one of the two forms below |
 
 `schema` must be an FHGFF3 schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
-versioned `https://w3id.org/fair-bioheaders/fhgff3/v0.4.0` of the release a file targets, or the raw
-GitHub URL of `fhgff3.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.0'` (FHGFF3 1.0),
+versioned `https://w3id.org/fair-bioheaders/fhgff3/v0.5.0` of the release a file targets, or the raw
+GitHub URL of `fhgff3.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.1'` (FHGFF3 1.1; `'1.0'` with the v0.4.x schemas),
 quoted in YAML.
 
 ### The genome link
@@ -102,7 +102,9 @@ features.
 The optional core fields (`voucherSpecimen`, `accessionID`, `scholarlyArticle`, `documentation`,
 `identifier`, `relatedLink`, `funding`, `reuseConditions`) mean the same as in FHR. Genome-only
 FHR fields (`genome`, `assemblyAuthor`, `masking`, `vitalStats`, `assemblySoftware` and the
-others) and FHP-only fields are not FHGFF3 fields. Every object rejects unknown keys and `null`.
+others) and FHP-only fields are not FHGFF3 fields. Every object rejects unknown keys and `null`,
+except that from FHGFF3 1.1 the top level accepts extension fields, keys that start with `x-`
+([FORMAT.md](FORMAT.md) R15).
 There is no required "method" field: describe how the annotation was made with the software,
 protocol and `source` values.
 
@@ -133,7 +135,7 @@ A match establishes identity, not that the annotation is correct.
 ## Rules
 
 FHGFF3 files follow the shared header, checksum, number and link rules R1 to R9 and R12 to
-R14 of [FORMAT.md](FORMAT.md) unchanged, and R10 with the GFF3 block end below. In addition:
+R15 of [FORMAT.md](FORMAT.md) unchanged, and R10 with the GFF3 block end below. In addition:
 
 - [G1] Line 1 matches `^##gff-version 3(\.[0-9]+\.[0-9]+)?[ \t]*$`: `##gff-version 3`, or
   `##gff-version 3.MINOR.PATCH` where each component after `3` is one or more ASCII digits,

@@ -59,7 +59,8 @@ class ValidationCommandTests(unittest.TestCase):
         result = self.run_command()
         self.assertEqual(result.returncode, 1)
         self.assertIn("'genome' is a required property", result.stderr)
-        self.assertIn("Additional properties", result.stderr)
+        # With extension fields (R15) jsonschema names the unknown key and the pattern.
+        self.assertIn("'unexpected' does not match any of the regexes", result.stderr)
 
     def test_invalid_schema(self):
         schema = json.loads(self.schema.read_text())

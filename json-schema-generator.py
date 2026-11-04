@@ -70,6 +70,38 @@ GENOME_LINK_RULE = {
 }
 
 
+# Extension fields (docs/FORMAT.md R15, specs/015-extension-fields). LinkML cannot
+# express patternProperties, propertyNames or a conditional, so they are added to
+# each header type's root after generation. Nested objects stay closed.
+EXTENSION_PATTERN = "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$"
+EXTENSION_FIELD = {
+    "description": (
+        "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+    )
+}
+# Python's "$" also matches before a final line feed, ECMA-262's does not; no key
+# may contain one, so both dialects accept the same keys (research R-01).
+NO_LINE_FEED = {"not": {"pattern": "\n"}}
+# The first schemaVersion of each type's current major. A record that states it is
+# held to that minor, which has no extension fields (research R-02).
+FIRST_MINOR = {"FHR": "2.0", "FHP": "1.0", "FHGFF3": "1.0"}
+
+
+def extension_gate(version):
+    """The rule that a record stating ``version`` has no extension fields."""
+    return {
+        "description": (
+            f"A record that states schemaVersion {version} has no extension fields "
+            "(docs/SCHEMA-VERSIONS.md)"
+        ),
+        "if": {
+            "required": ["schemaVersion"],
+            "properties": {"schemaVersion": {"const": version}},
+        },
+        "then": {"propertyNames": {"not": {"pattern": "^x-"}}},
+    }
+
+
 def _nodes(generated, root_names):
     """The schema root plus the named ``$defs`` entries, without duplicates."""
     yield generated
@@ -95,23 +127,43 @@ def apply_common_rules(generated):
     return generated
 
 
+def apply_extension_rules(generated, header_type, *root_names):
+    """Allow top-level extension fields (R15) on the root and the named roots.
+
+    A record that states the type's first minor ``schemaVersion`` may not use them.
+    """
+    for node in _nodes(generated, root_names):
+        node["patternProperties"] = {EXTENSION_PATTERN: copy.deepcopy(EXTENSION_FIELD)}
+        node["propertyNames"] = copy.deepcopy(NO_LINE_FEED)
+        node.setdefault("allOf", []).append(extension_gate(FIRST_MINOR[header_type]))
+    return generated
+
+
 def apply_fhr_rules(generated, *root_names):
-    """LinkML emits a scalar type beside a heterogeneous union. Retain the union."""
+    """LinkML emits a scalar type beside a heterogeneous union. Retain the union.
+
+    Also adds the extension-field rules (R15) to each root."""
     for node in _nodes(generated, root_names):
         properties = node.get("properties", {})
         if "assemblySoftware" in properties:
             properties["assemblySoftware"].pop("type", None)
-    return generated
+    return apply_extension_rules(generated, "FHR", *root_names)
 
 
 def apply_fhgff3_rules(generated, *root_names):
-    """Add the genome-link rule to the FHGFF3 root and any profile subclass root."""
+    """Add the genome-link rule and the extension-field rules (R15) to the FHGFF3
+    root and any profile subclass root."""
     definitions = generated.setdefault("$defs", {})
     for name, definition in GENOME_LINK_DEFINITIONS.items():
         definitions[name] = copy.deepcopy(definition)
     for node in _nodes(generated, root_names):
         node.update(copy.deepcopy(GENOME_LINK_RULE))
-    return generated
+    return apply_extension_rules(generated, "FHGFF3", *root_names)
+
+
+def apply_fhp_rules(generated, *root_names):
+    """Add the extension-field rules (R15) to the FHP root and any profile subclass root."""
+    return apply_extension_rules(generated, "FHP", *root_names)
 
 
 def generate_from(schema_path, legacy_open=True):
@@ -160,7 +212,7 @@ def _generate_type(linkml, name, published):
 
 def generate_fhp():
     """The published FHP schema (specs/006-protein-header contracts/fhp-schema.md)."""
-    return _generate_type("fhp_linkml.yml", "FHP", "fhp.json")
+    return apply_fhp_rules(_generate_type("fhp_linkml.yml", "FHP", "fhp.json"), "FHP")
 
 
 def generate_fhgff3():

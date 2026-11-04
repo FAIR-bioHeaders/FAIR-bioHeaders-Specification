@@ -109,6 +109,8 @@ The bracketed ids are stable labels used by the tests.
      minimum property is present, as in the canonical form.
    - Keys that FHR's nested objects do not define are left out and reported, never projected under
      `@vocab`.
+   - Extension fields (top-level `x-` keys, [FORMAT.md](FORMAT.md) R15) are left out and reported
+     in the same way, as in the canonical form (J9).
 
 ## Export context
 
@@ -121,6 +123,7 @@ ignored by the canonical writer.
 The export is not a substitute for the canonical form. It drops:
 - the record's key order and shape;
 - keys that FHR's nested objects do not define;
+- extension fields (`x-` keys);
 - the canonical `vitalStats` object, except `readTechnology`.
 
 It also asserts the article's resource type from the FHR field definition rather than checking it.

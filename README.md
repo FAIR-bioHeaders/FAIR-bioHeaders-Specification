@@ -57,7 +57,8 @@ published contracts are unchanged.
 The v0.3 release added optional fields and fixed examples; the required metadata
 set and numeric `schemaVersion: 1` were unchanged in that release. Package/release version,
 schema version, and assembly `version` are distinct. From v0.4 `schemaVersion` is a
-`"MAJOR.MINOR"` string (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`), and a file's `schema` URL
+`"MAJOR.MINOR"` string (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`; FHR `"2.1"`, FHP and FHGFF3
+`"1.1"` from v0.5.0), and a file's `schema` URL
 selects the schema it is checked against: see [schema versions](docs/SCHEMA-VERSIONS.md). Known gaps between the normative text and what the 2.0/1.0 schemas can express, with their
 status and target release, are in [the schema-contract gap audit](docs/SCHEMA-GAP-AUDIT.md).
 
@@ -66,7 +67,10 @@ Required fields: `schema`, `schemaVersion`, `genome`, `taxon`, `version`,
 See [the minimal instance](examples/minimal.fhr.json), the field definitions and
 descriptions in [`fhr.json`](fhr.json), and [the format and compatibility rules](docs/FORMAT.md).
 Top-level unknown fields are
-rejected by the schema. From v0.4 nested objects (`taxon`, authors,
+rejected by the schema, except extension fields: from FHR 2.1 (FHP and FHGFF3 1.1, release
+v0.5.0) a top-level key that starts with `x-`, such as `x-refget-commonName`, may hold any value
+that the standard does not define ([FORMAT.md R15](docs/FORMAT.md),
+[example](examples/extension-fields.fhr.yaml)). From v0.4 nested objects (`taxon`, authors,
 `accessionID`, `vitalStats`, software provenance) reject unknown keys too; see
 [the v0.4 schema changes](docs/SCHEMA-CHANGES-v0.4.md).
 
@@ -139,8 +143,9 @@ python scripts/project_mixs.py examples/example.fhr.json
 
 CI checks JSON/YAML examples, the explicit schema review baseline, and LinkML
 validation equivalence. Generation uses pinned LinkML 1.11.1, closes every
-nested object, writes `schemaVersion` as an enum (`["2.0"]` for FHR), and pins checksum length
-constraints. Equivalence checking
+nested object, writes `schemaVersion` as an enum (`["2.0", "2.1"]` for FHR), adds the extension-field rules
+that LinkML cannot express (`patternProperties`, `propertyNames` and the older-minor
+conditional), and pins checksum length constraints. Equivalence checking
 resolves local references and compares validation keywords, ignoring descriptive
 annotations and ordering of required fields. Generated output does not overwrite
 the published `fhr.json`. [MIxS/MIGS mapping limits](docs/MAPPINGS.md) include
@@ -169,7 +174,7 @@ submission; a valid header is not a deposit-ready submission.
   (proteomes and protein sets). The LinkML model imports the core, and the JSON
   Schema is generated from it. The format is described in [docs/FHP.md](docs/FHP.md),
   with examples in [examples/fhp/](examples/fhp/). FHP is released in v0.4.0 with
-  `schemaVersion` `"1.0"`; the spec's "v0.1" label is a document status, not a schema version.
+  `schemaVersion` `"1.0"`, and `"1.1"` (extension fields) is prepared for v0.5.0; the spec's "v0.1" label is a document status, not a schema version.
   See [specs/006-protein-header](specs/006-protein-header/spec.md).
 - `fhgff3_linkml.yml` and `fhgff3.json`: the FHGFF3 header for GFF3
   annotations, placed after `##gff-version 3`. The record links the annotation to
@@ -177,7 +182,8 @@ submission; a valid header is not a deposit-ready submission.
   imports the core and `schemas/shared.yaml` (software, sources and BUSCO
   completeness, shared with FHP), and the JSON Schema is generated from it. See
   [docs/FHGFF3.md](docs/FHGFF3.md) and [examples/fhgff3/](examples/fhgff3/). FHGFF3 is
-  released in v0.4.0 with `schemaVersion` `"1.0"`; the spec's "v0.1" label is a document
+  released in v0.4.0 with `schemaVersion` `"1.0"`, and `"1.1"` (extension fields) is prepared
+  for v0.5.0; the spec's "v0.1" label is a document
   status, not a schema version. See
   [specs/007-gff3-header](specs/007-gff3-header/spec.md).
 - `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type

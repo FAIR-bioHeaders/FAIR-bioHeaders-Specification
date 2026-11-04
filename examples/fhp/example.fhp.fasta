@@ -1,5 +1,5 @@
-;~schema: https://w3id.org/fair-bioheaders/fhp/v0.4.0
-;~schemaVersion: '1.0'
+;~schema: https://w3id.org/fair-bioheaders/fhp/v0.5.0
+;~schemaVersion: '1.1'
 ;~proteome: Synthetic predicted proteome (placeholder)
 ;~sourceType: predicted
 ;~taxon:
@@ -11,7 +11,7 @@
 ;~dateCreated: '2026-10-11'
 ;~geneticCode: 1
 ;~documentation: Synthetic FHP example; the sequences are not real proteins.
-;~checksum: pFRjhRnwd0TmQMIccSuYaC/4hs3/oHlt1MbC4cDw45o=
+;~checksum: BchVe2rk283HC1rFZqbg355ht825/seaOoIAFFMY7VI=
 >prot1 synthetic protein with a terminal stop
 MKTAYIAKQRQISFVKSHFSRQ*
 >prot2 synthetic protein with rare and ambiguous residues

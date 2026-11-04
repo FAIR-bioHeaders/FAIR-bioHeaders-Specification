@@ -156,7 +156,34 @@
     },
     "FHP": {
       "additionalProperties": false,
+      "allOf": [
+        {
+          "description": "A record that states schemaVersion 1.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+          "if": {
+            "properties": {
+              "schemaVersion": {
+                "const": "1.0"
+              }
+            },
+            "required": [
+              "schemaVersion"
+            ]
+          },
+          "then": {
+            "propertyNames": {
+              "not": {
+                "pattern": "^x-"
+              }
+            }
+          }
+        }
+      ],
       "description": "Metadata for protein FASTA files (proteomes and protein sets).",
+      "patternProperties": {
+        "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+          "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+        }
+      },
       "properties": {
         "accessionID": {
           "$ref": "#/$defs/AccessionID",
@@ -264,9 +291,10 @@
           "type": "string"
         },
         "schemaVersion": {
-          "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
+          "description": "Version of the FHP schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5",
           "enum": [
-            "1.0"
+            "1.0",
+            "1.1"
           ],
           "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
           "type": "string"
@@ -302,6 +330,11 @@
         "voucherSpecimen": {
           "description": "Description of the physical sample",
           "type": "string"
+        }
+      },
+      "propertyNames": {
+        "not": {
+          "pattern": "\n"
         }
       },
       "required": [
@@ -475,7 +508,34 @@
   "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "A record that states schemaVersion 1.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "1.0"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ]
+      },
+      "then": {
+        "propertyNames": {
+          "not": {
+            "pattern": "^x-"
+          }
+        }
+      }
+    }
+  ],
   "description": "Metadata for protein FASTA files (proteomes and protein sets).",
+  "patternProperties": {
+    "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+      "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+    }
+  },
   "properties": {
     "accessionID": {
       "$ref": "#/$defs/AccessionID",
@@ -583,9 +643,10 @@
       "type": "string"
     },
     "schemaVersion": {
-      "description": "Version of the FHP schema contract (\"MAJOR.MINOR\")",
+      "description": "Version of the FHP schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5",
       "enum": [
-        "1.0"
+        "1.0",
+        "1.1"
       ],
       "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
       "type": "string"
@@ -621,6 +682,11 @@
     "voucherSpecimen": {
       "description": "Description of the physical sample",
       "type": "string"
+    }
+  },
+  "propertyNames": {
+    "not": {
+      "pattern": "\n"
     }
   },
   "required": [

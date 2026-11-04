@@ -131,7 +131,9 @@ class InsdcCoverageTests(unittest.TestCase):
             with self.subTest(header=header):
                 assessed = re.search(rf"\b{header}\b[^`]*(?:`schemaVersion` )?`([0-9]+\.[0-9]+)`", line)
                 self.assertIsNotNone(assessed)
-                self.assertEqual([assessed.group(1)], current,
+                # A schema accepts every minor of its major (docs/SCHEMA-VERSIONS.md);
+                # the assessment pins the newest one.
+                self.assertEqual(assessed.group(1), current[-1],
                                  f"{header} changed: re-assess docs/insdc-coverage.md (#157)")
 
 

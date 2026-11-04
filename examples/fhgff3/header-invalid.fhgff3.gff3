@@ -1,6 +1,6 @@
 ##gff-version 3
-#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.4.0
-#~schemaVersion: '1.0'
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0
+#~schemaVersion: '1.1'
 #~annotation: Synthetic FHGFF3 example annotation
 #~taxon:
 #~  name: Homo sapiens
@@ -10,7 +10,7 @@
 #~- name: Synthetic metadata author (placeholder)
 #~dateCreated: '2026-10-13'
 #~documentation: Synthetic header with no genome link; it fails rule G2.
-#~checksum: 0ezjz7ga4WLxCv5pMRv9W3Ljs4ugZTMXAk61XLrmrKA=
+#~checksum: Wdk81S6z+f59zg6xMKtiZQswRmA0rb7KWSzMHz8m+JQ=
 ##sequence-region ctg1 1 20
 ##species https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
 #!genome-build Synthetic SyntheticAssembly1

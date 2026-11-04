@@ -90,6 +90,11 @@ parent; the annotation is linked as context.
   `legacy/fht-v0.1.json`, and the model is LinkML with a generated JSON Schema.
 - **FR-009**: RNA FASTA may use U for uracil; header parsing and checksums are
   alphabet-independent.
+- **FR-010**: Top-level extension fields as in docs/FORMAT.md R15 (#197): a key
+  matching `^x-[A-Za-z0-9][A-Za-z0-9_.-]*$` may hold any value; every other
+  unknown key stays invalid, nested objects stay closed, and JSON-LD and HTML
+  forms carry none. FHT is unreleased, so the draft `"1.0"` contract includes it
+  (FHT-Specification `fht.json`), with no older-minor restriction.
 
 ## Success Criteria *(mandatory)*
 

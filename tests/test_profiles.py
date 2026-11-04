@@ -209,7 +209,8 @@ class ProfileConformanceTests(unittest.TestCase):
         self.assertEqual(list(self.validator.iter_errors(instance)), [])
         errors = list(self.base.iter_errors(instance))
         self.assertTrue(errors)
-        self.assertTrue(any("Additional properties" in error.message for error in errors))
+        self.assertTrue(any("'sampleIdentifier' does not match any of the regexes"
+                            in error.message for error in errors))
         self.assertNotIn("sampleIdentifier", self.published["properties"])
         self.assertNotIn("AgBioDataFHR", self.published.get("$defs", {}))
 
