@@ -1,6 +1,6 @@
 # FHGFF3: FAIR header for GFF3 annotations
 
-**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, prepared for
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, released in
 FAIR-bioHeaders-Specification v0.5.0; `"1.0"` was first released in v0.4.0).** FHGFF3 is the working name (#54), and the
 fields may still change after curator review, through a new schema version. Its persistent
 schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.5.0` (v0.4.0 for FHGFF3 1.0). The design is in
