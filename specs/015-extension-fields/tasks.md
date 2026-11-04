@@ -38,21 +38,21 @@
 
 ## Phase 5: Toolkit (FAIR-bioHeaders-Tools)
 
-- [ ] T014 Bundle `fhr-2.1.json`, `fhp-1.1.json`, `fhgff3-1.1.json` and the current copies;
+- [X] T014 Bundle `fhr-2.1.json`, `fhp-1.1.json`, `fhgff3-1.1.json` and the current copies;
   `bundled.json` `current.release` `v0.5.0` and the v0.5.0 entry; examples copied from the
   specification
-- [ ] T015 JSON-LD, export and microdata writers leave extension fields out with a warning;
+- [X] T015 JSON-LD, export and microdata writers leave extension fields out with a warning;
   JSON-LD (canonical and general) and microdata readers reject them; FHP likewise
-- [ ] T016 Readable message for `x-` keys under the older minor
-- [ ] T017 Tests: validation by version and URL, key edge cases, R11/R12/R13 in keys and values,
+- [X] T016 Readable message for `x-` keys under the older minor
+- [X] T017 Tests: validation by version and URL, key edge cases, R11/R12/R13 in keys and values,
   combine/strip/verify/convert round trips, JSON-LD/microdata/export output, readers
-- [ ] T018 README, CHANGELOG, plugin skill, version 0.9.0 prepared (not released)
+- [X] T018 README, CHANGELOG (Unreleased) and plugin skill; the 0.9.0 version bump is a release step
 
 ## Phase 6: FHT (FHT-Specification)
 
-- [ ] T019 Generator post-processing and regenerated `fht.json`; tests; README and migration notes
+- [X] T019 Generator post-processing and regenerated `fht.json`; tests; README and migration notes
 
 ## Phase 7: Gates and review
 
-- [ ] T020 All gates in plan.md; code review and adversarial review; fixes in new commits
-- [ ] T021 CHANGELOGs; status comments on #197 and the PRs
+- [X] T020 All gates in plan.md; code review and adversarial review; fixes in new commits
+- [X] T021 CHANGELOGs; status comments on #197 and the PRs
