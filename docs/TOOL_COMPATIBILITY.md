@@ -620,6 +620,7 @@ current meaning, so no file that a tool reads today is read differently.
 | EddyRivasLab/easel | HMMER and the Easel miniapps | EddyRivasLab/easel#84 (2026-10-18) | Open |
 | bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release |
 | iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | **Accepted 2026-11-02**: merged into iqtree3 master; in the next IQ-TREE release |
+| revbayes/revbayes | RevBayes `readDiscreteCharacterData()` FASTA input (vendored NCL reader) | Issue revbayes/revbayes#1141 opened by the RevBayes maintainer (2026-11-09); PR revbayes/revbayes#1143 at his request | **Accepted 2026-11-09**: merged into `development` |
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | **Declined 2026-10-18**: the author is moving the code to a new repository and suggested stripping the header first; issue closed |
 | ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
 | ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
