@@ -478,6 +478,32 @@ it would fail loudly on FHP input.
 The failures in MUMmer4, Barrnap (`any2fasta`), RAxML-NG (coraxlib), eggNOG-mapper, Exonerate and
 Clustal Omega are listed as candidates in FAIR-bioHeaders-Specification#121 (none has been contacted).
 
+## Encoding round 6 (2026-11-10): UTF-8 `#~` bytes and GFF3 tools
+
+Issue [#210](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/210)
+tested four byte-controlled FHGFF3 fixtures: plain GFF3 without a header; a
+pure-ASCII header; a header with raw UTF-8 (`C3 A9`, two bytes over the ASCII
+file); and the same decoded value as an ASCII-only YAML escape (`\u00E9`).
+Directives, features, one ordinary `#` comment and the `##FASTA` section are
+byte-identical across fixtures. Harness and full tables:
+[scripts/tool_survey/round6](../scripts/tool_survey/round6/README.md).
+
+| Tool (pin) | Mode | Accepts all four | Ordinary `#` comments | `#~` lines | Checksum claim after its own rewrite |
+| --- | --- | --- | --- | --- | --- |
+| fair-bioheaders 0.9.0 (`verify`/`strip`/`combine`) | FH-aware | yes (the plain file exits 1 "no header", by design) | `strip` keeps every other payload byte | `strip` removes exactly the `#~` lines; `combine` regenerates and recomputes (canonical YAML re-writes the escape to raw UTF-8) | always valid: regenerated; a copied checksum over rewritten bytes is rejected |
+| simple-gff3 `gff3==1.0.1` | parse only | yes, 0 line errors | kept raw in the parse tree | kept raw as comments, raw `C3 A9` bytes and the `\u00E9` escape alike | n/a (does not write GFF3) |
+| gffutils 0.14 | parse + export | yes; feature lines byte-identical | **dropped by export** | **all dropped, `#~checksum` included**; `##sequence-region` and `#!genome-build` also dropped | no header survives: the output silently stops being FHGFF3 |
+| ENA gff3tools `main@1bbe070` (v5.6.4) | **not executed** — no releases and the build needs the authenticated EBI package registry (`webin-taxonomy-sdk` 401); no prebuilt jar | source-pinned only | source: lines matching `^#.*$` are skipped | source: `#~` appears nowhere in the project; only `##gff-version` is re-emitted on the write path | any rewrite path drops the header; treat output as unheaded |
+
+The escaped ASCII form changed **no** observed parser outcome: the four
+fixtures behaved identically apart from the header bytes themselves. No tested
+tool rejected raw UTF-8 comment bytes. Safe handling: after any third-party
+GFF3 rewrite re-run `bioheaders verify` and expect "no header"; regenerate with
+`combine` rather than relabeling a copied checksum. simple-gff3 keeps comments
+in its parse tree, but rewrite behavior was not tested; gffutils export drops
+them. The ENA gff3tools remain unexecuted — this row records source analysis,
+not runtime behavior.
+
 ## Comment markers: `;`, `#` or none
 
 Is `;` the right marker, or would another convention be better supported? On
@@ -644,6 +670,12 @@ and keep the FHR file as the record of provenance.
 - **GATK**: large install; it uses htsjdk, as Picard does.
 - **pybedtools**: wraps bedtools.
 - **GFA2 and rGFA tags**: only GFA1 was tested.
+- **ENA gff3tools**: pinned source `main@1bbe070` (v5.6.4) is not buildable
+  without the authenticated EBI package registry and ships no release jar; the
+  round-6 row in
+  [Encoding round 6](#encoding-round-6-2026-11-10-utf-8--bytes-and-gff3-tools)
+  records source analysis only, not runtime behavior
+  ([#210](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/210)).
 - **Protein FASTA**: MAFFT/MUSCLE protein modes were not tested (not needed for #40). FHP
   protein files were tested in [round 5](#more-tools-round-5-2026-10-28) with MMseqs2,
   CD-HIT, Exonerate, Clustal Omega and eggNOG-mapper.

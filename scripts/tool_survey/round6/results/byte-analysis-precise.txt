@@ -1,0 +1,79 @@
+== sizes ==
+fixture1-plain.gff3: 518 bytes
+fixture2-ascii-header.gff3: 1038 bytes
+fixture3-raw-utf8.gff3: 1036 bytes
+fixture4-escaped.gff3: 1040 bytes
+
+== non-ASCII byte scan (any byte >= 0x80) ==
+fixture1-plain.gff3: none (pure ASCII)
+fixture2-ascii-header.gff3: none (pure ASCII)
+fixture3-raw-utf8.gff3: byte 0xC3 at file offset 114 (line 4)
+fixture3-raw-utf8.gff3: byte 0xA9 at file offset 115 (line 4)
+fixture4-escaped.gff3: none (pure ASCII)
+
+== line-level comparison: bodies after the header block ==
+fixture2-ascii-header.gff3: body-identical-to-fixture1 = True
+fixture3-raw-utf8.gff3: body-identical-to-fixture1 = True
+fixture4-escaped.gff3: body-identical-to-fixture1 = True
+
+== directive/feature-line identity across all four fixtures ==
+fixture1-plain.gff3: 9 directive/feature lines, identical to fixture1 = True
+fixture2-ascii-header.gff3: 9 directive/feature lines, identical to fixture1 = True
+fixture3-raw-utf8.gff3: 9 directive/feature lines, identical to fixture1 = True
+fixture4-escaped.gff3: 9 directive/feature lines, identical to fixture1 = True
+
+== ordinary ASCII comment line present in each ==
+fixture1-plain.gff3: ['# ordinary ASCII comment: this line must survive downstream tools']
+fixture2-ascii-header.gff3: ['# ordinary ASCII comment: this line must survive downstream tools']
+fixture3-raw-utf8.gff3: ['# ordinary ASCII comment: this line must survive downstream tools']
+fixture4-escaped.gff3: ['# ordinary ASCII comment: this line must survive downstream tools']
+
+== '#~' header lines in fixtures 2-4 (line numbers) ==
+fixture2-ascii-header.gff3 L 2: b'#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0'
+fixture2-ascii-header.gff3 L 3: b"#~schemaVersion: '1.1'"
+fixture2-ascii-header.gff3 L 4: b'#~annotation: Synthetic annotation'
+fixture2-ascii-header.gff3 L 5: b'#~taxon:'
+fixture2-ascii-header.gff3 L 6: b'#~  name: Syntheticus testis'
+fixture2-ascii-header.gff3 L 7: b'#~  uri: https://identifiers.org/taxonomy:991300001'
+fixture2-ascii-header.gff3 L 8: b"#~version: '1.0'"
+fixture2-ascii-header.gff3 L 9: b'#~metadataAuthor:'
+fixture2-ascii-header.gff3 L10: b'#~  - name: Synthetic Test Curator'
+fixture2-ascii-header.gff3 L11: b'#~    nameType: Personal'
+fixture2-ascii-header.gff3 L12: b"#~dateCreated: '2026-11-10'"
+fixture2-ascii-header.gff3 L13: b'#~genomeReference:'
+fixture2-ascii-header.gff3 L14: b'#~  accession: GCA_900000015.1'
+fixture2-ascii-header.gff3 L15: b'#~  seqcol_id: SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS'
+fixture2-ascii-header.gff3 L16: b'#~  assemblyName: SyntheticAssembly1'
+fixture2-ascii-header.gff3 L17: b'#~checksum: GAM2M53yPorYxX1vDK2JHQzBKMQ7hhvkSAlYHW6F4BI='
+fixture3-raw-utf8.gff3 L 2: b'#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0'
+fixture3-raw-utf8.gff3 L 3: b"#~schemaVersion: '1.1'"
+fixture3-raw-utf8.gff3 L 4: b'#~annotation: "Caf\xc3\xa9 annotation"'   <-- non-ASCII bytes: C3 A9
+fixture3-raw-utf8.gff3 L 5: b'#~taxon:'
+fixture3-raw-utf8.gff3 L 6: b'#~  name: Syntheticus testis'
+fixture3-raw-utf8.gff3 L 7: b'#~  uri: https://identifiers.org/taxonomy:991300001'
+fixture3-raw-utf8.gff3 L 8: b"#~version: '1.0'"
+fixture3-raw-utf8.gff3 L 9: b'#~metadataAuthor:'
+fixture3-raw-utf8.gff3 L10: b'#~  - name: Synthetic Test Curator'
+fixture3-raw-utf8.gff3 L11: b'#~    nameType: Personal'
+fixture3-raw-utf8.gff3 L12: b"#~dateCreated: '2026-11-10'"
+fixture3-raw-utf8.gff3 L13: b'#~genomeReference:'
+fixture3-raw-utf8.gff3 L14: b'#~  accession: GCA_900000015.1'
+fixture3-raw-utf8.gff3 L15: b'#~  seqcol_id: SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS'
+fixture3-raw-utf8.gff3 L16: b'#~  assemblyName: SyntheticAssembly1'
+fixture3-raw-utf8.gff3 L17: b'#~checksum: TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g='
+fixture4-escaped.gff3 L 2: b'#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0'
+fixture4-escaped.gff3 L 3: b"#~schemaVersion: '1.1'"
+fixture4-escaped.gff3 L 4: b'#~annotation: "Caf\\u00E9 annotation"'
+fixture4-escaped.gff3 L 5: b'#~taxon:'
+fixture4-escaped.gff3 L 6: b'#~  name: Syntheticus testis'
+fixture4-escaped.gff3 L 7: b'#~  uri: https://identifiers.org/taxonomy:991300001'
+fixture4-escaped.gff3 L 8: b"#~version: '1.0'"
+fixture4-escaped.gff3 L 9: b'#~metadataAuthor:'
+fixture4-escaped.gff3 L10: b'#~  - name: Synthetic Test Curator'
+fixture4-escaped.gff3 L11: b'#~    nameType: Personal'
+fixture4-escaped.gff3 L12: b"#~dateCreated: '2026-11-10'"
+fixture4-escaped.gff3 L13: b'#~genomeReference:'
+fixture4-escaped.gff3 L14: b'#~  accession: GCA_900000015.1'
+fixture4-escaped.gff3 L15: b'#~  seqcol_id: SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS'
+fixture4-escaped.gff3 L16: b'#~  assemblyName: SyntheticAssembly1'
+fixture4-escaped.gff3 L17: b'#~checksum: zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k='

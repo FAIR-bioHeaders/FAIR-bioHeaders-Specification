@@ -1,0 +1,96 @@
+[
+  {
+    "step": "strip",
+    "fixture": "fixture2-ascii-header.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders strip /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/fixtures/fixture2-ascii-header.gff3 /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture2-ascii-header.gff3",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "output_equals_plain_payload": true,
+    "ordinary_comment_kept": true,
+    "tilde_lines_remaining": 0
+  },
+  {
+    "step": "verify-stripped",
+    "fixture": "fixture2-ascii-header.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders verify /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture2-ascii-header.gff3",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FHR: No #~ FHR metadata header found"
+  },
+  {
+    "step": "strip",
+    "fixture": "fixture3-raw-utf8.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders strip /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/fixtures/fixture3-raw-utf8.gff3 /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture3-raw-utf8.gff3",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "output_equals_plain_payload": true,
+    "ordinary_comment_kept": true,
+    "tilde_lines_remaining": 0
+  },
+  {
+    "step": "verify-stripped",
+    "fixture": "fixture3-raw-utf8.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders verify /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture3-raw-utf8.gff3",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FHR: No #~ FHR metadata header found"
+  },
+  {
+    "step": "strip",
+    "fixture": "fixture4-escaped.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders strip /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/fixtures/fixture4-escaped.gff3 /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture4-escaped.gff3",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "output_equals_plain_payload": true,
+    "ordinary_comment_kept": true,
+    "tilde_lines_remaining": 0
+  },
+  {
+    "step": "verify-stripped",
+    "fixture": "fixture4-escaped.gff3",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders verify /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/stripped-fixture4-escaped.gff3",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FHR: No #~ FHR metadata header found"
+  },
+  {
+    "step": "combine",
+    "fixture": "fixture4 metadata + plain payload",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders combine /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/fixture4-metadata.yaml /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/fixtures/payload.gff3 -o /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/combined-from-payload.gff3 --type gff3",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "output_file": "outputs/combined-from-payload.gff3",
+    "byte_identical_to_fixture4": false,
+    "nonascii_bytes": [
+      "A9",
+      "C3"
+    ],
+    "recomputed_fh_checksum": "SPKolM3cUKeyzoWEZGpfDQOuqg8ckMmFKtGDOvaTbRI="
+  },
+  {
+    "step": "verify-combined",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders verify /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/combined-from-payload.gff3",
+    "exit": 0,
+    "stdout": "Checksum verified.",
+    "stderr": ""
+  },
+  {
+    "step": "stale-checksum-setup",
+    "fixture": "fixture4-with-stale-fixture3-checksum.gff3",
+    "note": "fixture3's #~checksum claim replaces only fixture4's checksum line",
+    "sha256": "efc2a3b3635722a7657d473ca7c536cabe7e94075e1b1b5fc2d84abfa4b8b982",
+    "stale_checksum_claim": "#~checksum: TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=",
+    "recomputed_over_new_bytes": "zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k="
+  },
+  {
+    "step": "verify-stale-checksum",
+    "cmd": "/home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/.venv/bin/bioheaders verify /home/runner/work/FAIR-bioHeaders-Specification/FAIR-bioHeaders-Specification/scripts/tool_survey/round6/outputs/fixture4-with-stale-fixture3-checksum.gff3",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FHR: Checksum verification failed"
+  }
+]

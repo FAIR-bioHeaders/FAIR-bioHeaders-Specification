@@ -1,0 +1,22 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not determine the dependencies of task ':shadowJar'.
+> Could not resolve all dependencies for configuration ':runtimeClasspath'.
+   > Could not resolve uk.ac.ebi.ena.taxonomy:webin-taxonomy-sdk:1.+.
+     Required by:
+         project : > uk.ac.ebi.ena.sequence:sequencetools:2.36.0
+      > Failed to list versions for uk.ac.ebi.ena.taxonomy:webin-taxonomy-sdk.
+         > Unable to load Maven meta-data from https://gitlab.ebi.ac.uk/api/v4/groups/enasequence/-/packages/maven/uk/ac/ebi/ena/taxonomy/webin-taxonomy-sdk/maven-metadata.xml.
+            > Could not GET 'https://gitlab.ebi.ac.uk/api/v4/groups/enasequence/-/packages/maven/uk/ac/ebi/ena/taxonomy/webin-taxonomy-sdk/maven-metadata.xml'. Received status code 401 from server: Unauthorized
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 30s

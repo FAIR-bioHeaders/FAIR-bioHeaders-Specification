@@ -54,6 +54,33 @@ The checksum covers every byte of the file, including native directives, the fea
 excluded. Tools that sort or tidy GFF3 (for example `gt gff3 -sort -tidy`) change bytes, so their
 output's copied header no longer verifies. Validation reports that; nothing repairs it.
 
+### Encoding boundary and the INSDC GFF3 draft ASCII rule
+
+FH headers are UTF-8 (R6); that contract is unchanged. The INSDC GFF3
+Specification draft (v0.5.1) lists an ASCII common rule whose scope for comment
+bytes is not yet stated ([#210](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/210)).
+A producer targeting INSDC profiles can keep any Unicode value while staying
+pure-ASCII on the wire: a YAML double-quoted escape such as
+`#~annotation: "Caf\u00E9 annotation"` (bytes `5C 75 30 30 45 39`) decodes to
+exactly the same string as the raw UTF-8 serialization `"Café annotation"`
+(`C3 A9`). This was verified with fair-bioheaders 0.9.0: the FH reader returns
+identical decoded values for both forms and each file verifies its own
+checksum. Because R3 hashes bytes, the two serializations of one value
+necessarily have different checksums.
+
+Two tested caveats:
+
+- `bioheaders combine` regenerates a canonical YAML header and rewrites an
+  escaped scalar back to raw UTF-8 (verified on 0.9.0), so ASCII-only
+  serialization is a producer choice that a regenerate step does not preserve.
+- Tools that rebuild a GFF3 from a parsed model drop `#~` lines entirely rather
+  than carrying a stale checksum (see
+  [TOOL_COMPATIBILITY.md](TOOL_COMPATIBILITY.md)); a copied checksum never
+  validates rewritten bytes (verified: fixture bytes with another file's header
+  fail `bioheaders verify`).
+
+Evidence: [scripts/tool_survey/round6](../scripts/tool_survey/round6/README.md).
+
 ## Fields
 
 Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `version`,

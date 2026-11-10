@@ -1,0 +1,8 @@
+INFO     Reading embedded ##FASTA sequence
+INFO     1 sequences read
+INFO     Reading embedded ##FASTA sequence
+INFO     1 sequences read
+INFO     Reading embedded ##FASTA sequence
+INFO     1 sequences read
+INFO     Reading embedded ##FASTA sequence
+INFO     1 sequences read
