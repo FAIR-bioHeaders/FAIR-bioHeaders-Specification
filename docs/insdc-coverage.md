@@ -235,6 +235,10 @@ Submission-tool compatibility remains tracked in [#191](https://github.com/FAIR-
 
 ## 4. Using FAIR-bioHeaders alongside an INSDC submission
 
+The draft [insdc-fhr profile](../profiles/examples/insdc-fhr/README.md) checks
+selected FHR 2.0 assembly metadata offline after project and sample registration.
+
+
 A FAIR-bioHeaders header keeps metadata with a file you share or archive yourself. It does not replace an INSDC submission and does not make a file ready to deposit. To submit to GenBank, ENA or DDBJ, follow that node's instructions and validators, and use the header as a source of values.
 
 1. **Register the records INSDC needs.** BioProject, BioSample, collection date, geographic location and the per-sequence details in S12 and A.l (molecule type, topology, chromosome names and levels) are not in FH headers. Supply them through the node's submission route.

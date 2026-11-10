@@ -224,6 +224,70 @@ class ProfileConformanceTests(unittest.TestCase):
                 self.assertIn(slot, self.generated["required"])
 
 
+class INSDCFHRProfileTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        schema = profiles.generate_profile("insdc-fhr")
+        Draft202012Validator.check_schema(schema)
+        cls.profile = Draft202012Validator(schema, format_checker=FormatChecker())
+        cls.base = Draft202012Validator(
+            json.loads((ROOT / "fhr.json").read_text()), format_checker=FormatChecker()
+        )
+        fixtures = EXAMPLES.parent / "insdc-fhr"
+        cls.valid = json.loads((fixtures / "valid.json").read_text())
+        cls.missing_sample = json.loads(
+            (fixtures / "invalid-missing-sample.json").read_text()
+        )
+
+    def test_fixtures(self):
+        self.base.validate(self.valid)
+        self.profile.validate(self.valid)
+        self.base.validate(self.missing_sample)
+        self.assertFalse(self.profile.is_valid(self.missing_sample))
+
+    def test_supported_archive_links_and_instrument_fallback(self):
+        for project, sample in (
+            ("www.ebi.ac.uk/ena/browser/view/PRJEB1",
+             "www.ncbi.nlm.nih.gov/biosample/SAMN1"),
+            ("ddbj.nig.ac.jp/search/entry/bioproject/PRJDB1",
+             "ddbj.nig.ac.jp/resource/biosample/SAMD1"),
+            ("identifiers.org/bioproject:PRJNA1",
+             "ddbj.nig.ac.jp/search/entry/biosample/SAMD1"),
+        ):
+            with self.subTest(project=project, sample=sample):
+                record = copy.deepcopy(self.valid)
+                del record["vitalStats"]
+                record["instrument"] = ["Example sequencing platform"]
+                record["relatedLink"] = ["https://" + project, "https://" + sample]
+                self.base.validate(record)
+                self.profile.validate(record)
+
+    def test_base_valid_records_can_fail_the_profile(self):
+        for field, value in (
+            ("taxon", {"name": "Arabidopsis thaliana"}),
+            ("taxon", {"uri": "https://identifiers.org/taxonomy:0"}),
+            ("relatedLink", []),
+            ("relatedLink", [self.valid["relatedLink"][1]]),
+            ("relatedLink", [self.valid["relatedLink"][0],
+                             "https://example.org/biosample/SAMN1"]),
+            ("relatedLink", [self.valid["relatedLink"][0],
+                             "https://www.ncbi.nlm.nih.gov/biosample/PRJNA1"]),
+            ("assemblySoftware", "Legacy assembler"),
+            ("assemblySoftware", []),
+            ("assemblySoftware", [{"name": "Assembler"}]),
+            ("assemblySoftware", [{"name": "Assembler", "version": " "}]),
+            ("vitalStats", {"readTechnology": " "}),
+        ):
+            with self.subTest(field=field, value=value):
+                record = dict(self.valid, **{field: value})
+                self.base.validate(record)
+                self.assertFalse(self.profile.is_valid(record))
+
+    def test_itis_identifier_fails_the_profile(self):
+        record = dict(self.valid, taxon={"uri": "https://identifiers.org/itis:1"})
+        self.assertFalse(self.profile.is_valid(record))
+
+
 class OtherTypeProfileTests(unittest.TestCase):
     """A profile on FHP or FHGFF3 keeps that type's post-generated constraints.
 

@@ -33,3 +33,13 @@ profiles:
     community: AgBioData (illustrative; not consulted, no endorsement claimed)
     owner: unassigned
     issue: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/51
+  insdc-fhr:
+    header_type: FHR
+    model: insdc-fhr.yaml
+    base_model: fhr_linkml.yml
+    profileVersion: '0.1.0'
+    applicability: FHR 2.0 records for a single genome assembly with registered project and sample accessions.
+    status: draft
+    community: INSDC (requirements source; no endorsement claimed)
+    owner: unassigned
+    issue: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190
