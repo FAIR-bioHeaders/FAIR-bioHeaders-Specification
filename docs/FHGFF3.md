@@ -205,7 +205,7 @@ checksum-linked examples cite.
 
 These remain follow-ups in the [plan](../specs/007-gff3-header/plan.md):
 
-- JSON-LD and HTML microdata forms (F-01).
+- JSON-LD and HTML microdata forms (F-01). A reviewed **draft** FHGFF3 HTML microdata binding (rules H1–H8 over the shared [MICRODATA.md](MICRODATA.md) M1–M5) exists in [FHGFF3](https://github.com/FAIR-bioHeaders/FHGFF3/blob/main/docs/FHGFF3-MICRODATA.md) with fixtures and a test-only reader/writer; it is not a runtime and no toolkit/website support is claimed here (implementation is Tools#104; the publication-vs-implementation question is under #216). JSON-LD remains unbound (no reviewed binding).
 - Header checks in the gff3-validator's browser build (F-04).
 
 F-02 (the persistent schema alias, with the release) is complete: v0.4.0 is tagged, and

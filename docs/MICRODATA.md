@@ -70,3 +70,29 @@ incomplete, or multiple FHR root scopes; legacy examples with flattened nested
 properties should be regenerated. Run the converter round-trip and example tests
 before changing this representation. The browser microdata download-tool project
 is outside this release.
+
+## Type-specific bindings
+
+The rules M1 to M5 and the escaping and typed-container conventions above are the
+shared FHR representation. Each additional header type defines its own binding on
+top of these rules in its development repository, reusing M1 to M5 unchanged and
+restating only where it differs. Those bindings are the authoritative source for
+their type; this page names them and their itemtype so a reader arriving here
+knows where the contract lives. **Naming a binding here is documentation, not a
+claim of toolkit, validator or website support** — runtime support is recorded
+per tool in [TOOL_COMPATIBILITY.md](TOOL_COMPATIBILITY.md) and the shared
+conformance vectors.
+
+| Type | Binding document | Itemtype (record scope) | Status |
+| --- | --- | --- | --- |
+| FHR | this page (M1 to M5) | raw-main `fhr.json` | Released representation; shipped in the toolkit |
+| FHP | [FHP-Specification `docs/FHP-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHP-Specification/blob/main/docs/FHP-MICRODATA.md) | raw-main `fhp.json` | Binding reviewed in FHP-Specification; the toolkit reader/writer shipped in fair-bioheaders 0.8.2 (Tools#58). No shared conformance vector exists for the FHP form; see #216 for the publication-vs-implementation ruling this row depends on |
+| FHGFF3 | [FHGFF3 `docs/FHGFF3-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHGFF3/blob/main/docs/FHGFF3-MICRODATA.md) | raw-main `fhgff3.json` | Draft binding reviewed in FHGFF3#5 (rules H1 to H8, reusing M1 to M5); fixtures and a test-only reader/writer live in that repository. **No runtime support**: the toolkit still refuses FHGFF3 microdata pending Tools#104, and no shared conformance vector exists yet. The website annotation table carries no microdata until the toolkit reader lands |
+
+A shared publication of the FHP/FHGFF3 HTML forms as first-class conformance
+vectors, and any change to the "must be published through FAIR-bioHeaders-
+Specification before adoption" precondition in the two type-repo binding
+documents, is governed by the ruling requested in
+[#216](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/216).
+This section records that the bindings exist and where they live; it adds no
+requirement and adopts no contract.
