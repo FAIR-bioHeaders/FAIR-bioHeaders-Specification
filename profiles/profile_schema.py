@@ -383,6 +383,62 @@ def load_schema_view(profile, registry=None, *, allow_path=False):
     return _profile_context(profile, registry, allow_path=allow_path)[1]
 
 
+def _apply_insdc_fhr_rules(schema):
+    """Add array containment and cross-field checks to the draft profile."""
+    project = r"PRJ[DEN][A-Z][0-9]+"
+    sample = r"SAM(?:N|EA|D)[0-9]+"
+    record_hosts = r"www\.ebi\.ac\.uk/ena/browser/view/"
+    ddbj = r"ddbj\.nig\.ac\.jp/(?:search/entry|resource)/"
+    ncbi = r"www\.ncbi\.nlm\.nih\.gov/"
+    project_pattern = (
+        rf"^https://(?:(?:{record_hosts}|{ncbi}bioproject/|"
+        rf"{ddbj}bioproject/){project}/?|identifiers\.org/bioproject:{project})"
+        r"(?![\s\S])"
+    )
+    sample_pattern = (
+        rf"^https://(?:{record_hosts}|{ncbi}biosample/|"
+        rf"{ddbj}biosample/){sample}/?(?![\s\S])"
+    )
+    nonblank = {"type": "string", "pattern": r"\S"}
+    schema.setdefault("allOf", []).extend([
+        {
+            "properties": {
+                "relatedLink": {
+                    "allOf": [
+                        {"contains": {"pattern": project_pattern}},
+                        {"contains": {"pattern": sample_pattern}},
+                    ],
+                },
+                "assemblySoftware": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "required": ["version"],
+                        "properties": {"name": nonblank, "version": nonblank},
+                    },
+                },
+            },
+        },
+        {
+            "anyOf": [
+                {
+                    "required": ["vitalStats"],
+                    "properties": {
+                        "vitalStats": {
+                            "required": ["readTechnology"],
+                            "properties": {"readTechnology": nonblank},
+                        },
+                    },
+                },
+                {
+                    "required": ["instrument"],
+                    "properties": {"instrument": {"contains": nonblank}},
+                },
+            ],
+        },
+    ])
+
+
 def generate_profile(profile, registry=None, *, allow_path=False):
     """Generate the JSON Schema for a profile, layered on its type's model.
 
@@ -412,6 +468,8 @@ def generate_profile(profile, registry=None, *, allow_path=False):
     postprocess = PUBLISHED_BASES[base]["postprocess"]
     if postprocess is not None:
         postprocess(generated, root, base)
+    if path == PROFILES_DIR / "insdc-fhr.yaml":
+        _apply_insdc_fhr_rules(generated)
     for key in ("metamodel_version", "version"):
         generated.pop(key, None)
     return generated

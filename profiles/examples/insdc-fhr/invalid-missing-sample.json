@@ -1,0 +1,36 @@
+{
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+  "schemaVersion": "2.0",
+  "genome": "Synthetic plant assembly",
+  "taxon": {
+    "name": "Arabidopsis thaliana",
+    "uri": "https://identifiers.org/taxonomy:3702"
+  },
+  "version": "0.0.1",
+  "metadataAuthor": [
+    {
+      "name": "Example curator"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "name": "Example assembler"
+    }
+  ],
+  "dateCreated": "2022-03-21",
+  "masking": "soft-masked",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "relatedLink": [
+    "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA999999999/",
+    "https://example.org/assembly-notes"
+  ],
+  "assemblySoftware": [
+    {
+      "name": "Example assembler",
+      "version": "1.0"
+    }
+  ],
+  "vitalStats": {
+    "readTechnology": "PacBio HiFi"
+  }
+}

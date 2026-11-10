@@ -1,0 +1,29 @@
+# Draft constraining profile for issue #190.
+id: https://w3id.org/fair-bioheaders/profiles/insdc-fhr
+name: INSDCFHRProfile
+description: Offline metadata preflight for a single FHR 2.0 genome assembly.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+- fhr_linkml
+classes:
+  INSDCFHR:
+    is_a: FHR
+    tree_root: true
+    slot_usage:
+      taxon:
+        range: INSDCTaxon
+      relatedLink:
+        required: true
+      assemblySoftware:
+        required: true
+  INSDCTaxon:
+    is_a: Taxon
+    slot_usage:
+      uri:
+        required: true
+        pattern: '^https://identifiers\.org/taxonomy:[1-9][0-9]*(?![\s\S])'
