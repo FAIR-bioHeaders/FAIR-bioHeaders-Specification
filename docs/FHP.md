@@ -104,7 +104,7 @@ They add no requirements.
 
 These remain follow-ups in the [plan](../specs/006-protein-header/plan.md):
 
-- JSON-LD and HTML microdata forms (F-01). The model already carries the term annotations.
+- JSON-LD and HTML microdata forms (F-01). A reviewed FHP HTML microdata binding (rules F1–F7 over the shared [MICRODATA.md](MICRODATA.md) M1–M5) lives in [FHP-Specification](https://github.com/FAIR-bioHeaders/FHP-Specification/blob/main/docs/FHP-MICRODATA.md) and is the binding named as authoritative for FHP in that page's [Type-specific bindings](MICRODATA.md#type-specific-bindings) table (#216 reading 1, merged as #217); the FHP canonical JSON-LD context and reading rules live in FHP-Specification as well, still labeled draft there, with shared publication coordinated through #107 ([JSONLD.md](JSONLD.md) documents the FHR form only). The toolkit reader/writer for both forms shipped in fair-bioheaders 0.8.2 (Tools#58, merged in Tools#98): `convert` reads and writes FHP canonical JSON-LD and typed HTML microdata. FHP has no schema.org export profile and no shared conformance vector covers its typed forms; no website support is claimed here.
 - Checking GFF3 parents (F-03, spec 007).
 
 F-05 (the persistent schema alias) and F-07 (the release) are complete: v0.4.0 is tagged,
