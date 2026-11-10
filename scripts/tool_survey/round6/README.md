@@ -199,18 +199,35 @@ checksum line.
   stale checksum does not validate the fixture bytes. ✅ (consistent with
   FORMAT.md R3 and FHGFF3.md's "nothing repairs it" statement)
 
+### 5.7 Follow-up same day: ENA's **bundled** engine (gff3tools 5.5.1 inside webin-cli-11.0.0.jar) on the four fixtures
+
+The #191 harness (`../../insdc-191/`) located a runnable copy of ENA's GFF3
+engine — `gff3tools-5.5.1.jar` ships inside the public Webin-CLI 11.0.0 jar —
+and it was then run against these fixtures. Full transcript:
+`results/gff3tools-bundled-5.5.1.txt`. Summary: report mode accepted all four
+serializations with **zero encoding-related findings** and one identical
+feature-level finding on every arm including the plain control
+(`CDS_LENGTH`, the 63-bp synthetic CDS); rewrite mode emits nothing while any
+error exists, so comment-level byte behavior was not observable here — the
+#191 rewrite run on CDS_LENGTH-clean fixtures shows the engine drops `#~` and
+ordinary comments when it does write. The standalone v5.6.4 pin of §5.1
+remains unexecuted.
+
 ## 6. What remains unknown
 
-1. **Actual ENA gff3tools runtime behavior** — acceptance, diagnostics, and
-   rewrite outputs were not observed; §5.2 is static analysis of the pinned
-   commit and §5.3–5.4 are other tools. A run by someone with EBI-registry
-   credentials (or a CI-produced jar) is still needed to close checklist item 2.
+1. **Standalone ENA gff3tools v5.6.4 runtime behavior** — partially closed the
+   same day by §5.7 (bundled 5.5.1). Acceptance of all four encodings was
+   observed on 5.5.1; the v5.6.4 source analysis of §5.2 is unchanged. A run
+   with EBI-registry credentials is still needed for the current version, and
+   rewrite-mode comment census on these fixtures is gated by the engine's own
+   error policy.
 2. **The INSDC draft's intent** — whether the v0.5.1-draft ASCII common rule
    (p. 6, lines 145–150) constrains (a) all file bytes, (b) only feature-section
    bytes, (c) ordinary comments, and/or (d) embedded `#~` metadata, and whether
    it speaks to serialized bytes or decoded values. No failure has been
    reproduced in any INSDC validator; none was observed here either.
-3. **Webin-CLI / table2asn behavior** (covered by issue #191, not this one).
+3. **Webin-CLI end to end** — `-validate` refuses to run without an account
+   (recorded in #191); table2asn and DDBJ results are in `../../insdc-191/`.
 4. Whether future gff3tools versions add `#~` passthrough — as of the pinned
    commit the string `#~` appears nowhere in its source.
 
