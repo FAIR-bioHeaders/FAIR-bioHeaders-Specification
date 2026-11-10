@@ -150,9 +150,10 @@ Evidence run 2026-11-10 ([round 6 harness](../scripts/tool_survey/round6/README.
   no INSDC-side rejection has been reproduced. ENA gff3tools were not executed
   (build requires authenticated EBI registries).
 - The ASCII-escape route (YAML `\uXXXX` in a double-quoted scalar, verified to
-  decode identically) keeps the whole file ASCII and satisfies the draft rule
-  under every candidate scope for comment bytes — the recommended safe
-  serialization for submissions while the question is open.
+  decode identically) keeps the serialized file ASCII. The evidence supports
+  ASCII-on-disk compatibility only; it does not establish compliance if the
+  draft rule constrains decoded values. This is the recommended serialization
+  for ASCII-on-disk compatibility while the question is open.
 
 Status: **open question to the draft editors** (The-Sequence-Ontology/
 Specifications#41). Do not mark this covered or closed until an authoritative

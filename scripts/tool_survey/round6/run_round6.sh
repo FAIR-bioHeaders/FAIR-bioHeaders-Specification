@@ -43,7 +43,7 @@ log "\$ .venv/bin/python byte_analysis.py > results/byte-analysis-precise.txt"
 log "\$ .venv/bin/python fallback_parsers.py > results/fallback-results.json"
 .venv/bin/python fallback_parsers.py > results/fallback-results.json 2>results/fallback-stderr.txt; log "exit=$?"
 
-# 6. FH-stack strip / combine / copied-checksum tests ------------------------
+# 6. FH-stack strip / combine / stale-checksum tests -------------------------
 log "\$ .venv/bin/python fh_stack_runs.py > results/fh-stack-results.json"
 .venv/bin/python fh_stack_runs.py > results/fh-stack-results.json 2>&1; log "exit=$?"
 
@@ -53,10 +53,27 @@ sha256sum fixtures/*.gff3 outputs/*.gff3 > results/digest-manifest.txt
 # 8. ENA gff3tools: pin + documented non-executability ------------------------
 log ""
 log "ENA gff3tools pin: https://github.com/enasequence/gff3tools"
-log "  commit 1bbe070fa1d8f846553833d9625a2cf3e2a268ea (main, 2026-11-06; no named releases)"
+GFF3TOOLS_COMMIT=1bbe070fa1d8f846553833d9625a2cf3e2a268ea
+log "  commit $GFF3TOOLS_COMMIT (main, 2026-11-06; no named releases)"
 if command -v java >/dev/null 2>&1; then
-  if [ ! -d gff3tools ]; then git clone --quiet https://github.com/enasequence/gff3tools.git gff3tools; fi
-  log "cloned at: $(git -C gff3tools rev-parse HEAD)"
+  if [ ! -d gff3tools ]; then
+    git clone --quiet https://github.com/enasequence/gff3tools.git gff3tools || {
+      log "ERROR: could not clone gff3tools"; exit 1;
+    }
+  fi
+  if ! git -C gff3tools rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log "ERROR: gff3tools exists but is not a git checkout"; exit 1
+  fi
+  if ! git -C gff3tools fetch --quiet origin "$GFF3TOOLS_COMMIT"; then
+    log "ERROR: could not fetch pinned gff3tools commit $GFF3TOOLS_COMMIT"; exit 1
+  fi
+  if ! git -C gff3tools checkout --quiet --detach "$GFF3TOOLS_COMMIT"; then
+    log "ERROR: could not check out pinned gff3tools commit $GFF3TOOLS_COMMIT"; exit 1
+  fi
+  if [ "$(git -C gff3tools rev-parse HEAD)" != "$GFF3TOOLS_COMMIT" ]; then
+    log "ERROR: gff3tools checkout does not match pinned commit $GFF3TOOLS_COMMIT"; exit 1
+  fi
+  log "checked out at: $(git -C gff3tools rev-parse HEAD)"
   log "build attempt (expected to FAIL: webin-taxonomy-sdk needs EBI GitLab auth):"
   ( cd gff3tools && JAVA_HOME="${JAVA17_HOME:-/opt/homebrew/opt/openjdk@17}" \
       PATH="${JAVA17_HOME:-/opt/homebrew/opt/openjdk@17}/bin:$PATH" \

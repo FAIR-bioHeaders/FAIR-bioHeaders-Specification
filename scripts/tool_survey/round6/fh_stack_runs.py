@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""FH-stack (fair-bioheaders==0.9.0) behavior evidence + copied-checksum test.
+"""FH-stack (fair-bioheaders==0.9.0) behavior evidence + stale-checksum test.
 
 1. `bioheaders strip` on fixtures 2-4: does it keep ordinary comments and all
    other payload bytes? (FORMAT.md: "Strip removes complete FHR lines and
    leaves ordinary comments intact.")
 2. `bioheaders combine` regeneration: rewritten header + recomputed checksum
    must verify.
-3. Copied-checksum scenario (issue's final checklist item): fixture 3's exact
-   header lines (checksum line included) copied onto fixture 4's bytes -> the
-   stale checksum claim must be detected and rejected.
+3. Stale-checksum scenario (issue's final checklist item): fixture 3's checksum
+   claim replaces fixture 4's claim -> the stale checksum must be detected and
+   rejected.
 """
 import hashlib
 import json
@@ -67,19 +67,21 @@ if combo.exists():
 results.append({"step": "combine", "fixture": "fixture4 metadata + plain payload", **r})
 results.append({"step": "verify-combined", **run([BH, "verify", str(combo)])})
 
-# 3. copied-checksum scenario: fixture3's header (16 lines incl. its checksum
-#    line) placed onto fixture4's byte layout.
+# 3. stale-checksum scenario: fixture3's checksum claim replaces only the
+#    checksum line in fixture4, preserving its escaped annotation and all bytes
+#    outside that line.
 f3 = split_lines((FIX / "fixture3-raw-utf8.gff3").read_bytes())
 f4 = split_lines((FIX / "fixture4-escaped.gff3").read_bytes())
-hdr3 = [l for l in f3 if l.startswith(b"#~")]
-body4 = [l for l in f4 if not l.startswith(b"#~")]
-mangled = OUT / "fixture4-with-copied-fixture3-header.gff3"
-mangled.write_bytes(f4[0] + b"".join(hdr3) + b"".join(body4))
-results.append({"step": "copy-header-setup", "fixture": mangled.name,
-                "note": "fixture3 header incl. its #~checksum line copied onto fixture4 bytes",
-                "sha256": hashlib.sha256(mangled.read_bytes()).hexdigest(),
-                "copied_checksum_claim": hdr3[-1].decode().strip(),
-                "recomputed_over_new_bytes": fh_checksum(mangled)})
-results.append({"step": "verify-copied-header", **run([BH, "verify", str(mangled)])})
+checksum3 = next(l for l in f3 if l.startswith(b"#~checksum:"))
+stale_checksum = OUT / "fixture4-with-stale-fixture3-checksum.gff3"
+stale_checksum.write_bytes(
+    b"".join(checksum3 if line.startswith(b"#~checksum:") else line for line in f4)
+)
+results.append({"step": "stale-checksum-setup", "fixture": stale_checksum.name,
+                "note": "fixture3's #~checksum claim replaces only fixture4's checksum line",
+                "sha256": hashlib.sha256(stale_checksum.read_bytes()).hexdigest(),
+                "stale_checksum_claim": checksum3.decode().strip(),
+                "recomputed_over_new_bytes": fh_checksum(stale_checksum)})
+results.append({"step": "verify-stale-checksum", **run([BH, "verify", str(stale_checksum)])})
 
 print(json.dumps(results, indent=2))

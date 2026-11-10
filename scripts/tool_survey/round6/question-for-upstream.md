@@ -60,12 +60,12 @@ ordinary or `#~`, matches `COMMENT = ^#.*$` and is dropped; only
 `##gff-version <version>` is re-emitted on any write path. The string `#~`
 occurs nowhere in that codebase.
 
-Observed rewrites (both proxies, per fixture): ordinary comments **dropped**,
-all `#~` metadata **dropped**, `##sequence-region`/`#!genome-build` directives
-**dropped**, and only the feature lines re-emitted byte-identically. We
-separately verified that a header copied onto rewritten bytes fails checksum
-recomputation, as it must — so the safety property holds only because tools
-drop the header rather than keep a stale copy.
+Observed rewrites (gffutils 0.14 export, per fixture): ordinary comments
+**dropped**, all `#~` metadata **dropped**, `##sequence-region`/`#!genome-build`
+directives **dropped**, and only the feature lines re-emitted byte-identically.
+simple-gff3 was parsed and inspected but not exercised through a rewrite path.
+We separately verified that a stale checksum claim on fixture 4's unchanged
+escaped-annotation bytes fails verification, as it must.
 
 We reproduced **no failure** in any parser we could run, and none of our
 fixtures are intended to be submitted anywhere (validation-only, local). Our

@@ -15,7 +15,7 @@ Format authority: `FAIR-bioHeaders-Specification` `origin/main` @ `9db66060b0d83
 | Tool | Pin | How pinned | Ran here? |
 | --- | --- | --- | --- |
 | fair-bioheaders (bioheaders CLI) | **0.9.0** (PyPI) | `pip install fair-bioheaders==0.9.0`; PyYAML 6.0.3, jsonschema 4.26.0; Python 3.15.0 | yes |
-| ENA gff3tools | `https://github.com/enasequence/gff3tools` @ commit **`1bbe070fa1d8f846553833d9625a2cf3e2a268ea`** (main, committed 2026-11-06T16:23:38Z; project version 5.6.4 in `build.gradle`; **no named git releases exist** — `gh release list` empty) | fresh clone, clean tree | **no — not executable here** (see §5) |
+| ENA gff3tools | `https://github.com/enasequence/gff3tools` @ commit **`1bbe070fa1d8f846553833d9625a2cf3e2a268ea`** (main, committed 2026-11-06T16:23:38Z; project version 5.6.4 in `build.gradle`; **no named git releases exist** — `gh release list` empty) | checked out at exact commit before build | **no — not executable here** (see §5) |
 | gff3 ("simple-gff3", PyPI, hotdogee/gff3-py) | **1.0.1** | pip | yes |
 | gffutils | **0.14** | pip | yes |
 | BioPython | 1.88 | pip | **GFF parser not testable** — `Bio.GFF` does not exist in 1.88 (verified absent from 1.79/1.83/1.84/1.85 sdists and the 1.88 wheel); fallback parsers above used instead |
@@ -187,16 +187,16 @@ analysis and (b) proxy runs with pinned parsers.
 | `bioheaders strip` → payload | n/a | exit 0; output **byte-identical to the plain payload**; ordinary comment kept; 0 `#~` lines remain | same | same |
 | `bioheaders combine` (f4 metadata + payload → new file) | — | — | — | exit 0; **verify passes**, but output is NOT byte-identical: canonical re-serialization rewrote the escaped scalar to the **raw** `Café` plain scalar (`C3 A9` present), so the ASCII-only serialization did not survive the tool round-trip; new correct checksum `SPKolM3cUKeyzoWEZGpfDQOuqg8ckMmFKtGDOvaTbRI=` |
 
-### 5.6 Copied-checksum test (issue's final checklist item)
+### 5.6 Stale-checksum test (issue's final checklist item)
 
-Constructed `outputs/fixture4-with-copied-fixture3-header.gff3`: fixture 3's
-exact 16 `#~` lines **including fixture 3's checksum line** placed on fixture
-4's bytes (SHA-256 `023e3ca64247ad209d2e88083c526b3b7ebc0949ce8daed3edec17c8cc4abf8c`).
+Constructed `outputs/fixture4-with-stale-fixture3-checksum.gff3`: fixture 4's
+bytes are preserved except that fixture 3's checksum claim replaces fixture 4's
+checksum line.
 
-* copied claim: `TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=`
-* recomputed over the rewritten bytes: `l8Zwecn80zQCuJSLdKAYQ+SNIrGL7STy7xBJlq7P2AY=`
+* stale claim from fixture 3: `TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=`
+* recomputed over the unchanged fixture 4 bytes: `zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k=`
 * `bioheaders verify` → **exit 1, "FHR: Checksum verification failed"** — a
-  copied checksum does not validate rewritten bytes. ✅ (consistent with
+  stale checksum does not validate the fixture bytes. ✅ (consistent with
   FORMAT.md R3 and FHGFF3.md's "nothing repairs it" statement)
 
 ## 6. What remains unknown
@@ -225,7 +225,7 @@ crosscheck.py               # checksum 3-way agreement + fixtures 3-vs-4 equival
                             #                             -> results/crosscheck-output.txt
 fallback_parsers.py         # gff3 1.0.1 + gffutils 0.14  -> results/fallback-results.json
                             #                             -> results/fallback-stderr.txt, outputs/
-fh_stack_runs.py            # verify/strip/combine/copied-checksum tests
+fh_stack_runs.py            # verify/strip/combine/stale-checksum tests
                             #                             -> results/fh-stack-results.json, outputs/
 run_round6.sh               # end-to-end reproduction from this directory
 results/verify-log.txt, results/digest-manifest.txt       # commands + exit codes; SHA-256 pins
