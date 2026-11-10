@@ -70,3 +70,30 @@ incomplete, or multiple FHR root scopes; legacy examples with flattened nested
 properties should be regenerated. Run the converter round-trip and example tests
 before changing this representation. The browser microdata download-tool project
 is outside this release.
+
+## Type-specific bindings
+
+The escaping, typed-container and HTML parsing conventions above are shared.
+FHP and FHGFF3 reuse those conventions, but not the FHR-specific identity and
+validation requirements: their F1/H1 rules replace M1 with the type-specific
+itemtype, and their F2/H2 rules select the type-specific schema instead of
+validating against `fhr.json` as M4 does. The type-specific binding documents
+are authoritative for the complete rules and required fields. **Naming a binding
+here is documentation, not a claim of toolkit, validator or website support**:
+runtime status is summarized in the rows below, and toolkit implementation is
+tracked in the linked FAIR-bioHeaders-Tools records. The shared conformance
+vectors cover FHR microdata only; they do not record per-tool HTML support.
+
+| Type | Binding document | Itemtype (record scope) | Status |
+| --- | --- | --- | --- |
+| FHR | this page (M1 to M5) | raw-main `fhr.json` | Released representation; shipped in the toolkit |
+| FHP | [FHP-Specification `docs/FHP-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHP-Specification/blob/main/docs/FHP-MICRODATA.md) | raw-main `fhp.json` | Binding reviewed in FHP-Specification; the toolkit reader/writer shipped in fair-bioheaders 0.8.2 ([Tools#58](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/issues/58)). No shared conformance vector exists for the FHP form; see #216 for the publication-vs-implementation ruling this row depends on |
+| FHGFF3 | [FHGFF3 `docs/FHGFF3-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHGFF3/blob/main/docs/FHGFF3-MICRODATA.md) | raw-main `fhgff3.json` | Draft binding reviewed in FHGFF3#5 (rules H1 to H8); fixtures and a test-only reader/writer live in that repository. **No runtime support**: the toolkit still refuses FHGFF3 microdata pending [Tools#104](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/issues/104), and no shared conformance vector exists yet. The website annotation table carries no microdata until the toolkit reader lands |
+
+A shared publication of the FHP/FHGFF3 HTML forms as first-class conformance
+vectors, and any change to the "must be published through FAIR-bioHeaders-
+Specification before adoption" precondition in the two type-repo binding
+documents, is governed by the ruling requested in
+[#216](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/216).
+This section records that the bindings exist and where they live; it adds no
+requirement and adopts no contract.
