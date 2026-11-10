@@ -1,0 +1,24 @@
+Discrepancy Report Results
+
+Summary
+COUNT_NUCLEOTIDES: 2 nucleotide Bioseqs are present
+NO_ANNOTATION: 2 bioseqs have no features
+SOURCE_QUALS: isolate (all present, all same)
+SOURCE_QUALS: 2 sources have isolate = SynthEus1
+SOURCE_QUALS: taxname (all present, all same)
+SOURCE_QUALS: 2 sources have taxname = Exampleus syntheticus
+ALL_SEQS_SHORTER_THAN_20kb: No sequences longer than 20,000 nt found
+
+Detailed Report
+
+COUNT_NUCLEOTIDES: 2 nucleotide Bioseqs are present
+out.sqn:ctg1 (length 240)
+out.sqn:ctg2 (length 210)
+NO_ANNOTATION: 2 bioseqs have no features
+out.sqn:ctg1 (length 240)
+out.sqn:ctg2 (length 210)
+SOURCE_QUALS: isolate (all present, all same)
+SOURCE_QUALS: 2 sources have isolate = SynthEus1
+SOURCE_QUALS: taxname (all present, all same)
+SOURCE_QUALS: 2 sources have taxname = Exampleus syntheticus
+ALL_SEQS_SHORTER_THAN_20kb: No sequences longer than 20,000 nt found

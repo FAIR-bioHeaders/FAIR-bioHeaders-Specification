@@ -1,0 +1,8 @@
+##gff-version 3
+#!genome-build ExamSyn ExamSyntheticAssembly1
+##sequence-region ctg1 1 240
+# Ordinary comment: synthetic annotation, gene on ctg1 only.
+ctg1	synthetic	gene	21	170	.	+	.	ID=gene1;Name=gene1;locus_tag=synGene1
+ctg1	synthetic	mRNA	21	170	.	+	.	ID=rna1;Parent=gene1;locus_tag=synGene1
+ctg1	synthetic	exon	21	170	.	+	.	ID=exon1;Parent=rna1
+ctg1	synthetic	CDS	21	170	.	+	0	ID=cds1;Parent=rna1;locus_tag=synGene1;product=synthetic protein

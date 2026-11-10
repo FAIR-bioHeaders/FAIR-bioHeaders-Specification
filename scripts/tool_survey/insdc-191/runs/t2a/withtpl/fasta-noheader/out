@@ -1,0 +1,152 @@
+Seq-submit ::= {
+  sub {
+    contact {
+      contact {
+        name name {
+          last "Synthetic",
+          first "Fixture"
+        },
+        affil std {
+          affil "Example Institute of Synthetic Genomics",
+          div "Synthetic Division",
+          city "Examplsville",
+          sub "EX",
+          country "USA",
+          street "1 Example Way",
+          email "synthetic@example.org",
+          postal-code "00000"
+        }
+      }
+    },
+    cit {
+      authors {
+        names std {
+          {
+            name name {
+              last "Synthetic",
+              first "Fixture",
+              initials "F.S.F."
+            }
+          }
+        },
+        affil std {
+          affil "Example Institute of Synthetic Genomics",
+          div "Synthetic Division",
+          city "Examplsville",
+          sub "EX",
+          country "USA",
+          street "1 Example Way",
+          postal-code "00000"
+        }
+      },
+      date std {
+        year 2026,
+        month 11,
+        day 10
+      }
+    },
+    subtype new,
+    tool "table2asn 1.29.324"
+  },
+  data entrys {
+    set {
+      class genbank,
+      descr {
+        pub {
+          pub {
+            gen {
+              cit "Unpublished",
+              authors {
+                names std {
+                  {
+                    name name {
+                      last "Synthetic",
+                      first "Fixture",
+                      initials "F.S.F."
+                    }
+                  }
+                }
+              },
+              title "Synthetic fixture record for FAIR-bioHeaders issue #191
+ (not a real submission)"
+            }
+          }
+        }
+      },
+      seq-set {
+        seq {
+          id {
+            local str "ctg1"
+          },
+          descr {
+            title "Exampleus syntheticus synthetic contig one",
+            source {
+              org {
+                taxname "Exampleus syntheticus",
+                orgname {
+                  mod {
+                    {
+                      subtype isolate,
+                      subname "SynthEus1"
+                    }
+                  }
+                }
+              }
+            },
+            molinfo {
+              biomol genomic
+            },
+            create-date std {
+              year 2026,
+              month 11,
+              day 10
+            }
+          },
+          inst {
+            repr raw,
+            mol dna,
+            length 240,
+            seq-data ncbi2na '5B7FF8477A3B18748FAFA0809CD9C68B1E0E71FC0D97976D
+70EE1683B7481DA08F55FA012457DCE057CF04608E043C79A53EBA2C9780848805C319DD'H
+          }
+        },
+        seq {
+          id {
+            local str "ctg2"
+          },
+          descr {
+            title "Exampleus syntheticus synthetic contig two",
+            source {
+              org {
+                taxname "Exampleus syntheticus",
+                orgname {
+                  mod {
+                    {
+                      subtype isolate,
+                      subname "SynthEus1"
+                    }
+                  }
+                }
+              }
+            },
+            molinfo {
+              biomol genomic
+            },
+            create-date std {
+              year 2026,
+              month 11,
+              day 10
+            }
+          },
+          inst {
+            repr raw,
+            mol dna,
+            length 210,
+            seq-data ncbi2na 'C0E69D25E6A087EF9D0BE31E58AC9BE5164AC37F335435D5
+B183BB9689FBA34971D34A22E40C23716D2FD2F18FC8DE2F849E300CC0'H
+          }
+        }
+      }
+    }
+  }
+}

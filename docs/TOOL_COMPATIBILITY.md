@@ -497,12 +497,57 @@ byte-identical across fixtures. Harness and full tables:
 
 The escaped ASCII form changed **no** observed parser outcome: the four
 fixtures behaved identically apart from the header bytes themselves. No tested
-tool rejected raw UTF-8 comment bytes. Safe handling: after any third-party
-GFF3 rewrite re-run `bioheaders verify` and expect "no header"; regenerate with
-`combine` rather than relabeling a copied checksum. simple-gff3 keeps comments
-in its parse tree, but rewrite behavior was not tested; gffutils export drops
-them. The ENA gff3tools remain unexecuted — this row records source analysis,
-not runtime behavior.
+tool rejected raw UTF-8 comment bytes — including ENA's bundled gff3tools 5.5.1
+engine, run later the same day (zero encoding findings on all four fixtures; see
+[round6/README §5.7](../scripts/tool_survey/round6/README.md)). Safe handling:
+after any third-party GFF3 rewrite re-run `bioheaders verify` and expect "no
+header"; regenerate with `combine` rather than relabeling a copied checksum.
+simple-gff3 keeps comments in its parse tree, but rewrite behavior was not
+tested; gffutils export drops them. The standalone v5.6.4 gff3tools remain
+unexecuted — its row records source analysis, not runtime behavior.
+
+
+## INSDC submission validators (#191, run 2026-11-10)
+
+Submission-tool behaviour was unknown until
+[#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191).
+Synthetic fixtures only (fictional organism *Exampleus syntheticus*, two contigs
+of 240 and 210 bp, one gene/mRNA/exon/CDS); validation-only modes; nothing was
+submitted and no account or credential was used. The FHR header is schemaVersion
+"2.1", the FHGFF3 header "1.1", both built and verified with fair-bioheaders
+0.9.0. Each tool was run on a header-free control and the same file with the
+header, and the outputs were compared byte for byte. Harness and transcripts:
+[`scripts/tool_survey/insdc-191`](../scripts/tool_survey/insdc-191/README.md).
+
+| Tool | Version | Platform | Input | Class | Header kept | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| table2asn | 1.29.324 (built 2025-09-16, r205bed9d5a) | macOS 27 arm64 | FASTA (`.fsa`) | **a** | no | `-V vb -M n -Z`: `.sqn`, `.gbf` and `.dr` byte-identical to the control (in batch mode `-a s -V v`, `.val`/`.stats` likewise). The header is silently dropped; no message mentions it. |
+| table2asn | 1.29.324 | macOS arm64 | GFF3 + FASTA | **a** | no | Logs `Recognized annotation format: GFF3`; features parse identically (`locus-tag`, mRNA, CDS all present); every output byte-identical to the control. |
+| asnvalidate | 3.29.324 | macOS arm64 | `.sqn` only | n/a | n/a | Not a FASTA or GFF3 reader: `-i plain.fsa` fails on the **control** too (`FAILURE: Unable to process invalid ASN.1 file`). Both `.sqn` arms validate clean. |
+| Webin-CLI | 11.0.0 | OpenJDK 27 | submission directory | **unknown** | unknown | `-validate` and `-validateFiles` exit 2 before reading any file: `ERROR: Missing required option: '-userName=USER'`, then `ERROR: Password must be provided …`. No offline mode. Not tested further. |
+| gff3tools (bundled in webin-cli 11.0.0) | 5.5.1 | OpenJDK 27 | GFF3 | **a** (report) / **b** (rewrite) | no | ENA's own GFF3 engine, run directly from the jar; **not** the same as `webin-cli -validate`. Report-only (the default, writes nothing): exit 0, no finding for either arm. With an output argument it rewrites: `#~`, `#!genome-build` and ordinary comments all dropped, `locus_tag` upper-cased, bare `gene` dropped — bytes change, so an FH checksum no longer verifies. A stale-checksum FHGFF3 file passes identically: no FH checking. |
+| ddbj-validator | 1.0.94 @ `f3d3599` | macOS, `pip` from git | FASTA (with `.ann`) | **c** | n/a | **Rejects the header.** `SEQ0080:ERR: Missing FASTA definition line (>Entry name)` and `SEQ0090:ERR: Invalid nucleotide code ';' at 1 position`; control 0 errors. Its auto-fix (`fixed/`, written by default) then turns the block into a bogus record named `;~schema:` whose sequence is lower-cased metadata. A single ordinary `;` line, or an 18-line `;` block with no `~`, fails the same way: this is leading-comment intolerance, not a reaction to `~`. The tool is beta and was committed the day it was tested. |
+| ddbj-validator | 1.0.94 | — | GFF3 | n/a | n/a | DDBJ has no GFF3 input; its annotation format is `.ann`. FHGFF3 cannot be tested here. |
+
+Controls that make the positive results mean something: a **stale-checksum** FHR
+file (one character changed in the checksum value, still canonical base64) and a
+**stale-checksum** FHGFF3 file. `bioheaders verify` rejects both; table2asn and
+gff3tools produce output byte-identical to the valid-header arm, so they do not
+check FH headers, they ignore them. The R11 raw-`>` file is accepted by
+table2asn with no bogus record — its `;`-comment handling covers that case.
+
+Corrected download locations: `https://ftp.ncbi.nlm.nih.gov/toolkit/annotation/
+current/software/` is **404**; use
+`https://ftp.ncbi.nlm.nih.gov/asn1-converters/by_program/<program>/`. The
+Webin-CLI repository is [`enasequence/webin-cli`](https://github.com/enasequence/webin-cli),
+not `ena-webin-cli/webin-cli` (404). NCBI ships **arm64** macOS builds, so no
+Rosetta is needed; its `linux64` builds are x86-64 ELF.
+
+Not proven: whether any INSDC node stores, shows or forwards header content in a
+real submission (nothing was submitted); ENA's behaviour end to end (its CLI
+needs an account); the portals' own uploaders (WebIn2, NCBI submission portal,
+DDBJ NSSS/GGS); large or compressed or CRLF files, a `##FASTA` section,
+prokaryotic flags, or real organisms. Single platform, pinned versions, 2026-11-10.
 
 ## Comment markers: `;`, `#` or none
 
@@ -670,12 +715,17 @@ and keep the FHR file as the record of provenance.
 - **GATK**: large install; it uses htsjdk, as Picard does.
 - **pybedtools**: wraps bedtools.
 - **GFA2 and rGFA tags**: only GFA1 was tested.
-- **ENA gff3tools**: pinned source `main@1bbe070` (v5.6.4) is not buildable
-  without the authenticated EBI package registry and ships no release jar; the
-  round-6 row in
+- **ENA gff3tools (standalone)**: pinned source `main@1bbe070` (v5.6.4) is not
+  buildable without the authenticated EBI package registry and ships no release
+  jar; the round-6 row in
   [Encoding round 6](#encoding-round-6-2026-11-10-utf-8--bytes-and-gff3-tools)
   records source analysis only, not runtime behavior
   ([#210](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/210)).
+  An older engine, gff3tools 5.5.1, ships inside
+  [the Webin-CLI 11.0.0 jar and was run from it](#insdc-submission-validators-191-run-2026-11-10).
+- **ENA Webin-CLI `-validate`.** The CLI refuses to run without a Webin account
+  (exit 2 at option parsing), so its end-to-end header behavior is untested. See
+  [INSDC submission validators](#insdc-submission-validators-191-run-2026-11-10).
 - **Protein FASTA**: MAFFT/MUSCLE protein modes were not tested (not needed for #40). FHP
   protein files were tested in [round 5](#more-tools-round-5-2026-10-28) with MMseqs2,
   CD-HIT, Exonerate, Clustal Omega and eggNOG-mapper.

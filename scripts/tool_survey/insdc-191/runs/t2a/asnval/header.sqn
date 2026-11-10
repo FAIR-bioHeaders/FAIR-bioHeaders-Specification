@@ -1,0 +1,298 @@
+Seq-submit ::= {
+  sub {
+    contact {
+      contact {
+        name name {
+          last "Synthetic",
+          first "Fixture"
+        },
+        affil std {
+          affil "Example Institute of Synthetic Genomics",
+          div "Synthetic Division",
+          city "Examplsville",
+          sub "EX",
+          country "USA",
+          street "1 Example Way",
+          email "synthetic@example.org",
+          postal-code "00000"
+        }
+      }
+    },
+    cit {
+      authors {
+        names std {
+          {
+            name name {
+              last "Synthetic",
+              first "Fixture",
+              initials "F.S.F."
+            }
+          }
+        },
+        affil std {
+          affil "Example Institute of Synthetic Genomics",
+          div "Synthetic Division",
+          city "Examplsville",
+          sub "EX",
+          country "USA",
+          street "1 Example Way",
+          postal-code "00000"
+        }
+      },
+      date std {
+        year 2026,
+        month 11,
+        day 10
+      }
+    },
+    subtype new,
+    tool "table2asn 1.29.324"
+  },
+  data entrys {
+    set {
+      class genbank,
+      descr {
+        pub {
+          pub {
+            gen {
+              cit "Unpublished",
+              authors {
+                names std {
+                  {
+                    name name {
+                      last "Synthetic",
+                      first "Fixture",
+                      initials "F.S.F."
+                    }
+                  }
+                }
+              },
+              title "Synthetic fixture record for FAIR-bioHeaders issue #191
+ (not a real submission)"
+            }
+          }
+        }
+      },
+      seq-set {
+        set {
+          class nuc-prot,
+          descr {
+            source {
+              org {
+                taxname "Exampleus syntheticus",
+                orgname {
+                  mod {
+                    {
+                      subtype isolate,
+                      subname "SynthEus1"
+                    }
+                  }
+                }
+              }
+            },
+            create-date std {
+              year 2026,
+              month 11,
+              day 10
+            }
+          },
+          seq-set {
+            seq {
+              id {
+                local str "ctg1"
+              },
+              descr {
+                title "Exampleus syntheticus synthetic contig one",
+                molinfo {
+                  biomol genomic
+                }
+              },
+              inst {
+                repr raw,
+                mol dna,
+                length 240,
+                seq-data ncbi2na '5B7FF8477A3B18748FAFA0809CD9C68B1E0E71FC0D97
+976D70EE1683B7481DA08F55FA012457DCE057CF04608E043C79A53EBA2C9780848805C319DD'H
+              },
+              annot {
+                {
+                  data ftable {
+                    {
+                      id local id 1,
+                      data gene {
+                        locus-tag "synGene1"
+                      },
+                      location int {
+                        from 20,
+                        to 169,
+                        strand plus,
+                        id local str "ctg1"
+                      },
+                      xref {
+                        {
+                          id local id 2
+                        },
+                        {
+                          id local id 3
+                        }
+                      }
+                    },
+                    {
+                      id local id 2,
+                      data rna {
+                        type mRNA,
+                        ext name "synthetic protein"
+                      },
+                      location int {
+                        from 20,
+                        to 169,
+                        strand plus,
+                        id local str "ctg1"
+                      },
+                      qual {
+                        {
+                          qual "orig_protein_id",
+                          val "gnl|synGene1|cds1"
+                        },
+                        {
+                          qual "orig_transcript_id",
+                          val "gnl|synGene1|rna1"
+                        }
+                      },
+                      xref {
+                        {
+                          id local id 1
+                        },
+                        {
+                          id local id 3
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            seq {
+              id {
+                general {
+                  db "synGene1",
+                  tag str "cds1"
+                }
+              },
+              descr {
+                title "synthetic protein [Exampleus syntheticus]",
+                molinfo {
+                  biomol peptide,
+                  tech concept-trans
+                }
+              },
+              inst {
+                repr raw,
+                mol aa,
+                length 49,
+                seq-data iupacaa "MYDSDWLEESYRYGVLNATLNRLPRPNVTGMSQNSEDSPWKQHP
+SMNPY"
+              },
+              annot {
+                {
+                  data ftable {
+                    {
+                      data prot {
+                        name {
+                          "synthetic protein"
+                        }
+                      },
+                      location int {
+                        from 0,
+                        to 48,
+                        id general {
+                          db "synGene1",
+                          tag str "cds1"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          annot {
+            {
+              data ftable {
+                {
+                  id local id 3,
+                  data cdregion {
+                    frame one,
+                    code {
+                      id 1
+                    }
+                  },
+                  product whole general {
+                    db "synGene1",
+                    tag str "cds1"
+                  },
+                  location int {
+                    from 20,
+                    to 169,
+                    strand plus,
+                    id local str "ctg1"
+                  },
+                  qual {
+                    {
+                      qual "orig_transcript_id",
+                      val "gnl|synGene1|rna1"
+                    }
+                  },
+                  xref {
+                    {
+                      id local id 1
+                    },
+                    {
+                      id local id 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        seq {
+          id {
+            local str "ctg2"
+          },
+          descr {
+            title "Exampleus syntheticus synthetic contig two",
+            source {
+              org {
+                taxname "Exampleus syntheticus",
+                orgname {
+                  mod {
+                    {
+                      subtype isolate,
+                      subname "SynthEus1"
+                    }
+                  }
+                }
+              }
+            },
+            molinfo {
+              biomol genomic
+            },
+            create-date std {
+              year 2026,
+              month 11,
+              day 10
+            }
+          },
+          inst {
+            repr raw,
+            mol dna,
+            length 210,
+            seq-data ncbi2na 'C0E69D25E6A087EF9D0BE31E58AC9BE5164AC37F335435D5
+B183BB9689FBA34971D34A22E40C23716D2FD2F18FC8DE2F849E300CC0'H
+          }
+        }
+      }
+    }
+  }
+}

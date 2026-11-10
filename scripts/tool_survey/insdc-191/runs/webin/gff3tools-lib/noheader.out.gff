@@ -1,0 +1,6 @@
+##gff-version 3
+##sequence-region ctg1 1 240
+ctg1	synthetic	mRNA	21	170	.	+	.	ID=rna1;locus_tag=SYNGENE1;
+ctg1	synthetic	exon	21	170	.	+	.	ID=exon1;Parent=rna1;
+ctg1	synthetic	CDS	21	170	.	+	0	ID=cds1;Parent=rna1;locus_tag=SYNGENE1;product=synthetic protein;
+

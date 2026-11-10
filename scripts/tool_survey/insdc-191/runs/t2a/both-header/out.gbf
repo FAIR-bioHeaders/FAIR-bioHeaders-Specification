@@ -1,0 +1,70 @@
+LOCUS       ctg1                     240 bp    DNA     linear       10-NOV-2026
+DEFINITION  Exampleus syntheticus synthetic contig one.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      Exampleus syntheticus
+  ORGANISM  Exampleus syntheticus
+            Unclassified.
+REFERENCE   1  (bases 1 to 240)
+  AUTHORS   Synthetic,F.S.F.
+  TITLE     Synthetic fixture record for FAIR-bioHeaders issue #191 (not a real
+            submission)
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 240)
+  AUTHORS   Synthetic,F.S.F.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-NOV-2026) Synthetic Division, Example Institute of
+            Synthetic Genomics, 1 Example Way, Examplsville, EX 00000, USA
+FEATURES             Location/Qualifiers
+     source          1..240
+                     /organism="Exampleus syntheticus"
+                     /mol_type="genomic DNA"
+                     /isolate="SynthEus1"
+     gene            21..170
+                     /locus_tag="synGene1"
+     mRNA            21..170
+                     /locus_tag="synGene1"
+                     /product="synthetic protein"
+     CDS             21..170
+                     /locus_tag="synGene1"
+                     /codon_start=1
+                     /product="synthetic protein"
+                     /protein_id="synGene1:cds1"
+                     /translation="MYDSDWLEESYRYGVLNATLNRLPRPNVTGMSQNSEDSPWKQHP
+                     SMNPY"
+ORIGIN      
+        1 ccgtcttttt gacactctgg atgtacgact cagattggtt ggaagaaagc tatcgctacg
+       61 gagtactgaa tgctacttta aatcgcctgc ctcgtcctaa tgtgaccgga atgtctcaga
+      121 actcggaaga ttccccttgg aaacagcacc cttctatgaa cccttattaa cacgaagatg
+      181 aacaattact gcggccattg gtggagtagc ctgaaagaca gagaaaccta atacgctctc
+//
+LOCUS       ctg2                     210 bp    DNA     linear       10-NOV-2026
+DEFINITION  Exampleus syntheticus synthetic contig two.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      Exampleus syntheticus
+  ORGANISM  Exampleus syntheticus
+            Unclassified.
+REFERENCE   1  (bases 1 to 210)
+  AUTHORS   Synthetic,F.S.F.
+  TITLE     Synthetic fixture record for FAIR-bioHeaders issue #191 (not a real
+            submission)
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 210)
+  AUTHORS   Synthetic,F.S.F.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (10-NOV-2026) Synthetic Division, Example Institute of
+            Synthetic Genomics, 1 Example Way, Examplsville, EX 00000, USA
+FEATURES             Location/Qualifiers
+     source          1..210
+                     /organism="Exampleus syntheticus"
+                     /mol_type="genomic DNA"
+                     /isolate="SynthEus1"
+ORIGIN      
+        1 taaatgcggc tcagcctgcg ggaagacttg ttgctcaagt tgatactgcc gaggtagcgt
+       61 tgccaccgca ggtaatcttt atatcccaat cctcccgtac gaatgtgtgc cggagcttgt
+      121 ggatcagcct actcatcagg agagtgcaaa taagatctac cgtcagtttc agttacgatt
+      181 tagatctgag ttgacagctg ataaaatata
+//

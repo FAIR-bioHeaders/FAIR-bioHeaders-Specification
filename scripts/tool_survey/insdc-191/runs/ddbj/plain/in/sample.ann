@@ -1,0 +1,28 @@
+COMMON	SUBMITTER		ab_name	Synthetic,F.
+			contact	Synthetic Fixture
+			email	synthetic@example.org
+			institute	Example Institute of Synthetic Genomics
+			department	Synthetic Division
+			country	Japan
+			state	Tokyo
+			city	Tokyo
+			street	1 Example Way
+			zip	000-0000
+	REFERENCE		title	Synthetic fixture record for FAIR-bioHeaders issue 191 (not a real submission)
+			ab_name	Synthetic,F.
+			year	2026
+			status	Unpublished
+ctg1	source	1..240	organism	Exampleus syntheticus
+			mol_type	genomic DNA
+			collection_date	2026-01-01
+			geo_loc_name	Japan:Tokyo
+			isolate	SynthEus1
+			note	Synthetic fixture, not a real sequence
+	CDS	21..170	product	synthetic protein
+			gene	synGene1
+ctg2	source	1..210	organism	Exampleus syntheticus
+			mol_type	genomic DNA
+			collection_date	2026-01-01
+			geo_loc_name	Japan:Tokyo
+			isolate	SynthEus1
+			note	Synthetic fixture, not a real sequence

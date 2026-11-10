@@ -1,0 +1,14 @@
+># ordinary comment line (not FAIR-bioHeaders)
+//
+>ctg1 Exampleus syntheticus synthetic contig one
+ccgtctttttgacactctggatgtacgactcagattggttggaagaaagctatcgctacg
+gagtactgaatgctactttaaatcgcctgcctcgtcctaatgtgaccggaatgtctcaga
+actcggaagattccccttggaaacagcacccttctatgaacccttattaacacgaagatg
+aacaattactgcggccattggtggagtagcctgaaagacagagaaacctaatacgctctc
+//
+>ctg2 Exampleus syntheticus synthetic contig two
+taaatgcggctcagcctgcgggaagacttgttgctcaagttgatactgccgaggtagcgt
+tgccaccgcaggtaatctttatatcccaatcctcccgtacgaatgtgtgccggagcttgt
+ggatcagcctactcatcaggagagtgcaaataagatctaccgtcagtttcagttacgatt
+tagatctgagttgacagctgataaaatata
+//

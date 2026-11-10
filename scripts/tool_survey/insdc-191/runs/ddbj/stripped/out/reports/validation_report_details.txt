@@ -1,0 +1,15 @@
+
+=== Validation Details (1 file set) ===
+Validation Date: 2026-11-10 13:57:42 EST
+Process Time: 0.31 seconds
+Version: 1.0.94
+
+1. sample
+[ WARNING ]
+ANN0410:WAR:ALL:DBLINK:[FILE]:Missing BioProject accession.
+ANN0450:WAR:ALL:DBLINK:[FILE]:Missing BioSample accession.
+ANN0470:WAR:ALL:DBLINK:[FILE]:Missing SRA Run accession.
+
+[ AUTO-CLEANUP ]
+SEQ0100:WAR:ctg1:sequence:[FILE]:[Auto-cleanup] Missing sequence terminator ("//") was automatically appended.
+SEQ0100:WAR:ctg2:sequence:[FILE]:[Auto-cleanup] Missing sequence terminator ("//") was automatically appended.

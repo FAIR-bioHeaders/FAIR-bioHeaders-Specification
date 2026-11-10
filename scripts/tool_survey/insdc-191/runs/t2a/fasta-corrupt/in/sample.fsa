@@ -1,0 +1,28 @@
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+;~schemaVersion: '2.1'
+;~genome: Exampleus syntheticus synthetic example genome (SynthEus1; not a real organism)
+;~taxon:
+;~  name: Exampleus syntheticus
+;~  uri: https://identifiers.org/taxonomy:999999999
+;~version: 1.0.0
+;~metadataAuthor:
+;~- name: 'Synthetic fixture author (issue #191; not a real person or org)'
+;~  nameType: Organizational
+;~assemblyAuthor:
+;~- name: 'Synthetic fixture author (issue #191; not a real person or org)'
+;~dateCreated: '2026-11-10'
+;~masking: not-masked
+;~documentation: 'Synthetic fixture for FAIR-bioHeaders issue #191 validation testing;
+;~  fictional organism, invented identifiers.'
+;~x-fixture: insdc-191
+;~checksum: MpZmU067e+UfurTwRzDQBI20nDyoPPIhwzXSgsKoeEg=
+>ctg1 Exampleus syntheticus synthetic contig one
+CCGTCTTTTTGACACTCTGGATGTACGACTCAGATTGGTTGGAAGAAAGCTATCGCTACG
+GAGTACTGAATGCTACTTTAAATCGCCTGCCTCGTCCTAATGTGACCGGAATGTCTCAGA
+ACTCGGAAGATTCCCCTTGGAAACAGCACCCTTCTATGAACCCTTATTAACACGAAGATG
+AACAATTACTGCGGCCATTGGTGGAGTAGCCTGAAAGACAGAGAAACCTAATACGCTCTC
+>ctg2 Exampleus syntheticus synthetic contig two
+TAAATGCGGCTCAGCCTGCGGGAAGACTTGTTGCTCAAGTTGATACTGCCGAGGTAGCGT
+TGCCACCGCAGGTAATCTTTATATCCCAATCCTCCCGTACGAATGTGTGCCGGAGCTTGT
+GGATCAGCCTACTCATCAGGAGAGTGCAAATAAGATCTACCGTCAGTTTCAGTTACGATT
+TAGATCTGAGTTGACAGCTGATAAAATATA

@@ -1,0 +1,33 @@
+# gff3tools 5.5.1 — the ENA engine bundled inside webin-cli-11.0.0.jar
+# (sha256 722b23c5…4c66cc, see ../../insdc-191/PROVENANCE.txt). Run 2026-11-10
+# on the four round-6 encoding fixtures; validation mode only; nothing uploaded.
+# This closes part of README §6.1 (standalone v5.6.4 remains unexecuted).
+
+Command shape (Java 27):
+  java -cp <webin-cli libs> uk.ac.ebi.embl.gff3tools.cli.Main validation <fixture>
+
+Report mode (writes nothing):
+  fixture1-plain          exit=20  one finding: CDS_LENGTH on line 9   (control)
+  fixture2-ascii-header   exit=20  one finding: CDS_LENGTH on line 25  (header offset)
+  fixture3-raw-utf8       exit=20  one finding: CDS_LENGTH, identical
+  fixture4-escaped        exit=20  one finding: CDS_LENGTH, identical
+  grep -ciE 'ascii|utf|encoding|invalid char|non-printable' -> 0 in every report.
+
+  The single finding is feature-level (the synthetic 63-bp CDS is under the
+  engine's 25-amino-acid floor) and appears identically on the plain control:
+  it is not a header or encoding reaction. Parser ACCEPTANCE is therefore
+  identical for ASCII, raw UTF-8 (C3 A9) and YAML-escaped header bytes: the
+  engine reads all four files, maps all features, and reports no encoding
+  problem. Exit codes are equal across arms.
+
+Rewrite mode (trailing '-' with --sequence ctg1:fixtures/seq-ctg1.seq):
+  all four arms exit 20 and emit 0 lines — this engine version refuses to
+  produce rewritten output while any error finding exists, so byte-level
+  comment preservation is not observable on these fixtures. For the header vs
+  no-header comparison of the same engine's rewrite path, see the #191 run on
+  CDS_LENGTH-clean fixtures: ../../insdc-191/runs/webin/gff3tools-lib/
+  (report a / rewrite b: '#~', '#!genome-build' and ordinary comments dropped).
+
+Bottom line for #210: ENA's own shipped validator engine accepts all four
+serializations with zero encoding findings; it does not distinguish them, and
+it offers no ASCII rejection at the comment layer.

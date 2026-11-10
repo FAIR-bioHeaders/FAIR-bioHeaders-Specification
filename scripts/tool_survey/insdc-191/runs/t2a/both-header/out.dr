@@ -1,0 +1,40 @@
+Discrepancy Report Results
+
+Summary
+COUNT_NUCLEOTIDES: 2 nucleotide Bioseqs are present
+NO_ANNOTATION: 1 bioseq has no features
+SOURCE_QUALS: isolate (all present, all same)
+SOURCE_QUALS: 2 sources have isolate = SynthEus1
+SOURCE_QUALS: taxname (all present, all same)
+SOURCE_QUALS: 2 sources have taxname = Exampleus syntheticus
+FEATURE_COUNT: CDS: 1 present
+FEATURE_COUNT: gene: 1 present
+FEATURE_COUNT: mRNA: 1 present
+FATAL: BAD_LOCUS_TAG_FORMAT: 1 locus tag is incorrectly formatted.
+ALL_SEQS_SHORTER_THAN_20kb: No sequences longer than 20,000 nt found
+FEATURE_LIST: Feature List
+
+Detailed Report
+
+COUNT_NUCLEOTIDES: 2 nucleotide Bioseqs are present
+out.sqn:ctg1 (length 240)
+out.sqn:ctg2 (length 210)
+NO_ANNOTATION: 1 bioseq has no features
+out.sqn:ctg2 (length 210)
+SOURCE_QUALS: isolate (all present, all same)
+SOURCE_QUALS: 2 sources have isolate = SynthEus1
+SOURCE_QUALS: taxname (all present, all same)
+SOURCE_QUALS: 2 sources have taxname = Exampleus syntheticus
+FEATURE_COUNT: CDS: 1 present
+FEATURE_COUNT: gene: 1 present
+FEATURE_COUNT: mRNA: 1 present
+FATAL: BAD_LOCUS_TAG_FORMAT: 1 locus tag is incorrectly formatted.
+out.sqn:Gene	synGene1	lcl|ctg1:21-170	synGene1
+ALL_SEQS_SHORTER_THAN_20kb: No sequences longer than 20,000 nt found
+FEATURE_LIST: Feature List
+FEATURE_LIST: 1 CDS feature
+out.sqn:CDS	synthetic protein	lcl|ctg1:21-170	synGene1
+FEATURE_LIST: 1 Gene feature
+out.sqn:Gene	synGene1	lcl|ctg1:21-170	synGene1
+FEATURE_LIST: 1 mRNA feature
+out.sqn:mRNA	synthetic protein	lcl|ctg1:21-170	synGene1
