@@ -1,0 +1,20 @@
+
+=== Validation Details (1 file set) ===
+Validation Date: 2026-11-10 13:52:24 EST
+Process Time: 0.32 seconds
+Version: 1.0.94
+
+1. sample
+[ ERROR ]
+SEQ0080:ERR:ALL:sequence:[FILE]:Missing FASTA definition line (>Entry name).
+SEQ0090:ERR:;~schema::sequence:[FILE]:Invalid nucleotide code ';' at 1 position.
+
+[ WARNING ]
+ANN0410:WAR:ALL:DBLINK:[FILE]:Missing BioProject accession.
+ANN0450:WAR:ALL:DBLINK:[FILE]:Missing BioSample accession.
+ANN0470:WAR:ALL:DBLINK:[FILE]:Missing SRA Run accession.
+
+[ AUTO-CLEANUP ]
+SEQ0085:WAR:;~schema::file/format:[FILE]:[Auto-cleanup] Invalid characters (spaces, tabs and hyphens) or improperly placed terminators ('//') were automatically removed from the sequence.
+SEQ0100:WAR:ctg1:sequence:[FILE]:[Auto-cleanup] Missing sequence terminator ("//") was automatically appended.
+SEQ0100:WAR:ctg2:sequence:[FILE]:[Auto-cleanup] Missing sequence terminator ("//") was automatically appended.

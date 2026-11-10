@@ -1,0 +1,36 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.github.benmanes.caffeine.base.UnsafeAccess (file:$WORKAREA/bin/gff3tools/libs/caffeine-2.8.1.jar)
+WARNING: Please consider reporting this to the maintainers of class com.github.benmanes.caffeine.base.UnsafeAccess
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+java.lang.RuntimeException: java.lang.IllegalStateException: Unable to resolve sequence stats for sequence ctg1
+	at uk.ac.ebi.embl.gff3tools.cli.ValidationCommand.run(ValidationCommand.java:135)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2030)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2465)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2457)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2419)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2277)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2421)
+	at picocli.CommandLine.execute(CommandLine.java:2174)
+	at uk.ac.ebi.embl.gff3tools.cli.Main.main(Main.java:43)
+Caused by: java.lang.RuntimeException: java.lang.IllegalStateException: Unable to resolve sequence stats for sequence ctg1
+	at uk.ac.ebi.embl.gff3tools.validation.ValidationEngine.handleRuleException(ValidationEngine.java:216)
+	at uk.ac.ebi.embl.gff3tools.validation.ValidationEngine.executeValidations(ValidationEngine.java:115)
+	at uk.ac.ebi.embl.gff3tools.validation.ValidationEngine.validate(ValidationEngine.java:82)
+	at uk.ac.ebi.embl.gff3tools.gff3.reader.GFF3FileReader.readAnnotation(GFF3FileReader.java:157)
+	at uk.ac.ebi.embl.gff3tools.gff3.reader.GFF3FileReader.read(GFF3FileReader.java:193)
+	at uk.ac.ebi.embl.gff3tools.cli.ValidationCommand.runValidation(ValidationCommand.java:177)
+	at uk.ac.ebi.embl.gff3tools.cli.ValidationCommand.run(ValidationCommand.java:129)
+	... 9 more
+Caused by: java.lang.IllegalStateException: Unable to resolve sequence stats for sequence ctg1
+	at uk.ac.ebi.embl.gff3tools.validation.builtin.GapBasesPercentageValidation.resolveStats(GapBasesPercentageValidation.java:96)
+	at uk.ac.ebi.embl.gff3tools.validation.builtin.GapBasesPercentageValidation.validateGapBasesPercentage(GapBasesPercentageValidation.java:62)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:583)
+	at uk.ac.ebi.embl.gff3tools.validation.ValidationEngine.executeValidations(ValidationEngine.java:112)
+	... 14 more
+Caused by: java.lang.IllegalArgumentException: No sequence source found for seqId: ctg1
+	at uk.ac.ebi.embl.gff3tools.validation.provider.CompositeSequenceProvider$1.sourceFor(CompositeSequenceProvider.java:71)
+	at uk.ac.ebi.embl.gff3tools.validation.provider.CompositeSequenceProvider$1.getSequenceStats(CompositeSequenceProvider.java:87)
+	at uk.ac.ebi.embl.gff3tools.validation.builtin.GapBasesPercentageValidation.resolveStats(GapBasesPercentageValidation.java:94)
+	... 18 more

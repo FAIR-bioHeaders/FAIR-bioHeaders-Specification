@@ -1,0 +1,15 @@
+Total messages:		5
+
+=================================================================
+3 WARNING-level messages exist
+
+SEQ_DESCR.NoTaxonID:	2
+SEQ_FEAT.GenCodeMismatch:	1
+
+=================================================================
+2 ERROR-level messages exist
+
+SEQ_DESCR.NoPubFound:	1
+GENERIC.MissingPubRequirement:	1
+
+=================================================================

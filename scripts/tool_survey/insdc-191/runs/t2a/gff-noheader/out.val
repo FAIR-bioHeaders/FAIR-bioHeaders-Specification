@@ -1,0 +1,5 @@
+Warning: valid [SEQ_FEAT.GenCodeMismatch] Genetic code conflict between CDS (code 1) and BioSource (code 0) FEATURE: CDS: synthetic protein <3>  [lcl|ctg1:21-170] [lcl|ctg1: raw, dna len= 240] -> [gnl|synGene1|cds1]
+Warning: valid [SEQ_DESCR.NoTaxonID] BioSource is missing taxon ID DESCRIPTOR: BioSrc: Exampleus syntheticus BIOSEQ-SET: nuc-prot: lcl|ctg1
+Warning: valid [SEQ_DESCR.NoTaxonID] BioSource is missing taxon ID DESCRIPTOR: BioSrc: Exampleus syntheticus BIOSEQ: lcl|ctg2: raw, dna len= 210
+Error: valid [SEQ_DESCR.NoPubFound] No publications anywhere on this entire record. BIOSEQ-SET: genbank: lcl|ctg1
+Error: valid [GENERIC.MissingPubRequirement] No submission citation anywhere on this entire record. BIOSEQ-SET: genbank: lcl|ctg1

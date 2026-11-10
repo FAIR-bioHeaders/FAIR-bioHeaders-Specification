@@ -1,0 +1,77 @@
+Seq-entry ::= set {
+  class genbank,
+  seq-set {
+    seq {
+      id {
+        local str "ctg1"
+      },
+      descr {
+        title "Exampleus syntheticus synthetic contig one",
+        source {
+          org {
+            taxname "Exampleus syntheticus",
+            orgname {
+              mod {
+                {
+                  subtype isolate,
+                  subname "SynthEus1"
+                }
+              }
+            }
+          }
+        },
+        molinfo {
+          biomol genomic
+        },
+        create-date std {
+          year 2026,
+          month 11,
+          day 10
+        }
+      },
+      inst {
+        repr raw,
+        mol dna,
+        length 240,
+        seq-data ncbi2na '5B7FF8477A3B18748FAFA0809CD9C68B1E0E71FC0D97976D70EE
+1683B7481DA08F55FA012457DCE057CF04608E043C79A53EBA2C9780848805C319DD'H
+      }
+    },
+    seq {
+      id {
+        local str "ctg2"
+      },
+      descr {
+        title "Exampleus syntheticus synthetic contig two",
+        source {
+          org {
+            taxname "Exampleus syntheticus",
+            orgname {
+              mod {
+                {
+                  subtype isolate,
+                  subname "SynthEus1"
+                }
+              }
+            }
+          }
+        },
+        molinfo {
+          biomol genomic
+        },
+        create-date std {
+          year 2026,
+          month 11,
+          day 10
+        }
+      },
+      inst {
+        repr raw,
+        mol dna,
+        length 210,
+        seq-data ncbi2na 'C0E69D25E6A087EF9D0BE31E58AC9BE5164AC37F335435D5B183
+BB9689FBA34971D34A22E40C23716D2FD2F18FC8DE2F849E300CC0'H
+      }
+    }
+  }
+}

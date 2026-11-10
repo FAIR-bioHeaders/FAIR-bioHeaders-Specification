@@ -1,0 +1,31 @@
+>;~schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+;~schemaversion:'2.1'
+;~genome:exampleussyntheticussyntheticexamplegenome(syntheus1;notarealorganism)
+;~taxon:
+;~name:exampleussyntheticus
+;~uri:https:identifiers.org/taxonomy:999999999
+;~version:1.0.0
+;~metadataauthor:
+;~name:'syntheticfixtureauthor(issue#191;notarealpersonororg)'
+;~nametype:organizational
+;~assemblyauthor:
+;~name:'syntheticfixtureauthor(issue#191;notarealpersonororg)'
+;~datecreated:'20261110'
+;~masking:notmasked
+;~documentation:'syntheticfixtureforfairbioheadersissue#191validationtesting;
+;~fictionalorganism,inventedidentifiers.'
+;~xfixture:insdc191
+;~checksum:mpzmu067e+ufurtwrzdqbi20ndyoppihwzxsgskoeeg=
+//
+>ctg1 Exampleus syntheticus synthetic contig one
+ccgtctttttgacactctggatgtacgactcagattggttggaagaaagctatcgctacg
+gagtactgaatgctactttaaatcgcctgcctcgtcctaatgtgaccggaatgtctcaga
+actcggaagattccccttggaaacagcacccttctatgaacccttattaacacgaagatg
+aacaattactgcggccattggtggagtagcctgaaagacagagaaacctaatacgctctc
+//
+>ctg2 Exampleus syntheticus synthetic contig two
+taaatgcggctcagcctgcgggaagacttgttgctcaagttgatactgccgaggtagcgt
+tgccaccgcaggtaatctttatatcccaatcctcccgtacgaatgtgtgccggagcttgt
+ggatcagcctactcatcaggagagtgcaaataagatctaccgtcagtttcagttacgatt
+tagatctgagttgacagctgataaaatata
+//

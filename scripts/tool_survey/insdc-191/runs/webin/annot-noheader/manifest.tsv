@@ -1,0 +1,6 @@
+NAME	ANNOT-SYN-NOHDR
+STUDY	Sample-Study-Synthetic-191
+ANALYSIS_TYPE	DECOUPLED_ANNOTATION
+PRIMARY_ID	GCA_900000000.1
+DESCRIPTION	Synthetic issue #191 fixture, not a real assembly
+GFF3	sample.gff3.gz

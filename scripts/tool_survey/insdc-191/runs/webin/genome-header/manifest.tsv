@@ -1,0 +1,8 @@
+NAME	SAMPLE-TAB-HDR
+STUDY	Sample-Study-Synthetic-191
+ASSEMBLY_NAME	ExamSyntheticAssembly1
+ASSEMBLY_TYPE	contig
+MOLECULE_TYPE	genomic DNA
+COVERAGE	1
+PLATFORM	ILLUMINA
+FASTA	sample.fasta.gz

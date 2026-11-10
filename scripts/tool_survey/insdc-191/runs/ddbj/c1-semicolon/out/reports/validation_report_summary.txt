@@ -1,0 +1,17 @@
+
+=== Validation Summary (1 file set) ===
+Validation Date: 2026-11-10 13:52:44 EST
+Process Time: 0.31 seconds
+Version: 1.0.94
+
+1. sample
+[ ERROR ]
+SEQ0080:ERR:sequence: 1 file: Missing FASTA definition line (>Entry name).
+
+[ WARNING ]
+ANN0410:WAR:DBLINK: 1 file: Missing BioProject accession.
+ANN0450:WAR:DBLINK: 1 file: Missing BioSample accession.
+ANN0470:WAR:DBLINK: 1 file: Missing SRA Run accession.
+
+[ AUTO-CLEANUP ]
+SEQ0100:WAR:sequence: 2 sequences: [Auto-cleanup] Missing sequence terminator ("//") was automatically appended.
