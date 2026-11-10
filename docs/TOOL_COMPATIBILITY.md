@@ -499,10 +499,10 @@ The escaped ASCII form changed **no** observed parser outcome: the four
 fixtures behaved identically apart from the header bytes themselves. No tested
 tool rejected raw UTF-8 comment bytes. Safe handling: after any third-party
 GFF3 rewrite re-run `bioheaders verify` and expect "no header"; regenerate with
-`combine` rather than relabeling a copied checksum; round-trip header
-preservation only through tools that keep comment bytes (simple-gff3 keeps
-them; gffutils export does not). The ENA gff3tools remain unexecuted — this row
-records source analysis, not runtime behavior.
+`combine` rather than relabeling a copied checksum. simple-gff3 keeps comments
+in its parse tree, but rewrite behavior was not tested; gffutils export drops
+them. The ENA gff3tools remain unexecuted — this row records source analysis,
+not runtime behavior.
 
 ## Comment markers: `;`, `#` or none
 
