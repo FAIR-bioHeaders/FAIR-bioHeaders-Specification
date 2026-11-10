@@ -1,0 +1,214 @@
+{
+  "versions": {
+    "gff3": "1.0.1",
+    "gffutils": "0.14"
+  },
+  "per_fixture": [
+    {
+      "fixture": "fixture1-plain.gff3",
+      "expected_feature_lines": 5,
+      "simple_gff3": {
+        "parser": "gff3==1.0.1",
+        "accepts": true,
+        "line_types": {
+          "directive": 3,
+          "comment": 2,
+          "feature": 5
+        },
+        "comment_lines_total": 2,
+        "ordinary_comment_preserved_in_parse": true,
+        "tilde_lines_classified_as_comment": 0,
+        "tilde_annotation_line_raw": [],
+        "tilde_annotation_codepoints_nonascii": [],
+        "features_parsed": 5,
+        "features_expected": 5,
+        "errors_any": 0,
+        "errors_detail": []
+      },
+      "gffutils_iter": {
+        "parser": "gffutils==0.14",
+        "accepts": true,
+        "features_parsed": 5,
+        "features_expected": 5,
+        "feature_key_tuples_match": true
+      },
+      "gffutils_export": {
+        "parser": "gffutils==0.14",
+        "mode": "create_db() sqlite + GFFWriter export",
+        "db_stored_directives": [
+          "gff-version 3",
+          "sequence-region ctg1 1 48"
+        ],
+        "accepts": true,
+        "features_written": 5,
+        "output_file": "outputs/gffutils-fixture1-plain.gff3",
+        "output_feature_lines": 5,
+        "output_expected_features": 5,
+        "feature_lines_byte_identical_to_input": true,
+        "ordinary_comment_in_output": false,
+        "tilde_lines_in_output": 0,
+        "directives_in_output": [],
+        "nonascii_bytes_in_output": [],
+        "output_checksum_recorded": null,
+        "output_checksum_note": "no #~ line survives export; FH header dropped entirely"
+      }
+    },
+    {
+      "fixture": "fixture2-ascii-header.gff3",
+      "expected_feature_lines": 5,
+      "simple_gff3": {
+        "parser": "gff3==1.0.1",
+        "accepts": true,
+        "line_types": {
+          "directive": 3,
+          "comment": 18,
+          "feature": 5
+        },
+        "comment_lines_total": 18,
+        "ordinary_comment_preserved_in_parse": true,
+        "tilde_lines_classified_as_comment": 16,
+        "tilde_annotation_line_raw": [
+          "#~annotation: Synthetic annotation\n"
+        ],
+        "tilde_annotation_codepoints_nonascii": [],
+        "features_parsed": 5,
+        "features_expected": 5,
+        "errors_any": 0,
+        "errors_detail": []
+      },
+      "gffutils_iter": {
+        "parser": "gffutils==0.14",
+        "accepts": true,
+        "features_parsed": 5,
+        "features_expected": 5,
+        "feature_key_tuples_match": true
+      },
+      "gffutils_export": {
+        "parser": "gffutils==0.14",
+        "mode": "create_db() sqlite + GFFWriter export",
+        "db_stored_directives": [
+          "gff-version 3",
+          "sequence-region ctg1 1 48"
+        ],
+        "accepts": true,
+        "features_written": 5,
+        "output_file": "outputs/gffutils-fixture2-ascii-header.gff3",
+        "output_feature_lines": 5,
+        "output_expected_features": 5,
+        "feature_lines_byte_identical_to_input": true,
+        "ordinary_comment_in_output": false,
+        "tilde_lines_in_output": 0,
+        "directives_in_output": [],
+        "nonascii_bytes_in_output": [],
+        "output_checksum_recorded": null,
+        "output_checksum_note": "no #~ line survives export; FH header dropped entirely"
+      }
+    },
+    {
+      "fixture": "fixture3-raw-utf8.gff3",
+      "expected_feature_lines": 5,
+      "simple_gff3": {
+        "parser": "gff3==1.0.1",
+        "accepts": true,
+        "line_types": {
+          "directive": 3,
+          "comment": 18,
+          "feature": 5
+        },
+        "comment_lines_total": 18,
+        "ordinary_comment_preserved_in_parse": true,
+        "tilde_lines_classified_as_comment": 16,
+        "tilde_annotation_line_raw": [
+          "#~annotation: \"Caf\u00e9 annotation\"\n"
+        ],
+        "tilde_annotation_codepoints_nonascii": [
+          [
+            "U+00E9"
+          ]
+        ],
+        "features_parsed": 5,
+        "features_expected": 5,
+        "errors_any": 0,
+        "errors_detail": []
+      },
+      "gffutils_iter": {
+        "parser": "gffutils==0.14",
+        "accepts": true,
+        "features_parsed": 5,
+        "features_expected": 5,
+        "feature_key_tuples_match": true
+      },
+      "gffutils_export": {
+        "parser": "gffutils==0.14",
+        "mode": "create_db() sqlite + GFFWriter export",
+        "db_stored_directives": [
+          "gff-version 3",
+          "sequence-region ctg1 1 48"
+        ],
+        "accepts": true,
+        "features_written": 5,
+        "output_file": "outputs/gffutils-fixture3-raw-utf8.gff3",
+        "output_feature_lines": 5,
+        "output_expected_features": 5,
+        "feature_lines_byte_identical_to_input": true,
+        "ordinary_comment_in_output": false,
+        "tilde_lines_in_output": 0,
+        "directives_in_output": [],
+        "nonascii_bytes_in_output": [],
+        "output_checksum_recorded": null,
+        "output_checksum_note": "no #~ line survives export; FH header dropped entirely"
+      }
+    },
+    {
+      "fixture": "fixture4-escaped.gff3",
+      "expected_feature_lines": 5,
+      "simple_gff3": {
+        "parser": "gff3==1.0.1",
+        "accepts": true,
+        "line_types": {
+          "directive": 3,
+          "comment": 18,
+          "feature": 5
+        },
+        "comment_lines_total": 18,
+        "ordinary_comment_preserved_in_parse": true,
+        "tilde_lines_classified_as_comment": 16,
+        "tilde_annotation_line_raw": [
+          "#~annotation: \"Caf\\u00E9 annotation\"\n"
+        ],
+        "tilde_annotation_codepoints_nonascii": [],
+        "features_parsed": 5,
+        "features_expected": 5,
+        "errors_any": 0,
+        "errors_detail": []
+      },
+      "gffutils_iter": {
+        "parser": "gffutils==0.14",
+        "accepts": true,
+        "features_parsed": 5,
+        "features_expected": 5,
+        "feature_key_tuples_match": true
+      },
+      "gffutils_export": {
+        "parser": "gffutils==0.14",
+        "mode": "create_db() sqlite + GFFWriter export",
+        "db_stored_directives": [
+          "gff-version 3",
+          "sequence-region ctg1 1 48"
+        ],
+        "accepts": true,
+        "features_written": 5,
+        "output_file": "outputs/gffutils-fixture4-escaped.gff3",
+        "output_feature_lines": 5,
+        "output_expected_features": 5,
+        "feature_lines_byte_identical_to_input": true,
+        "ordinary_comment_in_output": false,
+        "tilde_lines_in_output": 0,
+        "directives_in_output": [],
+        "nonascii_bytes_in_output": [],
+        "output_checksum_recorded": null,
+        "output_checksum_note": "no #~ line survives export; FH header dropped entirely"
+      }
+    }
+  ]
+}

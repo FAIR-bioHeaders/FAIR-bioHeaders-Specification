@@ -1,0 +1,15 @@
+== part 1: independent checksum cross-check ==
+{"file": "fixture1-plain.gff3", "sha256": "5e22dab04bdf52a91790a42bd7460a2df5fee7c0b5afb0db9ff9d89afea90b43", "fh_independent": null, "fh_tool_0.9.0": null, "fh_recorded_in_header": null, "match": "n/a (no header)"}
+{"file": "fixture2-ascii-header.gff3", "sha256": "feb3a7c8c3e163585ba40fa5a5236323e6614ff87fc00b4ed815a11a794e7a2b", "fh_independent": "GAM2M53yPorYxX1vDK2JHQzBKMQ7hhvkSAlYHW6F4BI=", "fh_tool_0.9.0": "GAM2M53yPorYxX1vDK2JHQzBKMQ7hhvkSAlYHW6F4BI=", "fh_recorded_in_header": "GAM2M53yPorYxX1vDK2JHQzBKMQ7hhvkSAlYHW6F4BI=", "match": true}
+{"file": "fixture3-raw-utf8.gff3", "sha256": "de6c140d6f1b0893c8ad687c4fcdf3d8d6826e0089477412ef0c05b0881ee524", "fh_independent": "TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=", "fh_tool_0.9.0": "TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=", "fh_recorded_in_header": "TsG/eToVe5vEdviwXhTTe6un7TFnMVl2xp02C14bh/g=", "match": true}
+{"file": "fixture4-escaped.gff3", "sha256": "ba2fb80cb4f7fbc68cd592a5d22b021e86dcfc4757355488eac0e9b6501c5fc1", "fh_independent": "zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k=", "fh_tool_0.9.0": "zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k=", "fh_recorded_in_header": "zbxtFqkogcI6pLCtLH/+kRTkCYbdlFzz2j7RAOY0f5k=", "match": true}
+
+== part 2: decoded-value equivalence, fixtures 3 vs 4 ==
+{"file": "fixture3-raw-utf8.gff3", "header_type": "FHGFF3", "yaml_ok": true, "checksum_ok": true, "schema_ok": true, "genome_link": true, "annotation_value": "Caf\u00e9 annotation", "codepoints": ["U+0043", "U+0061", "U+0066", "U+00E9", "U+0020", "U+0061", "U+006E", "U+006E", "U+006F", "U+0074", "U+0061", "U+0074", "U+0069", "U+006F", "U+006E"]}
+{"file": "fixture4-escaped.gff3", "header_type": "FHGFF3", "yaml_ok": true, "checksum_ok": true, "schema_ok": true, "genome_link": true, "annotation_value": "Caf\u00e9 annotation", "codepoints": ["U+0043", "U+0061", "U+0066", "U+00E9", "U+0020", "U+0061", "U+006E", "U+006E", "U+006F", "U+0074", "U+0061", "U+0074", "U+0069", "U+006F", "U+006E"]}
+equal_decoded_values: True
+matches_expected_literal: True
+
+== part 2b: round-trip (reader -> YAML bytes -> reader) ==
+{"file": "fixture3-raw-utf8.gff3", "yaml_dump_ascii_only": "annotation: \"Caf\\xE9 annotation\"", "dump_bytes_hex": "616e6e6f746174696f6e3a20224361665c78453920616e6e6f746174696f6e220a", "roundtrip_equal": true}
+{"file": "fixture4-escaped.gff3", "yaml_dump_ascii_only": "annotation: \"Caf\\xE9 annotation\"", "dump_bytes_hex": "616e6e6f746174696f6e3a20224361665c78453920616e6e6f746174696f6e220a", "roundtrip_equal": true}

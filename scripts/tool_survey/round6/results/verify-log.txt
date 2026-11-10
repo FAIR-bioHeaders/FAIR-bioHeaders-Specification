@@ -1,0 +1,12 @@
+$ .venv/bin/bioheaders verify fixtures/fixture1-plain.gff3
+FHR: No #~ FHR metadata header found
+exit=1
+$ .venv/bin/bioheaders verify fixtures/fixture2-ascii-header.gff3
+Checksum verified.
+exit=0
+$ .venv/bin/bioheaders verify fixtures/fixture3-raw-utf8.gff3
+Checksum verified.
+exit=0
+$ .venv/bin/bioheaders verify fixtures/fixture4-escaped.gff3
+Checksum verified.
+exit=0

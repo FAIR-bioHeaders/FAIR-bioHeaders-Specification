@@ -136,6 +136,29 @@ use experimental extension fields. They add no coverage to the rated rows.
 
 Submission-tool compatibility remains tracked in [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191).
 
+#### GFF3 draft ASCII rule versus R6 UTF-8
+
+The INSDC GFF3 Specification draft (v0.5.1, p. 6, ll. 145–150) lists ASCII as a
+common rule; its scope for comment bytes is not yet stated
+([#210](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/210)).
+Evidence run 2026-11-10 ([round 6 harness](../scripts/tool_survey/round6/README.md)):
+
+- ASCII-only FH headers satisfy both rule sets trivially (ASCII ⊂ UTF-8).
+- Raw non-ASCII UTF-8 in `#~` bytes was accepted without error by every tool
+  we could run (gff3 1.0.1, gffutils 0.14; fair-bioheaders 0.9.0 verifies);
+  ENA gff3tools' pinned source treats all `#` lines as skippable comments;
+  no INSDC-side rejection has been reproduced. ENA gff3tools were not executed
+  (build requires authenticated EBI registries).
+- The ASCII-escape route (YAML `\uXXXX` in a double-quoted scalar, verified to
+  decode identically) keeps the whole file ASCII and satisfies the draft rule
+  under every candidate scope for comment bytes — the recommended safe
+  serialization for submissions while the question is open.
+
+Status: **open question to the draft editors** (The-Sequence-Ontology/
+Specifications#41). Do not mark this covered or closed until an authoritative
+disposition arrives. This is compatibility guidance; the released UTF-8 rule R6
+is unchanged and no matrix row's rating changes on this evidence.
+
 ### Analysis Minimum Specification v1.0
 
 | ID | INSDC requirement | FH type(s) | Cov. | Location in FH | Disposition |
