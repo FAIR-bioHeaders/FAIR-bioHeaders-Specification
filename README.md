@@ -21,6 +21,7 @@ comes here by pull request:
 | FHP | [FHP-Specification](https://github.com/FAIR-bioHeaders/FHP-Specification) |
 | FHT | [FHT-Specification](https://github.com/FAIR-bioHeaders/FHT-Specification) |
 | FHGFF3 | [FHGFF3](https://github.com/FAIR-bioHeaders/FHGFF3) |
+| FHGM (draft, no contract — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
 
 Schema URLs under the old name
 (`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`
@@ -51,6 +52,22 @@ required fields and naming rules on top of a header type without editing the
 published schemas, with a draft AgBioData example under
 [`profiles/`](profiles/). It is a proposal; no profile is adopted and the
 published contracts are unchanged.
+
+## Draft gene-model records (FHGM)
+
+[docs/FHGM.md](docs/FHGM.md) is a draft overview of FHGM (FAIR Header Gene
+Model): record-level metadata for a gene-model contribution, in contrast to the
+FHGFF3 header that describes the enclosing annotation file. The current pilot
+embeds repeatable model-level records inside an FHGFF3 file as `x-` extension
+fields and separates file integrity (the exact-byte checksum) from model-level
+revision resolution, which needs its own check. Contract ownership, required
+fields, serialization and model-level validation are under review in
+[#204](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204);
+pilot datasets are tracked in
+[#206](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/206).
+FHGM is **not** a released contract: it has no schema, no version and no entry
+in `schemas/versions.json` (released contracts only), and no toolkit, validator
+or builder support is claimed.
 
 ## Metadata
 
