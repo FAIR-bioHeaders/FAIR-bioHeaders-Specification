@@ -114,6 +114,28 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 | AN-xref | Mandatory links to sequence, sample, assembly, study, validation reports; optional publication and db_xrefs | FHGFF3 | ◐ | `genomeReference` (assembly accession and `seqcol_id`) or `derivedFrom` an FHR file; `relatedLink` for study and sample; ATT-014 checks `Dbxref` form; no validation-report link | **Partial** — the genome link is first-class; other links are `relatedLink` URLs |
 | AN-std | Standards: INSDC Feature Table; Sequence Ontology with incomplete INSDC mappings | FHGFF3 | ◐ | validator pins an SO release and SO rules; the Feature Table is not modelled | **Partial** — the incomplete INSDC to SO mapping is upstream at the Sequence Ontology |
 
+#### Draft FHGM note
+
+The [FHGM pilot review (FHGM-Specification #5)](https://github.com/FAIR-bioHeaders/FHGM-Specification/issues/5)
+explores multiple model records embedded in one FHGFF3 annotation. The records
+use experimental extension fields. They add no coverage to the rated rows.
+
+- **FHGFF3** describes the enclosing annotation. Header validation checks its
+  schema and genome link structure (AN-xref). File verification checks the
+  exact-byte checksum, including the embedded records.
+- **GFF3 validation** checks feature syntax, coordinates, and native
+  `ID`/`Parent` relationships (AN.a, AN.b.iii, AN.b.vii). Sequence-dependent
+  checks require the relevant reference. Missing INSDC rules and profile
+  placement remain tracked in [gff3-validator #27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27).
+- **FHGM (draft)** would check that each model record resolves to an
+  unambiguous feature at the intended scope. For revisions, it would resolve
+  the prior annotation checksum and the model ID and version within that
+  snapshot. A resolved pointer identifies a predecessor. Curator-approved
+  supersession requires separate evidence. A model ID does not establish an
+  INSDC locus tag (AN.b.ix).
+
+Submission-tool compatibility remains tracked in [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191).
+
 ### Analysis Minimum Specification v1.0
 
 | ID | INSDC requirement | FH type(s) | Cov. | Location in FH | Disposition |
