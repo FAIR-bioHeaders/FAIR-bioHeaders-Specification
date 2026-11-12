@@ -193,6 +193,12 @@ class FHPSchemaTests(unittest.TestCase):
                 record = changed("schemaVersion", "1.2")
                 record = changed("completeness.lineageDataset", dataset, record)
                 self.assertEqual(self.errors(record), [])
+        for dataset in ("primates_odb12.", "primates_odb.12", "primates_odb12..2",
+                        "primates_odb12.2b", "Primates_odb12.2"):
+            with self.subTest(schemaVersion="1.2", dataset=dataset):
+                record = changed("schemaVersion", "1.2")
+                record = changed("completeness.lineageDataset", dataset, record)
+                self.assertTrue(self.errors(record))
 
     def test_rejected_values(self):
         for path, value, reason in REJECTED:
