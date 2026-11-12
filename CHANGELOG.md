@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Generated CEDAR workbench authoring templates for the released types
+  (`templates/cedar/{fhp,fhgff3,fhr}.json`, FHR 2.1 / FHP 1.1 / FHGFF3 1.1) and
+  their generator `scripts/make_cedar.py` (stdlib-only, deterministic,
+  `--check` wired into the Validate specification workflow;
+  `tests/test_cedar.py`). Authoring aids only: no schema, version or registry
+  change; extension slots (docs/FORMAT.md R15) are omitted from the forms;
+  publication to a CEDAR instance remains a maintainer action. Refs #162.
 - The conformance CI runs the released `fair-bioheaders[jsonld]==0.9.0`, the first release
   that bundles the v0.5.0 schemas (R15, J9, M5), instead of the pinned FAIR-bioHeaders-Tools
   commit `5b05b65`.
