@@ -11,6 +11,7 @@ occurrence shape, and round-trip a filled export of every released type back
 into a record that validates against the real JSON Schema (Draft 2020-12).
 """
 
+import copy
 import datetime
 import hashlib
 import json
@@ -21,7 +22,7 @@ import sys
 import unittest
 
 import yaml
-from jsonschema import Draft202012Validator, FormatChecker
+from jsonschema import Draft4Validator, Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -82,13 +83,29 @@ def walk_keys(node, path=""):
             yield from walk_keys(item, f"{path}[]")
 
 
-def wrap_export(value):
+def context_mapping(properties):
+    context = {}
+    for key, schema in properties.items():
+        if "enum" in schema:
+            context[key] = schema["enum"][0]
+        elif "properties" in schema:
+            context[key] = {
+                name: definition["enum"][0]
+                for name, definition in schema["properties"].items()
+                if "enum" in definition
+            }
+    return context
+
+
+def wrap_export(value, node, root=False):
     """Wrap one record value the way a CEDAR artifact export presents it.
 
     Scalars become {"@value": ...} with the numeric datatypes the generated
     fields declare; element instances additionally carry the JSON-LD identity
     keys that flatten_export must drop.
     """
+    if value is None:
+        return {"@value": None}
     if isinstance(value, bool):
         return {"@value": value}
     if isinstance(value, int):
@@ -98,10 +115,15 @@ def wrap_export(value):
     if isinstance(value, str):
         return {"@value": value}
     if isinstance(value, list):
-        return [wrap_export(item) for item in value]
+        return [wrap_export(item, node["items"]) for item in value]
     if isinstance(value, dict):
-        inner = {key: wrap_export(item) for key, item in value.items()}
-        inner.update({"@context": {}, "@id": "urn:example:instance",
+        inner = {}
+        for key, item in value.items():
+            form_key = make_cedar.form_field_name(key) if root else key
+            inner[form_key] = wrap_export(item, node["properties"][form_key])
+        context_schema = node["properties"]["@context"]["properties"]
+        inner.update({"@context": context_mapping(context_schema),
+                      "@id": "urn:example:instance",
                       "@type": ["https://example.invalid/Instance"]})
         return inner
     raise AssertionError(f"unexpected value {value!r}")
@@ -143,10 +165,12 @@ class CedarTemplateTests(unittest.TestCase):
             template = load_template(stem)
             contract_required = [name for name in template["required"]
                                  if name not in make_cedar.FIXED_REQUIRED]
-            self.assertEqual(set(contract_required), set(schema["required"]),
+            expected = [make_cedar.form_field_name(name) for name in schema["required"]
+                        if name != "checksum"]
+            self.assertEqual(set(contract_required), set(expected),
                              f"{stem}: template required list differs from the schema")
-            self.assertEqual(contract_required, list(schema["required"]),
-                             f"{stem}: required list order should follow the schema")
+            self.assertEqual(contract_required, expected,
+                             f"{stem}: required fields should follow the schema, except checksum")
             self.assertEqual(template["required"][:9], make_cedar.FIXED_REQUIRED,
                              f"{stem}: the CEDAR 1.6.0 fixed required tuple must lead")
 
@@ -161,7 +185,8 @@ class CedarTemplateTests(unittest.TestCase):
             template = load_template(stem)
             url = contract_url(stem)
             version = contract_version(stem)
-            schema_literals = template["properties"]["schema"]["_valueConstraints"]["literals"]
+            schema_field = make_cedar.form_field_name("schema")
+            schema_literals = template["properties"][schema_field]["_valueConstraints"]["literals"]
             version_literals = (template["properties"]["schemaVersion"]
                                 ["_valueConstraints"]["literals"])
             self.assertEqual([entry["label"] for entry in schema_literals], [url],
@@ -185,9 +210,14 @@ class CedarTemplateTests(unittest.TestCase):
                 self.assertIn(key, template["properties"], f"{stem}: properties lacks {key}")
             self.assertIn("_ui", template)
             order = template["_ui"]["order"]
+            context_properties = template["properties"]["@context"]["properties"]
+            self.assertEqual(context_properties["schema"]["enum"],
+                             ["http://schema.org/"])
+            self.assertIn("header_schema", context_properties)
             schema_file, _, _ = TYPES[stem]
             schema = json.loads((ROOT / schema_file).read_text(encoding="utf-8"))
-            self.assertEqual(order, list(schema["properties"]),
+            self.assertEqual(order, [make_cedar.form_field_name(name)
+                                     for name in schema["properties"]],
                              f"{stem}: form order must cover every contract field exactly")
             for name in order:
                 field = template["properties"][name]
@@ -198,7 +228,8 @@ class CedarTemplateTests(unittest.TestCase):
                     node = field
                 self.assertIn(node["@type"], (make_cedar.CEDAR_FIELD, make_cedar.CEDAR_ELEMENT))
                 self.assertEqual(node["schema:schemaVersion"], make_cedar.CEDAR_FORMAT_VERSION)
-                self.assertEqual(node["schema:name"], name,
+                self.assertEqual(node["schema:name"],
+                                 "schema" if name == make_cedar.form_field_name("schema") else name,
                                  f"{stem}: {name} must export under its contract name")
                 if node["@type"] == make_cedar.CEDAR_ELEMENT:
                     self.assertEqual(node["required"][:2], ["@context", "@id"])
@@ -223,9 +254,10 @@ class CedarTemplateTests(unittest.TestCase):
                                                 make_cedar.load_registry()[stem]).normalize(node)
                 return node
 
-            def check(scope_node, cedar_node):
+            def check(scope_node, cedar_node, root=False):
                 for member, member_schema in scope_node.get("properties", {}).items():
-                    form = cedar_node["properties"][member]
+                    form_name = make_cedar.form_field_name(member) if root else member
+                    form = cedar_node["properties"][form_name]
                     target = contract_object(member_schema)
                     if target.get("type") == "array":
                         target = make_cedar.deref(target.get("items", {}), defs)
@@ -236,20 +268,26 @@ class CedarTemplateTests(unittest.TestCase):
                                          f"{stem}: {member} element required mismatch")
                         check(target, form)
 
-            check(schema, template)
+            check(schema, template, root=True)
 
     def test_filled_exports_round_trip_and_validate(self):
         for stem in STEMS:
             schema_file, example, fmt = TYPES[stem]
             record = load_example(example, fmt)
-            artifact = wrap_export(record)
-            artifact.update({"@context": {"@version": 1.1}, "@id": "urn:example:artifact",
+            template = load_template(stem)
+            artifact = wrap_export(record, template, root=True)
+            artifact.update({"@id": "urn:example:artifact",
                              "@type": ["https://example.invalid/FhRecord"],
                              "schema:isBasedOn": "https://example.invalid/template",
                              "schema:name": "export", "schema:description": "",
-                             "pav:createdOn": "2026-11-12T00:00:00+0000",
+                             "pav:createdOn": "2026-11-12T00:00:00Z",
                              "pav:createdBy": None, "pav:lastUpdatedOn": None,
-                             "oslc:modifiedBy": None, "pav:derivedFrom": None})
+                             "oslc:modifiedBy": None, "pav:derivedFrom": "urn:example:source"})
+            Draft4Validator.check_schema(template)
+            template_validator = Draft4Validator(template, format_checker=FormatChecker())
+            errors = sorted(template_validator.iter_errors(artifact), key=lambda e: e.json_path)
+            self.assertEqual([], [e.message for e in errors],
+                             f"{stem}: filled export failed generated-template validation")
             flat = make_cedar.flatten_export(artifact)
             self.assertEqual(flat, record, f"{stem}: CEDAR export round trip lost data")
             schema = json.loads((ROOT / schema_file).read_text(encoding="utf-8"))
@@ -259,17 +297,63 @@ class CedarTemplateTests(unittest.TestCase):
             self.assertEqual([], [e.message for e in errors],
                              f"{stem}: filled export failed schema validation")
 
+    def test_partial_exports_omit_empty_optional_values_and_root_checksum(self):
+        for stem in STEMS:
+            schema_file, example, fmt = TYPES[stem]
+            record = load_example(example, fmt)
+            record["checksum"] = None
+            record["documentation"] = None
+            record["taxon"]["name"] = None
+            template = load_template(stem)
+            artifact = wrap_export(record, template, root=True)
+            artifact.update({"@context": context_mapping(
+                template["properties"]["@context"]["properties"]),
+                "@id": "urn:example:artifact",
+                "@type": ["https://example.invalid/FhRecord"],
+                "schema:isBasedOn": "https://example.invalid/template",
+                "schema:name": "partial export", "schema:description": "",
+                "pav:createdOn": "2026-11-12T00:00:00Z",
+                "pav:createdBy": None, "pav:lastUpdatedOn": None,
+                "oslc:modifiedBy": None, "pav:derivedFrom": "urn:example:source"})
+            template_validator = Draft4Validator(template, format_checker=FormatChecker())
+            errors = sorted(template_validator.iter_errors(artifact), key=lambda e: e.json_path)
+            self.assertEqual([], [e.message for e in errors],
+                             f"{stem}: partial export failed generated-template validation")
+            flat = make_cedar.flatten_export(artifact)
+            self.assertNotIn("checksum", flat)
+            self.assertNotIn("documentation", flat)
+            self.assertNotIn("name", flat["taxon"])
+            if stem == "fhgff3":
+                parent_checksum = record["derivedFrom"][0]["checksum"]
+                self.assertEqual(flat["derivedFrom"][0]["checksum"], parent_checksum)
+            schema = json.loads((ROOT / schema_file).read_text(encoding="utf-8"))
+            errors = list(Draft202012Validator(schema, format_checker=FormatChecker())
+                          .iter_errors(flat))
+            self.assertEqual(["'checksum' is a required property"],
+                             [error.message for error in errors],
+                             f"{stem}: pre-binding record should only need its file checksum")
+            invalid_required = copy.deepcopy(artifact)
+            invalid_required["schemaVersion"] = {"@value": None}
+            invalid_flat = make_cedar.flatten_export(invalid_required)
+            self.assertIsNone(invalid_flat["schemaVersion"],
+                              f"{stem}: an unanswered required value must not be omitted")
+            invalid_errors = list(Draft202012Validator(schema, format_checker=FormatChecker())
+                                  .iter_errors(invalid_flat))
+            self.assertTrue(any("schemaVersion" in error.json_path for error in invalid_errors),
+                            f"{stem}: missing required value did not remain a validation error")
+
     def test_example_fields_are_all_covered_by_the_template(self):
         for stem in STEMS:
             _, example, fmt = TYPES[stem]
             record = load_example(example, fmt)
             template = load_template(stem)
 
-            def check(record_node, cedar_node, where):
+            def check(record_node, cedar_node, where, root=False):
                 for key, value in record_node.items():
-                    self.assertIn(key, cedar_node["properties"],
+                    form_key = make_cedar.form_field_name(key) if root else key
+                    self.assertIn(form_key, cedar_node["properties"],
                                   f"{stem}: example uses {where}{key} but the form lacks it")
-                    form = cedar_node["properties"][key]
+                    form = cedar_node["properties"][form_key]
                     if form.get("type") == "array":
                         form = form["items"]
                         if isinstance(value, list) and value and isinstance(value[0], dict):
@@ -277,7 +361,7 @@ class CedarTemplateTests(unittest.TestCase):
                     elif isinstance(value, dict):
                         check(value, form, f"{where}{key}.")
 
-            check(record, template, "")
+            check(record, template, "", root=True)
 
 
 if __name__ == "__main__":

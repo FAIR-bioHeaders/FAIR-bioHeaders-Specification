@@ -35,7 +35,7 @@
   "schema:identifier": "https://w3id.org/fair-bioheaders/templates/cedar/fhr/2.1",
   "_ui": {
     "order": [
-      "schema",
+      "header_schema",
       "schemaVersion",
       "genome",
       "genomeSynonym",
@@ -61,7 +61,7 @@
       "seqcol_id"
     ],
     "propertyLabels": {
-      "schema": "Schema",
+      "header_schema": "Schema",
       "schemaVersion": "Schema Version",
       "genome": "Genome",
       "genomeSynonym": "Genome Synonym",
@@ -87,7 +87,7 @@
       "seqcol_id": "SeqCol ID"
     },
     "propertyDescriptions": {
-      "schema": "centralized schema file. This template fixes the FHR contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhr/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
+      "header_schema": "centralized schema file. This template fixes the FHR contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhr/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
       "schemaVersion": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4, 2.1 (extension fields) from v0.5 (docs/SCHEMA-VERSIONS.md).",
       "genome": "Name of the Genome.",
       "genomeSynonym": "Other common names of the genome.",
@@ -139,8 +139,10 @@
           ]
         },
         "schema": {
+          "type": "string",
+          "format": "uri",
           "enum": [
-            "https://w3id.org/fair-bioheaders/templates/cedar/fhr#/schema"
+            "http://schema.org/"
           ]
         },
         "oslc": {
@@ -267,6 +269,11 @@
             }
           }
         },
+        "header_schema": {
+          "enum": [
+            "https://w3id.org/fair-bioheaders/templates/cedar/fhr#/schema"
+          ]
+        },
         "schemaVersion": {
           "enum": [
             "https://w3id.org/fair-bioheaders/templates/cedar/fhr#/schemaVersion"
@@ -384,16 +391,46 @@
         }
       },
       "required": [
-        "@type",
-        "@id",
-        "@context",
+        "rdfs",
+        "xsd",
+        "pav",
+        "schema",
+        "oslc",
+        "skos",
+        "rdfs:label",
         "schema:isBasedOn",
         "schema:name",
         "schema:description",
         "pav:createdOn",
         "pav:createdBy",
         "pav:lastUpdatedOn",
-        "oslc:modifiedBy"
+        "oslc:modifiedBy",
+        "skos:notation",
+        "pav:derivedFrom",
+        "header_schema",
+        "schemaVersion",
+        "genome",
+        "genomeSynonym",
+        "taxon",
+        "version",
+        "metadataAuthor",
+        "assemblyAuthor",
+        "dateCreated",
+        "voucherSpecimen",
+        "accessionID",
+        "instrument",
+        "scholarlyArticle",
+        "documentation",
+        "identifier",
+        "relatedLink",
+        "funding",
+        "reuseConditions",
+        "masking",
+        "vitalStats",
+        "checksum",
+        "assemblySoftware",
+        "assemblyProtocol",
+        "seqcol_id"
       ],
       "additionalProperties": false
     },
@@ -464,7 +501,7 @@
       "type": "string",
       "format": "uri"
     },
-    "schema": {
+    "header_schema": {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "@type": "https://schema.metadatacenter.org/core/TemplateField",
       "@context": {
@@ -5180,7 +5217,7 @@
     "pav:createdBy",
     "pav:lastUpdatedOn",
     "oslc:modifiedBy",
-    "schema",
+    "header_schema",
     "schemaVersion",
     "genome",
     "taxon",
@@ -5188,8 +5225,7 @@
     "metadataAuthor",
     "assemblyAuthor",
     "dateCreated",
-    "masking",
-    "checksum"
+    "masking"
   ],
   "pav:createdOn": null,
   "pav:createdBy": null,

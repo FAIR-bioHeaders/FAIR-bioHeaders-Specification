@@ -42,9 +42,14 @@ intentionally contain **no `x-` fields and no placeholder for them**:
 
 - an extension means nothing to the standard, so a form cannot give it field
   help, a type or requiredness without inventing meaning;
-- a guided surface should not invite values that no validator checks; and
-- omitting them exports only version-independent records: an `x-`-free record
-  is valid under both the current and the previous `schemaVersion` of its type.
+- a guided surface should not invite values that no validator checks.
+
+The templates pin the **current** schema URL and `schemaVersion`; omitting
+extensions does not make an export valid under a previous release. Older
+schemas may reject those newer identity values. To target an older release,
+change both `schema` and `schemaVersion` to values accepted by that release,
+then validate against its schema. These templates do not perform that
+downgrade.
 
 Curators who need extensions edit YAML directly; `tests/test_cedar.py` fails
 if an `x-` key ever reaches a template.
@@ -68,19 +73,24 @@ template JSON-LD format 1.6.0 (per the meta-schemas and reference templates in
 
 A CEDAR export is an artifact instance with JSON-LD wrappers
 (`{"@value": …}`, `@context`, provenance keys), **not** yet a header record.
-Flatten it and validate before anything else:
+Flatten it to prepare the metadata for binding:
 
 ```sh
 python scripts/make_cedar.py --flatten cedar-export.json > record.json
-bioheaders validate record.json
 bioheaders combine record.json data.fa -o data.fh.fa
+bioheaders validate data.fh.fa
+bioheaders verify data.fh.fa
 ```
 
-**Every exported record MUST pass `bioheaders validate` before
-`bioheaders combine`**, and the checksum is written by `bioheaders combine`
-over the exact file bytes — never type a checksum into the form by hand.
-`flatten_export` only restores the record shape; it validates nothing, and the
-toolkit stays the authority (it also accepts the same JSON as YAML).
+Leave the root checksum blank in the form. `flatten_export` omits an empty root
+checksum and unanswered optional values, but retains supplied nested parent
+checksums such as `derivedFrom[].checksum`. The resulting unbound metadata is
+not yet a complete contract instance because the root checksum is required.
+`bioheaders combine` is the supported pre-binding step: it computes that root
+checksum over the exact file bytes and validates the bound header. Do not run
+`bioheaders validate` on fresh, unbound metadata or enter a checksum by hand;
+validate and verify the resulting bound file as shown above. The toolkit remains
+the validator and writer, while `flatten_export` only restores the record shape.
 
 Known form limits, stated rather than hidden: the FHP `geneticCode` numeric
 input cannot block the contract's range gaps (1-6, 9-16, 21-33 — only

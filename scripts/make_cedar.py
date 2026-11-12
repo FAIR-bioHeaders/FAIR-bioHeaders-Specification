@@ -94,9 +94,6 @@ FIELD_CONTEXT = dict(CEDAR_CONTEXT, **{
 FIXED_REQUIRED = ["@context", "@id", "schema:isBasedOn", "schema:name",
                   "schema:description", "pav:createdOn", "pav:createdBy",
                   "pav:lastUpdatedOn", "oslc:modifiedBy"]
-FIXED_CONTEXT_PROPERTIES = ["@type", "@id", "@context", "schema:isBasedOn", "schema:name",
-                           "schema:description", "pav:createdOn", "pav:createdBy",
-                           "pav:lastUpdatedOn", "oslc:modifiedBy"]
 BOOKKEEPING = ["schema:isBasedOn", "schema:name", "schema:description", "pav:createdOn",
                "pav:createdBy", "pav:lastUpdatedOn", "oslc:modifiedBy", "pav:derivedFrom"]
 TYPE_DESC = {"oneOf": [{"type": "string", "format": "uri"},
@@ -108,6 +105,18 @@ NULL_DATETIME = {"type": ["string", "null"], "format": "date-time"}
 
 # Registry file -> template file stem, matching schemas/versions.json.
 TYPES = {"FHR": "fhr", "FHP": "fhp", "FHGFF3": "fhgff3"}
+FORM_FIELD_ALIASES = {"schema": "header_schema"}
+
+
+def form_field_name(name: str) -> str:
+    """Avoid CEDAR context namespace collisions while retaining contract names."""
+    return FORM_FIELD_ALIASES.get(name, name)
+
+
+def contract_field_name(name: str) -> str:
+    """Restore a contract key from its non-conflicting form alias."""
+    return next((contract for contract, alias in FORM_FIELD_ALIASES.items()
+                 if alias == name), name)
 
 # ---------------------------------------------------------------------------
 # Curated wording. Units follow docs/FORMAT.md and the schema descriptions;
@@ -486,55 +495,56 @@ class Generator:
         for name, node in properties.items():
             if name.startswith("x-") or name == "patternProperties":
                 raise SystemExit(f"make_cedar: extension field {name} must not reach the form")
-            order.append(name)
-            fields[name] = self.field(name, name, node, name in required)
-            context_map[name] = {"enum": [self.property_uri(name)]}
+            form_name = form_field_name(name)
+            order.append(form_name)
+            fields[form_name] = self.field(name, name, node, name in required)
+            context_map[form_name] = {"enum": [self.property_uri(name)]}
+        context_properties = {
+            "rdfs": {"type": "string", "format": "uri",
+                     "enum": ["http://www.w3.org/2000/01/rdf-schema#"]},
+            "xsd": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["xsd"]]},
+            "pav": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["pav"]]},
+            "schema": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["schema"]]},
+            "oslc": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["oslc"]]},
+            "skos": {"type": "string", "format": "uri",
+                     "enum": ["http://www.w3.org/2004/02/skos/core#"]},
+            "rdfs:label": {"type": "object",
+                           "properties": {"@type": {"type": "string",
+                                                    "enum": ["xsd:string"]}}},
+            "schema:isBasedOn": {"type": "object",
+                                 "properties": {"@type": {"type": "string",
+                                                          "enum": ["@id"]}}},
+            "schema:name": {"type": "object",
+                            "properties": {"@type": {"type": "string",
+                                                     "enum": ["xsd:string"]}}},
+            "schema:description": {"type": "object",
+                                   "properties": {"@type": {"type": "string",
+                                                            "enum": ["xsd:string"]}}},
+            "pav:createdOn": {"type": "object",
+                              "properties": {"@type": {"type": "string",
+                                                       "enum": ["xsd:dateTime"]}}},
+            "pav:createdBy": {"type": "object",
+                              "properties": {"@type": {"type": "string",
+                                                       "enum": ["@id"]}}},
+            "pav:lastUpdatedOn": {"type": "object",
+                                  "properties": {"@type": {"type": "string",
+                                                           "enum": ["xsd:dateTime"]}}},
+            "oslc:modifiedBy": {"type": "object",
+                                "properties": {"@type": {"type": "string",
+                                                         "enum": ["@id"]}}},
+            "skos:notation": {"type": "object",
+                              "properties": {"@type": {"type": "string",
+                                                       "enum": ["xsd:string"]}}},
+            "pav:derivedFrom": {"type": "object",
+                                "properties": {"@type": {"type": "string",
+                                                         "enum": ["@id"]}}},
+            **context_map,
+        }
         root_properties = {
             "@context": {
                 "type": "object",
-                "properties": {
-                    "rdfs": {"type": "string", "format": "uri",
-                             "enum": ["http://www.w3.org/2000/01/rdf-schema#"]},
-                    "xsd": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["xsd"]]},
-                    "pav": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["pav"]]},
-                    "schema": {"type": "string", "format": "uri",
-                               "enum": [CEDAR_CONTEXT["schema"]]},
-                    "oslc": {"type": "string", "format": "uri", "enum": [CEDAR_CONTEXT["oslc"]]},
-                    "skos": {"type": "string", "format": "uri",
-                             "enum": ["http://www.w3.org/2004/02/skos/core#"]},
-                    "rdfs:label": {"type": "object",
-                                   "properties": {"@type": {"type": "string",
-                                                            "enum": ["xsd:string"]}}},
-                    "schema:isBasedOn": {"type": "object",
-                                         "properties": {"@type": {"type": "string",
-                                                                  "enum": ["@id"]}}},
-                    "schema:name": {"type": "object",
-                                    "properties": {"@type": {"type": "string",
-                                                             "enum": ["xsd:string"]}}},
-                    "schema:description": {"type": "object",
-                                           "properties": {"@type": {"type": "string",
-                                                                    "enum": ["xsd:string"]}}},
-                    "pav:createdOn": {"type": "object",
-                                      "properties": {"@type": {"type": "string",
-                                                               "enum": ["xsd:dateTime"]}}},
-                    "pav:createdBy": {"type": "object",
-                                      "properties": {"@type": {"type": "string",
-                                                               "enum": ["@id"]}}},
-                    "pav:lastUpdatedOn": {"type": "object",
-                                          "properties": {"@type": {"type": "string",
-                                                                   "enum": ["xsd:dateTime"]}}},
-                    "oslc:modifiedBy": {"type": "object",
-                                        "properties": {"@type": {"type": "string",
-                                                                 "enum": ["@id"]}}},
-                    "skos:notation": {"type": "object",
-                                      "properties": {"@type": {"type": "string",
-                                                               "enum": ["xsd:string"]}}},
-                    "pav:derivedFrom": {"type": "object",
-                                        "properties": {"@type": {"type": "string",
-                                                                 "enum": ["@id"]}}},
-                    **context_map,
-                },
-                "required": FIXED_CONTEXT_PROPERTIES,
+                "properties": context_properties,
+                "required": list(context_properties),
                 "additionalProperties": False,
             },
             "@id": NULL_URI,
@@ -565,14 +575,15 @@ class Generator:
                                   f"{self.stem}/{self.meta['schemaVersion']}"),
             "_ui": {
                 "order": order,
-                "propertyLabels": {name: label_for(name) for name in order},
+                "propertyLabels": {name: label_for(contract_field_name(name)) for name in order},
                 "propertyDescriptions": {
                     name: (node.get("description") or node["items"].get("description")
                            if node.get("type") == "array" else node.get("description"))
                     for name, node in fields.items()},
             },
             "properties": root_properties,
-            "required": FIXED_REQUIRED + required,
+            "required": FIXED_REQUIRED + [
+                form_field_name(name) for name in required if name != "checksum"],
             "pav:createdOn": None,
             "pav:createdBy": None,
             "pav:lastUpdatedOn": None,
@@ -621,33 +632,74 @@ def _coerce(entry: dict):
     return value
 
 
-def flatten_value(value):
+def _contract_for_export(artifact: dict):
+    schema_value = artifact.get(form_field_name("schema"), artifact.get("schema"))
+    if isinstance(schema_value, dict) and "@value" in schema_value:
+        schema_value = _coerce(schema_value)
+    if not isinstance(schema_value, str):
+        raise ValueError("CEDAR export is missing its FAIR-bioHeaders schema URL")
+    for stem, meta in load_registry().items():
+        if schema_value == meta["url"]:
+            schema = json.loads((ROOT / meta["file"]).read_text(encoding="utf-8"))
+            return stem, meta, schema
+    raise ValueError(f"unsupported FAIR-bioHeaders schema URL: {schema_value}")
+
+
+def _contract_node(node, generator):
+    node = deref(node, generator.defs)
+    if "anyOf" in node and not (node.get("type") == "object" and node.get("properties")):
+        node = generator.normalize(node)
+    return node
+
+
+def _flatten_value(value, node, generator):
+    node = _contract_node(node, generator)
     if isinstance(value, list):
-        return [flatten_value(item) for item in value]
+        item_node = node.get("items", {})
+        return [_flatten_value(item, item_node, generator) for item in value]
     if isinstance(value, dict):
         if "@list" in value:
-            return [flatten_value(item) for item in value["@list"]]
+            return [_flatten_value(item, node.get("items", {}), generator)
+                    for item in value["@list"]]
         if "@value" in value:
             return _coerce(value)
-        return flatten_export(value)
+        return _flatten_object(value, node, generator)
     return value
+
+
+def _flatten_object(artifact: dict, node: dict, generator, root=False) -> dict:
+    node = _contract_node(node, generator)
+    properties = node.get("properties", {})
+    required = set(node.get("required", []))
+    record = {}
+    for key, value in artifact.items():
+        if key in RESERVED_KEYS or key.startswith("@"):
+            continue
+        contract_key = contract_field_name(key) if root else key
+        contract_node = properties.get(contract_key, {})
+        flattened = _flatten_value(value, contract_node, generator)
+        if root and contract_key == "checksum" and flattened in (None, ""):
+            continue
+        if flattened is None and contract_key not in required:
+            continue
+        record[contract_key] = flattened
+    return record
 
 
 def flatten_export(artifact: dict) -> dict:
     """Turn a CEDAR artifact instance export into the plain FH* JSON record.
 
     Drops the JSON-LD/CEDAR bookkeeping keys and unwraps ``{"@value": ...}``
-    (with the numeric datatypes the generated fields declare), so the result
-    has the shape ``bioheaders validate`` consumes. The toolkit remains the
+    (with the numeric datatypes the generated fields declare). Empty optional
+    values are omitted according to the selected contract's requiredness, and
+    an empty root checksum is omitted for ``bioheaders combine`` to calculate.
+    Supplied nested parent checksums are retained. The toolkit remains the
     authority: this helper only restores the record shape; it validates
     nothing.
     """
-    record = {}
-    for key, value in artifact.items():
-        if key in RESERVED_KEYS or key.startswith("@"):
-            continue
-        record[key] = flatten_value(value)
-    return record
+    stem, meta, schema = _contract_for_export(artifact)
+    generator = Generator(stem, schema, meta)
+    return _flatten_object(artifact, schema, generator, root=True)
 
 
 # ---------------------------------------------------------------------------

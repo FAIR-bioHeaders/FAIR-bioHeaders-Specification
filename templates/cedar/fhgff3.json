@@ -51,7 +51,7 @@
       "metadataAuthor",
       "relatedLink",
       "reuseConditions",
-      "schema",
+      "header_schema",
       "schemaVersion",
       "scholarlyArticle",
       "soVersion",
@@ -77,7 +77,7 @@
       "metadataAuthor": "Metadata Author",
       "relatedLink": "Related Link",
       "reuseConditions": "Reuse Conditions",
-      "schema": "Schema",
+      "header_schema": "Schema",
       "schemaVersion": "Schema Version",
       "scholarlyArticle": "Scholarly Article",
       "soVersion": "SO version",
@@ -103,7 +103,7 @@
       "metadataAuthor": "Authors of the FHGFF3 instance.",
       "relatedLink": "Related URLs to the annotation.",
       "reuseConditions": "Reuse conditions or license for the annotation.",
-      "schema": "URL of the FHGFF3 JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-010). This template fixes the FHGFF3 contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhgff3/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
+      "header_schema": "URL of the FHGFF3 JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-010). This template fixes the FHGFF3 contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhgff3/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
       "schemaVersion": "Version of the FHGFF3 schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5.",
       "scholarlyArticle": "Scholarly article where the annotation was published. A registered DOI without the resolver prefix (for example 10.5281/zenodo.6762550).",
       "soVersion": "Sequence Ontology release used for the feature types, as its data-version (for example 2026-08-07).",
@@ -139,8 +139,10 @@
           ]
         },
         "schema": {
+          "type": "string",
+          "format": "uri",
           "enum": [
-            "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/schema"
+            "http://schema.org/"
           ]
         },
         "oslc": {
@@ -347,6 +349,11 @@
             "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/reuseConditions"
           ]
         },
+        "header_schema": {
+          "enum": [
+            "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/schema"
+          ]
+        },
         "schemaVersion": {
           "enum": [
             "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/schemaVersion"
@@ -384,16 +391,46 @@
         }
       },
       "required": [
-        "@type",
-        "@id",
-        "@context",
+        "rdfs",
+        "xsd",
+        "pav",
+        "schema",
+        "oslc",
+        "skos",
+        "rdfs:label",
         "schema:isBasedOn",
         "schema:name",
         "schema:description",
         "pav:createdOn",
         "pav:createdBy",
         "pav:lastUpdatedOn",
-        "oslc:modifiedBy"
+        "oslc:modifiedBy",
+        "skos:notation",
+        "pav:derivedFrom",
+        "accessionID",
+        "annotation",
+        "annotationProtocol",
+        "annotationSoftware",
+        "checksum",
+        "completeness",
+        "dateCreated",
+        "derivedFrom",
+        "documentation",
+        "featureCounts",
+        "funding",
+        "genomeReference",
+        "identifier",
+        "metadataAuthor",
+        "relatedLink",
+        "reuseConditions",
+        "header_schema",
+        "schemaVersion",
+        "scholarlyArticle",
+        "soVersion",
+        "source",
+        "taxon",
+        "version",
+        "voucherSpecimen"
       ],
       "additionalProperties": false
     },
@@ -4728,7 +4765,7 @@
       "schema:schemaVersion": "1.6.0",
       "additionalProperties": false
     },
-    "schema": {
+    "header_schema": {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "@type": "https://schema.metadatacenter.org/core/TemplateField",
       "@context": {
@@ -6321,14 +6358,13 @@
     "pav:createdBy",
     "pav:lastUpdatedOn",
     "oslc:modifiedBy",
-    "schema",
+    "header_schema",
     "schemaVersion",
     "annotation",
     "taxon",
     "version",
     "metadataAuthor",
-    "dateCreated",
-    "checksum"
+    "dateCreated"
   ],
   "pav:createdOn": null,
   "pav:createdBy": null,

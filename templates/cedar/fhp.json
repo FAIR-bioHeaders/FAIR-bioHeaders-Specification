@@ -51,7 +51,7 @@
       "proteome",
       "relatedLink",
       "reuseConditions",
-      "schema",
+      "header_schema",
       "schemaVersion",
       "scholarlyArticle",
       "sequenceStats",
@@ -78,7 +78,7 @@
       "proteome": "Proteome",
       "relatedLink": "Related Link",
       "reuseConditions": "Reuse Conditions",
-      "schema": "Schema",
+      "header_schema": "Schema",
       "schemaVersion": "Schema Version",
       "scholarlyArticle": "Scholarly Article",
       "sequenceStats": "Sequence Stats",
@@ -105,7 +105,7 @@
       "proteome": "Name of the protein set.",
       "relatedLink": "Related URLs to the protein set.",
       "reuseConditions": "Reuse conditions or license for the protein set.",
-      "schema": "URL of the FHP JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-011). This template fixes the FHP contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhp/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
+      "header_schema": "URL of the FHP JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-011). This template fixes the FHP contract URL to the released v0.5.0 version (https://w3id.org/fair-bioheaders/fhp/v0.5.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
       "schemaVersion": "Version of the FHP schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5.",
       "scholarlyArticle": "Scholarly article where the protein set was published. A registered DOI without the resolver prefix (for example 10.5281/zenodo.6762550).",
       "sequenceStats": "Counts describing the protein set, as asserted by the producer.",
@@ -142,8 +142,10 @@
           ]
         },
         "schema": {
+          "type": "string",
+          "format": "uri",
           "enum": [
-            "https://w3id.org/fair-bioheaders/templates/cedar/fhp#/schema"
+            "http://schema.org/"
           ]
         },
         "oslc": {
@@ -350,6 +352,11 @@
             "https://w3id.org/fair-bioheaders/templates/cedar/fhp#/reuseConditions"
           ]
         },
+        "header_schema": {
+          "enum": [
+            "https://w3id.org/fair-bioheaders/templates/cedar/fhp#/schema"
+          ]
+        },
         "schemaVersion": {
           "enum": [
             "https://w3id.org/fair-bioheaders/templates/cedar/fhp#/schemaVersion"
@@ -392,16 +399,47 @@
         }
       },
       "required": [
-        "@type",
-        "@id",
-        "@context",
+        "rdfs",
+        "xsd",
+        "pav",
+        "schema",
+        "oslc",
+        "skos",
+        "rdfs:label",
         "schema:isBasedOn",
         "schema:name",
         "schema:description",
         "pav:createdOn",
         "pav:createdBy",
         "pav:lastUpdatedOn",
-        "oslc:modifiedBy"
+        "oslc:modifiedBy",
+        "skos:notation",
+        "pav:derivedFrom",
+        "accessionID",
+        "checksum",
+        "completeness",
+        "dateCreated",
+        "derivedFrom",
+        "documentation",
+        "funding",
+        "geneticCode",
+        "identifier",
+        "isoformPolicy",
+        "metadataAuthor",
+        "predictionProtocol",
+        "predictionSoftware",
+        "proteome",
+        "relatedLink",
+        "reuseConditions",
+        "header_schema",
+        "schemaVersion",
+        "scholarlyArticle",
+        "sequenceStats",
+        "source",
+        "sourceType",
+        "taxon",
+        "version",
+        "voucherSpecimen"
       ],
       "additionalProperties": false
     },
@@ -4253,7 +4291,7 @@
       "schema:schemaVersion": "1.6.0",
       "additionalProperties": false
     },
-    "schema": {
+    "header_schema": {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "@type": "https://schema.metadatacenter.org/core/TemplateField",
       "@context": {
@@ -6207,15 +6245,14 @@
     "pav:createdBy",
     "pav:lastUpdatedOn",
     "oslc:modifiedBy",
-    "schema",
+    "header_schema",
     "schemaVersion",
     "proteome",
     "sourceType",
     "taxon",
     "version",
     "metadataAuthor",
-    "dateCreated",
-    "checksum"
+    "dateCreated"
   ],
   "pav:createdOn": null,
   "pav:createdBy": null,
