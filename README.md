@@ -45,7 +45,11 @@ and not an adopted mapping/export suite; FHT remains blocked on its contract.
 
 The [shared voucher descriptions proposal](docs/proposals/shared-voucher-descriptions.md)
 preserves free text and specifies an optional structured alternative for family-wide
-review. It is not yet supported by the released schemas.
+review. It is not yet supported by the released schemas. Its
+[evidence pin](docs/proposals/voucher-evidence-review.md) records the verified
+external-standards evidence base and the importing-type/consumer impact analysis
+(#139 decision of 2026-11-12: hold at the proposal ceiling; evidence pinned,
+nothing adopted).
 
 The [community profiles proposal](docs/PROFILES.md) lets a community add
 required fields and naming rules on top of a header type without editing the
