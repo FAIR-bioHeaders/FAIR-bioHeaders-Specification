@@ -385,10 +385,11 @@ VALID = []
 INVALID = []
 
 
-def valid(name, kind, data, value, rules, description, compression=None, warnings=None):
+def valid(name, kind, data, value, rules, description, compression=None, warnings=None,
+          converter_results=None):
     VALID.append(dict(name=name, kind=kind, data=data, checksum=value, rules=rules,
                       description=description, compression=compression, status="valid",
-                      warnings=warnings))
+                      warnings=warnings, converter_results=converter_results))
 
 
 def invalid(name, kind, data, rule, reason, compression=None, metadata=None, result=None):
@@ -818,9 +819,11 @@ def fhp_lines(record=FHP_RECORD):
     return header("fhp-fasta", yaml_lines(record) + [None]) + body("fhp-fasta")
 
 
-def fhp_valid(name, lines, rules, description, expected=FHP_EXPECTED, **options):
+def fhp_valid(name, lines, rules, description, expected=FHP_EXPECTED, converter_results=None,
+              **options):
     data, value = assemble(lines, **options)
-    valid(name, "fhp-fasta", data, value, rules, description)
+    valid(name, "fhp-fasta", data, value, rules, description,
+          converter_results=converter_results)
     VALID[-1]["expected_metadata"] = expected
     return data, value
 
@@ -902,7 +905,8 @@ def build_fhp():
                       "missing": 1, "total": 2},
     )
     fhp_valid("fhp-fasta-busco-lineage-dotted", fhp_lines(dotted), ["P1"],
-              "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).")
+              "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
+              converter_results=["valid", "unsupported-version"])
 
     # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
     data, _ = assemble(fhp_lines())
@@ -1020,9 +1024,11 @@ def fhgff3_lines(record=FHGFF3_RECORD, before=(), after=(), features=True, fasta
     return lines
 
 
-def fhgff3_valid(name, lines, rules, description, expected=FHGFF3_EXPECTED, **options):
+def fhgff3_valid(name, lines, rules, description, expected=FHGFF3_EXPECTED,
+                 converter_results=None, **options):
     data, value = assemble(lines, **options)
-    valid(name, "fhgff3", data, value, rules, description)
+    valid(name, "fhgff3", data, value, rules, description,
+          converter_results=converter_results)
     VALID[-1]["expected_metadata"] = expected
     return data, value
 
@@ -1096,7 +1102,8 @@ def build_fhgff3():
                                    "completeSingle": 1, "completeDuplicated": 0,
                                    "fragmented": 0, "missing": 1, "total": 2})),
                  ["G2"], "BUSCO completeness with the dotted dataset version odb12.2 that "
-                 "FHGFF3 1.2 allows (#170).")
+                 "FHGFF3 1.2 allows (#170).",
+                 converter_results=["valid", "unsupported-version"])
 
     # Shared rules and G1 placement.
     data, _ = assemble(fhgff3_lines(fasta=True))
@@ -2214,6 +2221,8 @@ def manifest():
             item.update(expected="valid", rules=entry["rules"], description=entry["description"])
             if entry.get("warnings"):
                 item.update(warnings=entry["warnings"])
+            if entry.get("converter_results"):
+                item.update(converterResults=entry["converter_results"])
             if entry["kind"] in {"microdata", "jsonld"}:
                 item.update(metadata=entry["metadata"])
             else:

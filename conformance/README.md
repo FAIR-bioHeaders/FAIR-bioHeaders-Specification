@@ -56,6 +56,7 @@ Every entry in `vectors` has these fields:
 | `rule` | Invalid vectors only: the rule the file breaks |
 | `reason` | Invalid vectors only: how the file breaks that rule |
 | `result` | Invalid V4 vectors only: `unsupported-version`. A reader must report that the cited schema version is unsupported (the toolkit prints `unsupported schema version`), not check the file against another schema |
+| `converterResults` | Optional valid vectors only: outcomes accepted by `check_conformance.py --converter`; `valid` means the converter accepts the file and `unsupported-version` means it correctly reports V4 |
 
 Vector ids are stable and never reused. When a rule change alters a vector's expected
 outcome, the vector is retired and a vector with a new id takes its place. `retired`
@@ -90,6 +91,12 @@ For a `valid` FASTA/GFA vector, your implementation must accept the file, comput
 JSON-LD vector, it must extract exactly `metadata`. For an `invalid` vector, it
 must reject the file. Reporting the rule id is optional. Treat any difference as
 a bug in the implementation or the vectors, and report it as an issue.
+
+The two dotted BUSCO vectors cite the prepared v0.6.0 schemas and remain valid
+under the current specification. Until a converter supports that pre-release,
+reporting the unsupported schema version (V4) is also correct; their
+`converterResults` list records both acceptable outcomes. The local schema check
+still verifies them against the schemas in this checkout.
 
 To run the FAIR-bioHeaders toolkit (or another CLI with the same commands and exit
 codes) over the vectors. FASTA and GFA vectors go to `fhr-fasta-validate` and

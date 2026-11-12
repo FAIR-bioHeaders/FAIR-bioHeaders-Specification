@@ -2560,6 +2560,10 @@
         "P1"
       ],
       "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
+      "converterResults": [
+        "valid",
+        "unsupported-version"
+      ],
       "checksum": "wVckjyO2MygTdILNVtSbTORFkw3zWSX5xaOG903164I=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
@@ -2822,6 +2826,10 @@
         "G2"
       ],
       "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHGFF3 1.2 allows (#170).",
+      "converterResults": [
+        "valid",
+        "unsupported-version"
+      ],
       "checksum": "LrjUSzXWiq8RGhdN175fMb6sP97wK92Z+Z+FC/28SH4=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
