@@ -129,7 +129,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 13)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 18)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 22)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
@@ -140,6 +140,8 @@ class ConformanceTests(unittest.TestCase):
             if vector["expected"] == "invalid" and vector["rule"] in {"P1", "P2"}:
                 self.assertIn("metadata", vector, vector["id"])
         self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
+        # #170: malformed dotted BUSCO dataset versions are P1 near misses.
+        self.assertEqual(vectors["fhp-fasta-busco-lineage-trailing-dot"]["rule"], "P1")
 
     def test_selection_vectors(self):
         """specs/012-schema-versioning: V1-V6 and the registry they rely on."""
@@ -226,7 +228,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 17)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 19)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 20)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -309,7 +311,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(73 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(74 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -340,7 +342,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(73 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(74 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",

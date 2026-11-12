@@ -79,7 +79,7 @@
     },
     "Completeness": {
       "additionalProperties": false,
-      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10)",
+      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10 or enterobacterales_odb12.2)",
       "properties": {
         "buscoVersion": {
           "description": "Version of BUSCO",
@@ -101,8 +101,8 @@
           "type": "integer"
         },
         "lineageDataset": {
-          "description": "BUSCO lineage dataset, including its version suffix",
-          "pattern": "^[a-z0-9_]+_odb[0-9]+$",
+          "description": "BUSCO lineage dataset, including its version suffix; one or more dot-separated numeric version components are allowed, as BUSCO datasets are re-released (for example odb12.2)",
+          "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$",
           "type": "string"
         },
         "missing": {

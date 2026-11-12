@@ -95,6 +95,9 @@ REJECTED = [
     ("sourceType", "predicted", "FHP-only key"),
     ("genome", "x", "FHR-only key"),
     ("soVersion", None, "null is not a value"),
+    ("completeness.lineageDataset", "primates_odb12.", "dotted version with no digits "
+     "after the last dot"),
+    ("completeness.lineageDataset", "Primates_odb12.2", "dataset names are lower case"),
 ]
 ACCEPTED = [
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
@@ -108,6 +111,8 @@ ACCEPTED = [
     ("soVersion", "2.5.3", "an older numbered SO release"),
     ("featureCounts.0.featureType", "SO:0000704", "an SO accession as the type"),
     ("genomeReference.assemblyName", DELETE, "assemblyName is optional"),
+    ("completeness.lineageDataset", "enterobacterales_odb12.2", "the dotted BUSCO dataset "
+     "version of #170"),
 ]
 LINKS = {
     "checksum link only": (without(MINIMAL), True),

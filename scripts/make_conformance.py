@@ -882,6 +882,17 @@ def build_fhp():
                       "missing": 1, "total": 2},
     )
     fhp_valid("fhp-fasta-rich", fhp_lines(rich), ["P1"], "Every optional FHP field.")
+    # #170 widens the lineageDataset pattern for dotted BUSCO dataset versions
+    # (the user guide names diptera_odb12.2 in its result example). A positive
+    # dotted vector cannot land yet: every schemaVersion this tree can state
+    # ("1.0"/"1.1") predates the widening, and docs/SCHEMA-VERSIONS.md holds a
+    # record to the minor it states (tests/test_extension_fields.py compares
+    # every vector against the v0.4.0 outcome), so a valid dotted vector would
+    # flip outcome for a record stating "1.0". The positive vectors land with
+    # the release-staging commit that adds "1.2" to the enum and cites the
+    # prepared release, exactly as the R15 vectors cited the v0.5.0 prepared
+    # in #198. The malformed-dot rejection vectors below fail the old and the
+    # new pattern alike, so they are outcome-stable and land here.
 
     # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
     data, _ = assemble(fhp_lines())
@@ -927,6 +938,20 @@ def build_fhp():
                                          "completeDuplicated": 0, "fragmented": 0,
                                          "missing": 1, "total": 2}),
                 "P1", "A BUSCO lineage dataset without its version suffix (_odbNN).")
+    # Near misses for the dotted dataset versions widened in #170: each fails
+    # the old and the new pattern alike, so, like the vector above, it can
+    # cite v0.4.0 and its outcome is release-independent.
+    for suffix, dataset, defect in (
+            ("trailing-dot", "primates_odb12.", "the last dot has no digits after it"),
+            ("leading-dot", "primates_odb.12", "_odb is followed by a dot, not a digit"),
+            ("letter-component", "primates_odb12.2b", "a version component is not all digits"),
+            ("uppercase", "Primates_odb12.2", "dataset names are lower case"),
+    ):
+        fhp_invalid(f"fhp-fasta-busco-lineage-{suffix}",
+                    fhp_record(completeness={"lineageDataset": dataset, "completeSingle": 1,
+                                             "completeDuplicated": 0, "fragmented": 0,
+                                             "missing": 1, "total": 2}),
+                    "P1", f"A malformed dotted BUSCO dataset version: {defect}.")
     # P2: the schema URL selects the header type.
     fhp_invalid("fhp-fasta-cites-fhr-schema", fhp_record(schema=ITEM_TYPE),
                 "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
@@ -1050,6 +1075,9 @@ def build_fhgff3():
                      "relationship": "filteredFrom"}])),
                  ["G2", "R2", "R3"], "A second parent (a filtered FHGFF3 annotation); both nested "
                  "checksums are covered by the root checksum.")
+    # The positive dotted-version vector is deferred to release staging with
+    # the FHP one (see the #170 note in build_fhp); the rejection vector under
+    # G2 below is outcome-stable and lands here.
 
     # Shared rules and G1 placement.
     data, _ = assemble(fhgff3_lines(fasta=True))
@@ -1102,6 +1130,12 @@ def build_fhgff3():
                    "G2", "An annotates link whose parent is not an FHR genome.")
     fhgff3_invalid("fhgff3-fhr-only-key", fhgff3_record(genome="Synthetic genome"), "G2",
                    "The FHR-only key genome.")
+    fhgff3_invalid("fhgff3-busco-lineage-trailing-dot",
+                   fhgff3_record(completeness={"lineageDataset": "primates_odb12.",
+                                               "completeSingle": 1, "completeDuplicated": 0,
+                                               "fragmented": 0, "missing": 1, "total": 2}),
+                   "G2", "A malformed dotted BUSCO dataset version: the last dot has no "
+                   "digits after it (#170).")
     # G3: the schema URL selects the header type.
     fhgff3_invalid("fhgff3-cites-fhr-schema", fhgff3_record(schema=ITEM_TYPE), "G3",
                    "Annotation metadata citing fhr.json is validated as FHR, and fails it.")

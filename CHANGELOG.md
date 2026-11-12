@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+- **Schema change (proposed minor, #170): dotted BUSCO dataset versions.**
+  The shared `Completeness.lineageDataset` pattern widens from
+  `^[a-z0-9_]+_odb[0-9]+$` to `^[a-z0-9_]+_odb[0-9]+(\.[0-9]+)*$`, so dataset
+  ids documented by the BUSCO user guide, such as `enterobacterales_odb12.2`,
+  are valid. The change is additive: every previously valid value stays
+  valid with the same meaning. It affects the shared `Completeness` object
+  in `schemas/shared.yaml`, imported by FHP and FHGFF3; FHR has no
+  completeness slot, so `fhr.json` is unchanged; FHR gets no version increment
+  from this change. Proposed versions FHP `"1.2"` and FHGFF3 `"1.2"`; the
+  `schemaVersion` enums and `schemas/versions.json`
+  follow only in the release-staging commit (docs/SCHEMA-VERSIONS.md,
+  "Schema files on main"). Regenerated `fhp.json` and
+  `fhgff3.json` and both review baselines. 5 new conformance vectors (289:
+  117 valid, 172 invalid), all malformed-dotted-version rejections that fail
+  the old and the new pattern alike and keep a v0.4.0 citation, so every
+  converter run is unaffected. The positive dotted vectors land with the
+  release-staging commit (#198 precedent): a record using the widening must
+  state the new minor, and before the `schemaVersion` enum and
+  `schemas/versions.json` move, a valid dotted vector would flip the outcome
+  of a record stating `"1.0"`, which `tests/test_extension_fields.py` compares
+  against v0.4.0 (docs/SCHEMA-VERSIONS.md: a record that states an earlier
+  minor is held to it). Until then
+  `tests/test_schema_versions.py::test_schema_bytes_match_the_current_release_tag`
+  fails for `fhp.json` and `fhgff3.json`: any landed schema change is
+  byte-different from the current release, and the `preRelease` marker clears
+  that at staging. docs/FHP.md, specs/005 FR-005 and conformance/README.md
+  follow the widening; no INSDC coverage row changes (#170 carries no INSDC
+  requirement); llms.txt is unchanged (no version or required-field change).
+
 - The conformance CI runs the released `fair-bioheaders[jsonld]==0.9.0`, the first release
   that bundles the v0.5.0 schemas (R15, J9, M5), instead of the pinned FAIR-bioHeaders-Tools
   commit `5b05b65`.

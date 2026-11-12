@@ -117,6 +117,13 @@ REJECTED = [
     ("sequenceStats.extra", 1, "SequenceStats is closed"),
     ("completeness.lineageDataset", "primates", "lineage dataset without its version"),
     ("completeness.lineageDataset", DELETE, "lineage dataset required"),
+    ("completeness.lineageDataset", "primates_odb12.", "dotted version with no digits "
+     "after the last dot"),
+    ("completeness.lineageDataset", "primates_odb.12", "dot before the first digit "
+     "after _odb"),
+    ("completeness.lineageDataset", "primates_odb12.2b", "a version component is not "
+     "all digits"),
+    ("completeness.lineageDataset", "Primates_odb12.2", "dataset names are lower case"),
     ("completeness.missing", DELETE, "every count is required"),
     ("completeness.total", 0, "total is at least 1"),
     ("completeness.mode", "protein", "not a BUSCO mode"),
@@ -143,6 +150,10 @@ ACCEPTED = [
     ("derivedFrom.0.relationship", "filteredFrom", "filtered from another FHP file"),
     ("derivedFrom.0.headerType", "FHT", "translated from a transcriptome"),
     ("completeness.lineageDataset", "ascomycota_odb12", "another lineage version"),
+    ("completeness.lineageDataset", "diptera_odb12.2", "the dotted BUSCO dataset "
+     "version of #170"),
+    ("completeness.lineageDataset", "diptera_odb12.2.1", "a further numeric version "
+     "component, as the grammar allows"),
     ("completeness.total", 13780, "counts that need not add up are not checked"),
 ]
 

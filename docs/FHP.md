@@ -50,7 +50,7 @@ infer these values from the sequences.
 | `predictionSoftware` | List of `{name, version, uri, commandLineOption}`, with the same shape as FHR's `assemblySoftware` objects |
 | `predictionProtocol` | URI of the prediction or annotation protocol |
 | `sequenceStats` | `sequenceCount`, `geneCount`, `totalResidues` |
-| `completeness` | BUSCO counts: `lineageDataset` with its version suffix (for example `primates_odb10`), `completeSingle`, `completeDuplicated`, `fragmented`, `missing`, `total`, and optional `buscoVersion` and `mode` |
+| `completeness` | BUSCO counts: `lineageDataset` with its version suffix, one or more dot-separated numeric components allowed (for example `primates_odb10` or `enterobacterales_odb12.2`), `completeSingle`, `completeDuplicated`, `fragmented`, `missing`, `total`, and optional `buscoVersion` and `mode` |
 
 The optional core fields (`voucherSpecimen`, `accessionID`, `scholarlyArticle`, `documentation`,
 `identifier`, `relatedLink`, `funding`, `reuseConditions`) mean the same as in FHR. Genome-only
