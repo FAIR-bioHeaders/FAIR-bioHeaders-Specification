@@ -3,7 +3,10 @@
 Status: proposed for joint maintainer review; not an adopted schema contract.
 Tracks [#139](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/139),
 transferred from FHR-Specification #4. This document does not change validation,
-release versions or existing files.
+release versions or existing files. As of the 2026-11-12 maintainer decision,
+#139 holds at this proposal ceiling; the pinned external-evidence and
+impact analysis is in
+[`voucher-evidence-review.md`](voucher-evidence-review.md).
 
 ## Proposed contract
 
