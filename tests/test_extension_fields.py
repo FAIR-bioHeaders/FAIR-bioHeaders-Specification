@@ -27,8 +27,8 @@ PATTERN = "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$"
 # header type: (schema file, minimal example, first minor, new minor, a nested object path)
 TYPES = {
     "FHR": ("fhr.json", "examples/minimal.fhr.json", "2.0", "2.1", "taxon"),
-    "FHP": ("fhp.json", "examples/fhp/minimal-predicted.fhp.json", "1.0", "1.1", "taxon"),
-    "FHGFF3": ("fhgff3.json", "examples/fhgff3/minimal-reference.fhgff3.json", "1.0", "1.1",
+    "FHP": ("fhp.json", "examples/fhp/minimal-predicted.fhp.json", "1.0", "1.2", "taxon"),
+    "FHGFF3": ("fhgff3.json", "examples/fhgff3/minimal-reference.fhgff3.json", "1.0", "1.2",
                "genomeReference"),
 }
 VALID_KEYS = ["x-a", "x-1", "x-refget-commonName", "x-a.b-c_d", "x-A", "x-genome"]
@@ -85,10 +85,16 @@ class ExtensionFieldTests(unittest.TestCase):
     def test_registry_versions(self):
         self.assertEqual(REGISTRY["releases"]["v0.5.0"],
                          {"FHR": "2.1", "FHP": "1.1", "FHGFF3": "1.1"})
+        self.assertEqual(REGISTRY["releases"][REGISTRY["current"]],
+                         {"FHR": "2.1", "FHP": "1.2", "FHGFF3": "1.2"})
         for header_type, (name, _, first, new, _) in TYPES.items():
             with self.subTest(header_type=header_type):
                 schema = load(name)
-                self.assertEqual(schema["properties"]["schemaVersion"]["enum"], [first, new])
+                # The schema of M.N accepts exactly "M.0" to "M.N"
+                # (docs/SCHEMA-VERSIONS.md); "1.2" joined the range in #170.
+                major = first.split(".")[0]
+                expected = [f"{major}.{n}" for n in range(int(new.split(".")[1]) + 1)]
+                self.assertEqual(schema["properties"]["schemaVersion"]["enum"], expected)
                 self.assertEqual(list(schema["patternProperties"]), [PATTERN])
                 self.assertIs(schema["additionalProperties"], False)
 

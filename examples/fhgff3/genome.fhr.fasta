@@ -1,4 +1,4 @@
-;~schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.6.0
 ;~schemaVersion: '2.1'
 ;~genome: Synthetic FHGFF3 example genome
 ;~taxon:
@@ -12,6 +12,6 @@
 ;~dateCreated: '2026-10-13'
 ;~masking: not-masked
 ;~documentation: Synthetic genome for the FHGFF3 examples; not a real assembly.
-;~checksum: 6iEfbweXbENZ/x7c66kT6wUAMaXStwVhZFJbMMyr98A=
+;~checksum: k7IftMpykWVPXoehiI6uhpUZr8wo4lnQUSopnjRo7kA=
 >ctg1 synthetic contig
 ATGGCTAAAGGTCTGTAAGC

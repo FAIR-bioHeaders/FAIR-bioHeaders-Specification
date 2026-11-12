@@ -1,6 +1,6 @@
 {
-  "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0",
-  "schemaVersion": "1.1",
+  "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+  "schemaVersion": "1.2",
   "annotation": "Synthetic annotation of a genome without an FHR header",
   "taxon": {
     "name": "Homo sapiens",

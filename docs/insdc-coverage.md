@@ -11,7 +11,7 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 **Pinned inputs:**
 
 - **INSDC**: [insdc/minimum-specifcations](https://github.com/insdc/minimum-specifcations) (the repository name is spelled this way upstream) at commit `41f0dc424748c9f7e50a8b6bda9b888218c4b65e` (2026-07-06). All ten categories are at v1.0. Text was read from the per-category PDFs in each `Current version/` folder.
-- **FAIR-bioHeaders, released**: FHR `schemaVersion` `2.1`, FHP `1.1` and FHGFF3 `1.1` (`fhr.json`, `fhp.json`, `fhgff3.json`; release v0.5.0). They add only top-level `x-` extension fields ([FORMAT.md](FORMAT.md) R15) to FHR `2.0`, FHP `1.0` and FHGFF3 `1.0` (release line v0.4.x), and every row reads the same for both. An extension field never carries an INSDC requirement: rows count only standard fields, because tools attach no meaning to extensions.
+- **FAIR-bioHeaders, released**: FHR `schemaVersion` `2.1`, FHP `1.2` and FHGFF3 `1.2` (`fhr.json`, `fhp.json`, `fhgff3.json`; release v0.6.0, prepared on `main` and not yet tagged; the latest tagged release v0.5.0 carries FHR `2.1`, FHP and FHGFF3 `1.1`). FHP 1.2 and FHGFF3 1.2 only widen the shared `Completeness.lineageDataset` pattern to dotted BUSCO dataset versions (#170), and every row reads the same for all versions: a dataset name carries no INSDC meaning beyond naming the BUSCO run, whatever its version form. FHR is unchanged (no completeness slot). v0.5.0 added only top-level `x-` extension fields ([FORMAT.md](FORMAT.md) R15) to FHR `2.0`, FHP `1.0` and FHGFF3 `1.0` (release line v0.4.x), and every row reads the same for both. An extension field never carries an INSDC requirement: rows count only standard fields, because tools attach no meaning to extensions.
 - **FHT, draft (not released)**: the FHT 1.0 development contract, [`fht.json` at FHT-Specification `0ceb6f4`](https://github.com/FAIR-bioHeaders/FHT-Specification/blob/0ceb6f460e1f749f9eb2afb0a8b2f83cddb0e07a/fht.json), and the shared draft [specs/005-rna-transcriptome-header at `9a87e5c`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/9a87e5cfe0ce3e024508ff8fdb58e6fe9042dffe/specs/005-rna-transcriptome-header/spec.md). FHT rows are marked **FHT (draft)** and describe a contract that can still change.
 - **gff3-validator**: [rule catalogue at `c753f45`](https://github.com/FAIR-bioHeaders/gff3-validator/blob/c753f451d28b80b5f84c042e0f0486c3b1049adf/gff3_validator/catalogue.yaml) (`catalogue_version 0.1.0-draft`, 2026-10-08, a draft for Sequence Ontology review). Rules cited as implemented are implemented at that revision; planned rules are marked (planned).
 
@@ -23,6 +23,7 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 | v0 | 2026-10-28 | Landed in [#183](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/pull/183); review fixes in [#184](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/pull/184). |
 | v1 | 2026-10-28 | Every requirement given an ID and a final disposition; coverage claims rechecked against the pinned sources; follow-ups opened; submission guidance and `tests/test_insdc_coverage.py` added. |
 | v2 | 2026-11-03 | Re-pinned to FHR `2.1`, FHP `1.1` and FHGFF3 `1.1` (extension fields, #197). No row's coverage or disposition changes: extension fields carry no meaning the standard defines. |
+| v3 | 2026-11-12 | Re-pinned to FHP `1.2` and FHGFF3 `1.2` (dotted BUSCO dataset versions, #170; FHR stays `2.1`, v0.6.0 prepared on main). No row's coverage or disposition changes: no INSDC requirement depends on the identifier form of a BUSCO dataset name. |
 
 ## Keys
 
@@ -243,9 +244,9 @@ is unchanged and no matrix row's rating changes on this evidence.
 
 | Repository / type | Contract assessed | Rows | Open follow-ups |
 | --- | --- | --- | --- |
-| FAIR-bioHeaders-Specification: FHR | `2.1` (v0.5.0; `2.0` in v0.4.x, the same rows) | Sequence, Assembly, Analysis, Sample, Project, Package-Checklist | [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190) profile; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHP | `1.1` (v0.5.0; `1.0` in v0.4.x, the same rows) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHGFF3 | `1.1` (v0.5.0; `1.0` in v0.4.x, the same rows) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHR | `2.1` (v0.5.0, unchanged in v0.6.0; `2.0` in v0.4.x, the same rows) | Sequence, Assembly, Analysis, Sample, Project, Package-Checklist | [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190) profile; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHP | `1.2` (v0.6.0 prepared; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHGFF3 | `1.2` (v0.6.0 prepared; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
 | FHT-Specification: FHT (draft) | `1.0` development contract at `0ceb6f4` (unreleased) | Sequence S1–S4, S11–S13, S-fmt; Sample SA.T1; Experiment | none; rows are re-checked when FHT is released |
 | gff3-validator | catalogue `0.1.0-draft` at `c753f45` | Annotation | [gff3-validator#27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27) |
 
@@ -255,7 +256,7 @@ is unchanged and no matrix row's rating changes on this evidence.
 - [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190): draft INSDC submission-readiness profile for FHR; it requires `taxon.uri` in the NCBI Taxonomy form, because INSDC requires an NCBI taxID.
 - [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191): test FH headers with INSDC submission validators.
 - [gff3-validator#27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27): INSDC Annotation rules missing from the catalogue.
-- [#170](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/170): BUSCO `lineageDataset` dotted versions. Raised by the same FHT design review; no INSDC requirement depends on it.
+- [#170](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/170): BUSCO `lineageDataset` dotted versions. Raised by the same FHT design review; no INSDC requirement depends on it. Decided 2026-11-12 (option A, widen); the widening is staged for FHP/FHGFF3 `1.2` in v0.6.0 (prepared), with this assessment re-pinned at v3.
 - [#139](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/139): structured voucher specimens, relevant to A.b and SA.T1 but reviewed on its own track.
 
 ## 4. Using FAIR-bioHeaders alongside an INSDC submission
