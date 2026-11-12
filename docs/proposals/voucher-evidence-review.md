@@ -34,7 +34,7 @@ bytes at the commit this document was authored against
 | --- | --- | --- | --- |
 | E1 | <http://rs.tdwg.org/dwc/terms/materialSampleID> (landing `https://dwc.tdwg.org/list/#dwc_materialSampleID`; term version IRI `.../dwc/terms/version/materialSampleID-2026-10-13`) | Darwin Core identifier for a material sample: "An identifier for the dwc:MaterialSample (as opposed to a particular digital record ...)". The list marks it with the note "It is recommended to use dwc:materialEntityID in place of this term." | HTTP 200 |
 | E2 | <http://rs.tdwg.org/dwc/terms/materialEntityID> (`#dwc_materialEntityID`) | Darwin Core term the maintenance documentation now recommends in place of E1 — the vocabulary itself moves under curators | HTTP 200 |
-| E3 | <http://rs.tdwg.org/dwc/terms/basisOfRecord> (`#dwc_basisOfRecord`) | "The specific nature of the data record", recommended against a controlled vocabulary: the natural home of the preserved-specimen / photograph / human-observation distinctions #139 describes | HTTP 200 |
+| E3 | <http://rs.tdwg.org/dwc/terms/basisOfRecord> (`#dwc_basisOfRecord`) | "The specific nature of the data record"; recommended best practice is to use a controlled vocabulary, such as the local names of identifiers for classes in Darwin Core | HTTP 200 |
 | E4 | <http://rs.tdwg.org/dwc/terms/associatedMedia> (`#dwc_associatedMedia`) | "A list (concatenated and separated) of associated ac:Media resources": the evidence-image case (photograph of a specimen) already has a biodiversity-informatics term | HTTP 200 |
 | E5 | GSC MIxS <https://w3id.org/mixs>; term page <https://www.ebi.ac.uk/ols4/ontologies/gscmixs/classes?obo_id=MIXS%3A0000026> | MIxS `source_mat_id` ("source material identifiers", `MIXS:0000026`): the extraction/sequencing material identifier. Maintainer review rule from #139: map to it **only** for explicitly identified material used for extraction/sequencing — a population description or proxy voucher does not qualify | HTTP 200 (both) |
 | E6 | INSDC minimum specifications, `Sample` category at the pinned commit <https://github.com/insdc/minimum-specifcations/tree/41f0dc424748c9f7e50a8b6bda9b888218c4b65e/Sample> | The deposit-side requirement set [`docs/insdc-coverage.md`](../insdc-coverage.md) rows `Sample` and A.b assess against; those rows already name `voucherSpecimen` and #139 | HTTP 200 |
@@ -91,16 +91,18 @@ Published representations that carry the field (census at `692cffe`):
   "Free text; structured specimens are #101." (#101 is tracked by #139) —
   export behavior must be re-reviewed, and canonical round-trip identity
   preserved separately (#56 discipline);
-- conformance suite: 25 of the 286 vectors carry `voucherSpecimen`, all in
-  the JSON-LD FHR format; the `fasta`, `gfa`, `microdata`, `fhp-fasta` and
-  `fhgff3` formats currently carry it in none. Adoption adds valid/invalid
+- conformance suite: the manifest contains 284 vectors. Twenty-five JSON-LD
+  FHR vectors mention `voucherSpecimen` only in `@context`; none carries it as
+  a metadata value. The `fasta`, `gfa`, `microdata`, `fhp-fasta` and `fhgff3`
+  formats have no mention of it. Adoption adds valid/invalid
   vectors (description-only, identifier, URL, mixed-list rejection, empty-list
   rejection, Unicode/escaping) per affected type — string-or-list must also
   round-trip through the `;~`/`#~` line serialization (R8/R11/R12/R13 rules)
   and HTML microdata;
-- released examples: eight `examples/*fhr*` files (yaml/json/jsonld/export/
-  minimal.jsonld/microdata html/fasta/gfa) contain a `voucherSpecimen` string;
-  none may be rewritten (immutable published bytes);
+- released examples: seven rich FHR example files (yaml/json/jsonld/export/
+  microdata html/fasta/gfa) contain a `voucherSpecimen` string; the minimal
+  JSON-LD example defines it only in `@context`. Preserve all existing example
+  bytes; do not rewrite them as part of a future adoption;
 - INSDC assessment: `docs/insdc-coverage.md` rows `Sample` and A.b and the
   #139 cross-reference line name the field; a new `schemaVersion` fails
   `tests/test_insdc_coverage.py` until the assessment is re-pinned (#157 rule).
