@@ -186,8 +186,8 @@ and all GFA and GFF3 tools.
 The later [annotation and assembly survey](#annotation-and-assembly-tools) found
 two silent misreads of valid files, both in the tools' own FASTA parsers: QUAST
 counts the header as an extra contig in its threshold rows (ablab/quast#300), and
-TransDecoder 6.0.0 predicts ORFs on the header text (fixed on master,
-TransDecoder/TransDecoder#213). See [Upstream support](#upstream-support).
+TransDecoder 6.0.0 predicts ORFs on the header text (fixed in TransDecoder v7.0.0,
+released 2026-11-02, TransDecoder/TransDecoder#213). See [Upstream support](#upstream-support).
 The [2026-10-22 survey](#more-tools-2026-10-22) found a third: JBrowse 2's unindexed FASTA
 adapter (`UnindexedFastaAdapter`, the `parseSmallFasta()` code of `@gmod/indexedfasta`) shows
 the header as an extra reference sequence named `;~schema:`. The
@@ -363,10 +363,13 @@ databases) were tested later with a stub or tiny database; see
 [More tools (2026-10-22)](#more-tools-2026-10-22).
 
 Failures fixed by upstream changes: Liftoff (pyfaidx v0.9.1, mdshw5/pyfaidx#244, released
-2026-10-19 and verified 2026-10-20) and, once released, Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
-is fixed by gpertea/gclib#15 (merged 2026-10-28), from the next gffcompare release. The raw-`@`/`>` failures of Mash and seqfu do
+2026-10-19 and verified 2026-10-20), TransDecoder (`PerlLib/Fasta_reader.pm` now skips text before
+the first `>` in v7.0.0, released 2026-11-02, checked in the tag source 2026-11-12) and, once
+released, Prokka (the next BioPerl release, bioperl/bioperl-live#410). gffcompare
+is fixed by gpertea/gclib#15 (merged 2026-10-28), from the next gffcompare release. The raw-`@`/`>`
+failures of Mash and seqfu do
 not occur with R11 headers (fair-bioheaders 0.8.0 and later). The remaining failures (QUAST,
-TransDecoder, AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
+AUGUSTUS, sourmash/screed, BUSCO, meryl/Merqury) are in the tools' own parsers and
 are tracked in FAIR-bioHeaders-Specification#121 (BUSCO, QUAST, TransDecoder, meryl/Merqury,
 screed/sourmash, AUGUSTUS, Bakta, JBrowse 2, BBTools and any2fasta (Barrnap) have been contacted; see [Upstream support](#upstream-support)).
 
@@ -663,7 +666,8 @@ double-quoted YAML (`\x40`, `\x3E`), which reads back as the same metadata; the 
 
 ### FASTA tools: changes proposed upstream
 
-Status as of 2026-10-21; FAIR-bioHeaders-Specification#121 is the live tracker.
+Status as of 2026-11-12 (refreshed against upstream tags, releases and registries on
+2026-11-12); FAIR-bioHeaders-Specification#121 is the live tracker.
 
 Each proposal asks for the same narrow rule: skip lines starting with `;` **before the first `>`**,
 the original Pearson FASTA comment form and FHR rule R10. A `;` line anywhere else keeps its
@@ -672,14 +676,14 @@ current meaning, so no file that a tool reads today is read differently.
 | Project | Affected tools | Proposal (2026-10-14 unless dated) | Status |
 | --- | --- | --- | --- |
 | samtools/htslib | samtools faidx, pysam `FastaFile`, bedtools getfasta, JBrowse `add-assembly` (needs a `.fai`) | Issue samtools/htslib#2103; PR samtools/htslib#2106 | Declined 2026-10-15: "the de facto standard is not to use semicolons for comments", unless there is general consensus |
-| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Released in pyfaidx v0.9.1 (2026-10-19)**; also fixes the silent `None` record. Verified 2026-10-20 |
-| samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Merged 2026-10-19** (samtools/htsjdk#1922); reaches Picard and GATK with the next htsjdk release |
-| shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments |
+| mdshw5/pyfaidx | pyfaidx (silently created a `None` record) | mdshw5/pyfaidx#244 | **Released in pyfaidx v0.9.1 (2026-10-19)**; also fixes the silent `None` record. Verified 2026-10-20. Current PyPI release is 0.9.2.2 (2026-10-29); the 0.9.1.1 to 0.9.2.2 notes list only slicing/CLI, documentation and license-classifier fixes, no change to the leading-comment handling (checked 2026-11-12) |
+| samtools/htsjdk | Picard CreateSequenceDictionary, GATK | samtools/htsjdk#1922 | **Released in htsjdk 6.0.0 (2026-10-26)**: the merge commit `ef03603` is an ancestor of the `6.0.0` tag, Maven Central lists `com.github.samtools:htsjdk` 6.0.0 as current, and its release notes record "A FASTA whose first lines are `;` comments can be read and indexed". Picard's latest release (3.5.0, 2026-07-31) and GATK's (4.7.0.0, 2026-08-18) both predate htsjdk 6.0.0, so they still bundle the old htsjdk: htsjdk shipped, the downstream tool updates are pending (checked 2026-11-12) |
+| shenwei356/bio | seqkit `stats`, `seq`, `grep`, `faidx` | shenwei356/bio#12 | **Merged 2026-10-18**; reaches seqkit users in the next SeqKit release, documented as discarding leading comments (SeqKit is still 2.14.0, 2026-09-24, checked 2026-11-12) |
 | biopython/biopython | `SeqIO` `fasta` (`fasta-pearson` already works) | Discussion issue biopython/biopython#5375 | **Supported without changes** through `SeqIO.parse(handle, "fasta-pearson")`. The default `fasta` reader is unchanged (2026-10-16): 1.78 to 1.84 skip text before the first record silently, 1.85 and 1.86 warn, and 1.87 (2026-03-30) and later raise an error, so tools built on it, such as BUSCO, are approached individually. Avoid `fasta-blast` in 1.85 to 1.88 (biopython/biopython#5377) |
 | lmdu/pyfastx | pyfastx | lmdu/pyfastx#99 | Open |
 | ucscGenomeBrowser/kent | faToTwoBit, faSize | ucscGenomeBrowser/kent#105 | Declined 2026-10-19: UCSC's FASTA parsing serves its own pipelines and NCBI input |
-| gpertea/gclib | gffread `-g`, gffcompare `-s` | gpertea/gclib#15 | **Merged 2026-10-28**; reaches gffread and gffcompare with their next releases |
-| bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | **Merged 2026-10-19** (`Bio::DB::Fasta` and `Bio::SeqIO::fasta`); reaches AGAT users with the next BioPerl release (the last CPAN release is 1.7.8, 2021) |
+| gpertea/gclib | gffread `-g`, gffcompare `-s` | gpertea/gclib#15 | **Merged 2026-10-28**; reaches gffread and gffcompare with their next releases (still gffread 0.12.9, 2026-04-10, and gffcompare 0.12.10, 2025-07-12, checked 2026-11-12) |
+| bioperl/bioperl-live | `Bio::DB::Fasta`, AGAT genome input | bioperl/bioperl-live#410 | **Merged 2026-10-19** (`Bio::DB::Fasta` and `Bio::SeqIO::fasta`); reaches AGAT users with the next BioPerl release (MetaCPAN still lists BioPerl 1.7.8, 2021-02-03, as the latest release, checked 2026-11-12) |
 | BenLangmead/bowtie2 | bowtie2-build | BenLangmead/bowtie2#534 | Open; the maintainer pushed a follow-up commit (2026-10-23) so debug builds also accept `;` |
 | DaehwanKimLab/hisat2 | hisat2-build | DaehwanKimLab/hisat2#476 | Open; the same debug-build follow-up added 2026-10-23 |
 | alexdobin/STAR | STAR `genomeGenerate` | Feature request alexdobin/STAR#2709, with a suggested patch | Open |
@@ -687,22 +691,22 @@ current meaning, so no file that a tool reads today is read differently.
 | scikit-bio/scikit-bio | `skbio.io.read(format="fasta")` | Issue scikit-bio/scikit-bio#2644 (2026-10-18; their guide asks for an issue first) | Maybe (2026-10-20): the maintainer will leave the parser as is while watching consensus; an explicit opt-in would avoid changing the format sniffer |
 | zaeleus/noodles | noodles-fasta reader, async reader and indexer | zaeleus/noodles#439 (2026-10-18) | Declined 2026-10-19 |
 | rust-bio/rust-bio | `bio::io::fasta::Reader` | rust-bio/rust-bio#722 (2026-10-18) | Open |
-| BioJulia/FASTX.jl | `FASTA.Reader`, `validate_fasta`, `faidx` | BioJulia/FASTX.jl#132 (2026-10-18) | Open |
+| BioJulia/FASTX.jl | `FASTA.Reader`, `validate_fasta`, `faidx` | BioJulia/FASTX.jl#132 (2026-10-18) | **Merged 2026-10-18** (PR BioJulia/FASTX.jl#132); reaches Julia users with the next FASTX.jl release — no release since (latest tag and Julia registry version 2.2.0, 2026-08-30, checked 2026-11-12). A maintainer commented the same day that a caller-side skip was preferable and offered docs instead (BioJulia/FASTX.jl#132); the change stands unreverted on `master` as of 2026-11-12 |
 | EddyRivasLab/easel | HMMER and the Easel miniapps | EddyRivasLab/easel#84 (2026-10-18) | Open |
-| bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release |
-| iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | **Accepted 2026-11-02**: merged into iqtree3 master; in the next IQ-TREE release |
-| revbayes/revbayes | RevBayes `readDiscreteCharacterData()` FASTA input (vendored NCL reader) | Issue revbayes/revbayes#1141 opened by the RevBayes maintainer (2026-11-09); PR revbayes/revbayes#1143 at his request | **Accepted 2026-11-09**: merged into `development` |
-| mtholder/ncl | NCL (Nexus Class Library) FASTA reader, used by RevBayes and other phylogenetics tools | mtholder/ncl#37 (2026-11-09; upstream of revbayes/revbayes#1143, at the RevBayes maintainer's suggestion) | **Accepted 2026-11-10**: merged by the NCL author |
+| bbuchfink/diamond | `diamond makedb` and other FASTA input | Issue bbuchfink/diamond#992 (2026-10-18; asked before a PR, since its readers seek by byte offset) | **Accepted 2026-10-19**: to be included in the next DIAMOND release (still 2.2.8, 2026-09-20, checked 2026-11-12) |
+| iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | **Accepted 2026-11-02**: merged into iqtree3 master; in the next IQ-TREE release (still 3.1.4, 2026-09-10, checked 2026-11-12) |
+| revbayes/revbayes | RevBayes `readDiscreteCharacterData()` FASTA input (vendored NCL reader) | Issue revbayes/revbayes#1141 opened by the RevBayes maintainer (2026-11-09); PR revbayes/revbayes#1143 at his request | **Accepted 2026-11-09**: merged into `development`; not in a release yet (v1.4.2, 2026-11-05, predates the merge; checked 2026-11-12) |
+| mtholder/ncl | NCL (Nexus Class Library) FASTA reader, used by RevBayes and other phylogenetics tools | mtholder/ncl#37 (2026-11-09; upstream of revbayes/revbayes#1143, at the RevBayes maintainer's suggestion) | **Accepted 2026-11-10**: merged by the NCL author (`f02320ca`); the GitHub repository carries no tags or releases, so downstream consumers pick the change up from the branch (checked 2026-11-12) |
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | **Declined 2026-10-18**: the author is moving the code to a new repository and suggested stripping the header first; issue closed |
 | ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
 | ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
-| TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | **Accepted 2026-10-20**: the maintainer will fix it in the next TransDecoder release |
+| TransDecoder/TransDecoder | `TransDecoder.LongOrfs` (same reader in Trinity's `PerlLib`) | Issue TransDecoder/TransDecoder#213 (2026-10-20; tested patch, PR offered) | **Released in TransDecoder v7.0.0 (2026-11-02)**: `PerlLib/Fasta_reader.pm` at that tag skips text before the first `>` line (warning to stderr when the skipped text is non-empty), checked in the tag source 2026-11-12; the upstream issue #213 remains open |
 | marbl/meryl (marbl/meryl-utility) | `meryl count` (segfault on any input it can't open, e.g. a leading `;` block) | Issue marbl/meryl#58 (2026-10-21; tested null check and `;`-skipping in `bufSeqFile`, PRs offered) | Open |
 | marbl/merqury | `merqury.sh` exits 0 with no QV or completeness when `meryl count` fails | Issue marbl/merqury#182 (2026-10-21; tested exit-status checks, PR offered) | Open |
 | dib-lab/screed (used by sourmash) | `screed.open()` / `sourmash sketch dna`: "unknown file format" for a leading `;` block | Issue dib-lab/screed#123 (2026-10-22; tested patch, identical sketches; PR offered) | Open |
 | Gaius-Augustus/Augustus | `augustus`: leading `;` lines fail type detection ("Found bad character") or, without punctuation, become an extra `unnamed-1` sequence | Issue Gaius-Augustus/Augustus#452 (2026-10-22; tested patch, identical predictions; PR offered) | Open |
 | oschwengers/bakta | `bakta` genome import, `bakta_proteins` input and `--proteins` (Biopython `fasta`, which raises from 1.87): "wrong genome file format!" | Issue oschwengers/bakta#458 (2026-10-23; tested patch keeping Biopython ≥1.78 support, identical outputs; PR offered) | Open |
-| GMOD/jbrowse-components, GMOD/indexedfasta-js | `UnindexedFastaAdapter` and `parseSmallFasta`: leading `;` lines become an extra reference sequence (silent) | Issue GMOD/jbrowse-components#5638 (2026-10-27; tested patches for both repos, identical names/lengths/sequences) | **Accepted 2026-10-27**: fixed by the maintainer the same day in jbrowse-components (672a2cf, next release) and indexedfasta-js (18674c2), **released in `@gmod/indexedfasta` 5.0.14** |
+| GMOD/jbrowse-components, GMOD/indexedfasta-js | `UnindexedFastaAdapter` and `parseSmallFasta`: leading `;` lines become an extra reference sequence (silent) | Issue GMOD/jbrowse-components#5638 (2026-10-27; tested patches for both repos, identical names/lengths/sequences) | **Accepted 2026-10-27**: fixed by the maintainer the same day in jbrowse-components (672a2cf) and indexedfasta-js (18674c2), **released in `@gmod/indexedfasta` 5.0.14 (2026-10-27)**. The jbrowse-components fix ships only on the 5.0.0 prerelease line (`5.0.0-beta.18` and later, npm tag `next`); the latest stable JBrowse 2 release is still 4.3.0 (2026-05-21), checked 2026-11-12 |
 | bbushnell/BBTools | `stats.sh` (used by BUSCO for assembly statistics): leading `;` lines counted as an extra contig (2 contigs / 581,581 bp for an FHR file; silent), `AssertionError` on non-ASCII comments; `bbmap.sh` index gains an extra `null` scaffold | Issue bbushnell/BBTools#38 (2026-10-28; tested patch for both readers, outputs identical to the plain file; PR offered) | Open |
 | tseemann/any2fasta (used by Barrnap 1.10, abricate, mlst, snippy-core) | first-line format detection rejects a leading `;` line ("Unfamilar format"); Barrnap: "No sequences found in input" | Issue tseemann/any2fasta#43 (2026-10-28; tested patch, Barrnap output identical to the plain genome; PR offered) | Open |
 
