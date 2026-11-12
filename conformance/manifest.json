@@ -2551,6 +2551,23 @@
       }
     },
     {
+      "id": "fhp-fasta-busco-lineage-dotted",
+      "file": "valid/fhp-fasta-busco-lineage-dotted.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "P1"
+      ],
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
+      "checksum": "wVckjyO2MygTdILNVtSbTORFkw3zWSX5xaOG903164I=",
+      "metadata": {
+        "proteome": "Synthetic FHP conformance protein set",
+        "version": "1.0.0",
+        "sourceType": "predicted"
+      }
+    },
+    {
       "id": "fhgff3-minimal-checksum-link",
       "file": "valid/fhgff3-minimal-checksum-link.fhgff3.gff3",
       "format": "fhgff3",
@@ -2790,6 +2807,22 @@
       ],
       "description": "A second parent (a filtered FHGFF3 annotation); both nested checksums are covered by the root checksum.",
       "checksum": "T1C1rV3KPPpv3zaHaXrHkyWC2pGVtHkCLgi711a+qoc=",
+      "metadata": {
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted",
+      "file": "valid/fhgff3-busco-lineage-dotted.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "G2"
+      ],
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHGFF3 1.2 allows (#170).",
+      "checksum": "LrjUSzXWiq8RGhdN175fMb6sP97wK92Z+Z+FC/28SH4=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"

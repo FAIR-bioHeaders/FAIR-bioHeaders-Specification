@@ -1,9 +1,10 @@
 # FHP: FAIR header for protein FASTA
 
-**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, released in
-FAIR-bioHeaders-Specification v0.5.0; `"1.0"` was first released in v0.4.0).** FHP is the working name (#54), and the
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.2"`, prepared for
+FAIR-bioHeaders-Specification v0.6.0; `"1.1"` was released in v0.5.0 and
+`"1.0"` was first released in v0.4.0).** FHP is the working name (#54), and the
 fields may still change after curator review, through a new schema version. Its persistent
-schema URL is `https://w3id.org/fair-bioheaders/fhp/v0.5.0` (v0.4.0 for FHP 1.0). The design is in
+schema URL is `https://w3id.org/fair-bioheaders/fhp/v0.6.0` (v0.4.0 for FHP 1.0). The design is in
 [specs/006-protein-header](../specs/006-protein-header/spec.md).
 
 FHP brings the FHR header to protein FASTA files: predicted proteomes, sets taken from protein
@@ -34,8 +35,9 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | `sourceType` | `predicted`, `database` or `mixed` (see below) |
 
 `schema` must be an FHP schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
-versioned `https://w3id.org/fair-bioheaders/fhp/v0.5.0` of the release a file targets, or the raw
-GitHub URL of `fhp.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.1'` (FHP 1.1; `'1.0'` with the v0.4.x schemas), quoted
+versioned `https://w3id.org/fair-bioheaders/fhp/v0.6.0` of the release a file targets, or the raw
+GitHub URL of `fhp.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.2'` (FHP 1.2; `'1.0'` with the v0.4.x schemas, `'1.1'`
+with v0.5.0), quoted
 in YAML.
 
 The following fields are optional. Leave a field out when you do not know its value; tools never
@@ -50,7 +52,7 @@ infer these values from the sequences.
 | `predictionSoftware` | List of `{name, version, uri, commandLineOption}`, with the same shape as FHR's `assemblySoftware` objects |
 | `predictionProtocol` | URI of the prediction or annotation protocol |
 | `sequenceStats` | `sequenceCount`, `geneCount`, `totalResidues` |
-| `completeness` | BUSCO counts: `lineageDataset` with its version suffix, one or more dot-separated numeric components allowed (for example `primates_odb10` or `enterobacterales_odb12.2`), `completeSingle`, `completeDuplicated`, `fragmented`, `missing`, `total`, and optional `buscoVersion` and `mode` |
+| `completeness` | BUSCO counts: `lineageDataset` with its version suffix, one or more dot-separated numeric components allowed from FHP 1.2 (for example `primates_odb10` or `enterobacterales_odb12.2`; a record stating `'1.0'` or `'1.1'` keeps the undotted suffix), `completeSingle`, `completeDuplicated`, `fragmented`, `missing`, `total`, and optional `buscoVersion` and `mode` |
 
 The optional core fields (`voucherSpecimen`, `accessionID`, `scholarlyArticle`, `documentation`,
 `identifier`, `relatedLink`, `funding`, `reuseConditions`) mean the same as in FHR. Genome-only

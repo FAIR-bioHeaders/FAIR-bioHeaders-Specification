@@ -79,6 +79,7 @@ REJECTED = [
     ("annotation", DELETE, "annotation is required"),
     ("schemaVersion", 1, "schemaVersion is the string 1.0"),
     ("schemaVersion", "2.0", "FHR's version is not FHGFF3's"),
+    ("schemaVersion", "1.3", "FHGFF3 1.2 accepts only 1.0 to 1.2"),
     ("schema", "https://w3id.org/fair-bioheaders/fhr/v0.4.0", "an FHR w3id URL"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhp.json",
      "an FHP schema URL is not an FHGFF3 schema URL"),
@@ -98,6 +99,8 @@ REJECTED = [
     ("completeness.lineageDataset", "primates_odb12.", "dotted version with no digits "
      "after the last dot"),
     ("completeness.lineageDataset", "Primates_odb12.2", "dataset names are lower case"),
+    ("completeness.lineageDataset", "enterobacterales_odb12.2", "a dotted BUSCO dataset "
+     "version requires the record to state 1.2 (held to the stated minor, #170)"),
 ]
 ACCEPTED = [
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
@@ -111,8 +114,7 @@ ACCEPTED = [
     ("soVersion", "2.5.3", "an older numbered SO release"),
     ("featureCounts.0.featureType", "SO:0000704", "an SO accession as the type"),
     ("genomeReference.assemblyName", DELETE, "assemblyName is optional"),
-    ("completeness.lineageDataset", "enterobacterales_odb12.2", "the dotted BUSCO dataset "
-     "version of #170"),
+    ("schemaVersion", "1.2", "the FHGFF3 1.2 contract state this branch prepares"),
 ]
 LINKS = {
     "checksum link only": (without(MINIMAL), True),
@@ -158,6 +160,21 @@ class FHGFF3SchemaTests(unittest.TestCase):
     def test_minimal_and_rich_records_are_valid(self):
         self.assertEqual(self.errors(MINIMAL), [])
         self.assertEqual(self.errors(RICH), [])
+
+    def test_dotted_busco_versions_are_held_to_1_2(self):
+        """#170 mirrors FHP: a dotted dataset version requires schemaVersion
+        "1.2"; records stating "1.0" or "1.1" keep the single-integer suffix."""
+        for version in ("1.0", "1.1"):
+            with self.subTest(schemaVersion=version):
+                record = changed("schemaVersion", version)
+                record = changed("completeness.lineageDataset",
+                                 "enterobacterales_odb12.2", record)
+                self.assertTrue(self.errors(record))
+        for dataset in ("enterobacterales_odb12.2", "bacteria_odb12.2"):
+            with self.subTest(dataset=dataset):
+                record = changed("schemaVersion", "1.2")
+                record = changed("completeness.lineageDataset", dataset, record)
+                self.assertEqual(self.errors(record), [])
 
     def test_genome_link_rule(self):
         for name, (record, valid) in LINKS.items():

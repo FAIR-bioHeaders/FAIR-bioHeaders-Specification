@@ -171,6 +171,12 @@ RAW = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
 RAW_CANONICAL = "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
 W3ID = "https://w3id.org/fair-bioheaders/"
 RELEASE = "v0.4.0"
+# The release prepared on main under the pre-release exception
+# (schemas/versions.json current/preRelease). Vectors for a feature of that
+# release cite it and state the new schemaVersion until the tag exists, as
+# the R15 vectors cited the prepared v0.5.0 in #198; scripts/check_conformance.py
+# loads the current release's schema from the working tree.
+PREPARING_RELEASE = "v0.6.0"
 FHR_SCHEMA = f"{W3ID}fhr/{RELEASE}"
 UNSUPPORTED = "unsupported-version"
 COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";", "fhgff3": b"#"}
@@ -883,16 +889,20 @@ def build_fhp():
     )
     fhp_valid("fhp-fasta-rich", fhp_lines(rich), ["P1"], "Every optional FHP field.")
     # #170 widens the lineageDataset pattern for dotted BUSCO dataset versions
-    # (the user guide names diptera_odb12.2 in its result example). A positive
-    # dotted vector cannot land yet: every schemaVersion this tree can state
-    # ("1.0"/"1.1") predates the widening, and docs/SCHEMA-VERSIONS.md holds a
-    # record to the minor it states (tests/test_extension_fields.py compares
-    # every vector against the v0.4.0 outcome), so a valid dotted vector would
-    # flip outcome for a record stating "1.0". The positive vectors land with
-    # the release-staging commit that adds "1.2" to the enum and cites the
-    # prepared release, exactly as the R15 vectors cited the v0.5.0 prepared
-    # in #198. The malformed-dot rejection vectors below fail the old and the
-    # new pattern alike, so they are outcome-stable and land here.
+    # (the user guide names diptera_odb12.2 in its result example). The vector
+    # states FHP "1.2" and cites the prepared release v0.6.0: a record using a
+    # feature states the minor that added it (docs/SCHEMA-VERSIONS.md), and the
+    # malformed-dot near misses below fail the old and the new pattern alike,
+    # so they keep a v0.4.0 citation like the vector above.
+    dotted = fhp_record(
+        schema=f"{W3ID}fhp/{PREPARING_RELEASE}",
+        schemaVersion="1.2",
+        completeness={"lineageDataset": "diptera_odb12.2", "mode": "proteins",
+                      "completeSingle": 1, "completeDuplicated": 0, "fragmented": 0,
+                      "missing": 1, "total": 2},
+    )
+    fhp_valid("fhp-fasta-busco-lineage-dotted", fhp_lines(dotted), ["P1"],
+              "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).")
 
     # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
     data, _ = assemble(fhp_lines())
@@ -1075,9 +1085,18 @@ def build_fhgff3():
                      "relationship": "filteredFrom"}])),
                  ["G2", "R2", "R3"], "A second parent (a filtered FHGFF3 annotation); both nested "
                  "checksums are covered by the root checksum.")
-    # The positive dotted-version vector is deferred to release staging with
-    # the FHP one (see the #170 note in build_fhp); the rejection vector under
-    # G2 below is outcome-stable and lands here.
+    # #170: the dotted BUSCO dataset version, as for FHP: states FHGFF3 "1.2"
+    # and cites the prepared release; the malformed-dot rejection under G2
+    # below keeps a v0.4.0 citation.
+    fhgff3_valid("fhgff3-busco-lineage-dotted",
+                 fhgff3_lines(fhgff3_record(
+                     schema=f"{W3ID}fhgff3/{PREPARING_RELEASE}",
+                     schemaVersion="1.2",
+                     completeness={"lineageDataset": "enterobacterales_odb12.2",
+                                   "completeSingle": 1, "completeDuplicated": 0,
+                                   "fragmented": 0, "missing": 1, "total": 2})),
+                 ["G2"], "BUSCO completeness with the dotted dataset version odb12.2 that "
+                 "FHGFF3 1.2 allows (#170).")
 
     # Shared rules and G1 placement.
     data, _ = assemble(fhgff3_lines(fasta=True))

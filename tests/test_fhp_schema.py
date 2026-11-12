@@ -83,7 +83,7 @@ REJECTED = [
     ("schemaVersion", 1, "schemaVersion is the string 1.0"),
     ("schemaVersion", 1.0, "schemaVersion is the string 1.0, not a number"),
     ("schemaVersion", "1", "MAJOR.MINOR"),
-    ("schemaVersion", "1.2", "FHP 1.1 accepts only 1.0 and 1.1"),
+    ("schemaVersion", "1.3", "FHP 1.2 accepts only 1.0 to 1.2"),
     ("schemaVersion", "2.0", "FHR's version is not FHP's"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
      "0123abc/fhp.json", "only main and release tags are schema refs"),
@@ -124,6 +124,8 @@ REJECTED = [
     ("completeness.lineageDataset", "primates_odb12.2b", "a version component is not "
      "all digits"),
     ("completeness.lineageDataset", "Primates_odb12.2", "dataset names are lower case"),
+    ("completeness.lineageDataset", "diptera_odb12.2", "a dotted BUSCO dataset version "
+     "requires the record to state 1.2 (held to the stated minor, #170)"),
     ("completeness.missing", DELETE, "every count is required"),
     ("completeness.total", 0, "total is at least 1"),
     ("completeness.mode", "protein", "not a BUSCO mode"),
@@ -147,13 +149,10 @@ ACCEPTED = [
     ("geneticCode", 33, "range edges"),
     ("isoformPolicy", "all", "each isoform policy"),
     ("isoformPolicy", "canonicalPerGene", "each isoform policy"),
+    ("schemaVersion", "1.2", "the FHP 1.2 contract state this branch prepares"),
     ("derivedFrom.0.relationship", "filteredFrom", "filtered from another FHP file"),
     ("derivedFrom.0.headerType", "FHT", "translated from a transcriptome"),
     ("completeness.lineageDataset", "ascomycota_odb12", "another lineage version"),
-    ("completeness.lineageDataset", "diptera_odb12.2", "the dotted BUSCO dataset "
-     "version of #170"),
-    ("completeness.lineageDataset", "diptera_odb12.2.1", "a further numeric version "
-     "component, as the grammar allows"),
     ("completeness.total", 13780, "counts that need not add up are not checked"),
 ]
 
@@ -179,6 +178,21 @@ class FHPSchemaTests(unittest.TestCase):
     def test_minimal_and_rich_records_are_valid(self):
         self.assertEqual(self.errors(MINIMAL), [])
         self.assertEqual(self.errors(RICH), [])
+
+    def test_dotted_busco_versions_are_held_to_1_2(self):
+        """#170: a dotted dataset version requires schemaVersion "1.2"; a record
+        stating "1.0" or "1.1" keeps the single-integer suffix it was held to
+        (docs/SCHEMA-VERSIONS.md), and "1.2" allows further numeric components."""
+        for version in ("1.0", "1.1"):
+            with self.subTest(schemaVersion=version):
+                record = changed("schemaVersion", version)
+                record = changed("completeness.lineageDataset", "diptera_odb12.2", record)
+                self.assertTrue(self.errors(record))
+        for dataset in ("diptera_odb12.2", "diptera_odb12.2.1"):
+            with self.subTest(dataset=dataset):
+                record = changed("schemaVersion", "1.2")
+                record = changed("completeness.lineageDataset", dataset, record)
+                self.assertEqual(self.errors(record), [])
 
     def test_rejected_values(self):
         for path, value, reason in REJECTED:

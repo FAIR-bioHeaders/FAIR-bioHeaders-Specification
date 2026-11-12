@@ -100,10 +100,11 @@ classes:
         pattern: ^(https://raw\.githubusercontent\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\.[0-9]+\.[0-9]+)/fhgff3\.json|https://w3id\.org/fair-bioheaders/fhgff3/v[0-9]+\.[0-9]+\.[0-9]+/?)$
       schemaVersion:
         description: Version of the FHGFF3 schema contract ("MAJOR.MINOR"); 1.1 (extension
-          fields) from v0.5
+          fields) from v0.5; 1.2 (dotted BUSCO dataset versions) from v0.6
         equals_string_in:
         - "1.0"
         - "1.1"
+        - "1.2"
       version:
         description: Version of the annotation
       metadataAuthor:

@@ -1,9 +1,10 @@
 # FHGFF3: FAIR header for GFF3 annotations
 
-**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.1"`, released in
-FAIR-bioHeaders-Specification v0.5.0; `"1.0"` was first released in v0.4.0).** FHGFF3 is the working name (#54), and the
+**Status: v0.1 (document status; the schema contract is `schemaVersion` `"1.2"`, prepared for
+FAIR-bioHeaders-Specification v0.6.0; `"1.1"` was released in v0.5.0 and
+`"1.0"` was first released in v0.4.0).** FHGFF3 is the working name (#54), and the
 fields may still change after curator review, through a new schema version. Its persistent
-schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.5.0` (v0.4.0 for FHGFF3 1.0). The design is in
+schema URL is `https://w3id.org/fair-bioheaders/fhgff3/v0.6.0` (v0.4.0 for FHGFF3 1.0). The design is in
 [specs/007-gff3-header](../specs/007-gff3-header/spec.md).
 
 FHGFF3 is a provenance header around ordinary GFF3. It adds YAML lines that start with `#~` after
@@ -31,8 +32,8 @@ biodatamodels/gff-schema, whose upstream licence is unresolved (#75).
 ```
 ##gff-version 3
 #!genome-build Synthetic SyntheticAssembly1
-#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0
-#~schemaVersion: '1.1'
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.6.0
+#~schemaVersion: '1.2'
 #~annotation: Synthetic example annotation
 ##sequence-region ctg1 1 20
 #~# more fields
@@ -92,8 +93,9 @@ Required are the core's required fields (`schema`, `schemaVersion`, `taxon`, `ve
 | the genome link | At least one of the two forms below |
 
 `schema` must be an FHGFF3 schema URL ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)): preferably the
-versioned `https://w3id.org/fair-bioheaders/fhgff3/v0.5.0` of the release a file targets, or the raw
-GitHub URL of `fhgff3.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.1'` (FHGFF3 1.1; `'1.0'` with the v0.4.x schemas),
+versioned `https://w3id.org/fair-bioheaders/fhgff3/v0.6.0` of the release a file targets, or the raw
+GitHub URL of `fhgff3.json` on `main` or at a release tag, under either repository name. `schemaVersion` is `'1.2'` (FHGFF3 1.2; `'1.0'` with the v0.4.x schemas, `'1.1'`
+with v0.5.0),
 quoted in YAML.
 
 ### The genome link

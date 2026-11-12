@@ -1,5 +1,5 @@
 {
-  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.5.0",
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.6.0",
   "schemaVersion": "2.1",
   "genome": "Synthetic human reference example",
   "taxon": {
