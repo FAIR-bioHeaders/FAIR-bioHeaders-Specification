@@ -74,9 +74,11 @@ parent; the annotation is linked as context.
 - **FR-005**: `vitalStats` holds `totalTranscripts` (integer >= 0, FASTA records
   including isoforms), `N50` (integer >= 1) and `averageTranscriptLength`
   (number >= 0). `completeness` reuses the shared BUSCO count object; its
-  `lineageDataset` must match `^[a-z0-9_]+_odb[0-9]+$`, so dotted dataset versions
-  such as `odb12.2` are rejected and stay in `documentation`, not renamed, until
-  #170 decides.
+  `lineageDataset` must match `^[a-z0-9_]+_odb[0-9]+(\.[0-9]+)*$`, so dotted
+  dataset versions such as `diptera_odb12.2` are accepted: #170 decided
+  option A (2026-11-12), and the shared `Completeness` widening lands with
+  the next minor release cycle; the FHT-Specification draft `fht.json`
+  follows on its next regeneration from the shared model.
 - **FR-006**: `derivedFrom` is a non-empty ordered array accepting only
   `headerType: FHT` with `relationship: filteredFrom`, or `headerType: FHR` with
   `relationship: transcribedFrom` when transcript bases were extracted from that

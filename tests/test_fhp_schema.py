@@ -83,7 +83,7 @@ REJECTED = [
     ("schemaVersion", 1, "schemaVersion is the string 1.0"),
     ("schemaVersion", 1.0, "schemaVersion is the string 1.0, not a number"),
     ("schemaVersion", "1", "MAJOR.MINOR"),
-    ("schemaVersion", "1.2", "FHP 1.1 accepts only 1.0 and 1.1"),
+    ("schemaVersion", "1.3", "FHP 1.2 accepts only 1.0 to 1.2"),
     ("schemaVersion", "2.0", "FHR's version is not FHP's"),
     ("schema", "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
      "0123abc/fhp.json", "only main and release tags are schema refs"),
@@ -117,6 +117,15 @@ REJECTED = [
     ("sequenceStats.extra", 1, "SequenceStats is closed"),
     ("completeness.lineageDataset", "primates", "lineage dataset without its version"),
     ("completeness.lineageDataset", DELETE, "lineage dataset required"),
+    ("completeness.lineageDataset", "primates_odb12.", "dotted version with no digits "
+     "after the last dot"),
+    ("completeness.lineageDataset", "primates_odb.12", "dot before the first digit "
+     "after _odb"),
+    ("completeness.lineageDataset", "primates_odb12.2b", "a version component is not "
+     "all digits"),
+    ("completeness.lineageDataset", "Primates_odb12.2", "dataset names are lower case"),
+    ("completeness.lineageDataset", "diptera_odb12.2", "a dotted BUSCO dataset version "
+     "requires the record to state 1.2 (held to the stated minor, #170)"),
     ("completeness.missing", DELETE, "every count is required"),
     ("completeness.total", 0, "total is at least 1"),
     ("completeness.mode", "protein", "not a BUSCO mode"),
@@ -140,6 +149,7 @@ ACCEPTED = [
     ("geneticCode", 33, "range edges"),
     ("isoformPolicy", "all", "each isoform policy"),
     ("isoformPolicy", "canonicalPerGene", "each isoform policy"),
+    ("schemaVersion", "1.2", "the FHP 1.2 contract state this branch prepares"),
     ("derivedFrom.0.relationship", "filteredFrom", "filtered from another FHP file"),
     ("derivedFrom.0.headerType", "FHT", "translated from a transcriptome"),
     ("completeness.lineageDataset", "ascomycota_odb12", "another lineage version"),
@@ -168,6 +178,27 @@ class FHPSchemaTests(unittest.TestCase):
     def test_minimal_and_rich_records_are_valid(self):
         self.assertEqual(self.errors(MINIMAL), [])
         self.assertEqual(self.errors(RICH), [])
+
+    def test_dotted_busco_versions_are_held_to_1_2(self):
+        """#170: a dotted dataset version requires schemaVersion "1.2"; a record
+        stating "1.0" or "1.1" keeps the single-integer suffix it was held to
+        (docs/SCHEMA-VERSIONS.md), and "1.2" allows further numeric components."""
+        for version in ("1.0", "1.1"):
+            with self.subTest(schemaVersion=version):
+                record = changed("schemaVersion", version)
+                record = changed("completeness.lineageDataset", "diptera_odb12.2", record)
+                self.assertTrue(self.errors(record))
+        for dataset in ("diptera_odb12.2", "diptera_odb12.2.1"):
+            with self.subTest(dataset=dataset):
+                record = changed("schemaVersion", "1.2")
+                record = changed("completeness.lineageDataset", dataset, record)
+                self.assertEqual(self.errors(record), [])
+        for dataset in ("primates_odb12.", "primates_odb.12", "primates_odb12..2",
+                        "primates_odb12.2b", "Primates_odb12.2"):
+            with self.subTest(schemaVersion="1.2", dataset=dataset):
+                record = changed("schemaVersion", "1.2")
+                record = changed("completeness.lineageDataset", dataset, record)
+                self.assertTrue(self.errors(record))
 
     def test_rejected_values(self):
         for path, value, reason in REJECTED:

@@ -75,7 +75,7 @@ The v0.3 release added optional fields and fixed examples; the required metadata
 set and numeric `schemaVersion: 1` were unchanged in that release. Package/release version,
 schema version, and assembly `version` are distinct. From v0.4 `schemaVersion` is a
 `"MAJOR.MINOR"` string (FHR `"2.0"`, FHP and FHGFF3 `"1.0"`; FHR `"2.1"`, FHP and FHGFF3
-`"1.1"` from v0.5.0), and a file's `schema` URL
+`"1.1"` from v0.5.0, FHP and FHGFF3 `"1.2"` prepared for v0.6.0), and a file's `schema` URL
 selects the schema it is checked against: see [schema versions](docs/SCHEMA-VERSIONS.md). Known gaps between the normative text and what the 2.0/1.0 schemas can express, with their
 status and target release, are in [the schema-contract gap audit](docs/SCHEMA-GAP-AUDIT.md).
 
@@ -191,7 +191,8 @@ submission; a valid header is not a deposit-ready submission.
   (proteomes and protein sets). The LinkML model imports the core, and the JSON
   Schema is generated from it. The format is described in [docs/FHP.md](docs/FHP.md),
   with examples in [examples/fhp/](examples/fhp/). FHP is released in v0.4.0 with
-  `schemaVersion` `"1.0"`, and `"1.1"` (extension fields) is released in v0.5.0; the spec's "v0.1" label is a document status, not a schema version.
+  `schemaVersion` `"1.0"`, `"1.1"` (extension fields) is released in v0.5.0, and `"1.2"` (dotted
+  BUSCO dataset versions, #170) is prepared for v0.6.0; the spec's "v0.1" label is a document status, not a schema version.
   See [specs/006-protein-header](specs/006-protein-header/spec.md).
 - `fhgff3_linkml.yml` and `fhgff3.json`: the FHGFF3 header for GFF3
   annotations, placed after `##gff-version 3`. The record links the annotation to
@@ -199,8 +200,9 @@ submission; a valid header is not a deposit-ready submission.
   imports the core and `schemas/shared.yaml` (software, sources and BUSCO
   completeness, shared with FHP), and the JSON Schema is generated from it. See
   [docs/FHGFF3.md](docs/FHGFF3.md) and [examples/fhgff3/](examples/fhgff3/). FHGFF3 is
-  released in v0.4.0 with `schemaVersion` `"1.0"`, and `"1.1"` (extension fields) is released
-  in v0.5.0; the spec's "v0.1" label is a document
+  released in v0.4.0 with `schemaVersion` `"1.0"`, `"1.1"` (extension fields) is released
+  in v0.5.0, and `"1.2"` (dotted BUSCO dataset versions, #170) is prepared
+  for v0.6.0; the spec's "v0.1" label is a document
   status, not a schema version. See
   [specs/007-gff3-header](specs/007-gff3-header/spec.md).
 - `tests/fixtures/fhp_stub.yaml`: a test-only stub showing how a new header type

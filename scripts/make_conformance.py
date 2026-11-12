@@ -171,6 +171,12 @@ RAW = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/"
 RAW_CANONICAL = "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
 W3ID = "https://w3id.org/fair-bioheaders/"
 RELEASE = "v0.4.0"
+# The release prepared on main under the pre-release exception
+# (schemas/versions.json current/preRelease). Vectors for a feature of that
+# release cite it and state the new schemaVersion until the tag exists, as
+# the R15 vectors cited the prepared v0.5.0 in #198; scripts/check_conformance.py
+# loads the current release's schema from the working tree.
+PREPARING_RELEASE = "v0.6.0"
 FHR_SCHEMA = f"{W3ID}fhr/{RELEASE}"
 UNSUPPORTED = "unsupported-version"
 COMMENT = {"fasta": b";", "gfa": b"#", "fhp-fasta": b";", "fhgff3": b"#"}
@@ -379,10 +385,11 @@ VALID = []
 INVALID = []
 
 
-def valid(name, kind, data, value, rules, description, compression=None, warnings=None):
+def valid(name, kind, data, value, rules, description, compression=None, warnings=None,
+          converter_results=None):
     VALID.append(dict(name=name, kind=kind, data=data, checksum=value, rules=rules,
                       description=description, compression=compression, status="valid",
-                      warnings=warnings))
+                      warnings=warnings, converter_results=converter_results))
 
 
 def invalid(name, kind, data, rule, reason, compression=None, metadata=None, result=None):
@@ -812,9 +819,11 @@ def fhp_lines(record=FHP_RECORD):
     return header("fhp-fasta", yaml_lines(record) + [None]) + body("fhp-fasta")
 
 
-def fhp_valid(name, lines, rules, description, expected=FHP_EXPECTED, **options):
+def fhp_valid(name, lines, rules, description, expected=FHP_EXPECTED, converter_results=None,
+              **options):
     data, value = assemble(lines, **options)
-    valid(name, "fhp-fasta", data, value, rules, description)
+    valid(name, "fhp-fasta", data, value, rules, description,
+          converter_results=converter_results)
     VALID[-1]["expected_metadata"] = expected
     return data, value
 
@@ -882,6 +891,22 @@ def build_fhp():
                       "missing": 1, "total": 2},
     )
     fhp_valid("fhp-fasta-rich", fhp_lines(rich), ["P1"], "Every optional FHP field.")
+    # #170 widens the lineageDataset pattern for dotted BUSCO dataset versions
+    # (the user guide names diptera_odb12.2 in its result example). The vector
+    # states FHP "1.2" and cites the prepared release v0.6.0: a record using a
+    # feature states the minor that added it (docs/SCHEMA-VERSIONS.md), and the
+    # malformed-dot near misses below fail the old and the new pattern alike,
+    # so they keep a v0.4.0 citation like the vector above.
+    dotted = fhp_record(
+        schema=f"{W3ID}fhp/{PREPARING_RELEASE}",
+        schemaVersion="1.2",
+        completeness={"lineageDataset": "diptera_odb12.2", "mode": "proteins",
+                      "completeSingle": 1, "completeDuplicated": 0, "fragmented": 0,
+                      "missing": 1, "total": 2},
+    )
+    fhp_valid("fhp-fasta-busco-lineage-dotted", fhp_lines(dotted), ["P1"],
+              "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
+              converter_results=["valid", "unsupported-version"])
 
     # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
     data, _ = assemble(fhp_lines())
@@ -927,6 +952,20 @@ def build_fhp():
                                          "completeDuplicated": 0, "fragmented": 0,
                                          "missing": 1, "total": 2}),
                 "P1", "A BUSCO lineage dataset without its version suffix (_odbNN).")
+    # Near misses for the dotted dataset versions widened in #170: each fails
+    # the old and the new pattern alike, so, like the vector above, it can
+    # cite v0.4.0 and its outcome is release-independent.
+    for suffix, dataset, defect in (
+            ("trailing-dot", "primates_odb12.", "the last dot has no digits after it"),
+            ("leading-dot", "primates_odb.12", "_odb is followed by a dot, not a digit"),
+            ("letter-component", "primates_odb12.2b", "a version component is not all digits"),
+            ("uppercase", "Primates_odb12.2", "dataset names are lower case"),
+    ):
+        fhp_invalid(f"fhp-fasta-busco-lineage-{suffix}",
+                    fhp_record(completeness={"lineageDataset": dataset, "completeSingle": 1,
+                                             "completeDuplicated": 0, "fragmented": 0,
+                                             "missing": 1, "total": 2}),
+                    "P1", f"A malformed dotted BUSCO dataset version: {defect}.")
     # P2: the schema URL selects the header type.
     fhp_invalid("fhp-fasta-cites-fhr-schema", fhp_record(schema=ITEM_TYPE),
                 "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
@@ -985,9 +1024,11 @@ def fhgff3_lines(record=FHGFF3_RECORD, before=(), after=(), features=True, fasta
     return lines
 
 
-def fhgff3_valid(name, lines, rules, description, expected=FHGFF3_EXPECTED, **options):
+def fhgff3_valid(name, lines, rules, description, expected=FHGFF3_EXPECTED,
+                 converter_results=None, **options):
     data, value = assemble(lines, **options)
-    valid(name, "fhgff3", data, value, rules, description)
+    valid(name, "fhgff3", data, value, rules, description,
+          converter_results=converter_results)
     VALID[-1]["expected_metadata"] = expected
     return data, value
 
@@ -1050,6 +1091,19 @@ def build_fhgff3():
                      "relationship": "filteredFrom"}])),
                  ["G2", "R2", "R3"], "A second parent (a filtered FHGFF3 annotation); both nested "
                  "checksums are covered by the root checksum.")
+    # #170: the dotted BUSCO dataset version, as for FHP: states FHGFF3 "1.2"
+    # and cites the prepared release; the malformed-dot rejection under G2
+    # below keeps a v0.4.0 citation.
+    fhgff3_valid("fhgff3-busco-lineage-dotted",
+                 fhgff3_lines(fhgff3_record(
+                     schema=f"{W3ID}fhgff3/{PREPARING_RELEASE}",
+                     schemaVersion="1.2",
+                     completeness={"lineageDataset": "enterobacterales_odb12.2",
+                                   "completeSingle": 1, "completeDuplicated": 0,
+                                   "fragmented": 0, "missing": 1, "total": 2})),
+                 ["G2"], "BUSCO completeness with the dotted dataset version odb12.2 that "
+                 "FHGFF3 1.2 allows (#170).",
+                 converter_results=["valid", "unsupported-version"])
 
     # Shared rules and G1 placement.
     data, _ = assemble(fhgff3_lines(fasta=True))
@@ -1102,6 +1156,12 @@ def build_fhgff3():
                    "G2", "An annotates link whose parent is not an FHR genome.")
     fhgff3_invalid("fhgff3-fhr-only-key", fhgff3_record(genome="Synthetic genome"), "G2",
                    "The FHR-only key genome.")
+    fhgff3_invalid("fhgff3-busco-lineage-trailing-dot",
+                   fhgff3_record(completeness={"lineageDataset": "primates_odb12.",
+                                               "completeSingle": 1, "completeDuplicated": 0,
+                                               "fragmented": 0, "missing": 1, "total": 2}),
+                   "G2", "A malformed dotted BUSCO dataset version: the last dot has no "
+                   "digits after it (#170).")
     # G3: the schema URL selects the header type.
     fhgff3_invalid("fhgff3-cites-fhr-schema", fhgff3_record(schema=ITEM_TYPE), "G3",
                    "Annotation metadata citing fhr.json is validated as FHR, and fails it.")
@@ -2161,6 +2221,8 @@ def manifest():
             item.update(expected="valid", rules=entry["rules"], description=entry["description"])
             if entry.get("warnings"):
                 item.update(warnings=entry["warnings"])
+            if entry.get("converter_results"):
+                item.update(converterResults=entry["converter_results"])
             if entry["kind"] in {"microdata", "jsonld"}:
                 item.update(metadata=entry["metadata"])
             else:

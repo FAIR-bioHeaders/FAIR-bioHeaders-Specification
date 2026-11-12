@@ -2551,6 +2551,27 @@
       }
     },
     {
+      "id": "fhp-fasta-busco-lineage-dotted",
+      "file": "valid/fhp-fasta-busco-lineage-dotted.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "P1"
+      ],
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
+      "converterResults": [
+        "valid",
+        "unsupported-version"
+      ],
+      "checksum": "wVckjyO2MygTdILNVtSbTORFkw3zWSX5xaOG903164I=",
+      "metadata": {
+        "proteome": "Synthetic FHP conformance protein set",
+        "version": "1.0.0",
+        "sourceType": "predicted"
+      }
+    },
+    {
       "id": "fhgff3-minimal-checksum-link",
       "file": "valid/fhgff3-minimal-checksum-link.fhgff3.gff3",
       "format": "fhgff3",
@@ -2790,6 +2811,26 @@
       ],
       "description": "A second parent (a filtered FHGFF3 annotation); both nested checksums are covered by the root checksum.",
       "checksum": "T1C1rV3KPPpv3zaHaXrHkyWC2pGVtHkCLgi711a+qoc=",
+      "metadata": {
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted",
+      "file": "valid/fhgff3-busco-lineage-dotted.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "G2"
+      ],
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHGFF3 1.2 allows (#170).",
+      "converterResults": [
+        "valid",
+        "unsupported-version"
+      ],
+      "checksum": "LrjUSzXWiq8RGhdN175fMb6sP97wK92Z+Z+FC/28SH4=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
@@ -4766,6 +4807,178 @@
       }
     },
     {
+      "id": "fhp-fasta-busco-lineage-trailing-dot",
+      "file": "invalid/fhp-fasta-busco-lineage-trailing-dot.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "primates_odb12.",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "1Zp2Kx4KR1XBVGFN01i33aIQ8gTPuoMXjG4WzKfcUA8="
+      }
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-leading-dot",
+      "file": "invalid/fhp-fasta-busco-lineage-leading-dot.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "A malformed dotted BUSCO dataset version: _odb is followed by a dot, not a digit.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "primates_odb.12",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "CklOeVn8zHmCRKoSJTxNYsvrSo7X3bd7hmIKJ7sWGV4="
+      }
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-letter-component",
+      "file": "invalid/fhp-fasta-busco-lineage-letter-component.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "A malformed dotted BUSCO dataset version: a version component is not all digits.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "primates_odb12.2b",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "DnT5hTGfmhWe4uPNzAnz67VG2fcuwdvMr2NPmVr4LVk="
+      }
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-uppercase",
+      "file": "invalid/fhp-fasta-busco-lineage-uppercase.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "A malformed dotted BUSCO dataset version: dataset names are lower case.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "Primates_odb12.2",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "UBb8RwJ0v0iw/C5Xxdw5BdL/aVWISV5z0SKtnq+8mn0="
+      }
+    },
+    {
       "id": "fhp-fasta-cites-fhr-schema",
       "file": "invalid/fhp-fasta-cites-fhr-schema.fhp.fasta",
       "format": "fhp-fasta",
@@ -5044,6 +5257,48 @@
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
         "genome": "Synthetic genome",
         "checksum": "cDPwAc7S9binhK7akmV4hM6G4NKYNbvC1OC+/X2y4Po="
+      }
+    },
+    {
+      "id": "fhgff3-busco-lineage-trailing-dot",
+      "file": "invalid/fhgff3-busco-lineage-trailing-dot.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G2",
+      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it (#170).",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0",
+        "schemaVersion": "1.0",
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-13",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "annotates"
+          }
+        ],
+        "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
+        "completeness": {
+          "lineageDataset": "primates_odb12.",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "tO3QgsCjIOCY1+10PONFv+HGDS1zzqCSbZrQ0qQ6uNU="
       }
     },
     {

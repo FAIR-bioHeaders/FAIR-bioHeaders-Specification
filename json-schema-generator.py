@@ -102,6 +102,38 @@ def extension_gate(version):
     }
 
 
+# Dotted BUSCO dataset versions (FAIR-bioHeaders-Specification#170, proposed
+# FHP/FHGFF3 1.2). schemas/shared.yaml carries the widened 1.2 pattern; LinkML
+# cannot condition a nested slot on the record's schemaVersion, so the gates
+# for the earlier minors are added here, after generation, like the extension
+# rule above. A record that states "1.0" or "1.1" is held to that minor: the
+# single-integer suffix it saw (docs/SCHEMA-VERSIONS.md). FHR has no
+# completeness slot, so only FHP and FHGFF3 get this rule.
+LINEAGE_BASE_PATTERN = "^[a-z0-9_]+_odb[0-9]+$"
+MINORS_WITHOUT_DOTTED_LINEAGE = ("1.0", "1.1")
+
+
+def lineage_gate(version):
+    """The rule that a record stating ``version`` has no dotted dataset version."""
+    return {
+        "description": (
+            f"A record that states schemaVersion {version} has no dotted BUSCO dataset "
+            "version (#170; docs/SCHEMA-VERSIONS.md)"
+        ),
+        "if": {
+            "required": ["schemaVersion", "completeness"],
+            "properties": {"schemaVersion": {"const": version}},
+        },
+        "then": {
+            "properties": {
+                "completeness": {
+                    "properties": {"lineageDataset": {"pattern": LINEAGE_BASE_PATTERN}}
+                }
+            }
+        },
+    }
+
+
 def _nodes(generated, root_names):
     """The schema root plus the named ``$defs`` entries, without duplicates."""
     yield generated
@@ -139,6 +171,16 @@ def apply_extension_rules(generated, header_type, *root_names):
     return generated
 
 
+def apply_lineage_rules(generated, *root_names):
+    """Hold records stating FHP/FHGFF3 1.0 or 1.1 to the undotted lineage pattern (#170)."""
+    for node in _nodes(generated, root_names):
+        if "completeness" not in node.get("properties", {}):
+            continue
+        for version in MINORS_WITHOUT_DOTTED_LINEAGE:
+            node.setdefault("allOf", []).append(lineage_gate(version))
+    return generated
+
+
 def apply_fhr_rules(generated, *root_names):
     """LinkML emits a scalar type beside a heterogeneous union. Retain the union.
 
@@ -152,18 +194,21 @@ def apply_fhr_rules(generated, *root_names):
 
 def apply_fhgff3_rules(generated, *root_names):
     """Add the genome-link rule and the extension-field rules (R15) to the FHGFF3
-    root and any profile subclass root."""
+    root and any profile subclass root, and the #170 lineage gate."""
     definitions = generated.setdefault("$defs", {})
     for name, definition in GENOME_LINK_DEFINITIONS.items():
         definitions[name] = copy.deepcopy(definition)
     for node in _nodes(generated, root_names):
         node.update(copy.deepcopy(GENOME_LINK_RULE))
-    return apply_extension_rules(generated, "FHGFF3", *root_names)
+    apply_extension_rules(generated, "FHGFF3", *root_names)
+    return apply_lineage_rules(generated, *root_names)
 
 
 def apply_fhp_rules(generated, *root_names):
-    """Add the extension-field rules (R15) to the FHP root and any profile subclass root."""
-    return apply_extension_rules(generated, "FHP", *root_names)
+    """Add the extension-field rules (R15) and the #170 lineage gate to the FHP
+    root and any profile subclass root."""
+    apply_extension_rules(generated, "FHP", *root_names)
+    return apply_lineage_rules(generated, *root_names)
 
 
 def generate_from(schema_path, legacy_open=True):

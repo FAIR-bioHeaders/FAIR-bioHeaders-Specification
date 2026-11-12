@@ -2,6 +2,43 @@
 
 ## Unreleased
 
+- **Schema change (minor, staged for v0.6.0, #170): dotted BUSCO dataset versions.**
+  The shared `Completeness.lineageDataset` pattern widens from
+  `^[a-z0-9_]+_odb[0-9]+$` to `^[a-z0-9_]+_odb[0-9]+(\.[0-9]+)*$`, so dataset
+  ids documented by the BUSCO user guide, such as `enterobacterales_odb12.2`,
+  are valid. The change is additive: every previously valid value stays
+  valid with the same meaning. It affects the shared `Completeness` object
+  in `schemas/shared.yaml`, imported by FHP and FHGFF3; FHR has no
+  completeness slot, so `fhr.json` is unchanged and stays `"2.1"`. Staged as
+  FHP `"1.2"` and FHGFF3 `"1.2"` for release v0.6.0, prepared on `main` under
+  the pre-release exception (docs/SCHEMA-VERSIONS.md, "Schema files on main"):
+  `schemas/versions.json` sets `current` and `preRelease` to `v0.6.0` with the
+  new `releases` entry (`FHR "2.1"`, `FHP "1.2"`, `FHGFF3 "1.2"`), exactly as
+  #198 pre-staged v0.5.0. The `schemaVersion` enums in `fhp_linkml.yml` and
+  `fhgff3_linkml.yml` gain `"1.2"`, and `json-schema-generator.py` adds a
+  conditional per type (mirroring the R15 `extension_gate`): a record that
+  states `'1.0'` or `'1.1'` keeps the single-integer suffix, so it holds its
+  exact older-minor outcome (`tests/test_extension_fields.py` compares every
+  vector against v0.4.0). Regenerated `fhp.json` and `fhgff3.json` and both
+  review baselines; the release-identity byte check skips while `preRelease`
+  names the untagged `current`. 7 new conformance vectors (291: 119 valid,
+  172 invalid): `fhp-fasta-busco-lineage-dotted` and
+  `fhgff3-busco-lineage-dotted` state `'1.2'` and cite the prepared v0.6.0;
+  the five malformed-dot rejections (trailing dot, leading dot, letter
+  component, uppercase, and the FHGFF3 trailing-dot twin) fail the old and
+  the new pattern alike and keep a v0.4.0 citation, so they are stable at
+  every toolkit version. Like the R15 vectors before fair-bioheaders 0.9.0,
+  the two positive dotted vectors need a toolkit that bundles the v0.6.0
+  schemas: the conformance CI's released-`0.9.0` job reports them as an
+  unsupported version until the workflow is repinned to the FAIR-bioHeaders-Tools
+  commit that does, as #198 did with its `5b05b65` pin (the pin stays here
+  because no such toolkit commit exists yet). Examples and `llms.txt` follow
+  v0.6.0 with recomputed checksums and FHGFF3 parent links (FHR examples
+  re-cite the v0.6.0 URL, still stating `'2.1'`). docs/FHP.md, docs/FHGFF3.md,
+  docs/SCHEMA-VERSIONS.md, README.md, specs/005 FR-005 and conformance/README.md
+  follow the widening; the INSDC coverage assessment is re-pinned (v3), no row
+  changes (#170 carries no INSDC requirement).
+
 - The conformance CI runs the released `fair-bioheaders[jsonld]==0.9.0`, the first release
   that bundles the v0.5.0 schemas (R15, J9, M5), instead of the pinned FAIR-bioHeaders-Tools
   commit `5b05b65`.

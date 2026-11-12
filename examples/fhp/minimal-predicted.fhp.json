@@ -1,6 +1,6 @@
 {
-  "schema": "https://w3id.org/fair-bioheaders/fhp/v0.5.0",
-  "schemaVersion": "1.1",
+  "schema": "https://w3id.org/fair-bioheaders/fhp/v0.6.0",
+  "schemaVersion": "1.2",
   "proteome": "Synthetic predicted proteome (placeholder)",
   "sourceType": "predicted",
   "taxon": {

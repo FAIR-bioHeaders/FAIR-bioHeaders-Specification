@@ -1,4 +1,4 @@
-;~schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.6.0
 ;~schemaVersion: '2.1'
 ;~taxon:
 ;~  name: Homo sapiens
@@ -31,7 +31,7 @@
 ;~- beetlebase:TC010103
 ;~relatedLink:
 ;~- http://wfleabase.org/genome/Daphnia_pulex/dpulex_jgi060905/fasta/
-;~checksum: DHngnJyNvzqiqdmIAuabjrXddae2CDO1gWiYd8AP3zM=
+;~checksum: oVOUoqUJJWHHGe7JlwNErSs9Yvx32ujIOyaM+DDTK3s=
 ;~assemblySoftware:
 ;~- name: hifiasm
 ;~  version: 0.19.8

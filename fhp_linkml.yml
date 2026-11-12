@@ -108,10 +108,11 @@ classes:
         pattern: ^(https://raw\.githubusercontent\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\.[0-9]+\.[0-9]+)/fhp\.json|https://w3id\.org/fair-bioheaders/fhp/v[0-9]+\.[0-9]+\.[0-9]+/?)$
       schemaVersion:
         description: Version of the FHP schema contract ("MAJOR.MINOR"); 1.1 (extension
-          fields) from v0.5
+          fields) from v0.5; 1.2 (dotted BUSCO dataset versions) from v0.6
         equals_string_in:
         - "1.0"
         - "1.1"
+        - "1.2"
       version:
         description: Version of the protein set
       metadataAuthor:
