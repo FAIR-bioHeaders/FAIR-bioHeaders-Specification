@@ -1,0 +1,815 @@
+{
+  "$defs": {
+    "AccessionID": {
+      "additionalProperties": false,
+      "description": "Accession identifier",
+      "properties": {
+        "name": {
+          "description": "Accession name",
+          "type": "string"
+        },
+        "url": {
+          "description": "Accession URL",
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "title": "AccessionID",
+      "type": "object"
+    },
+    "AssemblyType": {
+      "description": "How the transcript set was constructed (D2)",
+      "enum": [
+        "de novo",
+        "genome-guided",
+        "annotation-derived"
+      ],
+      "title": "AssemblyType",
+      "type": "string"
+    },
+    "Author": {
+      "additionalProperties": false,
+      "description": "Person or organization; uri is an ORCID URI",
+      "properties": {
+        "name": {
+          "description": "Name of the person or organization",
+          "type": "string"
+        },
+        "nameType": {
+          "$ref": "#/$defs/NameType",
+          "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"
+        },
+        "uri": {
+          "description": "ORCID URI",
+          "format": "uri",
+          "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$",
+          "type": "string"
+        }
+      },
+      "title": "Author",
+      "type": "object"
+    },
+    "BuscoMode": {
+      "description": "BUSCO run modes",
+      "enum": [
+        "proteins",
+        "transcriptome",
+        "genome"
+      ],
+      "title": "BuscoMode",
+      "type": "string"
+    },
+    "Completeness": {
+      "additionalProperties": false,
+      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10)",
+      "properties": {
+        "buscoVersion": {
+          "description": "Version of BUSCO",
+          "type": "string"
+        },
+        "completeDuplicated": {
+          "description": "Complete duplicated BUSCOs (D)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "completeSingle": {
+          "description": "Complete single-copy BUSCOs (S)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fragmented": {
+          "description": "Fragmented BUSCOs (F)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lineageDataset": {
+          "description": "BUSCO lineage dataset, including its version suffix",
+          "pattern": "^[a-z0-9_]+_odb[0-9]+$",
+          "type": "string"
+        },
+        "missing": {
+          "description": "Missing BUSCOs (M)",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mode": {
+          "$ref": "#/$defs/BuscoMode",
+          "description": "BUSCO mode"
+        },
+        "total": {
+          "description": "Number of BUSCO groups searched (n)",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "lineageDataset",
+        "completeSingle",
+        "completeDuplicated",
+        "fragmented",
+        "missing",
+        "total"
+      ],
+      "title": "Completeness",
+      "type": "object"
+    },
+    "DerivationRelationship": {
+      "description": "Provisional relationship vocabulary for derivedFrom. Values and any PROV-O / Relation Ontology mapping await a maintainer decision (FAIR-bioHeaders-Specification#54).",
+      "enum": [
+        "annotates",
+        "transcribedFrom",
+        "translatedFrom",
+        "filteredFrom",
+        "assembledFrom"
+      ],
+      "title": "DerivationRelationship",
+      "type": "string"
+    },
+    "DerivedFrom": {
+      "additionalProperties": false,
+      "description": "Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema FR-003). Provisional until the relationship vocabulary is decided (FAIR-bioHeaders-Specification#54).",
+      "properties": {
+        "accessionID": {
+          "$ref": "#/$defs/AccessionID",
+          "description": "Accession of the parent file"
+        },
+        "checksum": {
+          "description": "FHR-family checksum of the parent file",
+          "pattern": "^[A-Za-z0-9+/]{43}=$",
+          "type": "string",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "headerType": {
+          "$ref": "#/$defs/HeaderType",
+          "description": "FAIR-bioHeaders type of the parent file"
+        },
+        "relationship": {
+          "$ref": "#/$defs/DerivationRelationship",
+          "description": "How this file relates to the parent. Provisional vocabulary: a PROV-O or Relation Ontology mapping is pending a maintainer decision (FAIR-bioHeaders-Specification#54)."
+        },
+        "seqcol_id": {
+          "description": "Sequence collection digest of the parent, if supplied",
+          "pattern": "^[A-Za-z0-9_-]{32}$",
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "headerType",
+        "checksum",
+        "relationship"
+      ],
+      "title": "DerivedFrom",
+      "type": "object",
+      "allOf": [
+        {
+          "description": "Permitted FHT parent relationship: another FHT file filtered into this set, or an FHR genome whose bases were extracted (annotation-derived). Genome guidance alone is not a transcribedFrom link. The shared object already requires the parent checksum; accessionID is additional, not a substitute.",
+          "anyOf": [
+            {
+              "properties": {
+                "headerType": {
+                  "const": "FHT"
+                },
+                "relationship": {
+                  "const": "filteredFrom"
+                }
+              },
+              "required": [
+                "headerType",
+                "relationship"
+              ]
+            },
+            {
+              "properties": {
+                "headerType": {
+                  "const": "FHR"
+                },
+                "relationship": {
+                  "const": "transcribedFrom"
+                }
+              },
+              "required": [
+                "headerType",
+                "relationship"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "FHT": {
+      "additionalProperties": false,
+      "description": "Metadata for a transcriptome FASTA file.",
+      "properties": {
+        "accessionID": {
+          "$ref": "#/$defs/AccessionID",
+          "description": "Accession of the transcriptome itself"
+        },
+        "assemblyAuthor": {
+          "description": "Attributions for the assembly or extraction, when supplied",
+          "items": {
+            "$ref": "#/$defs/Author"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "assemblySoftware": {
+          "description": "Software used to construct or extract the transcript set, with its real version and ordered options. Extraction is a process too.",
+          "items": {
+            "$ref": "#/$defs/Software"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "assemblyType": {
+          "$ref": "#/$defs/AssemblyType",
+          "description": "Construction case for the whole described transcript set"
+        },
+        "checksum": {
+          "description": "Exact-file SHA-512/256 checksum under the shared exclusion rules",
+          "pattern": "^[A-Za-z0-9+/]{43}=$",
+          "type": "string",
+          "minLength": 44,
+          "maxLength": 44
+        },
+        "completeness": {
+          "$ref": "#/$defs/Completeness",
+          "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus digits, such as hymenoptera_odb10), so dotted dataset versions such as hymenoptera_odb12.2 are rejected. Do not rename a dotted lineage to pass the pattern; omit completeness and keep the measured lineage and counts in documentation until shared #170 decides dotted lineage support."
+        },
+        "dateCreated": {
+          "description": "Date the transcriptome resource was created, not the sample collection date",
+          "format": "date",
+          "type": "string"
+        },
+        "derivedFrom": {
+          "description": "Reviewed FAIR-bioHeaders parent-file relationships only. This contract permits an FHT filteredFrom parent or an FHR transcribedFrom parent when the transcript bases were extracted from that genome; genome guidance alone never justifies transcribedFrom. Annotation coordinates and other sources stay in relatedLink/documentation until the shared relationship vocabulary is decided (#54). The shared DerivedFrom object requires the parent's FHR-family checksum; an accession alone is not a verified family link.",
+          "items": {
+            "$ref": "#/$defs/DerivedFrom"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "documentation": {
+          "description": "Documentation about the transcriptome",
+          "type": "string"
+        },
+        "funding": {
+          "description": "Grant line item",
+          "type": "string"
+        },
+        "identifier": {
+          "description": "Identifier of the transcriptome itself",
+          "items": {
+            "pattern": "^[A-Za-z0-9._-]+:.+$",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "instrument": {
+          "description": "Legacy-compatible free-text sequencing instrument names. Prefer sequencingRuns when run accessions exist; do not infer an instrument from a run accession or a software name.",
+          "items": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "libraryStrategy": {
+          "description": "One supplied library strategy term for the whole set, using the producer's ENA term where applicable. Omit when experiments differ or the value is unknown; this slot is not an ENA-controlled enum.",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "metadataAuthor": {
+          "description": "Authors responsible for the header assertions",
+          "items": {
+            "$ref": "#/$defs/Author"
+          },
+          "type": "array"
+        },
+        "moleculeType": {
+          "$ref": "#/$defs/MoleculeType",
+          "description": "One producer-supported biological molecule class that applies to the whole described set. Omit for unknown or heterogeneous sets; total RNA and cDNA are preparation contexts, not uniform biological classes."
+        },
+        "relatedLink": {
+          "description": "Related source, project, sample, experiment or protocol URLs",
+          "items": {
+            "format": "uri",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "reuseConditions": {
+          "description": "Reuse conditions or license supplied for the transcriptome",
+          "type": "string"
+        },
+        "sample": {
+          "description": "Supplied biological sample context. Repeat the object for pooled material; each item carries only the values actually known for that source. This is not a complete BioSample record and does not establish a uniform pooled identity.",
+          "items": {
+            "$ref": "#/$defs/Sample"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "schema": {
+          "description": "URL of the FHT JSON Schema this record follows (FHT-Specification raw main, a release tag URL, or its w3id URL). It identifies the header type and contract; it is not a transcriptome or project identifier.",
+          "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHT-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|https://w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
+          "type": "string"
+        },
+        "schemaVersion": {
+          "description": "Version of the FHT schema contract (\"MAJOR.MINOR\")",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "type": "string",
+          "enum": [
+            "1.0"
+          ]
+        },
+        "scholarlyArticle": {
+          "description": "DOI of an article about the transcriptome",
+          "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$",
+          "type": "string"
+        },
+        "sequencingRuns": {
+          "description": "Actual SRA/ENA/DDBJ run accessions supporting the set. An SRS sample accession is not a run and must not be substituted.",
+          "items": {
+            "pattern": "^(SRR|ERR|DRR)[0-9]+$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "strandedness": {
+          "$ref": "#/$defs/Strandedness",
+          "description": "Supplied library strandedness under the FHT read/read-1 convention: forward means the single read or read 1 is sense relative to the originating transcript, reverse means antisense. Unknown or mixed protocols are omitted, never defaulted to unstranded."
+        },
+        "taxon": {
+          "$ref": "#/$defs/Taxon",
+          "description": "Biological scope supplied by the producer"
+        },
+        "transcriptome": {
+          "description": "Name of the transcriptome resource described by the file",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "transcriptomeSynonym": {
+          "description": "Other supplied names for the transcriptome",
+          "items": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "version": {
+          "description": "Version of the transcriptome resource",
+          "type": "string"
+        },
+        "vitalStats": {
+          "$ref": "#/$defs/VitalStats",
+          "description": "Producer-reported measurements for the whole file. Counts describe FASTA records, including isoforms, not genes. Omit statistics that were not measured; a measured zero remains zero."
+        },
+        "voucherSpecimen": {
+          "description": "Description of the physical sample",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "schemaVersion",
+        "transcriptome",
+        "assemblyType",
+        "taxon",
+        "version",
+        "metadataAuthor",
+        "dateCreated",
+        "checksum"
+      ],
+      "title": "FHT",
+      "type": "object",
+      "patternProperties": {
+        "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+          "description": "Extension field (FAIR-bioHeaders-Specification docs/FORMAT.md R15): any value; it means nothing to the standard"
+        }
+      },
+      "propertyNames": {
+        "not": {
+          "pattern": "\n"
+        }
+      }
+    },
+    "HeaderType": {
+      "description": "FAIR-bioHeaders header types",
+      "enum": [
+        "FHR",
+        "FHT",
+        "FHP",
+        "FHGFF3"
+      ],
+      "title": "HeaderType",
+      "type": "string"
+    },
+    "MoleculeType": {
+      "description": "Restricted biological molecule classes for the whole described set (D1). These are not preparation methods, and matching a string does not prove per-record INSDC compliance.",
+      "enum": [
+        "mRNA",
+        "rRNA",
+        "tRNA",
+        "transcribed RNA"
+      ],
+      "title": "MoleculeType",
+      "type": "string"
+    },
+    "NameType": {
+      "description": "Kind of author, with the values of DataCite nameType",
+      "enum": [
+        "Personal",
+        "Organizational"
+      ],
+      "title": "NameType",
+      "type": "string"
+    },
+    "Sample": {
+      "additionalProperties": false,
+      "description": "One supplied biological sample context. Pooled material is represented by repeated items, not by one fabricated uniform value.",
+      "properties": {
+        "condition": {
+          "description": "Supplied treatment, disease or other condition context",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "developmentalStage": {
+          "description": "Supplied developmental stage or life stage",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "strain": {
+          "description": "Supplied strain, breed or cultivar",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "tissue": {
+          "description": "Supplied tissue or anatomical source label",
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "tissueIdentifier": {
+          "description": "CURIE for the supplied tissue concept, preferably UBERON, PO or CL. The pattern checks CURIE form, not that the identifier resolves.",
+          "pattern": "^[A-Za-z][A-Za-z0-9._-]*:[A-Za-z0-9._-]+$",
+          "type": "string"
+        }
+      },
+      "title": "Sample",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [
+            "tissue"
+          ]
+        },
+        {
+          "required": [
+            "tissueIdentifier"
+          ]
+        },
+        {
+          "required": [
+            "developmentalStage"
+          ]
+        },
+        {
+          "required": [
+            "condition"
+          ]
+        },
+        {
+          "required": [
+            "strain"
+          ]
+        }
+      ]
+    },
+    "Software": {
+      "additionalProperties": false,
+      "description": "Software with its version and options.",
+      "properties": {
+        "commandLineOption": {
+          "description": "Command-line options given to the software, in order",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Name of the software",
+          "type": "string"
+        },
+        "uri": {
+          "description": "URI of the software",
+          "format": "uri",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the software",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Software",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "description": "A source of sequences that is not a FAIR-bioHeaders file: a database release, set, annotation run or other contribution",
+      "properties": {
+        "assemblyAccession": {
+          "description": "Genome assembly accession that the source states for this set; an assertion by the source, not a checksum link",
+          "type": "string"
+        },
+        "description": {
+          "description": "What was taken from the source, or how the sequences were contributed",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the database, resource or contribution",
+          "type": "string"
+        },
+        "release": {
+          "description": "Release or annotation run of the source, as the source names it",
+          "type": "string"
+        },
+        "sequenceCount": {
+          "description": "Number of sequences in the file that came from this source",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "setIdentifier": {
+          "description": "Identifier of the set taken from the source, for example a UniProt proteome ID",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL of the source or set",
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "Strandedness": {
+      "description": "FHT library strandedness normalization (D3), not an ENA enum. It describes the library read/read-1 orientation, not genomic plus/minus orientation or the orientation of exported transcript sequences.",
+      "enum": [
+        "unstranded",
+        "forward",
+        "reverse"
+      ],
+      "title": "Strandedness",
+      "type": "string"
+    },
+    "Taxon": {
+      "additionalProperties": false,
+      "description": "Species name and taxonomy URI",
+      "properties": {
+        "name": {
+          "description": "Name of the species",
+          "type": "string"
+        },
+        "uri": {
+          "description": "Taxonomy URI",
+          "format": "uri",
+          "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$",
+          "type": "string"
+        }
+      },
+      "title": "Taxon",
+      "type": "object"
+    },
+    "VitalStats": {
+      "additionalProperties": false,
+      "description": "Optional producer-reported statistics for the whole file",
+      "properties": {
+        "N50": {
+          "description": "Nucleotide length at which half the total sequence length is in records of that length or longer; computed from all sequence symbols",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "averageTranscriptLength": {
+          "description": "Mean number of sequence symbols per record, excluding deflines and line endings",
+          "minimum": 0,
+          "type": "number"
+        },
+        "totalTranscripts": {
+          "description": "Number of FASTA records, including isoforms",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "title": "VitalStats",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Metadata for a transcriptome FASTA file.",
+  "properties": {
+    "accessionID": {
+      "$ref": "#/$defs/AccessionID",
+      "description": "Accession of the transcriptome itself"
+    },
+    "assemblyAuthor": {
+      "description": "Attributions for the assembly or extraction, when supplied",
+      "items": {
+        "$ref": "#/$defs/Author"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "assemblySoftware": {
+      "description": "Software used to construct or extract the transcript set, with its real version and ordered options. Extraction is a process too.",
+      "items": {
+        "$ref": "#/$defs/Software"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "assemblyType": {
+      "$ref": "#/$defs/AssemblyType",
+      "description": "Construction case for the whole described transcript set"
+    },
+    "checksum": {
+      "description": "Exact-file SHA-512/256 checksum under the shared exclusion rules",
+      "pattern": "^[A-Za-z0-9+/]{43}=$",
+      "type": "string",
+      "minLength": 44,
+      "maxLength": 44
+    },
+    "completeness": {
+      "$ref": "#/$defs/Completeness",
+      "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus digits, such as hymenoptera_odb10), so dotted dataset versions such as hymenoptera_odb12.2 are rejected. Do not rename a dotted lineage to pass the pattern; omit completeness and keep the measured lineage and counts in documentation until shared #170 decides dotted lineage support."
+    },
+    "dateCreated": {
+      "description": "Date the transcriptome resource was created, not the sample collection date",
+      "format": "date",
+      "type": "string"
+    },
+    "derivedFrom": {
+      "description": "Reviewed FAIR-bioHeaders parent-file relationships only. This contract permits an FHT filteredFrom parent or an FHR transcribedFrom parent when the transcript bases were extracted from that genome; genome guidance alone never justifies transcribedFrom. Annotation coordinates and other sources stay in relatedLink/documentation until the shared relationship vocabulary is decided (#54). The shared DerivedFrom object requires the parent's FHR-family checksum; an accession alone is not a verified family link.",
+      "items": {
+        "$ref": "#/$defs/DerivedFrom"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "documentation": {
+      "description": "Documentation about the transcriptome",
+      "type": "string"
+    },
+    "funding": {
+      "description": "Grant line item",
+      "type": "string"
+    },
+    "identifier": {
+      "description": "Identifier of the transcriptome itself",
+      "items": {
+        "pattern": "^[A-Za-z0-9._-]+:.+$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "instrument": {
+      "description": "Legacy-compatible free-text sequencing instrument names. Prefer sequencingRuns when run accessions exist; do not infer an instrument from a run accession or a software name.",
+      "items": {
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "libraryStrategy": {
+      "description": "One supplied library strategy term for the whole set, using the producer's ENA term where applicable. Omit when experiments differ or the value is unknown; this slot is not an ENA-controlled enum.",
+      "pattern": "\\S",
+      "type": "string"
+    },
+    "metadataAuthor": {
+      "description": "Authors responsible for the header assertions",
+      "items": {
+        "$ref": "#/$defs/Author"
+      },
+      "type": "array"
+    },
+    "moleculeType": {
+      "$ref": "#/$defs/MoleculeType",
+      "description": "One producer-supported biological molecule class that applies to the whole described set. Omit for unknown or heterogeneous sets; total RNA and cDNA are preparation contexts, not uniform biological classes."
+    },
+    "relatedLink": {
+      "description": "Related source, project, sample, experiment or protocol URLs",
+      "items": {
+        "format": "uri",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "reuseConditions": {
+      "description": "Reuse conditions or license supplied for the transcriptome",
+      "type": "string"
+    },
+    "sample": {
+      "description": "Supplied biological sample context. Repeat the object for pooled material; each item carries only the values actually known for that source. This is not a complete BioSample record and does not establish a uniform pooled identity.",
+      "items": {
+        "$ref": "#/$defs/Sample"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema": {
+      "description": "URL of the FHT JSON Schema this record follows (FHT-Specification raw main, a release tag URL, or its w3id URL). It identifies the header type and contract; it is not a transcriptome or project identifier.",
+      "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/FHT-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|https://w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "description": "Version of the FHT schema contract (\"MAJOR.MINOR\")",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "type": "string",
+      "enum": [
+        "1.0"
+      ]
+    },
+    "scholarlyArticle": {
+      "description": "DOI of an article about the transcriptome",
+      "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$",
+      "type": "string"
+    },
+    "sequencingRuns": {
+      "description": "Actual SRA/ENA/DDBJ run accessions supporting the set. An SRS sample accession is not a run and must not be substituted.",
+      "items": {
+        "pattern": "^(SRR|ERR|DRR)[0-9]+$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "strandedness": {
+      "$ref": "#/$defs/Strandedness",
+      "description": "Supplied library strandedness under the FHT read/read-1 convention: forward means the single read or read 1 is sense relative to the originating transcript, reverse means antisense. Unknown or mixed protocols are omitted, never defaulted to unstranded."
+    },
+    "taxon": {
+      "$ref": "#/$defs/Taxon",
+      "description": "Biological scope supplied by the producer"
+    },
+    "transcriptome": {
+      "description": "Name of the transcriptome resource described by the file",
+      "pattern": "\\S",
+      "type": "string"
+    },
+    "transcriptomeSynonym": {
+      "description": "Other supplied names for the transcriptome",
+      "items": {
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "version": {
+      "description": "Version of the transcriptome resource",
+      "type": "string"
+    },
+    "vitalStats": {
+      "$ref": "#/$defs/VitalStats",
+      "description": "Producer-reported measurements for the whole file. Counts describe FASTA records, including isoforms, not genes. Omit statistics that were not measured; a measured zero remains zero."
+    },
+    "voucherSpecimen": {
+      "description": "Description of the physical sample",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "schemaVersion",
+    "transcriptome",
+    "assemblyType",
+    "taxon",
+    "version",
+    "metadataAuthor",
+    "dateCreated",
+    "checksum"
+  ],
+  "title": "FHT",
+  "type": "object",
+  "patternProperties": {
+    "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+      "description": "Extension field (FAIR-bioHeaders-Specification docs/FORMAT.md R15): any value; it means nothing to the standard"
+    }
+  },
+  "propertyNames": {
+    "not": {
+      "pattern": "\n"
+    }
+  }
+}

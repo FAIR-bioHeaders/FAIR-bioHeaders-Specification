@@ -1,0 +1,47 @@
+{
+  "provenanceVersion": 1,
+  "note": "Byte-exact snapshots of the DRAFT FH* contract schemas the draft CEDAR templates in ../ are generated from. These are development-repo bytes, not released contracts: nothing here is a schema authority, and no w3id URL exists or is claimed for either type. scripts/make_cedar.py reads the snapshot bytes offline and refuses to generate when a snapshot no longer matches its recorded sha256; tests/test_cedar.py recomputes both the sha256 and the git blob hash against this file. Refresh procedure (maintainer-reviewed draft edits only): re-fetch the recorded path from the recorded repository at a named commit, update commit/sha256/size/retrieved here, rerun python scripts/make_cedar.py and review the template diff.",
+  "snapshots": {
+    "fht": {
+      "type": "FHT",
+      "status": "draft",
+      "contractVersion": "1.0",
+      "dialect": "https://json-schema.org/draft/2020-12/schema",
+      "local": "templates/cedar/drafts/fht.schema.json",
+      "repository": "FAIR-bioHeaders/FHT-Specification",
+      "url": "https://github.com/FAIR-bioHeaders/FHT-Specification",
+      "ref": "main",
+      "commit": "b9ad19a62772092e08935cff44ee77a50981bbaf",
+      "commitDate": "2026-11-12T10:43:38-05:00",
+      "commitSubject": "Byte-exact FHT conformance vectors, examples and parent fixtures (65 vectors, independent runner) (#29)",
+      "path": "fht.json",
+      "recordSchemaUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+      "recordSchemaUrlNote": "The draft contract's own schema-property pattern admits this raw-main URL, a future release-tag URL and a future w3id URL; only the raw-main form exists today, so the template pins it. FHT-Specification#24 added the open x- patternProperty; released FHT status is tracked in FAIR-bioHeaders-Specification#107 (lane F).",
+      "gitBlobSha1": "fb7618144ca436735d95bb9acf207364774b5e1b",
+      "size": 29199,
+      "sha256": "11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8",
+      "retrieved": "2026-11-13",
+      "crossCheck": "Identical bytes to the website's draft pin (fair-bioheaders.github.io scripts/schema-snapshots/provenance.json, fht-draft.json, retrieved 2026-11-10 at commit 720e7f32d915e2efcae6ff2dba821e62e3a20ff2); fht.json was unchanged between 720e7f3 and the commit recorded above."
+    },
+    "fhgm": {
+      "type": "FHGM",
+      "status": "draft",
+      "contractVersion": "0.1",
+      "dialect": "https://json-schema.org/draft/2020-12/schema",
+      "local": "templates/cedar/drafts/fhgm-model.schema.json",
+      "repository": "FAIR-bioHeaders/FHGM-Specification",
+      "url": "https://github.com/FAIR-bioHeaders/FHGM-Specification",
+      "ref": "main",
+      "commit": "8b0ca0055b84d69bc24e5daf4ad1950e91d11d0e",
+      "commitDate": "2026-11-12T23:09:53Z",
+      "commitSubject": "Draft the native FHGM model contract v0.1 (proposal, #204 Option C) (#11)",
+      "path": "development/model/fhgm-model.schema.json",
+      "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHGM-Specification/8b0ca0055b84d69bc24e5daf4ad1950e91d11d0e/development/model/fhgm-model.schema.json",
+      "recordSchemaUrlNote": "An FHGM model record carries no schema, schemaVersion or checksum field: it is one item of the FHGFF3 x-fhgm-models extension array (docs/FORMAT.md R15 transport, proposal under FAIR-bioHeaders-Specification#204) and the enclosing FHGFF3 header keeps the released file identity. No URL is claimed for the model contract itself.",
+      "gitBlobSha1": "f782059491804763003d2773ccf1ad949f61b867",
+      "size": 8493,
+      "sha256": "9114780bfcc8b575fa660b2d38a7ad521d9b993d2544963cdad388daed045e27",
+      "retrieved": "2026-11-13"
+    }
+  }
+}
