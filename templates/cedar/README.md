@@ -169,10 +169,11 @@ Draft caveats on this path:
 
 - **FHT:** the toolkit does not bind or validate FHT files yet (that lands with
   the FHT release lane, #107 F / FHT-Specification#9). Until then, validate the
-  flattened record against the pinned draft schema yourself, e.g. with
-  `python -m jsonschema -i record.json templates/cedar/drafts/fht.schema.json`
-  (Draft 2020-12; `tests/test_cedar.py` additionally enables format checking),
-  and keep the record, not a checksum, as the deliverable for curator review.
+  flattened record as pre-binding metadata using `Draft202012Validator` with
+  `FormatChecker` and an in-memory copy of the pinned draft schema with only
+  `checksum` removed from its root `required` list. Do not edit the pinned
+  snapshot or invent a checksum. Keep the unbound record for curator review;
+  full-contract validation must wait until a supported writer binds the file.
 - **FHGM:** the flattened output is one **model record** to embed per the
   [transport steps above](#draft-templates--fht-and-fhgm), never a standalone
   `bioheaders combine` input. `flatten_export` recognizes an FHGM export by
