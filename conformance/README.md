@@ -28,8 +28,8 @@ open and re-save them in an editor. Run the generator instead.
 
 `rules` maps each stable rule id to a short summary: R1 to R15 from
 docs/FORMAT.md, M1 to M5 from docs/MICRODATA.md, J1 to J9 from
-docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V6
-(schema selection) from docs/SCHEMA-VERSIONS.md. V6 reads an FHR 1 record that cites the raw-main `fhr.json` URL with `schemaVersion` the number 1 against the v0.3.1 schema; `fasta-schema-raw-main-version-1`, which states `1.0` as FHR 1 writers did, was invalid before V6, so it is retired and the same bytes are the valid vector `fasta-schema-raw-main-version-1-0`. The J3 to J5 vectors are JSON-LD in other forms than the canonical
+docs/JSONLD.md, P1 to P2 from docs/FHP.md, G1 to G3 from docs/FHGFF3.md, and V1 to V7
+(schema selection) from docs/SCHEMA-VERSIONS.md. V6 reads an FHR 1 record that cites the raw-main `fhr.json` URL with `schemaVersion` the number 1 against the v0.3.1 schema; `fasta-schema-raw-main-version-1`, which states `1.0` as FHR 1 writers did, was invalid before V6, so it is retired and the same bytes are the valid vector `fasta-schema-raw-main-version-1-0`. V7 is the opt-in draft lane (an unreleased contract read from its owning development repository's raw-main URL, revision-pinned and warned on); it changes no default outcome and publishes no draft contract here, so it has no vector and is `notApplicable`. The J3 to J5 vectors are JSON-LD in other forms than the canonical
 one, so a reader needs a JSON-LD processor for them. The invalid J3 vectors use a context other
 than the FHR context alone (remapped, extended, `@import`ed, nested, schema.org `@vocab` or
 remote) or `@nest`; a reader rejects them before expansion. J7 constrains writers, so it is

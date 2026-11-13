@@ -12,8 +12,14 @@ pilot datasets are tracked in
 and family delivery in
 [#55](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/55).
 No toolkit, validator or builder support is claimed; nothing on this page is a
-release statement. Finished, adopted contracts publish through this repository
-through the normal review and release cycle.
+release statement. Unreleased draft contracts do have a defined reader lane,
+rule V7 of [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md): explicit opt-in, pinned to
+a development-repository commit and schema digest, and warned on for every
+record read through it. Because an FHGM record carries no `schema` field, that
+lane selects the contract and validator applied to the records, not the file's
+routing. That is a statement about reader behavior, not about any tool, and not
+an adoption, support or release claim. Finished, adopted contracts publish
+through this repository through the normal review and release cycle.
 
 ## What FHGM is meant to be
 

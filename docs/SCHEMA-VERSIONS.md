@@ -205,6 +205,19 @@ same; existing files cite the old form, and it keeps serving the same files.
   no earlier raw-main contract. For microdata without `data-fhr-type`, `schemaVersion` text that
   reads as the JSON number 1 counts as the number 1 (rule M3 then converts it with the v0.3.1
   schema, whose `schemaVersion` is a number).
+- [V7] **Unreleased draft contracts (opt-in).** A reader may recognise a **draft** contract: a
+  `<file>` outside V1's list, cited as the raw-main URL of the development repository that owns
+  that type, `https://raw.githubusercontent.com/FAIR-bioHeaders/<repo>/main/<file>`. A type may
+  already have a released schema file in V1; its published file remains governed by V1, while a
+  later draft of that type is eligible only under a distinct `<file>` not in V1's list. The lane is
+  never the default: it applies only where the user has explicitly chosen to read that
+  repository's draft. Without that choice, V5 governs such a value and the outcome is exactly what
+  it was before V7 existed. With it, the record is read against the draft at the revision the
+  reader is built with, and the reader warns on every record it reads this way: the warning names
+  the draft, the commit and the digest it is pinned to, and says the result is not a
+  released-contract result, for example `<type>: warning: schema …/<repo>/main/<file> is an
+  unreleased draft (commit <full sha>, sha256 <digest> of those bytes); read against that pinned
+  draft, not a released schema`.
 
 V6 exists because FHR 1 (releases up to v0.3.1) told writers to cite the raw-main URL with
 `schemaVersion: 1`, and FHR 1 writers commonly wrote `1.0`. When raw-main moved to FHR 2.0 in
@@ -218,6 +231,46 @@ Readers use copies of the released schemas (tags are the source) and say which r
 current copy is; they do not fetch schemas at run time. Microdata keeps the raw-main `fhr.json`
 URL as its `itemtype` (rule M1 identifies FHR items by it); the `schema` itemprop carries the
 versioned URL.
+
+V7 opens a lane beside V1 (#221, decision of 2026-11-13); it adds nothing to V1's list, and a draft
+never takes a release form.
+A w3id URL `https://w3id.org/fair-bioheaders/<type>/vX.Y.Z` or a raw tag URL naming a release for a
+type that no release registers stays "any other value" under V5, as it is today, and a reader must
+not read it as the draft: no release number is invented for a draft, and an unpublished type has
+no row in `schemas/versions.json` to select. A reader that reports a near-miss schema URL, as
+fair-bioheaders 0.10.0 does (Tools#125), keeps doing so for such a value: V7 changes neither that
+warning nor the FHR result. Only the raw-main URL of the owning development repository is in the
+lane.
+
+A reader that implements the lane ships the draft bytes it recognises and pins them the way this
+family pins a copied tree: the commit of the development repository and the SHA-256 of the exact
+schema bytes, the pair `header/provenance.json` records for the FHGFF3 development copy and the
+digest `scripts/make_cedar.py` writes into every template's provenance line. Selection runs against
+the pinned bytes, never against `main` at run time, so a rewrite of a draft cannot move a reading
+that claims to be current out of sight; when the bytes a reader holds no longer match the digest it
+states, it says so instead of quietly choosing a newer draft.
+
+Publication moves that file out of the lane. The release adds the type's `<file>` to V1 and its row
+to `schemas/versions.json`; from then on its released bytes are governed by V1 to V4 and its
+`schemaVersion` by the rules above. A later unreleased revision of that type can use V7 only under
+a distinct `<file>` not in V1; V7 never reaches released bytes, and nothing published is rewritten:
+V1 to V6 keep their text and their outcomes, and V7 is additive. Reading an unreleased draft through
+the lane recognises a proposal, it does not adopt one: a record that cites a draft URL is
+experimental, is not a conforming record of a released type, and stays in its own development
+repository rather than in this one's examples or vectors.
+
+Two drafts are in the lane today: the transcriptome contract drafted in
+[FHT-Specification](https://github.com/FAIR-bioHeaders/FHT-Specification), whose conformance suite
+cites `https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json`, and the
+gene-model records drafted in
+[FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) and described in
+[FHGM.md](FHGM.md). The rule names neither: it describes the shape of the lane, and any type
+repository holding a draft contract is covered the same way. FHGM is the general case worth
+stating, because its records carry no `schema` field at all: they ride inside an FHGFF3 header as
+extension fields ([FORMAT.md](FORMAT.md) R15), so the file is routed by its own FHGFF3 citation
+under V1 to V3 and the lane selects only the contract and the validator that a tool applies to the
+records. For a type whose records name no schema, V7 chooses what validates them; it never chooses
+what they are.
 
 ## Writing files
 

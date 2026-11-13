@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+- **Selection rules (documentation, #221 ruling of 2026-11-13): rule V7, the draft lane.**
+  docs/SCHEMA-VERSIONS.md adds `[V7]`: a reader MAY recognise an unreleased **draft** contract at
+  the raw-main URL of the development repository that owns its type, only behind an explicit user
+  decision, reading it against bytes pinned by commit and SHA-256 digest (the
+  `header/provenance.json` / `scripts/make_cedar.py` discipline) and warning loudly on every
+  record so read. The rule is type-neutral: FHT (FHT-Specification's `fht.json` and its merged
+  vector suite) and FHGM (model records in FHGM-Specification) are named only as current
+  instances, and for a type whose records carry no `schema` field the lane selects the contract
+  and validator, not the file's routing. Default behavior is unchanged value for value: without
+  the opt-in decision such a URL is still "any other value" under V5, and a draft never takes a
+  release form — an unregistered type's w3id or raw-tag URL stays V5 territory, with the near-miss
+  warning of FAIR-bioHeaders-Tools#125. Published rules V1 to V6 are not rewritten; V7 is
+  additive, and publication promotes a type into V1 and `schemas/versions.json`, leaving the lane
+  open for the next draft. No schema, model, example or vector byte changes and no `schemaVersion`
+  or registry effect: `scripts/make_conformance.py` registers the V7 summary in the manifest's
+  `rules` map as `notApplicable` (the lane has no default-behavior vector, and no shared vector
+  cites a draft URL), so `conformance/manifest.json` gains that line only and all 291 vectors stay
+  byte-identical; `tests/test_schema_versions.py` extends its label enumeration; conformance/
+  README.md and docs/FHGM.md point at the rule. Refs #221.
+
 - Generated **draft** CEDAR authoring templates for FHT and FHGM
   (`templates/cedar/{fht,fhgm}.json`), per the maintainer decision of
   2026-11-13 ("CEDAR will expand to include FHGM and FHT") extending
