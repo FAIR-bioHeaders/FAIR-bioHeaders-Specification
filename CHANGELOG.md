@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+Work targeting **v0.6.1**, the documentation patch named by the release decision of
+2026-11-13: the schema selection rules, the format rules and the published JSON Schemas
+stay exactly at v0.6.0 (v0.6.1 repeats the v0.6.0 row in `schemas/versions.json`, as v0.4.1
+and v0.4.2 repeated the v0.4.0 row), and a v0.6.1 release changes guidance text only.
+
+## v0.6.0 — 2026-11-13
+
+A minor schema release: dotted BUSCO dataset versions. FHP `"1.2"` and FHGFF3 `"1.2"` accept
+the dotted forms the BUSCO user guide documents, such as `enterobacterales_odb12.2`; FHR stays
+`"2.1"` and `fhr.json` is byte-identical to v0.5.0, because `Completeness` lives in
+`schemas/shared.yaml` and the FHR contract does not import it. Every record valid under FHP
+`"1.0"`/`"1.1"` and FHGFF3 `"1.0"`/`"1.1"` stays valid with the same meaning, and a record that
+states an older minor may not carry a dotted dataset version, so it keeps exactly its older
+outcome. The schemas are published at `https://w3id.org/fair-bioheaders/<type>/v0.6.0`; the
+redirects for that tag are a maintainer act like the tag itself. `schemas/versions.json` sets
+`current` to v0.6.0 with `preRelease` cleared, and the examples cite the v0.6.0 URLs. The
+reference toolkit that bundles these schema bytes is fair-bioheaders 0.11.0, prepared on that
+repository's `main` and tagged after this release; the newest published toolkit release, 0.10.0,
+bundles the v0.5.0 schemas.
+
+Alongside the schema change, this tag carries the guidance that landed on `main` since v0.5.0:
+the selection rule **V7** (the opt-in draft lane, #221) documented in docs/SCHEMA-VERSIONS.md,
+generated CEDAR authoring templates for the released types and draft-labeled templates for FHT
+and FHGM (#162 and the decision of 2026-11-13), the INSDC submission-validator evidence rounds
+(#191, #210) and the `docs/FHGM.md` draft overview. Carrying them in the tag states where the
+text lives, nothing more: a draft type is still not published by this release, FHT and FHGM take
+no `schemaVersion`, no registry row and no w3id URL, and the follow-through corrections to that
+guidance are scheduled for v0.6.1.
+
 - **Selection rules (documentation, #221 ruling of 2026-11-13): rule V7, the draft lane.**
   docs/SCHEMA-VERSIONS.md adds `[V7]`: a reader MAY recognise an unreleased **draft** contract at
   the raw-main URL of the development repository that owns its type, only behind an explicit user

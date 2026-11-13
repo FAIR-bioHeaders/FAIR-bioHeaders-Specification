@@ -122,8 +122,8 @@ For assistants and people adding FAIR-bioHeaders headers to data elsewhere (summ
   `bioheaders verify` checks it; `bioheaders strip` removes it. Never write or edit a
   checksum by hand. The Claude Code plugin in FAIR-bioHeaders-Tools
   (`plugins/fair-bioheaders`) packages these steps as a skill.
-- Cite a versioned schema in `schema` (`https://w3id.org/fair-bioheaders/fhr/v0.5.0`,
-  `.../fhp/v0.5.0`, `.../fhgff3/v0.5.0`) with its `schemaVersion` from
+- Cite a versioned schema in `schema` (`https://w3id.org/fair-bioheaders/fhr/v0.6.0`,
+  `.../fhp/v0.6.0`, `.../fhgff3/v0.6.0`) with its `schemaVersion` from
   `schemas/versions.json`. Required fields are in `fhr.json`, `fhp.json` and
   `fhgff3.json`; never invent values for them.
 - Strict FASTA readers (samtools faidx and the rest of htslib, Picard, Biopython's default
