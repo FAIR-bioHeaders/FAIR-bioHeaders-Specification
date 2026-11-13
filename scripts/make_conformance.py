@@ -147,6 +147,13 @@ RULES = {
           "(either repository name) and whose schemaVersion is the number 1 (1 or 1.0, not "
           "the string \"1\" or a boolean) is an FHR 1 record, validated against the v0.3.1 "
           "FHR schema; the citation is deprecated, not invalid.",
+    "V7": "Selection, unreleased draft contracts (opt-in): a reader may recognise a draft "
+          "contract at the raw-main URL of the development repository that owns its type "
+          "(https://raw.githubusercontent.com/FAIR-bioHeaders/<repo>/main/<file>, a <file> outside "
+          "the V1 list) only behind an explicit user decision, reading it against bytes pinned by "
+          "commit and SHA-256 digest and warning on every record so read. Without that decision "
+          "such a value is V5, and a draft never takes a release form: an unregistered type's w3id "
+          "or raw-tag URL stays any other value under V5.",
 }
 NOT_APPLICABLE = {
     "R11": "R11 is a recommendation: a raw '>' or '@' in a FASTA header line makes a "
@@ -159,6 +166,10 @@ NOT_APPLICABLE = {
           "escapes read back to the real characters.",
     "R14": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid "
            "in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"].",
+    "V7": "V7 is an opt-in reader lane: it recognises a draft contract only behind an explicit "
+          "user decision, and this suite publishes no draft contract, so no vector is valid or "
+          "invalid under it. Without that decision a draft raw-main URL is read as FHR (V5), "
+          "which fasta-schema-other-value and fasta-schema-other-value-version-1 cover.",
 }
 
 PREFIX = {"fasta": b";~", "gfa": b"#~", "fhp-fasta": b";~", "fhgff3": b"#~"}

@@ -162,7 +162,8 @@ class SchemaVersionTests(unittest.TestCase):
 
     def test_policy_document_labels(self):
         text = (ROOT / "docs" / "SCHEMA-VERSIONS.md").read_text(encoding="utf-8")
-        self.assertEqual(re.findall(r"\[(V\d)\]", text), ["V1", "V2", "V3", "V4", "V5", "V6"])
+        self.assertEqual(re.findall(r"\[(V\d)\]", text),
+                         ["V1", "V2", "V3", "V4", "V5", "V6", "V7"])
         for tag in REGISTRY["releases"]:
             self.assertIn(tag, text)
 
