@@ -78,14 +78,18 @@ other four templates is deliberate and fundamental: **an FHGM record is a model
 record, not a file header.** It has no `schema`, `schemaVersion` or `checksum`
 field. The template authors exactly **one** model record; the transport is:
 
-1. validate the record against the native draft contract (the FHGM-Specification
-   model-level checker `validate_fhgm.py`, not the toolkit),
+1. validate the standalone record against
+   [`drafts/fhgm-model.schema.json`](drafts/fhgm-model.schema.json) using a
+   Draft 2020-12 validator with format checking,
 2. embed it as one item of the `x-fhgm-models` array in a **valid FHGFF3 1.1
    header** (docs/FORMAT.md R15 transport — the extension never overrides a
    standard field),
 3. recompute the enclosing file's checksum with `bioheaders combine` — the file
    checksum covers every embedded record byte like any other header byte, and
-   any later record edit invalidates it.
+   any later record edit invalidates it,
+4. run FHGM-Specification's `validate_fhgm.py` on the bound FHGFF3 file with
+   `--base-schema` pointing to its required released v0.5.0 FHGFF3 schema and
+   any predecessor snapshots supplied through `--predecessor`.
 
 Model **resolution** (feature-target matching, predecessor-pointer verdicts,
 reference agreement with the file header) is a draft checker rule set in
