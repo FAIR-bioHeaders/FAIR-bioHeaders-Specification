@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Generated CEDAR workbench authoring templates for the released types
+  (`templates/cedar/{fhp,fhgff3,fhr}.json`, FHR 2.1 / FHP 1.1 / FHGFF3 1.1) and
+  their generator `scripts/make_cedar.py` (stdlib-only, deterministic,
+  `--check` wired into the Validate specification workflow;
+  `tests/test_cedar.py`). Authoring aids only: no schema, version or registry
+  change; extension slots (docs/FORMAT.md R15) are omitted from the forms;
+  publication to a CEDAR instance remains a maintainer action. Refs #162.
+
 - **Schema change (minor, staged for v0.6.0, #170): dotted BUSCO dataset versions.**
   The shared `Completeness.lineageDataset` pattern widens from
   `^[a-z0-9_]+_odb[0-9]+$` to `^[a-z0-9_]+_odb[0-9]+(\.[0-9]+)*$`, so dataset
