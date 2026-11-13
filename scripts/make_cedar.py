@@ -291,7 +291,7 @@ class Generator:
             # A closed value set spelled out as a regex alternation (FHR
             # masking) becomes radio literals: derived from the schema bytes,
             # never curated here.
-            group = re.fullmatch(r"^\^\(([a-z0-9|-]+(?:\|[a-z0-9|-]+)+)\)\$$",
+            group = re.fullmatch(r"^\^\(([a-z0-9-]+(?:\|[a-z0-9-]+)+)\)\$$",
                                  node.get("pattern", ""))
             if group:
                 enum = group.group(1).split("|")
