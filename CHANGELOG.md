@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+- Generated **draft** CEDAR authoring templates for FHT and FHGM
+  (`templates/cedar/{fht,fhgm}.json`), per the maintainer decision of
+  2026-11-13 ("CEDAR will expand to include FHGM and FHT") extending
+  #162 Option A. Both are generated from byte-pinned development snapshots
+  under `templates/cedar/drafts/` (repository, branch, commit, SHA-256, git
+  blob and retrieval date recorded in `drafts/provenance.json`; generation
+  refuses when snapshot bytes and digests diverge). Draft templates embed
+  `status: "draft"`, a DRAFT title and an embedded warning string; the FHT
+  template pins the FHT-Specification raw-main contract URL and contains no
+  w3id URL (none exists), and covers all 66 named contract paths with the
+  draft's open `x-` patternProperty slot omitted like the released R15 slots;
+  the FHGM template authors ONE model record (32 named paths, reference
+  choose-one handled as the FHGFF3 genome link is) and documents the
+  FHGFF3-embedded `x-fhgm-models` transport in its provenance. No schema,
+  version or registry change; publication/upgrade is gated on the FHT release
+  (#107 lane F) and FHGM adoption (#204). `scripts/make_cedar.py` gains a
+  released|draft config table, `--check` now covers all five templates and
+  verifies the snapshot digests; `tests/test_cedar.py` grows from 11 to 21
+  tests (filled draft exports round-trip and validate against the stored
+  draft schemas, Draft 2020-12 + FormatChecker). Extension slots remain
+  omitted; publication to a CEDAR instance remains a maintainer action.
+  Refs #162.
+
 - Generated CEDAR workbench authoring templates for the released types
   (`templates/cedar/{fhp,fhgff3,fhr}.json`, FHR 2.1 / FHP 1.1 / FHGFF3 1.1) and
   their generator `scripts/make_cedar.py` (stdlib-only, deterministic,
