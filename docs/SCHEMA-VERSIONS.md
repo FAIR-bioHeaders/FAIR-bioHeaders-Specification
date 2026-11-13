@@ -207,7 +207,9 @@ same; existing files cite the old form, and it keeps serving the same files.
   schema, whose `schemaVersion` is a number).
 - [V7] **Unreleased draft contracts (opt-in).** A reader may recognise a **draft** contract: a
   `<file>` outside V1's list, cited as the raw-main URL of the development repository that owns
-  that type, `https://raw.githubusercontent.com/FAIR-bioHeaders/<repo>/main/<file>`. The lane is
+  that type, `https://raw.githubusercontent.com/FAIR-bioHeaders/<repo>/main/<file>`. A type may
+  already have a released schema file in V1; its published file remains governed by V1, while a
+  later draft of that type is eligible only under a distinct `<file>` not in V1's list. The lane is
   never the default: it applies only where the user has explicitly chosen to read that
   repository's draft. Without that choice, V5 governs such a value and the outcome is exactly what
   it was before V7 existed. With it, the record is read against the draft at the revision the
@@ -248,12 +250,12 @@ the pinned bytes, never against `main` at run time, so a rewrite of a draft cann
 that claims to be current out of sight; when the bytes a reader holds no longer match the digest it
 states, it says so instead of quietly choosing a newer draft.
 
-Publication moves a type out of the lane. The release adds the type's `<file>` to V1 and its row to
-`schemas/versions.json`; from then on its released bytes are governed by V1 to V4 and its
-`schemaVersion` by the rules above. V7 then stands ready for the next unreleased revision of that
-type or of another one; it never reaches released bytes, and nothing published is rewritten: V1 to
-V6 keep their text and their outcomes, and V7 is additive. Until a type is registered, reading it
-through the lane recognises a proposal, it does not adopt one: a record that cites a draft URL is
+Publication moves that file out of the lane. The release adds the type's `<file>` to V1 and its row
+to `schemas/versions.json`; from then on its released bytes are governed by V1 to V4 and its
+`schemaVersion` by the rules above. A later unreleased revision of that type can use V7 only under
+a distinct `<file>` not in V1; V7 never reaches released bytes, and nothing published is rewritten:
+V1 to V6 keep their text and their outcomes, and V7 is additive. Reading an unreleased draft through
+the lane recognises a proposal, it does not adopt one: a record that cites a draft URL is
 experimental, is not a conforming record of a released type, and stays in its own development
 repository rather than in this one's examples or vectors.
 
