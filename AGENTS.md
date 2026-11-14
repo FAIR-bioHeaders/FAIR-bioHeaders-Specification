@@ -195,10 +195,12 @@ joint maintainer adoption remain requirements before closing #56.
 ## Specification repository workflows
 
 These sections apply according to the Git remote. Keep the shared sections of
-this file identical in all five specification repositories; a repository may
-carry sections that describe only its own tree (currently the shared
-repository's "Draft metadata profiles (#56)" section and FHR-Specification's
-development-tree paragraph). Port only intended shared-guidance changes, record
+this file identical in all six specification repositories — the shared
+publication repository and the FHR, FHP, FHT, FHGFF3 and FHGM development
+repositories; a repository may carry sections that describe only its own tree
+(currently the shared repository's "Draft metadata profiles (#56)" section and
+FHR-Specification's development-tree paragraph, plus FHGM-Specification's own
+local-development-scope section). Port only intended shared-guidance changes, record
 the shared source commit, compare the shared sections byte-for-byte, and never
 delete another repository's local section to restore identity. Shared policy can
 describe every type without importing unrelated code or histories.
