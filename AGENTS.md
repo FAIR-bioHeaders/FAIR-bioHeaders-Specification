@@ -199,7 +199,9 @@ this file in step across all six specification repositories — the shared
 publication repository and the FHR, FHP, FHT, FHGFF3 and FHGM development
 repositories — modulo declared per-repository link adaptations: a repository
 may substitute an absolute shared-specification URL where a relative path does
-not resolve in its own tree. A repository may also carry sections that describe
+not resolve in its own tree. FHP-Specification's existing absolute links to the
+shared schema-selection rules and version registry are also permitted, even
+though those paths exist locally. A repository may also carry sections that describe
 only its own tree (currently the shared repository's "Draft metadata profiles
 (#56)" section, FHR-Specification's development-tree paragraph, and
 FHGM-Specification's local-development-scope section); never delete another
