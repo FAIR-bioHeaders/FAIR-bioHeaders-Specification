@@ -61,7 +61,7 @@
     },
     "Completeness": {
       "additionalProperties": false,
-      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10)",
+      "description": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10 or enterobacterales_odb12.2)",
       "properties": {
         "buscoVersion": {
           "description": "Version of BUSCO",
@@ -83,8 +83,8 @@
           "type": "integer"
         },
         "lineageDataset": {
-          "description": "BUSCO lineage dataset, including its version suffix",
-          "pattern": "^[a-z0-9_]+_odb[0-9]+$",
+          "description": "BUSCO lineage dataset, including its version suffix; one or more dot-separated numeric version components are allowed, as BUSCO datasets are re-released (for example odb12.2)",
+          "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$",
           "type": "string"
         },
         "missing": {
@@ -236,7 +236,7 @@
         },
         "completeness": {
           "$ref": "#/$defs/Completeness",
-          "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus digits, such as hymenoptera_odb10), so dotted dataset versions such as hymenoptera_odb12.2 are rejected. Do not rename a dotted lineage to pass the pattern; omit completeness and keep the measured lineage and counts in documentation until shared #170 decides dotted lineage support."
+          "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus one or more dot-separated numeric version components, such as hymenoptera_odb10 or hymenoptera_odb12.2), as widened by shared #170 for v0.6.0. Do not rename or coerce a measured lineage to fit the pattern; if a measured value cannot be represented, omit completeness and keep the lineage and counts in documentation."
         },
         "dateCreated": {
           "description": "Date the transcriptome resource was created, not the sample collection date",
@@ -651,7 +651,7 @@
     },
     "completeness": {
       "$ref": "#/$defs/Completeness",
-      "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus digits, such as hymenoptera_odb10), so dotted dataset versions such as hymenoptera_odb12.2 are rejected. Do not rename a dotted lineage to pass the pattern; omit completeness and keep the measured lineage and counts in documentation until shared #170 decides dotted lineage support."
+      "description": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus one or more dot-separated numeric version components, such as hymenoptera_odb10 or hymenoptera_odb12.2), as widened by shared #170 for v0.6.0. Do not rename or coerce a measured lineage to fit the pattern; if a measured value cannot be represented, omit completeness and keep the lineage and counts in documentation."
     },
     "dateCreated": {
       "description": "Date the transcriptome resource was created, not the sample collection date",
