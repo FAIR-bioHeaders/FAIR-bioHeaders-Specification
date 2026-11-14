@@ -32,16 +32,17 @@
       "repository": "FAIR-bioHeaders/FHGM-Specification",
       "url": "https://github.com/FAIR-bioHeaders/FHGM-Specification",
       "ref": "main",
-      "commit": "8b0ca0055b84d69bc24e5daf4ad1950e91d11d0e",
-      "commitDate": "2026-11-12T23:09:53Z",
-      "commitSubject": "Draft the native FHGM model contract v0.1 (proposal, #204 Option C) (#11)",
+      "commit": "ac3d37b3033312844fc3151217731928ae33aa54",
+      "commitDate": "2026-11-14T13:03:51-05:00",
+      "commitSubject": "Add the FHGM conformance vectors, model-level checks and CI lane (refs #9) (#15)",
       "path": "development/model/fhgm-model.schema.json",
-      "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHGM-Specification/8b0ca0055b84d69bc24e5daf4ad1950e91d11d0e/development/model/fhgm-model.schema.json",
+      "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHGM-Specification/ac3d37b3033312844fc3151217731928ae33aa54/development/model/fhgm-model.schema.json",
       "recordSchemaUrlNote": "An FHGM model record carries no schema, schemaVersion or checksum field: it is one item of the FHGFF3 x-fhgm-models extension array (docs/FORMAT.md R15 transport, proposal under FAIR-bioHeaders-Specification#204) and the enclosing FHGFF3 header keeps the released file identity. No URL is claimed for the model contract itself.",
-      "gitBlobSha1": "f782059491804763003d2773ccf1ad949f61b867",
-      "size": 8493,
-      "sha256": "9114780bfcc8b575fa660b2d38a7ad521d9b993d2544963cdad388daed045e27",
-      "retrieved": "2026-11-13"
+      "gitBlobSha1": "1fb066b8da5bf5bb462462763b0676dfb7d3d2ff",
+      "size": 9564,
+      "sha256": "bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f",
+      "retrieved": "2026-11-14",
+      "crossCheck": "The six-line delta from the previous pin (8b0ca005, sha256 9114780bfcc8b575...) is description text recording the 2026-11-14 joint review dispositions (FHGM #8/#15); field names, requiredness and the title's 'draft contract v0.1' are unchanged. These bytes were introduced by merged commit ac3d37b and are byte-identical at main head 52b07b7, verified 2026-11-14 by fetching ac3d37b from raw.githubusercontent.com (http 200, 9564 bytes, sha256 bf1553cac04dc88d...) and comparing with git show of the main-head blob. Not terminal: the FHGM release (recommended vehicle v0.8.0, FAIR-bioHeaders-Specification#211 round 9) will move these bytes again and promote this snapshot out of the draft lane; refresh with promotion review at publication, per rule V7."
     }
   }
 }
