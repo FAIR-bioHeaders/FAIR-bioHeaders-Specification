@@ -56,10 +56,10 @@ jobs:
           python-version: '3.13'
       - name: Check conformance vectors with the standard library only
         run: python scripts/check_conformance.py
-      - name: Install the toolkit with the v0.5.0 schemas
-        # fair-bioheaders 0.7.0 is the first release that bundles v0.4.0; 0.8.0 adds R11; 0.8.1 adds R4, R5 and R12 (v0.4.1); 0.8.2 enforces the G1 grammar; 0.8.4 adds V6; 0.8.5 adds J3, R14 and J8 (v0.4.2); 0.9.0 bundles v0.5.0 and adds R15, J9 and M5.
+      - name: Install the toolkit with the v0.6.0 schemas
+        # fair-bioheaders 0.7.0 is the first release that bundles v0.4.0; 0.8.0 adds R11; 0.8.1 adds R4, R5 and R12 (v0.4.1); 0.8.2 enforces the G1 grammar; 0.8.4 adds V6; 0.8.5 adds J3, R14 and J8 (v0.4.2); 0.9.0 bundles v0.5.0 and adds R15, J9 and M5; 0.10.0 keeps the v0.5.0 schemas and adds the V5 near-miss warning; 0.11.0 bundles v0.6.0, whose FHP/FHGFF3 1.2 schemas accept the dotted BUSCO dataset versions cited by the two busco-lineage-dotted vectors.
         run: |
           python -m venv "$RUNNER_TEMP/fhr-converter"
-          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==0.9.0"
+          "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==0.11.0"
       - name: Run the toolkit on every vector
         run: python scripts/check_conformance.py --skip-regeneration --require-format jsonld --require-format fhp-fasta --require-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"

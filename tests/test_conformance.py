@@ -97,10 +97,6 @@ class ConformanceTests(unittest.TestCase):
                           {"fasta", "gfa", "microdata", "jsonld", "fhp-fasta", "fhgff3"})
             self.assertTrue((CONFORMANCE / vector["file"]).is_file(), vector["file"])
             self.assertEqual(vector["file"].split("/")[0], vector["expected"])
-            if "converterResults" in vector:
-                self.assertEqual(vector["expected"], "valid", vector["id"])
-                self.assertEqual(set(vector["converterResults"]),
-                                 {"valid", "unsupported-version"}, vector["id"])
             if vector["format"] in {"microdata", "jsonld"}:
                 suffix = ".html" if vector["format"] == "microdata" else ".jsonld"
                 self.assertTrue(vector["file"].endswith(suffix), vector["file"])
@@ -144,18 +140,19 @@ class ConformanceTests(unittest.TestCase):
             if vector["expected"] == "invalid" and vector["rule"] in {"P1", "P2"}:
                 self.assertIn("metadata", vector, vector["id"])
         self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
-        # #170: dotted dataset versions state "1.2" and cite the prepared
-        # release; malformed dot forms are P1 near misses with v0.4.0 citations.
+        # #170: dotted dataset versions state "1.2" and cite the released
+        # v0.6.0; malformed dot forms are P1 near misses with v0.4.0 citations.
         self.assertEqual(vectors["fhp-fasta-busco-lineage-dotted"]["expected"], "valid")
-        self.assertEqual(vectors["fhp-fasta-busco-lineage-dotted"]["converterResults"],
-                         ["valid", "unsupported-version"])
+        self.assertNotIn("converterResults", vectors["fhp-fasta-busco-lineage-dotted"])
         self.assertEqual(vectors["fhp-fasta-busco-lineage-trailing-dot"]["rule"], "P1")
 
-    def test_pre_release_converter_expectations_are_scoped(self):
+    def test_pre_release_converter_expectations_are_retired(self):
+        # The converterResults tolerance landed with the staged v0.6.0 schemas (#222)
+        # and left with the pin to fair-bioheaders 0.11.0, the release that bundles
+        # them: no vector may accept an unsupported-version outcome any more.
         marked = {vector["id"] for vector in self.manifest["vectors"]
                   if "converterResults" in vector}
-        self.assertEqual(marked, {"fhp-fasta-busco-lineage-dotted",
-                                  "fhgff3-busco-lineage-dotted"})
+        self.assertEqual(marked, set())
 
     def test_selection_vectors(self):
         """specs/012-schema-versioning: V1-V6 and the registry they rely on."""
@@ -255,8 +252,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhgff3-header-before-version"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-header-after-fasta"]["rule"], "G1")
         self.assertEqual(vectors["fhgff3-cites-fhr-schema"]["rule"], "G3")
-        self.assertEqual(vectors["fhgff3-busco-lineage-dotted"]["converterResults"],
-                         ["valid", "unsupported-version"])
+        self.assertEqual(vectors["fhgff3-busco-lineage-dotted"]["expected"], "valid")
         # Invalid near misses for the G1 grammar, enforced from fair-bioheaders
         # 0.8.2 (FAIR-bioHeaders-Tools#91).
         for name in ("fhgff3-version-30", "fhgff3-version-3x", "fhgff3-version-3-1"):
@@ -345,9 +341,6 @@ class ConformanceTests(unittest.TestCase):
             "    raise SystemExit(1)\n"
             "if vector.get('result') == 'unsupported-version':\n"
             "    print('FHR: unsupported schema version: ' + sys.argv[1], file=sys.stderr)\n"
-            "if 'unsupported-version' in vector.get('converterResults', []):\n"
-            "    print('FHR: unsupported schema version: ' + sys.argv[1], file=sys.stderr)\n"
-            "    raise SystemExit(1)\n"
             "if vector['expected'] != 'valid':\n"
             "    raise SystemExit(1)\n"
             "if vector.get('warnings'):\n"
@@ -375,8 +368,14 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         wrong_version = self.check("--skip-regeneration", "--converter", wrong_version_bin)
         self.assertEqual(wrong_version.returncode, 1)
-        self.assertIn("fhp-fasta-busco-lineage-dotted: converter rejected "
-                      "(FHR: invalid metadata:", wrong_version.stderr)
+        # The V4 vectors must be rejected with an unsupported-schema-version
+        # message; this converter rejects them with a generic one.
+        self.assertIn("fasta-schema-unknown-release: converter rejected it without "
+                      "an unsupported schema version message (FHR: invalid metadata:",
+                      wrong_version.stderr)
+        self.assertIn("fhp-fasta-schema-release-without-type: converter rejected it "
+                      "without an unsupported schema version message",
+                      wrong_version.stderr)
 
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
                             "--converter", bin_directory)
