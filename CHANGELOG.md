@@ -7,6 +7,18 @@ Work targeting **v0.6.1**, the documentation patch named by the release decision
 stay exactly at v0.6.0 (v0.6.1 repeats the v0.6.0 row in `schemas/versions.json`, as v0.4.1
 and v0.4.2 repeated the v0.4.0 row), and a v0.6.1 release changes guidance text only.
 
+- The conformance CI repins the converter to the released `fair-bioheaders[jsonld]==0.11.0`,
+  the first release that bundles the v0.6.0 schemas (FHP/FHGFF3 1.2, dotted BUSCO dataset
+  versions; verified byte-identical to the `v0.6.0` tag). That pin makes the `converterResults`
+  tolerance #222 added for the two dotted BUSCO vectors dead code: no vector carries the field
+  any more, and under a converter that bundles the cited 1.2 schemas an `unsupported-version`
+  outcome is a regression, not a correct V4 answer, so keeping the tolerance would mask one.
+  The mechanism is removed from `scripts/check_conformance.py` (reverted to its pre-#222 form),
+  `scripts/make_conformance.py`, the two vectors' manifest entries (vector file bytes are
+  unchanged) and conformance/README.md, and the two vectors now demand a strict `valid`
+  outcome; the checker regression test that exercised the tolerance now asserts the retained
+  V4-result message check instead. Refs #222, #170.
+
 ## v0.6.0 — 2026-11-13
 
 A minor schema release: dotted BUSCO dataset versions. FHP `"1.2"` and FHGFF3 `"1.2"` accept

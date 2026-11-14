@@ -8,10 +8,9 @@ URL selects (docs/SCHEMA-VERSIONS.md; needs PyYAML and jsonschema, and git tags
 for older releases); JSON-LD vectors are read by rule J1 first.
 ``--converter`` runs fhr-fasta-validate/fhr-gfa-validate on every FASTA/GFA
 vector and ``fhr-convert in.html out.json`` or ``fhr-convert in.jsonld out.json``
-on every microdata or JSON-LD vector: valid vectors must exit 0 and invalid
-vectors nonzero, except where a manifest vector explicitly allows an unsupported
-schema version. Microdata and JSON-LD vectors must also produce exactly the
-manifest metadata. A converter that rejects every vector of a format as an
+on every microdata or JSON-LD vector: valid vectors must exit 0 (microdata and
+JSON-LD ones must also produce exactly the manifest metadata) and invalid
+vectors nonzero. A converter that rejects every vector of a format as an
 unsupported file extension predates that format; those vectors are left out and
 reported, unless ``--require-format`` names the format. ``--skip-format`` leaves
 out a format explicitly.
@@ -495,20 +494,11 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             detail = (result.stderr or result.stdout).strip().splitlines()
             problems.append(f"{vector['id']}: converter rejected it without an unsupported "
                             f"schema version message ({detail[-1] if detail else 'no output'})")
-        converter_results = vector.get("converterResults")
-        observed_result = "valid" if accepted else (
-            "unsupported-version" if UNSUPPORTED_VERSION in
-            (result.stderr + result.stdout).lower() else "invalid")
-        matches_expectation = (
-            observed_result in converter_results if converter_results
-            else accepted == (vector["expected"] == "valid")
-        )
-        if not matches_expectation:
+        if accepted != (vector["expected"] == "valid"):
             detail = (result.stderr or result.stdout).strip().splitlines()
             detail = detail[-1] if detail else f"exit {result.returncode}"
             outcome = "accepted" if accepted else f"rejected ({detail})"
-            expected = (f"one of {', '.join(converter_results)}" if converter_results else
-                        vector["expected"] + (f", {vector['rule']}" if "rule" in vector else ""))
+            expected = vector["expected"] + (f", {vector['rule']}" if "rule" in vector else "")
             problems.append(f"{vector['id']}: converter {outcome}; expected {expected}")
         elif accepted and vector.get("warnings") and "warning" not in result.stderr.lower():
             problems.append(f"{vector['id']}: converter printed no warning; expected one "
