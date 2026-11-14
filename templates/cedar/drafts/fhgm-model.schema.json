@@ -1,25 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FHGM gene-model record - draft contract v0.1 (proposal)",
-  "description": "Draft native FHGM model record. Proposal under review in FAIR-bioHeaders-Specification#204: no adopted contract, no schemaVersion, no released schema URI and no toolkit support is claimed. Field names and shapes follow the released FHGFF3 1.1 objects where their meanings match (docs/FORMAT.md R15, fhgff3.json). Object-level constraints that a JSON Schema cannot express - model ID uniqueness, feature-target resolution, record/file reference agreement and predecessor-pointer resolution with the resolvable, unresolvable and ambiguous verdicts - are enforced by the separate model-level checker in validate_fhgm.py.",
+  "description": "Draft native FHGM model record. Reviewed under FAIR-bioHeaders-Specification#204 on 2026-11-14: field names, modelId/modelVersion semantics, contract identity by validator selection, and the four flagged deviations were confirmed at the joint review (see ../../development/CONTRACT-REVIEW.md). Publication is authorized in direction and NOT performed: no adopted contract, no schemaVersion, no released schema URI and no toolkit support is claimed. Field names and shapes follow the released FHGFF3 1.1 objects where their meanings match (docs/FORMAT.md R15, fhgff3.json). Object-level constraints that a JSON Schema cannot express - model ID uniqueness, feature-target resolution, record/file reference agreement and predecessor-pointer resolution with the resolvable, unresolvable and ambiguous verdicts - are enforced by the separate model-level checker in validate_fhgm.py.",
   "type": "object",
   "additionalProperties": false,
   "required": ["modelId", "modelVersion", "featureId", "reference"],
   "properties": {
     "modelId": {
-      "description": "Draft (#204: model identity and scope). Opaque model identifier, unique within one annotation snapshot and stable across a revision of the same model on the same assembly. Curator versus derived authority is an open question.",
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Opaque model identifier, unique within one annotation snapshot and stable across a revision of the same model on the same assembly. File-local identity is the default and needs no minting authority; a producer-supplied external identifier may occupy this field, with its authority recorded beside it. Who may mint external model IDs is still a curator question.",
       "$ref": "#/$defs/text"
     },
     "modelVersion": {
-      "description": "Draft (#204: model identity and scope). Opaque model version. An immediate revision must use a value different from its predecessor; no ordering is implied.",
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Opaque model version, kept opaque through v0.x: equality and difference only. An immediate revision must use a value different from its predecessor; no ordering is implied, claimed or checked, and ordering requirements await curator use cases the pilots did not supply.",
       "$ref": "#/$defs/text"
     },
     "featureId": {
-      "description": "Draft (#204: model identity and scope). Exact decoded local GFF3 feature ID targeted by this record. The v0.1 default resolves one gene row; transcript scope is an open question. Resolution is a model-level check, not a schema constraint.",
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Exact decoded local GFF3 feature ID targeted by this record. The v0.1 default resolves one gene row; transcript-only scope stays open (#204 Q6, curator decision). Resolution is a model-level check, not a schema constraint.",
       "$ref": "#/$defs/text"
     },
     "reference": {
-      "description": "Draft (#204: reference coordinates). Reference assembly binding carried on the record so it stays interpretable when extracted from its file. Mirrors the FHGFF3 genome-link alternative: an FHR parent checksum, or an assembly accession with the supplied SeqCol digest; both forms may be supplied. Must not contradict the enclosing FHGFF3 header's genome link (model-level check).",
+      "description": "Draft (#204: reference coordinates; required by deviation D1, confirmed 2026-11-14). Reference assembly binding carried on the record so it stays interpretable when extracted from its file. Mirrors the FHGFF3 genome-link alternative: an FHR parent checksum, or an assembly accession with the supplied SeqCol digest; both forms may be supplied. The model-level check requires at least one form comparable with the enclosing FHGFF3 header's genome link and rejects any contradiction of it, so a record bound by an FHR checksum is not accepted in a file whose link is an accession plus digest. Never inferred; values are producer-supplied assertions.",
       "type": "object",
       "additionalProperties": false,
       "anyOf": [
@@ -45,7 +45,7 @@
           "$ref": "#/$defs/checksum"
         },
         "modelId": {
-          "description": "Predecessor model ID; in v0.1 it must equal this record's modelId",
+          "description": "Predecessor model ID; it must equal this record's own modelId (deviation D2, confirmed 2026-11-14). Model renames belong to the split/merge semantics #204 Q6 leaves open, so v0.x admits none.",
           "$ref": "#/$defs/text"
         },
         "modelVersion": {
