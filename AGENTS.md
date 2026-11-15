@@ -132,17 +132,22 @@ warns on every record read through it, and never takes a release form. Default
 behavior is unchanged and V1 to V6 keep their text and their outcomes; reading a
 draft through the lane is recognition, not adoption.
 
-Every cross-repository contract reference belongs to one of four classes and
+Every cross-repository contract reference belongs to one of five classes and
 must resolve to the authoritative bytes of its own class
 (FAIR-bioHeaders-Specification#241): a **released contract** resolves at its
 release tag; a **draft contract** resolves at the owning development
 repository's pinned commit; a **conformance suite** resolves at its recorded
 suite commit; a **base or carrier schema** — the released schema a draft is
-validated inside — resolves at the tag it names. Never substitute raw `main`
-for a released reference: both sides of that comparison move, so agreement
-with `main` says nothing about a release. Released contract files live at the
-shared repository's root (`v0.6.0/fhp.json`), not under `schemas/`; the
-`schemas/` path returns 404 at release tags.
+validated inside — resolves at the tag it names; a **byte-copied upstream
+tree** — a vendored directory of files under one provenance record, such as
+the `header/` trees — resolves at its recorded source revision, which for
+released material must be a tag. Never substitute raw `main` for a released
+reference: both sides of that comparison move, so agreement with `main` says
+nothing about a release, and a record that names `ref: main` for released
+material is drift in its own right, independent of any digest match.
+Released contract files live at the shared repository's root
+(`v0.6.0/fhp.json`), not under `schemas/`; the `schemas/` path returns 404 at
+release tags.
 
 The finding behind the rule: `FHP-Specification/fhp.json` was byte-identical
 to the released v0.5.0 contract (21,806 bytes, SHA-256 `2409739d4a223164…`)
@@ -151,9 +156,30 @@ bytes, SHA-256 `92a0b3cbcfe69939…`). The local LinkML model and the generated
 schema were stale together, so `check_linkml`, `check_schema_drift` and a
 release-parity comparison all passed on a tree one release behind. A
 self-consistency gate cannot detect drift that both sides of the comparison
-share; the reference has to be the release tag. The lag was fixed by
-FHP-Specification PR #32 (merged 2026-11-15); the classes above are its
-generalization. For the carrier class, the maintainer decision of 2026-11-15
+share, so the reference must be an **independent authority — a release tag or
+w3id alias — never a revision the consumer itself chose**. That covers three
+same-shaped gates: `check_linkml` compares model to generated file,
+`check_release.py` compares artifacts to a companion copy, and
+`FHGM-Specification/scripts/check_header_parity.py` verifies a copy against
+its own pinned upstream in both modes — even its CI form, `--upstream PATH`,
+"reads the pinned commit from a checkout" — so it proves fidelity to a stale
+record and cannot ask whether the record should move. The `fhp.json` lag was
+fixed by FHP-Specification PR #32 (merged 2026-11-15); the classes above are
+its generalization.
+
+The tree class carries the largest measured divergence of this cycle
+(re-measured 2026-11-16): `FHGM-Specification` and `FHGFF3` each hold a copy
+of the same header development tree, and comparing the `copied` arrays of
+their `header/provenance.json` files by `local` path gives 39 shared paths —
+29 with equal digests and 10 differing — plus 10 paths only FHGFF3 has (all
+`header/conformance/` vectors added upstream after FHGM's pinned 2026-10-21
+commit) and none only FHGM has: FHGM records `source.ref = "main"` at
+`bdcaecf7` (2026-10-21) where FHGFF3 records `ref = "v0.6.0"` at `0ae18b00`,
+and the model itself differs (`header/model/fhgff3_linkml.yml`, 5,391 bytes
+SHA-256 `cc71178b8c6a…` versus 5,527 bytes `f09249cfd2f4…`). A per-file
+digest check cannot express this class; it needs **set comparison** — digest
+equality over shared paths *and* a count of paths present on only one side.
+For the carrier class, the maintainer decision of 2026-11-15
 (recorded on FAIR-bioHeaders-Specification#211, answering #241 finding (b))
 is that the draft FHGM model accepts both FHGFF3 `1.1` and `1.2` bases: the
 harness resolves the FHGFF3 version a carrier declares, validates against
@@ -380,12 +406,15 @@ features; use gff3-validator for feature/biology checks.
   `Blocked - In Progress`, `Done`), and set `Outcome` when it closes.
 - Link every PR to its issue (`Closes #N` or `Refs #N`). Do not do unreported work.
 - When a gate issue closes, re-check the records that cite it. FAIR-bioHeaders-
-  Specification#157 closed COMPLETED on 2026-10-28, yet an organization-wide
-  body-text search on 2026-11-16 still found eleven open issues citing it as a
-  live gate, which makes finished work look blocked. Name each issue's actual
-  remaining prerequisite instead of inheriting a stale gate reference, and do
-  not add reverse blockers that create cycles — #157's own text warns against
-  that.
+  Specification#157 closed COMPLETED on 2026-10-28, yet open issues still
+  cited it as a live gate weeks later, which makes finished work look
+  blocked. Do not promise a stable count for this: an organization-wide
+  text search for `#157` now also matches the stale-gate annotation comments
+  posted 2026-11-15 that quote it, so the annotations raised the count they
+  were meant to retire and the search is no longer a valid proxy for
+  unresolved gating. Name each issue's actual remaining prerequisite instead
+  of inheriting a stale gate reference, and do not add reverse blockers that
+  create cycles — #157's own text warns against that.
 - After each work run (implementation, tests, review pass), post a status comment
   on the issue or PR: what changed, checks run and results, commit/PR links,
   blockers, and the next action. Do not rely on chat history.
