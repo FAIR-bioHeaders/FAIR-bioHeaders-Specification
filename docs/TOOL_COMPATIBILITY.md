@@ -473,10 +473,12 @@ counter (not run).
 
 Not tested: CheckM2 prediction (its database is 1.7 GB compressed and about 3 GB unpacked, and the
 environment pulls TensorFlow), eggNOG-mapper annotation (the eggNOG databases are tens of GB) and
-InterProScan (Java distribution with several GB of member databases). InterProScan 5's FASTA loader
-was read but not run: `LoadFastaFileImpl.java` (lines 131-142) stops with `Error: All input sequences
-should include their FASTA header lines` and exit 999 on any non-empty line before the first `>`, so
-it would fail loudly on FHP input.
+InterProScan (Java distribution with several GB of member databases). Update 2026-11-14 (run with Docker,
+Coils only): InterProScan 5.78-109.0, the final v5 release, stops with `Error: All input sequences should
+include their FASTA header lines` (exit 999) on FHP input; the loader that runs is
+`LoadFastaFileIntoDBImpl.java` (lines 177-187). InterProScan 6.0.3.0 accepts FHP protein input with
+results identical to the plain file, but a leading `;` line switches off its invalid-character check, and
+`--nucleic` runs crash in `esl-translate` on FHR input. Reported in ebi-pf-team/interproscan6#366.
 
 The failures in MUMmer4, Barrnap (`any2fasta`), RAxML-NG (coraxlib), eggNOG-mapper, Exonerate and
 Clustal Omega are listed as candidates in FAIR-bioHeaders-Specification#121 (none has been contacted).
@@ -697,6 +699,8 @@ current meaning, so no file that a tool reads today is read differently.
 | iqtree/iqtree3 | IQ-TREE FASTA alignment input | iqtree/iqtree3#235 (2026-10-18) | **Accepted 2026-11-02**: merged into iqtree3 master; in the next IQ-TREE release (still 3.1.4, 2026-09-10, checked 2026-11-12) |
 | revbayes/revbayes | RevBayes `readDiscreteCharacterData()` FASTA input (vendored NCL reader) | Issue revbayes/revbayes#1141 opened by the RevBayes maintainer (2026-11-09); PR revbayes/revbayes#1143 at his request | **Accepted 2026-11-09**: merged into `development`; not in a release yet (v1.4.2, 2026-11-05, predates the merge; checked 2026-11-12) |
 | mtholder/ncl | NCL (Nexus Class Library) FASTA reader, used by RevBayes and other phylogenetics tools | mtholder/ncl#37 (2026-11-09; upstream of revbayes/revbayes#1143, at the RevBayes maintainer's suggestion) | **Accepted 2026-11-10**: merged by the NCL author (`f02320ca`); the GitHub repository carries no tags or releases, so downstream consumers pick the change up from the branch (checked 2026-11-12) |
+| Gaius-Augustus/BRAKER | BRAKER genome preparation (passes leading `;` lines to GeneMark-ES, which aborts) | Issue Gaius-Augustus/BRAKER#982 (2026-11-14; local BRAKER 3.0.8 test) | **Accepted 2026-11-15**: fixed in BRAKER4 (`ed9f372`): genome preparation drops `;` lines before the first record; BRAKER 3 will not be changed; ProtHint PR gatech-genemark/ProtHint#64 opened by the BRAKER maintainer; not yet in a release or container |
+| ebi-pf-team/interproscan6 | InterProScan 6 FASTA validation and `--nucleic` translation | Issue ebi-pf-team/interproscan6#366 (2026-11-14) | Open |
 | rcedgar/muscle | MUSCLE FASTA input | Issue rcedgar/muscle#112 (2026-10-18; the author asks to be consulted before changes) | **Declined 2026-10-18**: the author is moving the code to a new repository and suggested stripping the header first; issue closed |
 | ezlab/busco (GitLab) | BUSCO genome mode (Biopython `fasta`) | Issue gitlab.com/ezlab/busco/-/work_items/864 (2026-10-20; tested `fasta-pearson` fix, identical completeness) | Open |
 | ablab/quast | QUAST threshold rows (`# contigs (>= 0 bp)`, `Total length (>= 0 bp)`) | Issue ablab/quast#300 (2026-10-20; tested patch, PR offered) | Open |
