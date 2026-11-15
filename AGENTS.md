@@ -70,6 +70,17 @@ full profile or header-family support. The mapping page tracked in
 fair-bioheaders.github.io#29 depends on approved profiles. Recheck these records
 rather than relying on a copied description of their temporary status.
 
+Name three states separately in issues, PRs and guidance, because they are
+routinely conflated: **merged into `main`** is not **released**, and an
+**adopted decision** is not a **published contract** (rule V7: a draft never
+takes a release form). A pull request merged into a non-default branch reads
+as MERGED with green CI while advancing nothing on the default branch —
+FAIR-bioHeaders-Tools-Julia PR #8, merged 2026-11-15 into `julia-draft-lane`,
+is the recorded case. Before treating merged content as shipped, check the
+pull request's `baseRefName` (or `git branch --contains` for the merge
+commit); before calling anything released, check `git tag --contains` and the
+version registry.
+
 Review a proposed schema revision against the pinned INSDC minimum-specification
 assessment, [`docs/insdc-coverage.md`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/insdc-coverage.md)
 in the shared specification (FAIR-bioHeaders-Specification#157). Name the matrix
@@ -121,6 +132,37 @@ warns on every record read through it, and never takes a release form. Default
 behavior is unchanged and V1 to V6 keep their text and their outcomes; reading a
 draft through the lane is recognition, not adoption.
 
+Every cross-repository contract reference belongs to one of four classes and
+must resolve to the authoritative bytes of its own class
+(FAIR-bioHeaders-Specification#241): a **released contract** resolves at its
+release tag; a **draft contract** resolves at the owning development
+repository's pinned commit; a **conformance suite** resolves at its recorded
+suite commit; a **base or carrier schema** — the released schema a draft is
+validated inside — resolves at the tag it names. Never substitute raw `main`
+for a released reference: both sides of that comparison move, so agreement
+with `main` says nothing about a release. Released contract files live at the
+shared repository's root (`v0.6.0/fhp.json`), not under `schemas/`; the
+`schemas/` path returns 404 at release tags.
+
+The finding behind the rule: `FHP-Specification/fhp.json` was byte-identical
+to the released v0.5.0 contract (21,806 bytes, SHA-256 `2409739d4a223164…`)
+while the released authority had moved to FHP `1.2` at tag `v0.6.0` (24,681
+bytes, SHA-256 `92a0b3cbcfe69939…`). The local LinkML model and the generated
+schema were stale together, so `check_linkml`, `check_schema_drift` and a
+release-parity comparison all passed on a tree one release behind. A
+self-consistency gate cannot detect drift that both sides of the comparison
+share; the reference has to be the release tag. The lag was fixed by
+FHP-Specification PR #32 (merged 2026-11-15); the classes above are its
+generalization. For the carrier class, the maintainer decision of 2026-11-15
+(recorded on FAIR-bioHeaders-Specification#211, answering #241 finding (b))
+is that the draft FHGM model accepts both FHGFF3 `1.1` and `1.2` bases: the
+harness resolves the FHGFF3 version a carrier declares, validates against
+that base, and records the resolved base in its output. Describe that as a
+recorded decision with implementation in progress in FHGM-Specification, not
+as current behavior, until its implementing PR lands; verify the state before
+restating it. FHGM remains a draft under rule V7 and is not a header type: no
+`schemaVersion`, no `schemas/versions.json` row, no w3id URL.
+
 ## Using FAIR-bioHeaders in another project
 
 For assistants and people adding FAIR-bioHeaders headers to data elsewhere (summary in
@@ -163,6 +205,23 @@ version-aware consumers in linked PRs; do not assume sibling checkout tests use
 installed release bytes. Record checks actually run and environment limitations.
 Update guidance, fixtures, release notes and version records with behavior changes.
 Publishing releases, tags, DOIs or deployments remains a separate maintainer action.
+
+Several otherwise-plausible conclusions in this federation came from probes
+that silently under- or over-report. The standing list: `gh api` with `-f`/`-F`
+implies POST, so reads need `-X GET` explicitly; code and issue search and
+filename or regex patterns are hints, not controls — read the file for any
+controlling claim (a pattern that disallowed a leading backtick missed
+backtick-quoted `%||%` operator definitions in the R library and the count
+still looked plausible); a `HEAD` content-length is not a file size (gzip
+transfer lengths were reported as sizes twice) — state sizes from bytes
+actually downloaded; a ranged read truncates a `.gz` stream — download whole
+files before asserting on their contents; `diff <(…) <(…)` prints nothing when
+the process substitution fails, which reads exactly like agreement — extract
+to temp files and print `wc -l` on each side; `$?` after a pipe reports the
+last pipeline element only; zsh applies `:A`/`:s` modifiers to a bare
+`$var:path` — brace the variable — and does not word-split an unquoted
+`$var`; and a case-insensitive filesystem can resolve a path whose case is
+wrong, so negative controls for missing files must also run on Linux CI.
 
 ## Licensing and historical material
 
@@ -320,6 +379,13 @@ features; use gff3-validator for feature/biology checks.
 - Keep `Status` current as the work moves (`Todo`, `In Progress`, `Blocked`,
   `Blocked - In Progress`, `Done`), and set `Outcome` when it closes.
 - Link every PR to its issue (`Closes #N` or `Refs #N`). Do not do unreported work.
+- When a gate issue closes, re-check the records that cite it. FAIR-bioHeaders-
+  Specification#157 closed COMPLETED on 2026-10-28, yet an organization-wide
+  body-text search on 2026-11-16 still found eleven open issues citing it as a
+  live gate, which makes finished work look blocked. Name each issue's actual
+  remaining prerequisite instead of inheriting a stale gate reference, and do
+  not add reverse blockers that create cycles — #157's own text warns against
+  that.
 - After each work run (implementation, tests, review pass), post a status comment
   on the issue or PR: what changed, checks run and results, commit/PR links,
   blockers, and the next action. Do not rely on chat history.
