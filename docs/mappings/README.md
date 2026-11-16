@@ -5,8 +5,10 @@
 and [adoption decision](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-6880245660)
 cover the existing root-field inventory, separate supplemental context and curated
 qualified-DCMI fixture. They do not adopt six complete target adapters.
-[#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56)
-remains open for the scoped implementation/shipment handoff and documentation.
+The narrowed [#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56)
+acceptance is completion and review of that adopted foundation and its guidance.
+The exporter shipment condition governs the withheld official label; it does not
+add a package-release prerequisite to foundation adoption/documentation closure.
 
 ## Identity, compatibility and available artifacts
 
@@ -136,10 +138,14 @@ endorsement. Deep nested/per-target crosswalks, registration schemas, resolver
 policies, ANVL, citation rendering and family extensions belong to separately
 reviewed follow-ups; the old six-target checklist is not v1 acceptance.
 
-To finish the scoped #56 handoff: merge the owning artifacts, implement/test the
-Tools exporter, verify actual shipment, and deliver the adopted guidance and
-examples to [website #29](https://github.com/FAIR-bioHeaders/fair-bioheaders.github.io/issues/29).
-Website consumption does not wait for a Janeway adapter or a downstream pilot.
+The owning artifacts complete the scoped foundation; this document specifies the
+Tools exporter handoff, whose implementation and installed-artifact evidence are
+tracked separately under the [execution plan #211](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211).
+[Website #29](https://github.com/FAIR-bioHeaders/fair-bioheaders.github.io/issues/29)
+consumes the adopted guidance and examples with accurate implementation wording.
+Actual package shipment is required before applying the official label. Neither
+foundation closure nor website documentation waits for a Janeway adapter or a
+downstream pilot.
 Do not claim a deposit, minted identifier, reverse mapping or target endorsement.
 
 ## Pinned vocabulary
