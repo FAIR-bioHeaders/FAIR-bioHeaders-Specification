@@ -15,8 +15,11 @@ never fall back to a newer schema or infer a type from the output filename.
 
 Keep title/resource/record identity explicit. Reject duplicate keys and non-JSON
 numeric constants when reading JSON. Reject invalid context and all documented
-identity/date conflicts before emitting an output bundle. A metadata-only external
-reference is not a complete FHR record. No sequence or live authority is fetched.
+identity/date conflicts before emitting Turtle. For readable inputs, a refused
+operation may still preserve the original input bytes and a diagnostic report in
+a fresh output bundle; it must not emit Turtle or label the refusal a successful
+projection. A metadata-only external reference is not a complete FHR record. No
+sequence or live authority is fetched.
 
 ## Exact semantic projection
 
