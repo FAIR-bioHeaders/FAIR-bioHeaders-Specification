@@ -18,6 +18,25 @@ and v0.4.2 repeated the v0.4.0 row), and a v0.6.1 release changes guidance text 
   unchanged) and conformance/README.md, and the two vectors now demand a strict `valid`
   outcome; the checker regression test that exercised the tolerance now asserts the retained
   V4-result message check instead. Refs #222, #170.
+- AGENTS.md guidance deltas (documentation only; carries the guidance decided
+  since v0.6.0 for release with v0.6.1). Shared sections gain: the five
+  cross-repository reference classes — released contract, draft contract,
+  conformance suite, base/carrier schema and byte-copied upstream trees — with
+  the tag-reference rule, the `ref: main` hard-drift rule for released
+  material, the independent-authority generalization naming all three
+  self-consistency gates, and the set-comparison requirement for copied trees
+  (#241, with the verified FHP `fhp.json` lag digests and the FHGM/FHGFF3
+  `header/` tree counts); the explicit separated states
+  merged/released/adopted, including the non-default-branch merge case
+  (FAIR-bioHeaders-Tools-Julia PR #8, merged 2026-11-15 into
+  `julia-draft-lane`); stale-gate hygiene for closed gate issues (#157; no
+  count is quoted because the 2026-11-15 stale-gate annotations quote `#157`
+  and contaminated the search metric); a probe-hygiene list of verified
+  tooling traps; and the FHGM dual-base decision of 2026-11-15 recorded as a
+  decision with implementation in progress, not shipped behavior.
+  `schemas/versions.json`, all schema, model, example and conformance-vector
+  bytes are unchanged by this entry, and `preRelease` is left exactly as
+  found: it is cleared only in the commit that gets tagged. Refs #241, #211.
 
 ## v0.6.0 — 2026-11-13
 
