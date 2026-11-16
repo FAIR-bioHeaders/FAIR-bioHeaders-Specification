@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Record the adopted mapping-v1 foundation and withheld official label from
+  the scope/adoption decisions for #56. Preserve the context's existing identity,
+  `0.1.0-draft.1` token and FHR v0.4.0 scope; reconcile status/family/version
+  guidance, add the qualified-DCMI Tools handoff and independent minimal fixture,
+  and include an attributed metadata-only external-resource reference with
+  offline provenance checks. Deep target adapters remain deferred. Exporter
+  implementation, installed evidence and shipment remain a separate handoff.
+
+
 Work targeting **v0.6.1**, the documentation patch named by the release decision of
 2026-11-13: the schema selection rules, the format rules and the published JSON Schemas
 stay exactly at v0.6.0 (v0.6.1 repeats the v0.6.0 row in `schemas/versions.json`, as v0.4.1

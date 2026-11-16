@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/mappings/proposals/assembly-export-context.schema.json",
-  "title": "Proposed assembly descriptive export context (not an FHR schema)",
-  "description": "Draft for issue #56. Separate supplemental assertions; does not establish registration readiness or add fields to FHR.",
+  "title": "Assembly descriptive export context (not an FHR schema)",
+  "description": "Adopted mapping-v1 supplemental context under issue #56. The existing profileVersion token 0.1.0-draft.1 and schema identity are retained for compatibility; adoption is not exporter shipment, an official label or registration readiness. No fields are added to FHR.",
   "type": "object",
   "additionalProperties": false,
   "required": [

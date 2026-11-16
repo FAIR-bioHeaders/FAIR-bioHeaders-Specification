@@ -276,21 +276,30 @@ assert permission that has not been established.
 
 ## Draft metadata profiles (#56)
 
-`docs/mappings/README.md` and `mappings/proposals/` describe an unadopted
-assembly-profile foundation. Its export-context schema is separate from the FH*
-header contracts. Preserve the existing canonical JSON-LD/DCMI/MIxS/schema.org
-artifacts; do not change core schemas or assign release versions for this draft.
-The first RDF fixture is manually curated, not a shipped exporter or deposit.
+This repository-local section retains its historical heading.
+`docs/mappings/README.md`, `docs/mappings/EXPORTER-HANDOFF.md` and
+`mappings/proposals/` record the **adopted** root-field assembly foundation. Preserve
+the existing `profileVersion: 0.1.0-draft.1`, context schema identity and fixed
+FHR v0.4.0/schemaVersion "2.0" scope; adoption does not assign a new serialized
+version. Withhold the official label until an exporter actually ships. The
+proposal directory name is retained for compatibility, not current adoption status.
 
-Keep source/context and resource subjects separate, report unmapped fields and
-ordering/classification loss, reject date/identity conflicts, and never promote
-an article DOI or metadata author to an assembly DOI/creator. The new inventory
-covers root fields only; it does not adopt deep per-target mappings. FHT has no
-released shared schema and stays explicitly blocked. Tests in
-`tests/test_mapping_proposal.py` check the proposal's context, term inventory,
-source/context/RDF semantics and registry coverage offline. Later adapters,
-registration schemas, Bib rendering/tool round trips, family extensions and
-joint maintainer adoption remain requirements before closing #56.
+Keep canonical JSON-LD/DCMI/MIxS/schema.org behavior separate. No new core fields
+or unconditional target equivalences are authorized. Preserve all source/context
+data and report omissions, ordering/classification/nesting loss and conflicts;
+never promote article DOI or metadata authorship to assembly identity/creators.
+The helper checks context/identity, not source conformance or registration.
+Tools must independently validate its fixed source, match curated RDF semantics,
+produce deterministic output and verify installed artifacts. Retain official-label
+and shipment gates separately from merging these artifacts. Other family/deep
+target adapters are deferred, not hidden prerequisites for this narrowed v1 scope.
+
+The metadata-only reference fixture is not a complete FHR source: without sequence
+bytes it establishes no file checksum, SeqCol or verified parent identity. Do not
+turn it into a dataset/deposit/publisher pilot. Tests in
+`tests/test_mapping_proposal.py` verify status, identity, context conflicts,
+resource subjects, independent rich/minimal expectations and pinned metadata-only
+provenance offline. This local section is not a shared six-holder guidance port.
 
 ## Specification repository workflows
 

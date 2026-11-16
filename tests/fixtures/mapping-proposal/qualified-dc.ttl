@@ -1,4 +1,4 @@
-# Draft descriptive example only. MPL-2.0. All example.org identifiers are illustrative.
+# Adopted descriptive foundation example; not a shipped exporter. MPL-2.0. All example.org identifiers are illustrative.
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix dctype: <http://purl.org/dc/dcmitype/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
