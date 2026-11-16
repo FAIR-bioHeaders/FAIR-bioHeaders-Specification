@@ -75,6 +75,15 @@ combination whenever the issue must remain open. Apply this rule to PR
 descriptions, comments and handoffs. See [AGENTS.md](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/AGENTS.md)
 for the repository workflow.
 
+For every human or Copilot PR review, read the overall review and every inline
+comment before changing anything. Address findings in new commits; do not amend
+or force-push reviewed commits. Reply to each finding with its disposition,
+evidence and relevant commit, resolve the handled inline threads, and post an
+overall response summarizing the dispositions and validation. Post an overall
+response even when the review has no findings, acknowledging that no changes
+were required and recording validation. Treat optional suggestions as required
+unless genuinely outside scope; explain that disposition and link the follow-up.
+
 Standing maintainer merge authorization applies only in FAIR-bioHeaders
 organization repositories and only to agents operated by David Molik (`molikd`)
 or Adam Wright (`adamjohnwright`). It grants no authority in other repositories
