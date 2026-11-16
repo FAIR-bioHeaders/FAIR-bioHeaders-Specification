@@ -455,7 +455,11 @@ When a PR receives code review (human or Copilot):
    scope; state why and link a follow-up issue.
 
 Do not push directly to a repository's main branch. Standing maintainer
-authorization permits an agent to merge a PR only when all CI checks exist
+merge authorization applies only in FAIR-bioHeaders organization repositories
+and only to agents operated by David Molik (`molikd`) or Adam Wright
+(`adamjohnwright`). It grants no authority in other repositories or to agents
+operated by anyone else. Within that scope, an agent may merge a PR only when
+all CI checks exist
 and are green for its current head, Copilot has given **🟢 Approved** for
 that head, the agent's own appropriate validation passes, and all review
 findings have been handled under the procedure above. Re-check these conditions

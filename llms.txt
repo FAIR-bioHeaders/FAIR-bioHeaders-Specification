@@ -75,8 +75,11 @@ combination whenever the issue must remain open. Apply this rule to PR
 descriptions, comments and handoffs. See [AGENTS.md](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/AGENTS.md)
 for the repository workflow.
 
-Standing maintainer authorization permits an agent to merge a PR only with all
-CI checks present and green for its current head, Copilot **🟢 Approved** for
+Standing maintainer merge authorization applies only in FAIR-bioHeaders
+organization repositories and only to agents operated by David Molik (`molikd`)
+or Adam Wright (`adamjohnwright`). It grants no authority in other repositories
+or to agents operated by anyone else. Within that scope, an agent may merge a PR
+only with all CI checks present and green for its current head, Copilot **🟢 Approved** for
 that head, passing appropriate agent validation, and all review findings
 handled. Re-check immediately before merging; a changed head needs current
 validation and review evidence. Direct pushes to main remain prohibited.
