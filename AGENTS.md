@@ -419,7 +419,13 @@ features; use gff3-validator for feature/biology checks.
   BioHeaders — 2026 refresh") and set `Status` to `In Progress` when work starts.
 - Keep `Status` current as the work moves (`Todo`, `In Progress`, `Blocked`,
   `Blocked - In Progress`, `Done`), and set `Outcome` when it closes.
-- Link every PR to its issue (`Closes #N` or `Refs #N`). Do not do unreported work.
+- Link every PR to its issue. Use `Closes #N` only when merging that PR satisfies
+  the issue's full acceptance criteria. For partial delivery, use `Refs #N` and
+  state `#N remains open`, with the remaining criteria and their owners or gates.
+  GitHub can recognize a closing keyword followed by an issue reference even
+  inside a negated sentence; never write that combination when an issue must
+  remain open. This applies to PR descriptions, comments and handoff text.
+  Do not do unreported work.
 - When a gate issue closes, re-check the records that cite it. FAIR-bioHeaders-
   Specification#157 closed COMPLETED on 2026-10-28, yet open issues still
   cited it as a live gate weeks later, which makes finished work look

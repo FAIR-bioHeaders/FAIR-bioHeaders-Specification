@@ -65,6 +65,16 @@ Required fields: all types need `schema`, `schemaVersion`, `taxon` (`name`, `uri
 - [Specification on Zenodo (concept DOI)](https://doi.org/10.5281/zenodo.6762549)
 - [Tools on Zenodo (concept DOI)](https://doi.org/10.5281/zenodo.6762547)
 
+## Contributing and issue linkage
+
+Use `Closes #N` in a PR only when its merge satisfies the issue's full acceptance
+criteria. For partial delivery, use `Refs #N` and `#N remains open`, naming the
+remaining criteria and their owners or gates. GitHub can recognize a closing
+keyword followed by an issue reference even in a negated sentence; avoid that
+combination whenever the issue must remain open. Apply this rule to PR
+descriptions, comments and handoffs. See [AGENTS.md](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/AGENTS.md)
+for the repository workflow.
+
 ## Optional
 
 - [Project website](https://fhref.org/)
