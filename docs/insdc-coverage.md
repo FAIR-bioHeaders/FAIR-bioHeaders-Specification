@@ -246,8 +246,8 @@ is unchanged and no matrix row's rating changes on this evidence.
 | Repository / type | Contract assessed | Rows | Open follow-ups |
 | --- | --- | --- | --- |
 | FAIR-bioHeaders-Specification: FHR | `2.1` (v0.5.0, unchanged in v0.6.0; `2.0` in v0.4.x, the same rows) | Sequence, Assembly, Analysis, Sample, Project, Package-Checklist | [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190) profile; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHP | `1.2` (v0.6.0 prepared; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
-| FAIR-bioHeaders-Specification: FHGFF3 | `1.2` (v0.6.0 prepared; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHP | `1.2` (v0.6.0 released; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Sequence S8 and S-xref/S-ver, Annotation AN.c.iii/AN.d, Sample, Project, Package-Checklist | [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
+| FAIR-bioHeaders-Specification: FHGFF3 | `1.2` (v0.6.0 released; `1.1` in v0.5.0, `1.0` in v0.4.x, the same rows) | Annotation, Analysis, Sample, Project, Package-Checklist | [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191) tool tests; [#189](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/189) next major |
 | FHT-Specification: FHT (draft) | `1.0` development contract at `0ceb6f4` (unreleased) | Sequence S1–S4, S11–S13, S-fmt; Sample SA.T1; Experiment | none; rows are re-checked when FHT is released |
 | gff3-validator | catalogue `0.1.0-draft` at `c753f45` | Annotation | [gff3-validator#27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27) |
 
@@ -257,7 +257,7 @@ is unchanged and no matrix row's rating changes on this evidence.
 - [#190](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/190): draft INSDC submission-readiness profile for FHR; it requires `taxon.uri` in the NCBI Taxonomy form, because INSDC requires an NCBI taxID.
 - [#191](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/191): test FH headers with INSDC submission validators.
 - [gff3-validator#27](https://github.com/FAIR-bioHeaders/gff3-validator/issues/27): INSDC Annotation rules missing from the catalogue.
-- [#170](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/170): BUSCO `lineageDataset` dotted versions. Raised by the same FHT design review; no INSDC requirement depends on it. Decided 2026-11-12 (option A, widen); the widening is staged for FHP/FHGFF3 `1.2` in v0.6.0 (prepared), with this assessment re-pinned at v3.
+- [#170](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/170): BUSCO `lineageDataset` dotted versions. Raised by the same FHT design review; no INSDC requirement depends on it. Decided 2026-11-12 (option A, widen); the widening was released for FHP/FHGFF3 `1.2` in v0.6.0, with this assessment re-pinned at v3 and its released status recorded at v4.
 - [#139](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/139): structured voucher specimens, relevant to A.b and SA.T1 but reviewed on its own track.
 
 ## 4. Using FAIR-bioHeaders alongside an INSDC submission

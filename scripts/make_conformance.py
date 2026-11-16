@@ -919,6 +919,14 @@ def build_fhp():
     fhp_valid("fhp-fasta-busco-lineage-dotted", fhp_lines(dotted), ["P1"],
               "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).")
 
+    # #244: citing the newer release does not opt an older stated minor into
+    # 1.2 fields. Keep all other values from the accepted dotted record.
+    for minor in ("1.0", "1.1"):
+        fhp_invalid(f"fhp-fasta-busco-lineage-dotted-version-{minor.replace('.', '-')}",
+                    dict(dotted, schemaVersion=minor), "P1",
+                    f"Dotted BUSCO dataset version with schemaVersion {minor}, citing "
+                    "v0.6.0: the older stated minor retains its undotted pattern.")
+
     # Shared rules on protein bytes: normalising residues or stops breaks the checksum.
     data, _ = assemble(fhp_lines())
     invalid("fhp-fasta-sequence-tampered", k, data.replace(b"MKTAYIAKQ", b"MKTAYIAKE"), "R3",
@@ -1112,6 +1120,17 @@ def build_fhgff3():
                                    "fragmented": 0, "missing": 1, "total": 2})),
                  ["G2"], "BUSCO completeness with the dotted dataset version odb12.2 that "
                  "FHGFF3 1.2 allows (#170).")
+
+    for minor in ("1.0", "1.1"):
+        fhgff3_invalid(
+            f"fhgff3-busco-lineage-dotted-version-{minor.replace('.', '-')}",
+            fhgff3_record(
+                schema=f"{W3ID}fhgff3/{PREPARING_RELEASE}", schemaVersion=minor,
+                completeness={"lineageDataset": "enterobacterales_odb12.2",
+                              "completeSingle": 1, "completeDuplicated": 0,
+                              "fragmented": 0, "missing": 1, "total": 2}),
+            "G2", f"Dotted BUSCO dataset version with schemaVersion {minor}, citing "
+            "v0.6.0: the older stated minor retains its undotted pattern.")
 
     # Shared rules and G1 placement.
     data, _ = assemble(fhgff3_lines(fasta=True))
