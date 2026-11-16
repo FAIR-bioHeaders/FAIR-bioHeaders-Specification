@@ -16,6 +16,14 @@ Work targeting **v0.6.1**, the documentation patch named by the release decision
 stay exactly at v0.6.0 (v0.6.1 repeats the v0.6.0 row in `schemas/versions.json`, as v0.4.1
 and v0.4.2 repeated the v0.4.0 row), and a v0.6.1 release changes guidance text only.
 
+- Complete the existing five-template CEDAR workflow guidance and installed
+  0.11.0 export/bind/readback evidence (Refs #162). Correct default-off versus
+  opt-in FHT support, distinguish the published writer's older draft pin from
+  the unchanged CEDAR snapshot, and document owning FHGM model checks against
+  either declared released FHGFF3 base. Retain all contract/snapshot/provenance
+  bytes and field shapes; regenerate only draft-template warning prose. Live
+  CEDAR instance/account/upload and artifact URI assignment remain maintainer
+  publication actions.
 - Correct v0.6.0 release-status wording, record its Zenodo version DOI
   (`10.5281/zenodo.24223950`) in CITATION.cff, and correct the released CEDAR
   template versions below. Add four shared rejection vectors: FHP and FHGFF3

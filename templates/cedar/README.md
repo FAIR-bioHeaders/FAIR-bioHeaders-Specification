@@ -26,8 +26,7 @@ throughout (see [Draft templates](#draft-templates--fht-and-fhgm) below):
 | [`fht.json`](fht.json) | FHT | **draft** | 1.0 (draft, unreleased) | `https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json` |
 | [`fhgm.json`](fhgm.json) | FHGM | **draft** | model contract v0.1 (proposal) | none — an FHGM record carries no schema URL |
 
-`v0.6.0` is the registry's `current` (pre-release-staged on `main` per
-docs/SCHEMA-VERSIONS.md); the templates track `versions.json` exactly, which is
+`v0.6.0` is published and is the registry's `current`; the templates track `versions.json` exactly, which is
 what `scripts/make_cedar.py --check` verifies.
 
 Each template is generated, never hand-edited. Released templates are derived
@@ -47,17 +46,19 @@ Maintainer decision of 2026-11-13 ("CEDAR will expand to include FHGM and FHT")
 supersedes the earlier FHT-deferred posture of #162: guided authoring now also
 exists for the two draft contracts, **clearly labeled as drafts**. The
 released-types list above is unchanged; no draft template joins it until its
-contract is released or adopted.
+contract is actually published.
 
 Filling a draft form can produce records that the eventual released contract
 **changes or rejects**. The draft schema bytes are the only authority for what
 a draft accepts today, and drafts move: field names, requiredness, patterns
-and meanings are still under curator review. Concretely, FHGM's `modelVersion`
-is opaque with explicitly open semantics (#204), and the FHT draft's
-`derivedFrom` relationship vocabulary and `completeness` lineage pattern are
-pending shared decisions (#54, #170). Treat every draft-form output as
-provisional and re-validate it against whatever the contract has become before
-binding it to data.
+and meanings are still under curator review. FHGM's `modelVersion` is deliberately opaque through v0.x by the
+[recorded review disposition](https://github.com/FAIR-bioHeaders/FHGM-Specification/issues/8#issuecomment-6881802036):
+equality/difference only, with no ordering implied. This is settled baseline
+behavior, not a pending choice of version syntax. FHT's dotted BUSCO lineage
+grammar is already in this pinned snapshot (#170 is completed); its publication
+and concrete curator acceptance remain separate. Treat draft-form outputs as
+provisional and validate against the exact contract supported by the chosen
+writer. The form pin and an installed writer's draft pin can differ.
 
 **FHT** ([`fht.json`](fht.json)) is generated from the FHT-Specification draft
 contract (`fht.json` on `main`; snapshot
@@ -81,20 +82,36 @@ field. The template authors exactly **one** model record; the transport is:
 1. validate the standalone record against
    [`drafts/fhgm-model.schema.json`](drafts/fhgm-model.schema.json) using a
    Draft 2020-12 validator with format checking,
-2. embed it as one item of the `x-fhgm-models` array in a **valid FHGFF3 1.1
-   header** (docs/FORMAT.md R15 transport — the extension never overrides a
+2. embed it as one item of the `x-fhgm-models` array in a **valid released
+   FHGFF3 1.1 or 1.2 header**, retaining that carrier's paired schema URL/version (docs/FORMAT.md R15 transport — the extension never overrides a
    standard field),
 3. recompute the enclosing file's checksum with `bioheaders combine` — the file
    checksum covers every embedded record byte like any other header byte, and
    any later record edit invalidates it,
-4. run FHGM-Specification's `validate_fhgm.py` on the bound FHGFF3 file with
-   `--base-schema` pointing to its required released v0.5.0 FHGFF3 schema and
-   any predecessor snapshots supplied through `--predecessor`.
+4. run the owning FHGM-Specification's
+   `development/model/validate_fhgm.py` on the bound FHGFF3 file. Supply the
+   registered released base schemas; its `base-schemas.json` resolves the
+   carrier's declared base and prints the selected release. Repeat
+   `--base-schema` to provide both candidates; supply any predecessor snapshots
+   explicitly through `--predecessor`.
+
+```sh
+git -C /path/to/FAIR-bioHeaders-Specification show v0.5.0:fhgff3.json > /tmp/fhgff3-v0.5.0.json
+git -C /path/to/FAIR-bioHeaders-Specification show v0.6.0:fhgff3.json > /tmp/fhgff3-v0.6.0.json
+python /path/to/FHGM-Specification/development/model/validate_fhgm.py \
+  --base-schema /tmp/fhgff3-v0.5.0.json --base-schema /tmp/fhgff3-v0.6.0.json \
+  bound.fhgff3.gff3
+```
+
+Use root-level release files, not `schemas/fhgff3.json` or floating main. The
+checker's registered hashes must match those released bytes. Base selection is
+implemented, not a request for curators to choose one universal carrier.
 
 Model **resolution** (feature-target matching, predecessor-pointer verdicts,
 reference agreement with the file header) is a draft checker rule set in
 FHGM-Specification, **not a toolkit feature yet**. Promotion of the FHGM
-template follows an adoption decision on #204.
+template follows actual shared publication under #204; the publication direction
+is already adopted. Merging readiness proposals does not publish the model.
 
 ## Extension fields are omitted on purpose
 
@@ -167,13 +184,22 @@ the validator and writer, while `flatten_export` only restores the record shape.
 
 Draft caveats on this path:
 
-- **FHT:** the toolkit does not bind or validate FHT files yet (that lands with
-  the FHT release lane, #107 F / FHT-Specification#9). Until then, validate the
-  flattened record as pre-binding metadata using `Draft202012Validator` with
-  `FormatChecker` and an in-memory copy of the pinned draft schema with only
-  `checksum` removed from its root `required` list. Do not edit the pinned
-  snapshot or invent a checksum. Keep the unbound record for curator review;
-  full-contract validation must wait until a supported writer binds the file.
+- **FHT:** released `fair-bioheaders==0.11.0` already binds and checks FHT in
+  the V7 draft lane. Opt in for every command; the default still refuses FHT:
+
+  ```sh
+  BIOHEADERS_EXPERIMENTAL_FHT=1 bioheaders combine record.json transcripts.fa -o transcripts.fht.fa
+  BIOHEADERS_EXPERIMENTAL_FHT=1 bioheaders validate transcripts.fht.fa
+  BIOHEADERS_EXPERIMENTAL_FHT=1 bioheaders verify transcripts.fht.fa
+  ```
+
+  This proves experimental draft processing, not an FHT release or curator
+  acceptance. The published 0.11.0 wheel's FHT draft digest is `11c69d66…`,
+  whereas this CEDAR snapshot is `59ad9641…`: 0.11.0 accepts the common
+  `diptera_odb10` example but rejects `diptera_odb10.1`, which this newer
+  snapshot accepts. Do not claim pin equality or complete template-value
+  coverage from a successful common-value round trip. Keep an unsupported
+  export unbound; do not silently rewrite a lineage or invent a checksum.
 - **FHGM:** the flattened output is one **model record** to embed per the
   [transport steps above](#draft-templates--fht-and-fhgm), never a standalone
   `bioheaders combine` input. `flatten_export` recognizes an FHGM export by
@@ -191,21 +217,45 @@ carry their schema patterns plus authority guidance in help text, but no live
 CEDAR terminology-server bindings (that enrichment belongs to the published
 instance, if maintainers choose it).
 
-## Promoting a draft template to a released-type template
+## Reproducible workflow checks
 
-The promotion is mechanical and happens together with the release/adoption
-decision, never ahead of it:
+```sh
+python scripts/make_cedar.py --check
+python -m unittest discover -s tests -p 'test_cedar.py' -v
+CEDAR_TOOLKIT=/path/to/installed-0.11.0/bin/bioheaders \
+  CEDAR_FHGM_ROOT=/path/to/FHGM-Specification \
+  python -m unittest discover -s tests -p 'test_cedar_toolkit.py' -v
+```
 
-1. the contract enters `schemas/versions.json` (FHT release, #107 lane F) or
-   gains an adopted released identity (#204 for FHGM) — maintainer action;
-2. in `scripts/make_cedar.py`, move the type from `DRAFT_TYPES` to `TYPES` and
-   delete its `DRAFT_*` wording entries;
-3. delete the type's snapshot and provenance entry under `drafts/`;
-4. regenerate: the template then pins the released w3id URL and loses its
-   `status`/DRAFT markings;
-5. update `tests/test_cedar.py` (`STEMS`/`DRAFT_STEMS`, the no-w3id and
-   draft-status tests shrink; the coverage census re-counts) and this README's
-   table.
+The five existing templates regenerate deterministically. Filled exports flatten
+without changing values, scalar types, array order or nested parent checksums.
+Installed-toolkit checks run outside the checkout, bind the three released
+headers plus opt-in FHT, validate/verify them, read metadata back and strip the
+exact original payload. FHGM checks validate one standalone record, preserve it
+inside both released FHGFF3 carriers, and invoke the owning model checker with
+both registered bases. The tests confirm that base/checksum success alone does
+not establish model-level validity. No reference-sequence, feature/biology,
+curator acceptance or live CEDAR validation is performed by these checks.
+
+Without `CEDAR_TOOLKIT`, installed integration is explicitly skipped. Without
+`CEDAR_FHGM_ROOT`, owning model resolution is explicitly skipped; successful
+carrier checks must never be reported as model conformance. The shared CI runs
+installed 0.11.0 checks; the separate owning-repository check is reproducible
+with the source revision recorded in [workflow evidence](WORKFLOW-EVIDENCE.md).
+
+## Promoting a draft template
+
+Promotion follows actual shared publication, never just the already-recorded
+adoption decision. For FHT, its published contract and registry entry precede
+moving it from `DRAFT_TYPES` to `TYPES`, retiring its draft snapshot/provenance,
+regenerating, and updating draft-status/no-w3id/coverage tests. Keep field shapes
+and checksum handling under the publication review.
+
+FHGM is a model record rather than a header family. Its publication must provide
+the appropriate model-contract identity and template packaging; do not apply the
+header-registry recipe mechanically or add `schema`, `schemaVersion`, checksum,
+a registry row or a fabricated URL to an authored model record. Retain the
+current pinned draft template until that publication work is reviewed.
 
 ## What this directory is not
 
