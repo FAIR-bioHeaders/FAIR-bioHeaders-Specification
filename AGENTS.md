@@ -183,11 +183,20 @@ For the carrier class, the maintainer decision of 2026-11-15
 (recorded on FAIR-bioHeaders-Specification#211, answering #241 finding (b))
 is that the draft FHGM model accepts both FHGFF3 `1.1` and `1.2` bases: the
 harness resolves the FHGFF3 version a carrier declares, validates against
-that base, and records the resolved base in its output. Describe that as a
-recorded decision with implementation in progress in FHGM-Specification, not
-as current behavior, until its implementing PR lands; verify the state before
-restating it. FHGM remains a draft under rule V7 and is not a header type: no
-`schemaVersion`, no `schemas/versions.json` row, no w3id URL.
+that base, and records the resolved base in its output. **Implemented**:
+FHGM-Specification PR #17 (merged 2026-11-16), which added
+`development/model/base-schemas.json` — one entry per released FHGFF3 base,
+keyed by the SHA-256 of the exact release bytes, each entry resolving a tag to
+a commit, with the rule that a floating branch is never recorded for released
+material. That implementation moved the FHGM transport overlay (1,363 → 2,613
+bytes, `dd9f69274f26…` → `d1619cced91b…`) and the FHGM suite manifest (35,269 →
+36,001 bytes, `31f14f022ff0…` → `5620f00cbb4b…`) **with the vector count
+unchanged at 31** — which is why suite references must be pinned by digest and
+never by count. Promoting the real-data cases to normative vectors is still in
+progress (FHGM-Specification #18). Re-verify before restating: this paragraph
+was written 2026-11-16 and its own status claim goes stale the moment upstream
+moves, as it did once already. FHGM remains a draft under rule V7 and is not a
+header type: no `schemaVersion`, no `schemas/versions.json` row, no w3id URL.
 
 ## Using FAIR-bioHeaders in another project
 
