@@ -41,7 +41,9 @@ These normative FHR definitions resolve the previously unspecified gap and lengt
 conventions, following the [jointly approved #251 proposal](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/251#issuecomment-6928652476).
 They concern the genome assembly described by the whole file, not the header's
 text or an external estimated genome size. FHP protein statistics and FHT
-transcript statistics retain their own definitions.
+transcript statistics retain their own definitions. These units describe an assembly
+as sequence records; this section does not define how a graph producer chooses
+paths to turn graph segments into scaffolds.
 
 - A **scaffold** is a FASTA record containing at least one sequence letter.
   A record without sequence contributes neither a scaffold nor a contig.
