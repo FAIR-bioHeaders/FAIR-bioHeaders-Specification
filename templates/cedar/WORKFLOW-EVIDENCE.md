@@ -13,7 +13,7 @@ or publish FHT/FHGM contracts. All five templates already existed.
 | FHT form | `drafts/fht.schema.json`, owner commit `226f923c28b680edb3c546e99a751482d06aef1a`, SHA-256 `59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e` | Existing pinned draft, unchanged |
 | FHGM form | `drafts/fhgm-model.schema.json`, owner commit `ac3d37b3033312844fc3151217731928ae33aa54`, SHA-256 `bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f` | Existing pinned model draft, unchanged |
 | Writer | Fresh PyPI `fair-bioheaders==0.11.0`, Python 3.13 | Installed noneditable artifact, invoked outside checkout |
-| Writer's FHT contract | Bundled SHA-256 `11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8` | Older draft than the form; not silently substituted |
+| Writer's FHT contract | Bundled owner revision `b9ad19a62772092e08935cff44ee77a50981bbaf`, SHA-256 `11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8` | Older draft than the form; not silently substituted |
 | FHGM checker | [Owning revision f0b3aee06cc2eafd1bf417bfb1c12105c9b595b3](https://github.com/FAIR-bioHeaders/FHGM-Specification/tree/f0b3aee06cc2eafd1bf417bfb1c12105c9b595b3/development/model) | Existing checker behavior; merged layer proposal is not newly adopted semantics |
 | FHGM base candidates | Its existing `base-schemas.json`: v0.5.0 FHGFF3 1.1 SHA-256 `20ce320f5d706f11ed21cdece4dfb56e3568b50be126e25b4016f46f2e8e416c`; v0.6.0 FHGFF3 1.2 SHA-256 `1942be4cefc8b3a2537942c2252b45fbcef87a5532486e4fd0f5d4c540e0fbf9` | Root release bytes checked by digest; declared carrier selects base |
 
