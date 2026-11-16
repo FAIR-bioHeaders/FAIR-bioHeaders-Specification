@@ -88,12 +88,15 @@ Standing maintainer merge authorization applies only in FAIR-bioHeaders
 organization repositories and only to agents operated by David Molik (`molikd`)
 or Adam Wright (`adamjohnwright`). It grants no authority in other repositories
 or to agents operated by anyone else. Within that scope, an agent may merge a PR
-only with all CI checks present and green for its current head, Copilot **🟢 Approved** for
-that head, passing appropriate agent validation, and all review findings
-handled. Re-check immediately before merging; a changed head needs current
-validation and review evidence. Direct pushes to main remain prohibited.
-Schema adoption, curator acceptance, releases, tags, package publication and
-deployments retain their separate maintainer gates.
+with all CI checks present and green for its current head, a valid Copilot
+**🟢 Approved** still in effect (not dismissed or superseded by a review with
+unresolved findings), and passing appropriate agent validation of all current
+changes, including changes made after that review. Handle review findings and
+re-check CI, approval status and agent validation immediately before merging.
+A changed head needs renewed agent validation and handling of new findings;
+it does not by itself require a new Copilot approval. Direct pushes to main
+remain prohibited. Schema adoption, curator acceptance, releases, tags, package
+publication and deployments retain their separate maintainer gates.
 
 ## Optional
 
