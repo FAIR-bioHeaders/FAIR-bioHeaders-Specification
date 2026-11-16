@@ -1,8 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. https://mozilla.org/MPL/2.0/.
-"""Validate the proposed descriptive export context, not a deposit or FHR schema.
+"""Validate the adopted descriptive export context, not a deposit or FHR schema.
 
-Draft issue #56 helper. No transformation, network lookup or identifier minting.
+Mapping-v1 issue #56 helper; existing context token retained.
+No transformation, network lookup or identifier minting.
 """
 import argparse
 import json
@@ -38,7 +39,7 @@ def context_errors(context, source):
         return ["source must be a JSON metadata object"]
     source_schema = source.get("schema")
     if not isinstance(source_schema, str) or source_schema not in SOURCE_ALIASES or source.get("schemaVersion") != "2.0":
-        return ["this draft context only supports the fixed FHR v0.4.0 / schemaVersion 2.0 source identity"]
+        return ["this mapping-v1 context only supports the fixed FHR v0.4.0 / schemaVersion 2.0 source identity"]
     validator = Draft202012Validator(json.loads(SCHEMA.read_text()), format_checker=FormatChecker())
     errors = [f"{error.json_path}: {error.message}" for error in validator.iter_errors(context)]
     if errors:
@@ -85,7 +86,7 @@ def main():
     for error in errors:
         print(error)
     if not errors:
-        print("Draft descriptive context checked; no export, deposit validation or registration performed.")
+        print("Adopted descriptive context checked; no export, deposit validation or registration performed.")
     return bool(errors)
 
 

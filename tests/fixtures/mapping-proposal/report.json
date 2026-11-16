@@ -1,6 +1,6 @@
 {
   "profileVersion": "0.1.0-draft.1",
-  "status": "illustrative-descriptive-fixture",
+  "status": "adopted-foundation-fixture",
   "source": "source.json",
   "context": "context.json",
   "output": "qualified-dc.ttl",
@@ -36,5 +36,7 @@
   "not_supplied_context": [
     "resourceDOI"
   ],
-  "conflict_policy": "Reject conflicting scoped identifiers or publication date/year; never silently prefer source or context."
+  "conflict_policy": "Reject conflicting scoped identifiers or publication date/year; never silently prefer source or context.",
+  "official": false,
+  "adoption_decision": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-6880245660"
 }

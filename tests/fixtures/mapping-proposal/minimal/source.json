@@ -1,0 +1,23 @@
+{
+  "schema": "https://w3id.org/fair-bioheaders/fhr/v0.4.0",
+  "schemaVersion": "2.0",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "genome": "Synthetic human reference example",
+  "version": "0.0.1",
+  "metadataAuthor": [
+    {
+      "name": "Metadata Group"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "name": "Assembly Group"
+    }
+  ],
+  "dateCreated": "2022-03-21",
+  "masking": "soft-masked",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}

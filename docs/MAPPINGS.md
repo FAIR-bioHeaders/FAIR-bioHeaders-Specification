@@ -1,8 +1,13 @@
 # Mappings
 
-[Draft citation/deposit profile work for #56](mappings/README.md) now has a
-separate export-context proposal, field inventory and worked descriptive bundle.
-These are not adopted profiles or shipped DataCite/Crossref/ARK/Bib exporters.
+[Mapping v1 for #56](mappings/README.md) is the adopted root-field assembly
+foundation: separate supplemental context, explicit handling/loss inventory and
+curated qualified-DCMI expectations. The official label remains withheld until
+an exporter ships. Its preserved legacy context token and narrow FHR v0.4.0
+scope are separate from the canonical tables below; no existing term/kind or
+MIxS projection changes. See the [consumer handoff](mappings/EXPORTER-HANDOFF.md)
+and [metadata-only reference example](../tests/fixtures/mapping-reference/README.md).
+Deep DataCite/Crossref/ARK/bibliographic/EZID adapters are deferred follow-ups.
 
 FHR metadata is mapped to other vocabularies in separate profiles:
 

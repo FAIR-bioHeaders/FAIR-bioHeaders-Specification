@@ -1,6 +1,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. https://mozilla.org/MPL/2.0/.
-"""Offline checks of the draft #56 artifacts; not target/deposit conformance."""
+"""Offline checks of adopted mapping-v1 artifacts; not target/deposit conformance."""
 from copy import deepcopy
 import json
 from pathlib import Path
@@ -26,6 +26,8 @@ class MappingProposalTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.source = json.loads((BUNDLE / "source.json").read_text())
+        cls.source_schema = json.loads(subprocess.check_output(
+            ["git", "show", "v0.4.0:fhr.json"], cwd=ROOT))
         cls.context = json.loads((BUNDLE / "context.json").read_text())
         cls.schema = json.loads((ROOT / "mappings/proposals/assembly-export-context.schema.json").read_text())
         cls.table = yaml.safe_load((ROOT / "mappings/proposals/assembly-dcmi.yml").read_text())
@@ -38,8 +40,7 @@ class MappingProposalTests(unittest.TestCase):
     def test_context_schema_and_complete_source_fixture_are_valid(self):
         Draft202012Validator.check_schema(self.schema)
         self.assertEqual(context_errors(self.context, self.source), [])
-        schema = json.loads((ROOT / "fhr.json").read_text())
-        Draft202012Validator(schema, format_checker=FormatChecker()).validate(self.source)
+        Draft202012Validator(self.source_schema, format_checker=FormatChecker()).validate(self.source)
         self.assertEqual(self.context["profileVersion"], self.table["profile_version"])
         self.assertEqual(self.report["profileVersion"], self.table["profile_version"])
 
@@ -183,28 +184,93 @@ class MappingProposalTests(unittest.TestCase):
         self.assertIn((self.record, DC.subject, self.resource), self.graph)
         self.assertIn((self.resource, DC.subject, URIRef(self.source["taxon"]["uri"])), self.graph)
 
-    def test_target_and_header_status_never_imply_adoption_or_fht_support(self):
+    def test_adoption_status_preserves_identity_without_official_or_fht_claims(self):
         registry = json.loads((ROOT / "schemas/versions.json").read_text())
         self.assertNotIn("FHT", registry["files"])
-        self.assertEqual(self.table["status"], "proposal")
-        self.assertEqual(self.status["status"], "proposal")
-        self.assertEqual(self.status["targets"]["dcmi-qualified"]["status"], "draft-fixture")
+        self.assertEqual(self.table["status"], "adopted")
+        self.assertEqual(self.status["status"], "adopted")
+        self.assertEqual(self.status["targets"]["dcmi-qualified"]["status"], "adopted-foundation")
+        self.assertFalse(self.table["official"])
+        self.assertFalse(self.status["official"])
+        self.assertEqual(self.schema["properties"]["profileVersion"], {"const": "0.1.0-draft.1"})
+        self.assertEqual(self.table["source_schema_version"], "2.0")
+        self.assertEqual(self.status["header_types"]["FHR"]["release"], "v0.4.0")
+        self.assertEqual(self.table["adoption_decision"], self.status["adoption_decision"])
         for target in ["datacite", "crossref", "ark", "bibtex", "biblatex"]:
-            self.assertEqual(self.status["targets"][target]["status"], "planned")
+            self.assertEqual(self.status["targets"][target]["status"], "deferred")
         for kind in ["FHR", "FHP", "FHGFF3"]:
             record = self.status["header_types"][kind]
             self.assertEqual(record["released_schema_version"], registry["releases"][record["release"]][kind])
         fht = self.status["header_types"]["FHT"]
         self.assertEqual(fht["status"], "blocked")
         self.assertNotIn("released_schema_version", fht)
-        self.assertEqual(len(fht["blocking_issues"]), 2)
+        self.assertEqual(fht["blocking_issues"], ["https://github.com/FAIR-bioHeaders/FHT-Specification/issues/10"])
 
-    def test_cli_only_checks_draft_context(self):
+    def test_cli_only_checks_context_despite_adoption(self):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/check_mapping_context.py"),
                                  str(BUNDLE / "context.json"), "--source", str(BUNDLE / "source.json")],
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("no export, deposit validation or registration", result.stdout)
+
+
+    def test_minimal_companion_omits_unknowns_and_keeps_creator_subjects(self):
+        directory = BUNDLE / "minimal"
+        source = load_json(directory / "source.json")
+        context = load_json(directory / "context.json")
+        self.assertEqual(context_errors(context, source), [])
+        Draft202012Validator(self.source_schema, format_checker=FormatChecker()).validate(source)
+        graph = Graph().parse(directory / "qualified-dc.ttl", format="turtle")
+        resource, record = URIRef(context["resourceIRI"]), URIRef(context["metadataRecordIRI"])
+        self.assertFalse(list(graph.objects(resource, DC.publisher)))
+        self.assertFalse(list(graph.objects(resource, DC.issued)))
+        self.assertFalse(list(graph.objects(record, DC.created)))
+        self.assertFalse(list(graph.objects(record, DC.issued)))
+        for subject, field in [(resource, "assemblyAuthor"), (record, "metadataAuthor")]:
+            agents = list(graph.objects(subject, DC.creator))
+            self.assertEqual(len(agents), 1)
+            self.assertEqual(graph.value(agents[0], RDFS.label), Literal(source[field][0]["name"]))
+            self.assertEqual(list(graph.objects(agents[0], RDF.type)), [DC.Agent])
+            self.assertFalse(list(graph.objects(agents[0], DC.identifier)))
+        self.assertEqual(graph.value(resource, DC.title), Literal(context["title"]))
+        self.assertNotEqual(context["title"], source["genome"])
+        self.assertFalse(set(graph.objects(resource, DC.creator)) & set(graph.objects(record, DC.creator)))
+        self.assertEqual(len(graph), 14)
+
+    def test_optional_context_assertions_are_not_unconditional_graph_aliases(self):
+        context = {**self.context, "resourceDOI": "10.1234/assembly"}
+        self.assertEqual(context_errors(context, self.source), [])
+        # These assertions remain in preserved context; no adopted context row projects them.
+        paths = {entry["path"] for entry in self.table["context_entries"]}
+        self.assertNotIn("/publicationYear", paths)
+        self.assertNotIn("/resourceDOI", paths)
+        self.assertFalse(list(self.graph.triples((None, DC.issued, Literal(2026, datatype=XSD.gYear)))))
+
+    def test_reference_snapshot_and_transcription_are_pinned_metadata_only(self):
+        import hashlib
+        directory = ROOT / "tests/fixtures/mapping-reference"
+        reference = load_json(directory / "reference.json")
+        raw = (directory / reference["evidence"]["snapshot"]).read_bytes()
+        self.assertEqual(len(raw), reference["evidence"]["bytes"])
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), reference["evidence"]["sha256"])
+        snapshot = json.loads(raw)
+        self.assertEqual(snapshot["total_count"], 1)
+        report = snapshot["reports"][0]
+        resource = reference["resource"]
+        self.assertEqual(resource["accession"], report["accession"])
+        self.assertEqual(resource["title"], report["assembly_info"]["assembly_name"])
+        self.assertEqual(resource["organism"], report["organism"]["organism_name"])
+        self.assertEqual(reference["sourceAssertions"], {
+            "submitter": report["assembly_info"]["submitter"],
+            "repositoryReleaseDate": report["assembly_info"]["release_date"]})
+        self.assertNotIn("schema", reference)
+        self.assertNotIn("checksum", reference)
+        self.assertNotIn("creators", resource)
+        self.assertTrue(context_errors(self.context, reference))
+        for gap in ["assemblyCreatorRoles", "resourceDOI", "sequenceBytes", "exactFileChecksum",
+                    "sequenceCollectionDigest", "verifiedParentFileIdentity", "archivePossession",
+                    "futurePersistence"]:
+            self.assertIn(gap, reference["notEstablished"])
 
 
 if __name__ == "__main__":

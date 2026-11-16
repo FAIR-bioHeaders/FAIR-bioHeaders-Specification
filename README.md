@@ -34,12 +34,14 @@ LinkML model, examples, and partial MIxS/MIGS mappings. The
 [FAIR-bioHeaders toolkit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools)
 provides conversion, validation, and FASTA/GFA/GFF3 header tools.
 
-## Draft metadata crosswalks
+## Adopted mapping foundation
 
-The [mapping-profile proposal](docs/mappings/README.md) starts issue #56 with
-a separate assembly export context, qualified Dublin Core fixture and a delivery
-matrix for DataCite, Crossref, ARK and bibliographic profiles. It is incomplete
-and not an adopted mapping/export suite; FHT remains blocked on its contract.
+The [adopted mapping-v1 foundation](docs/mappings/README.md) covers the existing
+FHR v0.4.0 root-field inventory, separate export context and qualified-DCMI
+fixtures. Its legacy context token remains `0.1.0-draft.1`; adoption assigns no
+new identifier or contract version. The official label is withheld until an
+exporter ships. Deep target adapters and other header-family mappings remain
+outside v1; a metadata-only source-reference example establishes no file checksum.
 
 ## Proposed shared amendments
 
@@ -54,7 +56,7 @@ nothing adopted).
 The [community profiles proposal](docs/PROFILES.md) lets a community add
 required fields and naming rules on top of a header type without editing the
 published schemas, with a draft AgBioData example under
-[`profiles/`](profiles/). It is a proposal; no profile is adopted and the
+[`profiles/`](profiles/). It is a proposal; no community profile is adopted and the
 published contracts are unchanged.
 
 ## Draft gene-model records (FHGM)

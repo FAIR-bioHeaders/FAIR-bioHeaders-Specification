@@ -1,85 +1,89 @@
-# Metadata crosswalks and citation profiles (draft)
+# Mapping v1: assembly descriptive foundation
 
-Proposal for joint maintainer review under [#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56).
-Profile version `0.1.0-draft.1`. This is an incomplete PR foundation, not an
-adopted or released mapping suite. “Official” would mean maintained and approved
-by FAIR BioHeaders, not endorsement by an external standards body.
+**Adopted; the “official” label is withheld until an exporter ships.** The
+[scope-down decision](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56#issuecomment-6829221221)
+and [adoption decision](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-6880245660)
+cover the existing root-field inventory, separate supplemental context and curated
+qualified-DCMI fixture. They do not adopt six complete target adapters.
+[#56](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/56)
+remains open for the scoped implementation/shipment handoff and documentation.
 
-## What is available now
+## Identity, compatibility and available artifacts
+
+“Mapping v1” names the adopted scope, not a new serialized profile identifier.
+The existing context `profileVersion: "0.1.0-draft.1"`, schema `$id` and paths under
+`mappings/proposals/` are retained for compatibility. The word `draft` in that
+legacy token does not undo adoption; adoption does not publish an exporter,
+assign a new profile release, or authorize an “official” claim. No FH* schema,
+field, requiredness, vocabulary or contract version changes here.
+
+| Artifact | Scope |
+| --- | --- |
+| [Root inventory](../../mappings/proposals/assembly-dcmi.yml) | Every FHR v0.4.0 root field has a conditional handling rule or explicit non-projection reason. Nested values remain in the preserved source. |
+| [Context schema](../../mappings/proposals/assembly-export-context.schema.json) | Supplemental assertions with fixed identity and conflict rules; separate from the FHR header. |
+| [Delivery/status record](../../mappings/proposals/profile-status.yml) | Adopted foundation, withheld official label, implementation handoff and deferred target work. |
+| [Rich source/context/graph/report](../../tests/fixtures/mapping-proposal/) | Independently curated semantic expectation, not output of a shipped exporter. |
+| [Minimal companion](../../tests/fixtures/mapping-proposal/minimal/) | Explicit title and separate creators; absent publisher/issue date/DOI stay absent. |
+| [Metadata-only reference](../../tests/fixtures/mapping-reference/) | A reference to a resource held elsewhere, not a complete FHR header or verified sequence. |
 
 The existing [canonical JSON-LD/DCMI table](../../mappings/fhr-jsonld-dcmi.yml),
-[MIxS projection](../MAPPINGS.md), and [one-way schema.org export](../SCHEMAORG-EXPORT.md)
-remain separate contracts. Their implementations are not re-created here.
-The draft adds a scoped resource model, separate supplemental context schema,
-a root-field handling inventory, a qualified-DC fixture, and tests of that
-fixture's subjects, dates, identifiers and omissions. There is no new exporter.
+[MIxS projection](../MAPPINGS.md) and [schema.org export](../SCHEMAORG-EXPORT.md)
+remain separate. Do not edit their terms or use lossy Simple DC as an intermediate
+store. The adopted assembly foundation supports **FHR v0.4.0 / schemaVersion
+`"2.0"` only**. Newer FHR releases, FHP, FHGFF3 and future FHT/FHGM mappings need
+explicit scope review; their existence does not widen this profile automatically.
 
-| Intended use | Profile direction | Current state |
-| --- | --- | --- |
-| Resource discovery / descriptive metadata | Qualified DCMI Terms (2020-01-20), preserving source/context alongside the graph | Draft assembly fixture and root-field inventory only. |
-| Dataset DOI deposit through DataCite | Assess schema 4.7; XML and REST request envelopes separately | Planned; no deposit-ready output or pinned XSD bundle. |
-| Dataset/database deposit through Crossref | Assess deposit XSD 5.5.0 | Planned; dataset/container/deposit context still to specify. REST retrieval JSON is not the deposit format. |
-| Publish an already assigned ARK | Select a metadata binding, resolver and persistence policy; assess ERC separately | Planned; no minting or assignment inferred. |
-| Ordinary assembly citation | Classic BibTeX `@misc` | Planned; tool/style/escaping/rendering matrix remains to implement. |
-| Dataset-aware bibliography | Separate BibLaTeX `@dataset` | Planned; backend/style versions remain to select and test. |
+## Resource subjects and conservative handling
 
-The machine-readable delivery matrix is
-[`profile-status.yml`](../../mappings/proposals/profile-status.yml). Candidate
-versions are references for review, not claims that adapters validate those
-formats. The ARK reference is a dated Internet-Draft, explicitly work in progress.
+Keep the assembly, metadata record, related publication and specification/software
+as distinct subjects. The assembly and metadata record require distinct IRIs.
 
-## Resource model and provenance
+- `assemblyAuthor` creates generic `dcterms:Agent` nodes for the assembly;
+  `metadataAuthor` creates them for the separately identified metadata record.
+  Preserve full names, identifiers, order and `nameType` in the source. Do not
+  split names or infer Person/Organization classifications in the graph.
+- `dateCreated` is assembly creation. Only explicit context `publicationDate`
+  produces `dcterms:issued`; `publicationYear` is preserved context and checked
+  for agreement when both are supplied, not substituted for a missing date.
+- `title` comes from context. `genome` is not a title fallback. A source version
+  string does not establish a resource-valued `hasVersion`/`isVersionOf` relation.
+- A supplied taxonomy IRI becomes a subject; protocol and generic links remain
+  generic relations. An article DOI is a relation to the article, never the
+  assembly's DOI. No link is fetched or classified by an exporter.
+- Supplied rights text becomes a labelled `dcterms:RightsStatement`; it is not
+  silently promoted to a license URI or replaced by the software's license.
+- Source `schema` constrains the metadata record, not the assembly. File checksum
+  and SeqCol remain source assertions, not registered identifiers or verified
+  digests merely because metadata was exported.
 
-The first proposed profile describes **one assembly resource**. Keep four
-subjects distinct: the assembly, its metadata record, a related publication,
-and the specification/software. No author's name, date or identifier moves
-between these subjects merely because it appears in the same file.
+The inventory's unsupported root fields remain explicitly unprojected. In
+particular, the accession repository name does not supply an accession, funding
+text does not supply grant roles, and metrics/software structures retain their
+values and types in the source. Conditional terms do not declare unconditional
+SKOS equivalence or change the canonical context.
 
-- `assemblyAuthor` supplies assembly creators; `metadataAuthor` supplies creators
-  of the separately identified metadata record. Preserve order, full names,
-  identifiers and optional `nameType` in the source; never split names or infer
-  a person/organization class. The RDF example uses generic `dcterms:Agent` nodes.
-- `dateCreated` is assembly creation. `publicationDate`/`publicationYear` come
-  from context and must agree when both are supplied. Neither is defaulted from
-  assembly creation, file timestamps or metadata authorship.
-- `genome` is not automatically a citation title. Context supplies an explicit
-  title. The resource version stays in the source; a literal `version` is not a
-  resource-valued `dcterms:hasVersion`/`isVersionOf` assertion.
-- `scholarlyArticle` identifies a related article, not the assembly. A generic
-  relation does not establish that the article describes this assembly. An
-  explicit resource DOI equal to that article DOI is a scope conflict here.
-- `accessionID.name` may name a repository. Do not derive an accession from it,
-  classify arbitrary strings as DOIs, or turn a supplied SeqCol/file digest into
-  a registered identifier. Generic links remain generic relations.
+## Context checking and conflict policy
 
-These are proposed adapter decisions. No FHR/FHP/FHGFF3 field, enum, meaning,
-requiredness, checksum rule, canonical context, vocabulary or schema version
-changes in this PR. Future structured-voucher adoption is separate (#139).
+The context requires `profileVersion`, `resourceKind: "assembly"`, `resourceIRI`,
+`metadataRecordIRI` and a nonblank title. Publisher, publication date/year and
+resource DOI are optional **known** assertions. Unknown values are omitted;
+null/empty assertions and undeclared context keys are rejected.
 
-## Separate context, not extra FHR fields
+The checker accepts the fixed source citation aliases listed in
+[`check_mapping_context.py`](../../scripts/check_mapping_context.py), rejects
+other types/releases/raw-main citations, duplicate JSON properties and non-JSON
+numeric constants, and checks context without rewriting either input. It rejects:
 
-[`assembly-export-context.schema.json`](../../mappings/proposals/assembly-export-context.schema.json)
-is a new **proposed export-context contract**, not an extension to `fhr.json`.
-It requires the draft profile version, `resourceKind: assembly`, distinct resource
-and metadata-record IRIs, and an explicit title. Publisher, publication date/year
-and a resource DOI are optional *known* assertions. Absence means unknown;
-empty/null assertions and undeclared context keys are rejected. Optional fields
-here do not imply optional registration fields in another target profile.
+- equal assembly/metadata-record IRIs;
+- conflicting publication date and year;
+- an assembly DOI or DOI-resolver resource IRI identifying the source's article.
 
-The helper validates structure, this draft's fixed FHR v0.4.0 / schemaVersion
-`"2.0"` source identity, and context conflicts. It does not validate the source
-record's conformance or determine registration readiness. Raw-main, other
-releases and other header types are unsupported by this initial profile; none
-silently falls back to v0.4.0. Use the
-ordinary source validator separately. It rejects duplicate JSON keys, invalid
-JSON constants, equal record/resource IRIs, conflicting publication date/year,
-and an article DOI reused as the assembly DOI or resource IRI. DOI comparisons
-are case-insensitive; resource IRIs recognize HTTP(S) `doi.org` and `dx.doi.org`
-resolver paths, including percent-encoded paths, without network lookups. This
-check applies even when optional `resourceDOI` is absent.
-No source/context conflict is silently overwritten. Publisher identities and
-name classifications are not guessed. No network operation or registration
-occurs.
+DOI scope comparisons are case-insensitive and recognize HTTP(S) `doi.org` /
+`dx.doi.org` resolver paths, including percent escapes, without resolving them.
+No conflicting value silently wins. The helper checks context/identity only;
+it does **not** validate source conformance, verify a sequence, export a graph or
+assess a registration/deposit. The Tools exporter must independently validate
+its source against the fixed released contract before projecting it.
 
 ```sh
 python scripts/check_mapping_context.py tests/fixtures/mapping-proposal/context.json \
@@ -87,90 +91,60 @@ python scripts/check_mapping_context.py tests/fixtures/mapping-proposal/context.
 python -m unittest discover -s tests -p test_mapping_proposal.py -v
 ```
 
-## Qualified DC and retained detail
+## Tools exporter handoff
 
-The curated [`assembly-dcmi.yml`](../../mappings/proposals/assembly-dcmi.yml)
-records every FHR v0.4.0 **root field**, with source/container cardinality,
-subject, condition, transformation and loss/unsupported reason. It is a handling
-inventory, not executable mappings or unconditional LinkML `exact_mappings`.
-Nested details retain the existing canonical table and the original source;
-complete per-target nested rules remain to review. Its conditional rules do not
-assert SKOS equivalence. Root cardinality measures field/container presence,
-not the number of array items.
+The [handoff contract](EXPORTER-HANDOFF.md) defines the existing fixture semantics,
+complete source/context preservation, expected omissions and required negative
+controls. Implement one deterministic **qualified DCMI descriptive** exporter in
+Tools; do not recreate canonical JSON-LD, MIxS or schema.org export.
 
-The [worked bundle](../../tests/fixtures/mapping-proposal/) contains an unchanged,
-schema-valid rich source example; explicit context; a manually curated Turtle
-graph; and a report. Checksum/identifiers in this synthetic source are not
-file-backed verification results. `example.org` subjects and publisher are
-illustrative and no resource DOI is assigned.
+A projection bundle must retain the complete parsed source/context, including
+ordered arrays and typed nested values, alongside graph and report. Preserve
+original input bytes when copying named sidecars; do not claim reformatted JSON
+is byte-identical. The graph alone loses ordering, classification and nested
+structure. Its loss report and the source/context remain necessary even when
+an RDF parser accepts the graph. No reverse mapping is defined.
 
-The graph separates assembly creators from metadata-record creators, applies
-creation/issue dates to the assembly, and applies FHR conformance only to the
-metadata record. Rights text is a labelled `dcterms:RightsStatement`, not an
-inferred license URI. Dataset/agent/rights nodes retain resource-valued DCMI
-relationships instead of treating every target as a text field. The fixture
-retains supplied ORCID strings as identifiers of its corresponding agents.
+The shared graph fixtures are independent semantic expectations. An exporter
+must match their RDF meaning and produce repeatable output bytes for the same
+inputs. A passing checked-out script is not installed-toolkit acceptance; the
+consumer must verify its installed wheel and package the required mapping data.
+Exporter merger, package shipment and applying the official label are separate
+records. This document makes none of those claims.
 
-RDF creator/relation triples do not retain array order or the full source
-structure. The graph alone is **not** lossless. `source.json` and `context.json`
-remain the preservation layer: keep names, order, classifications, typed nested
-statistics, software parameters, source versions and identifiers there before
-building subsequent adapters. Do not use serialized Simple DC as an intermediate
-store. No Simple DC output or reverse mapping is implemented here.
+## Metadata-only source references
 
-The older canonical table declares legacy version metadata and its format uses
-a numeric source-schema version. This proposal explicitly names released FHR
-schemaVersion `"2.0"`; it does not silently reinterpret or edit that historical
-format. Review version-metadata migration separately when extending that table.
+A [public NCBI metadata snapshot](../../tests/fixtures/mapping-reference/README.md)
+shows how to record an accession-bearing assembly reference without obtaining its
+sequence. Keep repository release dates and submitter roles as supplied; neither
+is automatically publication date or assembly creator. Missing roles, DOI and
+version details stay identified as gaps.
 
-## Header-family coverage and FHT
+Recording a landing/source URL does not archive the resource or promise future
+persistence. Without sequence bytes it establishes no exact file checksum,
+SeqCol digest or verified parent-file identity. This reference example cannot be
+passed to the assembly exporter as though it were a complete FHR source. It is
+foundation documentation, not a dataset pilot, deposit or publisher integration.
 
-| Header type | Released contract | Mapping proposal scope |
-| --- | --- | --- |
-| FHR | v0.4.0 / schemaVersion `"2.0"` | Initial assembly fixture only; not an adopted exporter. |
-| FHP | v0.4.0 / `"1.0"` | Not yet profiled; protein-set origin and contributor roles need review. |
-| FHGFF3 | v0.4.0 / `"1.0"` | Not yet profiled; annotation creators and genome relationships need review. |
-| FHT | No shared release | Blocked on the adopted transcriptome contract and versioned schema. |
+## Deferred targets and completion boundary
 
-Checked 2026-10-20: FHT issues [#6](https://github.com/FAIR-bioHeaders/FHT-Specification/issues/6)
-and [#7](https://github.com/FAIR-bioHeaders/FHT-Specification/issues/7) remain open.
-Its [PR #12](https://github.com/FAIR-bioHeaders/FHT-Specification/pull/12) updates
-AGENTS guidance; it is not a transcriptome-contract adoption. Do not import
-legacy FHT fields or claim RNA/cDNA mappings yet. This does not block review of
-the initial FHR assembly profile. Do not reuse assembly-author roles for FHP,
-FHGFF3 or FHT by assumption.
+The [status record](../../mappings/proposals/profile-status.yml) keeps DataCite,
+Crossref, ARK, BibTeX/BibLaTeX visible as **deferred**, not implemented v1 targets.
+EZID serializations build on those target profiles and are also deferred. Their
+candidate versions are research references, not claims of target validation or
+endorsement. Deep nested/per-target crosswalks, registration schemas, resolver
+policies, ANVL, citation rendering and family extensions belong to separately
+reviewed follow-ups; the old six-target checklist is not v1 acceptance.
 
-## Remaining work before adoption
+To finish the scoped #56 handoff: merge the owning artifacts, implement/test the
+Tools exporter, verify actual shipment, and deliver the adopted guidance and
+examples to [website #29](https://github.com/FAIR-bioHeaders/fair-bioheaders.github.io/issues/29).
+Website consumption does not wait for a Janeway adapter or a downstream pilot.
+Do not claim a deposit, minted identifier, reverse mapping or target endorsement.
 
-1. Obtain joint review of scope, subject choices, context schema, DCMI layer and
-   comparison with direct per-target adapters using the same fixture bundle.
-2. Specify all nested-field handling and loss reports for every target; implement
-   deterministic adapters with missing/unknown/conflict/special-character cases.
-3. Pin complete DataCite/Crossref validation artifacts and request/deposit
-   contracts; add XML/REST examples and negative registration-context fixtures.
-4. Define ARK binding/resolver/assigned-name policy, safe existing-identifier
-   examples, optional ERC serialization, and persistence responsibilities.
-5. Implement citation-only BibTeX first and separately test BibLaTeX. Select
-   versions/styles, parse/render citations, and cover corporate names, Unicode,
-   braces, ORCID loss and escaping. The optional metadata-bearing note envelope
-   stays an experiment until extraction/round trips and tool-loss behavior pass.
-6. Review family-specific scopes as their contracts allow. Integrate tested
-   adapters into Tools, then provide the approved guidance to
-   [website #29](https://github.com/FAIR-bioHeaders/fair-bioheaders.github.io/issues/29).
-7. Adopt and publish a versioned profile release; do not close #56 or describe
-   this draft as official, deposit-ready, endorsed or complete.
+## Pinned vocabulary
 
-## Primary references checked 2026-10-20
-
-- [DCMI Terms, 2020-01-20](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/2020-01-20/).
-- [DataCite 4.7](https://schema.datacite.org/meta/kernel-4.7/).
-- [Crossref 5.5.0](https://www.crossref.org/documentation/schema-library/metadata-deposit-schema-5-5-0/)
-  and [dataset record guide](https://www.crossref.org/documentation/schema-library/markup-guide-record-types/datasets/).
-- [ARK Internet-Draft, 2026-05-08](https://arks-org.github.io/arkspec/draft-kunze-ark.html)
-  (work in progress; select/pin a binding before claiming support).
-- [BibTeX documentation](https://www.bibtex.org/Using/) and
-  [BibLaTeX package/manual](https://ctan.org/pkg/biblatex).
-
-No registration service, DOI resolver, ARK minting service or live vocabulary is
-called by tests. RDF terms are checked against the repository's existing pinned
-DCMI term inventory; fixture schema/context checks are offline.
+The foundation uses [DCMI Terms 2020-01-20](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/2020-01-20/),
+checked offline against `tests/fixtures/dcmi-terms-2020-01-20.txt`. Existing target
+research references remain in the delivery record for deferred work. Tests do not
+call a live vocabulary, DOI resolver, registration service or deposit API.
