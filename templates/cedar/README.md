@@ -52,7 +52,7 @@ Filling a draft form can produce records that the eventual released contract
 **changes or rejects**. The draft schema bytes are the only authority for what
 a draft accepts today, and drafts move: field names, requiredness, patterns
 and meanings are still under curator review. FHGM's `modelVersion` is deliberately opaque through v0.x by the
-[recorded review disposition](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-6882779157):
+[recorded review disposition](https://github.com/FAIR-bioHeaders/FHGM-Specification/issues/8#issuecomment-6881802036):
 equality/difference only, with no ordering implied. This is settled baseline
 behavior, not a pending choice of version syntax. FHT's dotted BUSCO lineage
 grammar is already in this pinned snapshot (#170 is completed); its publication
