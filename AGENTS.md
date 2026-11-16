@@ -243,7 +243,8 @@ transfer lengths were reported as sizes twice) — state sizes from bytes
 actually downloaded; a ranged read truncates a `.gz` stream — download whole
 files before asserting on their contents; `diff <(…) <(…)` prints nothing when
 the process substitution fails, which reads exactly like agreement — extract
-to temp files and print `wc -l` on each side; `$?` after a pipe reports the
+to temp files, require each extraction to succeed, then print `wc -l` and compare
+those files; `$?` after a pipe reports the
 last pipeline element only; zsh applies `:A`/`:s` modifiers to a bare
 `$var:path` — brace the variable — and does not word-split an unquoted
 `$var`; and a case-insensitive filesystem can resolve a path whose case is
