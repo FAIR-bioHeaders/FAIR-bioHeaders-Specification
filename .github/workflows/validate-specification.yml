@@ -61,5 +61,10 @@ jobs:
         run: |
           python -m venv "$RUNNER_TEMP/fhr-converter"
           "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==0.11.0"
+      - name: Check CEDAR exports against the installed released toolkit
+        env:
+          CEDAR_TOOLKIT: ${{ runner.temp }}/fhr-converter/bin/bioheaders
+        run: |
+          "$RUNNER_TEMP/fhr-converter/bin/python" -m unittest discover -s tests -p 'test_cedar_toolkit.py' -v
       - name: Run the toolkit on every vector
         run: python scripts/check_conformance.py --skip-regeneration --require-format jsonld --require-format fhp-fasta --require-format fhgff3 --converter "$RUNNER_TEMP/fhr-converter"

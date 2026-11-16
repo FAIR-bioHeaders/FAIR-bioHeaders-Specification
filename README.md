@@ -143,6 +143,15 @@ JSON/YAML/HTML examples contain synthetic checksum and SeqCol placeholders.
 The FASTA/GFA examples have verified FHR file checksums but retain a synthetic
 SeqCol placeholder; it must not be used as the sequence collection's identity.
 
+## Guided metadata authoring
+
+The [five CEDAR templates](templates/cedar/README.md) guide authoring for released
+FHR/FHP/FHGFF3 and explicitly labelled draft FHT/FHGM records. The export workflow
+keeps contracts authoritative, uses the toolkit to compute file checksums, and
+separates FHGM model checks from its released FHGFF3 carrier. See the
+[offline workflow evidence and live-publication gate](templates/cedar/WORKFLOW-EVIDENCE.md);
+repository artifacts are not live CEDAR template links.
+
 ## Validation and LinkML
 
 Use Python 3.13 or later for repository checks. The cross-repo `check_release.py`

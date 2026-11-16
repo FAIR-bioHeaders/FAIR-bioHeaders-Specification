@@ -41,8 +41,8 @@ adds DRAFT templates for the two draft contracts, per type ``status: "draft"``:
 A draft template's title, description and top-level ``status`` key all say
 DRAFT loudly; filling one may produce records that the eventual released
 contract changes or rejects. Promoting a draft to a released-type template
-requires FHT release (#107 lane F) or FHGM adoption (#204) plus maintainer
-registry work first; see templates/cedar/README.md.
+requires actual FHT release (#107 lane F) or FHGM model publication (#204),
+with the appropriate reviewed identity; see templates/cedar/README.md.
 
 Pattern-defined extension slots (docs/FORMAT.md R15, and the draft FHT
 patternProperty of the same shape) are deliberately OMITTED: they mean nothing
@@ -166,12 +166,13 @@ DRAFT_WARNINGS = {
             "schema. Records authored here may be changed or rejected when FHT is "
             "released (FAIR-bioHeaders-Specification#107 lane F); no FHT release or "
             "versioned registry entry exists yet"),
-    "fhgm": ("DRAFT - NOT AN ADOPTED CONTRACT: this form targets the native FHGM "
-             "model contract v0.1, a proposal under FAIR-bioHeaders-Specification#204 "
-             "(Option C hybrid: FHGFF3-embedded x-fhgm-models transport). FHGM has no "
-             "schemaVersion, no versioned schema URL, no registry entry and no toolkit "
-             "support; the opaque modelVersion in particular carries no ordering and "
-             "its semantics are an open question that a later release may change"),
+    "fhgm": ("DRAFT - NOT A RELEASED CONTRACT: this form targets the native FHGM "
+             "model contract v0.1 under FAIR-bioHeaders-Specification#204 "
+             "(Option C hybrid: FHGFF3-embedded x-fhgm-models transport). The "
+             "publication direction is adopted, but FHGM has no schemaVersion, "
+             "versioned schema URL or registry entry. modelVersion stays opaque "
+             "through v0.x by the recorded review disposition: equality and "
+             "difference only, with no implied ordering"),
 }
 FORM_FIELD_ALIASES = {"schema": "header_schema"}
 
@@ -730,11 +731,19 @@ class Generator:
                          "for the same reason the released templates omit the R15 "
                          "slots (docs/FORMAT.md) - curators who need it write YAML "
                          "by hand")
+        if self.stem == "fht":
+            parts.append("Released fair-bioheaders 0.11.0 can bind and check FHT "
+                         "through the opt-in BIOHEADERS_EXPERIMENTAL_FHT=1 V7 "
+                         "lane; default behavior still refuses FHT. Its bundled "
+                         "draft predates this snapshot's dotted-lineage widening, "
+                         "so successful common-value round trips do not prove "
+                         "support for every value this template accepts")
         if self.stem == "fhgm":
             parts.append("This form authors ONE FHGM model record, not a file header: "
                          "the record has no schema, schemaVersion or checksum field "
                          "and is transported as one item of an FHGFF3 header's "
-                         "x-fhgm-models array, after which `bioheaders combine` "
+                         "x-fhgm-models array in a released FHGFF3 1.1 or 1.2 "
+                         "carrier, after which `bioheaders combine` "
                          "recomputes the file checksum over the exact bytes; FHGM "
                          "model resolution is not a toolkit feature yet (#204)")
         return ". ".join(part.rstrip(".") for part in parts) + "."
