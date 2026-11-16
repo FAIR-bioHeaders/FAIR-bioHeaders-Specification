@@ -1,0 +1,15 @@
+# Independently curated minimal expectation; no publisher/issued date invented.
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix type: <http://purl.org/dc/dcmitype/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<https://example.org/assemblies/synthetic-v1> a type:Dataset ;
+ dc:title "Explicit minimal assembly title" ;
+ dc:identifier "https://example.org/assemblies/synthetic-v1" ;
+ dc:creator [ a dc:Agent ; rdfs:label "Assembly Group" ] ;
+ dc:created "2022-03-21"^^xsd:date ;
+ dc:subject <https://identifiers.org/taxonomy:9606> .
+<https://example.org/metadata/synthetic-v1> a type:Text ;
+ dc:subject <https://example.org/assemblies/synthetic-v1> ;
+ dc:conformsTo <https://w3id.org/fair-bioheaders/fhr/v0.4.0> ;
+ dc:creator [ a dc:Agent ; rdfs:label "Metadata Group" ] .

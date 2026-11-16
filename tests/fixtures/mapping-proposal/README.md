@@ -1,11 +1,11 @@
-# Draft descriptive bundle for issue #56
+# Adopted mapping-v1 descriptive bundle for issue #56
 
 - `source.json`: byte-for-byte copy of `examples/example.fhr.json` at shared
   repository commit `2da7c96` (released FHR v0.4.0 contract, schemaVersion 2.0).
   It is a synthetic metadata example, not a verified assembly; the checksum is
   an existing placeholder. No immutable header or sequence bytes were edited.
-- `context.json`: synthetic, separate export assertions under draft context
-  profile `0.1.0-draft.1`. `example.org` subjects/publisher are illustrative;
+- `context.json`: synthetic, separate export assertions under the retained context
+  token `0.1.0-draft.1` (unchanged by adoption). `example.org` subjects/publisher are illustrative;
   resource DOI is deliberately absent. The issue-date example is 2026, whereas
   source assembly creation is 2022; this tests that these dates are distinct.
 - `qualified-dc.ttl`: manually curated expected descriptive graph, not generated
@@ -16,3 +16,8 @@ Retain source and context with any downstream projection. The graph does not
 preserve all nested values, classifications or array ordering. Person names and
 ORCID strings come from the existing synthetic source fixture; do not interpret
 this example as new claims about real research contributions. MPL-2.0 applies.
+
+`minimal/` is an independently curated companion showing that missing optional
+publisher, publication date/year and DOI do not get invented. Its name-only
+creators stay generic Agents. The adopted scope and legacy profile token are
+explained in `docs/mappings/README.md`; neither fixture claims exporter shipment.
