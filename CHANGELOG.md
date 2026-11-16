@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Normative FHR vitalStats definition clarification (#251): define one-or-more-N
+  contig splitting, scaffold/contig counts, separate N/L length denominators,
+  ambiguity-aware GC percentage and undefined/empty-input handling. No schema,
+  model, vocabulary identity, immutable example or version-registry bytes change.
+  Historical producer conventions remain documented rather than silently
+  reinterpreted. Publication classification remains a maintainer action under
+  SCHEMA-VERSIONS; this entry assigns no release and is outside the guidance-only
+  v0.6.1 scope described below.
+
 - Record the adopted mapping-v1 foundation and withheld official label from
   the scope/adoption decisions for #56. Preserve the context's existing identity,
   `0.1.0-draft.1` token and FHR v0.4.0 scope; reconcile status/family/version
