@@ -142,6 +142,19 @@ FHR 2.0 is a major version because the v0.4 tightening
 v0.4 changes (author `nameType`, scaffold statistics) are part of 2.0. FHP and FHGFF3 are first
 released in v0.4.0.
 
+### Coordinating a documentation patch with readers
+
+The planned v0.6.1 documentation patch repeats the v0.6.0 contract versions;
+that does not make its citation interchangeable for a version-aware reader.
+A reader that has not registered v0.6.1 reports its citation as unsupported (V4),
+even when the contract bytes would be identical. Before examples or usage
+instructions recommend v0.6.1 URLs, publish and verify a toolkit release that
+registers v0.6.1 and bundles the corresponding immutable contract bytes. Check
+its installed artifact against that release and run conformance, then update
+consumer pins and example/documentation citations. Until then, keep using the
+supported v0.6.0 citation. Preparing this rollout does not publish v0.6.1 or
+change `schemas/versions.json` (FAIR-bioHeaders-Specification#244).
+
 ## Schema files on main
 
 A schema change has its own release. The three schema files in the working tree are therefore

@@ -7,6 +7,13 @@ Work targeting **v0.6.1**, the documentation patch named by the release decision
 stay exactly at v0.6.0 (v0.6.1 repeats the v0.6.0 row in `schemas/versions.json`, as v0.4.1
 and v0.4.2 repeated the v0.4.0 row), and a v0.6.1 release changes guidance text only.
 
+- Correct v0.6.0 release-status wording, record its Zenodo version DOI
+  (`10.5281/zenodo.24223950`) in CITATION.cff, and correct the released CEDAR
+  template versions below. Add four shared rejection vectors: FHP and FHGFF3
+  records citing v0.6.0 but stating `schemaVersion` 1.0 or 1.1 cannot use dotted
+  BUSCO dataset versions. Existing vector bytes and outcomes are unchanged;
+  this is regression evidence for the existing contracts, not a contract change.
+  Document the toolkit-before-citation rollout for v0.6.1. Refs #244.
 - The conformance CI repins the converter to the released `fair-bioheaders[jsonld]==0.11.0`,
   the first release that bundles the v0.6.0 schemas (FHP/FHGFF3 1.2, dotted BUSCO dataset
   versions; verified byte-identical to the `v0.6.0` tag). That pin makes the `converterResults`
@@ -106,7 +113,7 @@ guidance are scheduled for v0.6.1.
   Refs #162.
 
 - Generated CEDAR workbench authoring templates for the released types
-  (`templates/cedar/{fhp,fhgff3,fhr}.json`, FHR 2.1 / FHP 1.1 / FHGFF3 1.1) and
+  (`templates/cedar/{fhp,fhgff3,fhr}.json`, FHR 2.1 / FHP 1.2 / FHGFF3 1.2) and
   their generator `scripts/make_cedar.py` (stdlib-only, deterministic,
   `--check` wired into the Validate specification workflow;
   `tests/test_cedar.py`). Authoring aids only: no schema, version or registry

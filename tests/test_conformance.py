@@ -129,7 +129,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 14)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 22)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 24)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
@@ -145,6 +145,35 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(vectors["fhp-fasta-busco-lineage-dotted"]["expected"], "valid")
         self.assertNotIn("converterResults", vectors["fhp-fasta-busco-lineage-dotted"])
         self.assertEqual(vectors["fhp-fasta-busco-lineage-trailing-dot"]["rule"], "P1")
+
+    def test_dotted_busco_rejection_depends_on_stated_minor(self):
+        """#244: reject the field, not a broken checksum or unrelated schema value."""
+        from jsonschema import Draft202012Validator, FormatChecker
+
+        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        for family, prefix, rule in (("fhp", "fhp-fasta", "P1"),
+                                      ("fhgff3", "fhgff3", "G2")):
+            validator = Draft202012Validator(
+                json.loads((ROOT / f"{family}.json").read_text()),
+                format_checker=FormatChecker())
+            for minor in ("1.0", "1.1"):
+                name = f"{prefix}-busco-lineage-dotted-version-{minor.replace('.', '-')}"
+                with self.subTest(vector=name):
+                    vector = vectors[name]
+                    self.assertEqual((vector["expected"], vector["rule"]), ("invalid", rule))
+                    metadata = vector["metadata"]
+                    self.assertEqual(metadata["schema"],
+                                     f"https://w3id.org/fair-bioheaders/{family}/v0.6.0")
+                    self.assertEqual(metadata["schemaVersion"], minor)
+                    errors = list(validator.iter_errors(metadata))
+                    self.assertTrue(errors)
+                    self.assertTrue(all(list(e.path) == ["completeness", "lineageDataset"]
+                                        and e.validator == "pattern" for e in errors), errors)
+                    # An engine ignoring if/then would wrongly accept the original.
+                    validator.validate(dict(metadata, schemaVersion="1.2"))
+                    undotted = dict(metadata, completeness=dict(
+                        metadata["completeness"], lineageDataset="primates_odb10"))
+                    validator.validate(undotted)
 
     def test_pre_release_converter_expectations_are_retired(self):
         # The converterResults tolerance landed with the staged v0.6.0 schemas (#222)
@@ -239,7 +268,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 18)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 20)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 22)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -323,7 +352,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(75 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -354,7 +383,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(75 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
 

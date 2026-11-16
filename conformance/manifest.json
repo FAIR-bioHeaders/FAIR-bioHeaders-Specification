@@ -4465,6 +4465,94 @@
       "reason": "Expanded form with a root @id, which no FHR field holds."
     },
     {
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-0",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-0.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.6.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "diptera_odb12.2",
+          "mode": "proteins",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "XTv0auS8E2ORaF3k59sQOijK5zhgJGqRdrklXMlBljM="
+      }
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-1",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-1.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.6.0",
+        "schemaVersion": "1.1",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "diptera_odb12.2",
+          "mode": "proteins",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "AJfXvRX3+fhzT0K2gq/1AlrYGLo+NWmNZ7s7okNStfE="
+      }
+    },
+    {
       "id": "fhp-fasta-sequence-tampered",
       "file": "invalid/fhp-fasta-sequence-tampered.fhp.fasta",
       "format": "fhp-fasta",
@@ -5007,6 +5095,90 @@
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
         "checksum": "Y4Mv2iolMZ54Wk/Qw3290fkCov6/BJqLIbRnSYkn3dM="
+      }
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted-version-1-0",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-0.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G2",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+        "schemaVersion": "1.0",
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-13",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "annotates"
+          }
+        ],
+        "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
+        "completeness": {
+          "lineageDataset": "enterobacterales_odb12.2",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "c7F1v4TMtSciB4HPkl8SaaTHaaIfVEa3VhJYlkoJ2B0="
+      }
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted-version-1-1",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-1.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "G2",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+        "schemaVersion": "1.1",
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-13",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "annotates"
+          }
+        ],
+        "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
+        "completeness": {
+          "lineageDataset": "enterobacterales_odb12.2",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "2GWHPPdilAEkuhfpDpjfCKR694tqoPTp2DYxlHqrktk="
       }
     },
     {
