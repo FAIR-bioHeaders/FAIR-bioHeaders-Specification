@@ -60,7 +60,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "General statistics about the genome assembly. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics.",
+        "@value": "General statistics about the genome assembly, computed as FORMAT.md R16 defines. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics.",
         "@language": "en"
       },
       "rdfs:subClassOf": [
@@ -213,7 +213,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent)",
+        "@value": "GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent); N and other ambiguity letters are excluded from numerator and denominator (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -263,7 +263,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Contig L50, the smallest number of contigs whose lengths sum to at least 50 percent of the assembly length",
+        "@value": "Contig L50, the smallest number of contigs, longest first, whose lengths sum to at least 50 percent of the summed contig length (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -288,7 +288,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Contig L90, the smallest number of contigs whose lengths sum to at least 90 percent of the assembly length",
+        "@value": "Contig L90, the smallest number of contigs, longest first, whose lengths sum to at least 90 percent of the summed contig length (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -369,7 +369,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Contig N50, the contig length in base pairs at 50 percent of the assembly length",
+        "@value": "Contig N50, the length in base pairs of the contig at which the descending cumulative contig length first reaches 50 percent of the summed contig length (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -394,7 +394,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Contig N90, the contig length in base pairs at 90 percent of the assembly length",
+        "@value": "Contig N90, the length in base pairs of the contig at which the descending cumulative contig length first reaches 90 percent of the summed contig length (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -444,7 +444,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Number of contigs of the genome assembly",
+        "@value": "Number of contigs of the genome assembly; every run of one or more N splits contigs (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -469,7 +469,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Number of scaffolds of the genome assembly",
+        "@value": "Number of scaffolds of the genome assembly, the sequence records containing at least one sequence letter (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -544,7 +544,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Scaffold L50, the smallest number of scaffolds whose lengths sum to at least 50 percent of the assembly length",
+        "@value": "Scaffold L50, the smallest number of scaffolds, longest first, whose lengths sum to at least 50 percent of totalBasePairs (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -569,7 +569,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Scaffold L90, the smallest number of scaffolds whose lengths sum to at least 90 percent of the assembly length",
+        "@value": "Scaffold L90, the smallest number of scaffolds, longest first, whose lengths sum to at least 90 percent of totalBasePairs (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -594,7 +594,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Scaffold N50, the scaffold length in base pairs at 50 percent of the assembly length",
+        "@value": "Scaffold N50, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 50 percent of totalBasePairs (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -619,7 +619,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Scaffold N90, the scaffold length in base pairs at 90 percent of the assembly length",
+        "@value": "Scaffold N90, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 90 percent of totalBasePairs (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [
@@ -699,7 +699,7 @@
         "@language": "en"
       },
       "rdfs:comment": {
-        "@value": "Total base pairs of the genome assembly",
+        "@value": "Total base pairs of the genome assembly, the summed scaffold length including N and other ambiguity letters (see FORMAT.md R16)",
         "@language": "en"
       },
       "sdo:domainIncludes": [

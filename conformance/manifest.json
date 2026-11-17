@@ -55,6 +55,10 @@
     "R15": {
       "summary": "Extension fields: from FHR 2.1 and FHP and FHGFF3 1.1, a top-level key matching ^x-[A-Za-z0-9][A-Za-z0-9_.-]*$ may hold any value; every other unknown key, an x- key in a nested object and an x- key in a record that states the older minor or cites an older release stay invalid; R8, R11, R12 and R13 apply to them."
     },
+    "R16": {
+      "summary": "Assembly statistics: FHR vitalStats are computed over contigs split at every run of one or more N; contig N/L statistics use the summed contig length, scaffold N/L statistics totalBasePairs; gcContent excludes ambiguity letters; a statistic with a zero denominator is omitted.",
+      "notApplicable": "R16 defines how producers compute vitalStats; the schema does not check stated statistics against the sequence and validators do not recompute them, so no file is invalid under it."
+    },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
     },

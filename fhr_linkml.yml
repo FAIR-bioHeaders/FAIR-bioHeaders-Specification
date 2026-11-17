@@ -116,72 +116,92 @@ classes:
         description: Reuse conditions or license for the genome
   VitalStats:
     description: >-
-      General statistics about the genome assembly. N50, N90, L50 and L90 are
-      contig statistics; the scaffold* variants are the scaffold statistics.
+      General statistics about the genome assembly, computed as FORMAT.md R16
+      defines. N50, N90, L50 and L90 are contig statistics; the scaffold* variants
+      are the scaffold statistics.
     class_uri: fhr:VitalStats
     annotations:
       vocabulary_subclass_of: sdo:StructuredValue
     attributes:
       L50:
-        description: Contig L50, the smallest number of contigs whose lengths sum
-          to at least 50 percent of the assembly length
+        description: >-
+          Contig L50, the smallest number of contigs, longest first, whose lengths sum
+          to at least 50 percent of the summed contig length (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       N50:
-        description: Contig N50, the contig length in base pairs at 50 percent of
-          the assembly length
+        description: >-
+          Contig N50, the length in base pairs of the contig at which the descending
+          cumulative contig length first reaches 50 percent of the summed contig length
+          (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       L90:
-        description: Contig L90, the smallest number of contigs whose lengths sum
-          to at least 90 percent of the assembly length
+        description: >-
+          Contig L90, the smallest number of contigs, longest first, whose lengths sum
+          to at least 90 percent of the summed contig length (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       totalBasePairs:
-        description: Total base pairs of the genome assembly
+        description: >-
+          Total base pairs of the genome assembly, the summed scaffold length including
+          N and other ambiguity letters (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       numberContigs:
         exact_mappings:
         - MIXS:0000060
-        description: Number of contigs of the genome assembly
+        description: >-
+          Number of contigs of the genome assembly; every run of one or more N splits
+          contigs (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       numberScaffolds:
-        description: Number of scaffolds of the genome assembly
+        description: >-
+          Number of scaffolds of the genome assembly, the sequence records containing at
+          least one sequence letter (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       readTechnology:
         description: Read technology of the genome assembly
       N90:
-        description: Contig N90, the contig length in base pairs at 90 percent of
-          the assembly length
+        description: >-
+          Contig N90, the length in base pairs of the contig at which the descending
+          cumulative contig length first reaches 90 percent of the summed contig length
+          (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       scaffoldN50:
-        description: Scaffold N50, the scaffold length in base pairs at 50 percent
-          of the assembly length
+        description: >-
+          Scaffold N50, the length in base pairs of the scaffold at which the descending
+          cumulative scaffold length first reaches 50 percent of totalBasePairs (see
+          FORMAT.md R16)
         range: integer
         minimum_value: 0
       scaffoldN90:
-        description: Scaffold N90, the scaffold length in base pairs at 90 percent
-          of the assembly length
+        description: >-
+          Scaffold N90, the length in base pairs of the scaffold at which the descending
+          cumulative scaffold length first reaches 90 percent of totalBasePairs (see
+          FORMAT.md R16)
         range: integer
         minimum_value: 0
       scaffoldL50:
-        description: Scaffold L50, the smallest number of scaffolds whose lengths
-          sum to at least 50 percent of the assembly length
+        description: >-
+          Scaffold L50, the smallest number of scaffolds, longest first, whose lengths
+          sum to at least 50 percent of totalBasePairs (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       scaffoldL90:
-        description: Scaffold L90, the smallest number of scaffolds whose lengths
-          sum to at least 90 percent of the assembly length
+        description: >-
+          Scaffold L90, the smallest number of scaffolds, longest first, whose lengths
+          sum to at least 90 percent of totalBasePairs (see FORMAT.md R16)
         range: integer
         minimum_value: 0
       gcContent:
         description: >-
-          GC content as a percentage from 0 to 100, not a fraction (write 42.0
-          for 42 percent; 0.42 means 0.42 percent)
+          GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42
+          percent; 0.42 means 0.42 percent); N and other ambiguity letters are excluded
+          from numerator and denominator (see FORMAT.md R16)
         range: float
         minimum_value: 0
         maximum_value: 100

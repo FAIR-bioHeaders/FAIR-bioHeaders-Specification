@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Number the FHR assembly-statistics definitions (#253) as FORMAT.md rule R16
+  and point the `vitalStats` descriptions in the LinkML model at them: contig
+  N50/L50/N90/L90 are over the summed contig length and the scaffold variants
+  over `totalBasePairs`, replacing "of the assembly length". The JSON-LD
+  vocabulary and TERMS.md are regenerated from the model; the conformance
+  manifest lists R16 as `notApplicable` (no file is invalid under it).
+  Description-only: no `schemaVersion` change (SCHEMA-VERSIONS "No change").
+  `fhr.json`, its drift baseline and the CEDAR template keep their v0.6.0 bytes,
+  since schema files on main equal the current release (SCHEMA-VERSIONS,
+  "Schema files on main"); the same description update goes into `fhr.json` with
+  the next release that may change schema bytes.
+
 - Normative FHR vitalStats definition clarification (#251): define one-or-more-N
   contig splitting, scaffold/contig counts, separate N/L length denominators,
   ambiguity-aware GC percentage and undefined/empty-input handling. No schema,

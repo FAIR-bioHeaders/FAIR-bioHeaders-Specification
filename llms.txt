@@ -14,9 +14,9 @@ Key facts (FAIR-bioHeaders-Specification v0.6.0 with fair-bioheaders 0.11.0, the
 
 ## Specification
 
-- [FHR assembly-statistics definitions](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md#assembly-statistics-vitalstats): any N/n run splits contigs; contig N/L uses summed contig length, scaffold N/L uses total length including gaps; GC uses A/C/G/T/U only. Undefined zero-denominator statistics are omitted. This normative clarification does not rewrite historical headers or assign a release.
+- [FHR assembly-statistics definitions, rule R16](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md#assembly-statistics-vitalstats): any N/n run splits contigs; contig N/L uses summed contig length, scaffold N/L uses total length including gaps; GC uses A/C/G/T/U only. Undefined zero-denominator statistics are omitted. This normative clarification does not rewrite historical headers or assign a release.
 
-- [Format rules R1 to R15](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping, link schemes, extension fields
+- [Format rules R1 to R16](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md): header block placement, checksum coverage, encoding, `>`/`@` escaping, link schemes, extension fields, assembly statistics
 - [Schema versions and selection](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md): versioning policy and how a `schema` URL selects a schema
 - [Schema-contract gap audit](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-GAP-AUDIT.md): status of the #150 findings and what waits for the next major `schemaVersion`
 - [FHP, protein FASTA](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHP.md): fields, `sourceType`, sources

@@ -37,8 +37,8 @@ produce different digests; record that context in external documentation.
 
 ## Assembly statistics (`vitalStats`)
 
-These normative FHR definitions resolve the previously unspecified gap and length
-conventions, following the [jointly approved #251 proposal](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/251#issuecomment-6928652476).
+These normative FHR definitions are rule R16 (see the [rule list](#checksum-decision)).
+They resolve the previously unspecified gap and length conventions, following the [jointly approved #251 proposal](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/251#issuecomment-6928652476).
 They concern the genome assembly described by the whole file, not the header's
 text or an external estimated genome size. FHP protein statistics and FHT
 transcript statistics retain their own definitions. These units describe an assembly
@@ -95,7 +95,8 @@ among six A/C/G/T/U letters.
 
 This is a **normative definition clarification**, not merely a formatting edit.
 It adds no field, required value, schema constraint, term IRI or serialization;
-existing published schema/model bytes and the version registry are unchanged.
+model and vocabulary changes are limited to field descriptions that cite R16;
+the published schema bytes and the version registry are unchanged.
 Older headers may have used another gap threshold, denominator or GC convention:
 do not silently reinterpret or rewrite their values, claim they were calculated
 under this convention, or invalidate them through a new schema gate. Preserve
@@ -265,6 +266,15 @@ reader must agree on what the checksum line contains:
     them out and say which keys they left out, and a JSON-LD or microdata document that holds
     one is invalid ([JSONLD.md](JSONLD.md) J9, [MICRODATA.md](MICRODATA.md) M5,
     [SCHEMAORG-EXPORT.md](SCHEMAORG-EXPORT.md) X9). Use JSON or YAML to exchange them.
+- [R16] **Assembly statistics.** FHR `vitalStats` values are computed as
+  [Assembly statistics](#assembly-statistics-vitalstats) defines. Every run of one or more
+  `N`/`n` letters splits contigs. Contig `N50`, `L50`, `N90` and `L90` use the summed contig
+  length as denominator, and the `scaffold*` statistics use `totalBasePairs`, the summed
+  scaffold length including `N`. `gcContent` excludes `N` and the other ambiguity letters from
+  numerator and denominator. A statistic whose denominator is zero is omitted. The schema does
+  not check stated statistics against the sequence and validators do not recompute them, so
+  R16 makes no file invalid; values in older headers computed under another convention are
+  kept as written and not reinterpreted.
 
 Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
 headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
@@ -277,7 +287,7 @@ than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
 YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
 them.
 
-The bracketed ids R1 to R15 are stable labels for the rules above, used by the
+The bracketed ids R1 to R16 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each applicable rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files

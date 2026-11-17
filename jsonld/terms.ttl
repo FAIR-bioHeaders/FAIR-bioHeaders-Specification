@@ -26,7 +26,7 @@ fhr:Agent a rdfs:Class ;
 
 fhr:VitalStats a rdfs:Class ;
     rdfs:label "VitalStats"@en ;
-    rdfs:comment "General statistics about the genome assembly. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics."@en ;
+    rdfs:comment "General statistics about the genome assembly, computed as FORMAT.md R16 defines. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics."@en ;
     rdfs:subClassOf sdo:StructuredValue ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
@@ -68,7 +68,7 @@ fhr:commandLineOption a rdf:Property ;
 
 fhr:gcContent a rdf:Property ;
     rdfs:label "gcContent"@en ;
-    rdfs:comment "GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent)"@en ;
+    rdfs:comment "GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent); N and other ambiguity letters are excluded from numerator and denominator (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Number ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -82,14 +82,14 @@ fhr:instrument a rdf:Property ;
 
 fhr:L50 a rdf:Property ;
     rdfs:label "L50"@en ;
-    rdfs:comment "Contig L50, the smallest number of contigs whose lengths sum to at least 50 percent of the assembly length"@en ;
+    rdfs:comment "Contig L50, the smallest number of contigs, longest first, whose lengths sum to at least 50 percent of the summed contig length (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:L90 a rdf:Property ;
     rdfs:label "L90"@en ;
-    rdfs:comment "Contig L90, the smallest number of contigs whose lengths sum to at least 90 percent of the assembly length"@en ;
+    rdfs:comment "Contig L90, the smallest number of contigs, longest first, whose lengths sum to at least 90 percent of the summed contig length (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -110,14 +110,14 @@ fhr:metadataAuthor a rdf:Property ;
 
 fhr:N50 a rdf:Property ;
     rdfs:label "N50"@en ;
-    rdfs:comment "Contig N50, the contig length in base pairs at 50 percent of the assembly length"@en ;
+    rdfs:comment "Contig N50, the length in base pairs of the contig at which the descending cumulative contig length first reaches 50 percent of the summed contig length (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:N90 a rdf:Property ;
     rdfs:label "N90"@en ;
-    rdfs:comment "Contig N90, the contig length in base pairs at 90 percent of the assembly length"@en ;
+    rdfs:comment "Contig N90, the length in base pairs of the contig at which the descending cumulative contig length first reaches 90 percent of the summed contig length (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -131,14 +131,14 @@ fhr:nameType a rdf:Property ;
 
 fhr:numberContigs a rdf:Property ;
     rdfs:label "numberContigs"@en ;
-    rdfs:comment "Number of contigs of the genome assembly"@en ;
+    rdfs:comment "Number of contigs of the genome assembly; every run of one or more N splits contigs (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:numberScaffolds a rdf:Property ;
     rdfs:label "numberScaffolds"@en ;
-    rdfs:comment "Number of scaffolds of the genome assembly"@en ;
+    rdfs:comment "Number of scaffolds of the genome assembly, the sequence records containing at least one sequence letter (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -159,28 +159,28 @@ fhr:relatedLink a rdf:Property ;
 
 fhr:scaffoldL50 a rdf:Property ;
     rdfs:label "scaffoldL50"@en ;
-    rdfs:comment "Scaffold L50, the smallest number of scaffolds whose lengths sum to at least 50 percent of the assembly length"@en ;
+    rdfs:comment "Scaffold L50, the smallest number of scaffolds, longest first, whose lengths sum to at least 50 percent of totalBasePairs (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:scaffoldL90 a rdf:Property ;
     rdfs:label "scaffoldL90"@en ;
-    rdfs:comment "Scaffold L90, the smallest number of scaffolds whose lengths sum to at least 90 percent of the assembly length"@en ;
+    rdfs:comment "Scaffold L90, the smallest number of scaffolds, longest first, whose lengths sum to at least 90 percent of totalBasePairs (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:scaffoldN50 a rdf:Property ;
     rdfs:label "scaffoldN50"@en ;
-    rdfs:comment "Scaffold N50, the scaffold length in base pairs at 50 percent of the assembly length"@en ;
+    rdfs:comment "Scaffold N50, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 50 percent of totalBasePairs (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:scaffoldN90 a rdf:Property ;
     rdfs:label "scaffoldN90"@en ;
-    rdfs:comment "Scaffold N90, the scaffold length in base pairs at 90 percent of the assembly length"@en ;
+    rdfs:comment "Scaffold N90, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 90 percent of totalBasePairs (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
@@ -202,7 +202,7 @@ fhr:seqcol_id a rdf:Property ;
 
 fhr:totalBasePairs a rdf:Property ;
     rdfs:label "totalBasePairs"@en ;
-    rdfs:comment "Total base pairs of the genome assembly"@en ;
+    rdfs:comment "Total base pairs of the genome assembly, the summed scaffold length including N and other ambiguity letters (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
