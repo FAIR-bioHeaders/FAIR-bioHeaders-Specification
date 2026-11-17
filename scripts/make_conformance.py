@@ -87,6 +87,10 @@ RULES = {
            "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$ may hold any value; every other unknown key, an x- "
            "key in a nested object and an x- key in a record that states the older minor or "
            "cites an older release stay invalid; R8, R11, R12 and R13 apply to them.",
+    "R16": "Assembly statistics: FHR vitalStats are computed over contigs split at every run "
+           "of one or more N; contig N/L statistics use the summed contig length, scaffold "
+           "N/L statistics totalBasePairs; gcContent excludes ambiguity letters; a statistic "
+           "with a zero denominator is omitted.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -168,6 +172,9 @@ NOT_APPLICABLE = {
           "escapes read back to the real characters.",
     "R14": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid "
            "in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"].",
+    "R16": "R16 defines how producers compute vitalStats; the schema does not check stated "
+           "statistics against the sequence and validators do not recompute them, so no "
+           "file is invalid under it.",
     "V7": "V7 is an opt-in reader lane for draft files not listed by V1; a published type's listed "
           "file remains governed by V1. This suite publishes no draft contract, so no vector is "
           "valid or invalid under V7. Without the explicit user decision, a draft raw-main URL is "

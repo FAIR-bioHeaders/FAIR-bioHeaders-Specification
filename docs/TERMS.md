@@ -33,7 +33,7 @@ A person or organization that the FHR record does not classify; FHR records the 
 
 `https://w3id.org/fair-bioheaders/terms#VitalStats`. Class.
 
-General statistics about the genome assembly. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics.
+General statistics about the genome assembly, computed as FORMAT.md R16 defines. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics.
 
 - Subclass of: `sdo:StructuredValue`
 
@@ -94,7 +94,7 @@ Command-line options given to the assembly software, in order
 
 `https://w3id.org/fair-bioheaders/terms#gcContent`. Property.
 
-GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent)
+GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent); N and other ambiguity letters are excluded from numerator and denominator (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Number
@@ -114,7 +114,7 @@ Physical tools and instruments used in the creation of the genome assembly
 
 `https://w3id.org/fair-bioheaders/terms#L50`. Property.
 
-Contig L50, the smallest number of contigs whose lengths sum to at least 50 percent of the assembly length
+Contig L50, the smallest number of contigs, longest first, whose lengths sum to at least 50 percent of the summed contig length (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -124,7 +124,7 @@ Contig L50, the smallest number of contigs whose lengths sum to at least 50 perc
 
 `https://w3id.org/fair-bioheaders/terms#L90`. Property.
 
-Contig L90, the smallest number of contigs whose lengths sum to at least 90 percent of the assembly length
+Contig L90, the smallest number of contigs, longest first, whose lengths sum to at least 90 percent of the summed contig length (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -154,7 +154,7 @@ Authors of the FHR instance
 
 `https://w3id.org/fair-bioheaders/terms#N50`. Property.
 
-Contig N50, the contig length in base pairs at 50 percent of the assembly length
+Contig N50, the length in base pairs of the contig at which the descending cumulative contig length first reaches 50 percent of the summed contig length (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -164,7 +164,7 @@ Contig N50, the contig length in base pairs at 50 percent of the assembly length
 
 `https://w3id.org/fair-bioheaders/terms#N90`. Property.
 
-Contig N90, the contig length in base pairs at 90 percent of the assembly length
+Contig N90, the length in base pairs of the contig at which the descending cumulative contig length first reaches 90 percent of the summed contig length (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -184,7 +184,7 @@ Whether the author is a person (Personal) or an organization (Organizational), a
 
 `https://w3id.org/fair-bioheaders/terms#numberContigs`. Property.
 
-Number of contigs of the genome assembly
+Number of contigs of the genome assembly; every run of one or more N splits contigs (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -194,7 +194,7 @@ Number of contigs of the genome assembly
 
 `https://w3id.org/fair-bioheaders/terms#numberScaffolds`. Property.
 
-Number of scaffolds of the genome assembly
+Number of scaffolds of the genome assembly, the sequence records containing at least one sequence letter (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -224,7 +224,7 @@ Related URLs to the genome
 
 `https://w3id.org/fair-bioheaders/terms#scaffoldL50`. Property.
 
-Scaffold L50, the smallest number of scaffolds whose lengths sum to at least 50 percent of the assembly length
+Scaffold L50, the smallest number of scaffolds, longest first, whose lengths sum to at least 50 percent of totalBasePairs (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -234,7 +234,7 @@ Scaffold L50, the smallest number of scaffolds whose lengths sum to at least 50 
 
 `https://w3id.org/fair-bioheaders/terms#scaffoldL90`. Property.
 
-Scaffold L90, the smallest number of scaffolds whose lengths sum to at least 90 percent of the assembly length
+Scaffold L90, the smallest number of scaffolds, longest first, whose lengths sum to at least 90 percent of totalBasePairs (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -244,7 +244,7 @@ Scaffold L90, the smallest number of scaffolds whose lengths sum to at least 90 
 
 `https://w3id.org/fair-bioheaders/terms#scaffoldN50`. Property.
 
-Scaffold N50, the scaffold length in base pairs at 50 percent of the assembly length
+Scaffold N50, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 50 percent of totalBasePairs (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -254,7 +254,7 @@ Scaffold N50, the scaffold length in base pairs at 50 percent of the assembly le
 
 `https://w3id.org/fair-bioheaders/terms#scaffoldN90`. Property.
 
-Scaffold N90, the scaffold length in base pairs at 90 percent of the assembly length
+Scaffold N90, the length in base pairs of the scaffold at which the descending cumulative scaffold length first reaches 90 percent of totalBasePairs (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
@@ -285,7 +285,7 @@ Unprefixed refget sequence collection top-level digest (sha512t24u).
 
 `https://w3id.org/fair-bioheaders/terms#totalBasePairs`. Property.
 
-Total base pairs of the genome assembly
+Total base pairs of the genome assembly, the summed scaffold length including N and other ambiguity letters (see FORMAT.md R16)
 
 - Used on: VitalStats (the `vitalStats` object)
 - Value: Integer
