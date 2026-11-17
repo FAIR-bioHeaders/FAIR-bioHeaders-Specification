@@ -460,6 +460,8 @@ deprecated.
   [jsonld/terms.jsonld](../jsonld/terms.jsonld) (JSON-LD).
 - How records use the terms: [JSONLD.md](JSONLD.md) and the
   [mapping table](../mappings/fhr-jsonld-dcmi.yml).
+- FHR assembly-statistics definitions: [FORMAT.md](FORMAT.md#assembly-statistics-vitalstats)
+  specifies contig/scaffold units, N/L denominators and GC ambiguity handling.
 - Licence: MPL-2.0. To cite a term, give its IRI and the FAIR-bioHeaders-Specification release.
 
 Each heading is the term's local name, so `{FHR}checksum` is the section `#checksum` below.

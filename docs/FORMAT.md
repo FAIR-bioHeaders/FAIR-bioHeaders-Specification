@@ -23,9 +23,9 @@ schemaVersion means and which schema a file's `schema` URL selects.
 | --- | --- | --- |
 | `assemblySoftware` | Legacy string or array of objects | Assembly software name; objects require `name`, with optional `uri`, `version`, and `commandLineOption` (array of argument strings). |
 | `assemblyProtocol` | URI string | External assembly protocol/workflow documentation. |
-| `vitalStats.N90` | Nonnegative integer | Contig length in base pairs at the 90% cumulative assembly-length threshold. `N50`, `L50` and `L90` are also contig statistics (stated from v0.4). |
+| `vitalStats.N90` | Nonnegative integer | Contig length in base pairs at the 90% cumulative contig-length threshold; see [assembly statistics](#assembly-statistics-vitalstats). `N50`, `L50` and `L90` are also contig statistics (stated from v0.4). |
 | `vitalStats.scaffoldN50`, `scaffoldN90`, `scaffoldL50`, `scaffoldL90` | Nonnegative integer (v0.4) | The same statistics computed over scaffolds. |
-| `vitalStats.gcContent` | Number from 0 to 100 | Percentage of G/C bases, not a fraction: write `42.0` for 42%; `0.42` means 0.42%. Contributors must document how ambiguous bases were handled. |
+| `vitalStats.gcContent` | Number from 0 to 100 | Percentage of G/C bases, not a fraction: write `42.0` for 42%; `0.42` means 0.42%. Use the denominator and ambiguity rules in [assembly statistics](#assembly-statistics-vitalstats); document the calculation convention. |
 | `seqcol_id` | 32 base64url characters | Unprefixed level-zero GA4GH refget sequence collection digest. |
 
 SeqCol uses [sha512t24u](https://ga4gh.github.io/refget/seqcols/): SHA-512 truncated
@@ -34,6 +34,86 @@ names, lengths, and sequence digests; it is not simply a hash of concatenated
 sequence letters. FHR stores a user-supplied digest and does not compute it,
 resolve it, or verify it against a local genome. Different attribute profiles can
 produce different digests; record that context in external documentation.
+
+## Assembly statistics (`vitalStats`)
+
+These normative FHR definitions resolve the previously unspecified gap and length
+conventions, following the [jointly approved #251 proposal](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/251#issuecomment-6928652476).
+They concern the genome assembly described by the whole file, not the header's
+text or an external estimated genome size. FHP protein statistics and FHT
+transcript statistics retain their own definitions. These units describe an assembly
+as sequence records; this section does not define how a graph producer chooses
+paths to turn graph segments into scaffolds.
+
+- A **scaffold** is a FASTA record containing at least one sequence letter.
+  A record without sequence contributes neither a scaffold nor a contig.
+- A **contig** is a maximal nonempty run of non-`N` sequence letters within a
+  scaffold. Every run of one or more `N`/`n` letters splits contigs: the minimum
+  gap length is **one**, with no assembler-specific 10- or 100-`N` threshold.
+  Leading/trailing `N` runs contribute to scaffold length but to no contig.
+  Other nucleotide ambiguity letters remain in contig lengths. Sequence case
+  changes neither these counts nor lengths.
+- `numberScaffolds` and `numberContigs` count those units.
+  `totalBasePairs` is the sum of scaffold lengths, **including `N` and other
+  nucleotide ambiguity letters**. Lengths exclude deflines, metadata/comments
+  and whitespace/line endings; no sequence bytes are rewritten to compute them.
+- For `N50`, `L50`, `N90` and `L90`, sort contig lengths in descending order.
+  The denominator is the **sum of contig lengths**, excluding `N` gaps.
+  At percentage *x* (50 or 90), take the first cumulative sum at least
+  *x*/100 of that denominator. `Nx` (`N50` or `N90`) is the length of the contig at that point;
+  `Lx` (`L50` or `L90`) is the number of contigs counted, including that contig.
+- `scaffoldN50`, `scaffoldL50`, `scaffoldN90` and `scaffoldL90` apply the same
+  rule to descending scaffold lengths, with `totalBasePairs` as denominator.
+  Do not use `totalBasePairs` as the contig N/L denominator or an external genome
+  size as either denominator.
+- `gcContent` is the percentage `100 * (G + C) / (A + C + G + T + U)`, counting
+  case-insensitively and rounding to two decimal places. `N` and every other
+  ambiguity letter are excluded from **both** numerator and denominator.
+  `U` contributes to the denominator without being rewritten to `T`.
+  Describe this convention in producer documentation; an unqualified fraction
+  such as `0.42` still means 0.42%, not 42%.
+
+**Empty denominators:** omit a statistic whose denominator is zero; zero is not
+an unknown-value placeholder. An all-`N` nonempty record is a scaffold and adds to
+`totalBasePairs`, but contributes zero contigs: contig N/L statistics are
+undefined and omitted. Its GC percentage is also undefined and omitted. A
+nonempty set containing no A/C/G/T/U likewise has undefined GC percentage.
+Scaffold N/L statistics are undefined when there are no nonempty records.
+Measured counts and total length may be zero where the existing schema permits
+zero; optionality, numeric minima and all other validation constraints are
+unchanged. Producers may reject an empty input rather than emit statistics;
+no missing measurement is invented.
+
+For example, records `AANNNCC` and `GNT` have scaffold lengths `[7, 3]`,
+contig lengths `[2, 2, 1, 1]`, `totalBasePairs: 10`, `numberScaffolds: 2` and
+`numberContigs: 4`. Contig `N50: 2`, `L50: 2`, `N90: 1`, `L90: 4` use denominator
+6. Scaffold `scaffoldN50: 7`, `scaffoldL50: 1`, `scaffoldN90: 3`,
+`scaffoldL90: 2` use denominator 10. `gcContent: 50.0` uses three G/C letters
+among six A/C/G/T/U letters.
+
+### Compatibility and publication scope
+
+This is a **normative definition clarification**, not merely a formatting edit.
+It adds no field, required value, schema constraint, term IRI or serialization;
+existing published schema/model bytes and the version registry are unchanged.
+Older headers may have used another gap threshold, denominator or GC convention:
+do not silently reinterpret or rewrite their values, claim they were calculated
+under this convention, or invalidate them through a new schema gate. Preserve
+and document their producer methodology; any deliberate header correction
+requires recomputing its file checksum and considering downstream parent links.
+
+The current source implementation from
+[Tools #175](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/pull/175)
+uses these definitions: it omits undefined contig N/L and GC values, warns when
+empty records are excluded, and rejects an input with no sequence-bearing
+records. This is source implementation evidence, not a claim about an installed
+release or a requirement to use that producer.
+
+The maintainers must classify the publication under
+[SCHEMA-VERSIONS](SCHEMA-VERSIONS.md#schemaversion): descriptions qualify for no
+version change only when valid values retain their meaning; a changed meaning
+requires the corresponding major-contract process. This PR assigns no release
+or contract version and does not expand the existing guidance-only v0.6.1 scope.
 
 <a id="checksum-decision-for-v03"></a>
 
