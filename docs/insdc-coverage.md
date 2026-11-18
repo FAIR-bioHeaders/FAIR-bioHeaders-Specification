@@ -263,7 +263,7 @@ is unchanged and no matrix row's rating changes on this evidence.
 ## 4. Using FAIR-bioHeaders alongside an INSDC submission
 
 The draft [insdc-fhr profile](../profiles/examples/insdc-fhr/README.md) checks
-selected FHR 2.0 assembly metadata offline after project and sample registration.
+selected FHR assembly metadata (`schemaVersion` 2.0 or 2.1) offline after project and sample registration.
 
 
 A FAIR-bioHeaders header keeps metadata with a file you share or archive yourself. It does not replace an INSDC submission and does not make a file ready to deposit. To submit to GenBank, ENA or DDBJ, follow that node's instructions and validators, and use the header as a source of values.

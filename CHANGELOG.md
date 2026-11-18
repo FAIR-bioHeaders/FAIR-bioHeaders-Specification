@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Draft `insdc-fhr` profile (#190; profile change, no released schema or
+  `schemaVersion` change): BioSample links may also use
+  `https://identifiers.org/biosample:<sample>` and
+  `https://www.ebi.ac.uk/biosamples/samples/<sample>`; project and sample
+  accession numbers must be positive without a leading zero, so `PRJNA0` and
+  `SAMN0` no longer count. The profile description now says what it accepts:
+  FHR `schemaVersion` 2.0 or 2.1, not 2.0 only. Extension-field tests now
+  assert the specific error (the rejected key and, for a new minor under the
+  v0.4.0 schema, the `schemaVersion` enum failure) instead of any failure.
+  Survey notes: the #191 results page links only committed files, and the
+  round 6 `fh-stack-results.json` records paths relative to its directory
+  instead of the CI runner's absolute paths (results unchanged).
+
 - CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
   form, as `schema` already was, so all five templates pass CEDAR's template
   meta-schema (FHR, FHP, FHGFF3 and FHT failed its reserved-name pattern); a test

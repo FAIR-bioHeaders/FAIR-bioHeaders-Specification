@@ -9,10 +9,11 @@ was created and no credential was used. All data are synthetic.
 Recorded run: 2026-11-10 in this directory; rerun with `./run-evidence.sh` (regenerates `runs/`, `evidence.log`, `jobs.tsv`).
 Harness: [`run-evidence.sh`](run-evidence.sh) (reproduces every row from a clean
 directory; self-tested 2026-11-10 — see [Reproduction](#reproduction)).
-Full transcripts: [`evidence-harness.log`](evidence-harness.log) and
-[`jobs-harness.tsv`](jobs-harness.tsv) (the clean re-run, 45 arms), plus the
-interactive `runs/` trees; layout explained in
-[`EVIDENCE-README.txt`](EVIDENCE-README.txt).
+Committed evidence: the per-arm exit-code table [`jobs.tsv`](jobs.tsv) (45 arms)
+and the inputs and outputs of every arm under [`runs/`](runs); layout explained in
+[`README.md`](README.md#layout). The full transcripts (`evidence-harness.log`
+from the clean re-run, and `evidence.log`) are not committed (`*.log` is
+ignored); `./run-evidence.sh` regenerates them.
 Digests of everything downloaded and built: [`PROVENANCE.txt`](PROVENANCE.txt).
 
 ## Headline
@@ -390,12 +391,12 @@ Class letters are the ones defined in
 
 ## Reproduction
 
-The packaged harness is [`harness/`](harness) (`run-evidence.sh` + `fixtures/` +
-its own [README](harness/README.md)). From a clean directory:
+The packaged harness is this directory: [`run-evidence.sh`](run-evidence.sh) +
+[`fixtures/`](fixtures) + its own [README](README.md). From a clean directory:
 
 ```bash
 mkdir survey && cd survey
-cp -r /path/to/harness/* .
+cp -r /path/to/scripts/tool_survey/insdc-191/{run-evidence.sh,fixtures} .
 ./run-evidence.sh              # TOOLDIR=/path/to/cache reuses downloads
 ```
 
