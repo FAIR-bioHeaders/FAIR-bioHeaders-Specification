@@ -811,6 +811,8 @@ def yaml_scalar(value):
         return "true" if value else "false"
     if isinstance(value, int):
         return str(value)
+    if "\n" in value:  # A double-quoted scalar, which is also a JSON string.
+        return json.dumps(value)
     if PLAIN_TEXT.fullmatch(value) and value.lower() not in YAML_WORDS \
             and not value.endswith((" ", ".")):
         return value
@@ -1004,6 +1006,17 @@ def build_fhp():
                                              "completeDuplicated": 0, "fragmented": 0,
                                              "missing": 1, "total": 2}),
                     "P1", f"A malformed dotted BUSCO dataset version: {defect}.")
+    # JSON Schema patterns are ECMA-262 regular expressions, where $ without the
+    # multiline flag matches only at the end of the string, so a value with a
+    # trailing line feed fails ^...$. Python's re (and so Python validators that
+    # use re.search) also lets $ match just before a final line feed.
+    fhp_invalid("fhp-fasta-pattern-trailing-newline",
+                fhp_record(completeness={"lineageDataset": "primates_odb10\n",
+                                         "completeSingle": 1, "completeDuplicated": 0,
+                                         "fragmented": 0, "missing": 1, "total": 2}),
+                "P1", "The BUSCO lineageDataset ends with a line feed, which its pattern "
+                "^...$ does not allow under ECMA-262 regular expressions; validators whose "
+                "$ also matches before a final line feed (Python re) wrongly accept it.")
     # P2: the schema URL selects the header type.
     fhp_invalid("fhp-fasta-cites-fhr-schema", fhp_record(schema=ITEM_TYPE),
                 "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
@@ -1617,6 +1630,11 @@ def build_microdata():
                   f"{GENOME}</span></div>"})), "M1",
         "genome appears only inside a nested item scope without itemprop, so the FHR "
         "item has no genome.")
+    md_invalid("microdata-itemref", md_page(
+        md_content(), root=f'itemscope itemref="fhr-extra" itemtype="{ITEM_TYPE}"',
+        after=f'<p id="fhr-extra" itemprop="reuseConditions" {s}>CC0-1.0</p>'), "M1",
+        "The FHR item has an itemref attribute, which FHR microdata does not support: a "
+        "reader that followed it would add reuseConditions from outside the scope.")
     md_invalid("microdata-itemtype-repeated-attribute", md_page(
         md_content(),
         root=f'itemscope itemtype="https://schema.org/Dataset" itemtype="{ITEM_TYPE}"'), "R9",
@@ -1978,6 +1996,11 @@ def build_jsonld_general(write, record):
                                           "@type": XSD_IRI + "dateTime"}]
     jsonld_invalid("jsonld-datetime-datecreated", jsonld_bytes(dated), "J5",
                    "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed.")
+    directed = copy.deepcopy(expanded)
+    directed[0][SDO_IRI + "name"] = [{"@value": record["genome"], "@direction": "ltr"}]
+    jsonld_invalid("jsonld-direction-value", jsonld_bytes(directed), "J5",
+                   "genome (schema.org name) has a base direction (@direction), which an FHR "
+                   "string cannot keep, like a language tag.")
     identified = copy.deepcopy(expanded)
     identified[0] = {"@id": EXPORT_CONTEXT["id"], **identified[0]}
     jsonld_invalid("jsonld-root-id", jsonld_bytes(identified), "J4",
