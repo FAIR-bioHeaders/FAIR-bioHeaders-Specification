@@ -764,7 +764,7 @@
           "title": "URL field schema",
           "description": "Accession URL.",
           "_ui": {
-            "inputType": "textfield"
+            "inputType": "link"
           },
           "_valueConstraints": {
             "requiredValue": false
@@ -787,11 +787,9 @@
                 }
               ]
             },
-            "@value": {
-              "type": [
-                "string",
-                "null"
-              ]
+            "@id": {
+              "type": "string",
+              "format": "uri"
             },
             "rdfs:label": {
               "type": [
@@ -800,9 +798,6 @@
               ]
             }
           },
-          "required": [
-            "@value"
-          ],
           "schema:name": "url",
           "schema:description": "Accession URL.",
           "pav:createdOn": null,
@@ -1547,7 +1542,7 @@
             "title": "URI field schema",
             "description": "URI of the software.",
             "_ui": {
-              "inputType": "textfield"
+              "inputType": "link"
             },
             "_valueConstraints": {
               "requiredValue": false
@@ -1570,11 +1565,9 @@
                   }
                 ]
               },
-              "@value": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+              "@id": {
+                "type": "string",
+                "format": "uri"
               },
               "rdfs:label": {
                 "type": [
@@ -1583,9 +1576,6 @@
                 ]
               }
             },
-            "required": [
-              "@value"
-            ],
             "schema:name": "uri",
             "schema:description": "URI of the software.",
             "pav:createdOn": null,
@@ -3154,7 +3144,7 @@
                 "title": "URL field schema",
                 "description": "Accession URL.",
                 "_ui": {
-                  "inputType": "textfield"
+                  "inputType": "link"
                 },
                 "_valueConstraints": {
                   "requiredValue": false
@@ -3177,11 +3167,9 @@
                       }
                     ]
                   },
-                  "@value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                  "@id": {
+                    "type": "string",
+                    "format": "uri"
                   },
                   "rdfs:label": {
                     "type": [
@@ -3190,9 +3178,6 @@
                     ]
                   }
                 },
-                "required": [
-                  "@value"
-                ],
                 "schema:name": "url",
                 "schema:description": "Accession URL.",
                 "pav:createdOn": null,
@@ -4609,7 +4594,7 @@
         "title": "Related Link field schema",
         "description": "Related source, project, sample, experiment or protocol URLs.",
         "_ui": {
-          "inputType": "textfield"
+          "inputType": "link"
         },
         "_valueConstraints": {
           "requiredValue": true
@@ -4632,11 +4617,9 @@
               }
             ]
           },
-          "@value": {
-            "type": [
-              "string",
-              "null"
-            ]
+          "@id": {
+            "type": "string",
+            "format": "uri"
           },
           "rdfs:label": {
             "type": [
@@ -4645,9 +4628,6 @@
             ]
           }
         },
-        "required": [
-          "@value"
-        ],
         "schema:name": "relatedLink",
         "schema:description": "Related source, project, sample, experiment or protocol URLs.",
         "pav:createdOn": null,

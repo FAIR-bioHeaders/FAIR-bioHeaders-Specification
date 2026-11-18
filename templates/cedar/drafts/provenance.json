@@ -42,7 +42,15 @@
       "size": 9564,
       "sha256": "bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f",
       "retrieved": "2026-11-14",
-      "crossCheck": "The six-line delta from the previous pin (8b0ca005, sha256 9114780bfcc8b575...) is description text recording the 2026-11-14 joint review dispositions (FHGM #8/#15); field names, requiredness and the title's 'draft contract v0.1' are unchanged. These bytes were introduced by merged commit ac3d37b and are byte-identical at main head 52b07b7, verified 2026-11-14 by fetching ac3d37b from raw.githubusercontent.com (http 200, 9564 bytes, sha256 bf1553cac04dc88d...) and comparing with git show of the main-head blob. Not terminal: the FHGM release (recommended vehicle v0.8.0, FAIR-bioHeaders-Specification#211 round 9) will move these bytes again and promote this snapshot out of the draft lane; refresh with promotion review at publication, per rule V7."
+      "crossCheck": "The six-line delta from the previous pin (8b0ca005, sha256 9114780bfcc8b575...) is description text recording the 2026-11-14 joint review dispositions (FHGM #8/#15); field names, requiredness and the title's 'draft contract v0.1' are unchanged. These bytes were introduced by merged commit ac3d37b and are byte-identical at main head 52b07b7, verified 2026-11-14 by fetching ac3d37b from raw.githubusercontent.com (http 200, 9564 bytes, sha256 bf1553cac04dc88d...) and comparing with git show of the main-head blob. Not terminal: the FHGM release (recommended vehicle v0.8.0, FAIR-bioHeaders-Specification#211 round 9) will move these bytes again and promote this snapshot out of the draft lane; refresh with promotion review at publication, per rule V7.",
+      "ownerChecker": {
+        "repository": "FAIR-bioHeaders/FHGM-Specification",
+        "commit": "f0b3aee06cc2eafd1bf417bfb1c12105c9b595b3",
+        "commitDate": "2026-11-16T12:38:58-05:00",
+        "commitSubject": "Propose independently earned FHGM layer verdicts and per-rule inputs (#23)",
+        "path": "development/model",
+        "note": "The owning repository's model checker (validate_fhgm.py with base-schemas.json) that tests/test_cedar_toolkit.py runs through CEDAR_FHGM_ROOT. The conformance job in .github/workflows/validate-specification.yml checks out exactly this commit; this is the only place it is recorded. It is a later commit than the snapshot pin above because base-schemas.json landed after it (FHGM-Specification PR #17); development/model/fhgm-model.schema.json at this commit is byte-identical to the snapshot (sha256 bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f, verified 2026-11-18 and asserted by the test). Move it only together with a reviewed snapshot re-pin or a reviewed checker update."
+      }
     }
   }
 }
