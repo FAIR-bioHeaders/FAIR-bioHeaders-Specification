@@ -615,7 +615,9 @@ def missing_warnings(rules, stderr):
     A vector's ``warnings`` lists the rules (R14) under which a validator should
     warn. Any line containing "warning" is not enough: an unrelated warning, such
     as one about the schema version, would satisfy it. Each listed rule needs its
-    own line that contains "warning" and names the rule as a whole word.
+    own line that contains "warning" and names the rule as a complete token: no
+    letter, digit or underscore may touch it on either side, so R140, R14A and
+    XR14 do not count as R14.
     """
     lines = [line for line in stderr.splitlines() if "warning" in line.lower()]
     return [rule for rule in rules

@@ -13,7 +13,8 @@
   final line feed; schema tightening proposed in #264). `check_conformance.py --schema` applies ECMA-262 `$`; `--known-gaps` reads
   the pinned toolkit's known gaps from `conformance/toolkit-pin.json` (the three new vectors
   for fair-bioheaders 0.12.0); and, as in FHR-Specification #22, each expected warning must
-  be on a warning line that names its rule.
+  be on a warning line that names its rule as a complete token (R140, R14A and
+  XR14 do not name R14).
 
 - CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
   form, as `schema` already was, so all five templates pass CEDAR's template
