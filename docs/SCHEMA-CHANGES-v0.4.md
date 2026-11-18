@@ -75,15 +75,22 @@ match before one trailing newline, so under Python a value such as
 `"soft-masked\n"` still passes the anchored patterns. The checksum and SeqCol
 fields close this gap with exact lengths.
 
-*Historical note — this describes the v0.4 contracts, not current policy:* the
-v0.4 hand-authored contracts avoided lookahead workarounds for that gap because
-RE2-based validators do not support them. That described how those contracts
-were written in v0.4; it is not a compatibility requirement today. ECMA-262 is
-the only normative floor for `pattern`, RE2-cleanliness is a non-normative
-compatibility observation, and a contract pattern may use lookaround. The policy
-and the engine-difference inventory are in [REGEX-DIALECT.md](REGEX-DIALECT.md);
-the `$`-vs-trailing-newline outcome difference is resolved in implementations,
-where the toolkit reads `$` as ECMA-262 does (FAIR-bioHeaders-Tools#189).
+> Lookahead workarounds are not used because RE2-based validators do not support them.
+
+*Status (2026-11-18): the quoted sentence above is retained verbatim, as a record of
+the v0.4 decision. (In the original file it was wrapped after "used"; the wrap is
+the only thing changed here, so the whole sentence fits one line and can be
+checked byte-for-byte with `grep -F`.) It describes the hand-authored v0.4
+contracts and is **not current policy**. Current policy is in
+[REGEX-DIALECT.md](REGEX-DIALECT.md): ECMA-262 is the only normative floor for
+`pattern`, and released-contract RE2-cleanliness is a non-normative compatibility
+observation, so a contract pattern may use lookaround and the drafts'
+`(?![\s\S])` end anchors are correct and publishable. The difference between the
+two readings of `$` before a trailing newline is resolved in implementations, not
+in the contracts:
+the toolkit reads `$` as ECMA-262 does (`bioheaders/schema_validator.py`,
+FAIR-bioHeaders-Tools#189, merged to toolkit `main`; that is a source-state
+observation, not a package-release claim).*
 
 ## Implementation and checks
 

@@ -14,7 +14,7 @@
   that lands; the four `(?![\s\S])` end anchors in the FHT and FHGM draft
   contracts are correct under this floor. The v0.4 line "Lookahead workarounds
   are not used because RE2-based validators do not support them" in
-  `docs/SCHEMA-CHANGES-v0.4.md` is kept and marked historical. `docs/FORMAT.md`
+  `docs/SCHEMA-CHANGES-v0.4.md` is quoted verbatim and marked historical. `docs/FORMAT.md`
   now says what a draft-2020-12 declaration does and does not establish, and
   `docs/MAPPINGS.md` cites the shared core by full URL. No `schemaVersion`,
   registry row, release or support claim; FHT and FHGM remain drafts under rule
