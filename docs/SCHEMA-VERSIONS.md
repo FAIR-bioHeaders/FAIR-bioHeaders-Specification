@@ -44,6 +44,30 @@ but a dotted BUSCO dataset version (#170), added in 1.2, is invalid in a record 
 `'1.0'` or `'1.1'`. A record that uses a feature states the minor that added it, or a later
 one.
 
+### Format and reading rules
+
+`schemaVersion` versions the JSON Schema contract only. The rules for reading and writing
+headers and other forms ([FORMAT.md](FORMAT.md) R1 to R16 and the container rule,
+[MICRODATA.md](MICRODATA.md) M1 to M5, [JSONLD.md](JSONLD.md) J1 to J9,
+[FHP.md](FHP.md) P1 and P2, [FHGFF3.md](FHGFF3.md) G1 to G3, and V1 to V7 below) are versioned
+by the release that publishes them, and a change to them never changes a `schemaVersion`.
+Releases so far have classified such changes like this:
+
+- **Patch release** (`v0.4.0` → `v0.4.1`): the schemas are byte-for-byte unchanged, and the rules
+  are made exact, or are closed where a reading was ambiguous or unsafe, even when that makes a
+  file invalid that some reader accepted. The precedents are v0.4.1, which defined the checksum
+  line exactly (R4, R5), added R12 and stated the container rule, and v0.4.2, which limited JSON-LD
+  to the FHR context (J3), so that a document compacted with a schema.org `@vocab` that its
+  vectors had treated as valid became invalid. Such a release names every file that changes
+  outcome, and its conformance vectors retire the affected ids rather than reuse them
+  ([conformance/README.md](../conformance/README.md)).
+- **Clarification**: text that states what the rules already require, or settles a case the text
+  left open in the direction the rest of the rules imply, for example that `@direction` is
+  invalid like `@language` (J5) or that microdata `itemref` is not followed (M1). It changes no
+  outcome the rules defined, ships in the next release of either kind, and comes with vectors.
+- **Minor or major release**: a rule change that comes with a schema change follows the schema
+  change's class above.
+
 In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0` is the number
 2.0 and fails. The toolkit quotes it when it writes YAML.
 
@@ -285,6 +309,18 @@ extension fields ([FORMAT.md](FORMAT.md) R15), so the file is routed by its own 
 under V1 to V3 and the lane selects only the contract and the validator that a tool applies to the
 records. For a type whose records name no schema, V7 chooses what validates them; it never chooses
 what they are.
+
+So a tool cannot opt FHGM records in by matching a cited URL, as V7's first sentence describes for
+a draft with its own `schema` value. The opt-in is the user's explicit choice to check the
+`x-fhgm-models` value of an FHGFF3 header against the FHGM draft, for example a command-line
+option or setting of a tool that ships the pinned FHGM draft. Without that choice, `x-fhgm-models`
+is an ordinary extension field: the FHGFF3 header is validated against the FHGFF3 schema its
+`schema` selects, extension values pass under R15, and the records are neither checked nor
+reported as FHGM. With it, the header must first pass its own FHGFF3 schema (FHGFF3 1.1 or 1.2,
+the bases the FHGM draft accepts); the tool then validates each item of `x-fhgm-models` against
+the pinned FHGM draft and warns as V7 requires, naming the draft, its commit and digest. A failing
+FHGM record is reported as an FHGM draft result: it does not make the FHGFF3 file invalid under
+the released rules.
 
 ## Writing files
 

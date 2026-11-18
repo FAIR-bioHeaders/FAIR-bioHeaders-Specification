@@ -301,9 +301,48 @@ def check_released_ids(manifest, released=None):
     return problems
 
 
+def ecma_pattern(pattern):
+    """A Python regular expression for an ECMA-262 ``pattern`` (JSON Schema).
+
+    In ECMA-262 without the multiline flag, ``$`` matches only at the end of the
+    string; Python's ``$`` also matches just before a final line feed. Every
+    ``$`` outside a character class becomes ``\\Z``. The other constructs the
+    published schemas use mean the same in both."""
+    out, escaped, in_class = [], False, False
+    for char in pattern:
+        if escaped:
+            out.append(char)
+            escaped = False
+        elif char == "\\":
+            out.append(char)
+            escaped = True
+        elif in_class:
+            out.append(char)
+            in_class = char != "]"
+        elif char == "[":
+            out.append(char)
+            in_class = True
+        elif char == "$":
+            out.append("\\Z")
+        else:
+            out.append(char)
+    return "".join(out)
+
+
+def schema_validator(schema):
+    """A Draft 2020-12 validator with format assertion and ECMA-262 patterns."""
+    from jsonschema import Draft202012Validator, FormatChecker, ValidationError, validators
+
+    def pattern(validator, value, instance, _schema):
+        if validator.is_type(instance, "string") and not re.search(ecma_pattern(value), instance):
+            yield ValidationError(f"{instance!r} does not match {value!r}")
+
+    checker = validators.extend(Draft202012Validator, {"pattern": pattern})
+    return checker(schema, format_checker=FormatChecker())
+
+
 def check_schema(conformance, manifest):
     """Validate the metadata of valid vectors against their type's schema."""
-    from jsonschema import Draft202012Validator, FormatChecker
     import yaml
 
     class Loader(yaml.SafeLoader):
@@ -319,8 +358,7 @@ def check_schema(conformance, manifest):
         return yaml.load(text, Loader=Loader)
 
     validators = {
-        name: Draft202012Validator(json.loads((ROOT / name).read_text()),
-                                   format_checker=FormatChecker())
+        name: schema_validator(json.loads((ROOT / name).read_text()))
         for name in {"fhr.json", *SCHEMAS.values()}
     }
     selected = {}
@@ -331,8 +369,7 @@ def check_schema(conformance, manifest):
         if release is None:
             return None
         if (release, name) not in selected:
-            selected[release, name] = Draft202012Validator(load_schema(release, name),
-                                                           format_checker=FormatChecker())
+            selected[release, name] = schema_validator(load_schema(release, name))
         return selected[release, name]
 
     def header_metadata(vector):
@@ -483,15 +520,23 @@ def same_json(left, right):
 UNSUPPORTED = "Unsupported file extension"
 
 
-def check_converter(conformance, manifest, location, skip=(), require=(), unsupported=None):
+def check_converter(conformance, manifest, location, skip=(), require=(), unsupported=None,
+                    known_gaps=None):
     """Run the converter on every vector and return the disagreements.
+
+    ``known_gaps`` maps vector ids the converter is known to get wrong to the
+    reason: for those the wrong accept/reject outcome is expected instead, and
+    the right one is a problem, so a fixed gap must be removed from the list.
 
     A converter that rejects every vector of a format with "Unsupported file
     extension" predates that format: its vectors are left out and the format is
     added to ``unsupported``, unless the format is in ``require``.
     """
     command = converter_commands(location)
-    problems = []
+    known_gaps = known_gaps or {}
+    ids = {vector["id"] for vector in manifest["vectors"]}
+    problems = [f"{gap}: listed as a known gap but is not a vector" for gap in known_gaps
+                if gap not in ids]
     by_format = {}
     for vector in manifest["vectors"]:
         if vector["format"] in skip:
@@ -531,15 +576,20 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             detail = (result.stderr or result.stdout).strip().splitlines()
             problems.append(f"{vector['id']}: converter rejected it without an unsupported "
                             f"schema version message ({detail[-1] if detail else 'no output'})")
+        if vector["id"] in known_gaps:
+            if accepted == (vector["expected"] == "valid"):
+                problems.append(f"{vector['id']}: converter now gets this known gap right; "
+                                "remove it from the known gaps")
+            continue
         if accepted != (vector["expected"] == "valid"):
             detail = (result.stderr or result.stdout).strip().splitlines()
             detail = detail[-1] if detail else f"exit {result.returncode}"
             outcome = "accepted" if accepted else f"rejected ({detail})"
             expected = vector["expected"] + (f", {vector['rule']}" if "rule" in vector else "")
             problems.append(f"{vector['id']}: converter {outcome}; expected {expected}")
-        elif accepted and vector.get("warnings") and "warning" not in result.stderr.lower():
+        elif accepted and missing_warnings(vector.get("warnings", []), result.stderr):
             problems.append(f"{vector['id']}: converter printed no warning; expected one "
-                            f"under {', '.join(vector['warnings'])}")
+                            f"under {', '.join(missing_warnings(vector['warnings'], result.stderr))}")
         elif extracted is not None and not same_json(extracted, vector["metadata"]):
             differences = sorted(
                 key for key in extracted.keys() | vector["metadata"].keys()
@@ -559,6 +609,22 @@ def check_converter(conformance, manifest, location, skip=(), require=(), unsupp
             if not (isinstance(problem, tuple) and problem[0] in skipped)]
 
 
+def missing_warnings(rules, stderr):
+    """The rules in ``rules`` that no warning line on ``stderr`` names.
+
+    A vector's ``warnings`` lists the rules (R14) under which a validator should
+    warn. Any line containing "warning" is not enough: an unrelated warning, such
+    as one about the schema version, would satisfy it. Each listed rule needs its
+    own line that contains "warning" and names the rule as a complete token: no
+    letter, digit or underscore may touch it on either side, so R140, R14A and
+    XR14 do not count as R14.
+    """
+    lines = [line for line in stderr.splitlines() if "warning" in line.lower()]
+    return [rule for rule in rules
+            if not any(re.search(rf"(?<![A-Za-z0-9_]){re.escape(rule)}(?![A-Za-z0-9_])", line)
+                       for line in lines)]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--conformance", type=Path, default=ROOT / "conformance",
@@ -570,6 +636,10 @@ def main():
                              "or bin directory, or PATH (the default when no value is given)")
     parser.add_argument("--skip-regeneration", action="store_true",
                         help="do not compare the vectors with freshly generated ones")
+    parser.add_argument("--known-gaps", type=Path, metavar="FILE",
+                        help="with --converter, a JSON file whose knownGaps object maps vector "
+                             "ids to the reason the converter gets them wrong (for example "
+                             "conformance/toolkit-pin.json); those vectors must still be wrong")
     parser.add_argument("--skip-format", action="append", default=[], metavar="FORMAT",
                         choices=sorted(COMMANDS),
                         help="with --converter, leave out the vectors of FORMAT (repeatable), "
@@ -594,11 +664,14 @@ def main():
     steps.append(("checksums recomputed independently", lambda: check_checksums(conformance, manifest)))
     if args.schema:
         steps.append(("valid metadata matches fhr.json (fhp.json for FHP)", lambda: check_schema(conformance, manifest)))
+    known_gaps = {}
+    if args.known_gaps:
+        known_gaps = json.loads(args.known_gaps.read_text(encoding="utf-8")).get("knownGaps", {})
     if args.converter:
         steps.append((f"converter ({args.converter}) agrees with the manifest",
                       lambda: check_converter(conformance, manifest, args.converter,
                                               args.skip_format, args.require_format,
-                                              unsupported)))
+                                              unsupported, known_gaps)))
 
     failed = False
     for label, step in steps:
@@ -618,6 +691,9 @@ def main():
         reasons = [f"{fmt} not supported by this converter" for fmt in sorted(unsupported)]
         reasons += [f"{fmt} skipped" for fmt in sorted(set(args.skip_format) - unsupported)]
         note = f" ({skipped} vectors left out: {'; '.join(reasons)})"
+    if args.converter and known_gaps:
+        note += (f" ({len(known_gaps)} known converter gaps: "
+                 f"{', '.join(sorted(known_gaps))})")
     print(f"{count} vectors {'failed' if failed else 'passed'}{note}")
     return int(failed)
 
