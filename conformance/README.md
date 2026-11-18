@@ -97,8 +97,9 @@ its own schema with a matching checksum, so only the container rule fails. The v
 citing R17 are the plain FHR, FHP and FHGFF3 files. `fasta-checksum-in-double-quoted-scalar`,
 `fasta-checksum-in-single-quoted-scalar` and `fasta-checksum-in-flow-mapping` (R2) hide a line
 shaped like `;~checksum:` inside an `x-note` value, with the value a line scanner would compute
-without that line, while the root `checksum` key is quoted: the file has no checksum line. Their
-column-0 continuation lines are also under-indented for YAML 1.2, which strict parsers report.
+without that line, while the root `checksum` key is quoted: the file has no checksum line. The
+hidden and closing lines are indented one space, as YAML 1.2 requires for a continuation line, so
+apart from the quoted root key each header is strict YAML 1.2 and only R2 fails.
 `fasta-extension-flow-mapping` (a flow mapping with plain keys in an `x-` value),
 `fasta-wrapped-single-quoted-value` and `fasta-wrapped-double-quoted-value` (a long quoted value
 wrapped over three lines, as the toolkit's YAML writer wraps it) and

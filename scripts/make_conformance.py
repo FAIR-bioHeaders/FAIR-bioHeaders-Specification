@@ -2255,21 +2255,24 @@ def build_cross_library():
     # R2: text shaped like a checksum line inside a multi-line quoted scalar or a
     # flow collection is not the checksum line. The root checksum key is quoted, so
     # the file has no checksum line; the hidden line's value is what a line scanner
-    # would compute without that line. Its column-0 continuation is also
-    # under-indented for YAML 1.2, which strict parsers report.
+    # would compute without that line. YAML 1.2 requires the continuation lines of
+    # a root value to be indented past the root keys, so the hidden line and the
+    # closing line are indented by one space: apart from the quoted root key the
+    # header is strict YAML 1.2, and the file breaks R2 alone.
     for name, opening, closing, what in (
-            ("fasta-checksum-in-double-quoted-scalar", 'x-note: "start', 'end"',
+            ("fasta-checksum-in-double-quoted-scalar", 'x-note: "start', ' end"',
              "a double-quoted scalar"),
-            ("fasta-checksum-in-single-quoted-scalar", "x-note: 'start", "end'",
+            ("fasta-checksum-in-single-quoted-scalar", "x-note: 'start", " end'",
              "a single-quoted scalar"),
-            ("fasta-checksum-in-flow-mapping", "x-note: {a: 1,", "}", "a flow mapping")):
+            ("fasta-checksum-in-flow-mapping", "x-note: {a: 1,", " }", "a flow mapping")):
         metadata = extension_metadata(first=False)[:-1]
         metadata += [opening, None, closing, '"checksum": ' + "A" * 43 + "="]
-        data, _ = assemble(header("fasta", metadata) + body("fasta"))
+        data, _ = assemble(header("fasta", metadata, key=" checksum: ") + body("fasta"))
         invalid(name, "fasta", data, "R2",
-                f"The only line shaped like ;~checksum: is inside {what} (x-note), and its "
-                "value matches the file without that line; the root checksum key is quoted, "
-                "so the file has no checksum line.")
+                f"The only line shaped like ;~checksum: (indented one space, as YAML requires "
+                f"for a continuation line) is inside {what} (x-note), and its value matches "
+                "the file without that line; the root checksum key is quoted, so the file has "
+                "no checksum line. Apart from that, the header is strict YAML 1.2.")
 
     # Valid YAML forms that toolkit writers and real headers produce.
     flow = extension_metadata(["x-proj-info: {tool: hifiasm, version: \"0.19\"}"],

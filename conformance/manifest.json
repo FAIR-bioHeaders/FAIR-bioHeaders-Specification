@@ -5978,7 +5978,7 @@
       "compressed": false,
       "expected": "invalid",
       "rule": "R2",
-      "reason": "The only line shaped like ;~checksum: is inside a double-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line."
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a double-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
     },
     {
       "id": "fasta-checksum-in-single-quoted-scalar",
@@ -5987,7 +5987,7 @@
       "compressed": false,
       "expected": "invalid",
       "rule": "R2",
-      "reason": "The only line shaped like ;~checksum: is inside a single-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line."
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a single-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
     },
     {
       "id": "fasta-checksum-in-flow-mapping",
@@ -5996,7 +5996,7 @@
       "compressed": false,
       "expected": "invalid",
       "rule": "R2",
-      "reason": "The only line shaped like ;~checksum: is inside a flow mapping (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line."
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a flow mapping (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
     },
     {
       "id": "fasta-schema-raw-refs-heads-main",

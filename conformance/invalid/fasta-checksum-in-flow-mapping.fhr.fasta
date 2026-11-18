@@ -13,8 +13,8 @@
 ;~masking: not-masked
 ;~documentation: Synthetic FHR conformance vector; not a real assembly.
 ;~x-note: {a: 1,
-;~checksum: L49GMKM+NYcBpjhEQn1KNeAeZU7BebscXNRJpLljydE=
-;~}
+;~ checksum: 5EmyhRpMX/U0LxGeLtMvrIPnln6ZvgCMPnvA36m3OXM=
+;~ }
 ;~"checksum": AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 >Contig1 synthetic sequence
 ACGTACGTAC
