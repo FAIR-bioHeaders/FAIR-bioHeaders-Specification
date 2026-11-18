@@ -2,6 +2,41 @@
 
 ## Unreleased
 
+- Pattern-dialect enforcement point (#270; tooling and CI only — no schema
+  change, no `schemaVersion`, no registry row, no release claim).
+  `scripts/check_pattern_census.py` enumerates every JSON Schema `pattern` in the
+  released surface (`fhr.json`, `fhp.json`, `fhgff3.json`, their three LinkML
+  models, `schemas/core.yaml`, `schemas/shared.yaml`, `schemas/versions.json`:
+  **72 patterns**) and in the draft and proposal scope (the byte-pinned FHT and
+  FHGM **DRAFT** contract snapshots under `templates/cedar/drafts/`, the draft
+  profiles, the mapping proposal, `assessment/manifest.schema.json` and the
+  spec-suite contracts: **80 patterns**), recording per pattern whether it carries
+  a `$` anchor (62 released, 59 draft), a lookaround, a `(?:` non-capturing group,
+  an inline flag, or an ECMA empty-class idiom (`[]` / `[^]`).
+  **ECMA-262 is the floor for `pattern`**: the sentence in
+  `docs/SCHEMA-CHANGES-v0.4.md` about lookahead workarounds is historical, not
+  current policy, so the census counts and reports lookarounds and never rejects
+  them. What it does gate is the released inventory:
+  `.github/pattern-baseline.json` records the 72-pattern digest and the check
+  fails if a released pattern is added, removed or edited, because any such edit
+  changes the value set a published contract accepts — #270 names #264's
+  `$(?!\n)` as the example that is *not* a no-op, since it newly rejects values
+  ending in a line feed. `--update-baseline` refreshes that file and refuses to run
+  when a CI environment is detected, so only a human outside CI can move the
+  released baseline, and the refresh is committed with the contract change.
+  Re-measured at this base, the released FHR/FHP/FHGFF3 contracts, both shared
+  models and both in-repo draft snapshots contain **no** lookaround; the one
+  lookaround already committed in this repository is in the draft `insdc-fhr`
+  profile (`/classes/INSDCTaxon/slot_usage/uri/pattern`, present since the v0.6.0
+  tag) — a site #270's table did not list. The owning repositories' live `main` is
+  probed only through a local sibling checkout, otherwise printed as UNVERIFIED:
+  the script performs no network access. A pattern-bearing document appearing at
+  the repository root or in `schemas/` without being added to the gated scope also
+  fails, so a future contract cannot escape the check by omission. Wired in as one
+  step of the existing `Validate specification` job (no new required check name);
+  `tests/test_pattern_census.py` (51 tests) runs inside the existing
+  `python -m unittest discover -s tests` step.
+
 - Draft `insdc-fhr` profile (#190; profile change, no released schema or
   `schemaVersion` change): BioSample links may also use
   `https://identifiers.org/biosample:<sample>` and

@@ -39,6 +39,11 @@ jobs:
 
       - name: Check LinkML validation equivalence
         run: python scripts/check_linkml.py
+      - name: Census schema patterns and gate the released contract inventory
+        # FAIR-bioHeaders-Specification#270. ECMA-262 is the floor for `pattern`, so
+        # this reports draft lookarounds informationally and fails only when a
+        # released pattern is added, removed or edited against .github/pattern-baseline.json.
+        run: python scripts/check_pattern_census.py
       - name: Check the generated JSON-LD context and vocabulary
         run: python scripts/make_jsonld.py --check
       - name: Check the generated CEDAR authoring templates
