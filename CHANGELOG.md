@@ -29,7 +29,6 @@
   be on a warning line that names its rule as a complete token (R140, R14A and
   XR14 do not name R14).
 
-
 - CEDAR templates (#162): `make_cedar.py --check` also fails on a top-level
   `templates/cedar/*.json` the generator does not produce. URI fields constrained
   only by `format: uri` become CEDAR link fields (value in `@id`); patterned URI
