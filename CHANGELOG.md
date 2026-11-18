@@ -33,7 +33,7 @@
   probed only through a local sibling checkout, otherwise printed as UNVERIFIED:
   the script performs no network access. A pattern-bearing document appearing at
   the repository root or in `schemas/` without being added to the gated scope also
-  fails, so a future contract cannot escape the check by omission. Wired in as one
+  fails; documents without a `pattern` keyword are outside this guard. Wired in as one
   step of the existing `Validate specification` job (no new required check name);
   `tests/test_pattern_census.py` (focused tests) runs inside the existing
   `python -m unittest discover -s tests` step.

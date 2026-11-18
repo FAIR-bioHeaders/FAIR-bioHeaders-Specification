@@ -313,6 +313,11 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
         self.assertIn("not in the gated scope", result.stderr)
         self.assertIn("fhx.json", result.stderr)
 
+    def test_unscoped_contract_without_patterns_is_outside_keyword_census(self):
+        (self.root / "fhx.json").write_text('{"type":"string"}')
+        result = self.run_census()
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_annotation_only_change_stays_green(self):
         self.patch_pattern(lambda document: document["properties"]["seqcol_id"].__setitem__(
             "description", "reworded by a documentation-only PR"))

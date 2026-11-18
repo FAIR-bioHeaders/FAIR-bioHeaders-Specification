@@ -55,8 +55,9 @@ Usage:
     python scripts/check_pattern_census.py --update-baseline
         Refresh .github/pattern-baseline.json after a reviewed, joint-maintainer
         contract change. Refuses to run when a CI environment is detected: only a
-        human outside CI may move the released baseline, and the refresh must be
-        committed alongside the contract change and explained in the PR.
+        authorized actor outside CI may refresh it after review. Environment
+        markers do not authenticate the actor or prove approval; the refresh must
+        be committed alongside the contract change and explained in the PR.
 """
 
 import argparse
@@ -445,12 +446,12 @@ def compare(baseline_files, current_files):
         for pointer in sorted(set(after) - set(before)):
             problems.append(
                 f"{relative}: {pointer}: released pattern set gained "
-                f"{after[pointer]!r} (a new constraint on a published contract)"
+                f"{after[pointer]!r} (a new written constraint requiring review)"
             )
         for pointer in sorted(set(before) - set(after)):
             problems.append(
                 f"{relative}: {pointer}: released pattern removed {before[pointer]!r} "
-                "(removing a constraint widens the accepted value set)"
+                "(removing a constraint can widen the accepted value set)"
             )
         for pointer in sorted(set(before) & set(after)):
             if before[pointer] != after[pointer]:
@@ -465,8 +466,8 @@ def compare(baseline_files, current_files):
 def on_released_surface(relative):
     """True for paths where a *released* contract lives: the repository root and
     ``schemas/``. A pattern-bearing document there that no scope table lists must
-    not be skipped quietly: that is how a newly published contract would escape
-    the gate."""
+    not be skipped quietly. Documents without a pattern keyword are outside
+    this inventory guard; this is not a complete contract-file inventory."""
     path = PurePosixPath(relative)
     return (path.parent == PurePosixPath(".") and path.suffix in {".json", ".yaml", ".yml"}
             or path.parent == PurePosixPath("schemas"))
@@ -478,7 +479,8 @@ def unscoped(root, found):
     Returns (on the released surface, elsewhere, unreadable on the released
     surface). The first and third gate the build: they are how a newly published
     contract at the repository root or under ``schemas/`` could otherwise slip
-    past the drift check unnoticed.
+    past this pattern-keyword drift check unnoticed. Documents without pattern
+    keywords are outside this guard.
     """
     listed, elsewhere, unreadable = [], [], []
     for path in sorted(root.rglob("*")):
@@ -585,7 +587,7 @@ def main():
         for text in listed + unreadable:
             print(f"  {text}", file=sys.stderr)
         print("Add it to RELEASED_SCOPE in scripts/check_pattern_census.py so a published "
-              "contract cannot escape the drift gate (or move it off the released surface), "
+              "pattern-bearing contract cannot escape this drift gate (or move it off the released surface), "
               "then refresh the baseline outside CI.", file=sys.stderr)
         return 1
 
@@ -610,7 +612,7 @@ def main():
         if blocked:
             print(
                 "refusing to refresh the released-pattern baseline inside CI "
-                f"(detected {', '.join(blocked)}): {REFRESH_COMMAND} is a human action "
+                f"(detected {', '.join(blocked)}): {REFRESH_COMMAND} is an authorized action "
                 "taken outside CI after a reviewed contract change, and the refreshed "
                 "baseline must be committed with that change.",
                 file=sys.stderr,
@@ -724,7 +726,7 @@ def main():
             print(f"  {problem}", file=sys.stderr)
         print("No released contract may be widened or narrowed by a pattern edit; that is a "
               "contract change with its own versioning and release cycle. If the change really "
-              f"is reviewed and approved, refresh the baseline as a human outside CI with "
+              f"is reviewed and approved, refresh the baseline outside CI with "
               f"`{REFRESH_COMMAND}` and commit both files together.", file=sys.stderr)
         return 1
     print(f"\nReleased gate: {released_count} patterns across {len(current)} files match the "
