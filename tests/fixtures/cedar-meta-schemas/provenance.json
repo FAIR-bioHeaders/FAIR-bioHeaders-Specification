@@ -1,0 +1,38 @@
+{
+  "note": "Byte-exact copies of the merged CEDAR artifact meta-schemas (JSON Schema Draft-04) and the licence notice of metadatacenter/cedar-model-validation-library, used offline by tests/test_cedar_meta_schema.py. Redistributed under that licence (license.txt, BSD-style, The Board of Trustees of Leland Stanford Junior University); the FAIR-bioHeaders MPL-2.0 licence does not apply to these files. Do not edit them; to refresh, copy the same paths from a newer upstream commit and update this record.",
+  "repository": "https://github.com/metadatacenter/cedar-model-validation-library",
+  "commit": "34e65d2571a37966e59d158695b6062d3ec47a55",
+  "commitDate": "2026-11-14T03:25:49+01:00",
+  "commitSubject": "Release CEDAR 2.9.36 from train 2.9.36-dev.20261113.2327",
+  "retrieved": "2026-11-18",
+  "files": {
+    "element-meta-schema.json": {
+      "source": "src/main/resources/element-meta-schema.json",
+      "sha256": "d9fde03926c0af55ad2af4308fdb7cb1cda68c8d9813868b2534c7507ef6c172"
+    },
+    "iri-field-meta-schema.json": {
+      "source": "src/main/resources/iri-field-meta-schema.json",
+      "sha256": "ad02a5ffedd42449d7807fc7c00f923979f55044c716ecbe0cc4dcc042d28b92"
+    },
+    "literal-field-meta-schema.json": {
+      "source": "src/main/resources/literal-field-meta-schema.json",
+      "sha256": "89c6e773273dd29f82458c508132346aac076034cdc2b0342b841291b36dbeec"
+    },
+    "multi-instance-field-meta-schema.json": {
+      "source": "src/main/resources/multi-instance-field-meta-schema.json",
+      "sha256": "4d71c428f157ee35fdf3795d58a396375ee5236aaf2b62daa65ded5f45456441"
+    },
+    "static-field-meta-schema.json": {
+      "source": "src/main/resources/static-field-meta-schema.json",
+      "sha256": "35062f4426cec50117a126b57e599b312ed9af9326f7b3814c4bfc8a7d5fb389"
+    },
+    "template-meta-schema.json": {
+      "source": "src/main/resources/template-meta-schema.json",
+      "sha256": "ebc1bcdadd1d5c229911681f1bcabb516c6a72448b0565bbd16d0a24db6e938d"
+    },
+    "license.txt": {
+      "source": "license.txt",
+      "sha256": "3c80e54ae1cc36c110750cbc0832d91f59c9355f8b7efbfb4e4e308807c05a3b"
+    }
+  }
+}

@@ -8,3 +8,5 @@ examples/fhgff3/** -text
 # Assessment fixtures are byte-exact too (specs/010-fair-header-assessment).
 assessment/** -text
 assessment/**/*.gz binary
+# Vendored CEDAR meta-schemas are byte-exact upstream copies checked by digest.
+tests/fixtures/cedar-meta-schemas/** -text

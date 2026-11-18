@@ -1,0 +1,6 @@
+{
+  "note": "The released fair-bioheaders toolkit the conformance and CEDAR toolkit CI jobs install (.github/workflows/validate-specification.yml reads version from here), and the SHA-256 of the FHT draft schema that release bundles (bioheaders/schemas/fht-draft.json), which tests/test_cedar_toolkit.py checks against the installed artifact. Change both together when moving the pin.",
+  "package": "fair-bioheaders",
+  "version": "0.12.0",
+  "fhtDraftSha256": "59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e"
+}

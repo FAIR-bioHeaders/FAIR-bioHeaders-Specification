@@ -12,8 +12,8 @@ or publish FHT/FHGM contracts. All five templates already existed.
 | FHR / FHP / FHGFF3 | Root released contracts, registry v0.6.0; versions 2.1 / 1.2 / 1.2 | Published contracts, unchanged |
 | FHT form | `drafts/fht.schema.json`, owner commit `226f923c28b680edb3c546e99a751482d06aef1a`, SHA-256 `59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e` | Existing pinned draft, unchanged |
 | FHGM form | `drafts/fhgm-model.schema.json`, owner commit `ac3d37b3033312844fc3151217731928ae33aa54`, SHA-256 `bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f` | Existing pinned model draft, unchanged |
-| Writer | Fresh PyPI `fair-bioheaders==0.11.0`, Python 3.13 | Installed noneditable artifact, invoked outside checkout |
-| Writer's FHT contract | Bundled owner revision `b9ad19a62772092e08935cff44ee77a50981bbaf`, SHA-256 `11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8` | Older draft than the form; not silently substituted |
+| Writer | Fresh PyPI `fair-bioheaders` at the release pinned in [`conformance/toolkit-pin.json`](../../conformance/toolkit-pin.json) (0.12.0 since 2026-11-18; first recorded with 0.11.0), Python 3.13 | Installed noneditable artifact, invoked outside checkout |
+| Writer's FHT contract | 0.12.0 bundles owner revision `226f923c28b680edb3c546e99a751482d06aef1a`, SHA-256 `59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e`, byte-identical to the form's snapshot. 0.11.0 bundled revision `b9ad19a62772092e08935cff44ee77a50981bbaf` (bytes unchanged since `2d582f1`), SHA-256 `11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8` | Pinned digest checked against the installed artifact; never silently substituted |
 | FHGM checker | [Owning revision f0b3aee06cc2eafd1bf417bfb1c12105c9b595b3](https://github.com/FAIR-bioHeaders/FHGM-Specification/tree/f0b3aee06cc2eafd1bf417bfb1c12105c9b595b3/development/model) | Existing checker behavior; merged layer proposal is not newly adopted semantics |
 | FHGM base candidates | Its existing `base-schemas.json`: v0.5.0 FHGFF3 1.1 SHA-256 `20ce320f5d706f11ed21cdece4dfb56e3568b50be126e25b4016f46f2e8e416c`; v0.6.0 FHGFF3 1.2 SHA-256 `1942be4cefc8b3a2537942c2252b45fbcef87a5532486e4fd0f5d4c540e0fbf9` | Root release bytes checked by digest; declared carrier selects base |
 
@@ -28,10 +28,12 @@ edited to force that match.
 | --- | --- |
 | Generate all five templates twice | Existing `test_cedar.py` byte-stability, field coverage, requiredness, identity, digest and draft-marking tests |
 | Flatten filled exports for all five types | Complete supplied values survive; optional blanks/root checksum are omitted deliberately; nested parent checksums survive |
+| Flatten exports with blank elements and lists | Every optional element or multiple-value field left blank, at any depth, is omitted (`CedarBlankExportTests`); required ones stay for the validator |
+| CEDAR meta-schemas | All five templates pass the template, element and field meta-schemas vendored from cedar-model-validation-library `34e65d2` (`tests/test_cedar_meta_schema.py`) |
 | Installed released FHR/FHP/FHGFF3 path | Export → flatten → combine → validate → verify → JSON readback → strip; recursively equal scalar types/values and list order; exact original sequence/feature payload; repeated bound bytes |
 | Installed FHT default-off control | Same valid draft input refused without opt-in; no bound output created |
 | Installed FHT V7 path | Common `diptera_odb10` fixture binds/validates/verifies with `BIOHEADERS_EXPERIMENTAL_FHT=1`; typed readback and exact payload preserved, draft warning present |
-| FHT pin-difference control | `diptera_odb10.1` validates against the unchanged CEDAR snapshot but fails installed 0.11.0 draft validation; unsupported writer coverage is visible, not reported as a pass or “not yet bindable” |
+| FHT pin control | The installed bundle's FHT digest must equal the pinned one. `diptera_odb10.1` validates against the CEDAR snapshot; the installed toolkit must accept it when its bundled draft is that snapshot (0.12.0) and reject it otherwise (0.11.0), so a writer-coverage gap stays visible rather than being reported as a pass |
 | FHGM standalone record | Flattened model validates against pinned model contract; no file schema/version/checksum is invented |
 | FHGM carriers | Same record preserved under `x-fhgm-models` in valid released 1.1 and 1.2 FHGFF3 carriers; checksum recomputed by toolkit |
 | Owning FHGM checks | Both registered base candidates supplied; owner resolves declared base, checks target/reference and reports no predecessor claim for the minimal fixture |
