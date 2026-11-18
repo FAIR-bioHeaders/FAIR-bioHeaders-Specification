@@ -67,9 +67,24 @@ jobs:
           version="$(python -c 'import json; print(json.load(open("conformance/toolkit-pin.json"))["version"])')"
           python -m venv "$RUNNER_TEMP/fhr-converter"
           "$RUNNER_TEMP/fhr-converter/bin/python" -m pip install "fair-bioheaders[jsonld]==$version"
+      - name: Read the pinned FHGM model-checker commit
+        id: fhgm-checker
+        # Recorded once, in templates/cedar/drafts/provenance.json (snapshots.fhgm.ownerChecker).
+        run: |
+          commit="$(python -c 'import json; print(json.load(open("templates/cedar/drafts/provenance.json"))["snapshots"]["fhgm"]["ownerChecker"]["commit"])')"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHGM-Specification
+          ref: ${{ steps.fhgm-checker.outputs.commit }}
+          path: _fhgm-owner
+          persist-credentials: false
       - name: Check CEDAR exports against the installed released toolkit
         env:
           CEDAR_TOOLKIT: ${{ runner.temp }}/fhr-converter/bin/bioheaders
+          # Runs the owning FHGM model check instead of skipping it; that test
+          # reads release tags (git show), which this job's first checkout fetches.
+          CEDAR_FHGM_ROOT: ${{ github.workspace }}/_fhgm-owner
         run: |
           "$RUNNER_TEMP/fhr-converter/bin/python" -m unittest discover -s tests -p 'test_cedar_toolkit.py' -v
       - name: Run the toolkit on every vector

@@ -15,6 +15,18 @@
   round 6 `fh-stack-results.json` records paths relative to its directory
   instead of the CI runner's absolute paths (results unchanged).
 
+- CEDAR templates (#162): `make_cedar.py --check` also fails on a top-level
+  `templates/cedar/*.json` the generator does not produce. URI fields constrained
+  only by `format: uri` become CEDAR link fields (value in `@id`); patterned URI
+  fields (taxonomy, ORCID) stay text fields with their regex, since CEDAR link
+  fields cannot carry one. `flatten_export` reads link values and raises a
+  `ValueError` naming the field for an object or list `@value` or an unparsable
+  number; `--flatten` reports it and exits 1. New tests check every field's
+  value constraints against its contract in all five templates, and the
+  snapshot-tamper test no longer writes tracked files. CI now runs the owning
+  FHGM model check at the checker commit recorded in
+  `templates/cedar/drafts/provenance.json`. The README no longer claims `--check`
+  detects upstream draft changes.
 - CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
   form, as `schema` already was, so all five templates pass CEDAR's template
   meta-schema (FHR, FHP, FHGFF3 and FHT failed its reserved-name pattern); a test
