@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
+  form, as `schema` already was, so all five templates pass CEDAR's template
+  meta-schema (FHR, FHP, FHGFF3 and FHT failed its reserved-name pattern); a test
+  now validates every template against the meta-schemas vendored from
+  cedar-model-validation-library `34e65d2`. `flatten_export` drops optional
+  elements and multiple-value fields left blank instead of emitting null-filled
+  objects or empty lists. The CI toolkit pin moves to fair-bioheaders 0.12.0 and,
+  with the FHT draft digest it bundles, lives in `conformance/toolkit-pin.json`;
+  template text no longer names a toolkit release. No contract schema changes.
+
 - Number the FHR assembly-statistics definitions (#253) as FORMAT.md rule R16
   and point the `vitalStats` descriptions in the LinkML model at them: contig
   N50/L50/N90/L90 are over the summed contig length and the scaffold variants

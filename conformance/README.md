@@ -100,8 +100,8 @@ a bug in the implementation or the vectors, and report it as an issue.
 
 The two dotted BUSCO vectors cite the v0.6.0 schemas released on 2026-11-13
 and remain valid under the current specification. A converter that bundles
-those schemas — fair-bioheaders 0.11.0 or later, the version the conformance
-workflow pins — must accept them; a converter that predates v0.6.0 correctly
+those schemas — fair-bioheaders 0.11.0 or later; the conformance workflow
+installs the release pinned in `toolkit-pin.json` — must accept them; a converter that predates v0.6.0 correctly
 reports the unsupported schema version (V4). While v0.6.0 was being prepared,
 the two vectors' manifest entries carried a `converterResults` field naming
 both outcomes as acceptable for the pinned older converter; that field and its

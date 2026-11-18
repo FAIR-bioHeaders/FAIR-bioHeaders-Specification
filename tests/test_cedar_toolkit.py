@@ -1,8 +1,9 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. https://mozilla.org/MPL/2.0/.
-"""Installed 0.11.0 CEDAR binding evidence, separate from live workbench upload.
+"""Installed-toolkit CEDAR binding evidence, separate from live workbench upload.
 
-Set CEDAR_TOOLKIT to an installed bioheaders executable. Optional CEDAR_FHGM_ROOT
+Set CEDAR_TOOLKIT to an installed bioheaders executable of the release pinned
+in conformance/toolkit-pin.json (the pin the CI workflow installs). Optional CEDAR_FHGM_ROOT
 selects the owning repository's checker; absent means that test is explicitly
 not run, never a model-conformance pass. No source contract or pin is rewritten.
 """
@@ -18,9 +19,14 @@ import unittest
 from jsonschema import Draft202012Validator, FormatChecker
 
 from test_cedar import (
-    ROOT, TYPES, FHT_FIXTURE, FHGM_FIXTURE_MINIMAL, contract_schema,
+    ROOT, TYPES, FHT_FIXTURE, FHGM_FIXTURE_MINIMAL, contract_path, contract_schema,
     load_example, load_template, make_cedar, wrap_export,
 )
+
+
+# One pin shared with the workflow's install step: the toolkit version and the
+# SHA-256 of the FHT draft that release bundles.
+TOOLKIT_PIN = json.loads((ROOT / "conformance" / "toolkit-pin.json").read_text(encoding="utf-8"))
 
 
 class CedarInstalledToolkitTests(unittest.TestCase):
@@ -28,7 +34,8 @@ class CedarInstalledToolkitTests(unittest.TestCase):
     def setUpClass(cls):
         selected = os.environ.get("CEDAR_TOOLKIT")
         if not selected:
-            raise unittest.SkipTest("not run: set CEDAR_TOOLKIT to installed bioheaders 0.11.0")
+            raise unittest.SkipTest("not run: set CEDAR_TOOLKIT to installed bioheaders "
+                                    + TOOLKIT_PIN["version"])
         cls.cli = Path(selected).resolve()
         cls.python = cls.cli.with_name("python")
         cls.env = {k: v for k, v in os.environ.items()
@@ -43,8 +50,9 @@ class CedarInstalledToolkitTests(unittest.TestCase):
             "files('bioheaders').joinpath('schemas/fht-draft.json').read_bytes()).hexdigest()}))"
         )])
         cls.installed = json.loads(result.stdout)
-        if cls.installed["version"] != "0.11.0":
-            raise AssertionError(f"requires published toolkit 0.11.0, got {cls.installed}")
+        if cls.installed["version"] != TOOLKIT_PIN["version"]:
+            raise AssertionError(f"requires the pinned published toolkit "
+                                 f"{TOOLKIT_PIN['version']}, got {cls.installed}")
         if "site-packages" not in Path(cls.installed["module"]).parts:
             raise AssertionError(f"installed artifact required, got {cls.installed}")
 
@@ -137,16 +145,22 @@ class CedarInstalledToolkitTests(unittest.TestCase):
         self.assertEqual(type(flat["vitalStats"]["N50"]), int)
         self.assertEqual(flat["derivedFrom"], record["derivedFrom"])
 
-    def test_fht_pins_are_distinct_and_dotted_lineage_is_not_shipped_in_011(self):
-        # The published 0.11.0 bundle predates the post-release CEDAR draft pin.
-        self.assertEqual(self.installed["fhtSha256"], "11c69d6647736695beaa72976a1d9b30c0f44f8cfe55f8eb171c9d0bcb6795f8")
+    def test_fht_draft_pin_and_dotted_lineage_follow_the_bundled_bytes(self):
+        # The installed bundle must be the one the pin records; whether it can
+        # bind a dotted lineage then follows from whether those bytes are the
+        # CEDAR snapshot's (which accepts it) or an older draft (which does not).
+        self.assertEqual(self.installed["fhtSha256"], TOOLKIT_PIN["fhtDraftSha256"])
+        snapshot = hashlib.sha256(contract_path("fht").read_bytes()).hexdigest()
         record = copy.deepcopy(FHT_FIXTURE)
         record["completeness"]["lineageDataset"] = "diptera_odb10.1"
         Draft202012Validator(contract_schema("fht"), format_checker=FormatChecker()).validate(record)
         source = self.directory / "fht-dotted.json"
         source.write_text(json.dumps(record), encoding="utf-8")
-        rejected = self.invoke([str(self.cli), "validate", str(source)], expected=1, draft=True)
-        self.assertIn("lineageDataset", rejected.stderr)
+        if TOOLKIT_PIN["fhtDraftSha256"] == snapshot:
+            self.invoke([str(self.cli), "validate", str(source)], expected=0, draft=True)
+        else:
+            rejected = self.invoke([str(self.cli), "validate", str(source)], expected=1, draft=True)
+            self.assertIn("lineageDataset", rejected.stderr)
 
     def carriers(self):
         model = self.flattened("fhgm", copy.deepcopy(FHGM_FIXTURE_MINIMAL))

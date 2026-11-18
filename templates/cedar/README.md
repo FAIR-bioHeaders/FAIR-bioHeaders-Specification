@@ -158,6 +158,13 @@ template's `pav:version` is `<schemaVersion>.0` and tracks its contract; the
 emitted shape is the CEDAR template JSON-LD format 1.6.0 (per the meta-schemas
 and reference templates in
 [`cedar-model-validation-library`](https://github.com/metadatacenter/cedar-model-validation-library)).
+`tests/test_cedar_meta_schema.py` validates every template against that
+library's template, element and field meta-schemas, vendored with their licence
+in `tests/fixtures/cedar-meta-schemas/` at commit `34e65d2`. Those meta-schemas
+reserve child names beginning with `schema`, `xsd`, `pav`, `oslc`, `rdfs` or
+`skos`, so the form names the contract's `schema` and `schemaVersion` fields
+`header_schema` and `header_schemaVersion`; each field's `schema:name` and
+`flatten_export` keep the contract names.
 
 ## From a filled form to a bound header — the round trip is mandatory
 
@@ -173,8 +180,11 @@ bioheaders verify data.fh.fa
 ```
 
 Leave the root checksum blank in the form. `flatten_export` omits an empty root
-checksum and unanswered optional values, but retains supplied nested parent
-checksums such as `derivedFrom[].checksum`. The resulting unbound metadata is
+checksum and unanswered optional values, including optional elements whose
+members were all left blank and optional multiple-value fields with no filled
+entry (blank entries in a partly filled list are dropped). It keeps an
+unanswered required value for the validator to judge, and retains supplied
+nested parent checksums such as `derivedFrom[].checksum`. The resulting unbound metadata is
 not yet a complete contract instance because the root checksum is required.
 `bioheaders combine` is the supported pre-binding step: it computes that root
 checksum over the exact file bytes and validates the bound header. Do not run
@@ -184,8 +194,8 @@ the validator and writer, while `flatten_export` only restores the record shape.
 
 Draft caveats on this path:
 
-- **FHT:** released `fair-bioheaders==0.11.0` already binds and checks FHT in
-  the V7 draft lane. Opt in for every command; the default still refuses FHT:
+- **FHT:** the released toolkit (`fair-bioheaders` 0.11.0 and later) binds and
+  checks FHT in the V7 draft lane. Opt in for every command; the default still refuses FHT:
 
   ```sh
   BIOHEADERS_EXPERIMENTAL_FHT=1 bioheaders combine record.json transcripts.fa -o transcripts.fht.fa
@@ -194,11 +204,13 @@ Draft caveats on this path:
   ```
 
   This proves experimental draft processing, not an FHT release or curator
-  acceptance. The published 0.11.0 wheel's FHT draft digest is `11c69d66…`,
-  whereas this CEDAR snapshot is `59ad9641…`: 0.11.0 accepts the common
-  `diptera_odb10` example but rejects `diptera_odb10.1`, which this newer
-  snapshot accepts. Do not claim pin equality or complete template-value
-  coverage from a successful common-value round trip. Keep an unsupported
+  acceptance. Each toolkit release bundles its own pinned FHT draft: 0.11.0
+  bundles `11c69d66…`, which accepts the common `diptera_odb10` example but
+  rejects `diptera_odb10.1`; 0.12.0 bundles `59ad9641…`, byte-identical to this
+  CEDAR snapshot, which accepts both. The CI pin and its bundled FHT digest are
+  recorded together in [`conformance/toolkit-pin.json`](../../conformance/toolkit-pin.json).
+  Compare digests before claiming that a toolkit covers every template value;
+  a successful common-value round trip does not show it. Keep an unsupported
   export unbound; do not silently rewrite a lineage or invent a checksum.
 - **FHGM:** the flattened output is one **model record** to embed per the
   [transport steps above](#draft-templates--fht-and-fhgm), never a standalone
@@ -222,7 +234,7 @@ instance, if maintainers choose it).
 ```sh
 python scripts/make_cedar.py --check
 python -m unittest discover -s tests -p 'test_cedar.py' -v
-CEDAR_TOOLKIT=/path/to/installed-0.11.0/bin/bioheaders \
+CEDAR_TOOLKIT=/path/to/installed-toolkit/bin/bioheaders \
   CEDAR_FHGM_ROOT=/path/to/FHGM-Specification \
   python -m unittest discover -s tests -p 'test_cedar_toolkit.py' -v
 ```
@@ -240,7 +252,8 @@ curator acceptance or live CEDAR validation is performed by these checks.
 Without `CEDAR_TOOLKIT`, installed integration is explicitly skipped. Without
 `CEDAR_FHGM_ROOT`, owning model resolution is explicitly skipped; successful
 carrier checks must never be reported as model conformance. The shared CI runs
-installed 0.11.0 checks; the separate owning-repository check is reproducible
+the installed checks with the toolkit release pinned in
+`conformance/toolkit-pin.json`; the separate owning-repository check is reproducible
 with the source revision recorded in [workflow evidence](WORKFLOW-EVIDENCE.md).
 
 ## Promoting a draft template
