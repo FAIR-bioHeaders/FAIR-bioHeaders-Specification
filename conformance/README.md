@@ -68,7 +68,8 @@ Vector ids are stable and never reused. When a rule change alters a vector's exp
 outcome, the vector is retired and a vector with a new id takes its place. `retired`
 lists each retired id with the outcome it had (`expected`, and `rule` if it was
 invalid), the id that replaces it (`replacedBy`) and the `reason`. No entry in
-`vectors` uses a retired id.
+`vectors` uses a retired id. `check_conformance.py` reads the manifest at every
+release tag and fails if a released id is neither a vector nor retired.
 
 An invalid vector breaks one rule and is otherwise correct. Where possible its
 stated checksum matches the bytes, so an implementation can't pass by failing the

@@ -183,6 +183,31 @@ class ConformanceTests(unittest.TestCase):
                   if "converterResults" in vector}
         self.assertEqual(marked, set())
 
+    def test_every_released_vector_id_is_a_vector_or_retired(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        try:
+            import check_conformance
+        finally:
+            sys.path.pop(0)
+        released = check_conformance.released_manifests()
+        # The validation workflow checks out every tag; a tagless clone must not pass quietly.
+        self.assertIn("v0.4.1", released, "fetch the git tags to check released vector ids")
+        self.assertEqual(check_conformance.check_released_ids(self.manifest, released), [])
+        retired = {entry["id"]: entry for entry in self.manifest["retired"]}
+        self.assertEqual(retired["jsonld-schemaorg-vocab-compaction"]["replacedBy"],
+                         "jsonld-context-schemaorg-vocab")
+        # Negative control: a released id that silently disappears is reported.
+        dropped = dict(self.manifest, retired=[
+            entry for entry in self.manifest["retired"]
+            if entry["id"] != "jsonld-schemaorg-vocab-compaction"])
+        problems = check_conformance.check_released_ids(dropped, released)
+        self.assertTrue(problems)
+        self.assertTrue(all(problem.startswith("jsonld-schemaorg-vocab-compaction ")
+                            for problem in problems), problems)
+        self.assertEqual(check_conformance.check_released_ids(self.manifest, {}),
+                         ["no release tag has conformance/manifest.json; fetch the git tags "
+                          "(git fetch --tags) so released vector ids can be checked"])
+
     def test_selection_vectors(self):
         """specs/012-schema-versioning: V1-V6 and the registry they rely on."""
         vectors = [v for v in self.manifest["vectors"]
