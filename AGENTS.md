@@ -260,8 +260,8 @@ actually downloaded; a ranged read truncates a `.gz` stream — download whole
 files before asserting on their contents; `diff <(…) <(…)` prints nothing when
 the process substitution fails, which reads exactly like agreement — extract
 to temp files, require each extraction to succeed, then print `wc -l` and compare
-those files; `$?` after a pipe reports the
-last pipeline element only; zsh applies `:A`/`:s` modifiers to a bare
+those files; with `pipefail` disabled, `$?` after a pipeline reports only the
+last command's status; zsh applies `:A`/`:s` modifiers to a bare
 `$var:path` — brace the variable — and does not word-split an unquoted
 `$var`; and a case-insensitive filesystem can resolve a path whose case is
 wrong, so negative controls for missing files must also run on Linux CI.
@@ -309,13 +309,13 @@ These sections apply according to the Git remote. Keep the shared sections of
 this file in step across all six specification repositories — the shared
 publication repository and the FHR, FHP, FHT, FHGFF3 and FHGM development
 repositories — modulo declared per-repository link adaptations: a repository
-may substitute an absolute shared-specification URL where a relative path does
-not resolve in its own tree. FHP-Specification's existing absolute links to the
-shared schema-selection rules and version registry are also permitted, even
-though those paths exist locally. A repository may also carry sections that describe
+may substitute an absolute shared-specification URL where a relative path is
+missing or resolves to a pinned compatibility copy rather than the intended
+shared version. A repository may also carry sections that describe
 only its own tree (currently the shared repository's "Draft metadata profiles
-(#56)" section, FHR-Specification's development-tree paragraph, and
-FHGM-Specification's local-development-scope section); never delete another
+(#56)" section, FHR-Specification's development-tree paragraph,
+FHGM-Specification's local-development-scope section, and FHGFF3's
+local-checks paragraph under Verification); never delete another
 repository's local section. Port only intended shared-guidance changes and
 record the shared source commit; comparisons of the shared sections across
 repositories are advisory, not a gate. The byte-identity requirement for these
@@ -352,8 +352,10 @@ or establish that release artifacts have been published.
 
 FHR-Specification development happens on branches. Reviewed schema changes publish
 in FAIR-bioHeaders-Specification first; then synchronize the compatibility files
-on FHR main. `.github/workflows/published-files.yml` checks `fhr.json`, `fhp.json`,
-`fhgff3.json` and `jsonld/*` against shared main. Do not merge an independent schema
+on FHR main. `.github/workflows/published-files.yml` runs
+`scripts/check_development_tree.py --remote`, which checks every published copy
+against the pinned shared release tag (not shared main, which may move between
+releases). Do not merge an independent schema
 change into FHR main that makes those public raw URLs diverge. Preserve historical
 tags and file-bound examples; schema addition review still follows its own cycle.
 
