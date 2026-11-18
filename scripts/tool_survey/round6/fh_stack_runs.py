@@ -27,9 +27,14 @@ BH = str(ROOT / ".venv/bin/bioheaders")
 
 results = []
 
+def shown(arg):
+    """Record paths relative to this directory, so results carry no host paths."""
+    path = pathlib.Path(str(arg))
+    return str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(arg)
+
 def run(cmd, **kw):
     p = subprocess.run(cmd, capture_output=True, text=True, **kw)
-    return {"cmd": " ".join(str(c) for c in cmd), "exit": p.returncode,
+    return {"cmd": " ".join(shown(c) for c in cmd), "exit": p.returncode,
             "stdout": p.stdout.strip(), "stderr": p.stderr.strip()}
 
 # metadata extracted (without checksum) for the combine test, from fixture 4

@@ -150,10 +150,20 @@ The generator uses only the standard library and never the network: it reads
 the committed schemas and the pinned snapshots in [`drafts/`](drafts/). When a
 schema release changes a contract, `--check` and `tests/test_cedar.py` fail on
 the digest/provenance mismatch, and the templates are regenerated on the
-release's own review cycle. When a **draft** upstream edits its schema,
-generation refuses loudly until the snapshot and
-[`drafts/provenance.json`](drafts/provenance.json) are re-pinned together
-against a named commit — draft bytes are cited, never paraphrased. A
+release's own review cycle. For the **drafts**, `--check` is offline and
+compares only against the local snapshot: it fails when a snapshot under
+[`drafts/`](drafts/) is edited without updating
+[`drafts/provenance.json`](drafts/provenance.json), but it never sees new
+commits in FHT-Specification or FHGM-Specification. Nothing in this repository
+watches those upstreams for schema changes; upstream drift is noticed by a
+maintainer comparing the recorded commit with the owning repository's `main`
+and re-pinning deliberately (snapshot and provenance together, against a named
+commit — draft bytes are cited, never paraphrased). The CI owning-checker run
+uses the separate FHGM checker commit recorded in `provenance.json` and asserts
+that its model schema is byte-identical to the snapshot, so it too says nothing
+about newer upstream commits. `--check` also reports any extra top-level
+`*.json` in this directory as drift (delete it, or add its type to the
+generator): every template here must be one the generator produces. A
 template's `pav:version` is `<schemaVersion>.0` and tracks its contract; the
 emitted shape is the CEDAR template JSON-LD format 1.6.0 (per the meta-schemas
 and reference templates in
@@ -165,6 +175,20 @@ reserve child names beginning with `schema`, `xsd`, `pav`, `oslc`, `rdfs` or
 `skos`, so the form names the contract's `schema` and `schemaVersion` fields
 `header_schema` and `header_schemaVersion`; each field's `schema:name` and
 `flatten_export` keep the contract names.
+
+A contract URI field constrained only by `format: uri` (`relatedLink`,
+`assemblyProtocol`, `accessionID.url`, software and evidence `uri`, and the
+like) is a CEDAR **link** field: the workbench checks that the value is a
+well-formed absolute IRI and exports it as `{"@id": …}`, which `flatten_export`
+reads back as the plain string. URI fields that also carry a `pattern` — the
+identifiers.org `taxon.uri` and the ORCID `uri` of authors and contributors —
+stay text fields with the contract's regex, because CEDAR's IRI-field value
+constraints (`iri-field-meta-schema.json`) have no `regex` key and a link field
+would drop the pattern. CEDAR's IRI check is not the JSON Schema `uri` format
+check (it admits non-ASCII IRIs, for one), so the toolkit stays the validator.
+`tests/test_cedar.py` checks every leaf field's value constraints (literals,
+regex, numeric type and bounds, date type, link type and requiredness) against
+its contract node for all five templates.
 
 ## From a filled form to a bound header — the round trip is mandatory
 
@@ -191,6 +215,11 @@ checksum over the exact file bytes and validates the bound header. Do not run
 `bioheaders validate` on fresh, unbound metadata or enter a checksum by hand;
 validate and verify the resulting bound file as shown above. The toolkit remains
 the validator and writer, while `flatten_export` only restores the record shape.
+A malformed export is refused rather than half-read: an object or list where a
+field value belongs, or a numeric value that does not parse as its declared
+datatype (such as `"2.5"` for `xsd:long`), makes `flatten_export` raise
+`ValueError` naming the field path (for example `vitalStats.N50`), and
+`--flatten` prints that message and exits 1.
 
 Draft caveats on this path:
 
@@ -253,8 +282,10 @@ Without `CEDAR_TOOLKIT`, installed integration is explicitly skipped. Without
 `CEDAR_FHGM_ROOT`, owning model resolution is explicitly skipped; successful
 carrier checks must never be reported as model conformance. The shared CI runs
 the installed checks with the toolkit release pinned in
-`conformance/toolkit-pin.json`; the separate owning-repository check is reproducible
-with the source revision recorded in [workflow evidence](WORKFLOW-EVIDENCE.md).
+`conformance/toolkit-pin.json`, and runs the owning FHGM model check against a
+checkout of FHGM-Specification at the commit recorded once in
+[`drafts/provenance.json`](drafts/provenance.json) (`snapshots.fhgm.ownerChecker`),
+whose model schema is byte-identical to the pinned snapshot.
 
 ## Promoting a draft template
 

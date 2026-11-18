@@ -181,7 +181,8 @@ NOT_APPLICABLE = {
           "JSON, so a reader has no invalid input for it. Its valid vector shows that the "
           "escapes read back to the real characters.",
     "R14": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid "
-           "in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"].",
+           "in FHR 2.0 and 2.1 and in FHP and FHGFF3 1.0, 1.1 and 1.2. Its valid vectors carry "
+           "\"warnings\": [\"R14\"].",
     "R16": "R16 defines how producers compute vitalStats; the schema does not check stated "
            "statistics against the sequence and validators do not recompute them, so no "
            "file is invalid under it.",

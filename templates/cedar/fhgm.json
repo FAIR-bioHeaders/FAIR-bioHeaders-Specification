@@ -2326,7 +2326,7 @@
             "title": "URI field schema",
             "description": "Location of the cited evidence, when one was supplied.",
             "_ui": {
-              "inputType": "textfield"
+              "inputType": "link"
             },
             "_valueConstraints": {
               "requiredValue": false
@@ -2349,11 +2349,9 @@
                   }
                 ]
               },
-              "@value": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+              "@id": {
+                "type": "string",
+                "format": "uri"
               },
               "rdfs:label": {
                 "type": [
@@ -2362,9 +2360,6 @@
                 ]
               }
             },
-            "required": [
-              "@value"
-            ],
             "schema:name": "uri",
             "schema:description": "Location of the cited evidence, when one was supplied.",
             "pav:createdOn": null,
@@ -2811,7 +2806,7 @@
                 "title": "URI field schema",
                 "description": "URI of the software.",
                 "_ui": {
-                  "inputType": "textfield"
+                  "inputType": "link"
                 },
                 "_valueConstraints": {
                   "requiredValue": false
@@ -2834,11 +2829,9 @@
                       }
                     ]
                   },
-                  "@value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                  "@id": {
+                    "type": "string",
+                    "format": "uri"
                   },
                   "rdfs:label": {
                     "type": [
@@ -2847,9 +2840,6 @@
                     ]
                   }
                 },
-                "required": [
-                  "@value"
-                ],
                 "schema:name": "uri",
                 "schema:description": "URI of the software.",
                 "pav:createdOn": null,
@@ -2915,7 +2905,7 @@
           "title": "Protocol field schema",
           "description": "Curation protocol or workflow reference URI, mirroring the FHGFF3 annotationProtocol role.",
           "_ui": {
-            "inputType": "textfield"
+            "inputType": "link"
           },
           "_valueConstraints": {
             "requiredValue": false
@@ -2938,11 +2928,9 @@
                 }
               ]
             },
-            "@value": {
-              "type": [
-                "string",
-                "null"
-              ]
+            "@id": {
+              "type": "string",
+              "format": "uri"
             },
             "rdfs:label": {
               "type": [
@@ -2951,9 +2939,6 @@
               ]
             }
           },
-          "required": [
-            "@value"
-          ],
           "schema:name": "protocol",
           "schema:description": "Curation protocol or workflow reference URI, mirroring the FHGFF3 annotationProtocol role.",
           "pav:createdOn": null,

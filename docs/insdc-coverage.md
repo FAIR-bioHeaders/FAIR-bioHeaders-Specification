@@ -6,7 +6,7 @@ A FAIR-bioHeaders header, a community profile or an optional field is never evid
 
 ## Assessment version
 
-**Assessment v2, 2026-11-03.** Every row below has a final disposition. Re-assess (and bump this version) when the pinned INSDC commit or any FAIR-bioHeaders `schemaVersion` changes; `tests/test_insdc_coverage.py` fails until the pins below are updated.
+**Assessment v3, 2026-11-13** (re-pinned to release v0.6.0; v2 of 2026-11-03 pinned v0.5.0). Every row below has a final disposition. Re-assess (and bump this version) when the pinned INSDC commit or any FAIR-bioHeaders `schemaVersion` changes; `tests/test_insdc_coverage.py` fails until the pins below are updated.
 
 **Pinned inputs:**
 
@@ -263,7 +263,7 @@ is unchanged and no matrix row's rating changes on this evidence.
 ## 4. Using FAIR-bioHeaders alongside an INSDC submission
 
 The draft [insdc-fhr profile](../profiles/examples/insdc-fhr/README.md) checks
-selected FHR 2.0 assembly metadata offline after project and sample registration.
+selected FHR assembly metadata (`schemaVersion` 2.0 or 2.1) offline after project and sample registration.
 
 
 A FAIR-bioHeaders header keeps metadata with a file you share or archive yourself. It does not replace an INSDC submission and does not make a file ready to deposit. To submit to GenBank, ENA or DDBJ, follow that node's instructions and validators, and use the header as a source of values.

@@ -1,8 +1,10 @@
 # FHR format and compatibility
 
 FHR release v0.3 and the converter 0.3.x packages retain numeric schemaVersion 1.
-FHR release v0.4 uses the string schemaVersion `"2.0"`. The header parsing rules
-below apply to both releases and are implemented from converter 0.3.1.
+FHR release v0.4 uses the string schemaVersion `"2.0"`, and releases from v0.5
+(currently v0.6.0) use `"2.1"`, which adds only extension fields (R15). The header
+parsing rules below apply to all of these releases and are implemented from
+converter 0.3.1.
 The assembly's own version string is independent. No required fields were added.
 Top-level metadata is closed, except for extension fields whose keys start with `x-` (R15,
 from FHR 2.1, FHP 1.1 and FHGFF3 1.1); optional fields may be omitted, not replaced by null.
@@ -231,9 +233,10 @@ reader must agree on what the checksum line contains:
   control character or a bidirectional formatting character (RFC 3987 section 4.1)
   anywhere has no accepted scheme. `http`, `https` and `ftp`
   also need `//` and a host. Any other value, for example a `javascript:`,
-  `data:`, `vbscript:` or `file:` URI, stays schema-valid in FHR 2.0 (and FHP and
-  FHGFF3 1.0), but validators warn about it. Writers of linked-data forms do not
-  write it as a link: a JSON-LD or schema.org export writer refuses the record
+  `data:`, `vbscript:` or `file:` URI, stays schema-valid in FHR 2.0 and 2.1 (and
+  FHP and FHGFF3 1.0, 1.1 and 1.2), but validators warn about it. Writers of
+  linked-data forms do not write it as a link: a JSON-LD or schema.org export
+  writer refuses the record
   ([JSONLD.md](JSONLD.md) J7, [SCHEMAORG-EXPORT.md](SCHEMAORG-EXPORT.md) X5). A
   tool that renders FHR metadata, for example as HTML, should make a link only
   from an accepted scheme. Such a value can't be rejected outright without

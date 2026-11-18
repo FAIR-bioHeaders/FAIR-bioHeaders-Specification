@@ -385,9 +385,13 @@ def load_schema_view(profile, registry=None, *, allow_path=False):
 
 def _apply_insdc_fhr_rules(schema):
     """Add array containment and cross-field checks to the draft profile."""
-    project = r"PRJ[DEN][A-Z][0-9]+"
-    sample = r"SAM(?:N|EA|D)[0-9]+"
+    # Accession numbers are positive integers without a leading zero, so
+    # placeholders such as PRJNA0 or SAMN0 do not count as registered records.
+    number = r"[1-9][0-9]*"
+    project = rf"PRJ[DEN][A-Z]{number}"
+    sample = rf"SAM(?:N|EA|D){number}"
     record_hosts = r"www\.ebi\.ac\.uk/ena/browser/view/"
+    biosamples = r"www\.ebi\.ac\.uk/biosamples/samples/"
     ddbj = r"ddbj\.nig\.ac\.jp/(?:search/entry|resource)/"
     ncbi = r"www\.ncbi\.nlm\.nih\.gov/"
     project_pattern = (
@@ -396,8 +400,9 @@ def _apply_insdc_fhr_rules(schema):
         r"(?![\s\S])"
     )
     sample_pattern = (
-        rf"^https://(?:{record_hosts}|{ncbi}biosample/|"
-        rf"{ddbj}biosample/){sample}/?(?![\s\S])"
+        rf"^https://(?:(?:{record_hosts}|{biosamples}|{ncbi}biosample/|"
+        rf"{ddbj}biosample/){sample}/?|identifiers\.org/biosample:{sample})"
+        r"(?![\s\S])"
     )
     nonblank = {"type": "string", "pattern": r"\S"}
     schema.setdefault("allOf", []).extend([

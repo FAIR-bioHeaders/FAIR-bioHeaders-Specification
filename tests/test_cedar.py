@@ -21,15 +21,20 @@ validate against the stored draft schema (Draft 2020-12 + FormatChecker).
 """
 
 import base64
+import contextlib
 import copy
 import datetime
 import hashlib
+import io
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 import yaml
 from jsonschema import Draft4Validator, Draft202012Validator, FormatChecker
@@ -210,13 +215,20 @@ def context_mapping(properties):
     return context
 
 
+def is_link_field(node):
+    return isinstance(node, dict) and node.get("_ui", {}).get("inputType") == "link"
+
+
 def wrap_export(value, node, root=False):
     """Wrap one record value the way a CEDAR artifact export presents it.
 
     Scalars become {"@value": ...} with the numeric datatypes the generated
-    fields declare; element instances additionally carry the JSON-LD identity
+    fields declare, and link (IRI) fields {"@id": ...} (no @id when
+    unanswered); element instances additionally carry the JSON-LD identity
     keys that flatten_export must drop.
     """
+    if is_link_field(node):
+        return {} if value is None else {"@id": value}
     if value is None:
         return {"@value": None}
     if isinstance(value, bool):
@@ -517,19 +529,32 @@ class CedarDraftTemplateTests(unittest.TestCase):
                                  f"{stem}: embedded digest does not match the snapshot")
 
     def test_draft_snapshot_pin_refuses_tampering(self):
+        # Tamper with a temporary copy of the drafts directory, never the
+        # tracked snapshot: the generator is pointed at the copy.
         entry = DRAFT_PROVENANCE["snapshots"]["fhgm"]
-        path = ROOT / entry["local"]
-        original = path.read_bytes()
+        tracked = ROOT / entry["local"]
+        tracked_digest = hashlib.sha256(tracked.read_bytes()).hexdigest()
         committed = (TEMPLATE_DIR / "fhgm.json").read_bytes()
-        try:
-            path.write_bytes(original + b"\n")  # a single byte breaks the pin
-            with self.assertRaises(SystemExit) as ctx:
-                make_cedar.render("fhgm")
-            self.assertIn("pinned", str(ctx.exception))
-        finally:
-            path.write_bytes(original)
-        self.assertEqual(make_cedar.render("fhgm").encode("utf-8"), committed,
-                         "restoring the snapshot bytes must restore the template")
+        with tempfile.TemporaryDirectory(prefix="cedar-pin-") as scratch:
+            root = Path(scratch)
+            drafts = root / make_cedar.DRAFT_DIR.relative_to(ROOT)
+            shutil.copytree(make_cedar.DRAFT_DIR, drafts)
+            copy_path = root / entry["local"]
+            original = copy_path.read_bytes()
+            with mock.patch.object(make_cedar, "ROOT", root), \
+                    mock.patch.object(make_cedar, "DRAFT_PROVENANCE_PATH",
+                                      drafts / make_cedar.DRAFT_PROVENANCE_PATH.name):
+                self.assertEqual(make_cedar.render("fhgm").encode("utf-8"), committed,
+                                 "the untouched copy must reproduce the committed template")
+                copy_path.write_bytes(original + b"\n")  # a single byte breaks the pin
+                with self.assertRaises(SystemExit) as ctx:
+                    make_cedar.render("fhgm")
+                self.assertIn("pinned", str(ctx.exception))
+                copy_path.write_bytes(original)
+                self.assertEqual(make_cedar.render("fhgm").encode("utf-8"), committed,
+                                 "restoring the snapshot bytes must restore the template")
+        self.assertEqual(hashlib.sha256(tracked.read_bytes()).hexdigest(), tracked_digest,
+                         "the tracked snapshot must never be rewritten by this test")
 
     # -- visibility --------------------------------------------------------------
 
@@ -688,6 +713,8 @@ def blank_export(node):
         return inner
     if node.get("_ui", {}).get("inputType") == "numeric":
         return {"@value": None, "@type": node["_valueConstraints"]["numberType"]}
+    if is_link_field(node):
+        return {}
     return {"@value": None}
 
 
@@ -700,7 +727,7 @@ def complete_export(record, node, root=False):
         if isinstance(value, list):
             for item in value:
                 fill(item, cedar["items"])
-        elif isinstance(value, dict) and "@value" not in value:
+        elif isinstance(value, dict) and "@value" not in value and not is_link_field(cedar):
             for name, member in cedar["properties"].items():
                 if name in ("@context", "@id", "@type"):
                     continue
@@ -858,6 +885,259 @@ class CedarBlankExportTests(unittest.TestCase):
 
 
 
+class CedarCheckModeTests(unittest.TestCase):
+    """--check covers the whole top level of templates/cedar/, not only the
+    files it writes. Runs against a temporary copy; no tracked file changes."""
+
+    def run_check(self, out_dir):
+        stderr, stdout = io.StringIO(), io.StringIO()
+        with mock.patch.object(make_cedar, "OUT_DIR", out_dir), \
+                contextlib.redirect_stderr(stderr), contextlib.redirect_stdout(stdout):
+            status = make_cedar.main(["--check"])
+        return status, stderr.getvalue()
+
+    def test_check_flags_a_stray_template_file(self):
+        with tempfile.TemporaryDirectory(prefix="cedar-check-") as scratch:
+            out_dir = Path(scratch)
+            for path in TEMPLATE_DIR.glob("*.json"):
+                shutil.copy2(path, out_dir / path.name)
+            (out_dir / "README.md").write_text("not a template\n", encoding="utf-8")
+            (out_dir / "drafts").mkdir()
+            (out_dir / "drafts" / "notes.json").write_text("{}\n", encoding="utf-8")
+            status, stderr = self.run_check(out_dir)
+            self.assertEqual((status, stderr), (0, ""), "a clean copy must pass")
+            (out_dir / "fhx.json").write_text("{}\n", encoding="utf-8")
+            status, stderr = self.run_check(out_dir)
+            self.assertEqual(status, 1)
+            self.assertIn("fhx.json is not produced by scripts/make_cedar.py", stderr)
+            self.assertIn("delete it", stderr)
+            self.assertNotIn("README.md", stderr)
+            self.assertNotIn("notes.json", stderr)
+
+    def test_check_flags_a_missing_or_edited_template(self):
+        with tempfile.TemporaryDirectory(prefix="cedar-check-") as scratch:
+            out_dir = Path(scratch)
+            for path in TEMPLATE_DIR.glob("*.json"):
+                shutil.copy2(path, out_dir / path.name)
+            (out_dir / "fhp.json").unlink()
+            (out_dir / "fhr.json").write_text("{}\n", encoding="utf-8")
+            status, stderr = self.run_check(out_dir)
+            self.assertEqual(status, 1)
+            self.assertIn("fhp.json", stderr)
+            self.assertIn("fhr.json", stderr)
+
+
+def closed_alternation(pattern):
+    """The literal values of a closed ``^(a|b|c)$`` pattern, else None."""
+    found = re.fullmatch(r"\^\(([a-z0-9-]+(?:\|[a-z0-9-]+)+)\)\$", pattern or "")
+    return found.group(1).split("|") if found else None
+
+
+class CedarValueConstraintTests(unittest.TestCase):
+    """Every leaf field's _ui/_valueConstraints state exactly what its contract
+    node says: enum -> literals, pattern -> regex, minimum/maximum ->
+    minValue/maxValue, integer -> xsd:long, number -> xsd:double, date ->
+    temporal xsd:date, unconstrained URI -> link, and requiredness."""
+
+    def leaves(self, stem):
+        """(path, contract node, form node, required) for every leaf field."""
+        schema = contract_schema(stem)
+        defs = schema.get("$defs") or schema.get("definitions") or {}
+        generator = make_cedar.Generator(stem, schema, make_cedar.load_contracts()[stem])
+
+        def walk(scope, cedar, path, root=False):
+            required = set(scope.get("required", []))
+            for member, member_schema in scope.get("properties", {}).items():
+                form = cedar["properties"][make_cedar.form_field_name(member) if root else member]
+                where = f"{path}.{member}" if path else member
+                target = generator.normalize(make_cedar.deref(member_schema, defs))
+                if target.get("type") == "array":
+                    items = make_cedar.deref(target.get("items", {}), defs)
+                    if items.get("type") == "object" or items.get("properties"):
+                        yield from walk(items, form["items"], where + "[]")
+                    else:
+                        # Each supplied instance of a multi-instance field is a value.
+                        yield where + "[]", items, form["items"], True
+                elif target.get("type") == "object" or target.get("properties"):
+                    yield from walk(target, form, where)
+                else:
+                    yield where, target, form, member in required
+
+        return list(walk(schema, load_template(stem), "", root=True))
+
+    def pinned_url(self, stem):
+        return FHT_RAW_MAIN if stem == "fht" else contract_url(stem)
+
+    def check_leaf(self, stem, path, node, form, required):
+        ui = form["_ui"]
+        vc = form["_valueConstraints"]
+        self.assertIs(vc["requiredValue"], required, "requiredValue")
+        labels = [entry["label"] for entry in vc.get("literals", [])]
+        enum = node.get("enum")
+        alternation = closed_alternation(node.get("pattern"))
+        if path == "schema":
+            url = self.pinned_url(stem)
+            self.assertEqual(labels, [url])
+            self.assertEqual(vc["defaultValue"], url)
+            if enum:
+                self.assertIn(url, enum)
+            if node.get("pattern"):
+                self.assertRegex(url, node["pattern"], "pinned URL breaks the contract pattern")
+            self.assertNotIn("regex", vc)
+        elif enum:
+            self.assertEqual(ui["inputType"], "radio")
+            if path == "schemaVersion":
+                version = (entry_version(stem) if stem in DRAFT_STEMS
+                           else contract_version(stem))
+                self.assertIn(version, [str(value) for value in enum])
+                self.assertEqual(labels, [version])
+            else:
+                self.assertEqual(labels, [str(value) for value in enum])
+            if len(labels) == 1:
+                self.assertEqual(vc["defaultValue"], labels[0])
+            else:
+                self.assertNotIn("defaultValue", vc)
+            self.assertNotIn("regex", vc)
+        elif alternation:
+            self.assertEqual(ui["inputType"], "radio")
+            self.assertEqual(labels, alternation)
+            self.assertNotIn("regex", vc)
+        elif node.get("format") == "date":
+            self.assertEqual(ui["inputType"], "temporal")
+            self.assertEqual(vc["temporalType"], "xsd:date")
+            self.assertEqual(vc["regex"], r"^\d{4}-\d{2}-\d{2}$")
+        elif node.get("type") in ("integer", "number"):
+            self.assertEqual(ui["inputType"], "numeric")
+            self.assertEqual(vc["numberType"],
+                             "xsd:long" if node["type"] == "integer" else "xsd:double")
+            for schema_key, cedar_key in (("minimum", "minValue"), ("maximum", "maxValue")):
+                if schema_key in node:
+                    self.assertEqual(vc[cedar_key], node[schema_key], cedar_key)
+                else:
+                    self.assertNotIn(cedar_key, vc)
+            self.assertEqual(form["required"], ["@value", "@type"])
+        elif node.get("format") == "uri" and not node.get("pattern"):
+            self.assertEqual(ui["inputType"], "link")
+            self.assertEqual(set(vc), {"requiredValue"})
+            self.assertIn("@id", form["properties"])
+            self.assertNotIn("@value", form["properties"])
+        else:
+            self.assertEqual(ui["inputType"], "textfield")
+            self.assertEqual(node.get("type"), "string", "unhandled scalar type")
+        if ui["inputType"] in ("textfield", "temporal") and node.get("format") != "date":
+            for schema_key, cedar_key in (("pattern", "regex"), ("minLength", "minLength"),
+                                          ("maxLength", "maxLength")):
+                if schema_key in node:
+                    self.assertEqual(vc[cedar_key], node[schema_key], cedar_key)
+                else:
+                    self.assertNotIn(cedar_key, vc)
+        if ui["inputType"] != "link":
+            self.assertIn("@value", form["properties"])
+        if ui["inputType"] != "numeric":
+            self.assertNotIn("numberType", vc)
+
+    def test_value_constraints_follow_each_contract_node(self):
+        for stem in ALL_STEMS:
+            leaves = self.leaves(stem)
+            self.assertTrue(leaves, f"{stem}: no leaf fields found")
+            for path, node, form, required in leaves:
+                with self.subTest(stem=stem, path=path):
+                    self.check_leaf(stem, path, node, form, required)
+
+    def test_every_kind_of_constraint_is_exercised(self):
+        """The generic walk must reach each mapping, so a vacuous pass fails."""
+        seen = set()
+        for stem in ALL_STEMS:
+            for _, node, form, required in self.leaves(stem):
+                vc = form["_valueConstraints"]
+                seen.add(form["_ui"]["inputType"])
+                seen.update(key for key in ("literals", "regex", "minValue", "maxValue",
+                                            "temporalType", "defaultValue") if key in vc)
+                seen.update(f"numberType={vc['numberType']}" for _ in [0] if "numberType" in vc)
+                seen.add(f"required={required}")
+        self.assertLessEqual({"radio", "temporal", "numeric", "textfield", "link", "literals",
+                              "regex", "minValue", "maxValue", "temporalType", "defaultValue",
+                              "numberType=xsd:long", "numberType=xsd:double", "required=True",
+                              "required=False"}, seen)
+
+    def test_spot_values_from_the_released_contracts(self):
+        def leaf(stem, path):
+            return next(form for where, _, form, _ in self.leaves(stem) if where == path)
+
+        genetic = leaf("fhp", "geneticCode")["_valueConstraints"]
+        self.assertEqual((genetic["numberType"], genetic["minValue"], genetic["maxValue"]),
+                         ("xsd:long", 1, 33))
+        taxon = leaf("fhr", "taxon.uri")
+        self.assertEqual(taxon["_ui"]["inputType"], "textfield")
+        self.assertEqual(taxon["_valueConstraints"]["regex"],
+                         r"^https://identifiers\.org/taxonomy:[0-9]+$")
+        self.assertEqual(leaf("fhr", "relatedLink[]")["_ui"]["inputType"], "link")
+        self.assertEqual(leaf("fhr", "dateCreated")["_valueConstraints"]["temporalType"],
+                         "xsd:date")
+
+
+class CedarFlattenInputErrorTests(unittest.TestCase):
+    """Malformed export values fail with a ValueError that names the field."""
+
+    def artifact(self):
+        record = load_example(*TYPES["fhr"][1:])
+        return record, wrap_export(record, load_template("fhr"), root=True)
+
+    def assert_rejects(self, artifact, field, fragment):
+        with self.assertRaises(ValueError) as ctx:
+            make_cedar.flatten_export(artifact)
+        self.assertIn(field, str(ctx.exception))
+        self.assertIn(fragment, str(ctx.exception))
+
+    def test_non_scalar_value_names_the_field(self):
+        for bad, kind in (({"nested": "x"}, "an object"), (["a", "b"], "a list")):
+            with self.subTest(kind=kind):
+                _, artifact = self.artifact()
+                artifact["taxon"]["name"] = {"@value": bad}
+                self.assert_rejects(artifact, "taxon.name", kind)
+                _, artifact = self.artifact()
+                artifact["metadataAuthor"][0]["name"] = {"@value": bad}
+                self.assert_rejects(artifact, "metadataAuthor[0].name", kind)
+
+    def test_unparsable_numbers_name_the_field(self):
+        record, artifact = self.artifact()
+        stats = artifact["vitalStats"]
+        integer = next(key for key, value in record["vitalStats"].items() if isinstance(value, int))
+        cases = [("2.5", "xsd:long"), ("", "xsd:long"), ("ten", "xsd:int"),
+                 ("abc", "xsd:double"), ("nan", "xsd:double"), ("inf", "xsd:float")]
+        for raw, datatype in cases:
+            with self.subTest(raw=raw, datatype=datatype):
+                broken = copy.deepcopy(artifact)
+                broken["vitalStats"][integer] = {"@value": raw, "@type": datatype}
+                self.assert_rejects(broken, f"vitalStats.{integer}", repr(raw))
+        self.assertIn(integer, stats)
+
+    def test_link_value_must_be_an_iri_string(self):
+        _, artifact = self.artifact()
+        artifact["relatedLink"][0] = {"@id": {"not": "an iri"}}
+        self.assert_rejects(artifact, "relatedLink[0]", "@id")
+
+    def test_flatten_cli_reports_errors_without_a_traceback(self):
+        _, artifact = self.artifact()
+        artifact["taxon"]["name"] = {"@value": ["a"]}
+        with tempfile.TemporaryDirectory(prefix="cedar-flatten-") as scratch:
+            bad = Path(scratch) / "export.json"
+            bad.write_text(json.dumps(artifact), encoding="utf-8")
+            unreadable = Path(scratch) / "broken.json"
+            unreadable.write_text("{not json", encoding="utf-8")
+            for path, fragment in ((bad, "taxon.name"), (unreadable, "broken.json"),
+                                   (Path(scratch) / "missing.json", "missing.json")):
+                with self.subTest(path=path.name):
+                    result = subprocess.run(
+                        [sys.executable, str(ROOT / "scripts" / "make_cedar.py"),
+                         "--flatten", str(path)], capture_output=True, text=True, cwd=ROOT)
+                    self.assertEqual(result.returncode, 1)
+                    self.assertEqual(result.stdout, "")
+                    self.assertNotIn("Traceback", result.stderr)
+                    self.assertIn(fragment, result.stderr)
+                    self.assertTrue(result.stderr.startswith("make_cedar: cannot flatten"))
+
+
 class CedarToolkitPinTests(unittest.TestCase):
     """One toolkit pin, shared by the workflow and tests/test_cedar_toolkit.py."""
 
@@ -870,6 +1150,18 @@ class CedarToolkitPinTests(unittest.TestCase):
             encoding="utf-8")
         self.assertIn("conformance/toolkit-pin.json", workflow)
         self.assertIsNone(re.search(r"fair-bioheaders(\[[a-z,]+\])?==\d", workflow))
+
+    def test_workflow_runs_the_owning_fhgm_checker_at_the_recorded_commit(self):
+        checker = DRAFT_PROVENANCE["snapshots"]["fhgm"]["ownerChecker"]
+        self.assertEqual(checker["repository"], "FAIR-bioHeaders/FHGM-Specification")
+        self.assertRegex(checker["commit"], r"^[0-9a-f]{40}$")
+        workflow = (ROOT / ".github" / "workflows" / "validate-specification.yml").read_text(
+            encoding="utf-8")
+        self.assertIn('["snapshots"]["fhgm"]["ownerChecker"]["commit"]', workflow)
+        self.assertIn("repository: FAIR-bioHeaders/FHGM-Specification", workflow)
+        self.assertIn("CEDAR_FHGM_ROOT:", workflow)
+        # The commit lives in provenance.json only, never as a second literal.
+        self.assertNotIn(checker["commit"], workflow)
 
     def test_generated_templates_name_no_toolkit_release(self):
         # A toolkit bump must not change template bytes.
