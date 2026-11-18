@@ -60,9 +60,26 @@ CANONICAL_CONTEXT_URL = (
     "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/"
     "jsonld/fhr.context.jsonld"
 )
-# Contexts a canonical document may reference by URL (rule J1). Release URLs
-# are added once a FAIR-bioHeaders-Specification release contains jsonld/.
-KNOWN_CONTEXT_URLS = (RAW_MAIN_CONTEXT_URL, CANONICAL_CONTEXT_URL)
+# Releases whose tree holds jsonld/fhr.context.jsonld. Each one's context is
+# byte-identical to the current file (tests/test_jsonld_context.py checks this
+# against the tags), so a reader serves all of them from its own copy. A release
+# that changes the context needs its own copy, not just an entry here.
+CONTEXT_RELEASES = ("v0.4.0", "v0.4.1", "v0.4.2", "v0.5.0", "v0.6.0")
+
+
+def release_context_urls(release):
+    """The raw tag URL and the w3id URL of a release's FHR context (rule J1)."""
+    return (
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/"
+        f"{release}/jsonld/fhr.context.jsonld",
+        f"https://w3id.org/fair-bioheaders/fhr/{release}/jsonld/fhr.context.jsonld",
+    )
+
+
+# Contexts a canonical document may reference by URL (rule J1): raw main under
+# both repository names, and every release's raw tag and w3id URL.
+KNOWN_CONTEXT_URLS = (RAW_MAIN_CONTEXT_URL, CANONICAL_CONTEXT_URL) + tuple(
+    url for release in CONTEXT_RELEASES for url in release_context_urls(release))
 
 SDO = "http://schema.org/"
 FHR = "https://w3id.org/fair-bioheaders/terms#"

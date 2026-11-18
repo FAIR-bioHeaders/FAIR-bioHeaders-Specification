@@ -1,6 +1,11 @@
 {
-  "note": "The released fair-bioheaders toolkit the conformance and CEDAR toolkit CI jobs install (.github/workflows/validate-specification.yml reads version from here), and the SHA-256 of the FHT draft schema that release bundles (bioheaders/schemas/fht-draft.json), which tests/test_cedar_toolkit.py checks against the installed artifact. Change both together when moving the pin.",
+  "note": "The released fair-bioheaders toolkit the conformance and CEDAR toolkit CI jobs install (.github/workflows/validate-specification.yml reads version from here), and the SHA-256 of the FHT draft schema that release bundles (bioheaders/schemas/fht-draft.json), which tests/test_cedar_toolkit.py checks against the installed artifact. Change both together when moving the pin. knownGaps lists the vectors the pinned release is known to get wrong, each with the reason; check_conformance.py --known-gaps accepts the wrong outcome for exactly those vectors and fails if the toolkit gets one right, so an entry is removed with the pin bump that fixes it.",
   "package": "fair-bioheaders",
   "version": "0.12.0",
-  "fhtDraftSha256": "59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e"
+  "fhtDraftSha256": "59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e",
+  "knownGaps": {
+    "fhp-fasta-pattern-trailing-newline": "Python re: $ also matches before a final line feed, so the ECMA-262 pattern ^...$ accepts a value that ends with one; the toolkit's jsonschema pattern check needs ECMA-262 $ semantics.",
+    "jsonld-direction-value": "JSONLD.md J5 (clarified): a value with @direction is invalid like a language-tagged one; 0.12.0 rejects @language but drops a lone @direction.",
+    "microdata-itemref": "MICRODATA.md M1 (clarified): itemref is not supported and makes the document invalid; 0.12.0 ignores the attribute."
+  }
 }

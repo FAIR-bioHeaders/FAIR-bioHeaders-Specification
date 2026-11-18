@@ -153,9 +153,11 @@ The toolkit's `bioheaders.jsonld.script_element(document)` writes such an elemen
 - The canonical source of the context is `jsonld/fhr.context.jsonld` on `main`:
   `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/jsonld/fhr.context.jsonld`.
 - Release copies are addressed as
-  `https://w3id.org/fair-bioheaders/fhr/vX.Y.Z/jsonld/fhr.context.jsonld`, once a release
-  contains the file. That URL redirects to the copy on the
-  [GitHub Pages site](https://fhref.org/FAIR-bioHeaders-Specification/), which serves it as
+  `https://w3id.org/fair-bioheaders/fhr/vX.Y.Z/jsonld/fhr.context.jsonld` or by the raw tag URL
+  `https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/vX.Y.Z/jsonld/fhr.context.jsonld`.
+  Releases v0.4.0, v0.4.1, v0.4.2, v0.5.0 and v0.6.0 contain the file, and their contexts are
+  identical to the one on `main`; both URLs of each are known context URLs (J1, J3). The w3id
+  URL redirects to the copy on the [GitHub Pages site](https://fhref.org/FAIR-bioHeaders-Specification/), which serves it as
   `application/ld+json` with CORS, so JSON-LD processors can load it.
 - The vocabulary namespace `https://w3id.org/fair-bioheaders/terms` redirects by content
   negotiation: `Accept: text/turtle` gets `terms.ttl`, `Accept: application/ld+json` gets
@@ -211,7 +213,8 @@ the FHR context or none: expanded, with value objects or explicit IRIs, or a sin
 - [J1] **Canonical form.** A document is canonical when its root is an object whose `@context`
   is a published FHR context, embedded (equal as parsed JSON to the `@context` value of
   `jsonld/fhr.context.jsonld`, comparing JSON types exactly, so `true` is not `1`) or referenced by a known FHR context URL (the raw-main URL above,
-  or a release URL once releases contain the file); when the only keys starting with `@`
+  under either repository name, or the raw tag or w3id URL of a release that contains the
+  file, v0.4.0 to v0.6.0 so far; see [Publication](#publication)); when the only keys starting with `@`
   anywhere are that root `@context`, an optional root `@id` and `@type` on any object; and when
   every `@type` value is a string or an array of strings. A reader sets the root `@context` and
   every `@type` aside. A root `subjectOf` string is the FHR `documentation` value; a document
@@ -257,7 +260,9 @@ the FHR context or none: expanded, with value objects or explicit IRIs, or a sin
     an accession `url`, a software `uri`) accepts `{"@id": ...}` or a string value. A value
     without an accepted link scheme is kept, and reported as [FORMAT.md](FORMAT.md) R14 says.
   - `dateCreated` accepts a value typed `xsd:date` or an untyped string. Any other datatype, on
-    any field, is invalid, and so is a language-tagged value.
+    any field, is invalid, and so is a value with a language (`@language`) or a base
+    direction (`@direction`), alone or together: FHR values are plain strings and cannot keep
+    either.
   - A field that takes one value must have exactly one; two values, for example two `genome`
     names, are invalid.
   - Array fields keep document order; `commandLineOption` comes from its `@list`.

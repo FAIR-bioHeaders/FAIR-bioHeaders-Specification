@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+- Rule clarifications, no schema change: JSONLD.md J1 now lists the release context URLs
+  (raw tag and w3id, v0.4.0 to v0.6.0, whose contexts equal main's) as known context URLs, and
+  `make_jsonld.KNOWN_CONTEXT_URLS` accepts them; J5 makes a value with `@direction` invalid
+  like a language-tagged one; MICRODATA.md M1 says `itemref` is not supported and makes the
+  document invalid. SCHEMA-VERSIONS.md says how a tool opts FHGM records into the V7 lane and
+  how changes to the format and reading rules have been classified (the v0.4.1 and v0.4.2
+  patch precedents). New invalid vectors `jsonld-direction-value`, `microdata-itemref` and
+  `fhp-fasta-pattern-trailing-newline` (ECMA-262 `$` in schema patterns; Python `re` accepts a
+  final line feed; schema tightening proposed in #264). `check_conformance.py --schema` applies ECMA-262 `$`; `--known-gaps` reads
+  the pinned toolkit's known gaps from `conformance/toolkit-pin.json` (the three new vectors
+  for fair-bioheaders 0.12.0); and, as in FHR-Specification #22, each expected warning must
+  be on a warning line that names its rule.
+
 - CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
   form, as `schema` already was, so all five templates pass CEDAR's template
   meta-schema (FHR, FHP, FHGFF3 and FHT failed its reserved-name pattern); a test

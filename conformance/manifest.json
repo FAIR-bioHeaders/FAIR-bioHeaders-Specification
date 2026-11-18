@@ -4115,6 +4115,15 @@
       "reason": "genome appears only inside a nested item scope without itemprop, so the FHR item has no genome."
     },
     {
+      "id": "microdata-itemref",
+      "file": "invalid/microdata-itemref.fhr.html",
+      "format": "microdata",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "M1",
+      "reason": "The FHR item has an itemref attribute, which FHR microdata does not support: a reader that followed it would add reuseConditions from outside the scope."
+    },
+    {
       "id": "microdata-itemtype-repeated-attribute",
       "file": "invalid/microdata-itemtype-repeated-attribute.fhr.html",
       "format": "microdata",
@@ -4458,6 +4467,15 @@
       "expected": "invalid",
       "rule": "J5",
       "reason": "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed."
+    },
+    {
+      "id": "jsonld-direction-value",
+      "file": "invalid/jsonld-direction-value.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J5",
+      "reason": "genome (schema.org name) has a base direction (@direction), which an FHR string cannot keep, like a language tag."
     },
     {
       "id": "jsonld-root-id",
@@ -5064,6 +5082,49 @@
           "total": 2
         },
         "checksum": "UBb8RwJ0v0iw/C5Xxdw5BdL/aVWISV5z0SKtnq+8mn0="
+      }
+    },
+    {
+      "id": "fhp-fasta-pattern-trailing-newline",
+      "file": "invalid/fhp-fasta-pattern-trailing-newline.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "The BUSCO lineageDataset ends with a line feed, which its pattern ^...$ does not allow under ECMA-262 regular expressions; validators whose $ also matches before a final line feed (Python re) wrongly accept it.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "primates_odb10\n",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "MiM5GcWYBIQwHS7T/kaJ9q5GVm9+mMdXh0Y5hMUkZdM="
       }
     },
     {

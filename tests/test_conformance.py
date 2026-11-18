@@ -129,7 +129,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 14)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 24)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 25)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
@@ -377,7 +377,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(78 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -398,7 +398,7 @@ class ConformanceTests(unittest.TestCase):
             "if vector['expected'] != 'valid':\n"
             "    raise SystemExit(1)\n"
             "if vector.get('warnings'):\n"
-            "    print('FHR: warning: link scheme', file=sys.stderr)\n"
+            "    print('FHR: warning: link scheme (docs/FORMAT.md R14)', file=sys.stderr)\n"
             "if len(sys.argv) > 2:\n"
             "    json.dump(vector['metadata'], open(sys.argv[2], 'w'))\n"
         )
@@ -408,9 +408,39 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(78 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
+
+        # Known converter gaps: a listed vector must get the wrong outcome, and a
+        # converter that now gets it right, or a listed id that is no vector, fails.
+        gaps = self.root / "gaps.json"
+        gaps.write_text(json.dumps({"knownGaps": {"microdata-itemref": "test",
+                                                  "no-such-vector": "test"}}))
+        fixed = self.check("--skip-regeneration", "--converter", bin_directory,
+                           "--known-gaps", gaps)
+        self.assertEqual(fixed.returncode, 1)
+        self.assertIn("microdata-itemref: converter now gets this known gap right",
+                      fixed.stderr)
+        self.assertIn("no-such-vector: listed as a known gap but is not a vector", fixed.stderr)
+        gap_bin = self.root / "gap-bin"
+        gap_bin.mkdir()
+        gap_body = body.replace("if vector['expected'] != 'valid':",
+                                "if vector['expected'] != 'valid' and "
+                                "vector['id'] != 'microdata-itemref':").replace(
+            "vector['metadata']", "vector.get('metadata', {})")
+        for name in ("fhr-fasta-validate", "fhr-gfa-validate", "fhr-convert"):
+            script = gap_bin / name
+            script.write_text(gap_body)
+            script.chmod(0o755)
+        unlisted = self.check("--skip-regeneration", "--converter", gap_bin)
+        self.assertEqual(unlisted.returncode, 1)
+        self.assertIn("microdata-itemref: converter accepted; expected invalid, M1",
+                      unlisted.stderr)
+        gaps.write_text(json.dumps({"knownGaps": {"microdata-itemref": "test"}}))
+        listed = self.check("--skip-regeneration", "--converter", gap_bin, "--known-gaps", gaps)
+        self.assertEqual(listed.returncode, 0, listed.stderr)
+        self.assertIn("(1 known converter gaps: microdata-itemref)", listed.stdout)
 
         wrong_version_bin = self.root / "wrong-version-bin"
         wrong_version_bin.mkdir()
@@ -431,6 +461,22 @@ class ConformanceTests(unittest.TestCase):
                       "without an unsupported schema version message",
                       wrong_version.stderr)
 
+        # R14 vectors need a warning that names R14, not just any warning line.
+        unrelated_warning_bin = self.root / "unrelated-warning-bin"
+        unrelated_warning_bin.mkdir()
+        unrelated_body = body.replace("FHR: warning: link scheme (docs/FORMAT.md R14)",
+                                      "FHR: warning: R140 is not a rule")
+        self.assertNotEqual(unrelated_body, body)
+        for name in ("fhr-fasta-validate", "fhr-gfa-validate", "fhr-convert"):
+            script = unrelated_warning_bin / name
+            script.write_text(unrelated_body)
+            script.chmod(0o755)
+        unrelated = self.check("--skip-regeneration", "--converter", unrelated_warning_bin)
+        self.assertEqual(unrelated.returncode, 1)
+        self.assertIn("fasta-link-scheme-warning: converter printed no warning; expected one "
+                      "under R14", unrelated.stderr)
+        self.assertNotIn("jsonld-link-scheme-warning", unrelated.stderr)  # jsonld skipped
+
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
                             "--converter", bin_directory)
         self.assertEqual(strict.returncode, 1)
@@ -446,7 +492,7 @@ class ConformanceTests(unittest.TestCase):
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
-        self.assertEqual(len(vectors), 37)
+        self.assertEqual(len(vectors), 38)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])
         self.assertIn("notApplicable", self.manifest["rules"]["J8"])
         self.assertIn("notApplicable", self.manifest["rules"]["R14"])
