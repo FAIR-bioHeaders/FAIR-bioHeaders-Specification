@@ -2,7 +2,9 @@
 
 Without options this needs only the Python standard library: it regenerates the
 vectors in a temporary directory and compares bytes, and recomputes each valid
-vector's SHA-512/256 checksum with its own reading of docs/FORMAT.md.
+vector's SHA-512/256 checksum with its own reading of docs/FORMAT.md. It also
+reads ``conformance/manifest.json`` at every release tag and fails if a released
+vector id is neither a current vector nor ``retired`` (this needs the git tags).
 ``--schema`` also validates vectors' metadata against the schema their ``schema``
 URL selects (docs/SCHEMA-VERSIONS.md; needs PyYAML and jsonschema, and git tags
 for older releases); JSON-LD vectors are read by rule J1 first.
@@ -261,6 +263,41 @@ def check_manifest(manifest):
             problems.append(f"{retired['id']}: retired id reused by a vector")
         if retired.get("replacedBy") and retired["replacedBy"] not in ids:
             problems.append(f"{retired['id']}: replacement {retired['replacedBy']} is not a vector")
+    return problems
+
+
+def released_manifests():
+    """{tag: manifest} for every release tag whose tree has conformance/manifest.json."""
+    tags = subprocess.run(["git", "tag", "--list", "v*"], cwd=ROOT, capture_output=True,
+                          text=True)
+    if tags.returncode:
+        raise ValueError(f"cannot list the release tags: {tags.stderr.strip()}")
+    manifests = {}
+    for tag in tags.stdout.split():
+        shown = subprocess.run(["git", "show", f"{tag}:conformance/manifest.json"], cwd=ROOT,
+                               capture_output=True, text=True)
+        if not shown.returncode:
+            manifests[tag] = json.loads(shown.stdout)
+    return manifests
+
+
+def check_released_ids(manifest, released=None):
+    """Every vector id a release published is still a vector or is retired.
+
+    Ids are stable for implementers who pin a release's suite, so dropping or
+    renaming a vector without a ``retired`` entry is an error."""
+    released = released_manifests() if released is None else released
+    if not released:
+        return ["no release tag has conformance/manifest.json; fetch the git tags "
+                "(git fetch --tags) so released vector ids can be checked"]
+    known = ({vector["id"] for vector in manifest["vectors"]}
+             | {retired["id"] for retired in manifest.get("retired", [])})
+    problems = []
+    for tag, old in sorted(released.items()):
+        for vector in old["vectors"]:
+            if vector["id"] not in known:
+                problems.append(f"{vector['id']} (published in {tag}) is neither a vector "
+                                "nor retired; add a retired entry in make_conformance.py")
     return problems
 
 
@@ -552,6 +589,8 @@ def main():
     if not args.skip_regeneration:
         steps.append(("vectors match the generator", lambda: check_up_to_date(conformance)))
     steps.append(("manifest covers the labelled rules", lambda: check_manifest(manifest)))
+    steps.append(("released vector ids are vectors or retired",
+                  lambda: check_released_ids(manifest)))
     steps.append(("checksums recomputed independently", lambda: check_checksums(conformance, manifest)))
     if args.schema:
         steps.append(("valid metadata matches fhr.json (fhp.json for FHP)", lambda: check_schema(conformance, manifest)))
