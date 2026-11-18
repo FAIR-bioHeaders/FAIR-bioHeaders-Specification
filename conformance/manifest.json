@@ -59,6 +59,9 @@
       "summary": "Assembly statistics: FHR vitalStats are computed over contigs split at every run of one or more N; contig N/L statistics use the summed contig length, scaffold N/L statistics totalBasePairs; gcContent excludes ambiguity letters; a statistic with a zero denominator is omitted.",
       "notApplicable": "R16 defines how producers compute vitalStats; the schema does not check stated statistics against the sequence and validators do not recompute them, so no file is invalid under it."
     },
+    "R17": {
+      "summary": "Containers: FHR headers go in FASTA and GFA files, FHP headers in FASTA files and FHGFF3 headers in GFF3 files; a header whose type, chosen by its schema URL, does not match its file makes the file invalid, even when its checksum matches."
+    },
     "M1": {
       "summary": "Microdata: exactly one FHR item scope; a nested item scope without itemprop is a separate item whose properties do not leak."
     },
@@ -154,7 +157,8 @@
         "R3",
         "R4",
         "R7",
-        "R10"
+        "R10",
+        "R17"
       ],
       "description": "LF line endings; the checksum line is the last FHR line.",
       "checksum": "Z1p/siczUlN/N+lDB5Kg6vFRrztGErgLw9H4MfVfZeU=",
@@ -501,7 +505,8 @@
         "R3",
         "R4",
         "R7",
-        "R10"
+        "R10",
+        "R17"
       ],
       "description": "LF line endings; the checksum line is the last FHR line.",
       "checksum": "ma1p3crG1VKXSyT7cfllyeFiNrZ5NU3WOODwCEmwASw=",
@@ -2383,7 +2388,8 @@
         "R3",
         "R4",
         "R7",
-        "R10"
+        "R10",
+        "R17"
       ],
       "description": "Protein FASTA with stops, rare and ambiguous residues, lower case and a gap; LF line endings.",
       "checksum": "n35sS+hcfZDQ7HOg1UhFktleFPIqv0MGdY2s/b2e8K0=",
@@ -2590,7 +2596,8 @@
         "R3",
         "R4",
         "R7",
-        "R10"
+        "R10",
+        "R17"
       ],
       "description": "The genome linked by its FHR checksum (derivedFrom annotates); header after ##gff-version 3; LF line endings.",
       "checksum": "EUNVNynadF9SZugxxVE5qDnF8r8fc+uyfylccG2UeRQ=",
@@ -3421,6 +3428,90 @@
       }
     },
     {
+      "id": "fasta-extension-flow-mapping",
+      "file": "valid/fasta-extension-flow-mapping.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R12",
+        "R15"
+      ],
+      "description": "An extension value written as a YAML flow mapping with plain keys.",
+      "checksum": "ZDtX3W+XUN++7XYwZzr6IJIEDg1b877NHI8yvMVw0wY=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "x-proj-info": {
+          "tool": "hifiasm",
+          "version": "0.19"
+        }
+      }
+    },
+    {
+      "id": "fasta-wrapped-single-quoted-value",
+      "file": "valid/fasta-wrapped-single-quoted-value.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2",
+        "R3",
+        "R12"
+      ],
+      "description": "A long single-quoted value wrapped over three lines, as the toolkit's YAML writer wraps it; it reads as one line.",
+      "checksum": "i51zC6FZxmhri4aB25TJxC9CvFjhoHkaFmZGsGvgmZQ=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector: assembled with a synthetic assembler, scaffolded with synthetic Hi-C reads, polished twice and checked against itself; not a real assembly, it says nothing biological."
+      }
+    },
+    {
+      "id": "fasta-wrapped-double-quoted-value",
+      "file": "valid/fasta-wrapped-double-quoted-value.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2",
+        "R3",
+        "R12"
+      ],
+      "description": "A long double-quoted value wrapped over three lines, as the toolkit's YAML writer wraps it; it reads as one line.",
+      "checksum": "+tj74mbBxGfcxfTOLQ4ORg/YhfDYeCMuTv4sYZsafeI=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "documentation": "Synthetic FHR conformance vector: assembled with a synthetic assembler, scaffolded with synthetic Hi-C reads, polished twice and checked against itself; not a real assembly, it says nothing biological."
+      }
+    },
+    {
+      "id": "fasta-vital-stats-above-int32",
+      "file": "valid/fasta-vital-stats-above-int32.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R12",
+        "R13"
+      ],
+      "description": "vitalStats integers above 2^31 (a human-sized totalBasePairs); readers must not use 32-bit integers.",
+      "checksum": "hR8OS/qTn9e4mKQBOqIdR8X+VJWqkHoR3LlvcXSqK80=",
+      "metadata": {
+        "genome": "Synthetic FHR conformance genome",
+        "version": "1.0.0",
+        "masking": "not-masked",
+        "vitalStats": {
+          "totalBasePairs": 3100000000,
+          "N50": 2147483648
+        }
+      }
+    },
+    {
       "id": "fasta-tab-on-checksum-line",
       "file": "invalid/fasta-tab-on-checksum-line.fhr.fasta",
       "format": "fasta",
@@ -4115,6 +4206,15 @@
       "reason": "genome appears only inside a nested item scope without itemprop, so the FHR item has no genome."
     },
     {
+      "id": "microdata-itemref",
+      "file": "invalid/microdata-itemref.fhr.html",
+      "format": "microdata",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "M1",
+      "reason": "The FHR item has an itemref attribute, which FHR microdata does not support: a reader that followed it would add reuseConditions from outside the scope."
+    },
+    {
       "id": "microdata-itemtype-repeated-attribute",
       "file": "invalid/microdata-itemtype-repeated-attribute.fhr.html",
       "format": "microdata",
@@ -4458,6 +4558,15 @@
       "expected": "invalid",
       "rule": "J5",
       "reason": "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed."
+    },
+    {
+      "id": "jsonld-direction-value",
+      "file": "invalid/jsonld-direction-value.fhr.jsonld",
+      "format": "jsonld",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "J5",
+      "reason": "genome (schema.org name) has a base direction (@direction), which an FHR string cannot keep, like a language tag."
     },
     {
       "id": "jsonld-root-id",
@@ -5064,6 +5173,49 @@
           "total": 2
         },
         "checksum": "UBb8RwJ0v0iw/C5Xxdw5BdL/aVWISV5z0SKtnq+8mn0="
+      }
+    },
+    {
+      "id": "fhp-fasta-pattern-trailing-newline",
+      "file": "invalid/fhp-fasta-pattern-trailing-newline.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "P1",
+      "reason": "The BUSCO lineageDataset ends with a line feed, which its pattern ^...$ does not allow under ECMA-262 regular expressions; validators whose $ also matches before a final line feed (Python re) wrongly accept it.",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
+        "schemaVersion": "1.0",
+        "proteome": "Synthetic FHP conformance protein set",
+        "sourceType": "predicted",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-10-11",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
+        "completeness": {
+          "lineageDataset": "primates_odb10\n",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 1,
+          "total": 2
+        },
+        "checksum": "MiM5GcWYBIQwHS7T/kaJ9q5GVm9+mMdXh0Y5hMUkZdM="
       }
     },
     {
@@ -5834,6 +5986,88 @@
       "expected": "invalid",
       "rule": "M5",
       "reason": "The FHR item has the property x-refget-commonName, although the selected schema (FHR 2.1) would accept it in JSON or YAML."
+    },
+    {
+      "id": "fasta-fhgff3-header",
+      "file": "invalid/fasta-fhgff3-header.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R17",
+      "reason": "An FHGFF3 header in a FASTA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+    },
+    {
+      "id": "gfa-fhgff3-header",
+      "file": "invalid/gfa-fhgff3-header.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R17",
+      "reason": "An FHGFF3 header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+    },
+    {
+      "id": "gfa-fhp-header",
+      "file": "invalid/gfa-fhp-header.fhr.gfa",
+      "format": "gfa",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R17",
+      "reason": "An FHP header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+    },
+    {
+      "id": "fhgff3-fhp-header",
+      "file": "invalid/fhgff3-fhp-header.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R17",
+      "reason": "An FHP header in a GFF3 file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+    },
+    {
+      "id": "fhgff3-fhr-header",
+      "file": "invalid/fhgff3-fhr-header.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R17",
+      "reason": "An FHR header in a GFF3 file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+    },
+    {
+      "id": "fasta-checksum-in-double-quoted-scalar",
+      "file": "invalid/fasta-checksum-in-double-quoted-scalar.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a double-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
+    },
+    {
+      "id": "fasta-checksum-in-single-quoted-scalar",
+      "file": "invalid/fasta-checksum-in-single-quoted-scalar.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a single-quoted scalar (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
+    },
+    {
+      "id": "fasta-checksum-in-flow-mapping",
+      "file": "invalid/fasta-checksum-in-flow-mapping.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "The only line shaped like ;~checksum: (indented one space, as YAML requires for a continuation line) is inside a flow mapping (x-note), and its value matches the file without that line; the root checksum key is quoted, so the file has no checksum line. Apart from that, the header is strict YAML 1.2."
+    },
+    {
+      "id": "fasta-schema-raw-refs-heads-main",
+      "file": "invalid/fasta-schema-raw-refs-heads-main.fhr.fasta",
+      "format": "fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V4",
+      "reason": "The raw URL names the ref refs/heads/main, which is neither main nor a release tag, so the schema version is unsupported.",
+      "result": "unsupported-version"
     }
   ],
   "retired": [

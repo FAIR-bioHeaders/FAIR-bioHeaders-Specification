@@ -239,5 +239,36 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(text, json.dumps(self.document, indent=2) + "\n")
 
 
+class ReleaseContextUrlTests(unittest.TestCase):
+    """J1: every release that contains the context is a known context URL, and
+    its tagged context is the bytes a reader serves from its own copy."""
+
+    def test_release_contexts_equal_the_current_context(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        try:
+            import make_jsonld
+        finally:
+            sys.path.pop(0)
+        current = CONTEXT_PATH.read_bytes()
+        tags = subprocess.run(["git", "tag", "--list", "v*"], cwd=ROOT, capture_output=True,
+                              text=True, check=True).stdout.split()
+        self.assertIn("v0.6.0", tags, "fetch the git tags to check release context URLs")
+        with_context = []
+        for tag in tags:
+            shown = subprocess.run(["git", "show", f"{tag}:jsonld/fhr.context.jsonld"],
+                                   cwd=ROOT, capture_output=True)
+            if shown.returncode == 0:
+                with_context.append(tag)
+                self.assertEqual(shown.stdout, current,
+                                 f"{tag}: its context differs; a reader needs that release's copy")
+        self.assertEqual(sorted(with_context), sorted(make_jsonld.CONTEXT_RELEASES))
+        for tag in with_context:
+            for url in make_jsonld.release_context_urls(tag):
+                self.assertIn(url, make_jsonld.KNOWN_CONTEXT_URLS)
+                self.assertTrue(make_jsonld.is_fhr_context(url))
+        self.assertFalse(make_jsonld.is_fhr_context(
+            "https://w3id.org/fair-bioheaders/fhr/v0.3.1/jsonld/fhr.context.jsonld"))
+
+
 if __name__ == "__main__":
     unittest.main()
