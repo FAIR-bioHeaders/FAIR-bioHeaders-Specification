@@ -21,14 +21,13 @@ Read that three ways, because the script deliberately does only two of them:
    That would silently adopt compatibility floor (B) of #270, which the
    maintainers did not choose, and would break the FHT and FHGM drafts and every
    LinkML regeneration that reintroduces ``(?![\\s\\S])``.
-3. What *is* gated, hard, is the released pattern inventory. Changing a released
-   ``pattern`` string changes the set of values the contract accepts, and that is
-   a contract change. #270 and #264 name the concrete trap: replacing a released
-   ``^(...)$`` with the "equivalent-looking" ``^(...)$\\(?...`` style anchor such
-   as ``$(?!\\n)`` is **not** a no-op — under the toolkit's CPython ``re`` it
-   newly rejects values ending in a line feed. So the released scope is compared
-   against the committed digest in ``.github/pattern-baseline.json`` and any
-   gain, loss or edit fails the build.
+3. The released ``pattern`` inventory is gated against its committed digest:
+   gain, loss or text edit requires explicit review. This preserves pattern
+   bytes, not an engine's accidental acceptance behavior. The recorded #264
+   option-3 ruling corrects validators to ECMA-262 semantics without changing
+   contracts: ``$`` means the end of the whole string, including when CPython's
+   stock ``re`` would accept a position before a final line feed. This census
+   neither compiles patterns nor proves ECMA-262 validity or engine conformance.
 
 The draft scope (the byte-pinned FHT and FHGM draft contract snapshots under
 ``templates/cedar/drafts/``, the draft profiles and proposals, and the
@@ -151,7 +150,7 @@ class CensusError(Exception):
 
 
 def load_document(path):
-    """Read JSON or YAML strictly: no duplicate keys, no NaN/Infinity."""
+    """Read JSON strictly (unique keys, finite values) or parse a YAML model."""
     text = path.read_text(encoding="utf-8")
     if path.suffix == ".json":
         return json.loads(text, object_pairs_hook=_unique_object, parse_constant=_reject)
@@ -162,7 +161,10 @@ def load_document(path):
             f"{path}: PyYAML is required to census YAML patterns "
             "(pip install -r requirements-linkml.txt)"
         ) from error
-    return yaml.safe_load(text)
+    try:
+        return yaml.safe_load(text)
+    except yaml.YAMLError as error:
+        raise CensusError(f"{path}: invalid YAML: {error}") from error
 
 
 def _unique_object(pairs):
@@ -215,6 +217,38 @@ def iter_patterns(node, pointer="", keyed_by_name=False):
             yield from iter_patterns(value, child, keyed_by_name=True)
         else:
             yield from iter_patterns(value, child)
+
+
+
+# Only schema-valued keywords are traversed in JSON Schema documents. In
+# particular examples/default/const/enum and unknown extensions are instances,
+# not nested schemas. patternProperties VALUES are schemas; its regex KEYS are
+# outside this keyword-only census.
+SCHEMA_MAPS = {"properties", "patternProperties", "$defs", "definitions",
+               "dependentSchemas", "dependencies"}
+SCHEMA_ARRAYS = {"allOf", "anyOf", "oneOf", "prefixItems"}
+SCHEMA_SINGLES = {"additionalProperties", "unevaluatedProperties", "propertyNames",
+                  "items", "additionalItems", "unevaluatedItems", "contains",
+                  "not", "if", "then", "else", "contentSchema"}
+
+
+def iter_schema_patterns(node, pointer=""):
+    """Yield written pattern keywords in schema locations, without following refs."""
+    if not isinstance(node, dict):
+        return
+    for key, value in node.items():
+        child = pointer + "/" + escape(key)
+        if key == "pattern":
+            yield child, value
+        elif key in SCHEMA_MAPS and isinstance(value, dict):
+            for name, schema in value.items():
+                yield from iter_schema_patterns(schema, child + "/" + escape(name))
+        elif key in SCHEMA_ARRAYS or (key == "items" and isinstance(value, list)):
+            if isinstance(value, list):
+                for index, schema in enumerate(value):
+                    yield from iter_schema_patterns(schema, f"{child}/{index}")
+        elif key in SCHEMA_SINGLES:
+            yield from iter_schema_patterns(value, child)
 
 
 def scan(pattern):
@@ -311,7 +345,8 @@ def inventory(root, relative):
         raise CensusError(f"{relative}: unreadable: {error}") from error
     rows = []
     anomalies = []
-    for pointer, value in iter_patterns(document):
+    walker = iter_patterns if path.suffix in {".yaml", ".yml"} else iter_schema_patterns
+    for pointer, value in walker(document):
         if not isinstance(value, str):
             anomalies.append(f"{pointer}: pattern is not a string ({type(value).__name__})")
             continue
@@ -389,12 +424,6 @@ def build_baseline(found):
             "historical, not current policy; no released contract may be widened."
         ),
         "policySource": CITATION,
-        "releasedTag": "v0.6.0",
-        "releasedTagNote": (
-            "Every file listed here carries the identical pattern inventory at the "
-            "v0.6.0 tag and at the commit this baseline was generated from, "
-            "verified 2026-11-18 by comparing `git show` inventories."
-        ),
         "scope": sorted(relative for relative, entry in found.items()
                         if entry[0] == "released"),
         "files": files,
@@ -427,9 +456,8 @@ def compare(baseline_files, current_files):
             if before[pointer] != after[pointer]:
                 problems.append(
                     f"{relative}: {pointer}: released pattern changed "
-                    f"{before[pointer]!r} -> {after[pointer]!r}; any edit to a "
-                    "released pattern changes the values the contract accepts "
-                    "(#270/#264: $(?!\\n) newly rejects a trailing line feed)"
+                    f"{before[pointer]!r} -> {after[pointer]!r}; review this pattern-text "
+                    "change under the contract change process (#270/#264)"
                 )
     return problems
 
@@ -514,8 +542,12 @@ def live_draft_lines(root):
             lines.append(f"  {type_name} live DRAFT contract {hit}: UNVERIFIED ({error})")
             continue
         lookaround = [(r["pointer"], r["pattern"]) for r in rows if r["lookaround"]]
+        try:
+            display = hit.relative_to(root.parent)
+        except ValueError:
+            display = hit
         lines.append(
-            f"  {type_name} live DRAFT contract {hit.relative_to(root.parent)}: "
+            f"  {type_name} live DRAFT contract {display}: "
             f"{len(rows)} patterns, {len(lookaround)} with lookaround "
             "(local sibling checkout; NOT verified against the owning repository's "
             "main, so informational only)"
@@ -597,7 +629,7 @@ def main():
     print("about lookahead workarounds is historical, not current policy, so lookaround")
     print("patterns are counted and reported, never rejected. The released contracts")
     print("are gated against a committed digest: no released pattern may be added,")
-    print("removed or edited, because that changes the accepted value set.")
+    print("removed or edited without review. Engine conformance is checked separately.")
     print("=" * 78)
 
     for scope, heading in (("released", "RELEASED scope (gated by the baseline digest)"),

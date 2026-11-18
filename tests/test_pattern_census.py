@@ -142,6 +142,23 @@ class WalkerTests(unittest.TestCase):
         self.assertEqual(list(found), ["/a~1b/c~0d/pattern"])
 
 
+class SchemaWalkerTests(unittest.TestCase):
+    def test_schema_locations_are_walked_but_instance_data_is_ignored(self):
+        doc = {"properties": {"pattern": {"pattern": "^real$"}},
+               "patternProperties": {"^key$": {"pattern": "^value$"}},
+               "examples": [{"pattern": "not a constraint"}],
+               "default": {"pattern": "not a constraint"},
+               "enum": [{"pattern": "not a constraint"}],
+               "x-data": {"pattern": "not a constraint"},
+               "allOf": [{"if": {"pattern": "^if$"},
+                           "then": {"items": {"pattern": "^item$"}}}]}
+        self.assertEqual(dict(census.iter_schema_patterns(doc)), {
+            "/properties/pattern/pattern": "^real$",
+            "/patternProperties/^key$/pattern": "^value$",
+            "/allOf/0/if/pattern": "^if$",
+            "/allOf/0/then/items/pattern": "^item$"})
+
+
 class CompareTests(unittest.TestCase):
     def setUp(self):
         self.baseline = {"fhr.json": [{"pointer": "/properties/a/pattern",
@@ -301,6 +318,53 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
             "description", "reworded by a documentation-only PR"))
         result = self.run_census()
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_instance_annotations_are_not_pattern_constraints(self):
+        for keyword in ("examples", "default", "const", "enum", "x-extension"):
+            with self.subTest(keyword=keyword):
+                self.patch_pattern(lambda doc: doc.__setitem__(keyword, [{"pattern": "data"}]))
+                result = self.run_census()
+                self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_malformed_draft_yaml_is_informational(self):
+        target = self.root / "profiles" / "insdc-fhr.yaml"
+        target.parent.mkdir()
+        target.write_text("pattern: [")
+        result = self.run_census()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("invalid YAML", result.stdout)
+
+    def test_malformed_released_yaml_fails_cleanly(self):
+        (self.root / "schemas" / "core.yaml").write_text("pattern: [")
+        result = self.run_census()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("invalid YAML", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_malformed_unrelated_yaml_does_not_crash(self):
+        (self.root / "unrelated").mkdir()
+        (self.root / "unrelated" / "note.yaml").write_text("pattern: [")
+        result = self.run_census()
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_updated_baseline_does_not_claim_unverified_tag_identity(self):
+        self.patch_pattern(lambda doc: doc["properties"]["seqcol_id"].__setitem__(
+            "pattern", "^changed$"))
+        result = self.run_census("--update-baseline")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        stored = json.loads((self.root / ".github" / "pattern-baseline.json").read_text())
+        self.assertNotIn("releasedTag", stored)
+        self.assertNotIn("releasedTagNote", stored)
+        self.assertEqual(self.run_census().returncode, 0)
+
+    def test_symlinked_sibling_outside_parent_is_informational(self):
+        with tempfile.TemporaryDirectory() as outside:
+            target = Path(outside)
+            (target / "fht.json").write_text('{"pattern":"^x$"}')
+            (self.root.parent / "FHT-Specification").symlink_to(target, target_is_directory=True)
+            result = self.run_census()
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn(str(target), result.stdout)
 
     def test_hand_edited_baseline_is_red(self):
         path = self.root / ".github" / "pattern-baseline.json"

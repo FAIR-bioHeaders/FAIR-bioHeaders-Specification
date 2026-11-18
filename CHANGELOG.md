@@ -18,12 +18,13 @@
   current policy, so the census counts and reports lookarounds and never rejects
   them. What it does gate is the released inventory:
   `.github/pattern-baseline.json` records the 72-pattern digest and the check
-  fails if a released pattern is added, removed or edited, because any such edit
-  changes the value set a published contract accepts — #270 names #264's
-  `$(?!\n)` as the example that is *not* a no-op, since it newly rejects values
-  ending in a line feed. `--update-baseline` refreshes that file and refuses to run
-  when a CI environment is detected, so only a human outside CI can move the
-  released baseline, and the refresh is committed with the contract change.
+  fails if a released pattern is added, removed or edited. This preserves
+  reviewed pattern bytes; it does not freeze a validator's Python-specific
+  acceptance behavior or prove ECMA-262 syntax/conformance. The recorded #264
+  option-3 decision corrects validator behavior without a schema edit.
+  `--update-baseline` refuses CI execution; it generates an inventory without
+  asserting unverified historical release provenance. JSON Schema instance
+  annotations are excluded; LinkML models use separate recursive traversal.
   Re-measured at this base, the released FHR/FHP/FHGFF3 contracts, both shared
   models and both in-repo draft snapshots contain **no** lookaround; the one
   lookaround already committed in this repository is in the draft `insdc-fhr`
@@ -34,7 +35,7 @@
   the repository root or in `schemas/` without being added to the gated scope also
   fails, so a future contract cannot escape the check by omission. Wired in as one
   step of the existing `Validate specification` job (no new required check name);
-  `tests/test_pattern_census.py` (51 tests) runs inside the existing
+  `tests/test_pattern_census.py` (focused tests) runs inside the existing
   `python -m unittest discover -s tests` step.
 
 - Draft `insdc-fhr` profile (#190; profile change, no released schema or
