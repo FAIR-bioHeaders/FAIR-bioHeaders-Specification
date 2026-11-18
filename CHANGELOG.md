@@ -5,14 +5,25 @@
 - Pattern-dialect enforcement point (#270; tooling and CI only — no schema
   change, no `schemaVersion`, no registry row, no release claim).
   `scripts/check_pattern_census.py` enumerates every JSON Schema `pattern` in the
-  released surface (`fhr.json`, `fhp.json`, `fhgff3.json`, their three LinkML
-  models, `schemas/core.yaml`, `schemas/shared.yaml`, `schemas/versions.json`:
-  **72 patterns**) and in the draft and proposal scope (the byte-pinned FHT and
-  FHGM **DRAFT** contract snapshots under `templates/cedar/drafts/`, the draft
-  profiles, the mapping proposal, `assessment/manifest.schema.json` and the
-  spec-suite contracts: **80 patterns**), recording per pattern whether it carries
-  a `$` anchor (62 released, 59 draft), a lookaround, a `(?:` non-capturing group,
-  an inline flag, or an ECMA empty-class idiom (`[]` / `[^]`).
+  released surface (9 governed files) and in the draft and proposal scope (12 files:
+  the byte-pinned FHT and FHGM **DRAFT** contract snapshots under
+  `templates/cedar/drafts/`, the draft profiles, the mapping proposal,
+  `assessment/manifest.schema.json` and the spec-suite contracts), recording per
+  pattern whether it carries a `$`, a lookaround, a `(?:` non-capturing group, an
+  inline flag, or an ECMA empty-class idiom (`[]` / `[^]`).
+  **Counts, with their scope stated so they are never compared against a differently
+  scoped census** (the #241 reference-class point; the single normative home for the
+  dialect ruling is `docs/REGEX-DIALECT.md`, added by the separate docs PR #271, whose
+  regex-entry scope is **broader** than this one): keyword = the `pattern` keyword only
+  — `patternProperties` keys are regular expressions too and are out of scope here by
+  design; unit = one **entry** per (file, JSON pointer), so a string repeated under two
+  pointers counts twice. Re-measured at base `24eab38` from a pristine `git archive`
+  extraction, and again on the `v0.6.0` tag blob: released = **72 entries**
+  (**15** distinct strings, **62** ending in `$`, **0** lookaround); draft/proposal =
+  **80 entries** (**35** distinct, **59** ending in `$`, **1** lookaround). The `66`
+  quoted earlier was a summation error, now corrected in #271 as well; `62` is
+  "entries whose text ends in `$`", which happens to equal the scanner's
+  unescaped-`$`-outside-a-class count in this file set but is a different measure.
   **ECMA-262 is the floor for `pattern`**: the sentence in
   `docs/SCHEMA-CHANGES-v0.4.md` about lookahead workarounds is historical, not
   current policy, so the census counts and reports lookarounds and never rejects
@@ -31,9 +42,21 @@
   profile (`/classes/INSDCTaxon/slot_usage/uri/pattern`, present since the v0.6.0
   tag) — a site #270's table did not list. The owning repositories' live `main` is
   probed only through a local sibling checkout, otherwise printed as UNVERIFIED:
-  the script performs no network access. A pattern-bearing document appearing at
-  the repository root or in `schemas/` without being added to the gated scope also
-  fails; documents without a `pattern` keyword are outside this guard. Wired in as one
+  the script performs no network access. The gate covers **which files are governed**,
+  not only what they assert: the released surface is discovered by rule (`*.json` /
+  `*.yaml` / `*.yml` at the repository root, plus everything of those types under
+  `schemas/`), and `.github/pattern-baseline.json` records the answer — every discovered
+  document must appear in `governedFiles`, or in `excludedFiles` **by name with a
+  reason**, or the check fails. So a new root-level contract fails even when it contains
+  no `pattern` at all, and a governed file that stops being discovered fails too; a file
+  named by `schemas/versions.json` can never be excluded away. (The first two versions
+  of this check decided scope by pattern *content*, so a pattern-free contract passed;
+  an intermediate revision documented that narrowness instead of closing it. Both
+  directions are now gated and pinned by tests.) `--update-baseline` is the only writer
+  of that registration, and it still refuses to run under a CI marker — which makes an
+  automated refresh inconvenient rather than authenticated: environment variables do not
+  identify an actor, so the authority remains review of the one-file diff plus branch
+  protection. Wired in as one
   step of the existing `Validate specification` job (no new required check name);
   `tests/test_pattern_census.py` (focused tests) runs inside the existing
   `python -m unittest discover -s tests` step.

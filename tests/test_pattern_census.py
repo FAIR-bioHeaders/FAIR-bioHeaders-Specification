@@ -264,7 +264,8 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
     def test_untouched_copy_is_green(self):
         result = self.run_census()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("No released pattern added, removed or edited", result.stdout)
+        self.assertIn("no released pattern added, removed or edited", result.stdout)
+        self.assertIn("9 governed", result.stdout)
 
     def test_one_character_change_to_a_released_pattern_is_red(self):
         def mutate(document):
@@ -310,13 +311,20 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
         shutil.copyfile(self.contract, self.root / "fhx.json")
         result = self.run_census()
         self.assertEqual(result.returncode, 1)
-        self.assertIn("not in the gated scope", result.stderr)
+        self.assertIn("not registered in the baseline", result.stderr)
         self.assertIn("fhx.json", result.stderr)
 
-    def test_unscoped_contract_without_patterns_is_outside_keyword_census(self):
+    def test_unscoped_contract_without_patterns_is_RED_not_out_of_scope(self):
+        """Replaced: this test used to assert exit 0, i.e. it pinned finding 1 as design.
+
+        A pattern-free contract on the released surface is exactly the case the governed
+        FILE set exists to catch, so the expectation is inverted rather than relaxed.
+        """
         (self.root / "fhx.json").write_text('{"type":"string"}')
         result = self.run_census()
-        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.returncode, 1,
+                         "a pattern-free root contract must not pass the gate")
+        self.assertIn("fhx.json", result.stderr)
 
     def test_annotation_only_change_stays_green(self):
         self.patch_pattern(lambda document: document["properties"]["seqcol_id"].__setitem__(
@@ -331,13 +339,23 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
                 result = self.run_census()
                 self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_malformed_draft_yaml_is_informational(self):
+    def test_malformed_draft_yaml_fails_closed(self):
+        """Changed from `is_informational`: unreadable is not the same as harmless.
+
+        Copilot asked for a quiet informational note here; the maintainer instruction for
+        this round was to fail closed, and that is what this asserts. A draft's *content*
+        (lookarounds and friends) is still purely informational — see
+        test_draft_constructs_never_fail_the_build. The line is content vs. coverage, not
+        released vs. draft.
+        """
         target = self.root / "profiles" / "insdc-fhr.yaml"
         target.parent.mkdir()
         target.write_text("pattern: [")
         result = self.run_census()
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("invalid YAML", result.stdout)
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("invalid YAML", result.stderr)
+        self.assertIn("could not be censused", result.stderr)
+        self.assertNotIn("Traceback", result.stderr + result.stdout)
 
     def test_malformed_released_yaml_fails_cleanly(self):
         (self.root / "schemas" / "core.yaml").write_text("pattern: [")
@@ -528,3 +546,170 @@ class ScopeHygieneTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# The scratch tree copies the real governed surface, which includes YAML models,
+# so this class needs PyYAML like ReleasedGateEndToEndTests does. Without the
+# guard these tests report the missing dependency as a census defect, which is
+# exactly the fail-closed behaviour they are supposed to be testing past.
+@unittest.skipUnless(yaml is not None, "PyYAML is required (released scope includes YAML)")
+class GovernedFileDiscoveryTests(unittest.TestCase):
+    """The baseline must be the authority on WHICH FILES are governed, not on which
+    files happen to contain a `pattern` (PR #272 review, finding 1).
+
+    Both files under test here are pattern-free, so a gate keyed on pattern content
+    cannot see them at all.
+    """
+
+    PATTERN_FREE_SCHEMA = (
+        '{"$schema":"https://json-schema.org/draft/2020-12/schema",'
+        '"$id":"https://example.org/fhx.json","title":"FHX","type":"object",'
+        '"properties":{"nothing":{"type":"string"}}}')
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.base = Path(directory.name)
+        self.root = self.base / "repo"
+        for relative, _label in census.RELEASED_SCOPE:
+            target = self.root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / relative, target)
+        # The real repository also carries a root-level YAML that is data, not a
+        # contract (fhr_mappings.yml): the discovery rule sees it, so a faithful
+        # scratch tree has to carry it too.
+        for extra in ("fhr_mappings.yml",):
+            if (ROOT / extra).is_file():
+                shutil.copyfile(ROOT / extra, self.root / extra)
+        (self.root / ".github").mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(BASELINE, self.root / ".github" / "pattern-baseline.json")
+
+    def run_census(self, *extra, env=None):
+        environment = dict(os.environ)
+        for name in census.ENV_FLAGS:
+            environment.pop(name, None)
+        environment.update(env or {})
+        return subprocess.run([sys.executable, str(SCRIPT), "--root", str(self.root), *extra],
+                              capture_output=True, text=True, env=environment)
+
+    def test_a_pattern_free_root_contract_fails_the_gate(self):
+        """Case (a): the reviewer's exact probe file."""
+        (self.root / "fhx.json").write_text(self.PATTERN_FREE_SCHEMA, encoding="utf-8")
+        result = self.run_census()
+        self.assertEqual(result.returncode, 1,
+                         f"expected RED, got exit {result.returncode}:\n{result.stdout}")
+        self.assertIn("fhx.json", result.stderr)
+        self.assertIn("not registered", result.stderr.lower() + result.stdout.lower())
+
+    def test_a_registered_governed_file_that_disappears_fails_the_gate(self):
+        """Case (b): the other direction — deleted or unscoped, not just added."""
+        (self.root / "fhx.json").write_text(self.PATTERN_FREE_SCHEMA, encoding="utf-8")
+        refresh = self.run_census("--update-baseline")
+        self.assertEqual(refresh.returncode, 0, refresh.stdout + refresh.stderr)
+        stored = json.loads((self.root / ".github" / "pattern-baseline.json").read_text())
+        self.assertIn("fhx.json", {entry["path"] for entry in stored["governedFiles"]})
+        (self.root / "fhx.json").unlink()
+        result = self.run_census()
+        self.assertEqual(result.returncode, 1,
+                         f"expected RED, got exit {result.returncode}:\n{result.stdout}")
+        self.assertIn("fhx.json", result.stderr)
+
+    def test_a_pattern_free_file_can_be_excluded_only_by_name_with_a_reason(self):
+        """Case (c): this is a registration requirement, not a blanket ban."""
+        (self.root / "notes.json").write_text(
+            json.dumps({"description": "release notes data", "count": 2}), encoding="utf-8")
+        excluded = self.run_census("--update-baseline", "--exclude",
+                                   "notes.json::root-level data file, not a contract")
+        self.assertEqual(excluded.returncode, 0, excluded.stdout + excluded.stderr)
+        stored = json.loads((self.root / ".github" / "pattern-baseline.json").read_text())
+        entries = {entry["path"]: entry for entry in stored["excludedFiles"]}
+        self.assertIn("notes.json", entries)
+        self.assertTrue(entries["notes.json"]["reason"].strip())
+        self.assertNotIn("notes.json", {e["path"] for e in stored["governedFiles"]})
+        self.assertEqual(self.run_census().returncode, 0, "registered exclusion must pass")
+        # and an exclusion without a reason is refused rather than accepted silently
+        bare = self.run_census("--update-baseline", "--exclude", "notes.json")
+        self.assertEqual(bare.returncode, 2 if bare.returncode == 2 else 1)
+        self.assertIn("reason", (bare.stderr + bare.stdout).lower())
+
+    def test_a_governed_file_can_never_be_excluded_away(self):
+        """A scope that shrinks to dodge a false positive has stopped being a gate."""
+        for path in ("fhr.json", "schemas/core.yaml"):
+            with self.subTest(path=path):
+                result = self.run_census("--update-baseline",
+                                         "--exclude", f"{path}::not interesting")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(path, result.stderr + result.stdout)
+
+    def test_baseline_records_and_digests_the_governed_set(self):
+        refresh = self.run_census("--update-baseline")
+        self.assertEqual(refresh.returncode, 0, refresh.stdout + refresh.stderr)
+        stored = json.loads((self.root / ".github" / "pattern-baseline.json").read_text())
+        missing = [key for key in ("governedFiles", "governedFileDigest", "excludedFiles",
+                                   "discoveryRule") if key not in stored]
+        self.assertEqual(missing, [], f"baseline omits {missing}")  # do not dump the file
+        self.assertEqual(stored["governedFileDigest"], census.digest(stored["governedFiles"]))
+        paths = {entry["path"] for entry in stored["governedFiles"]}
+        self.assertEqual(paths, {relative for relative, _label in census.RELEASED_SCOPE},
+                         "the explicit list is a seed: every seed file stays governed")
+        # tamper: drop a governed entry without re-digesting
+        stored["governedFiles"] = stored["governedFiles"][1:]
+        (self.root / ".github" / "pattern-baseline.json").write_text(
+            json.dumps(stored, indent=2) + "\n", encoding="utf-8")
+        result = self.run_census()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("governed", result.stderr)
+
+    def test_discovery_rule_finds_the_real_repository_surface(self):
+        discovered = census.discover_governed_surface(ROOT)
+        for relative, _label in census.RELEASED_SCOPE:
+            self.assertIn(relative, discovered, relative)
+        self.assertIn("fhr_mappings.yml", discovered,
+                      "a root-level YAML is on the surface; it is excluded by name, "
+                      "not discovered-away")
+        self.assertNotIn("examples/minimal.fhr.yaml", discovered)
+        self.assertNotIn("templates/cedar/fhr.json", discovered)
+        self.assertNotIn("conformance/manifest.json", discovered)
+
+    def test_output_labels_its_denominators(self):
+        """#271 counts a broader regex scope; every number here must name its own."""
+        result = self.run_census()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Counting scope", result.stdout)
+        self.assertIn("keyword `pattern` only", result.stdout)
+        self.assertIn("entries = one per file+JSON pointer", result.stdout)
+        self.assertIn("distinct strings", result.stdout)
+        self.assertIn("Subtotal, the three released contracts only", result.stdout)
+        self.assertIn("59 entries", result.stdout)   # fhr 10 + fhp 23 + fhgff3 26
+        self.assertIn("Discovery rule:", result.stdout)
+
+    def test_committed_baseline_registers_the_whole_surface(self):
+        """The shipped baseline must be internally complete against its own rule."""
+        stored = json.loads(BASELINE.read_text())
+        registered = ({entry["path"] for entry in stored["governedFiles"]}
+                      | {entry["path"] for entry in stored["excludedFiles"]})
+        self.assertEqual(registered, set(census.discover_governed_surface(ROOT)),
+                         "every discovered surface document is governed or excluded by name")
+
+    def test_governed_set_is_exactly_the_released_types_and_holds_no_draft(self):
+        """Rule V7, enforced structurally: the registry decides what is governed.
+
+        The governed set must equal the seed plus every contract `schemas/versions.json`
+        names as released, and it must never contain a draft type — so a future FHT or
+        FHGM contract cannot be pulled into the released gate by editing one tuple.
+        """
+        stored = json.loads(BASELINE.read_text())
+        governed = {entry["path"] for entry in stored["governedFiles"]}
+        self.assertEqual(governed, census.mandatory_governed(ROOT))
+        _current, _pre, files = census.registry(ROOT)
+        self.assertTrue(files, "the registry must name the released types")
+        self.assertTrue(set(files.values()) <= governed)
+        for path in sorted(governed):
+            token = path.lower()
+            self.assertNotIn("fht", token)
+            self.assertNotIn("fhgm", token)
+            self.assertNotIn("draft", token)
+        for entry in stored["excludedFiles"]:
+            self.assertNotIn(entry["path"], governed,
+                             "a file is governed or excluded, never both")
+            self.assertTrue(str(entry["reason"]).strip(), "an exclusion needs a reason")
