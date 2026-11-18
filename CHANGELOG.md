@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Draft `insdc-fhr` profile (#190; profile change, no released schema or
+  `schemaVersion` change): BioSample links may also use
+  `https://identifiers.org/biosample:<sample>` and
+  `https://www.ebi.ac.uk/biosamples/samples/<sample>`; project and sample
+  accession numbers must be positive without a leading zero, so `PRJNA0` and
+  `SAMN0` no longer count. The profile description now says what it accepts:
+  FHR `schemaVersion` 2.0 or 2.1, not 2.0 only. Extension-field tests now
+  assert the specific error (the rejected key and, for a new minor under the
+  v0.4.0 schema, the `schemaVersion` enum failure) instead of any failure.
+  Survey notes: the #191 results page links only committed files, and the
+  round 6 `fh-stack-results.json` records paths relative to its directory
+  instead of the CI runner's absolute paths (results unchanged).
 - Number the FHR assembly-statistics definitions (#253) as FORMAT.md rule R16
   and point the `vitalStats` descriptions in the LinkML model at them: contig
   N50/L50/N90/L90 are over the summed contig length and the scaffold variants

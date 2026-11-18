@@ -59,6 +59,26 @@ def validator(schema):
     return Draft202012Validator(schema, format_checker=FormatChecker())
 
 
+def key_errors(errors, key, path=()):
+    """The errors that reject ``key`` itself in the object at ``path``.
+
+    ``additionalProperties`` names an unmatched key in its message; the
+    ``propertyNames`` rules (a line break, or any ``x-`` key under the first
+    minor) fail with the key as the instance.
+    """
+    return [error for error in errors
+            if list(error.absolute_path) == list(path)
+            and ((error.validator == "additionalProperties" and repr(key) in error.message)
+                 or (error.validator == "not" and error.instance == key))]
+
+
+def version_errors(errors, accepted):
+    """The enum errors that reject a schemaVersion outside ``accepted``."""
+    return [error for error in errors
+            if error.validator == "enum" and list(error.absolute_path) == ["schemaVersion"]
+            and error.validator_value == accepted]
+
+
 def generated():
     spec = importlib.util.spec_from_file_location("generator", ROOT / "json-schema-generator.py")
     module = importlib.util.module_from_spec(spec)
@@ -134,7 +154,16 @@ class ExtensionFieldTests(unittest.TestCase):
                         record[key] = "value"
                         with self.subTest(header_type=header_type, schema=label,
                                           version=version, key=key):
-                            self.assertTrue(list(check.iter_errors(record)))
+                            errors = list(check.iter_errors(record))
+                            # The key itself is rejected, not just some other field.
+                            self.assertTrue(key_errors(errors, key), errors)
+                            # v0.4.0 rejects the new minor too, which must not be
+                            # the only reason the record fails.
+                            outside = label == "v0.4.0" and version == new
+                            self.assertEqual(bool(version_errors(errors, [first])),
+                                             outside, errors)
+                            self.assertEqual(len(errors) - len(key_errors(errors, key)),
+                                             int(outside), errors)
 
     def test_first_minor_has_no_extension_fields(self):
         """A record that states the older minor is held to it (research R-02)."""
@@ -154,12 +183,17 @@ class ExtensionFieldTests(unittest.TestCase):
                 record = self.record(header_type, new)
                 record[nested]["x-a"] = 1
                 with self.subTest(header_type=header_type, schema=label, path=nested):
-                    self.assertTrue(list(validator(schema).iter_errors(record)))
+                    errors = list(validator(schema).iter_errors(record))
+                    self.assertEqual(len(errors), 1, errors)
+                    self.assertEqual(key_errors(errors, "x-a", [nested]), errors)
                 record = self.record(header_type, new)
                 author = record["metadataAuthor"][0]
                 author["x-a"] = 1
                 with self.subTest(header_type=header_type, schema=label, path="author"):
-                    self.assertTrue(list(validator(schema).iter_errors(record)))
+                    errors = list(validator(schema).iter_errors(record))
+                    self.assertEqual(len(errors), 1, errors)
+                    self.assertEqual(key_errors(errors, "x-a", ["metadataAuthor", 0]),
+                                     errors)
 
     def test_older_release_schemas_reject_extension_fields(self):
         """V2/V3: a record citing v0.4.x is checked against the v0.4.x schema."""
@@ -172,7 +206,17 @@ class ExtensionFieldTests(unittest.TestCase):
                 record = self.record(header_type, version)
                 record["x-a"] = 1
                 with self.subTest(header_type=header_type, version=version):
-                    self.assertTrue(list(check.iter_errors(record)))
+                    errors = list(check.iter_errors(record))
+                    rejected = key_errors(errors, "x-a")
+                    # v0.4.x has no patternProperties: x-a is an unexpected key.
+                    self.assertEqual([error.validator for error in rejected],
+                                     ["additionalProperties"], errors)
+                    # The new minor is also outside v0.4.x's enum; that is the only
+                    # other error, so the x-a rejection is not masked by it.
+                    others = [error for error in errors if error not in rejected]
+                    expected = version_errors(errors, [first]) if version == new else []
+                    self.assertEqual(others, expected, errors)
+                    self.assertEqual(len(others), int(version == new), errors)
 
     def test_older_minor_outcomes_are_unchanged(self):
         """Every record stating the older minor has its v0.4.0 outcome under the new schema.
