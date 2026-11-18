@@ -215,6 +215,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(self.manifest["schemaVersionsSpecification"], "docs/SCHEMA-VERSIONS.md")
         unsupported = {v["id"] for v in vectors if v.get("result") == "unsupported-version"}
         self.assertEqual(unsupported, {"fasta-schema-unknown-release", "fasta-schema-branch-ref",
+                                       "fasta-schema-raw-refs-heads-main",
                                        "fhp-fasta-schema-release-without-type",
                                        "fhgff3-schema-unknown-release"})
         for vector in vectors:
@@ -293,7 +294,7 @@ class ConformanceTests(unittest.TestCase):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
         self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 18)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 22)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 24)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
@@ -377,7 +378,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(79 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -408,7 +409,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(77 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(79 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
 
