@@ -342,6 +342,20 @@ class ConformanceTests(unittest.TestCase):
             self.assertEqual(gzip.decompress(data), (CONFORMANCE / plain["file"]).read_bytes())
             self.assertEqual(vector["checksum"], plain["checksum"])
 
+    def test_missing_warnings_needs_a_complete_rule_token(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        try:
+            import check_conformance
+        finally:
+            sys.path.pop(0)
+        for line in ("FHR: warning: R14 link scheme", "FHR: warning: (FORMAT.md R14)",
+                     "warning: R14: link", "warning: rule R14."):
+            self.assertEqual(check_conformance.missing_warnings(["R14"], line), [], line)
+        for line in ("FHR: warning: R140 is not a rule", "FHR: warning: R14A unrelated warning",
+                     "FHR: warning: R14a", "FHR: warning: R14_b", "FHR: warning: XR14",
+                     "FHR: warning: 1R14", "FHR: error: R14 link scheme"):
+            self.assertEqual(check_conformance.missing_warnings(["R14"], line), ["R14"], line)
+
     def test_converter_that_accepts_everything_fails(self):
         bin_directory = self.root / "bin"
         bin_directory.mkdir()
@@ -461,21 +475,26 @@ class ConformanceTests(unittest.TestCase):
                       "without an unsupported schema version message",
                       wrong_version.stderr)
 
-        # R14 vectors need a warning that names R14, not just any warning line.
-        unrelated_warning_bin = self.root / "unrelated-warning-bin"
-        unrelated_warning_bin.mkdir()
-        unrelated_body = body.replace("FHR: warning: link scheme (docs/FORMAT.md R14)",
-                                      "FHR: warning: R140 is not a rule")
-        self.assertNotEqual(unrelated_body, body)
-        for name in ("fhr-fasta-validate", "fhr-gfa-validate", "fhr-convert"):
-            script = unrelated_warning_bin / name
-            script.write_text(unrelated_body)
-            script.chmod(0o755)
-        unrelated = self.check("--skip-regeneration", "--converter", unrelated_warning_bin)
-        self.assertEqual(unrelated.returncode, 1)
-        self.assertIn("fasta-link-scheme-warning: converter printed no warning; expected one "
-                      "under R14", unrelated.stderr)
-        self.assertNotIn("jsonld-link-scheme-warning", unrelated.stderr)  # jsonld skipped
+        # R14 vectors need a warning that names R14, not just any warning line,
+        # and not a longer token that starts or ends with it (R140, R14A, XR14).
+        for token in ("R140", "R14A", "R14_x", "XR14"):
+            with self.subTest(token=token):
+                unrelated_warning_bin = self.root / f"unrelated-warning-bin-{token}"
+                unrelated_warning_bin.mkdir()
+                unrelated_body = body.replace(
+                    "FHR: warning: link scheme (docs/FORMAT.md R14)",
+                    f"FHR: warning: {token} unrelated warning")
+                self.assertNotEqual(unrelated_body, body)
+                for name in ("fhr-fasta-validate", "fhr-gfa-validate", "fhr-convert"):
+                    script = unrelated_warning_bin / name
+                    script.write_text(unrelated_body)
+                    script.chmod(0o755)
+                unrelated = self.check("--skip-regeneration", "--converter",
+                                       unrelated_warning_bin)
+                self.assertEqual(unrelated.returncode, 1, unrelated.stderr)
+                self.assertIn("fasta-link-scheme-warning: converter printed no warning; "
+                              "expected one under R14", unrelated.stderr)
+                self.assertNotIn("jsonld-link-scheme-warning", unrelated.stderr)  # skipped
 
         strict = self.check("--skip-regeneration", "--require-format", "jsonld",
                             "--converter", bin_directory)
