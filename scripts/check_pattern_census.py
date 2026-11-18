@@ -313,13 +313,29 @@ def escape(token):
 NAME_KEYED = {"properties", "patternProperties", "$defs", "definitions",
               "dependentSchemas", "dependencies"}
 
+# LinkML keywords whose value is prose or annotation data, never a constraint. The
+# instance-data exclusion (PR #272 review, finding 3) was first applied only to the
+# JSON Schema traversal, which left the .yaml models — schemas/core.yaml,
+# schemas/shared.yaml, the *_linkml.yml files and the draft profiles, i.e. exactly the
+# files where `examples:` is common — still walking into their own instance data. A
+# LinkML-side test is what showed it.
+LINKML_DATA_KEYS = {"examples", "description", "title", "annotations", "extensions",
+                    "comments", "notes"}
+# LinkML containers whose child keys are model-level NAMES (a class name, a slot name),
+# not keywords. `attributes` and `slot_usage` in particular: a class may legitimately
+# declare a slot called `pattern`, and without this the walker reads that slot's
+# definition as the pattern keyword — a non-string, which now fails closed.
+LINKML_NAMED_KEYS = {"classes", "slots", "types", "enums", "attributes", "slot_usage",
+                     "subsets", "prefixes", "settings", "enum_entries", "permissible_values"}
+
 
 def iter_patterns(node, pointer="", keyed_by_name=False):
     """Yield (pointer, value) for every ``pattern`` keyword, resolving nothing.
 
     Pointers are reported exactly as they appear in the file: ``$ref`` targets of
     the shared imports are not followed, because #270 asks where a pattern is
-    written, not where it applies.
+    written, not where it applies. This is the LinkML traversal; the JSON Schema one is
+    `iter_schema_patterns`, and both exclude instance data, for the same reason.
     """
     if isinstance(node, list):
         for index, value in enumerate(node):
@@ -333,9 +349,11 @@ def iter_patterns(node, pointer="", keyed_by_name=False):
         return
     for key, value in node.items():
         child = pointer + "/" + escape(key)
+        if key in LINKML_DATA_KEYS:
+            continue
         if key == "pattern":
             yield child, value
-        elif key in NAME_KEYED:
+        elif key in NAME_KEYED or key in LINKML_NAMED_KEYS:
             yield from iter_patterns(value, child, keyed_by_name=True)
         else:
             yield from iter_patterns(value, child)

@@ -159,6 +159,27 @@ class SchemaWalkerTests(unittest.TestCase):
             "/allOf/0/then/items/pattern": "^item$"})
 
 
+    def test_linkml_instances_are_not_constraints(self):
+        """The other traversal: a LinkML slot's `examples` is prose, not a pattern.
+
+        inventory() picks iter_patterns for .yaml/.yml and iter_schema_patterns for
+        .json, so the instance-data exclusion has two implementations and each needs
+        its own test. Naming this one in a review reply before it existed is what
+        forced it: the claim was checked, found false, and then made true.
+        """
+        document = {"slots": {"uri": {"pattern": "^https://x$",
+                                      "examples": [{"pattern": "illustrative"}],
+                                      "description": "text"}},
+                    "classes": {"T": {"attributes": {"n": {"pattern": "^[0-9]+$"}}}},
+                    "name": "model"}
+        self.assertEqual(dict(census.iter_patterns(document)), {
+            "/slots/uri/pattern": "^https://x$",
+            "/classes/T/attributes/n/pattern": "^[0-9]+$"})
+        # a field legitimately *named* pattern is still just a name in LinkML too
+        nested = {"classes": {"T": {"attributes": {"pattern": {"type": "string"}}}}}
+        self.assertEqual(list(census.iter_patterns(nested)), [])
+
+
 class CompareTests(unittest.TestCase):
     def setUp(self):
         self.baseline = {"fhr.json": [{"pointer": "/properties/a/pattern",
