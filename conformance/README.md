@@ -68,7 +68,8 @@ Vector ids are stable and never reused. When a rule change alters a vector's exp
 outcome, the vector is retired and a vector with a new id takes its place. `retired`
 lists each retired id with the outcome it had (`expected`, and `rule` if it was
 invalid), the id that replaces it (`replacedBy`) and the `reason`. No entry in
-`vectors` uses a retired id.
+`vectors` uses a retired id. `check_conformance.py` reads the manifest at every
+release tag and fails if a released id is neither a vector nor retired.
 
 An invalid vector breaks one rule and is otherwise correct. Where possible its
 stated checksum matches the bytes, so an implementation can't pass by failing the
@@ -100,8 +101,8 @@ a bug in the implementation or the vectors, and report it as an issue.
 
 The two dotted BUSCO vectors cite the v0.6.0 schemas released on 2026-11-13
 and remain valid under the current specification. A converter that bundles
-those schemas — fair-bioheaders 0.11.0 or later, the version the conformance
-workflow pins — must accept them; a converter that predates v0.6.0 correctly
+those schemas — fair-bioheaders 0.11.0 or later; the conformance workflow
+installs the release pinned in `toolkit-pin.json` — must accept them; a converter that predates v0.6.0 correctly
 reports the unsupported schema version (V4). While v0.6.0 was being prepared,
 the two vectors' manifest entries carried a `converterResults` field naming
 both outcomes as acceptable for the pinned older converter; that field and its

@@ -36,7 +36,7 @@
   "_ui": {
     "order": [
       "header_schema",
-      "schemaVersion",
+      "header_schemaVersion",
       "genome",
       "genomeSynonym",
       "taxon",
@@ -62,7 +62,7 @@
     ],
     "propertyLabels": {
       "header_schema": "Schema",
-      "schemaVersion": "Schema Version",
+      "header_schemaVersion": "Schema Version",
       "genome": "Genome",
       "genomeSynonym": "Genome Synonym",
       "taxon": "Taxon",
@@ -88,7 +88,7 @@
     },
     "propertyDescriptions": {
       "header_schema": "centralized schema file. This template fixes the FHR contract URL to the released v0.6.0 version (https://w3id.org/fair-bioheaders/fhr/v0.6.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
-      "schemaVersion": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4, 2.1 (extension fields) from v0.5 (docs/SCHEMA-VERSIONS.md).",
+      "header_schemaVersion": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4, 2.1 (extension fields) from v0.5 (docs/SCHEMA-VERSIONS.md).",
       "genome": "Name of the Genome.",
       "genomeSynonym": "Other common names of the genome.",
       "taxon": "Species name and URL of the species information at identifiers.org.",
@@ -274,7 +274,7 @@
             "https://w3id.org/fair-bioheaders/templates/cedar/fhr#/schema"
           ]
         },
-        "schemaVersion": {
+        "header_schemaVersion": {
           "enum": [
             "https://w3id.org/fair-bioheaders/templates/cedar/fhr#/schemaVersion"
           ]
@@ -408,7 +408,7 @@
         "skos:notation",
         "pav:derivedFrom",
         "header_schema",
-        "schemaVersion",
+        "header_schemaVersion",
         "genome",
         "genomeSynonym",
         "taxon",
@@ -595,7 +595,7 @@
       "schema:schemaVersion": "1.6.0",
       "additionalProperties": false
     },
-    "schemaVersion": {
+    "header_schemaVersion": {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "@type": "https://schema.metadatacenter.org/core/TemplateField",
       "@context": {
@@ -5218,7 +5218,7 @@
     "pav:lastUpdatedOn",
     "oslc:modifiedBy",
     "header_schema",
-    "schemaVersion",
+    "header_schemaVersion",
     "genome",
     "taxon",
     "version",

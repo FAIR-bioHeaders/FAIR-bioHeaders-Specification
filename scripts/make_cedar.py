@@ -30,8 +30,9 @@ adds DRAFT templates for the two draft contracts, per type ``status: "draft"``:
   patternProperty (FHT-Specification#24), not through the released R15
   contract; the form keeps ``x-`` out exactly as for the released types.
 - **FHGM** is generated from the pinned native model contract v0.1
-  (``templates/cedar/drafts/fhgm-model.schema.json``, FHGM-Specification PR #11
-  under FAIR-bioHeaders-Specification#204). One FHGM record is a MODEL record,
+  (``templates/cedar/drafts/fhgm-model.schema.json``, introduced by
+  FHGM-Specification PR #11 under FAIR-bioHeaders-Specification#204; the
+  pinned commit is recorded in ``templates/cedar/drafts/provenance.json``). One FHGM record is a MODEL record,
   not a file header: it carries no ``schema``, ``schemaVersion`` or
   ``checksum`` field and travels as one item of the FHGFF3 header's
   ``x-fhgm-models`` array; the enclosing FHGFF3 file checksum covers the
@@ -174,12 +175,25 @@ DRAFT_WARNINGS = {
              "through v0.x by the recorded review disposition: equality and "
              "difference only, with no implied ordering"),
 }
-FORM_FIELD_ALIASES = {"schema": "header_schema"}
+# CEDAR's template and element meta-schemas reject any child (and @context)
+# key that starts with a reserved prefix such as "schema", so both contract
+# names that do are aliased in the form and restored by flatten_export.
+FORM_FIELD_ALIASES = {"schema": "header_schema", "schemaVersion": "header_schemaVersion"}
+# The union of the two child-name patterns in the CEDAR meta-schemas
+# (templatePropertiesFieldContent.json and templateContextPropertiesFieldContent.json
+# in metadatacenter/cedar-model-validation-library): a form name matching this
+# would make the whole template fail CEDAR validation.
+CEDAR_RESERVED_NAME = re.compile(
+    r"^(?:@context|@type|@id|@language|schema|xsd|pav|oslc|rdfs|skos|_annotations|\$)|\.")
 
 
 def form_field_name(name: str) -> str:
     """Avoid CEDAR context namespace collisions while retaining contract names."""
-    return FORM_FIELD_ALIASES.get(name, name)
+    form_name = FORM_FIELD_ALIASES.get(name, name)
+    if CEDAR_RESERVED_NAME.search(form_name):
+        raise SystemExit(f"make_cedar: form field name {form_name!r} is reserved by the "
+                         "CEDAR meta-schemas; add a FORM_FIELD_ALIASES entry")
+    return form_name
 
 
 def contract_field_name(name: str) -> str:
@@ -543,6 +557,9 @@ class Generator:
         context_map = {}
         order = []
         for member, member_node in node.get("properties", {}).items():
+            if CEDAR_RESERVED_NAME.search(member):
+                raise SystemExit(f"make_cedar: element member {path}.{member} is reserved "
+                                 "by the CEDAR meta-schemas; nested names are not aliased")
             member_path = f"{path}.{member}"
             order.append(member)
             fields[member] = self.field(member_path, member, member_node,
@@ -732,12 +749,12 @@ class Generator:
                          "slots (docs/FORMAT.md) - curators who need it write YAML "
                          "by hand")
         if self.stem == "fht":
-            parts.append("Released fair-bioheaders 0.11.0 can bind and check FHT "
+            parts.append("The released bioheaders toolkit can bind and check FHT "
                          "through the opt-in BIOHEADERS_EXPERIMENTAL_FHT=1 V7 "
-                         "lane; default behavior still refuses FHT. Its bundled "
-                         "draft predates this snapshot's dotted-lineage widening, "
-                         "so successful common-value round trips do not prove "
-                         "support for every value this template accepts")
+                         "lane; default behavior still refuses FHT. A toolkit "
+                         "release bundles its own pinned FHT draft, which may differ "
+                         "from this snapshot, so successful common-value round trips "
+                         "do not prove support for every value this template accepts")
         if self.stem == "fhgm":
             parts.append("This form authors ONE FHGM model record, not a file header: "
                          "the record has no schema, schemaVersion or checksum field "
@@ -947,15 +964,34 @@ def _contract_node(node, generator):
     return node
 
 
+def _blank(value) -> bool:
+    """True for a value a curator left unanswered: null, or a container that
+    holds nothing but unanswered values once flattened (a CEDAR export keeps
+    every element and multi-instance field, filled or not)."""
+    if value is None:
+        return True
+    if isinstance(value, dict):
+        return all(_blank(item) for item in value.values())
+    if isinstance(value, list):
+        return all(_blank(item) for item in value)
+    return False
+
+
+def _flatten_list(values, node, generator):
+    # An unanswered instance of a multi-instance field (the blank item CEDAR
+    # shows for a field with minItems, or an extra empty row) is not a value.
+    item_node = node.get("items", {})
+    flattened = (_flatten_value(item, item_node, generator) for item in values)
+    return [item for item in flattened if not _blank(item)]
+
+
 def _flatten_value(value, node, generator):
     node = _contract_node(node, generator)
     if isinstance(value, list):
-        item_node = node.get("items", {})
-        return [_flatten_value(item, item_node, generator) for item in value]
+        return _flatten_list(value, node, generator)
     if isinstance(value, dict):
         if "@list" in value:
-            return [_flatten_value(item, node.get("items", {}), generator)
-                    for item in value["@list"]]
+            return _flatten_list(value["@list"], node, generator)
         if "@value" in value:
             return _coerce(value)
         return _flatten_object(value, node, generator)
@@ -975,7 +1011,7 @@ def _flatten_object(artifact: dict, node: dict, generator, root=False) -> dict:
         flattened = _flatten_value(value, contract_node, generator)
         if root and contract_key == "checksum" and flattened in (None, ""):
             continue
-        if flattened is None and contract_key not in required:
+        if contract_key not in required and _blank(flattened):
             continue
         record[contract_key] = flattened
     return record
@@ -985,9 +1021,13 @@ def flatten_export(artifact: dict) -> dict:
     """Turn a CEDAR artifact instance export into the plain FH* JSON record.
 
     Drops the JSON-LD/CEDAR bookkeeping keys and unwraps ``{"@value": ...}``
-    (with the numeric datatypes the generated fields declare). Empty optional
-    values are omitted according to the selected contract's requiredness, and
-    an empty root checksum is omitted for ``bioheaders combine`` to calculate.
+    (with the numeric datatypes the generated fields declare). Unanswered
+    optional values are omitted according to the selected contract's
+    requiredness: a null value, an element whose members are all unanswered,
+    and a multi-instance field with no answered instance (unanswered instances
+    are dropped from partly filled lists). An unanswered required value stays
+    in the record as null or an empty list so the toolkit reports it, and an
+    empty root checksum is omitted for ``bioheaders combine`` to calculate.
     Supplied nested parent checksums are retained. The toolkit remains the
     authority: this helper only restores the record shape; it validates
     nothing.

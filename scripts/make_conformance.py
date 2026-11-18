@@ -43,6 +43,13 @@ RETIRED = {
                   "1.0) valid, so its expected outcome changed; the same bytes are now the "
                   "valid vector fasta-schema-raw-main-version-1-0.",
     },
+    "jsonld-schemaorg-vocab-compaction": {
+        "expected": "valid",
+        "replacedBy": "jsonld-context-schemaorg-vocab",
+        "reason": "Rule J3 (v0.4.2) allows only the FHR context, so a document compacted "
+                  "with a schema.org @vocab and an fhr prefix became invalid; the invalid "
+                  "vector jsonld-context-schemaorg-vocab now covers that form.",
+    },
 }
 
 # Stable, non-normative labels for the docs/FORMAT.md rules.

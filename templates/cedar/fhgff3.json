@@ -52,7 +52,7 @@
       "relatedLink",
       "reuseConditions",
       "header_schema",
-      "schemaVersion",
+      "header_schemaVersion",
       "scholarlyArticle",
       "soVersion",
       "source",
@@ -78,7 +78,7 @@
       "relatedLink": "Related Link",
       "reuseConditions": "Reuse Conditions",
       "header_schema": "Schema",
-      "schemaVersion": "Schema Version",
+      "header_schemaVersion": "Schema Version",
       "scholarlyArticle": "Scholarly Article",
       "soVersion": "SO version",
       "source": "Source",
@@ -104,7 +104,7 @@
       "relatedLink": "Related URLs to the annotation.",
       "reuseConditions": "Reuse conditions or license for the annotation.",
       "header_schema": "URL of the FHGFF3 JSON Schema this record follows (raw-main, a release's raw tag URL or its w3id URL; docs/SCHEMA-VERSIONS.md); it identifies the header type (FR-010). This template fixes the FHGFF3 contract URL to the released v0.6.0 version (https://w3id.org/fair-bioheaders/fhgff3/v0.6.0); docs/SCHEMA-VERSIONS.md allows other URLs for existing records.",
-      "schemaVersion": "Version of the FHGFF3 schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5; 1.2 (dotted BUSCO dataset versions) from v0.6.",
+      "header_schemaVersion": "Version of the FHGFF3 schema contract (\"MAJOR.MINOR\"); 1.1 (extension fields) from v0.5; 1.2 (dotted BUSCO dataset versions) from v0.6.",
       "scholarlyArticle": "Scholarly article where the annotation was published. A registered DOI without the resolver prefix (for example 10.5281/zenodo.6762550).",
       "soVersion": "Sequence Ontology release used for the feature types, as its data-version (for example 2026-08-07).",
       "source": "Sources of the annotation that are not FAIR-bioHeaders files, such as an annotation release or evidence set, as asserted by the producer; never verified by checksum.",
@@ -354,7 +354,7 @@
             "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/schema"
           ]
         },
-        "schemaVersion": {
+        "header_schemaVersion": {
           "enum": [
             "https://w3id.org/fair-bioheaders/templates/cedar/fhgff3#/schemaVersion"
           ]
@@ -424,7 +424,7 @@
         "relatedLink",
         "reuseConditions",
         "header_schema",
-        "schemaVersion",
+        "header_schemaVersion",
         "scholarlyArticle",
         "soVersion",
         "source",
@@ -4859,7 +4859,7 @@
       "schema:schemaVersion": "1.6.0",
       "additionalProperties": false
     },
-    "schemaVersion": {
+    "header_schemaVersion": {
       "$schema": "http://json-schema.org/draft-04/schema#",
       "@type": "https://schema.metadatacenter.org/core/TemplateField",
       "@context": {
@@ -6359,7 +6359,7 @@
     "pav:lastUpdatedOn",
     "oslc:modifiedBy",
     "header_schema",
-    "schemaVersion",
+    "header_schemaVersion",
     "annotation",
     "taxon",
     "version",

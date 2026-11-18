@@ -1,0 +1,1213 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Meta-schema that specifies the schema of an iri-valued template field",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "Schema describing the JSON Schema '$schema' field in a template, element, and field",
+      "type": "string",
+      "format": "uri",
+      "enum": [
+        "http://json-schema.org/draft-04/schema#"
+      ]
+    },
+    "type": {
+      "description": "Schema describing the JSON Schema 'type' field in a template, element, and field",
+      "type": "string",
+      "enum": [
+        "object"
+      ]
+    },
+    "schema:identifier": {
+      "description": "Schema describing the template field's user-defined identifier",
+      "type": "string",
+      "minLength": 1
+    },
+    "schema:name": {
+      "description": "Schema describing the template field name",
+      "type": "string",
+      "minLength": 1
+    },
+    "skos:prefLabel": {
+      "description": "Schema describing the preferred question text for the field, if any",
+      "type": "string"
+    },
+    "skos:altLabel": {
+      "description": "Schema describing the alternative question text for the field, if any",
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema:description": {
+      "description": "Schema describing the template field description",
+      "type": "string"
+    },
+    "title": {
+      "description": "Schema describing the JSON Schema 'title' field in a template, element, and field",
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "description": "Schema describing the JSON Schema 'description' field in a template, element, and field",
+      "type": "string",
+      "minLength": 1
+    },
+    "_ui": {
+      "$ref": "#/definitions/iriFieldUIContent"
+    },
+    "_valueConstraints": {
+      "$ref": "#/definitions/iriFieldValueConstraintsContent"
+    },
+    "@context": {
+      "$ref": "#/definitions/templateFieldJSONLDContextFieldContent"
+    },
+    "@id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "@type": {
+      "type": "string",
+      "format": "uri",
+      "enum": [
+        "https://schema.metadatacenter.org/core/TemplateField"
+      ]
+    },
+    "properties": {
+      "$ref": "#/definitions/iriFieldPropertiesContent"
+    },
+    "required": {
+      "$ref": "#/definitions/stringArray"
+    },
+    "pav:createdOn": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "pav:createdBy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "pav:lastUpdatedOn": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "oslc:modifiedBy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "bibo:status": {
+      "type": "string",
+      "enum": [
+        "bibo:published",
+        "bibo:draft"
+      ]
+    },
+    "pav:version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "pav:previousVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pav:derivedFrom": {
+      "type": "string",
+      "format": "uri"
+    },
+    "additionalProperties": {
+      "description": "Schema describing the JSON Schema 'additionalProperties' field in a template, element, and field",
+      "type": "boolean",
+      "enum": [
+        false
+      ]
+    },
+    "schema:schemaVersion": {
+      "type": "string",
+      "enum": [
+        "1.6.0"
+      ]
+    }
+  },
+  "required": [
+    "$schema",
+    "type",
+    "title",
+    "description",
+    "_ui",
+    "_valueConstraints",
+    "@context",
+    "@id",
+    "@type",
+    "properties",
+    "additionalProperties",
+    "pav:createdOn",
+    "pav:createdBy",
+    "pav:lastUpdatedOn",
+    "oslc:modifiedBy",
+    "schema:schemaVersion",
+    "schema:name",
+    "schema:description"
+  ],
+  "definitions": {
+    "iriFieldUIContent": {
+      "description": "Meta-schema that describes the schema of a '_ui' field of an IRI-valued template field",
+      "type": "object",
+      "properties": {
+        "inputType": {
+          "type": "string",
+          "enum": [
+            "link",
+            "ext-ror",
+            "ext-orcid",
+            "ext-pfas",
+            "ext-rrid",
+            "ext-pubmed",
+            "ext-nih-grant-id",
+            "ext-doi"
+          ]
+        },
+        "valueRecommendationEnabled": {
+          "type": "boolean"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "continuePreviousLine": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "inputType"
+      ],
+      "additionalProperties": false
+    },
+    "iriFieldValueConstraintsContent": {
+      "description": "Meta-schema that specifies the schema of a '_valueConstraints' field in an iri-valued template field",
+      "type": "object",
+      "properties": {
+        "requiredValue": {
+          "type": "boolean"
+        },
+        "recommendedValue": {
+          "type": "boolean"
+        },
+        "multipleChoice": {
+          "type": "boolean",
+          "enum": [
+            false
+          ]
+        },
+        "defaultValue": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/valueConstraintsStringDefaultValueContent"
+            },
+            {
+              "$ref": "#/definitions/valueConstraintsUriDefaultValueContent"
+            }
+          ]
+        },
+        "ontologies": {
+          "$ref": "#/definitions/valueConstraintsOntologiesFieldContent"
+        },
+        "valueSets": {
+          "$ref": "#/definitions/valueConstraintsValueSetsFieldContent"
+        },
+        "classes": {
+          "$ref": "#/definitions/valueConstraintsClassesFieldContent"
+        },
+        "branches": {
+          "$ref": "#/definitions/valueConstraintsBranchesFieldContent"
+        },
+        "literals": {
+          "$ref": "#/definitions/valueConstraintsLiteralsFieldContent"
+        },
+        "actions": {
+          "$ref": "#/definitions/valueConstraintsActionsFieldContent"
+        }
+      },
+      "required": [
+        "requiredValue"
+      ],
+      "additionalProperties": false
+    },
+    "iriFieldPropertiesContent": {
+      "description": "Meta-schema that describes the schema of a 'properties' field in an IRI-valued template field",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "$ref": "#/definitions/jsonLDTypeFieldContent"
+        },
+        "@id": {
+          "$ref": "#/definitions/jsonLDIDFieldContent"
+        },
+        "rdfs:label": {
+          "$ref": "#/definitions/rdfsLabelFieldContent"
+        },
+        "skos:notation": {
+          "$ref": "#/definitions/skosNotationFieldContent"
+        }
+      },
+      "required": [
+        "@type",
+        "@id",
+        "rdfs:label"
+      ],
+      "additionalProperties": false
+    },
+    "templateFieldJSONLDContextFieldContent": {
+      "description": "Schema describing a '@context' field in a template field",
+      "type": "object",
+      "properties": {
+        "xsd": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://www.w3.org/2001/XMLSchema#"
+          ]
+        },
+        "pav": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://purl.org/pav/"
+          ]
+        },
+        "schema": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://schema.org/"
+          ]
+        },
+        "oslc": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://open-services.net/ns/core#"
+          ]
+        },
+        "skos": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://www.w3.org/2004/02/skos/core#"
+          ]
+        },
+        "bibo": {
+          "type": "string",
+          "format": "uri",
+          "enum": [
+            "http://purl.org/ontology/bibo/"
+          ]
+        },
+        "schema:name": {
+          "$ref": "#/definitions/schemaNameContextFieldContent"
+        },
+        "schema:description": {
+          "$ref": "#/definitions/schemaDescriptionContextFieldContent"
+        },
+        "skos:prefLabel": {
+          "$ref": "#/definitions/skosPrefLabelContextFieldContent"
+        },
+        "skos:altLabel": {
+          "$ref": "#/definitions/skosAltLabelContextFieldContent"
+        },
+        "pav:createdOn": {
+          "$ref": "#/definitions/pavCreatedOnContextFieldContent"
+        },
+        "pav:createdBy": {
+          "$ref": "#/definitions/pavCreatedByContextFieldContent"
+        },
+        "pav:lastUpdatedOn": {
+          "$ref": "#/definitions/pavLastUpdatedOnContextFieldContent"
+        },
+        "oslc:modifiedBy": {
+          "$ref": "#/definitions/oslcModifiedByContextFieldContent"
+        },
+        "_annotations": {
+          "type": "string",
+          "enum": [
+            "@nest"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^(?!(schema|xsd|pav|oslc|skos|_annotations|\\$))[^.]+$": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "xsd",
+        "pav",
+        "schema",
+        "oslc",
+        "skos",
+        "schema:name",
+        "schema:description",
+        "skos:prefLabel",
+        "skos:altLabel",
+        "pav:createdOn",
+        "pav:createdBy",
+        "pav:lastUpdatedOn",
+        "oslc:modifiedBy"
+      ]
+    },
+    "stringArray": {
+      "description": "Schema that describes a possibly empty string array",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "valueConstraintsOntologiesFieldContent": {
+      "description": "Schema that describes an 'ontologies' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsOntologiesFieldItemContent"
+      }
+    },
+    "valueConstraintsValueSetsFieldContent": {
+      "description": "Schema that describes a 'valueSets' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsValueSetsFieldItemContent"
+      }
+    },
+    "valueConstraintsClassesFieldContent": {
+      "description": "Schema that describes a 'classes' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsClassesFieldItemContent"
+      }
+    },
+    "valueConstraintsBranchesFieldContent": {
+      "description": "Schema that describes a 'branches' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsBranchesFieldItemContent"
+      }
+    },
+    "valueConstraintsLiteralsFieldContent": {
+      "description": "Schema that describes a 'literals' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsLiteralsFieldItemContent"
+      }
+    },
+    "schemaNameContextFieldContent": {
+      "description": "Schema that describes a 'schema:name' field in a @context field",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:string"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "schemaDescriptionContextFieldContent": {
+      "description": "Schema that describes a 'schema:description' field in a @context field",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:string"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "skosPrefLabelContextFieldContent": {
+      "description": "Meta-schema that describes the schema of 'skos:prefLabel' field in a @context field",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:string"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "skosAltLabelContextFieldContent": {
+      "description": "Meta-schema that describes the schema of 'skos:prefLabel' field in a @context field",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:string"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "pavCreatedOnContextFieldContent": {
+      "description": "Schema that describes 'pav:createdOn' field content in a @context",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:dateTime"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "pavCreatedByContextFieldContent": {
+      "description": "Schema that describes 'pav:createdBy' field content in a @context",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "@id"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "pavLastUpdatedOnContextFieldContent": {
+      "description": "Schema that describes 'oslc:lastUpdatedOn' field content in a @context",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "xsd:dateTime"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "oslcModifiedByContextFieldContent": {
+      "description": "Schema that describes an 'oslc:modifiedBy' field in a @context",
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": [
+            "@id"
+          ]
+        }
+      },
+      "required": [
+        "@type"
+      ],
+      "additionalProperties": false
+    },
+    "jsonLDTypeFieldContent": {
+      "description": "Meta-schema specifying the schema of a '@type' field in a 'properties' field in a template, element or field",
+      "properties": {
+        "oneOf": {
+          "$ref": "#/definitions/jsonLDTypeFieldOneOfFieldContent"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "uri"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "jsonLDIDFieldContent": {
+      "description": "Meta-schema that specifies the schema for a '@id' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "uri"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "pavCreatedOnFieldContent": {
+      "description": "Meta-schema that describes the schema of a 'pav:createdOn' field content in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "date-time"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "pavCreatedByFieldContent": {
+      "description": "Meta-schema that describes the schema of a 'pav:createdBy' field in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "uri"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "pavLastUpdatedOnFieldContent": {
+      "description": "Meta-schema that describes the schema of a 'pav:lastUpdatedOn' field in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "date-time"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "oslcModifiedByFieldContent": {
+      "description": "Meta-schema that describes the schema of an 'oslc:modifiedBy' field content in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "uri"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "rdfsLabelFieldContent": {
+      "description": "Meta-schema that describes the schema of an 'rdfs:label' field in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "skosNotationFieldContent": {
+      "description": "Meta-schema that describes the schema of a 'skos:notation' field in a 'properties' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/stringAndNullTypeContent"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsActionsFieldContent": {
+      "description": "Schema that describes an 'actions' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/valueConstraintsActionsFieldItemContent"
+      }
+    },
+    "jsonLDTypeFieldOneOfFieldContent": {
+      "description": "Schema specifying the schema of a '@type.oneOf' field in a 'properties' field in a template, element or field",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "$ref": "#/definitions/uriEnumContent"
+        },
+        {
+          "$ref": "#/definitions/uriEnumArrayContent"
+        }
+      ]
+    },
+    "stringAndNullTypeContent": {
+      "description": "Meta-schema describing the schema of 'string' and 'null' values in an array",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "null"
+          ]
+        }
+      ]
+    },
+    "numberAndNullTypeContent": {
+      "description": "Schema that describes an array containing strings, numbers and null",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "type": "string",
+          "enum": [
+            "number"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "null"
+          ]
+        }
+      ]
+    },
+    "arrayAndNullTypeContent": {
+      "description": "Meta-schema that describes the schema for an array containing strings 'array' and 'null'",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        {
+          "type": "string",
+          "enum": [
+            "null"
+          ]
+        }
+      ]
+    },
+    "uriEnumContent": {
+      "description": "Meta-schema that specifies the schema of a type field oneOf URI field with an optional 'enum'",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "uri"
+          ]
+        },
+        "enum": {
+          "$ref": "#/definitions/arrayOfURIs"
+        }
+      },
+      "required": [
+        "type",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "uriEnumArrayContent": {
+      "description": "Meta-schema that specifies the schema of an array of URIs field with optional 'enum'",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        "minItems": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "items": {
+          "$ref": "#/definitions/uriEnumContent"
+        },
+        "uniqueItems": {
+          "type": "boolean",
+          "enum": [
+            true
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "minItems",
+        "items",
+        "uniqueItems"
+      ],
+      "additionalProperties": false
+    },
+    "arrayOfURIs": {
+      "description": "Schema that describes an array of URIs",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "jsonLDValueFieldContent": {
+      "description": "Meta-schema that specifies the schema for an '@value' field",
+      "type": "object",
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/stringAndNullTypeContent"
+            },
+            {
+              "$ref": "#/definitions/numberAndNullTypeContent"
+            },
+            {
+              "$ref": "#/definitions/arrayAndNullTypeContent"
+            }
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsOntologiesFieldItemContent": {
+      "description": "Schema that describes each entry in an 'ontologies' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "acronym": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "numTerms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "iri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sourceSystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "#/definitions/valueConstraintsLinksFieldContent"
+        },
+        "version": {
+          "$ref": "#/definitions/valueConstraintsVersionFieldContent"
+        },
+        "exclusions": {
+          "$ref": "#/definitions/valueConstraintsOntologiesExclusionsFieldContent"
+        },
+        "selectedByDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "uri"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsVersionFieldContent": {
+      "description": "Version pin for a value-constraint entry: the string \"latest\" or a version triple {id, effectiveDate, declaredVersion}. Absent means latest.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effectiveDate": {
+              "type": "string"
+            },
+            "declaredVersion": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "valueConstraintsLinksFieldContent": {
+      "description": "Optional public navigation links for any controlled-term constraint. Version remains on the constraint.",
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "landingPage": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://[^/?#@\\s\\\\]+(?:[/?#][^\\s\\\\]*)?$"
+        },
+        "icon": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://[^/?#@\\s\\\\]+(?:[/?#][^\\s\\\\]*)?$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "valueConstraintsValueSetsFieldItemContent": {
+      "description": "Schema that describes each entry in the 'valueSets' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "vsCollection": {
+          "type": "string",
+          "format": "uri"
+        },
+        "exclusions": {
+          "$ref": "#/definitions/valueConstraintsValueSetsExclusionsFieldContent"
+        },
+        "selectedByDefault": {
+          "type": "boolean"
+        },
+        "numTerms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "iri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sourceSystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "#/definitions/valueConstraintsLinksFieldContent"
+        },
+        "version": {
+          "$ref": "#/definitions/valueConstraintsVersionFieldContent"
+        }
+      },
+      "required": [
+        "uri"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsClassesFieldItemContent": {
+      "description": "Schema that describes each entry in the 'classes' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "prefLabel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "iri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sourceSystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "#/definitions/valueConstraintsLinksFieldContent"
+        },
+        "version": {
+          "$ref": "#/definitions/valueConstraintsVersionFieldContent"
+        },
+        "selectedByDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "uri",
+        "prefLabel",
+        "type",
+        "label",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsBranchesFieldItemContent": {
+      "description": "Schema that describes each entry in the 'branches' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acronym": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxDepth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "iri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "sourceSystem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "#/definitions/valueConstraintsLinksFieldContent"
+        },
+        "version": {
+          "$ref": "#/definitions/valueConstraintsVersionFieldContent"
+        },
+        "selectedByDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "source",
+        "acronym",
+        "name",
+        "uri",
+        "maxDepth"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsLiteralsFieldItemContent": {
+      "description": "Schema that describes teach entry in a 'literals' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedByDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsActionsFieldItemContent": {
+      "description": "Schema that describes each entry in the 'actions' field array in a '_valueConstraints' field",
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "move",
+            "delete"
+          ]
+        },
+        "to": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Value",
+            "OntologyClass"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "sourceUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "termUri": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "action",
+        "termUri",
+        "type",
+        "source",
+        "sourceUri"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsStringDefaultValueContent": {
+      "description": "Schema that describes a field's default value as a string",
+      "type": "string"
+    },
+    "valueConstraintsUriDefaultValueContent": {
+      "description": "Schema that describes a field's default value as a term object",
+      "type": "object",
+      "properties": {
+        "termUri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rdfs:label": {
+          "type": "string"
+        },
+        "skos:notation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "termUri",
+        "rdfs:label"
+      ],
+      "additionalProperties": false
+    },
+    "valueConstraintsOntologiesExclusionsFieldContent": {
+      "description": "Schema that describes the 'ontologies.exclusions' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "valueConstraintsValueSetsExclusionsFieldContent": {
+      "description": "Schema that describes a 'valueSets.exclusions' field in a '_valueConstraints' field",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    }
+  }
+}
