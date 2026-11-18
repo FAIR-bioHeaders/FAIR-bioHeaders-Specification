@@ -87,10 +87,9 @@ contracts and is **not current policy**. Current policy is in
 observation, so a contract pattern may use lookaround and the drafts'
 `(?![\s\S])` end anchors are correct and publishable. The difference between the
 two readings of `$` before a trailing newline is resolved in implementations, not
-in the contracts:
-the toolkit reads `$` as ECMA-262 does (`bioheaders/schema_validator.py`,
-FAIR-bioHeaders-Tools#189, merged to toolkit `main`; that is a source-state
-observation, not a package-release claim).*
+in the contracts: the toolkit reads `$` as ECMA-262 does
+(`bioheaders/schema_validator.py`, FAIR-bioHeaders-Tools#189, merged to toolkit
+`main`; that is a source-state observation, not a package-release claim).*
 
 ## Implementation and checks
 
