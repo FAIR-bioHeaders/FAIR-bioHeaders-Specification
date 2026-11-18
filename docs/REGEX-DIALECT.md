@@ -5,6 +5,11 @@ FAIR-bioHeaders contract means when it is evaluated. Every other page that needs
 this policy links here instead of restating it, so the policy has exactly one
 place to change.
 
+It records the [2026-11-18 ruling](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/264#issuecomment-6991186339),
+recorded by the operating agent under the maintainer's direction: option 3 is
+adopted, with no schema, `schemaVersion` or release change. Publication remains
+a separate action.
+
 ## The floor
 
 **ECMA-262 is the only normative floor for `pattern`.** JSON Schema draft
@@ -17,7 +22,10 @@ flags:
   applies no flags, and no contract pattern in this family sets one.
 - `[]` matches nothing and `[^]` matches any character: ECMA-262 permits an
   empty class body.
-- `\d`, `\w` and `\s` are ASCII-based (without the `u` flag).
+- `\d` and `\w` use ASCII digit/word sets with no flags. `\s` includes
+  Unicode whitespace and line terminators even without `u`, including U+00A0
+  (NO-BREAK SPACE) and U+FEFF (ZERO WIDTH NO-BREAK SPACE); `\S` is its complement.
+  See ECMA-262's [character-class escape rules](https://tc39.es/ecma262/2026/multipage/text-processing.html#sec-runtime-semantics-compiletocharset).
 
 **A JSON Schema `pattern` applies to the complete string value, not to a line
 within it.** `^` and `$` bound the value; a value that contains a line feed is
@@ -28,7 +36,8 @@ divergence is a property of the validator, not a second floor the contract must
 satisfy. Where a difference changes which records validate, this family resolves
 it on the implementation side: the toolkit evaluates contract `pattern` through
 an adapter that reads `$` as end of string, as ECMA-262 requires
-(`bioheaders/schema_validator.py`, FAIR-bioHeaders-Tools#189).
+(`bioheaders/schema_validator.py`, FAIR-bioHeaders-Tools#189, merged to toolkit
+`main`; this source-state observation does not establish a package release).
 
 ## Where engines actually differ, and what this family does about it
 
@@ -37,17 +46,20 @@ run, differs from ECMA-262 in ways that have been measured:
 
 - `$` also matches before one trailing newline, so a value such as
   `"soft-masked\n"` passes an anchored pattern under Python and fails it under
-  ECMA-262. **This is the one difference the family relies on today**, in the
-  sense that it changes the validation outcome of released contracts: the
-  toolkit corrects it by rewriting every unescaped `$` outside a character class
-  to `\Z`.
+  ECMA-262. This changes released-contract outcomes; whitespace-set differences
+  in released `\S` constraints do too (below). The toolkit's adapter corrects
+  the anchor by rewriting every unescaped `$` outside a character class to `\Z`.
 - `\d` and `\w` are Unicode-aware in Python where ECMA-262 without flags is
   ASCII, and `\s` is Unicode-aware in both but over different whitespace sets.
   Measured on the same 2026-11-18 pass: no released pattern uses `\d`, `\w`,
   `\s`, `\D` or `\W` outside a character class, and two of the 16 distinct
-  released patterns use `\S`, so a value holding a character Python calls
-  non-space and ECMA-262 calls space (for example U+00A0) is the kind of input
-  where the two readings can disagree.
+  released patterns use `\S`. U+FEFF is non-space in Python but whitespace in
+  ECMA-262, while U+00A0 is whitespace in both. For example, `"gene\uFEFF"`
+  passes Python's `^\S+$` but fails ECMA-262's: that exact released constraint
+  applies to `FeatureCount.featureType` and `GenomeReference.accession` in
+  `fhgff3.json`. U+0085 illustrates the opposite direction: Python treats it as
+  whitespace and ECMA-262 does not. These are regex outcomes, not assertions
+  that a whole record satisfies every other contract or format requirement.
 - A class whose first character is `]` starts a non-empty class in Python
   (`[]]` matches `]`) and an empty one in ECMA-262 (`[]]` matches nothing and
   `[^]` matches any character); Python rejects `[^]` outright as an unterminated

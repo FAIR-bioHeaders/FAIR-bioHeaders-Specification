@@ -7,7 +7,8 @@
   normative floor for `pattern`, that a `pattern` applies to the complete string
   value and not to a line within it, and which engine differences are measured
   (`$` before a trailing newline, the Unicode reading of `\d`/`\w`, the
-  whitespace sets of `\s`, and empty character classes). RE2-cleanliness of the
+  whitespace sets of `\s`/`\S` including released U+FEFF outcomes, and empty
+  character classes). RE2-cleanliness of the
   released contracts is recorded there as a non-normative compatibility
   observation, reported by the `scripts/check_pattern_census.py` inventory once
   that lands; the four `(?![\s\S])` end anchors in the FHT and FHGM draft
