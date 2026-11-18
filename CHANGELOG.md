@@ -27,6 +27,19 @@
   FHGM model check at the checker commit recorded in
   `templates/cedar/drafts/provenance.json`. The README no longer claims `--check`
   detects upstream draft changes.
+- Correct stale guidance and documentation text. AGENTS.md describes
+  FHT-Specification's own development contract and five GitHub workflows
+  (it previously said FHT had no CI) and adds FHGM-Specification to the
+  repository role table. docs/FHGM.md separates the adopted FHGM decisions
+  (Option C form, the 2026-11-14 review dispositions, both FHGFF3 1.1 and 1.2
+  carrier bases) from the items still open, and keeps FHGM a draft under rule
+  V7. FORMAT.md names FHR 2.1 as current and R14 covers FHR 2.1 and FHP/FHGFF3
+  1.1 and 1.2 (the conformance manifest's R14 note is regenerated to match; no
+  vector changes). The V6 example warning and migration advice name FHR 2.1 at
+  v0.6.0; conformance/README.md names the `fair-bioheaders` package; llms.txt
+  drops "resolves once tagged" for v0.6.0; the INSDC coverage assessment is
+  labelled v3 (re-pinned to v0.6.0); and TOOL_COMPATIBILITY.md links the BRAKER
+  fix to its BRAKER4 commit and release. No schema or model change.
 - CEDAR templates (#162): alias `schemaVersion` to `header_schemaVersion` in the
   form, as `schema` already was, so all five templates pass CEDAR's template
   meta-schema (FHR, FHP, FHGFF3 and FHT failed its reserved-name pattern); a test

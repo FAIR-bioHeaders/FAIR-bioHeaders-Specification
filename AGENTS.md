@@ -15,6 +15,7 @@ entire unrelated repository history for a guidance update.
 | FHP-Specification | Protein-header development; inherited FHR/family files are compatibility/history, not evidence of FHP ownership of those types. |
 | FHT-Specification | Transcriptome-header development; reconcile the legacy draft with the reviewed family contract before claiming toolkit support. |
 | FHGFF3 | Annotation-header development; inherited biodatamodels/gff-schema feature models are distinct from the FAIR header contract, and the pinned `header/` tree mirrors the shared publication copy under a parity check. |
+| FHGM-Specification | Draft FHGM gene-model contract development (`development/`), carried inside FHGFF3 files under the `x-fhgm-models` extension key; a draft under rule V7 and not a header type, so no `schemaVersion`. Its inherited feature models and pinned `header/` copy are baseline material, not FHGM. |
 
 David and Adam jointly hold schema and release authority. Read the shared
 GOVERNANCE.md; its optional steering group is not active. Read the local README,
@@ -106,8 +107,9 @@ report conditions, unsupported fields and losses rather than invent equivalence.
 Generate contexts/vocabulary via `scripts/make_jsonld.py`, where present.
 
 Only use paths and commands present in the checkout, and fetch before relying on
-it: a checkout can lag origin. FHT currently has a legacy `fht.json` and
-examples, without repository CI or the shared build/test machinery; FHGFF3 has
+it: a checkout can lag origin. FHT has its own `fht_linkml.yml`, generated
+`fht.json` development contract, examples, fixtures and GitHub workflows, but not
+the shared publication machinery; FHGFF3 has
 inherited feature-model sources plus a separate `header/` development tree
 copied byte-for-byte from a pinned shared-publication revision
 (`header/provenance.json`), checked by `scripts/check_header_parity.py` under
@@ -379,13 +381,24 @@ draft fields are iterated with curators.
 
 ### FHT legacy draft and adoption
 
-FHT-Specification currently has `fht.json` and `examples/`, without the shared
-generator/test suite. Inspect the schema's declared JSON Schema dialect and use
-a matching validator with format checks when validating its JSON/YAML examples;
-report the validator/version, parsed value types and validation failures. JSON
-syntax checking alone is not schema validation. No adopted local automated test
-command is implied here; document the chosen reproducible procedure in an FHT
-implementation PR rather than claiming the shared scripts ran in this tree.
+FHT-Specification keeps the FHT 1.0 development contract (`fht_linkml.yml`,
+generated `fht.json`), `examples/`, `conformance/` fixtures and the preserved
+legacy draft `legacy/fht-v0.1.json`. Its own GitHub workflows, described in its
+`docs/CI.md`, are the check list there: `validate-specification.yml` runs
+`python -m unittest discover -s tests -v`, regenerates `fht.json` with
+`json-schema-generator.py` and rejects drift, and runs
+`scripts/check_provenance.py` on the pinned shared imports; `fht-fixtures.yml`
+runs `scripts/check_fht_fixtures.py`, a scratch rerun of
+`scripts/make_fht_fixtures.py`, and a separate job that exercises a named
+released toolkit through the rule V7 draft lane (`scripts/run_toolkit_lane.py`);
+`legacy-draft-checks.yml` runs `scripts/check_legacy_schema.py` and
+`scripts/check_legacy_examples.py`; `docs-checks.yml` runs Markdownlint and
+`scripts/check_docs.py`; and `external-links.yml` checks cited URLs on a
+schedule or manual dispatch only. Run the commands from those workflows rather
+than claiming the shared repository's scripts ran in that tree. When validating
+the legacy draft directly, use a validator for its declared JSON Schema dialect
+with format checks, and report the validator/version, parsed value types and
+validation failures; JSON syntax checking alone is not schema validation.
 
 Reconcile legacy draft field names, author roles, `license`/reuse conditions,
 statistics/units, checksum coverage, schema versions and parent relationships

@@ -50,7 +50,7 @@
     },
     "R14": {
       "summary": "Links: a value whose schema format is uri should use http or https (ftp, urn, doi and info are also accepted); any other scheme, such as javascript:, data: or file:, stays schema-valid, but validators warn and JSON-LD writers do not write it as a link.",
-      "notApplicable": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid in FHR 2.0. Its valid vectors carry \"warnings\": [\"R14\"]."
+      "notApplicable": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid in FHR 2.0 and 2.1 and in FHP and FHGFF3 1.0, 1.1 and 1.2. Its valid vectors carry \"warnings\": [\"R14\"]."
     },
     "R15": {
       "summary": "Extension fields: from FHR 2.1 and FHP and FHGFF3 1.1, a top-level key matching ^x-[A-Za-z0-9][A-Za-z0-9_.-]*$ may hold any value; every other unknown key, an x- key in a nested object and an x- key in a record that states the older minor or cites an older release stay invalid; R8, R11, R12 and R13 apply to them."
