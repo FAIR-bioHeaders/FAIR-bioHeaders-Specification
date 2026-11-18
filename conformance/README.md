@@ -90,6 +90,22 @@ is an ordinary value, and each valid vector pins the metadata it reads back to. 
 equal, but strings, numbers and booleans are never equal to each other. Valid metadata conforms to `fhr.json`. The checksums are
 real; valid vectors carry no placeholder checksum or SeqCol value.
 
+Some vectors pin cases on which independent FAIR-bioHeaders libraries disagreed. R17 (containers)
+has one invalid vector per wrong pairing: `fasta-fhgff3-header`, `gfa-fhgff3-header`,
+`gfa-fhp-header`, `fhgff3-fhp-header` and `fhgff3-fhr-header` carry a record that is valid under
+its own schema with a matching checksum, so only the container rule fails. The valid vectors
+citing R17 are the plain FHR, FHP and FHGFF3 files. `fasta-checksum-in-double-quoted-scalar`,
+`fasta-checksum-in-single-quoted-scalar` and `fasta-checksum-in-flow-mapping` (R2) hide a line
+shaped like `;~checksum:` inside an `x-note` value, with the value a line scanner would compute
+without that line, while the root `checksum` key is quoted: the file has no checksum line. The
+hidden and closing lines are indented one space, as YAML 1.2 requires for a continuation line, so
+apart from the quoted root key each header is strict YAML 1.2 and only R2 fails.
+`fasta-extension-flow-mapping` (a flow mapping with plain keys in an `x-` value),
+`fasta-wrapped-single-quoted-value` and `fasta-wrapped-double-quoted-value` (a long quoted value
+wrapped over three lines, as the toolkit's YAML writer wraps it) and
+`fasta-vital-stats-above-int32` (integers above 2^31) are valid. `fasta-schema-raw-refs-heads-main`
+cites a raw URL whose ref is `refs/heads/main`, which is unsupported under V4.
+
 ## Using the vectors in another implementation
 
 For each manifest entry, read `file` and decompress it if `compressed` is true.

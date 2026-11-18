@@ -223,6 +223,8 @@ same; existing files cite the old form, and it keeps serving the same files.
   release vX.Y.Z's schema of that type, the same as V2.
 - [V4] If the reader does not have that release, the release has no schema of that type, or a raw
   URL names any ref other than `main` or a release tag, the result is **unsupported-version**. The
+  ref is everything between the repository name and `/<file>`, so a ref of several path segments,
+  such as `refs/heads/main` or `refs/tags/v0.6.0`, is not `main` or a release tag either. The
   file is not checked against another schema. The message names the value and the releases the
   reader has, for example
   `FHR: unsupported schema version: https://w3id.org/fair-bioheaders/fhr/v0.0.0 (this tool has FHR

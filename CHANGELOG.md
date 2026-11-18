@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Conformance vectors for cases on which independent libraries disagreed, with two rule-text
+  clarifications and no schema change: the FORMAT.md container paragraph is labelled R17, with
+  invalid vectors for an FHGFF3 header in FASTA and GFA, an FHP header in GFA and GFF3, and an
+  FHR header in GFF3; R2 says the checksum line is the line holding the root `checksum` key,
+  never a line inside a multi-line quoted scalar or flow collection (three invalid vectors);
+  V4 says a raw ref of several segments such as `refs/heads/main` is unsupported (one vector,
+  and `check_conformance.py` now reads such refs as V4). New valid vectors: a flow mapping in
+  an `x-` value, a long quoted value wrapped as the toolkit writes it, and `vitalStats`
+  integers above 2^31.
+
 - Draft `insdc-fhr` profile (#190; profile change, no released schema or
   `schemaVersion` change): BioSample links may also use
   `https://identifiers.org/biosample:<sample>` and

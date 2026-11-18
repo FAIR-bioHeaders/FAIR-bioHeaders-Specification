@@ -58,9 +58,10 @@ SCHEMA_RULES = {"P1": "fhp.json", "P2": "fhr.json", "G2": "fhgff3.json", "G3": "
 # Schema selection (docs/SCHEMA-VERSIONS.md V1-V6) and the version registry.
 REGISTRY_PATH = ROOT / "schemas" / "versions.json"
 # Either repository name (#108): FAIR-bioHeaders-Specification, or FHR-Specification
-# as it was called before; the old URLs stay supported aliases.
+# as it was called before; the old URLs stay supported aliases. The ref may have
+# several path segments (refs/heads/main): only main or a release tag is supported (V4).
 RAW_SCHEMA = re.compile(r"https://raw\.githubusercontent\.com/FAIR-bioHeaders/"
-                        r"(?:FHR|FAIR-bioHeaders)-Specification/([^/]+)/(fhr|fhp|fhgff3)\.json")
+                        r"(?:FHR|FAIR-bioHeaders)-Specification/(.+)/(fhr|fhp|fhgff3)\.json")
 W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3)/"
                          r"(v[0-9]+\.[0-9]+\.[0-9]+)/?")
 RELEASE_TAG = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+")
