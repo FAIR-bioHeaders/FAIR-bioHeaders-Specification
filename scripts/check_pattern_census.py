@@ -29,35 +29,99 @@ Read that three ways, because the script deliberately does only two of them:
    stock ``re`` would accept a position before a final line feed. This census
    neither compiles patterns nor proves ECMA-262 validity or engine conformance.
 
+Two things are gated, not one:
+
+1. **Which files are governed.** The released surface is *discovered by rule*
+   (see :data:`DISCOVERY_RULE`) — not enumerated by hand — and ``.github/
+   pattern-baseline.json`` is the authority on the registration: every discovered
+   document must appear there either in ``governedFiles`` or in ``excludedFiles``
+   **by name, with a reason**. A newly discovered file that is registered nowhere
+   fails; a governed file the rule no longer discovers fails; an exclusion whose
+   reason is blank fails; and a file named by ``RELEASED_SCOPE`` or by
+   ``schemas/versions.json`` can never be excluded at all. This is the fix for the
+   hole PR #272 finding 1 reported: the first version decided scope by asking
+   "does this file contain a `pattern`?", so **a brand-new contract with no pattern
+   in it passed the gate**, and both sides of the comparison were derived from the
+   same hand-written tuple, which can never discover a file it does not already
+   name. Note the direction of the rule: content is optional, registration is not.
+2. **What each governed file asserts.** The ``pattern`` value at every JSON pointer,
+   compared against the committed digest. Any gain, loss or edit fails the build.
+   An edit *may* be value-preserving (``^[a]$`` and ``^(?:[a])$`` accept the same
+   language), but this check cannot tell a provable rewrite from a widening, so every
+   edit is gated. #264's ``$(?!\\n)`` is the standing example of an edit that looks
+   equivalent and is not: under the toolkit's CPython ``re``, ``$`` also matches
+   before a trailing line feed, so the lookahead newly rejects such a value, whereas
+   under a strict ECMA-262 reading the two forms coincide. Implementation behaviour
+   and the recorded ECMA ruling are different claims and are kept apart here.
+
 The draft scope (the byte-pinned FHT and FHGM draft contract snapshots under
 ``templates/cedar/drafts/``, the draft profiles and proposals, and the
-spec-suite contracts) is reported **informationally only** and can never fail
-this check: those drafts are drafts, and #270's own conclusion is that their
-lookarounds are legitimate under the ECMA-262 floor.
+spec-suite contracts) is reported **informationally as to content**: a lookaround,
+an inline flag or an empty-class idiom in a draft can never fail this check, because
+#270's conclusion is that they are legitimate under the ECMA-262 floor. What a
+scoped file *can* fail on is being unreadable: a draft whose YAML does not parse
+fails closed with a named error and a non-zero exit, because a census that skips a
+file it cannot open and then prints a clean total is asserting coverage it does not
+have. (The Copilot thread proposed leaving that informational too; the maintainer
+instruction for this round was to fail closed, and the content/coverage line above
+is what reconciles the two.)
 
 Rule V7 is respected throughout: FHT and FHGM are labelled drafts everywhere in
 the output; nothing here assigns them a ``schemaVersion``, a registry row, a w3id
-or tag URL, or a toolkit support claim.
+or tag URL, or a toolkit support claim. No draft type can enter the governed set:
+the registry's ``files`` map names the released types, and that set is asserted by
+a test to be exactly what is governed.
 
 No network access. The live owning repositories of the FHT and FHGM drafts are
 probed only through local sibling checkouts when one happens to exist; when it
-does not, the line is printed as UNVERIFIED rather than fetched, because the
-specification's CI must not depend on another repository (a maintainer decision
-recorded in #270).
+does not — or when reading one raises at all, including a sibling that is a symlink
+resolving outside the workspace — the line is printed as UNVERIFIED rather than
+fetched, and rather than crashing, because the specification's CI must not depend on
+another repository (a maintainer decision recorded in #270).
 
 Scope note: this is a census of the ``pattern`` keyword only. ``patternProperties``
 keys are regular expressions too and are deliberately out of scope here; adding
-them is a follow-up, not an omission to repair silently.
+them is a follow-up, not an omission to repair silently. Counts are labelled
+entries (one per file + JSON pointer), distinct strings, and entries ending in
+``$``, so they are never compared against the broader regex-entry census in the
+#271 docs page (the #241 reference-class point).
 
 Usage:
     python scripts/check_pattern_census.py                 # census + released gate
     python scripts/check_pattern_census.py --root <tree>    # same, on a scratch tree
     python scripts/check_pattern_census.py --update-baseline
         Refresh .github/pattern-baseline.json after a reviewed, joint-maintainer
-        contract change. Refuses to run when a CI environment is detected: only a
-        authorized actor outside CI may refresh it after review. Environment
-        markers do not authenticate the actor or prove approval; the refresh must
-        be committed alongside the contract change and explained in the PR.
+        contract change. Refuses to run when a CI environment is detected: only an
+        authorized actor outside CI should refresh it after review. Environment
+        markers do not authenticate the actor or prove approval — they make an
+        automated refresh inconvenient, and branch protection plus a one-file diff
+        in review is what actually authorises it.
+    python scripts/check_pattern_census.py --update-baseline --exclude PATH::REASON
+        Register a discovered surface document as not-a-contract. Both halves are
+        mandatory, and a governed file cannot be excluded.
+
+Verified behaviours — each is a test, and each was re-run against the pre-fix script
+before the fix was believed (a test that never saw the broken code is not a regression
+test):
+
+    released pattern changed by one character ................ RED
+    released pattern deleted / added ........................ RED
+    unscoped root contract WITH a pattern .................... RED
+    unscoped root contract with NO pattern ................... RED   (governed-file set)
+    governed file that disappears ............................ RED
+    exclusion registered without a reason .................... RED
+    exclusion attempted for a governed file .................. REFUSED
+    baseline hand-edited without re-digesting ................ RED
+    baseline version 1 in check mode ......................... RED (and refresh still works)
+    --update-baseline under a CI marker ...................... REFUSED, bytes unchanged
+    lookaround in a draft ................................ GREEN (informational)
+    malformed YAML in a scoped draft ................. RED (named error, no traceback)
+    malformed YAML in an unscoped document ............. does not abort the sweep
+    sibling checkout symlinked outside the tree ........ UNVERIFIED line, never a crash
+    ``examples``/``const``/unknown-keyword data ...... GREEN (instance data, not a
+        constraint, and still listed informationally)
+    description-only edit beside a released pattern .... GREEN
+    untouched tree ..................................... GREEN
 """
 
 import argparse
@@ -109,12 +173,65 @@ DRAFT_SCOPE = (
 )
 DRAFT_GLOBS = ("specs/*/contracts/*.json",)
 
-# Deliberately not censused, so that a reader does not mistake the totals for
-# "every regex in the tree": .github/schema-baseline*.json (review baselines
-# owned by check_schema_drift.py), templates/cedar/*.json (generated authoring
-# templates, verified against their source schema by make_cedar.py --check) and
-# tests/fixtures/cedar-meta-schemas/*.json (third-party CEDAR meta-schema
-# fixtures, not family contracts).
+# The governed surface is DISCOVERED by rule, not enumerated by hand. RELEASED_SCOPE
+# above is a seed: it labels files and it names the minimum set that must always stay
+# governed. It is not the boundary of the check, and that distinction is the whole
+# point — see PR #272 review, finding 1: a gate whose two comparison sides both derive
+# from one hand-written tuple can never see a file the tuple does not already name, so
+# a brand-new contract with no `pattern` in it passed. The rule below is what finds
+# such a file. `docs/TERMS.md` places the released contracts at the repository root,
+# and the shared models and registry under schemas/, so exactly those two places are
+# the surface. Root-level discovery is deliberately NOT recursive: examples/,
+# templates/ and conformance/ hold instances and generated artifacts, and the
+# informational sweep still reports any `pattern` they carry.
+DISCOVERY_RULE = ("*.json / *.yaml / *.yml at the repository root, plus every "
+                  "*.json / *.yaml / *.yml under schemas/ (recursive)")
+SURFACE_SUFFIXES = {".json", ".yaml", ".yml"}
+
+
+def expand(root, governed=None):
+    """Every scoped path: {relative: (scope, label, rows, anomalies)}.
+
+    `governed` is the DISCOVERED set minus registered exclusions; the hand-written
+    RELEASED_SCOPE is always included as the seed. A released-scope file that is
+    missing or unparsable raises :class:`CensusError` (silently losing a gated
+    contract is the failure mode this script exists to prevent). A draft-scope file
+    that cannot be read is recorded as an anomaly instead: what a draft *contains*
+    never gates the build.
+    """
+    labels = dict(RELEASED_SCOPE)
+    paths = sorted(set(governed or ()) | set(labels))
+    found = {}
+    for relative in paths:
+        rows, anomalies = inventory(root, relative)
+        found[relative] = ("released", labels.get(relative, "discovered on the released "
+                                                       "surface"), rows, anomalies)
+    for relative, label in draft_paths(root):
+        path = root / relative
+        if relative in found or not path.is_file():
+            continue
+        try:
+            rows, anomalies = inventory(root, relative)
+        except CensusError as error:
+            rows, anomalies = [], [f"unreadable: {error}"]
+        found[relative] = ("draft", label, rows, anomalies)
+    return found
+
+
+def released_files(found):
+    return {
+        relative: [{"pointer": row["pointer"], "pattern": row["pattern"]}
+                   for row in rows]
+        for relative, (_scope, _label, rows, _anomalies) in sorted(found.items())
+        if _scope == "released"
+    }
+
+
+def digest(files):
+    payload = json.dumps(files, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 EXCLUDED = (
     ".github/pattern-baseline.json",
     ".github/schema-baseline.json",
@@ -142,6 +259,10 @@ LIVE_DRAFT_PROBES = (
 
 CITATION = "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/270"
 REFRESH_COMMAND = "python scripts/check_pattern_census.py --update-baseline"
+# Baseline format. 2 registers the governed FILE set (discovered by rule)
+# plus per-file pattern counts; version 1 stored only a hand-written `scope`
+# list, so an unregistered contract was invisible to it.
+BASELINE_VERSION = 2
 ENV_FLAGS = ("CI", "GITHUB_ACTIONS", "GITLAB_CI", "JENKINS_URL", "TF_BUILD", "CIRCLECI")
 FLAG_LETTERS = set("aiLmsux")  # PCRE/Python inline flags; ECMA-262 has none
 
@@ -372,63 +493,156 @@ def draft_paths(root):
     return paths
 
 
-def expand(root):
-    """Every scoped path that exists: {relative path: (scope, label, rows, anomalies)}.
+def discover_governed_surface(root):
+    """Every document the rule places on the released surface, whether or not it has patterns."""
+    found = set()
+    for path in root.iterdir():
+        if path.is_file() and path.suffix in SURFACE_SUFFIXES:
+            found.add(path.relative_to(root).as_posix())
+    schemas = root / "schemas"
+    if schemas.is_dir():
+        for path in schemas.rglob("*"):
+            if path.is_file() and path.suffix in SURFACE_SUFFIXES:
+                found.add(path.relative_to(root).as_posix())
+    return sorted(found)
 
-    A released-scope file that is missing or unparsable raises :class:`CensusError`
-    (silently losing a gated contract is the failure mode this script exists to
-    prevent). A draft-scope file that cannot be read is recorded as an anomaly
-    instead: drafts never gate the build.
+
+def registry(root):
+    """The release identity and the released type->file map this repository asserts.
+
+    schemas/versions.json is the authority on which types are released, so it also
+    decides which contracts must be governed: a file named there can never be
+    discovered-away or excluded-away.
     """
-    found = {}
-    for relative, label in RELEASED_SCOPE:
-        rows, anomalies = inventory(root, relative)
-        found[relative] = ("released", label, rows, anomalies)
-    for relative, label in draft_paths(root):
-        path = root / relative
-        if relative in found or not path.is_file():
-            continue
+    try:
+        document = load_document(root / "schemas" / "versions.json")
+    except CensusError:
+        return None, None, {}
+    if not isinstance(document, dict):
+        return None, None, {}
+    files = document.get("files")
+    return (document.get("current"), document.get("preRelease"),
+            {str(key): str(value) for key, value in files.items()}
+            if isinstance(files, dict) else {})
+
+
+def mandatory_governed(root):
+    """Seed paths plus every contract the registry names as released."""
+    _current, _pre, files = registry(root)
+    return {relative for relative, _label in RELEASED_SCOPE} | set(files.values())
+
+
+def parse_exclusion(value):
+    """`path::reason` -> (path, reason). A reason is mandatory: an anonymous exclusion
+    is just a silent skip with extra typing."""
+    path, separator, reason = value.partition("::")
+    path = path.strip()
+    reason = reason.strip()
+    if not separator or not path or not reason:
+        raise ValueError(f"--exclude expects PATH::REASON, got {value!r}")
+    return path, reason
+
+
+def compare_governed(baseline, discovered, root):
+    """Registration drift, in both directions, keyed on the discovered surface.
+
+    Returns (problems, stale). A discovered document that is neither governed nor
+    excluded by name with a reason is the unregistered-contract case; a governed file
+    that is no longer discovered is the deleted-or-moved case.
+    """
+    problems = []
+    governed = {entry["path"] for entry in baseline.get("governedFiles", [])}
+    excluded = {entry["path"]: entry for entry in baseline.get("excludedFiles", [])}
+    for path in sorted(set(discovered) - governed - set(excluded)):
         try:
-            rows, anomalies = inventory(root, relative)
+            entries = len(inventory(root, path)[0])
         except CensusError as error:
-            rows, anomalies = [], [f"unreadable: {error}"]
-        found[relative] = ("draft", label, rows, anomalies)
-    return found
+            entries = f"uncensusable: {error}"
+        problems.append(
+            f"{path}: discovered on the released surface ({DISCOVERY_RULE}) but not "
+            f"registered in the baseline as governed or as excluded with a reason "
+            f"(it holds {entries} pattern entries; 0 entries still fails — a "
+            "pattern-free contract is still a contract joining the governed surface)")
+    for path in sorted(governed - set(discovered)):
+        problems.append(
+            f"{path}: the baseline governs it but the discovery rule no longer finds it "
+            "(deleted, renamed, or moved off the released surface). Removing a governed "
+            "contract is a contract change: review it, then refresh the baseline "
+            "outside CI.")
+    for path, entry in sorted(excluded.items()):
+        if not str(entry.get("reason", "")).strip():
+            problems.append(f"{path}: registered as excluded with no reason")
+        if path in mandatory_governed(root):
+            problems.append(
+                f"{path}: is named by RELEASED_SCOPE or by schemas/versions.json and "
+                "cannot be excluded; a governed file that stops looking interesting is "
+                "still a governed file")
+    stale = sorted(set(excluded) - set(discovered))
+    return problems, stale
+
+# Deliberately not censused, so that a reader does not mistake the totals for
+# "every regex in the tree": .github/schema-baseline*.json (review baselines
+# owned by check_schema_drift.py), templates/cedar/*.json (generated authoring
+# templates, verified against their source schema by make_cedar.py --check) and
+# tests/fixtures/cedar-meta-schemas/*.json (third-party CEDAR meta-schema
+# fixtures, not family contracts).
 
 
-def released_files(found):
-    return {
-        relative: [{"pointer": row["pointer"], "pattern": row["pattern"]}
-                   for row in rows]
-        for relative, (_scope, _label, rows, _anomalies) in sorted(found.items())
-        if _scope == "released"
-    }
+def governed_entries(root, found, discovered, excluded):
+    """The governed file set: discovered surface minus the registered exclusions."""
+    labels = dict(RELEASED_SCOPE)
+    entries = []
+    for relative in discovered:
+        if relative in excluded:
+            continue
+        rows = found[relative][2] if relative in found else []
+        entries.append({"path": relative,
+                        "label": labels.get(relative, "discovered on the released surface"),
+                        "patternEntries": len(rows)})
+    return entries
 
 
-def digest(files):
-    payload = json.dumps(files, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
-    return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-
-def build_baseline(found):
+def build_baseline(root, found, discovered, excluded):
     files = released_files(found)
+    governed = governed_entries(root, found, discovered, excluded)
+    rows = [row for entry in found.values() if entry[0] == "released" for row in entry[2]]
     return {
-        "baselineVersion": 1,
+        "baselineVersion": 2,
         "note": (
-            "Committed inventory of every JSON Schema `pattern` in the released "
-            "specification surface. Refresh only through a reviewed contract "
-            "change: python scripts/check_pattern_census.py --update-baseline "
-            "(refuses to run in CI). See " + CITATION + "."
+            "Two gates, one file. (1) WHICH FILES are governed: the released surface is "
+            "discovered by rule and every discovered document must appear here either in "
+            "governedFiles or in excludedFiles with a reason, so a new contract fails even "
+            "when it contains no `pattern` at all. (2) WHAT EACH GOVERNED FILE ASSERTS: "
+            "every JSON Schema `pattern` entry below, by file and JSON pointer. Refresh "
+            "only through a reviewed contract change: "
+            "python scripts/check_pattern_census.py --update-baseline (refuses to run in "
+            "CI). See " + CITATION + "."
         ),
         "policy": (
             "ECMA-262 is the floor for `pattern`; the v0.4 lookahead sentence is "
             "historical, not current policy; no released contract may be widened."
         ),
         "policySource": CITATION,
-        "scope": sorted(relative for relative, entry in found.items()
-                        if entry[0] == "released"),
+        "countingScope": {
+            "keyword": "the `pattern` keyword only; `patternProperties` keys are regular "
+                       "expressions too and are out of this scope by design (#270 "
+                       "follow-up), so this is narrower than the regex-entry census in "
+                       "the #271 docs page",
+            "unit": "entry = one (file, JSON pointer) pair; the same string under two "
+                    "pointers counts twice; entriesEndingInDollar counts entries whose "
+                    "text ends in `$`; distinctPatternStrings counts unique strings",
+            "governedFiles": "discovered by rule, not enumerated; see discoveryRule",
+        },
+        "discoveryRule": DISCOVERY_RULE,
+        "governedFiles": governed,
+        "governedFileDigest": digest(governed),
+        "excludedFiles": [{"path": path, "reason": excluded[path]}
+                          for path in sorted(excluded)],
         "files": files,
-        "patternCount": sum(len(rows) for rows in files.values()),
+        "patternEntries": len(rows),
+        "distinctPatternStrings": len({row["pattern"] for row in rows}),
+        "entriesEndingInDollar": sum(1 for row in rows if row["pattern"].endswith("$")),
+        "patternCount": len(rows),
         "digest": digest(files),
     }
 
@@ -473,7 +687,7 @@ def on_released_surface(relative):
             or path.parent == PurePosixPath("schemas"))
 
 
-def unscoped(root, found):
+def unscoped(root, found, excluded=()):
     """Pattern-bearing documents outside every scope table, split by surface.
 
     Returns (on the released surface, elsewhere, unreadable on the released
@@ -490,6 +704,10 @@ def unscoped(root, found):
         if relative.startswith(".git/") or relative in found:
             continue
         if any(relative == ex or relative.startswith(ex + "/") for ex in EXCLUDED):
+            continue
+        if relative in excluded:
+            # registered as not-a-contract, by name and with a reason, in the baseline:
+            # the registration check already vets that decision, so this sweep stays quiet
             continue
         try:
             rows, _anomalies = inventory(root, relative)
@@ -559,6 +777,45 @@ def live_draft_lines(root):
     return lines
 
 
+def load_stored(baseline_path):
+    """Read the committed baseline, or return None when there is not one yet."""
+    if not baseline_path.is_file():
+        return None
+    try:
+        stored = load_document(baseline_path)
+    except (CensusError, ValueError, OSError) as error:
+        raise CensusError(f"{baseline_path}: unreadable: {error}") from error
+    if not isinstance(stored, dict):
+        raise CensusError(f"{baseline_path}: not an object")
+    return stored
+
+
+def exclusions_for(root, stored, requested, refresh):
+    """Registered exclusions carry forward; a refresh may add to them, never subtract
+    a governed file. Returns {path: reason}."""
+    excluded = {}
+    if isinstance(stored, dict):
+        for entry in stored.get("excludedFiles", []) or []:
+            if isinstance(entry, dict) and entry.get("path") and entry.get("reason"):
+                excluded[str(entry["path"])] = str(entry["reason"])
+    if not refresh:
+        return excluded
+    mandatory = mandatory_governed(root)
+    for value in requested:
+        try:
+            path, reason = parse_exclusion(value)
+        except ValueError as error:
+            raise CensusError(str(error)) from error
+        if path in mandatory:
+            raise CensusError(
+                f"{path} is named by RELEASED_SCOPE or by schemas/versions.json and cannot "
+                "be excluded: a governed contract that stops looking interesting is still a "
+                "governed contract. If it really is no longer released, that is a registry "
+                "and release decision, not a census flag.")
+        excluded[path] = reason
+    return excluded
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Census schema `pattern` values and gate the released contracts (#270).")
@@ -569,26 +826,74 @@ def main():
                              "(default: <root>/.github/pattern-baseline.json)")
     parser.add_argument("--update-baseline", action="store_true",
                         help="rewrite the baseline from the census (refuses to run in CI)")
+    parser.add_argument("--exclude", action="append", default=[], metavar="PATH::REASON",
+                        help="with --update-baseline, register a discovered surface file as "
+                             "not-a-contract, naming it and justifying it; a governed file "
+                             "cannot be excluded")
     args = parser.parse_args()
     root = args.root.resolve()
     baseline_path = args.baseline.resolve() if args.baseline else (
         root / ".github" / "pattern-baseline.json")
 
+    # 1. Discover the surface by rule. Everything else in this check is downstream of
+    #    this list, including the baseline's own claim about what it governs.
+    discovered = discover_governed_surface(root)
     try:
-        found = expand(root)
+        stored = load_stored(baseline_path)
+    except CensusError as error:
+        print(f"pattern census failed: {error}", file=sys.stderr)
+        return 1
+    try:
+        excluded = exclusions_for(root, stored, args.exclude, args.update_baseline)
     except CensusError as error:
         print(f"pattern census failed: {error}", file=sys.stderr)
         return 1
 
-    listed, elsewhere, unreadable = unscoped(root, found)
+    try:
+        governed = [entry for entry in discovered if entry not in excluded]
+        found = expand(root, governed)
+    except CensusError as error:
+        print(f"pattern census failed: {error}", file=sys.stderr)
+        return 1
+
+    # 2. Registration: the baseline is the authority on which files are governed.
+    #    Checked before pattern contents, because a file this check has never heard of
+    #    cannot contribute a trustworthy pattern inventory. A refresh is exempt from the
+    #    "no baseline yet" and "old baseline format" guards — refusing those in refresh
+    #    mode would make the very command that upgrades a baseline impossible to run.
+    if not args.update_baseline:
+        if stored is None:
+            print(f"pattern census failed: no baseline at {baseline_path}. Create one "
+                  f"outside CI with: {REFRESH_COMMAND}", file=sys.stderr)
+            return 1
+        if stored.get("baselineVersion") != BASELINE_VERSION:
+            print(f"pattern census failed: {baseline_path.name} is baseline version "
+                  f"{stored.get('baselineVersion')!r}; this script writes version "
+                  f"{BASELINE_VERSION}. A version-1 baseline names a hand-written file list "
+                  "and no governed set, so it cannot detect an unregistered contract. "
+                  f"Upgrade it outside CI with `{REFRESH_COMMAND}`.", file=sys.stderr)
+            return 1
+    registration, stale = ([], []) if args.update_baseline else \
+        compare_governed(stored, discovered, root)
+    if registration:
+        print(f"\nGOVERNED FILE SET: {baseline_path} vs the discovered released surface "
+              f"({len(registration)} problems)", file=sys.stderr)
+        for problem in registration:
+            print(f"  {problem}", file=sys.stderr)
+        print(f"Register the file by refreshing outside CI (`{REFRESH_COMMAND}`), which puts "
+              "it in governedFiles, or exclude it by name with a reason "
+              f"(`{REFRESH_COMMAND} --exclude PATH::REASON`). A file named by "
+              "schemas/versions.json can never be excluded.", file=sys.stderr)
+        return 1
+    listed, elsewhere, unreadable = unscoped(root, found, set(excluded))
     if listed or unreadable:
         print("pattern census failed: a pattern-bearing document on the released surface "
               "(repository root or schemas/) is not in the gated scope:", file=sys.stderr)
         for text in listed + unreadable:
             print(f"  {text}", file=sys.stderr)
         print("Add it to RELEASED_SCOPE in scripts/check_pattern_census.py so a published "
-              "pattern-bearing contract cannot escape this drift gate (or move it off the released surface), "
-              "then refresh the baseline outside CI.", file=sys.stderr)
+              "pattern-bearing contract cannot escape this drift gate (or move it off the "
+              "released surface), then refresh the baseline outside CI.", file=sys.stderr)
         return 1
 
     released_anomalies = sorted(
@@ -601,10 +906,24 @@ def main():
             print(f"  {text}", file=sys.stderr)
         return 1
     draft_anomalies = sorted(
-        f"{relative}: {text}" for relative, (scope, _label, _rows, texts) in found.items()
-        if scope == "draft" for text in texts)
+        f"[draft] {relative}: {text}" for relative, (scope, _label, _rows, texts)
+        in found.items() if scope == "draft" for text in texts)
+    # Deliberately NOT informational. The Copilot thread proposed letting draft parse
+    # failures pass quietly; the maintainer instruction for this round was to fail closed.
+    # The distinction that keeps both honest: what a draft CONTAINS (a lookaround, an
+    # inline flag) is reported and never gates, because ECMA-262 is the floor. Whether a
+    # scoped file can be READ at all is coverage, and a census that skips an unreadable
+    # file while printing a clean total is making a claim it did not verify.
+    scope_anomalies = released_anomalies + draft_anomalies
+    if scope_anomalies:
+        print("pattern census failed: a file listed in a scope table could not be censused "
+              "(contents are informational for drafts; unreadable is not, because a skipped "
+              "file is an unverified coverage claim):", file=sys.stderr)
+        for text in scope_anomalies:
+            print(f"  {text}", file=sys.stderr)
+        return 1
 
-    baseline_payload = build_baseline(found)
+    baseline_payload = build_baseline(root, found, discovered, excluded)
     current = baseline_payload["files"]
 
     if args.update_baseline:
@@ -618,42 +937,63 @@ def main():
                 file=sys.stderr,
             )
             return 1
+        after = compare_governed(baseline_payload, discovered, root)[0]
+        if after:
+            print("refusing to write an inconsistent baseline:", file=sys.stderr)
+            for problem in after:
+                print(f"  {problem}", file=sys.stderr)
+            return 1
         baseline_path.parent.mkdir(parents=True, exist_ok=True)
         baseline_path.write_text(json.dumps(baseline_payload, indent=2, ensure_ascii=False,
                                             allow_nan=False) + "\n", encoding="utf-8")
-        print(f"Updated {baseline_path} ({baseline_payload['patternCount']} released patterns, "
-              f"{baseline_payload['digest']}); review and commit it with the contract change.")
+        print(f"Updated {baseline_path}: {len(baseline_payload['governedFiles'])} governed "
+              f"files, {baseline_payload['patternEntries']} pattern entries "
+              f"({baseline_payload['distinctPatternStrings']} distinct strings, "
+              f"{baseline_payload['entriesEndingInDollar']} ending in `$`), "
+              f"{baseline_payload['digest']}; "
+              f"{len(baseline_payload['excludedFiles'])} surface files excluded by name")
+        if stale:
+            print("  note: these registered exclusions no longer describe a discovered file "
+                  f"and were dropped: {', '.join(stale)}")
+        print("Review and commit it with the contract change.")
         return 0
 
     print("Pattern census (FAIR-bioHeaders-Specification#270)")
-    print("=" * 78)
+    print("=" * 92)
     print("Policy: ECMA-262 is the floor for `pattern`. The v0.4 changelog sentence")
     print("about lookahead workarounds is historical, not current policy, so lookaround")
-    print("patterns are counted and reported, never rejected. The released contracts")
-    print("are gated against a committed digest: no released pattern may be added,")
-    print("removed or edited without review. Engine conformance is checked separately.")
-    print("=" * 78)
+    print("patterns are counted and reported, never rejected. Two things are gated:")
+    print("the governed FILE set (discovered by rule, registered in the baseline), and")
+    print("the `pattern` entry at every pointer inside those files.")
+    print("=" * 92)
+    print(f"Discovery rule: {DISCOVERY_RULE}")
+    print("Counting scope (do not compare these totals with a differently scoped census,")
+    print("such as the regex-entry census in the #271 docs page):")
+    for key, value in baseline_payload["countingScope"].items():
+        print(f"  {key}: {value}")
 
-    for scope, heading in (("released", "RELEASED scope (gated by the baseline digest)"),
+    for scope, heading in (("released", "RELEASED scope (gated: file set + pattern entries)"),
                            ("draft", "DRAFT and proposal scope (informational only)")):
         paths = sorted(p for p, (s, *_rest) in found.items() if s == scope)
         print(f"\n{heading}")
         if not paths:
             print("  (no files found)")
             continue
+        rows = [row for p in paths for row in found[p][2]]
         total = {}
         for relative in paths:
-            _scope, label, rows, _anomalies = found[relative]
-            print(f"  {describe(relative, rows)}  [{label}]")
+            _scope, label, entry_rows, _anomalies = found[relative]
+            print(f"  {describe(relative, entry_rows)}  [{label}]")
             for key in ("dollar_anchor", "lookaround", "noncapturing_group",
                         "inline_flags", "empty_class", "named_group"):
-                total[key] = total.get(key, 0) + sum(1 for row in rows if row[key])
-        print(f"  {'SUBTOTAL ' + scope:62s} "
-              f"{sum(len(found[p][2]) for p in paths):3d} patterns   "
-              + "   ".join(
-                  f"{key.replace('_', ' ')} {total.get(key, 0):3d}"
-                  for key in ("dollar_anchor", "lookaround", "noncapturing_group",
-                              "inline_flags", "empty_class", "named_group")))
+                total[key] = total.get(key, 0) + sum(1 for row in entry_rows if row[key])
+        print(f"  {'SUBTOTAL ' + scope:62s} {len(rows):3d} entries   "
+              + "   ".join(f"{key.replace('_', ' ')} {total[key]:3d}"
+                           for key in ("dollar_anchor", "lookaround", "noncapturing_group",
+                                       "inline_flags", "empty_class", "named_group"))
+              + f"   distinct strings {len({row['pattern'] for row in rows}):3d}"
+              + f"   ending in $ {sum(1 for row in rows if row['pattern'].endswith('$')):3d}")
+        print(f"    (entries = one per file+JSON pointer; keyword `pattern` only)")
 
     print("\nConstruct detail (informational; never fails the build)")
     detail = [(relative, row) for relative in sorted(found)
@@ -677,10 +1017,18 @@ def main():
         print(f"             {'; '.join(marks)}")
         print(f"             {row['pattern']!r}")
 
-    if draft_anomalies:
-        print("\nDraft-scope notes (informational)")
-        for text in draft_anomalies:
-            print(f"  {text}")
+    if stale:
+        print("\nRegistered exclusions that no longer describe a discovered file "
+              "(informational; a refresh drops them)")
+        for path in stale:
+            print(f"  {path}")
+
+    print("\nSurface files excluded by name (each must state a reason; a governed file")
+    print("  named by RELEASED_SCOPE or schemas/versions.json can never appear here)")
+    if not baseline_payload["excludedFiles"]:
+        print("  none")
+    for entry in baseline_payload["excludedFiles"]:
+        print(f"  {entry['path']}: {entry['reason']}")
 
     print("\nPattern-bearing documents outside both scope tables (informational; not family "
           "contracts, see EXCLUDED)")
@@ -696,29 +1044,22 @@ def main():
     for line in live_draft_lines(root):
         print(line)
 
-    if not baseline_path.is_file():
-        print(f"\npattern census failed: no baseline at {baseline_path}. Create one outside CI "
-              f"with: {REFRESH_COMMAND}", file=sys.stderr)
-        return 1
-    try:
-        stored = load_document(baseline_path)
-    except (CensusError, ValueError, OSError) as error:
-        print(f"pattern census failed: {baseline_path}: unreadable: {error}", file=sys.stderr)
-        return 1
     stored_files = stored.get("files")
     if not isinstance(stored_files, dict):
         print(f"pattern census failed: {baseline_path} has no `files` inventory", file=sys.stderr)
         return 1
-    stored_digest = stored.get("digest")
-    recomputed = digest(stored_files)
-    if stored_digest != recomputed:
+    if stored.get("digest") != digest(stored_files):
         print(f"pattern census failed: {baseline_path} is internally inconsistent: recorded "
-              f"digest {stored_digest} != recomputed {recomputed}. The baseline itself was "
-              "edited by hand; regenerate it outside CI.", file=sys.stderr)
+              "pattern digest does not match its own `files` inventory. The baseline itself "
+              "was edited by hand; regenerate it outside CI.", file=sys.stderr)
+        return 1
+    if stored.get("governedFileDigest") != digest(stored.get("governedFiles", [])):
+        print(f"pattern census failed: {baseline_path} is internally inconsistent: recorded "
+              "governed-file digest does not match its own `governedFiles` list. The baseline "
+              "was edited by hand; regenerate it outside CI.", file=sys.stderr)
         return 1
 
     problems = compare(stored_files, current)
-    released_count = sum(len(rows) for rows in current.values())
     if problems:
         print(f"\nRELEASED PATTERN DRIFT: {baseline_path} vs {root} "
               f"({len(problems)} problems)", file=sys.stderr)
@@ -729,9 +1070,31 @@ def main():
               f"is reviewed and approved, refresh the baseline outside CI with "
               f"`{REFRESH_COMMAND}` and commit both files together.", file=sys.stderr)
         return 1
-    print(f"\nReleased gate: {released_count} patterns across {len(current)} files match the "
-          f"baseline {baseline_path.name} ({stored_digest}). No released pattern added, "
-          "removed or edited.")
+    released_rows = [row for entry in found.values() if entry[0] == "released"
+                     for row in entry[2]]
+    print(f"\nReleased gate: {len(discovered)} surface documents discovered "
+          f"({len(stored.get('governedFiles', []))} governed, "
+          f"{len(stored.get('excludedFiles', []))} excluded by name), "
+          f"{len(released_rows)} `pattern` entries "
+          f"({len({row['pattern'] for row in released_rows})} distinct strings, "
+          f"{sum(1 for row in released_rows if row['pattern'].endswith('$'))} ending in `$`, "
+          f"{sum(1 for row in released_rows if row['lookaround'])} with lookaround) match the "
+          f"baseline {baseline_path.name} (patterns {stored.get('digest')}; files "
+          f"{stored.get('governedFileDigest')}). No governed file added, removed or "
+          "unregistered; no released pattern added, removed or edited.")
+    # A second denominator, labelled: #271's docs census counts regex entries under a
+    # broader scope, so the three-contract subset is printed here to keep the two
+    # documents reconcilable instead of contradictory (#241 reference classes).
+    three_paths = sorted(path for path, entry in found.items()
+                         if entry[0] == "released" and path.endswith(".json")
+                         and "/" not in path)
+    three = [row for path in three_paths for row in found[path][2]]
+    three_distinct = len({row["pattern"] for row in three})
+    three_dollar = sum(1 for row in three if row["pattern"].endswith("$"))
+    print(f"  Subtotal, the three released contracts only ({', '.join(three_paths)}): "
+          f"{len(three)} entries ({three_distinct} distinct strings, {three_dollar} ending "
+          "in `$`). The rest of the released scope is the LinkML models, the shared slot "
+          "models and the registry.")
     print("Draft constructs above are informational: ECMA-262 is the floor (#270).")
     return 0
 
