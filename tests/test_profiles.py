@@ -229,6 +229,7 @@ class INSDCFHRProfileTests(unittest.TestCase):
     def setUpClass(cls):
         schema = profiles.generate_profile("insdc-fhr")
         Draft202012Validator.check_schema(schema)
+        cls.schema = schema
         cls.profile = Draft202012Validator(schema, format_checker=FormatChecker())
         cls.base = Draft202012Validator(
             json.loads((ROOT / "fhr.json").read_text()), format_checker=FormatChecker()
@@ -261,6 +262,92 @@ class INSDCFHRProfileTests(unittest.TestCase):
                 record["relatedLink"] = ["https://" + project, "https://" + sample]
                 self.base.validate(record)
                 self.profile.validate(record)
+
+    def test_sample_resolver_and_biosamples_links(self):
+        """identifiers.org and EBI BioSamples URLs satisfy the BioSample check."""
+        project = self.valid["relatedLink"][0]
+        for sample in (
+            "https://identifiers.org/biosample:SAMN1",
+            "https://identifiers.org/biosample:SAMEA10",
+            "https://identifiers.org/biosample:SAMD100",
+            "https://www.ebi.ac.uk/biosamples/samples/SAMN1",
+            "https://www.ebi.ac.uk/biosamples/samples/SAMEA10/",
+            "https://www.ebi.ac.uk/biosamples/samples/SAMD100",
+        ):
+            with self.subTest(sample=sample):
+                record = dict(self.valid, relatedLink=[project, sample])
+                self.base.validate(record)
+                self.profile.validate(record)
+
+    def test_unusable_sample_links_fail_the_profile(self):
+        project = self.valid["relatedLink"][0]
+        for sample in (
+            "https://identifiers.org/biosample:PRJNA1",
+            "https://identifiers.org/biosample:",
+            "https://identifiers.org/bioproject:SAMN1",
+            "http://identifiers.org/biosample:SAMN1",
+            "https://identifiers.org/biosample:SAMN1/",
+            "https://www.ebi.ac.uk/biosamples/samples/PRJEB1",
+            "https://www.ebi.ac.uk/biosamples/samples?text=SAMN1",
+            "https://www.ebi.ac.uk/biosamples/SAMN1",
+        ):
+            with self.subTest(sample=sample):
+                record = dict(self.valid, relatedLink=[project, sample])
+                self.base.validate(record)
+                self.assertFalse(self.profile.is_valid(record))
+
+    def test_zero_and_leading_zero_accessions_fail_the_profile(self):
+        project, sample = self.valid["relatedLink"][:2]
+        for links in (
+            [f"https://www.ncbi.nlm.nih.gov/bioproject/{accession}", sample]
+            for accession in ("PRJNA0", "PRJNA01", "PRJEB0", "PRJDB00")
+        ):
+            with self.subTest(links=links):
+                record = dict(self.valid, relatedLink=links)
+                self.base.validate(record)
+                self.assertFalse(self.profile.is_valid(record))
+        for url in (
+            "https://identifiers.org/bioproject:PRJNA0",
+            "https://www.ebi.ac.uk/ena/browser/view/PRJEB012",
+        ):
+            with self.subTest(project=url):
+                record = dict(self.valid, relatedLink=[url, sample])
+                self.assertFalse(self.profile.is_valid(record))
+        for url in (
+            "https://www.ncbi.nlm.nih.gov/biosample/SAMN0",
+            "https://www.ncbi.nlm.nih.gov/biosample/SAMN01",
+            "https://www.ebi.ac.uk/ena/browser/view/SAMEA0",
+            "https://ddbj.nig.ac.jp/search/entry/biosample/SAMD0",
+            "https://identifiers.org/biosample:SAMN0",
+            "https://www.ebi.ac.uk/biosamples/samples/SAMEA007",
+        ):
+            with self.subTest(sample=url):
+                record = dict(self.valid, relatedLink=[project, url])
+                self.base.validate(record)
+                self.assertFalse(self.profile.is_valid(record))
+        # The smallest non-zero numbers are still accepted.
+        record = dict(self.valid, relatedLink=[
+            "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1",
+            "https://www.ncbi.nlm.nih.gov/biosample/SAMN10",
+        ])
+        self.profile.validate(record)
+
+    def test_profile_accepts_fhr_2_0_and_2_1(self):
+        """The profile covers the schemaVersions fhr.json accepts, not only 2.0."""
+        self.assertEqual(self.schema["properties"]["schemaVersion"]["enum"],
+                         ["2.0", "2.1"])
+        record = dict(self.valid, schemaVersion="2.1",
+                      schema="https://w3id.org/fair-bioheaders/fhr/v0.6.0")
+        record["x-note"] = "extension"
+        self.base.validate(record)
+        self.profile.validate(record)
+        record["schemaVersion"] = "2.0"
+        self.assertFalse(self.base.is_valid(record))
+        self.assertFalse(self.profile.is_valid(record))
+        del record["x-note"]
+        self.profile.validate(record)
+        record["schemaVersion"] = "2.2"
+        self.assertFalse(self.profile.is_valid(record))
 
     def test_base_valid_records_can_fail_the_profile(self):
         for field, value in (

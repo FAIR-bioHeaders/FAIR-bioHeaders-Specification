@@ -1,7 +1,7 @@
 # Draft constraining profile for issue #190.
 id: https://w3id.org/fair-bioheaders/profiles/insdc-fhr
 name: INSDCFHRProfile
-description: Offline metadata preflight for a single FHR 2.0 genome assembly.
+description: Offline metadata preflight for a single FHR genome assembly (schemaVersion 2.0 or 2.1).
 prefixes:
   linkml: https://w3id.org/linkml/
   fhr: https://w3id.org/fair-bioheaders/terms#

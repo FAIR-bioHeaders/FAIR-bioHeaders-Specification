@@ -1,7 +1,9 @@
 # Draft INSDC submission-readiness profile for FHR
 
-This opt-in profile layers onto FHR 2.0 for a single genome assembly after
-project and sample registration. It checks a subset of assembly metadata offline.
+This opt-in profile layers onto FHR for a single genome assembly after project
+and sample registration. It is generated from the current FHR model, so it
+accepts records that state `schemaVersion` `2.0` or `2.1`; as in `fhr.json`,
+top-level `x-` extension fields are accepted only with `2.1`. It checks a subset of assembly metadata offline.
 Validate the cited FHR schema and report the profile result separately. Archive
 checks still cover record existence, public visibility, whether links describe
 this assembly, taxonomy rank and name agreement, sample checklists and submission
@@ -23,12 +25,16 @@ accessions such as `SAMN…`, `SAMEA…` and `SAMD…`.
 | --- | --- | --- |
 | [NCBI](https://submit.ncbi.nlm.nih.gov/help/sequence-submission-guidance/) | `https://www.ncbi.nlm.nih.gov/bioproject/<project>` | `https://www.ncbi.nlm.nih.gov/biosample/<sample>` |
 | [ENA](https://ena-browser-docs.readthedocs.io/en/latest/browser/ena-record.html) | `https://www.ebi.ac.uk/ena/browser/view/<project>` | `https://www.ebi.ac.uk/ena/browser/view/<sample>` |
+| [EBI BioSamples](https://www.ebi.ac.uk/biosamples/docs/references/api/overview) | — | `https://www.ebi.ac.uk/biosamples/samples/<sample>` |
 | [DDBJ](https://www.ddbj.nig.ac.jp/news/en/2024-06-10_2-e.html) | `https://ddbj.nig.ac.jp/search/entry/bioproject/<project>` | `https://ddbj.nig.ac.jp/search/entry/biosample/<sample>` |
 
 The checks also recognize the legacy DDBJ `/resource/` paths and the
-[Identifiers.org BioProject resolver](https://registry.identifiers.org/registry/bioproject)
-form `https://identifiers.org/bioproject:<project>`. Archive paths accept a
-trailing slash. Search queries, run accessions and unrelated URLs do not satisfy
+Identifiers.org resolver forms
+[`https://identifiers.org/bioproject:<project>`](https://registry.identifiers.org/registry/bioproject)
+and [`https://identifiers.org/biosample:<sample>`](https://registry.identifiers.org/registry/biosample).
+Archive paths accept a trailing slash. An accession number must be a positive
+integer without a leading zero, so placeholders such as `PRJNA0` or `SAMN0`
+do not count. Search queries, run accessions and unrelated URLs do not satisfy
 either requirement.
 
 Apply the 1000-character limit to each rendered Assembly metadata value (A.k),
