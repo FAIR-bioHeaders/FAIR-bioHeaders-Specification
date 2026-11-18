@@ -30,7 +30,7 @@ Key facts (FAIR-bioHeaders-Specification v0.6.0 with fair-bioheaders 0.11.0, the
 
 ## Schemas
 
-- [FHR v0.6.0](https://w3id.org/fair-bioheaders/fhr/v0.6.0): reference genome header schema (`fhr.json`, FHR 2.1; resolves once v0.6.0 is tagged)
+- [FHR v0.6.0](https://w3id.org/fair-bioheaders/fhr/v0.6.0): reference genome header schema (`fhr.json`, FHR 2.1)
 - [FHP v0.6.0](https://w3id.org/fair-bioheaders/fhp/v0.6.0): protein FASTA header schema (`fhp.json`, FHP 1.2)
 - [FHGFF3 v0.6.0](https://w3id.org/fair-bioheaders/fhgff3/v0.6.0): GFF3 header schema (`fhgff3.json`, FHGFF3 1.2)
 - [FHR v0.5.0](https://w3id.org/fair-bioheaders/fhr/v0.5.0), [FHP v0.5.0](https://w3id.org/fair-bioheaders/fhp/v0.5.0) and [FHGFF3 v0.5.0](https://w3id.org/fair-bioheaders/fhgff3/v0.5.0): the released FHR 2.1, FHP 1.1 and FHGFF3 1.1 schemas

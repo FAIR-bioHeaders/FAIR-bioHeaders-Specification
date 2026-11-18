@@ -138,6 +138,8 @@ python scripts/check_conformance.py --schema  # also validate metadata (PyYAML, 
 `check_conformance.py` regenerates the vectors in a temporary directory and
 compares the bytes. It then checks that the manifest covers every rule in
 docs/FORMAT.md, and recomputes each checksum with a separate reading of the
-rules. CI runs these checks and then runs the released converter (`fhr` from PyPI)
-over every vector. To add a vector, edit the generator, rerun it, and commit the
-script together with its output.
+rules. CI runs these checks and then runs the released toolkit over every
+vector: the `fair-bioheaders` package from PyPI at the version pinned in
+`toolkit-pin.json`, which provides the `bioheaders` CLI and the `fhr-*`
+commands. To add a vector, edit the generator, rerun it, and commit the script
+together with its output.

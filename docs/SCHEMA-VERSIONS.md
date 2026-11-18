@@ -214,7 +214,7 @@ same; existing files cite the old form, and it keeps serving the same files.
   unchanged. The record is **deprecated, not invalid**: readers should warn and name the two
   fixes in [Migrating](#migrating-files-that-cite-raw-main-with-schemaversion-1), for example
   `FHR: warning: schemaVersion 1 via the raw-main schema URL is read as FHR 1 (v0.3.1); cite
-  https://w3id.org/fair-bioheaders/fhr/v0.3.1 or move to schemaVersion "2.0"`. V6 applies only
+  https://w3id.org/fair-bioheaders/fhr/v0.3.1 or move to schemaVersion "2.1"`. V6 applies only
   to FHR: FHP and FHGFF3 were first released in v0.4.0 with `schemaVersion` `"1.0"`, so they have
   no earlier raw-main contract. For microdata without `data-fhr-type`, `schemaVersion` text that
   reads as the JSON number 1 counts as the number 1 (rule M3 then converts it with the v0.3.1
@@ -305,13 +305,16 @@ valid while it is valid FHR 1, but raw-main is the current-schema link, so new a
 should cite a versioned URL. No tool rewrites it, because any change to the header changes the
 checksum. To clear the warning, choose one:
 
-- **Move to v0.4**: set `schema` to `https://w3id.org/fair-bioheaders/fhr/v0.4.0` and
-  `schemaVersion` to `'2.0'`, fix anything the v0.4 tightening rejects
-  ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)), and recompute the checksum.
+- **Move to the current release**: set `schema` to
+  `https://w3id.org/fair-bioheaders/fhr/v0.6.0` and `schemaVersion` to `'2.1'`, fix
+  anything the v0.4 tightening rejects ([SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md)),
+  and recompute the checksum. Citing `https://w3id.org/fair-bioheaders/fhr/v0.4.0` with
+  `schemaVersion` `'2.0'` also clears the warning.
 - **Pin v0.3.1**: set `schema` to `https://w3id.org/fair-bioheaders/fhr/v0.3.1`, keep
   `schemaVersion: 1`, and recompute the checksum.
 
-With the toolkit and standard shell tools (checked with `bioheaders` 0.8.0 and later):
+With the toolkit and standard shell tools (checked with `bioheaders` 0.8.0 and later; a
+header that cites v0.6.0 needs 0.11.0 or later, the first release that bundles it):
 
 ```bash
 grep '^;~' legacy.fa | cut -c3- > metadata.yaml   # recover the YAML header (use '^#~' for GFA)
