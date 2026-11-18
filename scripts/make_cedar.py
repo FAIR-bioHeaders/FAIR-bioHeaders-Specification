@@ -74,11 +74,14 @@ Commands, from the repository root:
     python scripts/make_cedar.py --check    # CI drift check (no writes)
 
 ``--check`` regenerates in memory and exits 1 with a unified diff if a
-committed template differs (the scripts/make_jsonld.py pattern). It also
-recomputes the draft snapshot digests against
+committed template differs (the scripts/make_jsonld.py pattern), or if a
+``*.json`` at the top of templates/cedar/ is not one the generator produces.
+It also recomputes the draft snapshot digests against
 ``templates/cedar/drafts/provenance.json``, so a re-pinned or edited snapshot
 cannot silently flow into a template. Like that script, this one uses only the
-standard library and never the network.
+standard library and never the network, so it cannot notice a new upstream
+commit to a draft contract; re-pinning a snapshot is a deliberate maintainer
+step (templates/cedar/README.md).
 ``flatten_export`` (imported by tests/test_cedar.py, also
 ``python scripts/make_cedar.py --flatten FILE``) converts a CEDAR artifact
 export back into the plain FH* JSON record shape so it can round-trip through
@@ -94,6 +97,7 @@ import argparse
 import difflib
 import hashlib
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -194,6 +198,22 @@ def form_field_name(name: str) -> str:
         raise SystemExit(f"make_cedar: form field name {form_name!r} is reserved by the "
                          "CEDAR meta-schemas; add a FORM_FIELD_ALIASES entry")
     return form_name
+
+
+# A URI-valued scalar becomes a CEDAR ``link`` field (an IRI field: the value
+# travels as ``{"@id": ...}``, and CEDAR checks it is a well-formed absolute
+# IRI) only when nothing but its type and format constrain it. CEDAR's IRI-field
+# value constraints have no ``regex``/``minLength``/``maxLength`` keys
+# (iri-field-meta-schema.json in cedar-model-validation-library sets
+# additionalProperties: false), so a URI node with a pattern - the taxonomy
+# and ORCID URIs - stays a text field that carries the contract's regex.
+LINK_NODE_KEYS = {"type", "format", "description"}
+
+
+def is_link_node(node: dict) -> bool:
+    """True when a contract node becomes a CEDAR link (IRI) field losslessly."""
+    return (isinstance(node, dict) and node.get("type") == "string"
+            and node.get("format") == "uri" and set(node) <= LINK_NODE_KEYS)
 
 
 def contract_field_name(name: str) -> str:
@@ -471,6 +491,8 @@ class Generator:
                       inherited: str | None = None) -> dict:
         """A single-valued CEDAR TemplateField for a scalar schema node."""
         node = deref(node, self.defs)
+        if is_link_node(node) and path != "schema":
+            return self.link_field(path, name, node, required, inherited)
         kind = node.get("type")
         enum = node.get("enum")
         if enum and path == "schemaVersion":
@@ -535,6 +557,39 @@ class Generator:
             "required": value_required,
             "schema:name": name,
             "schema:description": self.describe(path, node, inherited),
+            "pav:createdOn": None,
+            "pav:createdBy": None,
+            "pav:lastUpdatedOn": None,
+            "oslc:modifiedBy": None,
+            "schema:schemaVersion": CEDAR_FORMAT_VERSION,
+            "additionalProperties": False,
+        }
+
+    def link_field(self, path: str, name: str, node: dict, required: bool,
+                   inherited: str | None = None) -> dict:
+        """A CEDAR link (IRI) field for an otherwise unconstrained URI node.
+
+        Shape per cedar-model-validation-library's iri-field-meta-schema.json
+        and its src/test/resources/fields/link-field.json: the value is the
+        instance's ``@id`` (absent when unanswered, so no ``required`` list)
+        and the value constraints carry only requiredness.
+        """
+        description = self.describe(path, node, inherited)
+        return {
+            "$schema": DRAFT04,
+            "@type": CEDAR_FIELD,
+            "@context": FIELD_CONTEXT,
+            "@id": None,
+            "type": "object",
+            "title": f"{label_for(name)} field schema",
+            "description": description,
+            "_ui": {"inputType": "link"},
+            "_valueConstraints": {"requiredValue": required},
+            "properties": {"@type": TYPE_DESC,
+                           "@id": {"type": "string", "format": "uri"},
+                           "rdfs:label": {"type": ["string", "null"]}},
+            "schema:name": name,
+            "schema:description": description,
             "pav:createdOn": None,
             "pav:createdBy": None,
             "pav:lastUpdatedOn": None,
@@ -923,20 +978,50 @@ RESERVED_KEYS = set(FIXED_REQUIRED + BOOKKEEPING + [
     "schema:identifier", "schema:schemaVersion", "status"])
 
 
-def _coerce(entry: dict):
+INTEGER_TYPES = ("xsd:long", "xsd:int", "xsd:short", "xsd:byte", "xsd:integer")
+DECIMAL_TYPES = ("xsd:double", "xsd:float", "xsd:decimal")
+
+
+def _coerce(entry: dict, where: str = "value"):
+    """Unwrap one ``{"@value": ...}`` literal, refusing what no field emits.
+
+    A field value is a string, number, boolean or null; an object or list in
+    ``@value`` and an unparsable numeric string raise ValueError naming the
+    field path, so a malformed export never reaches the toolkit half-read.
+    """
     value = entry.get("@value")
     datatype = entry.get("@type")
-    if isinstance(value, str) and datatype in ("xsd:long", "xsd:int", "xsd:short", "xsd:byte"):
-        return int(value)
-    if isinstance(value, str) and datatype in ("xsd:double", "xsd:float", "xsd:decimal"):
-        return float(value)
+    if isinstance(value, (dict, list)):
+        raise ValueError(f"{where}: @value must be a string, number, boolean or null, "
+                         f"not {'an object' if isinstance(value, dict) else 'a list'}")
+    if isinstance(value, str) and datatype in INTEGER_TYPES:
+        try:
+            return int(value)
+        except ValueError:
+            raise ValueError(f"{where}: {value!r} is not a valid {datatype} integer") from None
+    if isinstance(value, str) and datatype in DECIMAL_TYPES:
+        try:
+            number = float(value)
+        except ValueError:
+            raise ValueError(f"{where}: {value!r} is not a valid {datatype} number") from None
+        if not math.isfinite(number):
+            raise ValueError(f"{where}: {value!r} is not a finite {datatype} number")
+        return number
     return value
+
+
+def _link_value(entry: dict, where: str):
+    """The IRI of a link-field instance; an unanswered link exports no @id."""
+    iri = entry.get("@id")
+    if iri is not None and not isinstance(iri, str):
+        raise ValueError(f"{where}: a link field's @id must be an IRI string")
+    return iri
 
 
 def _contract_for_export(artifact: dict):
     schema_value = artifact.get(form_field_name("schema"), artifact.get("schema"))
     if isinstance(schema_value, dict) and "@value" in schema_value:
-        schema_value = _coerce(schema_value)
+        schema_value = _coerce(schema_value, "schema")
     contracts = load_contracts()
     if isinstance(schema_value, str):
         for stem, meta in contracts.items():
@@ -977,28 +1062,31 @@ def _blank(value) -> bool:
     return False
 
 
-def _flatten_list(values, node, generator):
+def _flatten_list(values, node, generator, where):
     # An unanswered instance of a multi-instance field (the blank item CEDAR
     # shows for a field with minItems, or an extra empty row) is not a value.
     item_node = node.get("items", {})
-    flattened = (_flatten_value(item, item_node, generator) for item in values)
+    flattened = (_flatten_value(item, item_node, generator, f"{where}[{index}]")
+                 for index, item in enumerate(values))
     return [item for item in flattened if not _blank(item)]
 
 
-def _flatten_value(value, node, generator):
+def _flatten_value(value, node, generator, where):
     node = _contract_node(node, generator)
     if isinstance(value, list):
-        return _flatten_list(value, node, generator)
+        return _flatten_list(value, node, generator, where)
     if isinstance(value, dict):
         if "@list" in value:
-            return _flatten_list(value["@list"], node, generator)
+            return _flatten_list(value["@list"], node, generator, where)
         if "@value" in value:
-            return _coerce(value)
-        return _flatten_object(value, node, generator)
+            return _coerce(value, where)
+        if is_link_node(node):
+            return _link_value(value, where)
+        return _flatten_object(value, node, generator, where=where)
     return value
 
 
-def _flatten_object(artifact: dict, node: dict, generator, root=False) -> dict:
+def _flatten_object(artifact: dict, node: dict, generator, root=False, where="") -> dict:
     node = _contract_node(node, generator)
     properties = node.get("properties", {})
     required = set(node.get("required", []))
@@ -1008,7 +1096,8 @@ def _flatten_object(artifact: dict, node: dict, generator, root=False) -> dict:
             continue
         contract_key = contract_field_name(key) if root else key
         contract_node = properties.get(contract_key, {})
-        flattened = _flatten_value(value, contract_node, generator)
+        member_path = f"{where}.{contract_key}" if where else contract_key
+        flattened = _flatten_value(value, contract_node, generator, member_path)
         if root and contract_key == "checksum" and flattened in (None, ""):
             continue
         if contract_key not in required and _blank(flattened):
@@ -1020,8 +1109,10 @@ def _flatten_object(artifact: dict, node: dict, generator, root=False) -> dict:
 def flatten_export(artifact: dict) -> dict:
     """Turn a CEDAR artifact instance export into the plain FH* JSON record.
 
-    Drops the JSON-LD/CEDAR bookkeeping keys and unwraps ``{"@value": ...}``
-    (with the numeric datatypes the generated fields declare). Unanswered
+    Drops the JSON-LD/CEDAR bookkeeping keys, unwraps ``{"@value": ...}``
+    (with the numeric datatypes the generated fields declare) and reads a
+    link field's ``{"@id": ...}``. A non-scalar ``@value`` or an unparsable
+    numeric value raises ValueError naming the field path. Unanswered
     optional values are omitted according to the selected contract's
     requiredness: a null value, an element whose members are all unanswered,
     and a multi-instance field with no answered instance (unanswered instances
@@ -1041,13 +1132,38 @@ def flatten_export(artifact: dict) -> dict:
 # CLI
 # ---------------------------------------------------------------------------
 
-def check_output(name: str, payload: str, errors: list) -> None:
-    path = ROOT / name
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def check_output(path: Path, payload: str, errors: list) -> None:
+    name = display_path(path)
     committed = path.read_text(encoding="utf-8") if path.exists() else ""
     if committed != payload:
         errors.extend(difflib.unified_diff(
             committed.splitlines(keepends=True), payload.splitlines(keepends=True),
             fromfile=f"a/{name}", tofile=f"b/{name}"))
+
+
+def drift_errors() -> list:
+    """Diff lines for every changed template, plus one line per stray file.
+
+    A ``*.json`` at the top of templates/cedar/ that the generator does not
+    produce (a removed type, a renamed stem, a hand-made copy) is drift too:
+    it would be published beside the generated templates with no source.
+    """
+    errors = []
+    generated = generate_all()
+    for path, payload in generated.items():
+        check_output(path, payload.decode("utf-8"), errors)
+    for stray in sorted(set(OUT_DIR.glob("*.json")) - set(generated)):
+        errors.append(f"make_cedar: {display_path(stray)} is not produced by "
+                      "scripts/make_cedar.py; delete it (git rm), or add its type to "
+                      "TYPES/DRAFT_TYPES so the generator owns it\n")
+    return errors
 
 
 def main(argv=None):
@@ -1058,17 +1174,21 @@ def main(argv=None):
                         help="print the FH* JSON record flattened from a CEDAR artifact export")
     args = parser.parse_args(argv)
     if args.flatten:
-        artifact = json.loads(Path(args.flatten).read_text(encoding="utf-8"))
-        print(json.dumps(flatten_export(artifact), indent=2))
+        try:
+            artifact = json.loads(Path(args.flatten).read_text(encoding="utf-8"))
+            record = flatten_export(artifact)
+        except (OSError, ValueError) as error:
+            sys.stderr.write(f"make_cedar: cannot flatten {args.flatten}: {error}\n")
+            return 1
+        print(json.dumps(record, indent=2))
         return 0
     if args.check:
-        errors = []
-        for path, payload in generate_all().items():
-            check_output(str(path.relative_to(ROOT)), payload.decode("utf-8"), errors)
+        errors = drift_errors()
         if errors:
             sys.stderr.writelines(errors)
             sys.stderr.write("make_cedar: templates/cedar/ has drifted from the committed "
-                             "schemas; run python scripts/make_cedar.py\n")
+                             "schemas; run python scripts/make_cedar.py and remove any "
+                             "stray file named above\n")
             return 1
         print("make_cedar: CEDAR templates are up to date")
         return 0

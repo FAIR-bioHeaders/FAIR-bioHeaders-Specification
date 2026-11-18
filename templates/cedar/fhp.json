@@ -728,7 +728,7 @@
           "title": "URL field schema",
           "description": "Accession URL.",
           "_ui": {
-            "inputType": "textfield"
+            "inputType": "link"
           },
           "_valueConstraints": {
             "requiredValue": false
@@ -751,11 +751,9 @@
                 }
               ]
             },
-            "@value": {
-              "type": [
-                "string",
-                "null"
-              ]
+            "@id": {
+              "type": "string",
+              "format": "uri"
             },
             "rdfs:label": {
               "type": [
@@ -764,9 +762,6 @@
               ]
             }
           },
-          "required": [
-            "@value"
-          ],
           "schema:name": "url",
           "schema:description": "Accession URL.",
           "pav:createdOn": null,
@@ -2146,7 +2141,7 @@
                 "title": "URL field schema",
                 "description": "Accession URL.",
                 "_ui": {
-                  "inputType": "textfield"
+                  "inputType": "link"
                 },
                 "_valueConstraints": {
                   "requiredValue": false
@@ -2169,11 +2164,9 @@
                       }
                     ]
                   },
-                  "@value": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                  "@id": {
+                    "type": "string",
+                    "format": "uri"
                   },
                   "rdfs:label": {
                     "type": [
@@ -2182,9 +2175,6 @@
                     ]
                   }
                 },
-                "required": [
-                  "@value"
-                ],
                 "schema:name": "url",
                 "schema:description": "Accession URL.",
                 "pav:createdOn": null,
@@ -3492,7 +3482,7 @@
       "title": "Prediction Protocol field schema",
       "description": "Prediction or annotation protocol or workflow reference URI.",
       "_ui": {
-        "inputType": "textfield"
+        "inputType": "link"
       },
       "_valueConstraints": {
         "requiredValue": false
@@ -3515,11 +3505,9 @@
             }
           ]
         },
-        "@value": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "@id": {
+          "type": "string",
+          "format": "uri"
         },
         "rdfs:label": {
           "type": [
@@ -3528,9 +3516,6 @@
           ]
         }
       },
-      "required": [
-        "@value"
-      ],
       "schema:name": "predictionProtocol",
       "schema:description": "Prediction or annotation protocol or workflow reference URI.",
       "pav:createdOn": null,
@@ -3871,7 +3856,7 @@
             "title": "URI field schema",
             "description": "URI of the software.",
             "_ui": {
-              "inputType": "textfield"
+              "inputType": "link"
             },
             "_valueConstraints": {
               "requiredValue": false
@@ -3894,11 +3879,9 @@
                   }
                 ]
               },
-              "@value": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+              "@id": {
+                "type": "string",
+                "format": "uri"
               },
               "rdfs:label": {
                 "type": [
@@ -3907,9 +3890,6 @@
                 ]
               }
             },
-            "required": [
-              "@value"
-            ],
             "schema:name": "uri",
             "schema:description": "URI of the software.",
             "pav:createdOn": null,
@@ -4154,7 +4134,7 @@
         "title": "Related Link field schema",
         "description": "Related URLs to the protein set.",
         "_ui": {
-          "inputType": "textfield"
+          "inputType": "link"
         },
         "_valueConstraints": {
           "requiredValue": true
@@ -4177,11 +4157,9 @@
               }
             ]
           },
-          "@value": {
-            "type": [
-              "string",
-              "null"
-            ]
+          "@id": {
+            "type": "string",
+            "format": "uri"
           },
           "rdfs:label": {
             "type": [
@@ -4190,9 +4168,6 @@
             ]
           }
         },
-        "required": [
-          "@value"
-        ],
         "schema:name": "relatedLink",
         "schema:description": "Related URLs to the protein set.",
         "pav:createdOn": null,
@@ -5614,7 +5589,7 @@
             "title": "URL field schema",
             "description": "URL of the source or set.",
             "_ui": {
-              "inputType": "textfield"
+              "inputType": "link"
             },
             "_valueConstraints": {
               "requiredValue": false
@@ -5637,11 +5612,9 @@
                   }
                 ]
               },
-              "@value": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+              "@id": {
+                "type": "string",
+                "format": "uri"
               },
               "rdfs:label": {
                 "type": [
@@ -5650,9 +5623,6 @@
                 ]
               }
             },
-            "required": [
-              "@value"
-            ],
             "schema:name": "url",
             "schema:description": "URL of the source or set.",
             "pav:createdOn": null,

@@ -15,6 +15,7 @@ entire unrelated repository history for a guidance update.
 | FHP-Specification | Protein-header development; inherited FHR/family files are compatibility/history, not evidence of FHP ownership of those types. |
 | FHT-Specification | Transcriptome-header development; reconcile the legacy draft with the reviewed family contract before claiming toolkit support. |
 | FHGFF3 | Annotation-header development; inherited biodatamodels/gff-schema feature models are distinct from the FAIR header contract, and the pinned `header/` tree mirrors the shared publication copy under a parity check. |
+| FHGM-Specification | Draft FHGM gene-model contract development (`development/`), carried inside FHGFF3 files under the `x-fhgm-models` extension key; a draft under rule V7 and not a header type, so no `schemaVersion`. Its inherited feature models and pinned `header/` copy are baseline material, not FHGM. |
 
 David and Adam jointly hold schema and release authority. Read the shared
 GOVERNANCE.md; its optional steering group is not active. Read the local README,
@@ -106,8 +107,9 @@ report conditions, unsupported fields and losses rather than invent equivalence.
 Generate contexts/vocabulary via `scripts/make_jsonld.py`, where present.
 
 Only use paths and commands present in the checkout, and fetch before relying on
-it: a checkout can lag origin. FHT currently has a legacy `fht.json` and
-examples, without repository CI or the shared build/test machinery; FHGFF3 has
+it: a checkout can lag origin. FHT has its own `fht_linkml.yml`, generated
+`fht.json` development contract, examples, fixtures and GitHub workflows, but not
+the shared publication machinery; FHGFF3 has
 inherited feature-model sources plus a separate `header/` development tree
 copied byte-for-byte from a pinned shared-publication revision
 (`header/provenance.json`), checked by `scripts/check_header_parity.py` under
@@ -258,8 +260,8 @@ actually downloaded; a ranged read truncates a `.gz` stream — download whole
 files before asserting on their contents; `diff <(…) <(…)` prints nothing when
 the process substitution fails, which reads exactly like agreement — extract
 to temp files, require each extraction to succeed, then print `wc -l` and compare
-those files; `$?` after a pipe reports the
-last pipeline element only; zsh applies `:A`/`:s` modifiers to a bare
+those files; with `pipefail` disabled, `$?` after a pipeline reports only the
+last command's status; zsh applies `:A`/`:s` modifiers to a bare
 `$var:path` — brace the variable — and does not word-split an unquoted
 `$var`; and a case-insensitive filesystem can resolve a path whose case is
 wrong, so negative controls for missing files must also run on Linux CI.
@@ -307,13 +309,13 @@ These sections apply according to the Git remote. Keep the shared sections of
 this file in step across all six specification repositories — the shared
 publication repository and the FHR, FHP, FHT, FHGFF3 and FHGM development
 repositories — modulo declared per-repository link adaptations: a repository
-may substitute an absolute shared-specification URL where a relative path does
-not resolve in its own tree. FHP-Specification's existing absolute links to the
-shared schema-selection rules and version registry are also permitted, even
-though those paths exist locally. A repository may also carry sections that describe
+may substitute an absolute shared-specification URL where a relative path is
+missing or resolves to a pinned compatibility copy rather than the intended
+shared version. A repository may also carry sections that describe
 only its own tree (currently the shared repository's "Draft metadata profiles
-(#56)" section, FHR-Specification's development-tree paragraph, and
-FHGM-Specification's local-development-scope section); never delete another
+(#56)" section, FHR-Specification's development-tree paragraph,
+FHGM-Specification's local-development-scope section, and FHGFF3's
+local-checks paragraph under Verification); never delete another
 repository's local section. Port only intended shared-guidance changes and
 record the shared source commit; comparisons of the shared sections across
 repositories are advisory, not a gate. The byte-identity requirement for these
@@ -350,8 +352,10 @@ or establish that release artifacts have been published.
 
 FHR-Specification development happens on branches. Reviewed schema changes publish
 in FAIR-bioHeaders-Specification first; then synchronize the compatibility files
-on FHR main. `.github/workflows/published-files.yml` checks `fhr.json`, `fhp.json`,
-`fhgff3.json` and `jsonld/*` against shared main. Do not merge an independent schema
+on FHR main. `.github/workflows/published-files.yml` runs
+`scripts/check_development_tree.py --remote`, which checks every published copy
+against the pinned shared release tag (not shared main, which may move between
+releases). Do not merge an independent schema
 change into FHR main that makes those public raw URLs diverge. Preserve historical
 tags and file-bound examples; schema addition review still follows its own cycle.
 
@@ -379,13 +383,24 @@ draft fields are iterated with curators.
 
 ### FHT legacy draft and adoption
 
-FHT-Specification currently has `fht.json` and `examples/`, without the shared
-generator/test suite. Inspect the schema's declared JSON Schema dialect and use
-a matching validator with format checks when validating its JSON/YAML examples;
-report the validator/version, parsed value types and validation failures. JSON
-syntax checking alone is not schema validation. No adopted local automated test
-command is implied here; document the chosen reproducible procedure in an FHT
-implementation PR rather than claiming the shared scripts ran in this tree.
+FHT-Specification keeps the FHT 1.0 development contract (`fht_linkml.yml`,
+generated `fht.json`), `examples/`, `conformance/` fixtures and the preserved
+legacy draft `legacy/fht-v0.1.json`. Its own GitHub workflows, described in its
+`docs/CI.md`, are the check list there: `validate-specification.yml` runs
+`python -m unittest discover -s tests -v`, regenerates `fht.json` with
+`json-schema-generator.py` and rejects drift, and runs
+`scripts/check_provenance.py` on the pinned shared imports; `fht-fixtures.yml`
+runs `scripts/check_fht_fixtures.py`, a scratch rerun of
+`scripts/make_fht_fixtures.py`, and a separate job that exercises a named
+released toolkit through the rule V7 draft lane (`scripts/run_toolkit_lane.py`);
+`legacy-draft-checks.yml` runs `scripts/check_legacy_schema.py` and
+`scripts/check_legacy_examples.py`; `docs-checks.yml` runs Markdownlint and
+`scripts/check_docs.py`; and `external-links.yml` checks cited URLs on a
+schedule or manual dispatch only. Run the commands from those workflows rather
+than claiming the shared repository's scripts ran in that tree. When validating
+the legacy draft directly, use a validator for its declared JSON Schema dialect
+with format checks, and report the validator/version, parsed value types and
+validation failures; JSON syntax checking alone is not schema validation.
 
 Reconcile legacy draft field names, author roles, `license`/reuse conditions,
 statistics/units, checksum coverage, schema versions and parent relationships
