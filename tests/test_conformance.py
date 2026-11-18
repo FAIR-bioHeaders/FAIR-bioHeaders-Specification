@@ -465,7 +465,7 @@ class ConformanceTests(unittest.TestCase):
         unrelated_warning_bin = self.root / "unrelated-warning-bin"
         unrelated_warning_bin.mkdir()
         unrelated_body = body.replace("FHR: warning: link scheme (docs/FORMAT.md R14)",
-                                      "FHR: warning: R140 is not a rule")
+                                      "FHR: warning: R14A is not a rule")
         self.assertNotEqual(unrelated_body, body)
         for name in ("fhr-fasta-validate", "fhr-gfa-validate", "fhr-convert"):
             script = unrelated_warning_bin / name
@@ -488,6 +488,21 @@ class ConformanceTests(unittest.TestCase):
         self.assertEqual(gff3.returncode, 1)
         self.assertIn("fhgff3-minimal-checksum-link: converter rejected (Unsupported file "
                       "extension (no fhr-gff3-validate))", gff3.stderr)
+
+    def test_warning_rule_ids_require_complete_tokens(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "warning_checker", ROOT / "scripts/check_conformance.py")
+        checker = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(checker)
+        for token in ("R140", "R14A", "R14x", "R14_", "AR14", "_R14"):
+            with self.subTest(token=token):
+                self.assertEqual(checker.missing_warnings(
+                    ["R14"], f"FHR: warning: {token} unrelated warning"), ["R14"])
+        for message in ("FHR: warning: R14 link scheme",
+                        "FHR: warning: link scheme (docs/FORMAT.md R14)"):
+            with self.subTest(message=message):
+                self.assertEqual(checker.missing_warnings(["R14"], message), [])
 
     def test_jsonld_vectors(self):
         vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}

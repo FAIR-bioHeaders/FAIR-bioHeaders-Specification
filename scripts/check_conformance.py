@@ -619,7 +619,7 @@ def missing_warnings(rules, stderr):
     """
     lines = [line for line in stderr.splitlines() if "warning" in line.lower()]
     return [rule for rule in rules
-            if not any(re.search(rf"(?<![A-Za-z0-9]){re.escape(rule)}(?![0-9])", line)
+            if not any(re.search(rf"(?<![A-Za-z0-9_]){re.escape(rule)}(?![A-Za-z0-9_])", line)
                        for line in lines)]
 
 
