@@ -52,8 +52,10 @@ run, differs from ECMA-262 in ways that have been measured:
 - `\d` and `\w` are Unicode-aware in Python where ECMA-262 without flags is
   ASCII, and `\s` is Unicode-aware in both but over different whitespace sets.
   Measured on the same 2026-11-18 pass: no released pattern uses `\d`, `\w`,
-  `\s`, `\D` or `\W` outside a character class, and two of the 16 distinct
-  released patterns use `\S`. U+FEFF is non-space in Python but whitespace in
+  `\s`, `\D` or `\W` outside a character class, and `\S` appears outside a
+  character class in **7** entries of the three released contracts, which are
+  **2** distinct pattern strings (`^\S+$` and the `scholarlyArticle` DOI
+  pattern). U+FEFF is non-space in Python but whitespace in
   ECMA-262, while U+00A0 is whitespace in both. For example, `"gene\uFEFF"`
   passes Python's `^\S+$` but fails ECMA-262's: that exact released constraint
   applies to `FeatureCount.featureType` and `GenomeReference.accession` in
@@ -75,13 +77,22 @@ engine.
 Staying inside the RE2 subset — no lookaround, no backreferences, no inline
 flags, no conditionals — is a **non-normative compatibility observation**. It is
 not a requirement a contract has to meet, and nothing in this family rejects a
-pattern for being RE2-hostile. It is reported by the `pattern` inventory that
-`scripts/check_pattern_census.py` maintains once that script lands on `main`;
-read its current output for any present-day figure rather than a number quoted
-in prose. For the record, the measurement taken when this page was written
-(2026-11-18, `origin/main` at `24eab38`, walking every `pattern`, every
-`patternProperties` key and every `propertyNames` exception pattern of the
-source files):
+pattern for being RE2-hostile. Nothing here claims that any tool certifies it:
+the census script proposed in #270 and under review in #272 (open, not merged as
+this PR is written) is an **inventory and drift gate for the `pattern` keyword
+of the released contracts** — it fails when a released `pattern` is added,
+removed or edited against its committed baseline, and it reports lookaround and
+other constructs in the draft and proposal scope **informationally only**, so it
+can never reject the drafts' lookarounds. It deliberately does **not** compile
+patterns, prove ECMA-262 validity, certify engine or RE2 compatibility, or cover
+`patternProperties` keys. So the observation below is a measurement of record,
+taken by hand for this page and not produced by that tool; if #272 merges, read
+its output for the current released-`pattern` figures and this page only for the
+dialect rule.
+
+Measurement of record: 2026-11-18, `origin/main` at `24eab38` (this PR's base),
+walking every `pattern` keyword, every `patternProperties` key and every
+`propertyNames` exception pattern of six files:
 
 | file | regex entries | entries ending in `$` | entries using lookaround |
 | --- | --- | --- | --- |
@@ -91,18 +102,37 @@ source files):
 | `schemas/core.yaml` | 7 | 7 | 0 |
 | `schemas/shared.yaml` | 1 | 1 | 0 |
 | `schemas/versions.json` | 0 | 0 | 0 |
+| **total** | **72** | **62** | **0** |
+
+**Which scope each figure covers, so that two honest censuses are not read as a
+disagreement.** The table above counts *regex entries*, not pattern strings, and
+its class set is `pattern` keywords **plus** `patternProperties` keys **plus**
+`propertyNames` exception patterns, over **six** files: 72 entries, 62 ending in
+`$`, 0 using lookaround. The census under review in #272 counts the `pattern`
+keyword only — it deliberately excludes `patternProperties` keys — over **nine**
+files, adding the three root `*_linkml.yml` models: its committed
+`.github/pattern-baseline.json` at head `a2051760` records `patternCount` 72 with
+62 `$`-terminated entries and 0 using lookaround, and 15 distinct strings. The
+two totals coincide at 72/62/0 **by composition, not by agreement**: this page's
+64 contract entries are 49 `pattern` keywords + 5 `patternProperties` keys + 10
+`propertyNames` exception patterns, and #272's 72 are 59 in those same three
+contracts plus 5 in the three LinkML models, 7 in `core.yaml` and 1 in
+`shared.yaml`. A figure quoted from one scope does not validate the other,
+and neither supersedes the other — the same trap as comparing a pin against the
+wrong ref.
 
 The `$`-terminated patterns live in the three released contracts at the
 repository root, in `schemas/core.yaml`, and in the one `lineageDataset` slot of
 `schemas/shared.yaml`; `schemas/versions.json` is a version registry and carries
 no regex at all. Those per-file figures count occurrences, not patterns: the
-three contracts hold 16 distinct pattern strings among their 64 entries, because
+three contracts hold 16 distinct regexes among their 64 entries, because
 a LinkML pattern appears both in `$defs` and at the emitted instance path. None
-of the 16, and none of the 8 LinkML entries, uses lookaround, a backreference,
-an inline flag group, a conditional or `\A`/`\z`. All 7 `schemas/core.yaml`
-entries and the single `schemas/shared.yaml` entry end in `$`; the 10 entries
-that do not are the extension-field exception patterns of rule R15 in
-`docs/FORMAT.md` — a literal line-feed pattern and a `^x-` prefix test, once
+of the 16, and none of the 8 entries in `schemas/core.yaml` and
+`schemas/shared.yaml` together, uses lookaround, a backreference, an inline flag
+group, a conditional or `\A`/`\z`. All 7 `schemas/core.yaml` entries and the
+single `schemas/shared.yaml` entry end in `$`; the 10 entries that do not are all
+in the three contracts and are the extension-field exception patterns of rule R15
+in `docs/FORMAT.md` — 5 literal line-feed patterns and 5 `^x-` prefix tests, once
 per contract and, for the two generated contracts, again in their `$defs`
 copy — which are key-name tests, not unanchored value patterns.
 
