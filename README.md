@@ -84,6 +84,9 @@ schema version, and assembly `version` are distinct. From v0.4 `schemaVersion` i
 `"1.1"` from v0.5.0, FHP and FHGFF3 `"1.2"` released in v0.6.0), and a file's `schema` URL
 selects the schema it is checked against: see [schema versions](docs/SCHEMA-VERSIONS.md). Known gaps between the normative text and what the 2.0/1.0 schemas can express, with their
 status and target release, are in [the schema-contract gap audit](docs/SCHEMA-GAP-AUDIT.md).
+What a contract's `pattern` means when it is evaluated — the ECMA-262 floor and
+the engine differences a reader must not assume away — is in
+[regex dialect](docs/REGEX-DIALECT.md).
 
 Required fields: `schema`, `schemaVersion`, `genome`, `taxon`, `version`,
 `metadataAuthor`, `assemblyAuthor`, `dateCreated`, `masking`, and `checksum`.

@@ -73,8 +73,17 @@ JSON Schema patterns use ECMA-262 semantics, where `$` matches only at the end
 of the string. Python's `re` (used by the `jsonschema` package) also lets `$`
 match before one trailing newline, so under Python a value such as
 `"soft-masked\n"` still passes the anchored patterns. The checksum and SeqCol
-fields close this gap with exact lengths. Lookahead workarounds are not used
-because RE2-based validators do not support them.
+fields close this gap with exact lengths.
+
+*Historical note — this describes the v0.4 contracts, not current policy:* the
+v0.4 hand-authored contracts avoided lookahead workarounds for that gap because
+RE2-based validators do not support them. That described how those contracts
+were written in v0.4; it is not a compatibility requirement today. ECMA-262 is
+the only normative floor for `pattern`, RE2-cleanliness is a non-normative
+compatibility observation, and a contract pattern may use lookaround. The policy
+and the engine-difference inventory are in [REGEX-DIALECT.md](REGEX-DIALECT.md);
+the `$`-vs-trailing-newline outcome difference is resolved in implementations,
+where the toolkit reads `$` as ECMA-262 does (FAIR-bioHeaders-Tools#189).
 
 ## Implementation and checks
 

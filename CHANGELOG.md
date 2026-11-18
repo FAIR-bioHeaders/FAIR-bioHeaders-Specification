@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- Give `pattern` one normative home (#270, #264; guidance only, no schema or
+  contract change): new `docs/REGEX-DIALECT.md` states that ECMA-262 is the only
+  normative floor for `pattern`, that a `pattern` applies to the complete string
+  value and not to a line within it, and which engine differences are measured
+  (`$` before a trailing newline, the Unicode reading of `\d`/`\w`, the
+  whitespace sets of `\s`, and empty character classes). RE2-cleanliness of the
+  released contracts is recorded there as a non-normative compatibility
+  observation, reported by the `scripts/check_pattern_census.py` inventory once
+  that lands; the four `(?![\s\S])` end anchors in the FHT and FHGM draft
+  contracts are correct under this floor. The v0.4 line "Lookahead workarounds
+  are not used because RE2-based validators do not support them" in
+  `docs/SCHEMA-CHANGES-v0.4.md` is kept and marked historical. `docs/FORMAT.md`
+  now says what a draft-2020-12 declaration does and does not establish, and
+  `docs/MAPPINGS.md` cites the shared core by full URL. No `schemaVersion`,
+  registry row, release or support claim; FHT and FHGM remain drafts under rule
+  V7.
+
 - Draft `insdc-fhr` profile (#190; profile change, no released schema or
   `schemaVersion` change): BioSample links may also use
   `https://identifiers.org/biosample:<sample>` and
