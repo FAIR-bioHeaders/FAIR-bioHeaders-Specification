@@ -111,8 +111,8 @@ its class set is `pattern` keywords **plus** `patternProperties` keys **plus**
 `$`, 0 using lookaround. The census under review in #272 counts the `pattern`
 keyword only — it deliberately excludes `patternProperties` keys — over **nine**
 files, adding the three root `*_linkml.yml` models: its committed
-`.github/pattern-baseline.json` at head `a2051760` records `patternCount` 72 with
-62 `$`-terminated entries and 0 using lookaround, and 15 distinct strings. The
+`.github/pattern-baseline.json` (read at head `79e30c5c`, identical at `a2051760`) records
+`patternCount` 72 with 62 `$`-terminated entries and 0 using lookaround, and 15 distinct strings. The
 two totals coincide at 72/62/0 **by composition, not by agreement**: this page's
 64 contract entries are 49 `pattern` keywords + 5 `patternProperties` keys + 10
 `propertyNames` exception patterns, and #272's 72 are 59 in those same three
