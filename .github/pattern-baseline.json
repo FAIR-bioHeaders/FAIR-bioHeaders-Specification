@@ -389,7 +389,7 @@
       },
       {
         "pointer": "/$defs/FHT/properties/schema/pattern",
-        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
       },
       {
         "pointer": "/$defs/FHT/properties/schemaVersion/pattern",
@@ -473,7 +473,7 @@
       },
       {
         "pointer": "/properties/schema/pattern",
-        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
       },
       {
         "pointer": "/properties/schemaVersion/pattern",
@@ -511,7 +511,7 @@
       },
       {
         "pointer": "/classes/FHT/slot_usage/schema/pattern",
-        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
       },
       {
         "pointer": "/classes/FHT/slot_usage/version/pattern",
@@ -604,5 +604,5 @@
   "distinctPatternStrings": 20,
   "entriesEndingInDollar": 76,
   "patternCount": 126,
-  "digest": "sha256:b1f2ae8c6cf947ae6fc93546e32ee34f53e500f6151de7fcadb5bfed63f5beb8"
+  "digest": "sha256:8489e3dbc67f59577164d7d34a03569e849982ecfd9b83214a1c14c662151214"
 }

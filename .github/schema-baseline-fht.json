@@ -350,7 +350,7 @@
         },
         "schema": {
           "description": "Proposed released FHT selector under shared V1-V7. Shared raw-main selects the reader current FHT contract; immutable raw-tag and w3id citations select only registered releases. Owning development raw tags remain V5, not shared release aliases. Proposed URLs are not live.",
-          "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])",
+          "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])",
           "type": "string"
         },
         "schemaVersion": {
@@ -800,7 +800,7 @@
     },
     "schema": {
       "description": "Proposed released FHT selector under shared V1-V7. Shared raw-main selects the reader current FHT contract; immutable raw-tag and w3id citations select only registered releases. Owning development raw tags remain V5, not shared release aliases. Proposed URLs are not live.",
-      "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])",
+      "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])",
       "type": "string"
     },
     "schemaVersion": {

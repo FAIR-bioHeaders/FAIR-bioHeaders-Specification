@@ -35,7 +35,7 @@ class FHTPublicationTests(unittest.TestCase):
 
     def test_v1_through_v7_keep_distinct_selection_outcomes(self):
         common = 'https://raw.githubusercontent.com/FAIR-bioHeaders/'
-        for repo in ('FAIR-bioHeaders-Specification', 'FHR-Specification'):
+        for repo in ('FAIR-bioHeaders-Specification',):
             self.assertEqual(select_schema(common + repo + '/main/fht.json'), ('FHT', 'main', 'fht.json'))
             self.assertEqual(select_schema(common + repo + '/v0.7.0/fht.json'), ('FHT', 'v0.7.0', 'fht.json'))
         for suffix in ('', '/'):
@@ -248,6 +248,28 @@ class FHTPublicationTests(unittest.TestCase):
         self.assertIn('allow_candidate=False', text)
         self.assertNotIn('4156353aa6d077', text)
         self.assertIn('(FHT-MICRODATA.md)', (ROOT / 'docs/MICRODATA.md').read_text())
+
+    def test_new_fht_has_no_legacy_fhr_repository_publication_authority(self):
+        canonical = 'https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/'
+        legacy = 'https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/'
+        record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
+        html = binding.write_page(record, allow_candidate=True)
+        for ref in ('main', 'v0.7.0'):
+            uri = legacy + ref + '/fht.json'
+            with self.subTest(ref=ref):
+                self.assertEqual(select_schema(uri), ('FHR', 'main', 'fhr.json'))  # V5.
+                changed = dict(record, schema=uri)
+                self.assertFalse(schema_validator(self.schema).is_valid(changed))
+                with self.assertRaisesRegex(binding.MicrodataError, 'selection'):
+                    binding.write_page(changed, allow_candidate=True)
+                scope_only = html.replace('itemtype="' + binding.FHT_ITEMTYPE + '"', 'itemtype="' + uri + '"')
+                with self.assertRaises(binding.MicrodataError):
+                    binding.read_page(scope_only, allow_candidate=True)
+                self.assertEqual(select_schema(canonical + ref + '/fht.json'), ('FHT', ref, 'fht.json'))
+        for kind in ('fhr', 'fhp', 'fhgff3'):
+            header = {'fhr': 'FHR', 'fhp': 'FHP', 'fhgff3': 'FHGFF3'}[kind]
+            self.assertEqual(select_schema(legacy + 'main/' + kind + '.json'), (header, 'main', kind + '.json'))
+            self.assertEqual(select_schema(legacy + 'v0.6.0/' + kind + '.json'), (header, 'v0.6.0', kind + '.json'))
 
 
 if __name__ == '__main__':

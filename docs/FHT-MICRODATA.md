@@ -12,7 +12,7 @@ F1–F7 are shared review labels, not additional field constraints.
 The accepted owning contract SHA-256 is
 `b62c4e227042e162b43d2c461cfe6c3ece3806636ca88a4cf9b0b2f902fb1fc3`.
 The proposed root contract is [fht.json](../fht.json), SHA-256
-`2a20528d609f36c9f936cf9084fe7f2994154b2eb5cf4c10665a6aa848cb86d0`.
+`082b0790b7878940c4496c97d7485e32c65de8ba75ecc080e53f04fb44251a43`.
 Tests compare every non-selector resolved validation constraint; only the
 selector forms and annotations change. No URI below is minted or advertised
 as live by this branch. Final joint acceptance and the publication gates in
@@ -34,9 +34,10 @@ The record's ordinary `schema` property is separately selected under F2.
 
 The proposed v0.7.0 registry permits these FHT selectors:
 
-- shared raw-main `.../FAIR-bioHeaders-Specification/main/fht.json` (and the
-  historical `FHR-Specification` namespace alias) selects the reader's current
-  FHT contract under V1;
+- canonical shared raw-main `.../FAIR-bioHeaders-Specification/main/fht.json`
+  selects the reader's current FHT contract under V1. FHR-Specification is not an
+  FHT publication authority or compatibility mirror; its raw-main/raw-tag FHT
+  spellings remain unrecognized V5 citations, not FHT aliases;
 - shared raw-tag `.../v0.7.0/fht.json` selects the registered immutable release
   under V2, and `https://w3id.org/fair-bioheaders/fht/v0.7.0` with optional
   trailing slash selects it under V3;

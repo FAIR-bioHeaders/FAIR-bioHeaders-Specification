@@ -76,6 +76,11 @@ def select_schema(value, registry=None):
     if isinstance(value, str):
         raw, w3id = RAW_SCHEMA.fullmatch(value), W3ID_SCHEMA.fullmatch(value)
         if raw:
+            # The historical FHR repository aliases existing released types,
+            # but no FHT artifact/compatibility mirror exists there. A new FHT
+            # contract must not manufacture authority by sharing their regex.
+            if raw.group(2) == 'fht' and not value.startswith('https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/'):
+                return 'FHR', 'main', registry['files']['FHR']  # V5, not FHT.
             ref, header_type = raw.group(1), TYPE_NAMES[raw.group(2)]
         elif w3id:
             ref, header_type = w3id.group(2), TYPE_NAMES[w3id.group(1)]
