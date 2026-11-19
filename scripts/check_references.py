@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -36,7 +37,26 @@ class Missing(Exception):
 
 class Github:
     """Resolve tag -> commit first; read content-addressed bytes, never raw main."""
+    def __init__(self):
+        self._requests = {}
+        self._lock = threading.Lock()
+
     def get(self, route, raw=False):
+        key = (route, raw)
+        with self._lock:
+            future = self._requests.get(key)
+            owner = future is None
+            if owner:
+                future = concurrent.futures.Future()
+                self._requests[key] = future
+        if owner:
+            try:
+                future.set_result(self._fetch(route, raw))
+            except Exception as exc:
+                future.set_exception(exc)
+        return future.result()
+
+    def _fetch(self, route, raw=False):
         req = urllib.request.Request('https://api.github.com/repos/' + route,
             headers={'Accept': 'application/vnd.github.raw+json' if raw else
                      'application/vnd.github+json', 'User-Agent': 'fair-bioheaders-reference-audit'})
@@ -159,6 +179,20 @@ def audit(row, resolver, local=None):
     if not ref or not files or any(not f.get('path') or not f.get('sha256') for f in files):
         result['reason'] = 'Incomplete recorded reference; no authoritative comparison claimed'
         return result
+    if kind not in {'tag', 'commit'}:
+        result.update(verdict='DRIFT', reason='Unsupported/floating revision kind')
+        return result
+    if row['class'] == 'draft-contract' and kind != 'commit':
+        result.update(verdict='DRIFT', reason='Draft contracts require an owning full commit')
+        return result
+    if row['class'] == 'copied-tree':
+        status = row.get('materialStatus')
+        if status not in {'released', 'draft', 'historical'}:
+            result.update(verdict='DRIFT', reason='Copied tree requires explicit material classification')
+            return result
+        if (status == 'released' and kind != 'tag') or (status == 'draft' and kind != 'commit'):
+            result.update(verdict='DRIFT', reason='Released mirrors require tags; draft snapshots require full commits')
+            return result
     if row['class'] in {'released-contract', 'base-carrier'} and kind != 'tag':
         result.update(verdict='DRIFT', reason='Released material must name a tag')
         return result

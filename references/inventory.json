@@ -375,7 +375,8 @@
           "sha256": "185eb8139052f5200fec9274456fee60687816450590bf7f60aa96f08f592408"
         }
       ],
-      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b"
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "materialStatus": "released"
     },
     {
       "id": "FHP-Specification:provenance.json:3",
@@ -673,7 +674,8 @@
         }
       ],
       "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
-      "note": "Declared selected path set, not the entire upstream repository. Historical commit-only overrides retain historical classification."
+      "note": "Declared selected path set, not the entire upstream repository. Historical commit-only overrides retain historical classification.",
+      "materialStatus": "released"
     },
     {
       "id": "FHP-Specification:provenance.json:4",
@@ -696,7 +698,8 @@
         }
       ],
       "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
-      "note": "Declared selected path set, not the entire upstream repository. Historical commit-only overrides retain historical classification."
+      "note": "Declared selected path set, not the entire upstream repository. Historical commit-only overrides retain historical classification.",
+      "materialStatus": "released"
     },
     {
       "id": "FHP-Specification:provenance.json:5",
@@ -1071,7 +1074,8 @@
         "header/conformance/README.md",
         "header/docs/README.md",
         "header/provenance.json"
-      ]
+      ],
+      "materialStatus": "released"
     },
     {
       "id": "FHGFF3:header/provenance.json:12",
@@ -1412,7 +1416,8 @@
         "header/conformance/README.md",
         "header/docs/README.md",
         "header/provenance.json"
-      ]
+      ],
+      "materialStatus": "released"
     },
     {
       "id": "FHGM-Specification:header/provenance.json:17",
@@ -1507,7 +1512,8 @@
           "sha256": "694ab5afaf8c3743eacf9e2aacb5551f7cbe37073b6f4afc3ae4a65b47f9d4df"
         }
       ],
-      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b"
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "materialStatus": "released"
     },
     {
       "id": "FHGM-Specification:development/model/base-schemas.json:22",
@@ -4904,7 +4910,8 @@
       "revision": "v0.6.0",
       "revisionKind": "tag",
       "files": [],
-      "note": "See owning table/provenance: the toolkit vendors all 26 examples/ files of specification tag v0.6.0 byte-identically (measured 2026-11-16: git ls-tree v0.6.0 -- examples vs this checkout, 26/26 digests equal) plus its own additions, and holds no copied-tree provenance record for them: the single-file released-contract rows pin the schemas and contexts, but no record names the examples tree, its upstream revision, or which toolkit example files are copies and which are toolkit-authored. Absence of a record is the finding (FAIR-bioHeaders-Specification#241 class copied-tree, FAIR-bioHeaders-Tools#163): this repository trips its own rule."
+      "note": "See owning table/provenance: the toolkit vendors all 26 examples/ files of specification tag v0.6.0 byte-identically (measured 2026-11-16: git ls-tree v0.6.0 -- examples vs this checkout, 26/26 digests equal) plus its own additions, and holds no copied-tree provenance record for them: the single-file released-contract rows pin the schemas and contexts, but no record names the examples tree, its upstream revision, or which toolkit example files are copies and which are toolkit-authored. Absence of a record is the finding (FAIR-bioHeaders-Specification#241 class copied-tree, FAIR-bioHeaders-Tools#163): this repository trips its own rule.",
+      "materialStatus": "released"
     },
     {
       "id": "FAIR-bioHeaders-Tools-R:inst/VENDORED.json:139",

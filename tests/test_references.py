@@ -26,8 +26,9 @@ class Authority:
 class ReferenceTests(unittest.TestCase):
     def row(self, cls='released-contract'):
         return {'id': 'test', 'consumer': 'owner/consumer', 'class': cls,
-                'repository': 'owner/authority', 'revision': 'v1.0.0',
-                'revisionKind': 'tag', 'commit': COMMIT,
+                'repository': 'owner/authority', 'revision': COMMIT if cls == 'draft-contract' else 'v1.0.0',
+                'revisionKind': 'commit' if cls == 'draft-contract' else 'tag',
+                'materialStatus': 'released', 'commit': COMMIT,
                 'files': [{'path': 'schema.json', 'local': 'copy.json',
                            'sha256': hashlib.sha256(ORIGINAL).hexdigest()}]}
 
@@ -219,3 +220,67 @@ class ReleaseIdentityPreflightTests(unittest.TestCase):
             data['$id'] = 'https://w3id.org/fair-bioheaders/fhp/v0.9.0'
             target.write_text(json.dumps(data))
             self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)
+
+
+class RevisionAndBudgetTests(unittest.TestCase):
+    row = ReferenceTests.row
+
+    def test_every_class_refuses_floating_and_unsupported_kinds(self):
+        for cls in audit.CLASSES:
+            for kind in ('branch', 'unknown', None):
+                row = self.row(cls)
+                row.update(revision='main', revisionKind=kind)
+                self.assertEqual(audit.audit(row, Authority())['verdict'], 'DRIFT')
+        row = self.row('draft-contract')
+        row.update(revision='v1.0.0', revisionKind='tag')
+        self.assertEqual(audit.audit(row, Authority())['verdict'], 'DRIFT')
+
+    def test_released_mirror_needs_tag_and_draft_snapshot_needs_commit(self):
+        row = self.row('copied-tree')
+        row.update(revision=COMMIT, revisionKind='commit')
+        self.assertEqual(audit.audit(row, Authority())['verdict'], 'DRIFT')
+        row['materialStatus'] = 'draft'
+        self.assertEqual(audit.audit(row, Authority())['verdict'], 'FRESH')
+        row.update(revision='v1.0.0', revisionKind='tag')
+        self.assertEqual(audit.audit(row, Authority())['verdict'], 'DRIFT')
+
+    def test_concurrent_identical_requests_share_one_fetch(self):
+        import concurrent.futures
+        import threading
+        class Counted(audit.Github):
+            def __init__(self):
+                super().__init__()
+                self.calls = 0
+            def _fetch(self, route, raw=False):
+                self.calls += 1
+                return ORIGINAL
+        resolver = Counted()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+            results = list(pool.map(lambda _: resolver.get('same/immutable/object', True), range(100)))
+        self.assertEqual(results, [ORIGINAL] * 100)
+        self.assertEqual(resolver.calls, 1)
+
+    def test_complete_inventory_request_budget_uses_deduplicated_immutable_reads(self):
+        import json
+        import urllib.parse
+        root = Path(__file__).resolve().parents[1]
+        inventory = json.loads((root / 'references/inventory.json').read_text())
+        tags = {r['release']: r['commit'] for r in json.loads((root / 'references/released-identities.json').read_text())['artifacts']}
+        class Simulation(audit.Github):
+            def _fetch(self, route, raw=False):
+                if '/git/ref/tags/' in route:
+                    return {'ref': 'refs/tags/' + urllib.parse.unquote(route.split('/git/ref/tags/')[1])}
+                if '/commits/' in route:
+                    ref = urllib.parse.unquote(route.split('/commits/')[1])
+                    return {'sha': tags.get(ref, ref)}
+                if '/git/trees/' in route:
+                    return {'tree': []}
+                if audit.CONTROL in route:
+                    raise audit.Missing('confirmed negative control')
+                return ORIGINAL
+        resolver = Simulation()
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+            results = list(pool.map(lambda row: audit.audit(row, resolver), inventory['references']))
+        self.assertFalse(any(r['verdict'] == 'QUERY_FAILED' for r in results))
+        self.assertLess(len(resolver._requests), 1000)
