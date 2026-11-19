@@ -1,6 +1,7 @@
 """Exercise the conformance vectors, their generator and their checker."""
 
 import gzip
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -13,6 +14,49 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFORMANCE = ROOT / "conformance"
+
+spec = importlib.util.spec_from_file_location("conformance_checker", ROOT / "scripts/check_conformance.py")
+checker = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(checker)
+
+
+class EcmaPatternTests(unittest.TestCase):
+    def test_empty_classes_keep_their_ecma_meaning(self):
+        cases = [
+            ("[]a$]", "a]", False), ("[^]$a]", "xa]", False),
+            ("[]", "", False), ("[]", "]", False),
+            ("[^]", "\n", True), ("[^]", "", False),
+            ("^[^]$", "a\n", False), ("^[^]$", "\n", True),
+            ("[$]]", "$]", True), (r"[\]$]", "$", True),
+            ("a$]", "a]", False), ("[]]$", "]", False),
+            (r"\[\]$", "[]", True), ("[a-z]$", "z\n", False),
+        ]
+        for pattern, value, expected in cases:
+            with self.subTest(pattern=pattern, value=value):
+                self.assertEqual(checker.schema_validator({"pattern": pattern}).is_valid(value), expected)
+
+    def test_untranslatable_patterns_are_validation_findings(self):
+        # An ECMA named capture is deliberately outside this bounded adapter.
+        errors = list(checker.schema_validator({"pattern": "(?<word>a)"}).iter_errors("a"))
+        self.assertEqual(len(errors), 1)
+        self.assertIn("cannot evaluate contract pattern", errors[0].message)
+        self.assertEqual(errors[0].validator, "pattern")
+        self.assertTrue(checker.schema_validator({"pattern": "(?<word>a)"}).is_valid(7))
+
+    @unittest.skipUnless(shutil.which("node"), "Node is the independent ECMA oracle")
+    def test_translation_agrees_with_an_ecma_executor(self):
+        patterns = ["[]", "[^]", "[]a$]", "[^]$a]", "[]]$", "[^]$", "[$]]",
+                    r"[\]$]", "a$]", r"\[\]$", "[a-z]$", "(^|$)"]
+        values = ["", "a", "a\n", "\n", "\r", "]", "$", "$]", "[]", "xa]", "a]"]
+        cases = [[p, v] for p in patterns for v in values]
+        result = subprocess.run(["node", "-e", (
+            "let s='';process.stdin.on('data',c=>s+=c);process.stdin.on('end',()=>"
+            "console.log(JSON.stringify(JSON.parse(s).map(([p,v])=>new RegExp(p).test(v)))));"
+        )], input=json.dumps(cases), capture_output=True, text=True, check=True)
+        expected = json.loads(result.stdout)
+        for (pattern, value), matched in zip(cases, expected):
+            with self.subTest(pattern=pattern, value=value):
+                self.assertEqual(checker.schema_validator({"pattern": pattern}).is_valid(value), matched)
 
 
 def run(*arguments):

@@ -303,14 +303,29 @@ def check_released_ids(manifest, released=None):
 
 
 def ecma_pattern(pattern):
-    """A Python regular expression for an ECMA-262 ``pattern`` (JSON Schema).
+    """A bounded Python translation of an ECMA-262 ``pattern`` (JSON Schema).
 
     In ECMA-262 without the multiline flag, ``$`` matches only at the end of the
     string; Python's ``$`` also matches just before a final line feed. Every
-    ``$`` outside a character class becomes ``\\Z``. The other constructs the
-    published schemas use mean the same in both."""
+    ``$`` outside a character class becomes ``\\Z``. ECMA empty classes match
+    nothing (``[]``) or any character (``[^]``); Python treats a leading ``]``
+    as a literal class member instead. Match the toolkit adapter's handling.
+    This is not a full ECMA engine: shorthand whitespace sets and other
+    documented dialect differences remain outside this correction.
+    """
     out, escaped, in_class = [], False, False
-    for char in pattern:
+    index = 0
+    while index < len(pattern):
+        char = pattern[index]
+        if not escaped and not in_class:
+            if pattern.startswith("[]", index):
+                out.append("(?!)")
+                index += 2
+                continue
+            if pattern.startswith("[^]", index):
+                out.append(r"[\s\S]")
+                index += 3
+                continue
         if escaped:
             out.append(char)
             escaped = False
@@ -327,15 +342,26 @@ def ecma_pattern(pattern):
             out.append("\\Z")
         else:
             out.append(char)
+        index += 1
     return "".join(out)
 
 
 def schema_validator(schema):
-    """A Draft 2020-12 validator with format assertion and ECMA-262 patterns."""
+    """Draft 2020-12 with format assertions and bounded ECMA pattern handling."""
     from jsonschema import Draft202012Validator, FormatChecker, ValidationError, validators
 
     def pattern(validator, value, instance, _schema):
-        if validator.is_type(instance, "string") and not re.search(ecma_pattern(value), instance):
+        if not validator.is_type(instance, "string"):
+            return
+        try:
+            matched = re.search(ecma_pattern(value), instance)
+        except re.error as error:
+            yield ValidationError(
+                f"cannot evaluate contract pattern {value!r} with the bounded "
+                f"Python translation: {error}"
+            )
+            return
+        if not matched:
             yield ValidationError(f"{instance!r} does not match {value!r}")
 
     checker = validators.extend(Draft202012Validator, {"pattern": pattern})
