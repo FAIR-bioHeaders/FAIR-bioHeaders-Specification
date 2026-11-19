@@ -63,6 +63,19 @@ def run(*arguments):
     return subprocess.run([sys.executable, *map(str, arguments)], capture_output=True, text=True)
 
 
+def feature_vectors(manifest, kind=None):
+    """Feature assertions follow explicit retirements; iteration stays current-only."""
+    replacements = {r['id']: r.get('replacedBy') for r in manifest.get('retired', [])}
+    class CurrentVectors(dict):
+        def __missing__(self, identity):
+            replacement = replacements.get(identity)
+            if replacement and replacement in self:
+                return self[replacement]
+            raise KeyError(identity)
+    return CurrentVectors((v['id'], v) for v in manifest['vectors']
+                          if kind is None or v['format'] == kind)
+
+
 class ConformanceTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
@@ -160,7 +173,7 @@ class ConformanceTests(unittest.TestCase):
                 self.assertTrue(vector["reason"])
 
     def test_numeric_vectors_cite_r13(self):
-        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        vectors = feature_vectors(self.manifest)
         for name, value in (("fasta-nan-vital-stats", b"gcContent: .nan"),
                             ("fasta-infinity-vital-stats", b"gcContent: .inf")):
             with self.subTest(vector=name):
@@ -170,31 +183,31 @@ class ConformanceTests(unittest.TestCase):
 
     def test_fhp_vectors(self):
         """specs/006-protein-header contracts/conformance.md."""
-        vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhp-fasta"}
+        vectors = feature_vectors(self.manifest, "fhp-fasta")
         self.assertEqual(self.manifest["fhpSpecification"], "docs/FHP.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 14)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 25)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 16)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 27)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith(".fhp.fasta")
                             or vector["file"].endswith(".fhp.fasta.gz"), vector["file"])
-        body = (CONFORMANCE / vectors["fhp-fasta-lf"]["file"]).read_bytes().split(b"\n>", 1)[1]
+        body = (CONFORMANCE / vectors["fhp-fasta-lf-canonical-parent"]["file"]).read_bytes().split(b"\n>", 1)[1]
         for residue in (b"*", b"U", b"O", b"B", b"Z", b"J", b"X", b"m", b"-"):
             self.assertIn(residue, body)
         for vector in vectors.values():
             if vector["expected"] == "invalid" and vector["rule"] in {"P1", "P2"}:
                 self.assertIn("metadata", vector, vector["id"])
-        self.assertEqual(vectors["fhp-fasta-cites-fhr-schema"]["rule"], "P2")
+        self.assertEqual(vectors["fhp-fasta-cites-fhr-schema-canonical-parent"]["rule"], "P2")
         # #170: dotted dataset versions state "1.2" and cite the released
         # v0.6.0; malformed dot forms are P1 near misses with v0.4.0 citations.
-        self.assertEqual(vectors["fhp-fasta-busco-lineage-dotted"]["expected"], "valid")
-        self.assertNotIn("converterResults", vectors["fhp-fasta-busco-lineage-dotted"])
-        self.assertEqual(vectors["fhp-fasta-busco-lineage-trailing-dot"]["rule"], "P1")
+        self.assertEqual(vectors["fhp-fasta-busco-lineage-dotted-canonical-parent"]["expected"], "valid")
+        self.assertNotIn("converterResults", vectors["fhp-fasta-busco-lineage-dotted-canonical-parent"])
+        self.assertEqual(vectors["fhp-fasta-busco-lineage-trailing-dot-canonical-parent"]["rule"], "P1")
 
     def test_dotted_busco_rejection_depends_on_stated_minor(self):
         """#244: reject the field, not a broken checksum or unrelated schema value."""
         from jsonschema import Draft202012Validator, FormatChecker
 
-        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        vectors = feature_vectors(self.manifest)
         for family, prefix, rule in (("fhp", "fhp-fasta", "P1"),
                                       ("fhgff3", "fhgff3", "G2")):
             validator = Draft202012Validator(
@@ -260,8 +273,8 @@ class ConformanceTests(unittest.TestCase):
         unsupported = {v["id"] for v in vectors if v.get("result") == "unsupported-version"}
         self.assertEqual(unsupported, {"fasta-schema-unknown-release", "fasta-schema-branch-ref",
                                        "fasta-schema-raw-refs-heads-main",
-                                       "fhp-fasta-schema-release-without-type",
-                                       "fhgff3-schema-unknown-release"})
+                                       "fhp-fasta-schema-release-without-type-canonical-parent",
+                                       "fhgff3-schema-unknown-release-canonical-parent"})
         for vector in vectors:
             if vector["id"] in unsupported:
                 self.assertEqual((vector["expected"], vector["rule"]), ("invalid", "V4"))
@@ -287,7 +300,7 @@ class ConformanceTests(unittest.TestCase):
 
     def test_fhr1_raw_main_vectors(self):
         """docs/SCHEMA-VERSIONS.md V6: FHR 1 records citing raw-main are read as v0.3.1."""
-        vectors = {v["id"]: v for v in self.manifest["vectors"]}
+        vectors = feature_vectors(self.manifest)
         fhr1 = {name for name, v in vectors.items() if "V6" in v.get("rules", [v.get("rule")])}
         self.assertEqual(fhr1, {
             "fasta-schema-raw-main-version-1-0", "fasta-schema-raw-main-version-1-integer",
@@ -335,30 +348,30 @@ class ConformanceTests(unittest.TestCase):
 
     def test_fhgff3_vectors(self):
         """specs/007-gff3-header contracts/conformance.md."""
-        vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "fhgff3"}
+        vectors = feature_vectors(self.manifest, "fhgff3")
         self.assertEqual(self.manifest["fhgff3Specification"], "docs/FHGFF3.md")
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 18)
-        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 24)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "valid"]), 20)
+        self.assertEqual(len([v for v in vectors.values() if v["expected"] == "invalid"]), 26)
         for vector in vectors.values():
             self.assertTrue(vector["file"].endswith((".fhgff3.gff3", ".fhgff3.gff3.gz")),
                             vector["file"])
             data = (CONFORMANCE / vector["file"]).read_bytes()
-            if not vector["compressed"] and vector["id"] != "fhgff3-header-before-version":
+            if not vector["compressed"] and vector["id"] != "fhgff3-header-before-version-canonical-parent":
                 self.assertTrue(data.startswith(b"##gff-version 3"), vector["id"])
             if vector["expected"] == "invalid" and vector["rule"] in {"G2", "G3"}:
                 self.assertIn("metadata", vector, vector["id"])
-        self.assertIn(b"##FASTA", (CONFORMANCE / vectors["fhgff3-embedded-fasta"]["file"]).read_bytes())
-        self.assertEqual(vectors["fhgff3-header-before-version"]["rule"], "G1")
-        self.assertEqual(vectors["fhgff3-header-after-fasta"]["rule"], "G1")
-        self.assertEqual(vectors["fhgff3-cites-fhr-schema"]["rule"], "G3")
-        self.assertEqual(vectors["fhgff3-busco-lineage-dotted"]["expected"], "valid")
+        self.assertIn(b"##FASTA", (CONFORMANCE / vectors["fhgff3-embedded-fasta-canonical-parent"]["file"]).read_bytes())
+        self.assertEqual(vectors["fhgff3-header-before-version-canonical-parent"]["rule"], "G1")
+        self.assertEqual(vectors["fhgff3-header-after-fasta-canonical-parent"]["rule"], "G1")
+        self.assertEqual(vectors["fhgff3-cites-fhr-schema-canonical-parent"]["rule"], "G3")
+        self.assertEqual(vectors["fhgff3-busco-lineage-dotted-canonical-parent"]["expected"], "valid")
         # Invalid near misses for the G1 grammar, enforced from fair-bioheaders
         # 0.8.2 (FAIR-bioHeaders-Tools#91).
-        for name in ("fhgff3-version-30", "fhgff3-version-3x", "fhgff3-version-3-1"):
+        for name in ("fhgff3-version-30-canonical-parent", "fhgff3-version-3x-canonical-parent", "fhgff3-version-3-1-canonical-parent"):
             self.assertEqual(vectors[name]["expected"], "invalid", name)
             self.assertEqual(vectors[name]["rule"], "G1", name)
-        self.assertEqual(vectors["fhgff3-version-3-1-26"]["expected"], "valid")
-        self.assertEqual(vectors["fhgff3-version-3-trailing-whitespace"]["expected"], "valid")
+        self.assertEqual(vectors["fhgff3-version-3-1-26-canonical-parent"]["expected"], "valid")
+        self.assertEqual(vectors["fhgff3-version-3-trailing-whitespace-canonical-parent"]["expected"], "valid")
 
     def test_g1_version_grammar_rejects_near_misses(self):
         """docs/FHGFF3.md G1: only 3 or 3.x.y is a valid ##gff-version line."""
@@ -374,13 +387,13 @@ class ConformanceTests(unittest.TestCase):
                 self.assertNotRegex(line, grammar)
 
     def test_compressed_vectors_share_the_plain_checksum(self):
-        vectors = {vector["id"]: vector for vector in self.manifest["vectors"]}
+        vectors = feature_vectors(self.manifest)
         compressed = [vector for vector in vectors.values()
                       if vector["compressed"] and vector["expected"] == "valid"]
         self.assertGreaterEqual(len(compressed), 4)
         for vector in compressed:
             kind = vector["format"]
-            plain = vectors[{"fhgff3": "fhgff3-minimal-checksum-link"}.get(kind, f"{kind}-lf")]
+            plain = vectors[{"fhgff3": "fhgff3-minimal-checksum-link-canonical-parent"}.get(kind, f"{kind}-lf")]
             data = (CONFORMANCE / vector["file"]).read_bytes()
             self.assertEqual(data[3] & 0x08, 0, "no stored file name")
             self.assertEqual(data[4:8], b"\0\0\0\0", "mtime 0")
@@ -436,7 +449,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn("jsonld-", skipped.stderr)
         self.assertIn("microdata-type-mismatch", skipped.stderr)
         # These fake converters have no fhr-gff3-validate, so FHGFF3 is also left out.
-        self.assertIn("(80 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(84 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld skipped)", skipped.stdout)
 
     def test_converter_without_a_format_is_skipped_unless_required(self):
@@ -467,7 +480,7 @@ class ConformanceTests(unittest.TestCase):
             script.chmod(0o755)
         lenient = self.check("--skip-regeneration", "--converter", bin_directory)
         self.assertEqual(lenient.returncode, 0, lenient.stderr)
-        self.assertIn("(80 vectors left out: fhgff3 not supported by this converter; "
+        self.assertIn("(84 vectors left out: fhgff3 not supported by this converter; "
                       "jsonld not supported by this converter)",
                       lenient.stdout)
 
@@ -516,7 +529,7 @@ class ConformanceTests(unittest.TestCase):
         self.assertIn("fasta-schema-unknown-release: converter rejected it without "
                       "an unsupported schema version message (FHR: invalid metadata:",
                       wrong_version.stderr)
-        self.assertIn("fhp-fasta-schema-release-without-type: converter rejected it "
+        self.assertIn("fhp-fasta-schema-release-without-type-canonical-parent: converter rejected it "
                       "without an unsupported schema version message",
                       wrong_version.stderr)
 
@@ -550,7 +563,7 @@ class ConformanceTests(unittest.TestCase):
         gff3 = self.check("--skip-regeneration", "--require-format", "fhgff3",
                           "--converter", bin_directory)
         self.assertEqual(gff3.returncode, 1)
-        self.assertIn("fhgff3-minimal-checksum-link: converter rejected (Unsupported file "
+        self.assertIn("fhgff3-minimal-checksum-link-canonical-parent: converter rejected (Unsupported file "
                       "extension (no fhr-gff3-validate))", gff3.stderr)
 
     def test_warning_rule_ids_require_complete_tokens(self):
@@ -569,7 +582,7 @@ class ConformanceTests(unittest.TestCase):
                 self.assertEqual(checker.missing_warnings(["R14"], message), [])
 
     def test_jsonld_vectors(self):
-        vectors = {v["id"]: v for v in self.manifest["vectors"] if v["format"] == "jsonld"}
+        vectors = feature_vectors(self.manifest, "jsonld")
         self.assertEqual(self.manifest["jsonldSpecification"], "docs/JSONLD.md")
         self.assertEqual(len(vectors), 38)
         self.assertIn("notApplicable", self.manifest["rules"]["J7"])

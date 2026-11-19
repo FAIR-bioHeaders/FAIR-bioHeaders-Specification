@@ -1,0 +1,125 @@
+{
+  "ledgerVersion": 1,
+  "note": "Exact immutable released bytes only; no generic $id exemption. New or changed bytes must pass stable-identity preflight.",
+  "artifacts": [
+    {
+      "release": "v0.3.0",
+      "commit": "f73b4423b2771e20496ddf6b2ac0a6b57d529a8b",
+      "path": "fhr.json",
+      "sha256": "e3d3843e1a1646e12495ccc9a615df94b7abe71b833c5f336c59444e0a49620a",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.3.1",
+      "commit": "378b534dda9c1d759f25b4b32287172402492233",
+      "path": "fhr.json",
+      "sha256": "e3d3843e1a1646e12495ccc9a615df94b7abe71b833c5f336c59444e0a49620a",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.4.0",
+      "commit": "84c2f90ab0e97c81d8afbf33eafe80ebade7a009",
+      "path": "fhr.json",
+      "sha256": "168a60467e3651dfdfe9855747f38257d5889bfcce6ec8661d9a378762a362dd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.4.0",
+      "commit": "84c2f90ab0e97c81d8afbf33eafe80ebade7a009",
+      "path": "fhp.json",
+      "sha256": "e3f8f45260b833f931644e87ff7530cb9b4151e67094023dd96edde9a1d90366",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json"
+    },
+    {
+      "release": "v0.4.0",
+      "commit": "84c2f90ab0e97c81d8afbf33eafe80ebade7a009",
+      "path": "fhgff3.json",
+      "sha256": "f89635f252f6e204944de99e6c40bad1b0c9b37af5108fce05ee63f6dfd40bbd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json"
+    },
+    {
+      "release": "v0.4.1",
+      "commit": "f2d828c0f5a2e05ca02c58cb310f576d6a362ed5",
+      "path": "fhr.json",
+      "sha256": "168a60467e3651dfdfe9855747f38257d5889bfcce6ec8661d9a378762a362dd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.4.1",
+      "commit": "f2d828c0f5a2e05ca02c58cb310f576d6a362ed5",
+      "path": "fhp.json",
+      "sha256": "e3f8f45260b833f931644e87ff7530cb9b4151e67094023dd96edde9a1d90366",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json"
+    },
+    {
+      "release": "v0.4.1",
+      "commit": "f2d828c0f5a2e05ca02c58cb310f576d6a362ed5",
+      "path": "fhgff3.json",
+      "sha256": "f89635f252f6e204944de99e6c40bad1b0c9b37af5108fce05ee63f6dfd40bbd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json"
+    },
+    {
+      "release": "v0.4.2",
+      "commit": "91501619a1cb4626d609202dacabe337ccdeb7cb",
+      "path": "fhr.json",
+      "sha256": "168a60467e3651dfdfe9855747f38257d5889bfcce6ec8661d9a378762a362dd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.4.2",
+      "commit": "91501619a1cb4626d609202dacabe337ccdeb7cb",
+      "path": "fhp.json",
+      "sha256": "e3f8f45260b833f931644e87ff7530cb9b4151e67094023dd96edde9a1d90366",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json"
+    },
+    {
+      "release": "v0.4.2",
+      "commit": "91501619a1cb4626d609202dacabe337ccdeb7cb",
+      "path": "fhgff3.json",
+      "sha256": "f89635f252f6e204944de99e6c40bad1b0c9b37af5108fce05ee63f6dfd40bbd",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json"
+    },
+    {
+      "release": "v0.5.0",
+      "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
+      "path": "fhr.json",
+      "sha256": "694ab5afaf8c3743eacf9e2aacb5551f7cbe37073b6f4afc3ae4a65b47f9d4df",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.5.0",
+      "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
+      "path": "fhp.json",
+      "sha256": "2409739d4a223164ca368f93afa78c8f1e3809fb04ec46cc9a793cc5aaaba427",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json"
+    },
+    {
+      "release": "v0.5.0",
+      "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
+      "path": "fhgff3.json",
+      "sha256": "20ce320f5d706f11ed21cdece4dfb56e3568b50be126e25b4016f46f2e8e416c",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json"
+    },
+    {
+      "release": "v0.6.0",
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "path": "fhr.json",
+      "sha256": "694ab5afaf8c3743eacf9e2aacb5551f7cbe37073b6f4afc3ae4a65b47f9d4df",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json"
+    },
+    {
+      "release": "v0.6.0",
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "path": "fhp.json",
+      "sha256": "92a0b3cbcfe69939ebfaac69f0c5958ce426c005873efe8d3e3eb0fc0dab6de5",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhp.json"
+    },
+    {
+      "release": "v0.6.0",
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "path": "fhgff3.json",
+      "sha256": "1942be4cefc8b3a2537942c2252b45fbcef87a5532486e4fd0f5d4c540e0fbf9",
+      "id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/fhgff3.json"
+    }
+  ]
+}
