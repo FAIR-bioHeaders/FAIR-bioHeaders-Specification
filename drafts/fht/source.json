@@ -1,7 +1,7 @@
 {
   "status": "unreleased publication candidate; joint acceptance and publication pending",
   "repository": "FAIR-bioHeaders/FHT-Specification",
-  "commit": "0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00",
+  "commit": "4ddda69cbcbb3920a06ab657173c0198672cd7bf",
   "selection": {
     "trackedFiles": "all",
     "excluded": [
@@ -10,9 +10,9 @@
     "reason": "Retain the complete owning test/documentation dependency closure and original notices. Workspace guidance remains authoritative in the shared repository; this is not a guidance port."
   },
   "decisionRecord": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934",
-  "owningMerge": "https://github.com/FAIR-bioHeaders/FHT-Specification/pull/61",
+  "owningMerge": "https://github.com/FAIR-bioHeaders/FHT-Specification/pull/62",
   "expectedEvidence": {
-    "unitTests": 114,
+    "unitTests": 116,
     "vectors": 93,
     "valid": 34,
     "invalid": 59,
@@ -61,8 +61,8 @@
     {
       "source": ".github/workflows/validate-specification.yml",
       "local": "upstream/.github/workflows/validate-specification.yml",
-      "bytes": 2135,
-      "sha256": "3d7c2325ebd1e35ec42152bd5a36dac12b448f0a30b39ea3272d736a72a77397",
+      "bytes": 2243,
+      "sha256": "1f234a24d8a2fdc72bf3d04b49ed863323b895fecd08609377ee3ec617595e65",
       "mode": "100644"
     },
     {
@@ -82,8 +82,8 @@
     {
       "source": "CHANGELOG.md",
       "local": "upstream/CHANGELOG.md",
-      "bytes": 6337,
-      "sha256": "bfc66da68bfd91870129f4b5836c9ba6bcd6a627ad107f3a9fb7c201791dd7c9",
+      "bytes": 6731,
+      "sha256": "f1eaeaca1b79a09cb96a27847fe3dc66704abc70181e4ff6321ba9d1f0a32ca4",
       "mode": "100644"
     },
     {
@@ -803,8 +803,8 @@
     {
       "source": "docs/CI.md",
       "local": "upstream/docs/CI.md",
-      "bytes": 25535,
-      "sha256": "de3085d6566f1c347f348e5bb24ba9870a8a9e56d58c6723bd50503bc52f57a2",
+      "bytes": 26480,
+      "sha256": "3f7a4b207de52740235f7206f8197ea4b0aa5f0d78cb349b02474085fd971c67",
       "mode": "100644"
     },
     {
@@ -1244,15 +1244,15 @@
     {
       "source": "scripts/check_fht_fixtures.py",
       "local": "upstream/scripts/check_fht_fixtures.py",
-      "bytes": 50451,
-      "sha256": "e28cd5b7e3e7c63109162989ef332f261cb816b0627c0e35c7999951667466fb",
+      "bytes": 50791,
+      "sha256": "5519fba18a1d1dfec164d797cf59fe38ca616d71f4468392da33d739b0838881",
       "mode": "100644"
     },
     {
       "source": "scripts/check_fht_html_browser.mjs",
       "local": "upstream/scripts/check_fht_html_browser.mjs",
-      "bytes": 3683,
-      "sha256": "f64b2d2a8f8ec9ba01d684ba0ff7cab138b5696852a9d5e91c73b6eb64d9f4fd",
+      "bytes": 5486,
+      "sha256": "4743607b75bd72f0baf2bf87e6ca34b5dfe646a918d8b39745ce26c6c6a0d5a1",
       "mode": "100644"
     },
     {
@@ -1281,6 +1281,13 @@
       "local": "upstream/scripts/external-links-exclusions.json",
       "bytes": 606,
       "sha256": "2117bf9f37f591406482e0556bf95d8003c90e679b214b3a10bb686cc74dfb51",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/fht_json_compare.mjs",
+      "local": "upstream/scripts/fht_json_compare.mjs",
+      "bytes": 1350,
+      "sha256": "20a0fec84ab0b6c0750302d94df113f7240489829558b597d100fe0cdc40426f",
       "mode": "100644"
     },
     {
@@ -1613,6 +1620,13 @@
       "mode": "100644"
     },
     {
+      "source": "tests/test_browser_integers.mjs",
+      "local": "upstream/tests/test_browser_integers.mjs",
+      "bytes": 1603,
+      "sha256": "36f058b12e5b0492278b4ae9c464d51a7737d4f43e8858183547f01c81777d6b",
+      "mode": "100644"
+    },
+    {
       "source": "tests/test_ci_checks.py",
       "local": "upstream/tests/test_ci_checks.py",
       "bytes": 4111,
@@ -1650,8 +1664,8 @@
     {
       "source": "tests/test_fixture_reader.py",
       "local": "upstream/tests/test_fixture_reader.py",
-      "bytes": 8355,
-      "sha256": "5596fecb827aff1f5fc748e71ffeb777cb72fe253772f67378968eb0e210b756",
+      "bytes": 9771,
+      "sha256": "945052a03d0bb177e83465ca147e5a70a04aba70d73d9db1aa941368b570e4ac",
       "mode": "100644"
     },
     {
@@ -1682,5 +1696,6 @@
       "sha256": "ab2c11e702ded3d0f022d7c6d4acd43a7ae7fc1684f913f38341b09c88c23a20",
       "mode": "100644"
     }
-  ]
+  ],
+  "owningDecisionMerge": "https://github.com/FAIR-bioHeaders/FHT-Specification/pull/61"
 }

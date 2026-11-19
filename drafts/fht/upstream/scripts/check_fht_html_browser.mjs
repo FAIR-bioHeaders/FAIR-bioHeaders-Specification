@@ -6,6 +6,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseExactJson, exactStringify } from './fht_json_compare.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.FHT_PLAYWRIGHT_MODULE || 'playwright');
@@ -21,9 +22,7 @@ try {
   const page = await browser.newPage();
   const requests = [];
   page.on('request', request => requests.push(request.url()));
-  for (const [html, json] of pairs) {
-    await page.setContent(readFileSync(html, 'utf8'));
-    const actual = await page.evaluate(() => {
+  const extract = () => {
       const value = element => {
         const type = element.getAttribute('data-fhr-type');
         if (type === 'array') return Array.from(element.children, child => {
@@ -31,7 +30,11 @@ try {
           return value(child);
         });
         if (type === 'object') return table(element.firstElementChild);
-        if (type === 'integer' || type === 'number') return JSON.parse(element.textContent);
+        if (type === 'integer') {
+          if (!/^-?(?:0|[1-9][0-9]*)$/.test(element.textContent)) throw Error('invalid integer token');
+          return BigInt(element.textContent);
+        }
+        if (type === 'number') return JSON.parse(element.textContent);
         if (type === 'boolean') return JSON.parse(element.textContent);
         if (type !== 'string') throw Error('unexpected scalar type');
         if (getComputedStyle(element).whiteSpace !== 'pre-wrap') throw Error('readable string whitespace collapses');
@@ -56,13 +59,38 @@ try {
         if (Array.from(element.attributes).some(attribute => attribute.name.startsWith('on'))) throw Error('event handler');
       }
       return table(scopes[0]);
-    });
-    const source = JSON.parse(readFileSync(json, 'utf8'));
+    };
+  for (const [html, json] of pairs) {
+    await page.setContent(readFileSync(html, 'utf8'));
+    const actual = await page.evaluate(extract);
+    const source = parseExactJson(readFileSync(json, 'utf8'));
     const expected = Object.fromEntries(Object.entries(source).filter(([name]) => !name.startsWith('x-')));
-    assert.equal(JSON.stringify(actual), JSON.stringify(expected), html);
+    assert.equal(exactStringify(actual), exactStringify(expected), html);
   }
+  // Independent canonical token and actual DOM mutation controls. Do not let
+  // rounding on both sides turn either adjacent integer into a false match.
+  await page.setContent(readFileSync(path.join(root, 'examples/html/de-novo.fht.html'), 'utf8'));
+  const text = readFileSync(path.join(root, 'examples/de-novo.fht.json'), 'utf8')
+    .replace('"totalTranscripts": 84211', '"totalTranscripts": 9007199254740993');
+  const expected = parseExactJson(text);
+  const integer = page.locator('[itemprop="totalTranscripts"]');
+  for (const token of ['9007199254740993', '9007199254740992', '9007199254740994']) {
+    await integer.evaluate((element, value) => { element.textContent = value; }, token);
+    const actual = await page.evaluate(extract);
+    assert.equal(exactStringify(actual) === exactStringify(expected),
+      token === '9007199254740993', `large integer DOM control ${token}`);
+  }
+  await integer.evaluate(element => {
+    const object = document.createElement('div');
+    object.setAttribute('itemprop', 'totalTranscripts');
+    object.setAttribute('data-fhr-type', 'object');
+    object.innerHTML = '<table><tbody><tr><th>$fht-integer</th><td><span itemprop="$fht-integer" data-fhr-type="string">9007199254740993</span></td></tr></tbody></table>';
+    element.replaceWith(object);
+  });
+  assert.notEqual(exactStringify(await page.evaluate(extract)), exactStringify(expected),
+    'a DOM object resembling the old integer marker must remain a type mismatch');
   assert.deepEqual(requests, [], 'standalone metadata must not fetch anything');
-  console.log(`${pairs.length} standalone records match Chromium DOM extraction; no active content or network requests.`);
+  console.log(`${pairs.length} standalone records match Chromium DOM extraction; large-integer exact/adjacent/type controls pass; no active content or network requests.`);
 } finally {
   await browser.close();
 }

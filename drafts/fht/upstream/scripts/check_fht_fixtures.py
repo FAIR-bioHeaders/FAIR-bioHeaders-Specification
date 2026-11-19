@@ -154,6 +154,11 @@ def _member_header_end(data, start):
                 raise CompressionError("R1: unterminated gzip name/comment field")
             position = end + 1
     if flags & FHCRC:
+        if len(data) < position + 2:
+            raise CompressionError("R1: truncated gzip header CRC-16")
+        expected = int.from_bytes(data[position:position + 2], "little")
+        if expected != zlib.crc32(data[start:position]) & 0xFFFF:
+            raise CompressionError("R1: gzip header CRC-16 does not match its header bytes")
         position += 2
     if position > len(data):
         raise CompressionError("R1: truncated gzip member header")

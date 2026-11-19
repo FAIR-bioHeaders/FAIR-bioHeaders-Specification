@@ -6,14 +6,14 @@ publication steps. No root contract, release selector, registry row, current
 published alias or consumer support is established by this directory.
 
 `upstream/` is the complete tracked owning snapshot at
-`0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00`, excluding only `AGENTS.md`:
+`4ddda69cbcbb3920a06ab657173c0198672cd7bf`, excluding only `AGENTS.md`:
 this is source evidence, not another common-guidance port. Existing local shared
 guidance controls this candidate. Original source paths, dependency imports,
 fixtures, model, reference binding, legacy/pilot provenance, licenses and notices
 are preserved byte-for-byte. Nested `.github/workflows/` files are inert source
 evidence; only the top-level candidate workflow is active here.
 
-[source.json](source.json) records 237 files with source/local paths, commit,
+[source.json](source.json) records 239 files with source/local paths, commit,
 byte lengths, modes and SHA-256 digests. `check_source.py` verifies the offline
 baseline. With `--upstream`, it independently selects the owning git file set
 and compares immutable blobs at the locked commit, detecting a file removed
@@ -29,7 +29,7 @@ python drafts/fht/run_checks.py --upstream /path/to/exact-owning-checkout \
 
 Install `upstream/requirements-linkml.txt` with Python 3.13 first. The 93-vector
 checker, model regeneration and import/legacy checks execute on the vendored
-candidate. All 114 unchanged tests execute in the parity-checked owning checkout:
+candidate. All 116 unchanged tests execute in the parity-checked owning checkout:
 its HTML reference verifies the actual last schema-changing commit in owning git
 history. This avoids inventing a synthetic source revision or weakening that
 provenance assertion. The runner repeats parity after execution and writes a

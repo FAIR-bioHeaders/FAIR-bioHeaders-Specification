@@ -362,3 +362,19 @@ Playwright 1.65.0 and Chromium outside the checkout and runs
 examples through a real browser DOM and compares them with the canonical JSON
 (locally: "7 standalone records match Chromium DOM extraction; no active content
 or network requests").
+
+## Reference-integrity review fixes — 2026-11-19
+
+The independent RFC 1952 reader checks the optional FHCRC against the low 16
+bits of CRC-32 over the complete member header, including extra/name/comment
+fields, for every member. Valid, one-bit-corrupted and truncated controls use
+actual zlib decoding as a separate oracle. All 93 existing vector bytes remain
+unchanged; these controls test the already adopted compression policy.
+
+The browser comparison uses exact integer tokens from the JSON reviver source
+and BigInt from typed DOM integer text. It does not round either side through
+Number. Chromium checks the canonical integer 9007199254740993 and rejects both
+adjacent DOM mutations plus an integer-to-object marker mutation. All values
+use recursively typed normalization so an object cannot impersonate an integer.
+Node controls preserve integer/float/string distinctions
+and array order. No schema bound or field meaning changes.

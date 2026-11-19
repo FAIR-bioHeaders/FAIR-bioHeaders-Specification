@@ -2,7 +2,7 @@
 
 FHT remains **unreleased**. The [reviewable candidate](../drafts/fht/README.md)
 vendors the accepted owning draft at
-[`0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00`](https://github.com/FAIR-bioHeaders/FHT-Specification/commit/0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00)
+[`4ddda69cbcbb3920a06ab657173c0198672cd7bf`](https://github.com/FAIR-bioHeaders/FHT-Specification/commit/4ddda69cbcbb3920a06ab657173c0198672cd7bf)
 with its exact dependency closure, conformance suite and typed HTML reference.
 It prepares shared handoff before final joint acceptance. It neither adds a
 released root `fht.json` nor changes any registry, vocabulary, existing shared
@@ -17,7 +17,7 @@ parent expectations are accepted for exact file identity only. Neither a match
 nor synthetic test acceptance proves biological derivation.
 
 The candidate preserves 93 vectors (34 valid, 59 invalid), seven canonical HTML
-pairs, the reference reader/writer and 114 owning tests. Its workflow checks
+pairs, the reference reader/writer and 116 owning tests. Its workflow checks
 immutable-source parity and executes those tests with the required owning git
 history. Installed toolkit 0.11.0 with an explicit checkout-schema overlay can
 compare 91 cases; the two newly invalid arithmetic cases are **NOT-RUN for

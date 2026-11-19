@@ -12,7 +12,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parent
 REPOSITORY = "FAIR-bioHeaders/FHT-Specification"
-COMMIT = "0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00"
+COMMIT = "4ddda69cbcbb3920a06ab657173c0198672cd7bf"
 EXCLUDED = {"AGENTS.md"}
 
 

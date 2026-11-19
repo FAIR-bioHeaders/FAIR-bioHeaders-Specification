@@ -51,6 +51,8 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/fht-browser" --ignore-scripts playwright@1.65.0
           "$RUNNER_TEMP/fht-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Lossless integer comparison controls
+        run: node --test tests/test_browser_integers.mjs
       - name: Browser-DOM extraction of the HTML examples
         env:
           FHT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/fht-browser/node_modules/playwright

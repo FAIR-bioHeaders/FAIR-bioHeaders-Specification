@@ -1,5 +1,13 @@
 # Development changelog
 
+## Unreleased — reference integrity fixes, 2026-11-19
+
+- Verify optional RFC 1952 member header CRCs, with valid/corrupt/truncated
+  controls and independent zlib agreement.
+- Compare browser integer values without Number rounding, including exact
+  values beyond 2**53 and both adjacent mismatch controls in Chromium.
+- Preserve all 93 vector bytes/outcomes and the current draft contract.
+
 ## Unreleased — adopted FHT draft decisions, 2026-11-19
 
 - Retain optional software/array/string/object behaviour (D1, #56).

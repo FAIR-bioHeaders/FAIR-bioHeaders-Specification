@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: FAIR-bioHeaders/FHT-Specification
-          ref: 0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00
+          ref: 4ddda69cbcbb3920a06ab657173c0198672cd7bf
           path: _fht-owning
           fetch-depth: 0
           persist-credentials: false
@@ -34,7 +34,7 @@ jobs:
         run: python -m pip install -r drafts/fht/upstream/requirements-linkml.txt
       - name: Exercise candidate integrity controls
         run: python -m unittest discover -s drafts/fht -p 'test_candidate.py' -v
-      - name: Verify parity, 93 vendored fixtures and 114 owning-history unit tests
+      - name: Verify parity, 93 vendored fixtures and 116 owning-history unit tests
         run: |
           python drafts/fht/run_checks.py --upstream "$GITHUB_WORKSPACE/_fht-owning" \
             --receipt "$RUNNER_TEMP/fht-reference.json"
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: FAIR-bioHeaders/FHT-Specification
-          ref: 0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00
+          ref: 4ddda69cbcbb3920a06ab657173c0198672cd7bf
           path: _fht-owning
           fetch-depth: 0
           persist-credentials: false
@@ -92,6 +92,8 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/fht-browser" --ignore-scripts playwright@1.65.0
           "$RUNNER_TEMP/fht-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Lossless integer and type-collision controls
+        run: node --test drafts/fht/upstream/tests/test_browser_integers.mjs
       - name: Extract the seven unchanged HTML pairs through Chromium
         env:
           FHT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/fht-browser/node_modules/playwright

@@ -27,6 +27,7 @@ import hashlib
 import importlib.util
 import json
 import unittest
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,6 +84,30 @@ class ReaderTests(unittest.TestCase):
                 with self.assertRaises(self.check.CompressionError) as caught:
                     self.check.decompress(data)
                 self.assertTrue(str(caught.exception).startswith("R1:"))
+
+    def test_optional_gzip_header_crc_covers_all_header_fields_and_each_member(self):
+        whole = gzip.compress(self.lf, mtime=0)
+        # FHCRC plus FEXTRA, FNAME and FCOMMENT: CRC covers every header byte.
+        header = whole[:3] + bytes([0x1E]) + whole[4:10]
+        header += b"\x03\x00abcfile.fasta\x00comment\x00"
+        crc = (zlib.crc32(header) & 0xFFFF).to_bytes(2, "little")
+        member = header + crc + whole[10:]
+        self.assertEqual(zlib.decompress(member, 31), self.lf)
+        self.assertEqual(self.check.decompress(member), self.lf)
+        self.assertEqual(self.check.decompress(whole + member), self.lf * 2)
+        damaged = header + bytes([crc[0] ^ 1, crc[1]]) + whole[10:]
+        for raw in (damaged, whole + damaged):
+            with self.assertRaises(zlib.error):
+                zlib.decompress(raw[len(whole):] if raw.startswith(whole) else raw, 31)
+            with self.assertRaisesRegex(self.check.CompressionError, "header CRC-16"):
+                self.check.decompress(raw)
+
+    def test_optional_gzip_header_crc_truncation_is_a_clean_r1_failure(self):
+        whole = gzip.compress(self.lf, mtime=0)
+        header = whole[:3] + bytes([2]) + whole[4:10]
+        for suffix in (b"", b"\x00"):
+            with self.assertRaisesRegex(self.check.CompressionError, "R1: truncated gzip header CRC-16"):
+                self.check.decompress(header + suffix)
 
     def test_truncated_vector_is_rejected_as_r1(self):
         entry = self.entries["fht-fasta-gzip-truncated"]
