@@ -57,6 +57,10 @@ def problems(receipt):
         model = actual['fullModel']['status']
         if model != expected.get(row['id']):
             errors.append('earned model state differs: ' + row['id'])
+        if model == 'reject' and not any(
+                rule['status'] == 'reject'
+                for rule in actual['snapshots'][0]['rules'].values()):
+            errors.append('model rejection without an earned carrier predicate: ' + row['id'])
         if model == 'pass':
             if row['id'] in vectors:
                 errors.extend(snapshot_problems(vectors[row['id']], actual.get('snapshots', [])))
