@@ -173,6 +173,46 @@ class FHTPublicationTests(unittest.TestCase):
             changed = changed[:position] + line.replace(stated.encode(), self.reader.recomputed(changed).encode(), 1) + changed[position + length:]
             self.assertEqual(candidate.observe(changed, entry, self.reader)['valid'], valid)
 
+    def test_tag_reference_state_requires_exact_fixture_tag_and_never_claims_release(self):
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = Path(directory)
+            (fixture / 'schemas').mkdir()
+            registry = json.loads((ROOT / 'schemas/versions.json').read_text())
+            registry['preRelease'] = None
+            (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+            (fixture / 'fht.json').write_bytes((ROOT / 'fht.json').read_bytes())
+            record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
+            def git(*args):
+                return subprocess.check_output(['git', '-C', str(fixture), *args], stderr=subprocess.DEVNULL)
+            git('init', '-q')
+            git('add', '.')
+            git('-c', 'commit.gpgsign=false', '-c', 'user.name=Tag-state fixture',
+                '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture only')
+            with patch.object(binding, 'ROOT', fixture):
+                with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
+                    binding.write_page(record)
+                git('tag', 'v0.7.0')  # Only inside the temporary repository, never the shared checkout.
+                html = binding.write_page(record)
+                self.assertIn('FHT tag-verified reference metadata', html)
+                self.assertNotIn('publication-candidate metadata', html)
+                messages = []
+                self.assertEqual(binding.read_page(html, warn=messages.append), record)
+                self.assertEqual(len(messages), 1)
+                self.assertIn('tag-verified reference', messages[0])
+                self.assertIn('GitHub Release and publication not verified', messages[0])
+                self.assertNotIn('Unpublished', messages[0])
+                changed = dict(self.schema, description='working bytes differ from fixture tag')
+                (fixture / 'fht.json').write_text(json.dumps(changed))
+                with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
+                    binding.write_page(record)
+        messages = []
+        source = (ROOT / 'examples/fht/minimal-de-novo.fht.html').read_text()
+        binding.read_page(source, allow_candidate=True, warn=messages.append)
+        self.assertIn('Unpublished', messages[0])
+        self.assertIn('released=false', messages[0])
+
 
 if __name__ == '__main__':
     unittest.main()

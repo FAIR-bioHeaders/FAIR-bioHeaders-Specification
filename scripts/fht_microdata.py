@@ -579,20 +579,22 @@ def _candidate_schema(allow_candidate, schema):
     registry = json.loads((ROOT / 'schemas/versions.json').read_text())
     if registry.get('current') != 'v0.7.0':
         raise MicrodataError('This binding targets the proposed v0.7.0 contract only')
+    mode = 'publication-candidate'
     if registry.get('preRelease') == 'v0.7.0':
         if not allow_candidate:
             raise MicrodataError('Unpublished binding requires allow_candidate=True; no release is claimed')
     elif registry.get('preRelease') is None:
         immutable = subprocess.run(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.7.0:fht.json'], capture_output=True)
         if immutable.returncode or immutable.stdout != (ROOT / 'fht.json').read_bytes():
-            raise MicrodataError('Released binding requires actual byte-matching v0.7.0 tag; no fallback to candidate')
+            raise MicrodataError('Tag-reference binding requires actual byte-matching v0.7.0 tag; no fallback to candidate')
+        mode = 'tag-verified-reference'
     else:
         raise MicrodataError('Invalid FHT preRelease guard')
     local = json.loads((ROOT / 'fht.json').read_text())
     if schema is not None and schema != local:
         raise MicrodataError('custom schema must match the shared candidate')
     Draft202012Validator.check_schema(local)
-    return local
+    return local, mode
 
 
 def read_page(text, schema=None, *, allow_candidate=False, warn=None):
@@ -602,7 +604,7 @@ def read_page(text, schema=None, *, allow_candidate=False, warn=None):
             "the FHT HTML reader requires RCDATA-capable html.parser behavior: "
             "<title>/<textarea> markup must stay text with references decoded"
         )
-    schema = _candidate_schema(allow_candidate, schema)
+    schema, mode = _candidate_schema(allow_candidate, schema)
     builder = _TreeBuilder()
     # HTML preprocessing normalizes literal line endings before tokenization;
     # character references such as &#13; are decoded later and stay intact.
@@ -639,7 +641,9 @@ def read_page(text, schema=None, *, allow_candidate=False, warn=None):
         raise MicrodataError("extension fields are not permitted in microdata (M5)")
     _validate(record, selected)
     _html_text(record)
-    message = 'Unpublished FHT v0.7.0 publication-candidate reference; released=false'
+    message = ('Unpublished FHT v0.7.0 publication-candidate reference; released=false'
+               if mode == 'publication-candidate' else
+               'FHT v0.7.0 tag-verified reference; exact tag bytes verified; GitHub Release and publication not verified')
     if warn is None:
         warnings.warn_explicit(message, UserWarning, __file__, 0, registry={})
     else:
@@ -689,10 +693,12 @@ def _write_property(name, value):
 
 
 def write_page(
-    record, schema=None, *, allow_candidate=False, title="FHT publication-candidate metadata", warn=None
+    record, schema=None, *, allow_candidate=False, title=None, warn=None
 ):
     """Write one visible typed table; omit M5 extension fields with an explicit warning."""
-    schema = _candidate_schema(allow_candidate, schema)
+    schema, mode = _candidate_schema(allow_candidate, schema)
+    if title is None:
+        title = 'FHT publication-candidate metadata' if mode == 'publication-candidate' else 'FHT tag-verified reference metadata'
     selected = resolve_schema(record.get("schema"), schema)
     _validate(record, selected)
     keys = [name for name in record if name.startswith("x-")]

@@ -33,7 +33,9 @@ release object, alias, DOI, website enablement or consumer repin is created.
   opt-in, complete contract/C1 arithmetic checks, integer/type/order preservation,
   visibility and mixed-family checks. It does not verify absent sequence bytes.
   Post-tag execution requires the actual byte-matching v0.7.0 tag; clearing the
-  marker without that tag cannot silently enable the binding.
+  marker without that tag cannot silently enable the binding. Candidate mode
+  reports unpublished status; the verified-tag reference mode instead reports
+  exact tag-byte verification without claiming a GitHub Release or publication.
 - Seven synthetic JSON/FASTA/HTML counterparts live in `examples/fht/`.
   Their selectors and root checksums are generated deliberately; original seven
   pairs and source bytes remain unchanged. Parent claims retain their original
