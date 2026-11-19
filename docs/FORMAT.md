@@ -13,9 +13,11 @@ The consolidated status of the known schema-contract gaps, including R13, is in
 [SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md).
 
 The v0.4 schema is FHR schemaVersion `"2.0"`, a string: nested objects
-reject unknown keys, patterns are anchored, the checksum must be padded base64 of
-32 bytes, statistics are nonnegative, and optional scaffold statistics and author
-`nameType` are added. See [SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md) for every
+reject unknown keys, every `$`-anchored `pattern` is read as an ECMA-262 regular
+expression applied to the whole string value ([REGEX-DIALECT.md](REGEX-DIALECT.md)),
+the checksum must be padded base64 of 32 bytes, statistics are nonnegative, and
+optional scaffold statistics and author `nameType` are added. See
+[SCHEMA-CHANGES-v0.4.md](SCHEMA-CHANGES-v0.4.md) for every
 change and a migration hint, and [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md) for what
 schemaVersion means and which schema a file's `schema` URL selects.
 
@@ -305,6 +307,15 @@ The JSON-LD form of FHR metadata and its rules J1 to J9 are in
 The schemas do not express every requirement. Required values must be non-empty, `format` must
 be asserted by the validator, and NaN and infinities are invalid (R13); see
 [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md#values-the-schema-does-not-check).
+
+A contract declaring `"$schema"` draft 2020-12 fixes the dialect its keywords are
+read in — including `pattern`, which is an ECMA-262 regular expression tested
+against the complete string value, not a line within it ([REGEX-DIALECT.md](REGEX-DIALECT.md)).
+It does not establish that every implementation shares one regex engine, that
+`format` assertions behave alike, or that a record which validates in one engine
+is conformant for a consumer: the three requirements above are not schema
+keywords at all, and engine readings of `$`, of the shorthand classes and of an
+empty character class differ.
 
 Changing any covered metadata or data bytes invalidates the checksum. The
 checksum does not authenticate an author or protect against malicious rewriting.

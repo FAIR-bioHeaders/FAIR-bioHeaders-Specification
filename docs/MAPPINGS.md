@@ -54,14 +54,16 @@ mappings have been removed rather than emitting misleading accession values.
 
 **Identifier Conventions:** The shared core reserves `identifier` (a CURIE list) and
 `accessionID` (a `{name, url}` object) for the described data itself
-(`schemas/core.yaml`); they must not carry related project, sample or publication
+([`schemas/core.yaml`](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/schemas/core.yaml));
+they must not carry related project, sample or publication
 identifiers. Links to related INSDC records — BioProject, BioSample, SRA studies —
 belong in `relatedLink` as URLs (e.g. `https://www.ncbi.nlm.nih.gov/bioproject/PRJNA…`,
 `https://www.ebi.ac.uk/ena/browser/view/PRJEB…`,
 `https://www.ncbi.nlm.nih.gov/biosample/SAMN…`). Publications are recorded with
 `scholarlyArticle` (a bare DOI, no resolver prefix) or a `relatedLink` URL. The
 CURIE pattern `^[A-Za-z0-9._-]+:.+$` applies to `identifier` entries of the
-described data. How each INSDC minimum-specification requirement is covered, and how
+described data: an ECMA-262 regular expression over each whole string value
+([REGEX-DIALECT.md](REGEX-DIALECT.md)). How each INSDC minimum-specification requirement is covered, and how
 to use FH headers alongside an INSDC submission, is in the
 [INSDC coverage review](insdc-coverage.md).
 

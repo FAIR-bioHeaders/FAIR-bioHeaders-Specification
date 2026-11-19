@@ -60,6 +60,26 @@
   step of the existing `Validate specification` job (no new required check name);
   `tests/test_pattern_census.py` (focused tests) runs inside the existing
   `python -m unittest discover -s tests` step.
+- Give `pattern` one normative home (#270, #264; guidance only, no schema or
+  contract change): new `docs/REGEX-DIALECT.md` states that ECMA-262 is the only
+  normative floor for `pattern`, that a `pattern` applies to the complete string
+  value and not to a line within it, and which engine differences are measured
+  (`$` before a trailing newline, the Unicode reading of `\d`/`\w`, the
+  whitespace sets of `\s`/`\S` including released U+FEFF outcomes, and empty
+  character classes). RE2-cleanliness of the
+  released contracts is recorded there as a non-normative compatibility
+  observation, not something any tool certifies: the census script under review
+  in #272 gates the released `pattern` keyword against its baseline and reports
+  draft lookarounds informationally only. The four `(?![\s\S])` end anchors in
+  the FHT and FHGM draft contracts are correct under this floor. The v0.4 line
+  "Lookahead workarounds are not used because RE2-based validators do not
+  support them" in `docs/SCHEMA-CHANGES-v0.4.md` is quoted verbatim and marked
+  historical. `docs/REGEX-DIALECT.md` states which scope each of its counts
+  covers. `docs/FORMAT.md`
+  now says what a draft-2020-12 declaration does and does not establish, and
+  `docs/MAPPINGS.md` cites the shared core by full URL. No `schemaVersion`,
+  registry row, release or support claim; FHT and FHGM remain drafts under rule
+  V7.
 - Conformance vectors for cases on which independent libraries disagreed, with two rule-text
   clarifications and no schema change: the FORMAT.md container paragraph is labelled R17, with
   invalid vectors for an FHGFF3 header in FASTA and GFA, an FHP header in GFA and GFF3, and an
