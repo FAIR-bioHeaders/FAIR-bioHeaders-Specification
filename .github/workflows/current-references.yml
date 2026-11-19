@@ -1,0 +1,82 @@
+name: Current staged-reference advisory
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '31 8 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  current-staged-trees:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Validate current source declarations before authority checkout
+        id: sources
+        continue-on-error: true
+        run: |
+          python -I scripts/audit_current_references.py --plan --github-output "$GITHUB_OUTPUT" \
+            --plan-output "$RUNNER_TEMP/current-reference-plan.json"
+      - name: Check out the declared FHT owning commit
+        if: steps.sources.outcome == 'success'
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHT-Specification
+          ref: ${{ steps.sources.outputs.fht_commit }}
+          path: .current-authorities/fht
+          persist-credentials: false
+      - name: Check out the declared FHGM owning commit
+        if: steps.sources.outcome == 'success'
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHGM-Specification
+          ref: ${{ steps.sources.outputs.fhgm_commit }}
+          path: .current-authorities/fhgm
+          persist-credentials: false
+      - name: Audit current declarations offline without updating pins
+        if: always()
+        run: |
+          python -I scripts/audit_current_references.py \
+            --checkout "FAIR-bioHeaders/FHT-Specification=$GITHUB_WORKSPACE/.current-authorities/fht" \
+            --checkout "FAIR-bioHeaders/FHGM-Specification=$GITHUB_WORKSPACE/.current-authorities/fhgm" \
+            --report-output "$RUNNER_TEMP/current-reference-audit.json"
+      - name: Preserve a failure record if setup or execution produced no report
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -s "$RUNNER_TEMP/current-reference-audit.json" ]; then
+            if [ -s "$RUNNER_TEMP/current-reference-plan.json" ]; then
+              cp "$RUNNER_TEMP/current-reference-plan.json" "$RUNNER_TEMP/current-reference-audit.json"
+            else
+            cat > "$RUNNER_TEMP/current-reference-audit.json" <<'JSON'
+          {"advisory":true,"wrote":[],"references":[{"id":"current-reference-bootstrap","verdict":"QUERY_FAILED","localComparison":"not-run","reason":"Setup or execution produced no report; inspect workflow steps."}]}
+          JSON
+            fi
+          fi
+      - name: Retain actual current-reference findings
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: current-staged-reference-audit
+          path: ${{ runner.temp }}/current-reference-audit.json
+          if-no-files-found: error
+      - name: Surface the advisory report without requiring Python setup
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Current staged references — advisory, no pin writes'
+            echo '```json'
+            cat "$RUNNER_TEMP/current-reference-audit.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
