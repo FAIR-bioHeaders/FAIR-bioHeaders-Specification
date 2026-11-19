@@ -109,7 +109,7 @@ class WriterTests(unittest.TestCase):
         cls.context = json.loads(make_jsonld.CONTEXT_PATH.read_text())["@context"]
 
     def test_record_set(self):
-        self.assertEqual(len(self.records), 47)  # 3 examples and 44 vector headers.
+        self.assertEqual(len(self.records), 50)  # 3 examples and 47 vector headers.
 
     def test_writer_steps(self):
         for name, record in self.records.items():

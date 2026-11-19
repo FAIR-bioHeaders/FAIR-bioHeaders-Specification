@@ -37,7 +37,10 @@ these rules.
   schema it is checked against ([SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)). A document with none, or
   with more than one, is invalid. An element with `itemscope` but no `itemprop`
   inside the FHR scope is a separate item: neither it nor its properties belong
-  to the FHR metadata.
+  to the FHR metadata. Properties come only from elements inside the FHR scope:
+  `itemref` is not supported, and a document with an `itemref` attribute on the
+  FHR item or on any element inside it is invalid, so that a reader that follows
+  `itemref` and one that ignores it can never read different metadata.
 - [M2] The document is parsed as HTML, so end tags implied by HTML (`p`, `li`,
   `dt`, `dd`, `td`, `th`, `tr` and others) end their elements. A property's value
   is the defining attribute of its element if present (`meta[content]`,

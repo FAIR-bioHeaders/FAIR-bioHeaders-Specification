@@ -140,6 +140,10 @@ helpers used MD5 and described different coverage. v0.3 explicitly adopts:
    `#~checksum:` (GFA), with an unquoted key. Spaces may appear before the key
    only to match the root indentation of the other header lines, and before the
    colon.
+   The checksum line is the line on which the root mapping's `checksum` key is written. A
+   line inside a multi-line quoted scalar or a flow collection is part of that value, never
+   the checksum line, even when its text matches `;~checksum:`; a file whose root
+   `checksum` key is not on a line of this form has no checksum line and is invalid.
    Nested properties named checksum remain covered. (From v0.4 FHR's nested
    objects reject unknown keys, so in FHR such a line occurs only inside a
    scalar; header types with nested checksums, such as `derivedFrom`, keep it.)
@@ -281,10 +285,10 @@ reader must agree on what the checksum line contains:
   R16 makes no file invalid; values in older headers computed under another convention are
   kept as written and not reinterpreted.
 
-Each header type has its containers: FHR headers go in FASTA and GFA files, FHP
-headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose type
-(chosen by its `schema` URL, see [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)) does not
-match the file it is in makes the file invalid, even when its checksum matches.
+- [R17] **Containers.** Each header type has its containers: FHR headers go in FASTA and
+  GFA files, FHP headers in FASTA files, and FHGFF3 headers in GFF3 files. A header whose
+  type (chosen by its `schema` URL, see [SCHEMA-VERSIONS.md](SCHEMA-VERSIONS.md)) does not
+  match the file it is in makes the file invalid, even when its checksum matches.
 
 Readers may refuse input beyond these limits, which real headers stay far below: a
 header block larger than 1 MiB or longer than 10,000 lines, YAML metadata with more
@@ -292,7 +296,7 @@ than 20,000 nodes or nested more than 64 levels deep, and a metadata file (JSON,
 YAML, JSON-LD or HTML) larger than 64 MiB after decompression. Writers stay within
 them.
 
-The bracketed ids R1 to R16 are stable labels for the rules above, used by the
+The bracketed ids R1 to R17 are stable labels for the rules above, used by the
 [conformance vectors](../conformance/README.md); they add no requirements.
 The vectors give each applicable rule valid and invalid files: FASTA/GFA files with expected
 checksums computed independently of the converter, and for R9 HTML microdata files

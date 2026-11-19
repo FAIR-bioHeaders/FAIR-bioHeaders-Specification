@@ -57,7 +57,7 @@ Every entry in `vectors` has these fields:
 | `expected` | `valid` or `invalid` |
 | `rules` | Valid vectors only: the rules the file exercises |
 | `description` | Valid vectors only: what the file exercises |
-| `warnings` | Valid vectors only, optional: rules under which a validator should print a warning for the file (R14). `check_conformance.py --converter` requires a line containing `warning` on its standard error |
+| `warnings` | Valid vectors only, optional: rules under which a validator should print a warning for the file (R14). `check_conformance.py --converter` requires, for each listed rule, a line on its standard error that contains `warning` and names that rule (for example `R14`); an unrelated warning does not count |
 | `checksum` | Valid FASTA/GFA vectors only: the expected FHR checksum, base64 SHA-512/256 |
 | `metadata` | Valid FASTA/GFA vectors: some expected parsed values (`genome`, `version`, `masking`; the V vectors also `schema` and `schemaVersion`; the R11 and R14 vectors also `documentation` or `relatedLink`). Valid `fhp-fasta` vectors: `proteome`, `version` and `sourceType`. Valid `fhgff3` vectors: `annotation` and `version`. Valid microdata and JSON-LD vectors: the complete expected metadata object. `microdata-schema-invalid`, `jsonld-missing-checksum` the P1/P2 `fhp-fasta` vectors and the G2/G3 `fhgff3` vectors: the metadata they yield, which fails `fhp.json` (P1), `fhgff3.json` (G2) or `fhr.json` (the other vectors, P2 and G3) |
 | `rule` | Invalid vectors only: the rule the file breaks |
@@ -90,6 +90,22 @@ is an ordinary value, and each valid vector pins the metadata it reads back to. 
 equal, but strings, numbers and booleans are never equal to each other. Valid metadata conforms to `fhr.json`. The checksums are
 real; valid vectors carry no placeholder checksum or SeqCol value.
 
+Some vectors pin cases on which independent FAIR-bioHeaders libraries disagreed. R17 (containers)
+has one invalid vector per wrong pairing: `fasta-fhgff3-header`, `gfa-fhgff3-header`,
+`gfa-fhp-header`, `fhgff3-fhp-header` and `fhgff3-fhr-header` carry a record that is valid under
+its own schema with a matching checksum, so only the container rule fails. The valid vectors
+citing R17 are the plain FHR, FHP and FHGFF3 files. `fasta-checksum-in-double-quoted-scalar`,
+`fasta-checksum-in-single-quoted-scalar` and `fasta-checksum-in-flow-mapping` (R2) hide a line
+shaped like `;~checksum:` inside an `x-note` value, with the value a line scanner would compute
+without that line, while the root `checksum` key is quoted: the file has no checksum line. The
+hidden and closing lines are indented one space, as YAML 1.2 requires for a continuation line, so
+apart from the quoted root key each header is strict YAML 1.2 and only R2 fails.
+`fasta-extension-flow-mapping` (a flow mapping with plain keys in an `x-` value),
+`fasta-wrapped-single-quoted-value` and `fasta-wrapped-double-quoted-value` (a long quoted value
+wrapped over three lines, as the toolkit's YAML writer wraps it) and
+`fasta-vital-stats-above-int32` (integers above 2^31) are valid. `fasta-schema-raw-refs-heads-main`
+cites a raw URL whose ref is `refs/heads/main`, which is unsupported under V4.
+
 ## Using the vectors in another implementation
 
 For each manifest entry, read `file` and decompress it if `compressed` is true.
@@ -114,6 +130,22 @@ codes) over the vectors. FASTA and GFA vectors go to `fhr-fasta-validate` and
 `fhr-gfa-validate`. Microdata and JSON-LD vectors go to `fhr-convert in.html out.json`
 or `fhr-convert in.jsonld out.json`, and the JSON it writes must equal `metadata`.
 `--skip-format jsonld` leaves out the JSON-LD vectors for converters that predate them:
+
+Schema patterns are ECMA-262 regular expressions (JSON Schema), in which `$` without the
+multiline flag matches only at the end of the string. Python's `re`, which Python JSON Schema
+validators use for `pattern`, also lets `$` match just before a final line feed, so such a
+validator wrongly accepts `lineageDataset: "primates_odb10\n"`. The invalid vector
+`fhp-fasta-pattern-trailing-newline` documents this known limitation; `check_conformance.py
+--schema` reads patterns with ECMA-262 `$`. Two other invalid vectors pin rule clarifications:
+`jsonld-direction-value` (J5: a value with `@direction` is invalid, like a language-tagged one)
+and `microdata-itemref` (M1: `itemref` is not supported and makes the document invalid).
+
+`--known-gaps FILE` names vectors a converter is known to get wrong: the `knownGaps` object of
+the JSON file maps each id to the reason. For those vectors the wrong outcome is expected, and
+the right one fails the check, so an entry is removed together with the converter release that
+fixes it. The conformance workflow passes [`toolkit-pin.json`](toolkit-pin.json), which lists
+the gaps of the pinned toolkit release. A gap is never a second valid outcome: the manifest
+keeps one expected result for every vector.
 
 ```bash
 python scripts/check_conformance.py --converter           # commands on PATH

@@ -22,6 +22,15 @@
   `docs/MAPPINGS.md` cites the shared core by full URL. No `schemaVersion`,
   registry row, release or support claim; FHT and FHGM remain drafts under rule
   V7.
+- Conformance vectors for cases on which independent libraries disagreed, with two rule-text
+  clarifications and no schema change: the FORMAT.md container paragraph is labelled R17, with
+  invalid vectors for an FHGFF3 header in FASTA and GFA, an FHP header in GFA and GFF3, and an
+  FHR header in GFF3; R2 says the checksum line is the line holding the root `checksum` key,
+  never a line inside a multi-line quoted scalar or flow collection (three invalid vectors);
+  V4 says a raw ref of several segments such as `refs/heads/main` is unsupported (one vector,
+  and `check_conformance.py` now reads such refs as V4). New valid vectors: a flow mapping in
+  an `x-` value, a long quoted value wrapped as the toolkit writes it, and `vitalStats`
+  integers above 2^31.
 
 - Draft `insdc-fhr` profile (#190; profile change, no released schema or
   `schemaVersion` change): BioSample links may also use
@@ -35,6 +44,20 @@
   Survey notes: the #191 results page links only committed files, and the
   round 6 `fh-stack-results.json` records paths relative to its directory
   instead of the CI runner's absolute paths (results unchanged).
+
+- Rule clarifications, no schema change: JSONLD.md J1 now lists the release context URLs
+  (raw tag and w3id, v0.4.0 to v0.6.0, whose contexts equal main's) as known context URLs, and
+  `make_jsonld.KNOWN_CONTEXT_URLS` accepts them; J5 makes a value with `@direction` invalid
+  like a language-tagged one; MICRODATA.md M1 says `itemref` is not supported and makes the
+  document invalid. SCHEMA-VERSIONS.md says how a tool opts FHGM records into the V7 lane and
+  how changes to the format and reading rules have been classified (the v0.4.1 and v0.4.2
+  patch precedents). New invalid vectors `jsonld-direction-value`, `microdata-itemref` and
+  `fhp-fasta-pattern-trailing-newline` (ECMA-262 `$` in schema patterns; Python `re` accepts a
+  final line feed; schema tightening proposed in #264). `check_conformance.py --schema` applies ECMA-262 `$`; `--known-gaps` reads
+  the pinned toolkit's known gaps from `conformance/toolkit-pin.json` (the three new vectors
+  for fair-bioheaders 0.12.0); and, as in FHR-Specification #22, each expected warning must
+  be on a warning line that names its rule as a complete token (R140, R14A and
+  XR14 do not name R14).
 
 - CEDAR templates (#162): `make_cedar.py --check` also fails on a top-level
   `templates/cedar/*.json` the generator does not produce. URI fields constrained

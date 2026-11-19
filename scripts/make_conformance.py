@@ -98,6 +98,9 @@ RULES = {
            "of one or more N; contig N/L statistics use the summed contig length, scaffold "
            "N/L statistics totalBasePairs; gcContent excludes ambiguity letters; a statistic "
            "with a zero denominator is omitted.",
+    "R17": "Containers: FHR headers go in FASTA and GFA files, FHP headers in FASTA files and "
+           "FHGFF3 headers in GFF3 files; a header whose type, chosen by its schema URL, does "
+           "not match its file makes the file invalid, even when its checksum matches.",
     "M1": "Microdata: exactly one FHR item scope; a nested item scope without "
           "itemprop is a separate item whose properties do not leak.",
     "M2": "Microdata: HTML parsing with implied end tags; values come from the "
@@ -458,7 +461,7 @@ def build():
         k = kind
         data, value = standard(k)
         plain[k] = (data, value)
-        valid(f"{k}-lf", k, data, value, ["R1", "R2", "R3", "R4", "R7", "R10"],
+        valid(f"{k}-lf", k, data, value, ["R1", "R2", "R3", "R4", "R7", "R10", "R17"],
               "LF line endings; the checksum line is the last FHR line.")
         data, value = standard(k, endings=b"\r\n")
         valid(f"{k}-crlf", k, data, value, ["R1", "R3"], "CRLF line endings; CR bytes are hashed.")
@@ -773,6 +776,7 @@ def build():
     build_fhgff3()
     build_selection()
     build_extensions()
+    build_cross_library()
 
 
 # FHP vectors (specs/006-protein-header contracts/conformance.md): the shared
@@ -807,6 +811,8 @@ def yaml_scalar(value):
         return "true" if value else "false"
     if isinstance(value, int):
         return str(value)
+    if "\n" in value:  # A double-quoted scalar, which is also a JSON string.
+        return json.dumps(value)
     if PLAIN_TEXT.fullmatch(value) and value.lower() not in YAML_WORDS \
             and not value.endswith((" ", ".")):
         return value
@@ -863,7 +869,7 @@ def fhp_invalid(name, record, rule, reason):
 def build_fhp():
     k = "fhp-fasta"
     data, value = fhp_valid("fhp-fasta-lf", fhp_lines(),
-                            ["P1", "P2", "R1", "R2", "R3", "R4", "R7", "R10"],
+                            ["P1", "P2", "R1", "R2", "R3", "R4", "R7", "R10", "R17"],
                             "Protein FASTA with stops, rare and ambiguous residues, lower case "
                             "and a gap; LF line endings.")
     plain = data
@@ -1000,6 +1006,17 @@ def build_fhp():
                                              "completeDuplicated": 0, "fragmented": 0,
                                              "missing": 1, "total": 2}),
                     "P1", f"A malformed dotted BUSCO dataset version: {defect}.")
+    # JSON Schema patterns are ECMA-262 regular expressions, where $ without the
+    # multiline flag matches only at the end of the string, so a value with a
+    # trailing line feed fails ^...$. Python's re (and so Python validators that
+    # use re.search) also lets $ match just before a final line feed.
+    fhp_invalid("fhp-fasta-pattern-trailing-newline",
+                fhp_record(completeness={"lineageDataset": "primates_odb10\n",
+                                         "completeSingle": 1, "completeDuplicated": 0,
+                                         "fragmented": 0, "missing": 1, "total": 2}),
+                "P1", "The BUSCO lineageDataset ends with a line feed, which its pattern "
+                "^...$ does not allow under ECMA-262 regular expressions; validators whose "
+                "$ also matches before a final line feed (Python re) wrongly accept it.")
     # P2: the schema URL selects the header type.
     fhp_invalid("fhp-fasta-cites-fhr-schema", fhp_record(schema=ITEM_TYPE),
                 "P2", "Protein metadata citing fhr.json is validated as FHR, and fails it.")
@@ -1076,7 +1093,7 @@ def build_fhgff3():
     species = b"##species https://identifiers.org/taxonomy:9606"
     data, value = fhgff3_valid(
         "fhgff3-minimal-checksum-link", fhgff3_lines(), ["G1", "G2", "G3", "R1", "R2", "R3",
-                                                         "R4", "R7", "R10"],
+                                                         "R4", "R7", "R10", "R17"],
         "The genome linked by its FHR checksum (derivedFrom annotates); header after "
         "##gff-version 3; LF line endings.")
     plain = data
@@ -1613,6 +1630,11 @@ def build_microdata():
                   f"{GENOME}</span></div>"})), "M1",
         "genome appears only inside a nested item scope without itemprop, so the FHR "
         "item has no genome.")
+    md_invalid("microdata-itemref", md_page(
+        md_content(), root=f'itemscope itemref="fhr-extra" itemtype="{ITEM_TYPE}"',
+        after=f'<p id="fhr-extra" itemprop="reuseConditions" {s}>CC0-1.0</p>'), "M1",
+        "The FHR item has an itemref attribute, which FHR microdata does not support: a "
+        "reader that followed it would add reuseConditions from outside the scope.")
     md_invalid("microdata-itemtype-repeated-attribute", md_page(
         md_content(),
         root=f'itemscope itemtype="https://schema.org/Dataset" itemtype="{ITEM_TYPE}"'), "R9",
@@ -1974,6 +1996,11 @@ def build_jsonld_general(write, record):
                                           "@type": XSD_IRI + "dateTime"}]
     jsonld_invalid("jsonld-datetime-datecreated", jsonld_bytes(dated), "J5",
                    "dateCreated is typed xsd:dateTime; only xsd:date or no type is allowed.")
+    directed = copy.deepcopy(expanded)
+    directed[0][SDO_IRI + "name"] = [{"@value": record["genome"], "@direction": "ltr"}]
+    jsonld_invalid("jsonld-direction-value", jsonld_bytes(directed), "J5",
+                   "genome (schema.org name) has a base direction (@direction), which an FHR "
+                   "string cannot keep, like a language tag.")
     identified = copy.deepcopy(expanded)
     identified[0] = {"@id": EXPORT_CONTEXT["id"], **identified[0]}
     jsonld_invalid("jsonld-root-id", jsonld_bytes(identified), "J4",
@@ -2224,6 +2251,91 @@ def build_extensions():
         "genome": md_property("x-refget-commonName", "human")})), "M5",
                "The FHR item has the property x-refget-commonName, although the selected "
                "schema (FHR 2.1) would accept it in JSON or YAML.")
+
+
+def build_cross_library():
+    """Cases on which independent FAIR-bioHeaders libraries disagreed."""
+    # R17: a header of another type in each container. Each record is otherwise
+    # valid under its own schema, so only the container rule fails.
+    fhgff3 = yaml_lines(fhgff3_record()) + [None]
+    fhp = yaml_lines(FHP_RECORD) + [None]
+    for name, kind, lines, what in (
+            ("fasta-fhgff3-header", "fasta", header("fasta", fhgff3) + body("fasta"),
+             "An FHGFF3 header in a FASTA file"),
+            ("gfa-fhgff3-header", "gfa", header("gfa", fhgff3) + body("gfa"),
+             "An FHGFF3 header in a GFA file"),
+            ("gfa-fhp-header", "gfa", header("gfa", fhp) + body("gfa"),
+             "An FHP header in a GFA file"),
+            ("fhgff3-fhp-header", "fhgff3", fhgff3_lines(FHP_RECORD),
+             "An FHP header in a GFF3 file"),
+            ("fhgff3-fhr-header", "fhgff3",
+             [Line(GFF3_VERSION)] + header("fhgff3", METADATA)
+             + [Line(text) for text in GFF3_FEATURES],
+             "An FHR header in a GFF3 file")):
+        data, _ = assemble(lines)
+        invalid(name, kind, data, "R17", f"{what}: the record is valid under its own schema "
+                "and its checksum matches, but that header type does not go in this file.")
+
+    # R2: text shaped like a checksum line inside a multi-line quoted scalar or a
+    # flow collection is not the checksum line. The root checksum key is quoted, so
+    # the file has no checksum line; the hidden line's value is what a line scanner
+    # would compute without that line. YAML 1.2 requires the continuation lines of
+    # a root value to be indented past the root keys, so the hidden line and the
+    # closing line are indented by one space: apart from the quoted root key the
+    # header is strict YAML 1.2, and the file breaks R2 alone.
+    for name, opening, closing, what in (
+            ("fasta-checksum-in-double-quoted-scalar", 'x-note: "start', ' end"',
+             "a double-quoted scalar"),
+            ("fasta-checksum-in-single-quoted-scalar", "x-note: 'start", " end'",
+             "a single-quoted scalar"),
+            ("fasta-checksum-in-flow-mapping", "x-note: {a: 1,", " }", "a flow mapping")):
+        metadata = extension_metadata(first=False)[:-1]
+        metadata += [opening, None, closing, '"checksum": ' + "A" * 43 + "="]
+        data, _ = assemble(header("fasta", metadata, key=" checksum: ") + body("fasta"))
+        invalid(name, "fasta", data, "R2",
+                f"The only line shaped like ;~checksum: (indented one space, as YAML requires "
+                f"for a continuation line) is inside {what} (x-note), and its value matches "
+                "the file without that line; the root checksum key is quoted, so the file has "
+                "no checksum line. Apart from that, the header is strict YAML 1.2.")
+
+    # Valid YAML forms that toolkit writers and real headers produce.
+    flow = extension_metadata(["x-proj-info: {tool: hifiasm, version: \"0.19\"}"],
+                              first=False)
+    extension_valid("fasta-extension-flow-mapping", "fasta", flow, ["R12", "R15"],
+                    "An extension value written as a YAML flow mapping with plain keys.",
+                    dict(EXPECTED_METADATA,
+                         **{"x-proj-info": {"tool": "hifiasm", "version": "0.19"}}))
+    wrapped_text = ("Synthetic FHR conformance vector: assembled with a synthetic assembler, "
+                    "scaffolded with synthetic Hi-C reads, polished twice and checked against "
+                    "itself; not a real assembly, it says nothing biological.")
+    documentation = METADATA[-2]
+    for name, quote in (("fasta-wrapped-single-quoted-value", "'"),
+                        ("fasta-wrapped-double-quoted-value", '"')):
+        wrapped = [
+            f"documentation: {quote}Synthetic FHR conformance vector: assembled with a "
+            "synthetic assembler,",
+            "  scaffolded with synthetic Hi-C reads, polished twice and checked against itself;",
+            f"  not a real assembly, it says nothing biological.{quote}"]
+        lines = [item for item in METADATA if item != documentation][:-1] + wrapped + [None]
+        data, value = assemble(header("fasta", lines) + body("fasta"))
+        valid(name, "fasta", data, value, ["R2", "R3", "R12"],
+              f"A long {'single' if quote == chr(39) else 'double'}-quoted value wrapped over "
+              "three lines, as the toolkit's YAML writer wraps it; it reads as one line.")
+        VALID[-1]["expected_metadata"] = dict(EXPECTED_METADATA, documentation=wrapped_text)
+    large = list(METADATA[:-1]) + ["vitalStats:", "  totalBasePairs: 3100000000",
+                                   "  N50: 2147483648", None]
+    data, value = assemble(header("fasta", large) + body("fasta"))
+    valid("fasta-vital-stats-above-int32", "fasta", data, value, ["R12", "R13"],
+          "vitalStats integers above 2^31 (a human-sized totalBasePairs); readers must not "
+          "use 32-bit integers.")
+    VALID[-1]["expected_metadata"] = dict(
+        EXPECTED_METADATA, vitalStats={"totalBasePairs": 3100000000, "N50": 2147483648})
+
+    # V4: a raw URL whose ref has several path segments is not main or a release tag.
+    selection_invalid("fasta-schema-raw-refs-heads-main",
+                      f"{RAW_CANONICAL}refs/heads/main/fhr.json", "'2.0'", "V4",
+                      "The raw URL names the ref refs/heads/main, which is neither main nor a "
+                      "release tag, so the schema version is unsupported.", result=UNSUPPORTED)
 
 
 def jsonld_self_check():
