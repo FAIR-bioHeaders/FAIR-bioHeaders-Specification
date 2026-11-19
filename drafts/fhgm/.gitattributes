@@ -1,0 +1,2 @@
+# Preserve every copied owning-source byte, including schemas and Python code.
+upstream/** -text

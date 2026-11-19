@@ -1,0 +1,59 @@
+##gff-version 3
+#~schema: "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0"
+#~schemaVersion: "1.1"
+#~annotation: "S6k gene model in Drosophila ananassae (converted pilot fixture)"
+#~taxon: {"name":"Drosophila ananassae","uri":"https://identifiers.org/taxonomy:7217"}
+#~version: "1.0"
+#~metadataAuthor: [{"name":"OpenAI Codex"}]
+#~dateCreated: "2026-11-10"
+#~genomeReference: {"accession":"GCA_000005115.1","seqcol_id":"JpZUOWCdrUxBuclH0rbvPszL9b8HpHZj"}
+#~identifier: ["doi:10.22002/e86gh-a7p16"]
+#~scholarlyArticle: "10.17912/micropub.biology.001030"
+#~reuseConditions: "CC BY 4.0"
+#~x-fhgm-models: [{"contributors":[{"name":"Laura K. Reed","role":"model author (deposit attribution)"}],"evidence":[{"description":"Transcripts PA and PB match the deposited 1,467-nt transcript and 489-aa peptide against GCA_000005115.1 (CH902618.1); the separately annotated stop intervals read TAA, as recorded by the S6k pilot."}],"featureId":"DanaCAF1_S6k","methods":{"software":[{"name":"development/examples/s6k/convert.py"}]},"modelId":"DanaCAF1_S6k","modelVersion":"1.0","publication":{"article":"10.17912/micropub.biology.001030","deposit":["doi:10.22002/e86gh-a7p16"]},"reference":{"genomeReference":{"accession":"GCA_000005115.1","seqcol_id":"JpZUOWCdrUxBuclH0rbvPszL9b8HpHZj"}},"reuseConditions":"CC BY 4.0"}]
+#~checksum: krWpdzrhfx1SE7SYJlzxMCXiHg64ujNO6L26SF5asZ8=
+scaffold_13337	GEP	gene	12737297	12747140	.	+	.	ID=DanaCAF1_S6k
+scaffold_13337	GEP	mRNA	12737297	12747140	.	+	.	ID=DanaCAF1_S6k-PA;Parent=DanaCAF1_S6k
+scaffold_13337	GEP	CDS	12737297	12737395	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12739299	12739339	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12739953	12740079	.	+	1	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12740144	12740275	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12740341	12740474	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12740535	12740726	.	+	1	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12740813	12740903	.	+	1	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12740963	12741211	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12741277	12741384	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	CDS	12746844	12747137	.	+	0	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	stop_codon	12747138	12747140	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12737297	12737395	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12739299	12739339	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12739953	12740079	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12740144	12740275	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12740341	12740474	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12740535	12740726	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12740813	12740903	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12740963	12741211	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12741277	12741384	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	exon	12746844	12747137	.	+	.	Parent=DanaCAF1_S6k-PA
+scaffold_13337	GEP	mRNA	12737297	12747140	.	+	.	ID=DanaCAF1_S6k-PB;Parent=DanaCAF1_S6k
+scaffold_13337	GEP	CDS	12737297	12737395	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12739299	12739339	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12739953	12740079	.	+	1	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12740144	12740275	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12740341	12740474	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12740535	12740726	.	+	1	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12740813	12740903	.	+	1	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12740963	12741211	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12741277	12741384	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	CDS	12746844	12747137	.	+	0	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	stop_codon	12747138	12747140	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12737297	12737395	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12739299	12739339	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12739953	12740079	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12740144	12740275	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12740341	12740474	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12740535	12740726	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12740813	12740903	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12740963	12741211	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12741277	12741384	.	+	.	Parent=DanaCAF1_S6k-PB
+scaffold_13337	GEP	exon	12746844	12747137	.	+	.	Parent=DanaCAF1_S6k-PB

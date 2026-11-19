@@ -1,0 +1,103 @@
+##gff-version 3
+#~schema: https://w3id.org/fair-bioheaders/fhgff3/v0.5.0
+#~schemaVersion: '1.1'
+#~annotation: Two Drosophila melanogaster chromosome-4 gene models (Dmel_CG11076 multi-isoform,
+#~  Mpv17 single-exon), feature rows copied verbatim from the pinned RefSeq GFF3 archive
+#~taxon:
+#~  name: Drosophila melanogaster
+#~  uri: https://identifiers.org/taxonomy:7227
+#~version: '1'
+#~metadataAuthor:
+#~- name: FHGM real-data example builder (agent)
+#~  nameType: Organizational
+#~dateCreated: '2026-11-15'
+#~genomeReference:
+#~  accession: GCF_000001215.4
+#~  seqcol_id: hFwVeJXKpWP3X-g4wmJGT-eZTa1r3Y1l
+#~  assemblyName: Release 6 plus ISO1 MT
+#~derivedFrom:
+#~- checksum: zSTzyw4aOnZWd2XXKL9GBWtVWM1S6e0i1vt1XX0mVOY=
+#~  headerType: FHR
+#~  relationship: annotates
+#~source:
+#~- name: NCBI RefSeq annotation, Release 6 plus ISO1 MT
+#~  release: GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz
+#~  assemblyAccession: GCF_000001215.4
+#~  url: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz
+#~  description: All feature rows copied verbatim and in source order for gene-Dmel_CG11076
+#~    and gene-Dmel_CG11077 (Mpv17) on NC_004353.4 chromosome 4 plus the chromosome
+#~    region row
+#~  sequenceCount: 1
+#~featureCounts:
+#~- featureType: CDS
+#~  count: 4
+#~- featureType: exon
+#~  count: 6
+#~- featureType: gene
+#~  count: 2
+#~- featureType: mRNA
+#~  count: 4
+#~- featureType: region
+#~  count: 1
+#~x-fhgm-models:
+#~- modelId: gene-Dmel_CG11076
+#~  modelVersion: '1'
+#~  featureId: gene-Dmel_CG11076
+#~  reference:
+#~    genomeReference:
+#~      accession: GCF_000001215.4
+#~      seqcol_id: hFwVeJXKpWP3X-g4wmJGT-eZTa1r3Y1l
+#~      assemblyName: Release 6 plus ISO1 MT
+#~  evidence:
+#~  - description: 'gene-Dmel_CG11076: feature rows copied verbatim from the pinned
+#~      RefSeq GFF3; three mRNA transcripts (NM_166807.3, NM_143686.4, NM_001258500.1),
+#~      five exons and three CDS, 1029711..1031757 on the minus strand'
+#~    uri: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz
+#~  methods:
+#~    software:
+#~    - name: development/examples/dmel4/build_fixture.py
+#~    - name: fair-bioheaders
+#~      version: 0.11.0
+#~      uri: https://pypi.org/project/fair-bioheaders/
+#~  publication:
+#~    deposit:
+#~    - FLYBASE:FBgn0039929
+#~    - GeneID:43830
+#~- modelId: gene-Dmel_CG11077
+#~  modelVersion: '1'
+#~  featureId: gene-Dmel_CG11077
+#~  reference:
+#~    annotates: zSTzyw4aOnZWd2XXKL9GBWtVWM1S6e0i1vt1XX0mVOY=
+#~  evidence:
+#~  - description: 'gene-Dmel_CG11077: feature rows copied verbatim from the pinned
+#~      RefSeq GFF3; one mRNA transcript (NM_143687.4), one exon and one CDS, 1028675..1029361
+#~      on the minus strand'
+#~    uri: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz
+#~  methods:
+#~    software:
+#~    - name: development/examples/dmel4/build_fixture.py
+#~    - name: fair-bioheaders
+#~      version: 0.11.0
+#~      uri: https://pypi.org/project/fair-bioheaders/
+#~  publication:
+#~    deposit:
+#~    - FLYBASE:FBgn0039930
+#~    - GeneID:43831
+#~checksum: 4o7S2qFElvCqHkK59ZLarK9LGPO4Jwrsn1Ea6LwQZMY=
+NC_004353.4	RefSeq	region	1	1348131	.	+	.	ID=NC_004353.4:1..1348131;Dbxref=taxon:7227;Name=4;chromosome=4;gbkey=Src;genome=chromosome;genotype=y[1]%3B Gr22b[1] Gr22d[1] cn[1] CG33964[R4.2] bw[1] sp[1]%3B LysC[1] MstProx[1] GstD5[1] Rh6[1];mol_type=genomic DNA
+NC_004353.4	RefSeq	gene	1028675	1029361	.	-	.	ID=gene-Dmel_CG11077;Dbxref=FLYBASE:FBgn0039930,GeneID:43831;Name=Mpv17;cyt_map=102F6-102F6;description=Mitochondrial inner membrane protein MPV17;gbkey=Gene;gen_map=4-0 cM;gene=Mpv17;gene_biotype=protein_coding;gene_synonym=CG11077,Dmel\CG11077,dMpv17,MPV17,PMP22;locus_tag=Dmel_CG11077
+NC_004353.4	RefSeq	mRNA	1028675	1029361	.	-	.	ID=rna-NM_143687.4;Parent=gene-Dmel_CG11077;Dbxref=FLYBASE:FBtr0089222,GeneID:43831,GenBank:NM_143687.4,FLYBASE:FBgn0039930;Name=NM_143687.4;Note=Mpv17-RA%3B Dmel\Mpv17-RA%3B CG11077-RA%3B Dmel\CG11077-RA;gbkey=mRNA;gene=Mpv17;locus_tag=Dmel_CG11077;orig_protein_id=gnl|FlyBase|CG11077-PA|gb|AAF59393;orig_transcript_id=gnl|FlyBase|CG11077-RA;product=mitochondrial inner membrane protein MPV17;transcript_id=NM_143687.4
+NC_004353.4	RefSeq	exon	1028675	1029361	.	-	.	ID=exon-NM_143687.4-1;Parent=rna-NM_143687.4;Dbxref=FLYBASE:FBtr0089222,GeneID:43831,GenBank:NM_143687.4,FLYBASE:FBgn0039930;Note=Mpv17-RA%3B Dmel\Mpv17-RA%3B CG11077-RA%3B Dmel\CG11077-RA;gbkey=mRNA;gene=Mpv17;locus_tag=Dmel_CG11077;orig_protein_id=gnl|FlyBase|CG11077-PA|gb|AAF59393;orig_transcript_id=gnl|FlyBase|CG11077-RA;product=mitochondrial inner membrane protein MPV17;transcript_id=NM_143687.4
+NC_004353.4	RefSeq	CDS	1028743	1029249	.	-	0	ID=cds-NP_651944.1;Parent=rna-NM_143687.4;Dbxref=FLYBASE:FBpp0088286,GeneID:43831,GenBank:NP_651944.1,FLYBASE:FBgn0039930;Name=NP_651944.1;gbkey=CDS;gene=Mpv17;locus_tag=Dmel_CG11077;orig_transcript_id=gnl|FlyBase|CG11077-RA;product=mitochondrial inner membrane protein MPV17;protein_id=NP_651944.1
+NC_004353.4	RefSeq	gene	1029711	1031757	.	-	.	ID=gene-Dmel_CG11076;Dbxref=FLYBASE:FBgn0039929,GeneID:43830;Name=CG11076;cyt_map=102F6-102F6;gbkey=Gene;gen_map=4-0 cM;gene=CG11076;gene_biotype=protein_coding;gene_synonym=Dmel\CG11076;locus_tag=Dmel_CG11076
+NC_004353.4	RefSeq	mRNA	1029711	1031757	.	-	.	ID=rna-NM_001258500.1;Parent=gene-Dmel_CG11076;Dbxref=FLYBASE:FBtr0344706,GeneID:43830,GenBank:NM_001258500.1,FLYBASE:FBgn0039929;Name=NM_001258500.1;Note=CG11076-RE%3B Dmel\CG11076-RE;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PE|gb|AFH06789;orig_transcript_id=gnl|FlyBase|CG11076-RE;product=uncharacterized protein%2C transcript variant E;transcript_id=NM_001258500.1
+NC_004353.4	RefSeq	exon	1031595	1031757	.	-	.	ID=exon-NM_001258500.1-1;Parent=rna-NM_001258500.1;Dbxref=FLYBASE:FBtr0344706,GeneID:43830,GenBank:NM_001258500.1,FLYBASE:FBgn0039929;Note=CG11076-RE%3B Dmel\CG11076-RE;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PE|gb|AFH06789;orig_transcript_id=gnl|FlyBase|CG11076-RE;product=uncharacterized protein%2C transcript variant E;transcript_id=NM_001258500.1
+NC_004353.4	RefSeq	exon	1029711	1030777	.	-	.	ID=exon-NM_001258500.1-2;Parent=rna-NM_001258500.1;Dbxref=FLYBASE:FBtr0344706,GeneID:43830,GenBank:NM_001258500.1,FLYBASE:FBgn0039929;Note=CG11076-RE%3B Dmel\CG11076-RE;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PE|gb|AFH06789;orig_transcript_id=gnl|FlyBase|CG11076-RE;product=uncharacterized protein%2C transcript variant E;transcript_id=NM_001258500.1
+NC_004353.4	RefSeq	CDS	1029971	1030753	.	-	0	ID=cds-NP_001245429.2;Parent=rna-NM_001258500.1;Dbxref=FLYBASE:FBpp0311039,GeneID:43830,GenBank:NP_001245429.2,FLYBASE:FBgn0039929;Name=NP_001245429.2;Note=non-AUG (CUG) translation initiation;gbkey=CDS;gene=CG11076;locus_tag=Dmel_CG11076;orig_transcript_id=gnl|FlyBase|CG11076-RE;product=uncharacterized protein%2C isoform E;protein_id=NP_001245429.2
+NC_004353.4	RefSeq	mRNA	1029711	1031676	.	-	.	ID=rna-NM_143686.4;Parent=gene-Dmel_CG11076;Dbxref=FLYBASE:FBtr0344705,GeneID:43830,GenBank:NM_143686.4,FLYBASE:FBgn0039929;Name=NM_143686.4;Note=CG11076-RD%3B Dmel\CG11076-RD;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PD|gb|AAN06566;orig_transcript_id=gnl|FlyBase|CG11076-RD;product=uncharacterized protein%2C transcript variant D;transcript_id=NM_143686.4
+NC_004353.4	RefSeq	exon	1031552	1031676	.	-	.	ID=exon-NM_143686.4-1;Parent=rna-NM_143686.4;Dbxref=FLYBASE:FBtr0344705,GeneID:43830,GenBank:NM_143686.4,FLYBASE:FBgn0039929;Note=CG11076-RD%3B Dmel\CG11076-RD;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PD|gb|AAN06566;orig_transcript_id=gnl|FlyBase|CG11076-RD;product=uncharacterized protein%2C transcript variant D;transcript_id=NM_143686.4
+NC_004353.4	RefSeq	exon	1029711	1030777	.	-	.	ID=exon-NM_143686.4-2;Parent=rna-NM_143686.4;Dbxref=FLYBASE:FBtr0344705,GeneID:43830,GenBank:NM_143686.4,FLYBASE:FBgn0039929;Note=CG11076-RD%3B Dmel\CG11076-RD;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PD|gb|AAN06566;orig_transcript_id=gnl|FlyBase|CG11076-RD;product=uncharacterized protein%2C transcript variant D;transcript_id=NM_143686.4
+NC_004353.4	RefSeq	CDS	1029971	1030753	.	-	0	ID=cds-NP_651943.2;Parent=rna-NM_143686.4;Dbxref=FLYBASE:FBpp0311038,GeneID:43830,GenBank:NP_651943.2,FLYBASE:FBgn0039929;Name=NP_651943.2;Note=non-AUG (CUG) translation initiation;gbkey=CDS;gene=CG11076;locus_tag=Dmel_CG11076;orig_transcript_id=gnl|FlyBase|CG11076-RD;product=uncharacterized protein%2C isoform D;protein_id=NP_651943.2
+NC_004353.4	RefSeq	mRNA	1029711	1030975	.	-	.	ID=rna-NM_166807.3;Parent=gene-Dmel_CG11076;Dbxref=FLYBASE:FBtr0089221,GeneID:43830,GenBank:NM_166807.3,FLYBASE:FBgn0039929;Name=NM_166807.3;Note=CG11076-RA%3B Dmel\CG11076-RA;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PA|gb|AAF59392;orig_transcript_id=gnl|FlyBase|CG11076-RA;product=uncharacterized protein%2C transcript variant A;transcript_id=NM_166807.3
+NC_004353.4	RefSeq	exon	1029711	1030975	.	-	.	ID=exon-NM_166807.3-1;Parent=rna-NM_166807.3;Dbxref=FLYBASE:FBtr0089221,GeneID:43830,GenBank:NM_166807.3,FLYBASE:FBgn0039929;Note=CG11076-RA%3B Dmel\CG11076-RA;gbkey=mRNA;gene=CG11076;locus_tag=Dmel_CG11076;orig_protein_id=gnl|FlyBase|CG11076-PA|gb|AAF59392;orig_transcript_id=gnl|FlyBase|CG11076-RA;product=uncharacterized protein%2C transcript variant A;transcript_id=NM_166807.3
+NC_004353.4	RefSeq	CDS	1029971	1030810	.	-	0	ID=cds-NP_726630.2;Parent=rna-NM_166807.3;Dbxref=FLYBASE:FBpp0088285,GeneID:43830,GenBank:NP_726630.2,FLYBASE:FBgn0039929;Name=NP_726630.2;gbkey=CDS;gene=CG11076;locus_tag=Dmel_CG11076;orig_transcript_id=gnl|FlyBase|CG11076-RA;product=uncharacterized protein%2C isoform A;protein_id=NP_726630.2

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FHGM draft transport overlay for FHGFF3 1.1 and 1.2 headers (proposal)",
+  "description": "Transport-only overlay for native FHGM draft contract v0.1. It admits either released FHGFF3 file identity a carrier can cite today - the v0.5.0 identity with schemaVersion 1.1, or the v0.6.0 identity with schemaVersion 1.2 or 1.1 (the v0.6.0 release accepts 1.1 records, per the shared docs/SCHEMA-VERSIONS.md) - each as a closed branch pairing that schema URI set with the versions its release admits for extension fields, so a citation and a stated version that contradict each other (a v0.5.0 citation stating 1.2) are rejected. Each URI set is the release's w3id URL with and without the trailing slash and its raw tag URL under both repository names, FAIR-bioHeaders-Specification and the FHR-Specification alias, matching the schemaUrls of the same release in development/model/base-schemas.json. Maintainer decision of 2026-11-15: FHGM carriers must be describable on both released bases, because the released toolkit writes 1.2 headers today while the sealed v0.1 fixtures and vectors carry 1.1 bytes; the choice never falls back to a single pin. FORMAT.md R15 permits x- keys from schemaVersion 1.1, so 1.0 stays inadmissible and the base schema itself rejects it. It intentionally does not describe record contents: each record validates against fhgm-model.schema.json in the separate model-level checker (validate_fhgm.py), which also resolves which registered FHGFF3 base release (development/model/base-schemas.json) the carrier's schema URL cites, validates the carrier against it and prints that selection. The base FHGFF3 schema validates transport only; model-level meaning is never established by the base schema, and the file checksum covers every embedded record byte like any other header byte.",
+  "type": "object",
+  "required": ["schema", "schemaVersion", "x-fhgm-models"],
+  "anyOf": [
+    {
+      "properties": {
+        "schema": {
+          "enum": [
+            "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0",
+            "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0/",
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.5.0/fhgff3.json",
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.5.0/fhgff3.json"
+          ]
+        },
+        "schemaVersion": {"const": "1.1"}
+      },
+      "required": ["schema", "schemaVersion"]
+    },
+    {
+      "properties": {
+        "schema": {
+          "enum": [
+            "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+            "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0/",
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fhgff3.json",
+            "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.6.0/fhgff3.json"
+          ]
+        },
+        "schemaVersion": {"enum": ["1.1", "1.2"]}
+      },
+      "required": ["schema", "schemaVersion"]
+    }
+  ],
+  "properties": {
+    "x-fhgm-models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "object"}
+    }
+  }
+}

@@ -1,0 +1,2815 @@
+{
+  "manifestVersion": 1,
+  "status": "Draft FHGM conformance suite, prepared from the reviewed model contract. FHGM has no released contract, no schemaVersion, no schema URL and no schemas/versions.json entry, and selection rule V7 keeps it that way until the shared publication PR lands; nothing here publishes, adopts or claims support. Expectations are derived from clauses, including independent accepted promotion records. Actual checker observations are reported separately by run_conformance.py against exact registered base bytes.",
+  "specification": "../model/README.md",
+  "decisionRecord": "../CONTRACT-REVIEW.md",
+  "checker": "../model/validate_fhgm.py",
+  "recordContract": "../model/fhgm-model.schema.json",
+  "transportOverlay": "../model/fhgm-draft.schema.json",
+  "provenance": "provenance.json",
+  "baseSchema": "provenance.json records the two released FHGFF3 base bytes this suite evaluates: the 1.1 (v0.5.0) release every sealed expectation below was observed against - the record lane - and the 1.2 (v0.6.0) release under which base_matrix.json re-observes identity-rewritten twins (maintainer dual-base decision 2026-11-15; base selection, not substitution: no expectation or vector byte below is repointed). run_conformance.py verifies those bytes, the base-schemas.json registry the checker reads and the recorded contract and generator artifacts before it reports anything.",
+  "baseMatrix": "base_matrix.json",
+  "ruleVocabulary": "K1-K6 are the FHGM model-level rules and B1 the boundary above them; they are drafted in this repository and are not registered in the shared conformance manifest, whose R1-R15, M, J, P, G and V namespaces keep their meanings. Vectors may also cite shared rules (sharedRules) where the shared text is the authority. The shared suite enumerates released types only, so this manifest is the seed the #204 publication PR either absorbs into conformance/manifest.json under ids it chooses, or mirrors with a cross-repository digest check - see README.md.",
+  "contextVocabulary": "Pointer resolution is context-dependent: `context.predecessors` names the prior snapshots handed to the checker, in addition to the vector's own bytes. Two entries may therefore share one file and differ only in the history supplied - that pair is how deviation D3's bound is pinned.",
+  "layers": "Each vector records what four independent checks report: base (the released fhgff3.json schema alone, over the parsed header), checksum (verify when the file-bound SHA-512/256 covers the bytes, stale when the header states a digest the bytes no longer produce), gff3 (gff3-validate --no-header over the feature layer, a separate tool: each vector records its own outcome, including the bare-Parent syntax rejection) and model (the draft checker's outcome). These observations bind to the v0.5.0 base bytes; the checker is handed both registered base releases and prints, for every loaded file, the release it selected from that file's cited schema URL, so no verdict is silent about which bytes produced it. The checksum field always holds the value the file states, stale or not, so a tampered vector pins which digest it kept. An invalid vector records the reason substring the checker must print. A reader without gff3-validate reports that layer as skipped; no FHGM rule depends on it.",
+  "rules": {
+    "K1": {
+      "summary": "Transport: an FHGM-carrying file keeps a released FHGFF3 identity - the v0.5.0 citation with schemaVersion 1.1, or the v0.6.0 citation with schemaVersion 1.2 or 1.1 (maintainer dual-base decision 2026-11-15; each citation may use the w3id URL or the raw tag URL under either repository name) - and carries one or more records under the single top-level x-fhgm-models key (docs/FORMAT.md R15). The checker validates the file against the registered base release its schema URL cites and refuses a citation no registered release answers to (raw main, superseded releases) or whose bytes were not supplied. A file stating FHGFF3 1.0 cannot carry the extension at all.",
+      "source": "../model/README.md#model-level-constraints-the-base-schema-cannot-enforce"
+    },
+    "K2": {
+      "summary": "Record shape: every record validates against the native record contract, whose required set is modelId, modelVersion, featureId and reference (deviation D1); nested objects are closed; opaque text values are non-empty, carry no leading or trailing whitespace and no control, zero-width or bidirectional formatting character; link fields (evidence uri, software uri, methods protocol) must be URIs with a scheme the shared FORMAT.md R14 accepts.",
+      "source": "../model/fhgm-model.schema.json"
+    },
+    "K3": {
+      "summary": "modelId is unique within one annotation snapshot, compared after Unicode NFC normalisation, and checked before any per-record rule. A duplicate makes the identity a pointer needs unselectable, reported under the name ambiguous, and rejects that snapshot (checker rule 1, deviation D4).",
+      "source": "../model/README.md#model-level-constraints-the-base-schema-cannot-enforce"
+    },
+    "K4": {
+      "summary": "featureId resolves, percent-decoded, to exactly one local root gene row (type gene or SO:0000704, with no Parent attribute) in the enclosing file (checker rule 2).",
+      "source": "../model/README.md#model-level-constraints-the-base-schema-cannot-enforce"
+    },
+    "K5": {
+      "summary": "A record reference shares at least one comparable form with the file genome link and never contradicts it (checker rule 3). Both halves are enforced, which is stricter than the adoption packet's D1 summary; the maintainers confirm that strength.",
+      "source": "../model/README.md#model-level-constraints-the-base-schema-cannot-enforce"
+    },
+    "K6": {
+      "summary": "A predecessor pointer resolves against explicitly supplied prior snapshots only: it names its own modelId (deviation D2), the recorded version differs, the assembly link and record reference match, and a recorded successor present in the supplied set is not skipped (checker rule 4, deviation D3).",
+      "source": "../model/README.md#model-level-constraints-the-base-schema-cannot-enforce"
+    },
+    "R3": {
+      "shared": true,
+      "origin": "docs/FORMAT.md (FAIR-bioHeaders-Specification)",
+      "summary": "Shared checksum rule 3, cited rather than redefined: the file checksum excludes the root checksum line and its terminator and covers every other byte, so it covers the embedded record bytes.",
+      "source": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md"
+    },
+    "R15": {
+      "shared": true,
+      "origin": "docs/FORMAT.md (FAIR-bioHeaders-Specification)",
+      "summary": "Shared extension rule, cited rather than redefined: a top-level x- key is admitted from FHR 2.1 and FHP and FHGFF3 1.1; any other unknown key and any x- key inside a nested object stays invalid.",
+      "source": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md"
+    },
+    "B1": {
+      "summary": "Boundary, not a model rule: a file must already satisfy the released FHGFF3 base schema and its exact-byte checksum before any FHGM verdict exists. Model checks add to those guarantees and never replace them, so a rejection reported under B1 is not evidence of a model-level gap.",
+      "source": "../model/README.md#transport-fhgff3-embedded-records-normative-draft-wording"
+    }
+  },
+  "openScope": {
+    "O1": {
+      "summary": "Transcript-only contribution scope.",
+      "decision": "#204 Q6, curator decision",
+      "vectors": "none - no outcome asserted"
+    },
+    "O2": {
+      "summary": "Split and merge of models across records.",
+      "decision": "#204 Q6, curator decision",
+      "vectors": "none - no outcome asserted"
+    },
+    "O3": {
+      "summary": "Assembly migration of a model between references.",
+      "decision": "#204 Q6, curator decision",
+      "vectors": "none - no outcome asserted"
+    },
+    "O4": {
+      "summary": "Companion-file (transcript and peptide) identity.",
+      "decision": "#204 Q6, curator decision",
+      "vectors": "none - no outcome asserted"
+    },
+    "O5": {
+      "summary": "Who may mint an external model identifier.",
+      "decision": "#204 Q2, curator residue",
+      "vectors": "supplied-external-model-id admits a supplied value; it authorises nothing"
+    },
+    "O6": {
+      "summary": "Whether a supplied snapshot with an unresolved own pointer may serve as history.",
+      "decision": "raised as #204 Q7 on 2026-11-14; v0.x says yes",
+      "vectors": "history-with-unresolved-own-pointer pins behavior, not a ruling"
+    },
+    "O7": {
+      "summary": "Whether ambiguous should be reachable as a per-pointer verdict.",
+      "decision": "#204 D4 review of 2026-11-14: snapshot level only in v0.x",
+      "vectors": "pointer-into-ambiguous-history pins the observable behavior"
+    },
+    "O8": {
+      "summary": "Curator acceptance of a resolved revision.",
+      "decision": "separate decision with its own evidence, outside the header check",
+      "vectors": "none - no file carries an acceptance assertion"
+    }
+  },
+  "vectors": [
+    {
+      "id": "both-reference-forms",
+      "file": "vectors/valid/both-reference-forms.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K5"
+      ],
+      "description": "Rule K5 with a file carrying both released FHGFF3 genome-link forms: one record binds the FHR parent checksum, the other the accession plus supplied SeqCol digest, and each finds a comparable form.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "1P5U+vhOhzH96CZR3tlQwQN8pItGDe63dH3oe0t2aT8=",
+      "bytes": {
+        "size": 1215,
+        "sha256": "a9720110c88170b21abab6e1c845905ccfb3d482bda5135442a81f539e86fe78"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "contract-minimal-file",
+      "file": "../examples/contract/minimal.fhgff3.gff3",
+      "generator": "committed",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2"
+      ],
+      "description": "The PR #7 contract example: released FHGFF3 1.1 identity plus the x-fhgm-models array, one record, no pointer.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "/TyPutE5fH7sndxWSSTSL0vaMW83zHhU/LQTcZRH6Z0=",
+      "bytes": {
+        "size": 755,
+        "sha256": "14c37f5d09604d9514f5e98eb0fd289f9434ccce7d199ccdd1588dd011c34f57"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "contract-rich-revision-chain",
+      "file": "../examples/contract/rich.fhgff3.gff3",
+      "generator": "committed",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K6"
+      ],
+      "description": "The PR #7 rich example resolved against the minimal example it names: the pointer's checksum, modelId and modelVersion all match.",
+      "context": {
+        "predecessors": [
+          "../examples/contract/minimal.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "eWhsEs3dFoASKWYoJhPQrWH9aoxDj6YHAibfqDqNTk4=",
+      "bytes": {
+        "size": 1240,
+        "sha256": "ebf7238069fb5315b58b14536673354eeb79b1878b0a7e7cd5436a47b29d9ef2"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "dmel-snapshot-v1",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v1.fhgff3.gff3",
+      "generator": "committed",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K4",
+        "K5"
+      ],
+      "description": "Two real chromosome-4 gene models (multi-isoform Dmel_CG11076 plus the single-exon neighbour Dmel_CG11077) bound to the two released genome-link forms with real values; the positive anchor the pointer cases below hand to the checker. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "4o7S2qFElvCqHkK59ZLarK9LGPO4Jwrsn1Ea6LwQZMY=",
+      "bytes": {
+        "size": 10096,
+        "sha256": "4e8d44ce289c6c891eba183449719d76c6b0f2df4549ec50927c50f7812d86fb"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K1, K2, K4, K5",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-snapshot-v2-resolved",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v2.fhgff3.gff3",
+      "generator": "committed",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K6"
+      ],
+      "description": "The real revision snapshot resolved against the v1 anchor: pointer checksum, own modelId and recorded version all match; verdict resolvable, which states no curator acceptance. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "8TaIBDS3IJv+OAyV0fr6jOC7bmjlF1JxAtJOQkAnVME=",
+      "bytes": {
+        "size": 10474,
+        "sha256": "1bcba240f11c332c85dfec2539eb359efd9623a959ac5a66021e7efb94ec73c9"
+      },
+      "context": {
+        "predecessors": [
+          "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K1, K2, K6",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "fhr-specification-alias-v0.6.0",
+      "file": "vectors/valid/fhr-specification-alias-v0.6.0.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1"
+      ],
+      "description": "The v0.6.0 raw tag URL under the FHR-Specification repository name, which the shared release recognises as the same release. The checker maps it to the v0.6.0 registry entry and the overlay admits it; the matrix twin keeps this citation and states 1.2, so the alias is exercised under both stated versions.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "gb3xLMhNl2iDXkpKp5xzGahByDsSCIYm6XL9uQQMhEg=",
+      "bytes": {
+        "size": 998,
+        "sha256": "34b128c338626cd24f91a392b19211d4b40914281af25c252e793d462652b3b3"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "file-linked-by-fhr-parent",
+      "file": "vectors/valid/file-linked-by-fhr-parent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K5"
+      ],
+      "description": "The other FHGFF3 genome-link branch at file scope - a derivedFrom FHR annotates link and no genomeReference - with the record bound the same way. No v0.1 fixture exercised this branch.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "E5WBT7XXBottf0CeA4yUGIdaI55/TGgrI4ds/SzgWFI=",
+      "bytes": {
+        "size": 935,
+        "sha256": "5add0025916e2ab085b0f9ea29347f5881773a382f4e305261ef1dfed19718ac"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "gap-pointer-without-recorded-successor",
+      "file": "../examples/model/version-gap-skip.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K6"
+      ],
+      "description": "The same bytes as gap-skip-with-recorded-successor-supplied with only the pointed snapshot supplied: resolvable. The pair is the point - the bound deviation D3 adopted cuts both ways, so the checker contradicts no chain it was not handed and claims no transitive or external history.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "eWayprO9nRTnZ0pp5dFFZsrOlxXTVLKLaQ6AlkoqZ1c=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "77e5dc904e5dc020020ff02790dad9b32b7a1a0e0f45c343d4ea802505e58edd"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "history-with-unresolved-own-pointer",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K6"
+      ],
+      "description": "A supplied snapshot whose own pointer does not resolve still serves as history, because the checker resolves only the selected file's pointers. Raised as question Q7 by the 2026-11-14 review; v0.x keeps this weaker bounded behavior and the vector makes the bound visible rather than accidental.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3",
+          "../examples/model/pointer-version-mismatch.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "5bYtJn9PQv+3tG9TNgIzKchJSBDgL8FslgP3QAb601M=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "c42fdf0a84640f55fb0ac476343bf64cbfcbc7ae57410753b2d1fdf1861b23bd"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "percent-decoded-feature-target",
+      "file": "vectors/valid/percent-decoded-feature-target.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K4"
+      ],
+      "description": "Rule K4 compares decoded identifiers: the record names toy-a while the gene row is written ID=toy%2Da.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "8vPZRuqHkrw3YKGtkdEfKyftMfq7Sh1RvlK99fmSUvQ=",
+      "bytes": {
+        "size": 960,
+        "sha256": "7a43e409f894859bd33ff3b5924813b29df62c282e5b8ce0b07f190bf02d2369"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-links-user-info-before-host",
+      "file": "vectors/valid/record-links-user-info-before-host.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K2"
+      ],
+      "description": "K2 positive control for the link host check: user information before a real host (evidence uri https://reader@example.org/evidence and protocol ftp://anonymous@ftp.example.org/protocol.txt) and a bracketed IPv6 host with a port (software uri https://[2001:db8::1]:8443/tool) are accepted in all three link fields.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "zP8GewYzKGidLjXfmqQdlAA3EKco7ue9zwUl+l5nSrQ=",
+      "bytes": {
+        "size": 1220,
+        "sha256": "fec57abbf903f5125f89180fdd1871749956f583178fa7bb246afbe2138fd352"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "revision-resolves-supplied-history",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K3",
+        "K6"
+      ],
+      "description": "A single-predecessor, same-assembly revision resolved against one explicitly supplied snapshot: verdict resolvable, which states only that the pointer identifies its predecessor record and never that a curator accepted the revision.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "5bYtJn9PQv+3tG9TNgIzKchJSBDgL8FslgP3QAb601M=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "c42fdf0a84640f55fb0ac476343bf64cbfcbc7ae57410753b2d1fdf1861b23bd"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "s6k-derived-record-fixture",
+      "file": "../examples/s6k/DanaCAF1_S6k.fhgm-models.fhgff3.gff3",
+      "generator": "embed_models",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K4"
+      ],
+      "description": "The only non-synthetic content in the suite: one draft record wrapping the attributed, reference-verified S6k deposit fixture. Its bytes are re-derived by embed_models.py from the committed profile fixture rather than copied, so the deposit attribution and the record shape are checked together.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "krWpdzrhfx1SE7SYJlzxMCXiHg64ujNO6L26SF5asZ8=",
+      "bytes": {
+        "size": 4574,
+        "sha256": "bc00668960410d7acf6b38680439f87f9cc2b7f978425db189b15664a2e1f177"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "single-record",
+      "file": "../examples/model/valid-single.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2"
+      ],
+      "description": "One record, no predecessor claim: base schema, transport overlay, record contract and the uniqueness, target and agreement rules all hold.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "P+HDA/e5TBwmQagHan7vKSQZGpM7oIa57sPNPE/HOSs=",
+      "bytes": {
+        "size": 923,
+        "sha256": "7f400445754e9a561da6a67c46f9bbaab532001276da998a4758294390bbf367"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "supplied-external-model-id",
+      "file": "vectors/valid/supplied-external-model-id.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K2"
+      ],
+      "description": "Review disposition Q2. File-local identity is the default, and a producer-supplied external identifier may occupy the same opaque field: the modelId is not the featureId and needs no matching registry. The identifier sits in the documentation-only urn:example: namespace and claims no authority. modelVersion is equally opaque.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "j17+cBhdN3m1QzJcyrXKkGBEab2LoIvZmgkVOQfe+ZU=",
+      "bytes": {
+        "size": 984,
+        "sha256": "008cdf56aded57961bb146d2b6192953a084ed6dd36e65dbbff10f9d3991c048"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "two-records-unique-ids",
+      "file": "../examples/model/snapshot-v1.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "description": "Two records with distinct modelIds in one snapshot, both targeting gene rows of a noncoding feature layer. This is the snapshot the pointer vectors below hand to the checker.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "mLL01gudzlxP9lVjGu2XwxFI72RpAXMTEv5q2S9e4UM=",
+      "bytes": {
+        "size": 1100,
+        "sha256": "706ec80436e0abf2b25af9f286bc2dd29466150b3a40cb5d4f433e77e6872cfe"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "v0.6.0-citation-stating-1.1",
+      "file": "vectors/valid/v0.6.0-citation-stating-1.1.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1"
+      ],
+      "description": "Base selection by citation: the v0.6.0 w3id URL with schemaVersion 1.1. The checker selects the v0.6.0 bytes the URL cites (not the release schemaVersion 1.1 first appeared in), those bytes accept a 1.1 record per the shared SCHEMA-VERSIONS.md, and the overlay's v0.6.0 branch admits 1.1. The base layer of the sealed lane (v0.5.0 bytes) accepts it too.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "checksum": "0aOAngctNOM1v0O9ZjUaFQ8GVBbBjInNTN6dEbdv8Eo=",
+      "bytes": {
+        "size": 958,
+        "sha256": "34c668b5f6661ad2cbb177d44001960141c5362b56ee8775f9ef70026c82264a"
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "ambiguous-model-id-in-snapshot",
+      "file": "../examples/model/ambiguous-model-id.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K3",
+      "reason": "Ambiguous model ID",
+      "description": "Deviation D4 as adopted: a duplicate modelId makes the identity a pointer needs unselectable, reported under the name ambiguous rather than as a generic invalid record, because the defect belongs to the snapshot.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "Q4uaux42N2pxeolmFp4awJE5bQKNbrFgYgS+H8fUjmQ=",
+      "bytes": {
+        "size": 1100,
+        "sha256": "da09d10bc4da0c6ba9c94b2180372ec1b9b3469996c4dd44e676481048e180e4"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "carrier-cites-raw-main",
+      "file": "vectors/invalid/carrier-cites-raw-main.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K1",
+      "reason": "which no registered FHGFF3 base release answers to",
+      "description": "Base selection by citation, refusal half: the carrier cites raw main, a moving contract link rather than a release. No registered base answers to it, so the checker refuses instead of evaluating the carrier against bytes it never cited. The released base schema's URL pattern accepts raw main, so the rejection is gap-proof.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "FDyi18SE48FE1z2ejZgPN+qsKZ/Q9jZSwxxxfbc2v70=",
+      "bytes": {
+        "size": 1008,
+        "sha256": "57e50f31cc89c968144101000e99b1694babfc2033b229e84ac4a926ff8749d2"
+      },
+      "evidenceExpectation": {
+        "model": "not-run",
+        "basis": "D4 prerequisite boundary"
+      }
+    },
+    {
+      "id": "dmel-duplicate-model-id",
+      "file": "vectors/invalid/dmel-duplicate-model-id.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K3",
+      "reason": "Ambiguous model ID",
+      "description": "Deviation D4 on real records: the unchanged neighbour model is appended a second time, two records share modelId gene-Dmel_CG11077, and the snapshot is rejected. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "u3bNK2JOomZkt3LIr3z3bzslYeYoo6RHC0K2uGFcHEA=",
+      "bytes": {
+        "size": 10686,
+        "sha256": "5e7a9cd810ec02ca7908ad25498ef71cb2c09d70b6d0a4c13f9d59a586050f8b"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K3",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-empty-model-array",
+      "file": "vectors/invalid/dmel-empty-model-array.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K1",
+      "reason": "should be non-empty",
+      "description": "The transport requires one or more records: x-fhgm-models emptied on the real snapshot. The base schema accepts any extension value, so only the checker distinguishes an empty array from an FHGM file. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "XpJhVq0wOxtR8i6HNubKJYp8ImMTK2KSclJs3b2iQes=",
+      "bytes": {
+        "size": 8302,
+        "sha256": "17a00252a172fecf525a33f58cac491b615a210fd7d7dc70c9dc6a31686af460"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K1",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-numeric-model-version",
+      "file": "vectors/invalid/dmel-numeric-model-version.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is not of type 'string'",
+      "description": "modelVersion set to the YAML integer 2 on the real CG record: the contract's opaque text field takes non-empty strings only (fhgm-model.schema.json $defs/text). Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "LUHTRiQ3InkHOzCEuSW6vpV6ycvQ8j/DMiS2in6huqA=",
+      "bytes": {
+        "size": 9927,
+        "sha256": "33df25c7e303b5ea6bb8b957bb751fe7b43a68c26eb41457d48ae8afb61e1524"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K2",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-pointer-names-neighbor",
+      "file": "vectors/invalid/dmel-pointer-names-neighbor.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the pointer names another model ID",
+      "description": "Deviation D2 attacked through the pointer on real records: the v2 CG record's predecessor names the unchanged neighbour gene-Dmel_CG11077. The predecessor snapshot itself is valid bytes with a verifying checksum. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "Qz5X4lezXQx43wXqWX/FKY0pHGe94BgvIS2lQhRu0YQ=",
+      "bytes": {
+        "size": 10278,
+        "sha256": "1f055d34e373d4de8137f90469c7a5875677eaa9f7454b1bcc90c1efc70f5ed0"
+      },
+      "context": {
+        "predecessors": [
+          "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K6",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-pointer-reuses-version",
+      "file": "vectors/invalid/dmel-pointer-reuses-version.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "reuses the predecessor model version",
+      "description": "The successor's own modelVersion set to '1', equal to the recorded predecessor version: the one version rule v0.1 states (an immediate revision must differ) fires on real data. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "gSUzw+dYs503MEPVdD7IMN14iJODFmBvyGJBgumXODk=",
+      "bytes": {
+        "size": 10278,
+        "sha256": "eedc2d59b783013e8f2128a63a39064abfb32503e07134a5a0fce3e1a10cce2c"
+      },
+      "context": {
+        "predecessors": [
+          "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K6",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-reference-contradicts-file",
+      "file": "vectors/invalid/dmel-reference-contradicts-file.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K5",
+      "reason": "contradicts the file genome link",
+      "description": "Rule K5's contradiction half with a real wrong parent: the MP record re-bound to annotates = the committed S6k example fixture's own checksum - a genuine FHGFF3 file digest that is simply not this file's parent, invisible to every released check. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "zv55GSPKWSqbTv5tJuwtnfv37Gm3603VHXhXZnjr8jo=",
+      "bytes": {
+        "size": 9929,
+        "sha256": "0cd2f55656f905086798b1f07c4c0ffa78e68d6f3f99ea38df1397a8fb29a258"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K5",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-reference-not-comparable",
+      "file": "vectors/invalid/dmel-reference-not-comparable.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K5",
+      "reason": "has no reference form comparable with the file genome link",
+      "description": "Rule K5's strictness half on real data: the file's genomeReference dropped (only the FHR subset derivedFrom link remains) while the CG record keeps only its accession-plus-SeqCol binding. Nothing contradicts; no shared comparable form exists. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "RqH4dWTzCbjsJuskkHrXOCjXUceEvH6QbDZyxs5Eaj8=",
+      "bytes": {
+        "size": 9791,
+        "sha256": "0be8ba5aafb77fcb3e103bb07cdfe8b0222bd89b225930f3b4f59b92bfa42753"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K5",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-revision-without-history",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v2.fhgff3.gff3",
+      "generator": "committed",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "description": "Deviation D3's bound on real bytes: the committed v2 revision snapshot run with no supplied history - unresolvable, because resolution covers only what the reviewer hands over. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "8TaIBDS3IJv+OAyV0fr6jOC7bmjlF1JxAtJOQkAnVME=",
+      "bytes": {
+        "size": 10474,
+        "sha256": "1bcba240f11c332c85dfec2539eb359efd9623a959ac5a66021e7efb94ec73c9"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K6",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-target-absent",
+      "file": "vectors/invalid/dmel-target-absent.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row",
+      "description": "Rule K4: the CG record's featureId changed to gene-Dmel_absentFromThisFile, which no row in the real locus payload carries. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "xNNUUVlZmC0iD/66d1l+ZqwMOagG9HJ/9Ngwzo5+fjA=",
+      "bytes": {
+        "size": 9940,
+        "sha256": "ffd59b49022256b29a63acd727af5b1764cdcaf21eb6ebac3c18ad63136690e1"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K4",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "dmel-target-transcript-row",
+      "file": "vectors/invalid/dmel-target-transcript-row.fhgff3.gff3",
+      "generator": "make_dmel_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row",
+      "description": "Rule K4's v0.1 scope against the exact real confusion a producer editing a nested RefSeq graph faces: featureId set to rna-NM_143687.4, a real mRNA row of the same gene. A transcript row is not a gene row; #204 Q6 transcript-only scope stays open. Independent clause derivation accepted on 2026-11-19; see expectationReview.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "cOUIEWcIDqaqCz1QrtXPdY9bGPtYGODE0rjCdTDDuwU=",
+      "bytes": {
+        "size": 9927,
+        "sha256": "deac006b3e4f88170c348dd0666409e197b3ac0b7c8801987a15943ae2783df0"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "original promotion derivation author (Qwen; historical packet)",
+        "derivation": "PROMOTION-2026-11-15.md",
+        "clause": "K4",
+        "disposition": "Accept the recorded expectation for this draft suite; D4 earned evidence boundaries apply. No curator acceptance or publication.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "duplicate-model-id-reported-before-record-checks",
+      "file": "vectors/invalid/duplicate-model-id-reported-before-record-checks.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K3",
+      "reason": "Ambiguous model ID 'model-a'",
+      "description": "Deviation D4 ordering: K3 runs before the per-record K4 and K5 checks, so a snapshot whose second model-a record also contradicts the file genome link is reported as ambiguous rather than as a K5 failure.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "1hGVf49AcVJeWeo0oNNonO+9QFipYjtb3K0MHbyApFY=",
+      "bytes": {
+        "size": 1141,
+        "sha256": "5aef25790488872ed8c5f44200a46a9fdaca187a51eb9d964c62f66a44f65d83"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "empty-model-array",
+      "file": "vectors/invalid/empty-model-array.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K1",
+      "reason": "should be non-empty",
+      "description": "The transport requires one or more records, so an empty x-fhgm-models array is not an FHGM file at all. The base schema accepts it, because any extension value is valid there.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "5LzPAJuT3ydw+PGjO7evvfbURs8MvhsweRKjeq7BTaM=",
+      "bytes": {
+        "size": 782,
+        "sha256": "2428eaaad84045477ce5e8063eab7cfca6a0369a4c628e0841e0a3054e15f6c3"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-id-names-percent-encoding",
+      "file": "vectors/invalid/feature-id-names-percent-encoding.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row: 'toy%2Da'",
+      "description": "The negative control for percent-decoded-feature-target: only decoded IDs are compared, so a record naming the raw spelling toy%2Da does not resolve to the row written ID=toy%2Da, whose ID is toy-a.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "s15okzK4jLY7+sxjwsSVuIyfT913t3dMSGPKLB3L1to=",
+      "bytes": {
+        "size": 962,
+        "sha256": "5b861a3883157a547281bc5c56e80b2a5da5ce2bf83dd0e83e68d102207639dd"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-target-absent",
+      "file": "vectors/invalid/feature-target-absent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row",
+      "description": "Rule K4: the record's featureId matches no local row.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "QR4Bzl+FHs90bGdoUx/vW6aLwDW+KH4THyKKlJJqMIA=",
+      "bytes": {
+        "size": 964,
+        "sha256": "61bfd704dc73dc9434cc34f41440dc70293619fd3435b6ad895162efb1cce544"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-target-duplicate-rows",
+      "file": "vectors/invalid/feature-target-duplicate-rows.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row",
+      "description": "Rule K4: exactly one row, so two gene rows sharing the ID resolve to no target.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "lFSsGALQdIb8RPZG26Y8ONeoESYcpn3dzAflwjSWUqY=",
+      "bytes": {
+        "size": 992,
+        "sha256": "20fe45ede108e9a504a86c4184cc5c1ccef8feb4e19fe73859bc3c4e02800d2f"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-target-gene-with-parent",
+      "file": "vectors/invalid/feature-target-gene-with-parent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "has a Parent attribute, so it is not a root gene row",
+      "description": "K4 requires a root gene row: here the gene row toy-a names the toy-b transcript as its Parent. gff3-validator 0.1.0 accepts this file; FHGM rejects it because a gene model's target must head its own feature graph.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "2u3D4/3VInXMpgvoUGG4z2xRg03MhoH4OlkcWYG+OqM=",
+      "bytes": {
+        "size": 975,
+        "sha256": "ea8577e32a27c4a93a55f63610b2b8020c08eb2b6e962e205f245438ff105d21"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-target-root-transcript-row",
+      "file": "vectors/invalid/feature-target-root-transcript-row.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row: 'toy-a'",
+      "description": "K4's type half on a root row: toy-a is written as a root mRNA with no Parent, so only the gene-type requirement can refuse it. A statement about v0.1 scope only, like feature-target-transcript-row; #204 Q6 leaves transcript-only contribution open.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "V8KyJfUk1hpMM/vYBA8Vyb+VW8JGPHMMl2B4cag9mno=",
+      "bytes": {
+        "size": 958,
+        "sha256": "81ebb96c9fe9384c269bd26b7bc4d94557ed35ed721c1ebc3faadadcf198b447"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "feature-target-transcript-row",
+      "file": "vectors/invalid/feature-target-transcript-row.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K4",
+      "reason": "must target one local gene row",
+      "description": "Rule K4's v0.1 scope, not a ruling on #204 Q6: a transcript row is not a gene row, and v0.1 declares no transcript target. Transcript-only contribution stays with curators.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "cbKSArx3NDo5zJs9EB6GQOZC8N0O9wb117RkLl8q0s8=",
+      "bytes": {
+        "size": 962,
+        "sha256": "0b78cc60b396f9a941b731202f88bbb65c7d1be70c5708123faf126328c84b86"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "gap-skip-with-recorded-successor-supplied",
+      "file": "../examples/model/version-gap-skip.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "already has a recorded successor",
+      "description": "Deviation D3 as adopted. The pointer skips the recorded successor of the pointed model, and that successor is in the supplied set, so the pointer is refused.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3",
+          "../examples/model/snapshot-v2.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "eWayprO9nRTnZ0pp5dFFZsrOlxXTVLKLaQ6AlkoqZ1c=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "77e5dc904e5dc020020ff02790dad9b32b7a1a0e0f45c343d4ea802505e58edd"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "model-ids-equal-under-nfc",
+      "file": "vectors/invalid/model-ids-equal-under-nfc.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K3",
+      "reason": "equal under NFC normalisation",
+      "description": "K3 compares modelIds after Unicode NFC normalisation: the two records' IDs are the NFC and NFD spellings of 'model-caf\u00e9', which print identically, so the snapshot is ambiguous.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "ZuFXtKOWIdQKEtR0cD7zxQ8ExxTuE9FJHFpn+IPX9MA=",
+      "bytes": {
+        "size": 1152,
+        "sha256": "36548892beaf89d0e5cd3ebc4c9dfd5f355a7c30fd2fd9ac5d0d4ae3507eb92b"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "pointer-assembly-link-differs",
+      "file": "vectors/invalid/pointer-assembly-link-differs.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "no matching assembly link with the predecessor snapshot",
+      "description": "K6's assembly-link half: the successor file is linked only by an FHR parent, the supplied predecessor (valid-single) by accession plus SeqCol digest, so the two files share no comparable assembly form. The record references still match, so only the file-level comparison refuses the pointer.",
+      "context": {
+        "predecessors": [
+          "../examples/model/valid-single.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "HU3e5QkZC4r0xuaT8VdwQ1hdWJz76sIsIKJaVfOvAX4=",
+      "bytes": {
+        "size": 1160,
+        "sha256": "15094807d2cb4e33e15b596419a19cb5e5082386041f7d88b6df656c4c7b26de"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "pointer-into-ambiguous-history",
+      "file": "vectors/invalid/pointer-into-ambiguous-history.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K3",
+      "reason": "Ambiguous model ID",
+      "description": "Deviation D4 at snapshot level, reached through the pointer side: the supplied prior snapshot carries a duplicate modelId, so loading it rejects the run and no verdict for this record's pointer is reported. Ambiguity is observable at snapshot level only (open scope O7).",
+      "context": {
+        "predecessors": [
+          "../examples/model/ambiguous-model-id.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "/+IQgLjSJZOVcBKsTILZEorOHbOpvmdjnSR3p7FZSi4=",
+      "bytes": {
+        "size": 1081,
+        "sha256": "e3a839642ff428b75040d7438a0684b5a0f402dd41adac016a782ae99fbb9e62"
+      },
+      "evidenceExpectation": {
+        "model": "not-run",
+        "basis": "D4 prerequisite boundary"
+      }
+    },
+    {
+      "id": "pointer-record-reference-differs",
+      "file": "vectors/invalid/pointer-record-reference-differs.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "no matching record reference with the predecessor record",
+      "description": "K6's record-reference half: both files carry both genome-link forms, so the assembly links match, but the predecessor record (both-reference-forms, model-a) is bound by the FHR parent checksum and the successor record by accession plus SeqCol digest only.",
+      "context": {
+        "predecessors": [
+          "vectors/valid/both-reference-forms.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "+VSPJLhptKj4JfaBxlXRmZ27th+pa05UJGNchgHQhRc=",
+      "bytes": {
+        "size": 1204,
+        "sha256": "81b02d5c3002e5f34ab8df48bc37a4268685218f0851d8e071810d44858333cb"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "pointer-snapshot-lacks-model",
+      "file": "vectors/invalid/pointer-snapshot-lacks-model.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the predecessor snapshot has no model",
+      "description": "K6: the pointed snapshot is supplied and passes every snapshot check, but holds no record with this modelId, so there is no prior record to resolve to.",
+      "context": {
+        "predecessors": [
+          "vectors/valid/supplied-external-model-id.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "OiAghBaJmKbER8AmYaA9FKF45c/h1mG8D20NOw5tnNg=",
+      "bytes": {
+        "size": 1081,
+        "sha256": "8e66f08708e0ad545b7a68e7183ca1601d68390555c67864d219afa61ae18af0"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "predecessor-names-neighbor-model",
+      "file": "../examples/model/predecessor-name-mismatch.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the pointer names another model ID",
+      "description": "Deviation D2, kept at the review, and the attack the pilots showed the released base schema waving through: the pointer names the unchanged neighbour model-b instead of the record's own model-a.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "Y8MtotsffyVTfnehi/Z7gLUwR9Qlh6f4qwzLSZF/zYg=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "12d817b65e1d148cb9e41307f417ae0a165191c225986a452185ac8d2ff304f5"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "predecessor-version-mismatch",
+      "file": "../examples/model/pointer-version-mismatch.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the predecessor records version",
+      "description": "The pointer claims a predecessor version the pinned snapshot does not record. Values are compared for equality only, so '9' is not newer than '1' - it is simply not what was recorded (review disposition Q3).",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "b4IGaP/hjEZnUw/gHQs/kCrhmJnJ40c8K3v44nEJvmk=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "14d6175b13b6ec86ae84695f95797266034cc3297f5bcfad3c86fef8f4d8cfd1"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "predecessor-version-reused",
+      "file": "../examples/model/version-reuse.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "reuses the predecessor model version",
+      "description": "The only version rule v0.1 states: an immediate revision must differ from its predecessor. Opaque equality is the whole of the semantics (review disposition Q3).",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "yy/mPxrhzUyIUI/4Itl2jPKTECAjJckLzFcL/H1Jz30=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "82763b0480533203ed7d51536b969cee05b7ff9dc187a53a087e93e157eb972f"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-evidence-uri-javascript-scheme",
+      "file": "vectors/invalid/record-evidence-uri-javascript-scheme.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "does not match '^(?:(?:[Hh][Tt][Tt][Pp][Ss]?",
+      "description": "K2 link fields (evidence uri, software uri, methods protocol) accept only the schemes the shared FORMAT.md R14 accepts: http, https or ftp with a host, or urn:, doi: or info:. javascript:void(0) is a well-formed URI that no renderer should link, so this draft record contract rejects it where the released header types only warn.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "9IQDgu75EKiLKaHAlX5C1xYisDyk3BNTOCGVsc0gq0o=",
+      "bytes": {
+        "size": 1045,
+        "sha256": "5d5e29534270739a778f030d656d491752301a9eb3e08f7052bff78e06c4f370"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-evidence-uri-not-a-uri",
+      "file": "vectors/invalid/record-evidence-uri-not-a-uri.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is not a 'uri'",
+      "description": "K2 enforces format: uri, not only the accepted scheme: the evidence URI has an https scheme and host but contains a space, which no URI may contain.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "fLdGOsg+bPA9FbNEICvSfmnqyo7+NW5wyp2/MmYjI/8=",
+      "bytes": {
+        "size": 1065,
+        "sha256": "757f931e69549461c7064893f1c72119e56aff05940a88e6467572b66bdd25dd"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-evidence-uri-user-info-without-host",
+      "file": "vectors/invalid/record-evidence-uri-user-info-without-host.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'https://user@/' does not match",
+      "description": "K2 link fields accept http, https or ftp only with a host. In https://user@/ the authority is user information followed by an empty host (urlsplit hostname is None); format uri accepts the value, so only the link pattern's host check rejects it.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "0ZpIyMkqf2Ix7BV77kIFTCTsKUShNqWe/KYvTelN7NA=",
+      "bytes": {
+        "size": 1041,
+        "sha256": "2cc94528e4684b52bb606354a91d0a3d5e3e0b20d970d514e50452d97dc68234"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-methods-protocol-ftp-user-info-without-host",
+      "file": "vectors/invalid/record-methods-protocol-ftp-user-info-without-host.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'ftp://user@/' does not match",
+      "description": "K2 host check on the methods protocol, ftp scheme: ftp://user@/ names a user but no host. format uri accepts it; the link pattern rejects it.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "X4QsTUnXRMC8ktL7wxnYXWOiEuFXJDhr6JNQvH8ZngY=",
+      "bytes": {
+        "size": 996,
+        "sha256": "85060eb9d7eb7e078b776cf04ca440149a8146f7079f81251d7a78a0e85bfbf1"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-space",
+      "file": "vectors/invalid/record-model-id-trailing-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'model-a ' should not be valid under",
+      "description": "K2 opaque text values carry no leading or trailing whitespace and no control, zero-width or bidirectional formatting character, so 'model-a ' cannot pass as an identifier distinct from 'model-a'.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "BOylt1/Zq+8f7MnQ5GjIogp8wKWN4Ld+uiZ/vvRmcgc=",
+      "bytes": {
+        "size": 959,
+        "sha256": "6130a639341f129e6e2e51a37295767547a1383291c2bd881dcdbdf27ad6514c"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-numeric-model-version",
+      "file": "vectors/invalid/record-numeric-model-version.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is not of type 'string'",
+      "description": "modelVersion is an opaque string, not a number: the YAML value 2 is not the string '2'. No ordering is claimed either way.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "bQl46zHP+FQi5WY4xO6t6n4TeVz2gPDyS4xJ5C+zeA8=",
+      "bytes": {
+        "size": 956,
+        "sha256": "88e8d27eabfc1d06f8cef804b1b9a4fa4a70901f6c442dd86b38b1d314885491"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-reference-contradicts-file",
+      "file": "../examples/model/record-reference-conflict.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K5",
+      "reason": "contradicts the file genome link",
+      "description": "Rule K5's contradiction half: the record binds a different accession than the enclosing file's genome link. No checksum can reveal this, because both byte streams are internally consistent.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "7nxnzuageSrh6bpYY5jjwjddc1P4uBP8TRgWPgyfV9o=",
+      "bytes": {
+        "size": 920,
+        "sha256": "8ea1e35cf442149bebfc679d82333ec40e9363758bcc5e7c457e0f2968c39443"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-software-uri-empty-user-info-and-host",
+      "file": "vectors/invalid/record-software-uri-empty-user-info-and-host.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'https://@/' does not match",
+      "description": "K2 host check on the software uri: https://@/ has empty user information and an empty host. format uri accepts it; the link pattern requires a non-empty host after the optional user information.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "eNPxJYmw78sN+s/gqRsergrxhkQrjHzNzIqLSGUSVUw=",
+      "bytes": {
+        "size": 1037,
+        "sha256": "20afe60ac4cca78f5d00ff1a59b3c1a93079a5e8f7fe34d41a75c86e9de64341"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-unknown-key",
+      "file": "vectors/invalid/record-unknown-key.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "Additional properties are not allowed",
+      "description": "The record object is closed. An unknown key inside a record is invalid even though FORMAT.md R15 admits top-level x- keys and the base schema never looks inside the array.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "8M152Jdhlha5ZM36+eX6RWy+Dq5T3EFVf9tcGW1PUZE=",
+      "bytes": {
+        "size": 983,
+        "sha256": "781eb4e7eda9710923cdffa70d528a0dc29c3aa3cdbaeedb19ff6a808f781f16"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-without-reference",
+      "file": "../examples/model/record-without-reference.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'reference' is a required property",
+      "description": "Deviation D1, kept at the review: a record must carry its own reference binding, so an extracted record cannot silently lose its assembly. The base schema ignores record contents entirely.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "+Oh9R2VYjabMpLlNVcjiLyURt3EGX6sgp5GEyTW7kzE=",
+      "bytes": {
+        "size": 807,
+        "sha256": "2fee4a274710e1ba3e017f259e9353939ca0536f02dbf740b1b3b5bf8a60d381"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "reference-forms-not-comparable",
+      "file": "vectors/invalid/reference-forms-not-comparable.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K5",
+      "reason": "has no reference form comparable with the file genome link",
+      "description": "The half of rule K5 the adoption packet's D1 summary does not mention. Nothing contradicts here - the record binds an FHR parent checksum, the file an accession plus SeqCol digest - and the record is still rejected for sharing no comparable form. Whether v0.1 should be this strict is put to the maintainers (CONTRACT-REVIEW.md, review of 2026-11-14).",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "XARrpzyXmQuz9ey9d9HNLT+PmHRZV7FFu8EQypCJAsI=",
+      "bytes": {
+        "size": 915,
+        "sha256": "93eafce6cd8d0656bff3bec466c6f08eb961f0d5f20ccf6eba36e383d2aeb32e"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "revision-without-supplied-history",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "description": "The resolvable chain above run with an empty history set: unresolvable. Resolution is bounded to what the reviewer supplies, so an unsupplied chain is never assumed to hold.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "5bYtJn9PQv+3tG9TNgIzKchJSBDgL8FslgP3QAb601M=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "c42fdf0a84640f55fb0ac476343bf64cbfcbc7ae57410753b2d1fdf1861b23bd"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "stale-pointer-absent-history",
+      "file": "../examples/model/pointer-absent-snapshot.fhgff3.gff3",
+      "generator": "make_fixtures",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K6",
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "description": "A pointer naming a digest no supplied snapshot carries (the checksum of unrelated bytes): unresolvable. The reported reason covers the absent-snapshot and current-file cases together, which v0.1 does not distinguish.",
+      "context": {
+        "predecessors": [
+          "../examples/model/snapshot-v1.fhgff3.gff3"
+        ]
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "+5lrWIOxTRSbXN6tKpoI6y91NIc5quP4RlVABMQJ//8=",
+      "bytes": {
+        "size": 1223,
+        "sha256": "5bac530f4300066f3957e3d3f20a897f1457378b57650d9294f561e3105496a9"
+      },
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "tampered-record-bytes",
+      "file": "vectors/invalid/tampered-record-bytes.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "B1",
+      "reason": "File checksum mismatch",
+      "description": "Integrity, not a model rule: one line added after the header makes the file-bound checksum stop covering the bytes, so the checker refuses before any model verdict. Recorded as a stale checksum and excluded from the gap claim, because the released checks catch it too.",
+      "sharedRules": [
+        "R3"
+      ],
+      "layers": {
+        "base": "accept",
+        "checksum": "stale",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "P+HDA/e5TBwmQagHan7vKSQZGpM7oIa57sPNPE/HOSs=",
+      "bytes": {
+        "size": 953,
+        "sha256": "d27e43eb1e98fe8147764aa13abf3798adcb407ce28fe5bccbea285c5fbb4e99"
+      },
+      "evidenceExpectation": {
+        "model": "not-run",
+        "basis": "D4 prerequisite boundary"
+      }
+    },
+    {
+      "id": "transport-1-0-extension",
+      "file": "vectors/invalid/transport-1-0-extension.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "B1",
+      "reason": "which no registered FHGFF3 base release answers to",
+      "description": "A file citing the v0.4.0 schema and stating FHGFF3 1.0 with an extension key. The released base schema rejects it (the FORMAT.md R15 floor), and the checker refuses it at base selection: no registered base release answers to a v0.4.0 citation, and the checker never judges a carrier by bytes it did not cite. Deliberately not gap-proof; transport-1-0-under-v0.5.0-citation keeps the floor observed at the model layer.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "reject",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "sC8VDYBHC6KiuW7dExHaAda4Ls6r2wO5M0R9M1wYI40=",
+      "bytes": {
+        "size": 958,
+        "sha256": "787afca3c013253f68a8bbfea1d5947749cd3a5281abe4eac730b8dfb5c930a3"
+      },
+      "evidenceExpectation": {
+        "model": "not-run",
+        "basis": "D4 prerequisite boundary"
+      }
+    },
+    {
+      "id": "transport-1-0-under-v0.5.0-citation",
+      "file": "vectors/invalid/transport-1-0-under-v0.5.0-citation.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "B1",
+      "reason": "'x-fhgm-models' should not be valid under",
+      "description": "The FORMAT.md R15 floor under a registered citation: the v0.5.0 URL stating schemaVersion 1.0. The checker selects the v0.5.0 bytes the URL cites and those bytes reject the extension key, so this vector keeps the floor observed at the model layer now that transport-1-0-extension (a v0.4.0 citation) is refused at selection. Deliberately not gap-proof.",
+      "sharedRules": [
+        "R15"
+      ],
+      "layers": {
+        "base": "reject",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "checksum": "tOfX/QxGzffwFaDIFSy7AHdsSosUiCIzn9BPczwc8jU=",
+      "bytes": {
+        "size": 958,
+        "sha256": "cd73204b809f1a5d91f41e0e5175be8c50a04599e266c0332bf94e7808727d4b"
+      },
+      "evidenceExpectation": {
+        "model": "not-run",
+        "basis": "D4 prerequisite boundary"
+      }
+    },
+    {
+      "id": "record-model-id-byte-order-mark",
+      "file": "vectors/invalid/record-model-id-byte-order-mark.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: byte order mark. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "547f69fd081b2394661e178982d2fa5d0259e7efdb50307150e897a5f1d0d89c"
+      },
+      "checksum": "hSmuUMrqFHkOG9vQnmp3HlO4801MAiqIV3982sJJTBM=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-invisible-plus",
+      "file": "vectors/invalid/record-model-id-invisible-plus.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: invisible plus. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "7d754c67210b1825860366b3a17f9f38b84c32202d9f15b5252cacc4c1504950"
+      },
+      "checksum": "dCETchq66gmm4hbclBAVPQwqpupEPW7jDMR42TArR+o=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-leading-line-separator",
+      "file": "vectors/invalid/record-model-id-leading-line-separator.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: leading line separator. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "f5b9e8394485f6a8e70b05af84750ad86996fc986d441761395dfcfe0ea5a6f1"
+      },
+      "checksum": "ebcs3bAGXK8mI+QmjVdVYgGF3UxwNxlyT74LOrNfEwI=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-leading-ogham-space",
+      "file": "vectors/invalid/record-model-id-leading-ogham-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: leading ogham space. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "18d5041c651aa00a535265308a0fbaf002806a9f1cb0931f57fc4171a2959c0b"
+      },
+      "checksum": "zWAQXD0HXDi6a+uvS5NgcAXsbqNK+B7qNBsO6b7mJ3w=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-leading-paragraph-separator",
+      "file": "vectors/invalid/record-model-id-leading-paragraph-separator.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: leading paragraph separator. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "33c6845a4d75be8ca3e32596b1cd3830e1da5062b91e45df0e3a8adf42b90d97"
+      },
+      "checksum": "s5Oaa+eGwCW4lxFiSQEDeQOvaJGCYc+EVC8w2AIpUKA=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-left-to-right-embedding",
+      "file": "vectors/invalid/record-model-id-left-to-right-embedding.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: left to right embedding. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "7946fd54ccdf8ee879ae2a004e447a74c7f4f430d6fb652aebbb9e41e6113e3c"
+      },
+      "checksum": "UAse4dTboDcdt7MVCyntKDWP1DKnn6i5IXcpp8dIRwI=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-right-to-left-mark",
+      "file": "vectors/invalid/record-model-id-right-to-left-mark.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: right to left mark. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "20bc8bfadcb7786e9b4ccf8486fe852555f1b13b3bdf746ef5d4b5e1a85dc041"
+      },
+      "checksum": "yKmr6LZPFlQXylNeT4rzVc5xpVRE0swVem2pfaW+A+c=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-right-to-left-override",
+      "file": "vectors/invalid/record-model-id-right-to-left-override.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: right to left override. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "d72728aa51377b2bf3203d7007896426d11c3649edd2f1f73d0527d929751ef6"
+      },
+      "checksum": "Qme1c78EKOoLtldxCRK7+s7hHQ6+RHNwxPX2CqI9Fos=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-en-quad",
+      "file": "vectors/invalid/record-model-id-trailing-en-quad.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing en quad. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "17bafca3fd0e009430a8f448e964e06ae3b4d3f707390a349de06a15149cd9a8"
+      },
+      "checksum": "dpjykbhXXQFnB07/0Hpm621J61q5stfo7WrgV8RUVng=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-hair-space",
+      "file": "vectors/invalid/record-model-id-trailing-hair-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing hair space. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "62df7c80ae0729d41abcfc3585c4e39e26be6cfbf0f79fa6cca176cd94463b46"
+      },
+      "checksum": "lFR77IKjvP4P3KLTu9Y9MMeI6jvjIiMdm2UEvoXI9LY=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-ideographic-space",
+      "file": "vectors/invalid/record-model-id-trailing-ideographic-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing ideographic space. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "35eca7521ab460da65695e8c5a24e9236ee4e606c2ad8f8c08037bc7aede2c36"
+      },
+      "checksum": "CBs8lazePk0MjjVheeS9ARxce6UNmXZ+28rdOfVFU4o=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-medium-mathematical-space",
+      "file": "vectors/invalid/record-model-id-trailing-medium-mathematical-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing medium mathematical space. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "403b362d0c1dce3c507303355715ff1f7f53bfb1e980abf1d24f86304d8b45e6"
+      },
+      "checksum": "Z9/S+mVZESitwQXHMpyO4rbpRyaiChi5KHxhPUPv2l8=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-narrow-nbsp",
+      "file": "vectors/invalid/record-model-id-trailing-narrow-nbsp.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing narrow nbsp. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "9ea6bc09a52fae127057ae92b7a50469c1e536de3f167ef12c7aae78892df309"
+      },
+      "checksum": "7MmBA35zi0LualoAqZ+ZM9GP+8RKTZTO2rormTyyjBo=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-trailing-nbsp",
+      "file": "vectors/invalid/record-model-id-trailing-nbsp.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: trailing nbsp. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "4c4af7ae519a2eb58d9479b1ecb9fa2ef61eeb8b9d7329258c24f8a008b24742"
+      },
+      "checksum": "OnFaXqD+wY2LZZ/ZVfMoMcdYsgK2Mal434quyfCf3WE=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-word-joiner",
+      "file": "vectors/invalid/record-model-id-word-joiner.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: word joiner. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "ad5bdb6aad0e44f5f2a5a7db8f19d5d6e3caadcce9f896c4433aace85781ed09"
+      },
+      "checksum": "a0BQmbiDIofaro49705gmBOahU1XiwdKbpHpToBbNOA=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-zero-width-space",
+      "file": "vectors/invalid/record-model-id-zero-width-space.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "is invalid under draft contract v0.1",
+      "description": "K2 text coverage: zero width space. Expectation derived from the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "aec8442bcfbda480094a1e235b0de33ca18f47305a7d788958012a62a09ff228"
+      },
+      "checksum": "5Ycv40Ad7iUxlFK3fo/aAFHW86e3O7YdqSM7TLYPM1c=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-absent",
+      "file": "vectors/invalid/record-model-id-absent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'modelId' is a required property",
+      "description": "K2 required record identity: modelId is absent. Required record shape is checked before K3 duplicate identity; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 938,
+        "sha256": "d4859d09fa39dce2b53bf7ace17139d2b120e8cddb02b27aeeb848636c08b722"
+      },
+      "checksum": "aoyvp6lrG6yDSLyEHK+1b/WF7UOqADsby8UiwX81zng=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "two-records-model-id-absent",
+      "file": "vectors/invalid/two-records-model-id-absent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "rule": "K2",
+      "reason": "'modelId' is a required property",
+      "description": "K2 required record identity: modelId is absent. Required record shape is checked before K3 duplicate identity; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "bytes": {
+        "size": 1095,
+        "sha256": "47ea532f4d9034300423b60a7868d3eac1115366880592d47095edbfd9cd7e23"
+      },
+      "checksum": "J6hs56H/BNsT9XzBbMoHmpvZsO/rwn8HeqdJPy0filc=",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "record-model-id-interior-nbsp",
+      "file": "vectors/valid/record-model-id-interior-nbsp.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "rules": [
+        "K1",
+        "K2",
+        "K4",
+        "K5"
+      ],
+      "description": "K2 positive control: NBSP inside opaque text is neither edge whitespace nor a forbidden invisible character. Expectation follows the unchanged text definition; see TEXT-COVERAGE-2026-11-19.md.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "63c9d1b748381553d02f34378dd7f2a6e0ba3cbd963ff352d02b5cbd70fa0969"
+      },
+      "checksum": "eBulOPQjZ9RuXHdLwhyc2NHMrviQKTdAI0KS1YIo7uM=",
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      }
+    },
+    {
+      "id": "competing-model-ids-same-target",
+      "file": "vectors/valid/competing-model-ids-same-target.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "Distinct model IDs may share the same root-gene target; no featureId uniqueness constraint.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K3"
+      ],
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 1135,
+        "sha256": "cb3829ed979004e6609c613ba1c05ae154fd01442da731aab81034ddf26e2dd0"
+      },
+      "checksum": "ZINr+Bt5xF4gcAG/U9HPANCLDoC9+sPmQRgSfMFYwxk=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K3",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "changed-file-local-feature-id",
+      "file": "vectors/valid/changed-file-local-feature-id.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "A stable modelId points to its preceding version while its current file-local featureId is renamed.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K6"
+      ],
+      "context": {
+        "predecessors": [
+          "../examples/model/valid-single.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 1101,
+        "sha256": "4f4cca54afbb66268101140418898b4ce531a09af198218ebfd81aa26c15eba5"
+      },
+      "checksum": "I6lORNofmi8P+Lj+vtsQyA+9hoY52giPBAxH/tLUh4s=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K6",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "opaque-version-a-initial",
+      "file": "vectors/valid/opaque-version-a-initial.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "Opaque version A has no predecessor claim.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K6"
+      ],
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 958,
+        "sha256": "d6ee78cac282422a9b1f0a6076c22663212f7d98704fe517148e89f3b4d6db5c"
+      },
+      "checksum": "+BgZ84WDJDoaRAaSc6EY42O51eKnp16F8FVOSKl5GZI=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K6",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "opaque-version-b-successor",
+      "file": "vectors/valid/opaque-version-b-successor.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "B differs from its immediate predecessor A.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K6"
+      ],
+      "context": {
+        "predecessors": [
+          "vectors/valid/opaque-version-a-initial.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 1081,
+        "sha256": "fbdbcee0786125c24eef39e3b7d60ed663b0beab2f8bda35db3c6f6a4600ab05"
+      },
+      "checksum": "Ra+fTFDObV7AMnP2ytFnjuoGv9C4gISUgUFO87KQ3Xw=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K6",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "opaque-version-a-reused",
+      "file": "vectors/valid/opaque-version-a-reused.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "Reused A differs from its immediate predecessor B; no global version uniqueness requirement.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K6"
+      ],
+      "context": {
+        "predecessors": [
+          "vectors/valid/opaque-version-a-initial.fhgff3.gff3",
+          "vectors/valid/opaque-version-b-successor.fhgff3.gff3"
+        ]
+      },
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 1087,
+        "sha256": "ca225c7084423041686f4179bf587d913858dabaf2fa3e5dd33e253c3007fba3"
+      },
+      "checksum": "nW4XmSI3sC1Ri3Tut6ZOMO4UjWl25QATVGpiDOk/l0k=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K6",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "noncoding-root-gene",
+      "file": "vectors/valid/noncoding-root-gene.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "valid",
+      "description": "A real antisense gene root and its RNA/exon descendants satisfy gene scope without CDS.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "rules": [
+        "K4"
+      ],
+      "evidenceExpectation": {
+        "model": "pass",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 2314,
+        "sha256": "28e1074909239af8277b3f4e4ef7ef1ca123e41e5ebc10a00f430c86e27f856f"
+      },
+      "checksum": "vTDZPpg9lvSE1Af6XKd85kxtd+TvhWC8J4SIP2FDLMg=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "feature-inventory-complete-empty",
+      "file": "vectors/invalid/feature-inventory-complete-empty.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "description": "Complete empty inventory has zero matching rows, so K4 rejects.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "rule": "K4",
+      "reason": "one local gene row",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 688,
+        "sha256": "954f83efc45d762566ade742cc00261b0504e2f9f86c9675d3ed5b4ae2b29ee5"
+      },
+      "checksum": "yB4Ia4w9aG75DNkiQRb604Tlw3Bw9etizudWx/aWBi8=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "feature-inventory-no-identifiers",
+      "file": "vectors/invalid/feature-inventory-no-identifiers.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "description": "Complete inventory without ID attributes has zero matching rows, so K4 rejects.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "rule": "K4",
+      "reason": "one local gene row",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 717,
+        "sha256": "b2245c7738ad74b84dceb132d0f4b757faead8ab6837c1f52f9ae955bd04b512"
+      },
+      "checksum": "TRq3GxaVQ8NpJQ0wo8oEmkRFgRnArPpQ09rOC9aZQ9A=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "feature-target-bare-parent",
+      "file": "vectors/invalid/feature-target-bare-parent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "description": "Presence of a bare Parent tag cannot establish a root, even though malformed syntax is independently reported by GFF3 validation.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "reject",
+        "model": "reject"
+      },
+      "rule": "K4",
+      "reason": "root gene",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 965,
+        "sha256": "91a362dca094dd55b5b62329221f08b4c19899a23c60d0aaf0097aef1c116522"
+      },
+      "checksum": "V7RMt19swlq/FIV2Rw3fcZHZ0RazV1g72gpY4WBKaA8=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "feature-target-empty-parent",
+      "file": "vectors/invalid/feature-target-empty-parent.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "description": "Presence of Parent= cannot establish a root, regardless of empty value.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "rule": "K4",
+      "reason": "root gene",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 966,
+        "sha256": "57053987402298db7bcf19f1a0b5a83b21a5cb3792e536bed8e8fcfc026bc20d"
+      },
+      "checksum": "tPadY3MhaadA3f0antaASHumOYlkK3xu7ULYYiRBiR4=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    },
+    {
+      "id": "feature-target-other-so-type",
+      "file": "vectors/invalid/feature-target-other-so-type.fhgff3.gff3",
+      "generator": "make_vectors",
+      "format": "fhgff3",
+      "expected": "invalid",
+      "description": "SO:0001263 is not gene or SO:0000704; this is an initial FHGM scope limit.",
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "rule": "K4",
+      "reason": "one local gene row",
+      "evidenceExpectation": {
+        "model": "reject",
+        "basis": "K1-K6 clause derivation"
+      },
+      "bytes": {
+        "size": 964,
+        "sha256": "39834480679af05942837f73cea7704ec4be1a6ce346a36421215ba8d8cc561e"
+      },
+      "checksum": "3v7JR22YALbHO7xOzq3At7dQx0I+dCuSV3ME5IAP2Ng=",
+      "reviewRequired": true,
+      "expectationReview": {
+        "status": "accepted",
+        "reader": "independent_review_275, gpt-6.1-terra, operated by David Molik",
+        "author": "FHGM authoring agent inherited parent gpt-6.1-sol; parent verified runtime session metadata",
+        "derivation": "DECISIONS-2026-11-19.md#new-expected-outcomes-derived-from-clauses",
+        "clause": "K4",
+        "disposition": "Accept clause-derived fullModel expectation after checking actual manifest, bytes, generator and supplied contexts; not biological or curator acceptance.",
+        "date": "2026-11-19"
+      }
+    }
+  ],
+  "retired": [],
+  "evidenceSemantics": "layers.model retains the historical checker-process outcome. evidenceExpectation.model is earned fullModel evidence; not-run cannot count as rejection or pass. Actual rule/layer receipts are emitted by --report-json.",
+  "ruleRequirements": {
+    "K1": [
+      "carrier header",
+      "selected FHGFF3 base",
+      "selected FHGM transport contract"
+    ],
+    "K2": [
+      "carrier model records",
+      "selected native record contract"
+    ],
+    "K3": [
+      "all carrier model records after K2"
+    ],
+    "K4": [
+      "carrier featureId values",
+      "complete trustworthy local carrier feature inventory (ID/type/Parent presence)"
+    ],
+    "K5": [
+      "carrier header assembly links",
+      "carrier model reference bindings"
+    ],
+    "K6": [
+      "selected carrier records and header",
+      "explicitly supplied prior snapshots with relevant K1-K5 prerequisites, including complete trustworthy feature inventories",
+      "recorded successor relations within supplied history only"
+    ]
+  },
+  "fullModelRequirements": "All selected-file K1-K6 predicates and relevant supplied-snapshot prerequisites must pass. Focus labels are not dependency declarations. No feature inventory means K4 not-run, not pass; known complete empty inventory rejects K4. No external or transitive history service."
+}

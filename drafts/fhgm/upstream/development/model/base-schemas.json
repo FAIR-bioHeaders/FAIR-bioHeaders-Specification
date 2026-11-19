@@ -1,0 +1,64 @@
+{
+  "registryVersion": 1,
+  "description": "The released FHGFF3 base-schema releases that development/model/validate_fhgm.py accepts as --base-schema candidates. One entry per release, keyed by the SHA-256 of the exact release bytes; every entry resolves a TAG to a commit - a floating branch is never recorded for released material. This file is the checker's single authority for base selection: the carrier's cited schema URL chooses which registered bytes validate it, and no other bytes are accepted. It states no FHGM contract identity of its own: FHGM remains a draft with no schemaVersion, no schema URL, no registry row and no release form (selection rule V7).",
+  "selectionRule": "A carrier names the FHGFF3 base it was written against through its `schema` URL. The checker maps that URL to exactly one entry below through the entry's schemaUrls list - the release's w3id URL with and without the trailing slash, and its raw tag URL under both repository names (FAIR-bioHeaders-Specification and the FHR-Specification alias) - and validates the carrier against those registered bytes. schemaVersion plays no part in the selection; the selected release's own enum then judges it, so a v0.6.0 citation stating 1.1 is accepted where the release accepts it and a v0.5.0 citation stating 1.2 is rejected by the bytes it cites. The run is refused, never evaluated against other bytes, when the URL is absent or not a string, when it names no registered release (a superseded release such as v0.4.0, or raw main, which is a moving contract rather than a release), or when the cited release's bytes were not supplied with --base-schema. The selected base is printed for every loaded file, so no verdict is ever silent about which release produced it.",
+  "bases": [
+    {
+      "schemaVersion": "1.1",
+      "acceptsSchemaVersions": [
+        "1.0",
+        "1.1"
+      ],
+      "schemaUrls": [
+        "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0",
+        "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0/",
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.5.0/fhgff3.json",
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.5.0/fhgff3.json"
+      ],
+      "repository": "FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+      "url": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+      "ref": "v0.5.0",
+      "tagObject": "7150f74cf447de5694b8938c705d5a5896eaeacd",
+      "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
+      "commitNote": "The commit the v0.5.0 annotated tag names. It is not an ancestor of shared main: the v0.5.0 release was tagged before its merge commit landed, a split recorded in the workspace guide and not repeated for later releases.",
+      "path": "fhgff3.json",
+      "pathNote": "Released contracts sit at the repository root at both v0.5.0 and v0.6.0; schemas/fhgff3.json returns 404 at both.",
+      "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.5.0/fhgff3.json",
+      "retrievalCommand": "git -C /path/to/FAIR-bioHeaders-Specification show v0.5.0:fhgff3.json > /tmp/fhgff3-v0.5.0.json",
+      "size": 24080,
+      "sha256": "20ce320f5d706f11ed21cdece4dfb56e3568b50be126e25b4016f46f2e8e416c",
+      "retrieved": "2026-11-14",
+      "verification": "Bytes re-fetched 2026-11-15 by tag name and by commit URL over HTTPS and cmp-verified byte-equal to the original retrieval and to the digest previously recorded in development/conformance/provenance.json.",
+      "role": "The sealed-lane base: every expectation in development/conformance/manifest.json was observed against these bytes and stays bound to them."
+    },
+    {
+      "schemaVersion": "1.2",
+      "acceptsSchemaVersions": [
+        "1.0",
+        "1.1",
+        "1.2"
+      ],
+      "schemaUrls": [
+        "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+        "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0/",
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fhgff3.json",
+        "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/v0.6.0/fhgff3.json"
+      ],
+      "repository": "FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+      "url": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+      "ref": "v0.6.0",
+      "tagObject": "ab7e3ddd53bfccee9a31d59fc10524eadf32c1da",
+      "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+      "commitNote": "The commit the v0.6.0 annotated tag names; unlike v0.5.0 it is an ancestor of shared main (compare 0ae18b00...main: ahead), the split the workspace guide says need not be repeated.",
+      "path": "fhgff3.json",
+      "pathNote": "Root path; schemas/fhgff3.json 404s at this ref (measured 2026-11-15, with a nonsense-version control: v9.9.9 404s on both paths).",
+      "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fhgff3.json",
+      "retrievalCommand": "git -C /path/to/FAIR-bioHeaders-Specification show v0.6.0:fhgff3.json > /tmp/fhgff3-v0.6.0.json",
+      "size": 26955,
+      "sha256": "1942be4cefc8b3a2537942c2252b45fbcef87a5532486e4fd0f5d4c540e0fbf9",
+      "retrieved": "2026-11-15",
+      "verification": "Fetched 2026-11-15 by tag name and by resolved commit URL over HTTPS; cmp-verified byte-equal to each other; sha256 matches the workspace guide's v0.6.0 release-tarball record (1942be4c...). The full-schema JSON walk against v0.5.0 found exactly three real changes: the schemaVersion enum gains '1.2', Completeness.lineageDataset gains dotted BUSCO dataset versions (pattern ^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$), and two version-gated if/then clauses keep stating the 1.0 pattern for carriers declaring 1.0 or 1.1; descriptions updated. No FHGM vector or fixture byte carries a completeness object, so the real delta touches no FHGM content.",
+      "role": "The matrix-lane base: development/conformance/base_matrix.json records the suite's identity-rewritten twins observed against these bytes (maintainer decision 2026-11-15: support both released FHGFF3 bases)."
+    }
+  ]
+}

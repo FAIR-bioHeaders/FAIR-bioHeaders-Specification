@@ -1,0 +1,18 @@
+##gff-version 3
+#~schema: "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0"
+#~schemaVersion: "1.1"
+#~annotation: "Synthetic toy locus"
+#~taxon: {"name":"Synthetic example"}
+#~metadataAuthor: [{"name":"Example curator"}]
+#~dateCreated: "2026-11-10"
+#~genomeReference: {"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}
+#~version: "2"
+#~annotationProtocol: "https://example.org/manual-curation"
+#~x-fhgm-models: [{"contributors":[{"name":"Example contributor","role":"model curation"}],"evidence":[{"description":"Synthetic evidence placeholder for the second isoform"}],"featureId":"toy-a","modelId":"toy-model","modelVersion":"2","predecessor":{"annotationChecksum":"/TyPutE5fH7sndxWSSTSL0vaMW83zHhU/LQTcZRH6Z0=","modelId":"toy-model","modelVersion":"1"},"reference":{"genomeReference":{"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}}}]
+#~checksum: eWhsEs3dFoASKWYoJhPQrWH9aoxDj6YHAibfqDqNTk4=
+toy	pilot	gene	10	30	.	+	.	ID=toy-a
+toy	pilot	lncRNA	10	30	.	+	.	ID=toy-a-rna;Parent=toy-a
+toy	pilot	exon	10	30	.	+	.	Parent=toy-a-rna
+toy	pilot	lncRNA	10	30	.	+	.	ID=toy-a-alt;Parent=toy-a
+toy	pilot	exon	10	15	.	+	.	Parent=toy-a-alt
+toy	pilot	exon	25	30	.	+	.	Parent=toy-a-alt
