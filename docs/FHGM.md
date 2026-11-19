@@ -104,22 +104,29 @@ Adopted by the maintainers (decisions, not a published contract):
 - **Real-data vectors (2026-11-15, same record).** Selected real-data cases
   are promoted to the draft's conformance vectors.
 
-Still open:
+The 2026-11-19 [D4–D6 decision record](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934)
+and accepted [FHGM PR #34](https://github.com/FAIR-bioHeaders/FHGM-Specification/pull/34)
+settle the previously listed technical questions: earned per-rule evidence;
+complete-empty inventory rejection versus unavailable-input not-run; bounded
+supplied-history prerequisites; exactly one root `gene`/`SO:0000704` row with
+Parent absent; graph/biology owned by gff3-validator; strict K5 comparability;
+and permitted competing model IDs, renamed file-local targets and opaque
+A→B→A versions. The promoted expectations received independent review, and
+real noncoding gene-scope coverage is included.
 
-- Curator acceptance of the contract, including who may mint external model
-  identifiers and who may accept a replacement model.
-- Scope edges left to curators: transcript-only models, split and merge,
-  assembly migration and companion-file identity (no vectors and no implied
-  verdicts in v0.x).
-- Questions raised by the review: whether the predecessor claims inside
-  supplied snapshots must themselves resolve (Q7), and whether the record
-  `reference` check should reject only contradictions rather than any
-  reference form that cannot be compared with the file's genome link (K5).
-- Independent review of the promoted real-data vector expectations
-  ([FHGM-Specification#22](https://github.com/FAIR-bioHeaders/FHGM-Specification/issues/22)).
-- The shared publication step, which must also state whether the contract is
-  eligible for `schemas/versions.json` at all, since an FHGM record names no
-  schema of its own.
+The [shared publication candidate](../drafts/fhgm/README.md) carries the exact
+accepted owning dependency tree and executable 92-case dual-base suite. It
+proposes native contract label `0.1` and a separate model-contract publication
+path for joint review; no alias, released contract or FHGM header-registry row
+is created. The hand-authored schema mechanism, file-local IDs and dual bases
+are settled; they are not new approval questions.
+
+Remaining gates are joint review of that concrete publication package and
+actual publication as specification v0.8.0. Curator acceptance of particular
+models and external identifier minting authority remain distinct. Transcript-only,
+split/merge and assembly-migration scopes are explicitly deferred, not hidden
+requirements for this initial gene-scope contract. Project 12 deposit/pilot
+work remains separate from the shared foundation.
 
 ## How the current pilot is built
 
@@ -134,7 +141,7 @@ schema-valid FHGFF3 header. Two released FHGFF3 bases are carriers: FHGFF3 1.1
 [FHGM-Specification PR #17](https://github.com/FAIR-bioHeaders/FHGM-Specification/pull/17)
 (merged 2026-11-16) registers each base's released bytes by tag and SHA-256
 digest in `development/model/base-schemas.json`, and the checker validates a
-carrier against the base matching its declared `schemaVersion` and reports the
+carrier against the base selected by its cited `schema` URL and reports the
 base it used. The file keeps its FHGFF3 `schema` URL and `schemaVersion`; the
 records add no coverage to any released contract.
 
@@ -156,8 +163,8 @@ Verified pilot artifacts (see the linked PRs and records for method detail):
   (merged 2026-11-16) promoted ten real-data rejection cases from
   *Drosophila melanogaster* chromosome 4, with two positive anchors, to draft
   conformance vectors; their
-  recorded expectations still await independent review. Read that repository's
-  `development/conformance/manifest.json` for the current vector set.
+  recorded expectations were independently accepted in FHGM PR #34. Read
+  that repository's `development/conformance/manifest.json` for the current set.
 - The draft requirements review — the comparison worksheet
   [`development/FHGFF3-COMPARISON.md`](https://github.com/FAIR-bioHeaders/FHGM-Specification/blob/main/development/FHGFF3-COMPARISON.md),
   the decision record
@@ -215,10 +222,8 @@ today:
   the copy is not an editable FHGM model.
 - `src/`, `jsonschema/`, `python/`, `rdf/`, `owl/`, `shex/`, `graphql/`, `csv/` —
   inherited biodatamodels/gff-schema feature-model material, retained with its
-  original identity. The inherited upstream licensing question is unresolved, as
-  it is in the FHGFF3 repository (see the repository README and
-  [FHGFF3#3](https://github.com/FAIR-bioHeaders/FHGFF3/issues/3)); MPL-2.0 on
-  FAIR BioHeaders contributions does not settle it.
+  original identity. That inherited material is outside this native-contract
+  candidate; its notices and provenance must be preserved separately.
 - CI in that repository verifies documentation and the inherited FHGFF3
   baseline, and a draft model-conformance workflow runs the draft FHGM vectors
   and checker against both FHGFF3 bases. That lane checks the draft, not a

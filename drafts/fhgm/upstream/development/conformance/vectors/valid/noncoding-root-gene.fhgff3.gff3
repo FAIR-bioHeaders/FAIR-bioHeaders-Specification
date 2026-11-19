@@ -1,0 +1,15 @@
+##gff-version 3
+#~schema: "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0"
+#~schemaVersion: "1.1"
+#~annotation: "RefSeq antisense gene slice for draft FHGM scope review"
+#~taxon: {"name":"Drosophila melanogaster"}
+#~metadataAuthor: [{"name":"FHGM conformance vector generator (synthetic)"}]
+#~dateCreated: "2026-11-14"
+#~genomeReference: {"accession":"GCF_000001215.4","assemblyName":"Release 6 plus ISO1 MT","seqcol_id":"hFwVeJXKpWP3X-g4wmJGT-eZTa1r3Y1l"}
+#~version: "1"
+#~x-fhgm-models: [{"featureId":"gene-Dmel_CR45124","modelId":"nc-model-a","modelVersion":"A","reference":{"genomeReference":{"accession":"GCF_000001215.4","assemblyName":"Release 6 plus ISO1 MT","seqcol_id":"hFwVeJXKpWP3X-g4wmJGT-eZTa1r3Y1l"}}}]
+#~checksum: vTDZPpg9lvSE1Af6XKd85kxtd+TvhWC8J4SIP2FDLMg=
+NC_004353.4	RefSeq	gene	42774	43374	.	+	.	ID=gene-Dmel_CR45124;Dbxref=FLYBASE:FBgn0266617,GeneID:19834809;Name=asRNA:CR45124;cyt_map=101F1-101F1;description=antisense RNA:CR45124;gbkey=Gene;gen_map=4-0 cM;gene=asRNA:CR45124;gene_biotype=antisense_RNA;gene_synonym=CR45124,Dmel\CR45124;locus_tag=Dmel_CR45124
+NC_004353.4	RefSeq	antisense_RNA	42774	43374	.	+	.	ID=rna-NR_123741.1;Parent=gene-Dmel_CR45124;Dbxref=FLYBASE:FBtr0344900,GeneID:19834809,GenBank:NR_123741.1,FLYBASE:FBgn0266617;Name=NR_123741.1;Note=asRNA:CR45124-RA%3B Dmel\asRNA:CR45124-RA%3B CR45124-RA%3B Dmel\CR45124-RA;gbkey=ncRNA;gene=asRNA:CR45124;locus_tag=Dmel_CR45124;orig_transcript_id=gnl|FlyBase|CR45124-RA;product=antisense RNA:CR45124;transcript_id=NR_123741.1
+NC_004353.4	RefSeq	exon	42774	43157	.	+	.	ID=exon-NR_123741.1-1;Parent=rna-NR_123741.1;Dbxref=FLYBASE:FBtr0344900,GeneID:19834809,GenBank:NR_123741.1,FLYBASE:FBgn0266617;Note=asRNA:CR45124-RA%3B Dmel\asRNA:CR45124-RA%3B CR45124-RA%3B Dmel\CR45124-RA;gbkey=ncRNA;gene=asRNA:CR45124;locus_tag=Dmel_CR45124;orig_transcript_id=gnl|FlyBase|CR45124-RA;product=antisense RNA:CR45124;transcript_id=NR_123741.1
+NC_004353.4	RefSeq	exon	43231	43374	.	+	.	ID=exon-NR_123741.1-2;Parent=rna-NR_123741.1;Dbxref=FLYBASE:FBtr0344900,GeneID:19834809,GenBank:NR_123741.1,FLYBASE:FBgn0266617;Note=asRNA:CR45124-RA%3B Dmel\asRNA:CR45124-RA%3B CR45124-RA%3B Dmel\CR45124-RA;gbkey=ncRNA;gene=asRNA:CR45124;locus_tag=Dmel_CR45124;orig_transcript_id=gnl|FlyBase|CR45124-RA;product=antisense RNA:CR45124;transcript_id=NR_123741.1

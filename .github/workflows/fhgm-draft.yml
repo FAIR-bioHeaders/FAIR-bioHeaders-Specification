@@ -1,0 +1,69 @@
+name: FHGM unpublished shared candidate
+
+on:
+  pull_request:
+    paths:
+      - 'drafts/fhgm/**'
+      - '.github/workflows/fhgm-draft.yml'
+      - 'docs/FHGM.md'
+      - 'docs/proposals/fhgm-adoption-packet.md'
+  push:
+    branches: [main]
+    paths:
+      - 'drafts/fhgm/**'
+      - '.github/workflows/fhgm-draft.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fhgm-candidate:
+    name: Exact FHGM source and dual-base earned evidence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Check out accepted owning source for independent blob parity
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHGM-Specification
+          ref: d9d131a02b042023f4784d842a874232fc891069
+          path: .upstream/fhgm
+          persist-credentials: false
+      - name: Verify complete selected source set and exact blobs
+        run: |
+          python drafts/fhgm/check_source.py --upstream .upstream/fhgm
+          python -m unittest discover -s drafts/fhgm -p test_candidate.py -v
+      - name: Install the same explicit owning-checker dependencies
+        run: |
+          python -m pip install 'fair-bioheaders[jsonld]==0.11.0' 'jsonschema==4.26.0' 'gff3-validator==0.1.0'
+      - name: Read actual released carrier bytes from their tags
+        run: |
+          git show v0.5.0:fhgff3.json > "$RUNNER_TEMP/fhgm-base-v050.json"
+          git show v0.6.0:fhgff3.json > "$RUNNER_TEMP/fhgm-base-v060.json"
+      - name: Run exact copied suite and preserve actual evidence
+        run: |
+          python drafts/fhgm/upstream/development/conformance/run_conformance.py \
+            --base-schema "$RUNNER_TEMP/fhgm-base-v050.json" \
+            --base-schema "$RUNNER_TEMP/fhgm-base-v060.json" \
+            --matrix --gff3-validate "$(command -v gff3-validate)" \
+            --report-json "$RUNNER_TEMP/fhgm-evidence.json"
+          python drafts/fhgm/check_receipt.py "$RUNNER_TEMP/fhgm-evidence.json" --exercise-guards
+          python -m unittest discover -s drafts/fhgm/upstream/tests -p test_fhgm_conformance.py -v
+          python drafts/fhgm/upstream/development/model/check_draft.py \
+            "$RUNNER_TEMP/fhgm-base-v050.json" "$RUNNER_TEMP/fhgm-base-v060.json"
+      - name: Upload actual draft evidence receipt
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fhgm-unpublished-evidence
+          path: ${{ runner.temp }}/fhgm-evidence.json
+          if-no-files-found: warn

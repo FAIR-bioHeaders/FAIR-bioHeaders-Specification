@@ -1,0 +1,163 @@
+{
+  "provenanceVersion": 2,
+  "description": "Provenance for the draft FHGM conformance suite. The suite is model-level: it validates FHGM records embedded in files carrying a released FHGFF3 identity against the reviewed native draft contract. The sealed expectations were observed against the FHGFF3 1.1 bytes and stay bound to them; the matrix lane (base_matrix.json) re-observes identity-rewritten twins against the FHGFF3 1.2 bytes per the maintainer dual-base decision of 2026-11-15. The suite depends on two released external artifacts (the two base-schema releases registered in development/model/base-schemas.json) and on the contract and generator bytes carried in this repository. scripts/check_header_parity.py applies the same discipline to the pinned header/ tree; run_conformance.py verifies every digest below on each run and refuses to report a pass when a recorded artifact changed under the manifest. Nothing here is a schema authority: FHGM has no released contract, no schemaVersion, no schema URL and no versions.json row, and selection rule V7 keeps it that way until the shared publication PR lands.",
+  "retrieved": "2026-11-15",
+  "baseRegistry": {
+    "local": "development/model/base-schemas.json",
+    "role": "the checker's authority for which FHGFF3 base bytes may be supplied and how a loaded file's cited schema URL selects among them",
+    "note": "provenance.json mirrors the two base records below for the suite lanes; run_conformance.py cross-checks registry, provenance record, checker-supplied bytes and each file's actual digest on every run and refuses on any disagreement. Released material is recorded by tag with the tag->commit resolution; no floating branch is recorded for any release."
+  },
+  "baseSchema": {
+    "type": "FHGFF3",
+    "status": "released",
+    "schemaVersion": "1.1",
+    "dialect": "https://json-schema.org/draft/2020-12/schema",
+    "repository": "FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+    "url": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+    "ref": "v0.5.0",
+    "tagObject": "7150f74cf447de5694b8938c705d5a5896eaeacd",
+    "commit": "170e677fbb6726a3f765373dbe1f214820000be7",
+    "commitNote": "The commit the v0.5.0 tag names. It is not an ancestor of shared main: the v0.5.0 release was tagged before its merge commit landed, a split recorded in the workspace guide and not repeated for later releases.",
+    "path": "fhgff3.json",
+    "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.5.0/fhgff3.json",
+    "retrievalCommand": "git -C /path/to/FAIR-bioHeaders-Specification show v0.5.0:fhgff3.json > /tmp/fhgff3-v0.5.0.json",
+    "size": 24080,
+    "sha256": "20ce320f5d706f11ed21cdece4dfb56e3568b50be126e25b4016f46f2e8e416c",
+    "retrieved": "2026-11-14",
+    "crossCheck": "base-schemas.json registers the same digest and validate_fhgm.py resolves every supplied --base-schema file against that registry, refusing any other bytes; run_conformance.py compares this record, that registry, the supplied files and their actual digests and reports all of them. The released file is also what development/examples/contract, development/examples/model and development/examples/s6k were validated against in PRs #7, #10 and #11.",
+    "whyThisRelease": "These bytes remain the sealed lane's base: every expectation in manifest.json was observed against them and keeps its evidence trail for the v0.8.0 review. The 2026-11-15 dual-base decision adds the v0.6.0 bytes as the matrix lane's base; it does not repoint this record, and the sealed vectors keep their 1.1 identity bytes unchanged."
+  },
+  "matrixBaseSchema": {
+    "type": "FHGFF3",
+    "status": "released",
+    "schemaVersion": "1.2",
+    "dialect": "https://json-schema.org/draft/2020-12/schema",
+    "repository": "FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+    "url": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+    "ref": "v0.6.0",
+    "tagObject": "ab7e3ddd53bfccee9a31d59fc10524eadf32c1da",
+    "commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+    "commitNote": "The commit the v0.6.0 annotated tag names (tag object ab7e3ddd..., dereferenced 2026-11-15 via the Git refs API). Unlike v0.5.0 it is an ancestor of shared main.",
+    "path": "fhgff3.json",
+    "pathNote": "Root path. schemas/fhgff3.json returns 404 at this ref, measured 2026-11-15; a nonsense-version control (v9.9.9 on both paths) also 404s, so the 200s above are tag-resolution, not server defaults.",
+    "pinnedSourceUrl": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fhgff3.json",
+    "retrievalCommand": "git -C /path/to/FAIR-bioHeaders-Specification show v0.6.0:fhgff3.json > /tmp/fhgff3-v0.6.0.json",
+    "size": 26955,
+    "sha256": "1942be4cefc8b3a2537942c2252b45fbcef87a5532486e4fd0f5d4c540e0fbf9",
+    "retrieved": "2026-11-15",
+    "verification": "Fetched by tag name and by resolved commit URL over HTTPS as full downloads; cmp-verified byte-equal to each other; sha256 equals the workspace guide's v0.6.0 release-tarball record (1942be4c...). A full JSON walk of both releases found the real delta: the schemaVersion enum gains '1.2'; Completeness.lineageDataset gains dotted BUSCO dataset versions (pattern ^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$) for carriers declaring 1.2; two new version-gated if/then clauses keep stating the old pattern for carriers declaring 1.0 or 1.1; description text updated. No FHGM vector or fixture byte carries a completeness object, so the delta touches no FHGM content, and the 1.0 extension floor (docs/FORMAT.md R15 clause) is byte-identical in both releases.",
+    "crossCheck": "base-schemas.json registers the same digest; validate_fhgm.py selects these bytes only for a loaded file whose schema URL cites the v0.6.0 release (w3id or raw tag URL under either repository name) and refuses such a file when these bytes were not supplied; run_conformance.py compares this record, the registry and the supplied file's actual digest on every non-offline run.",
+    "whyThisRelease": "Maintainer decision 2026-11-15: FHGM must be describable on both released FHGFF3 bases, because the released toolkit (fair-bioheaders 0.11.0) writes 1.2 headers today while the merged fixtures and the sealed manifest carry 1.1 bytes. The 1.2 lane is an added matrix, not a repoint: no sealed expectation moves."
+  },
+  "contractArtifacts": [
+    {
+      "local": "development/model/fhgm-model.schema.json",
+      "role": "native record contract (K2)",
+      "size": 11522,
+      "sha256": "b7075e5872e0a5ffce5ae61c590ce182f1f219fa269413cad3b1a966753cfeae",
+      "note": "Reviewed in place on 2026-11-14: the 2026-11-12 proposal bytes (commit 8b0ca00, sha256 9114780bfcc8b575fa660b2d38a7ad521d9b993d2544963cdad388daed045e27) carry the same title, field names, requiredness and keywords; only description text changed to record the review's positions, so no validation outcome moved and the draft label stays v0.1. The dual-base work of 2026-11-15 leaves these bytes unchanged: the record contract carries no file identity, which is exactly the transport framing (FHGM is not a header type; records ride inside an FHGFF3 header and model records carry no schema field). 2026-11-18, a draft contract change made at review: the text definition now rejects leading or trailing whitespace and control, zero-width and bidirectional formatting characters; reuseConditions, assemblyName and deposit identifiers take the same non-blank text constraints; evidence uri, software uri and methods protocol take only FORMAT.md R14 schemes. Every earlier vector and fixture keeps its outcome under the new bytes (re-observed); the eleven vectors added that day pin the new constraints. Review follow-through: hierarchical link authorities now require a nonempty host after optional user information; empty-host/user-info controls reject while host, port and bracketed IPv6 controls remain accepted. A second follow-through makes that link pattern portable across Python and ECMA-262 regex dialects: an explicit whitespace class instead of \\s, end of string written (?![\\s\\S]) instead of a $ that Python also matches before a final line feed, no '@' in user information and no bracket in a registered-name host. Four vectors pin the host check in each link field (three empty-host/user-info rejections and one accepted user-info/IPv6 control); every earlier vector keeps its outcome."
+    },
+    {
+      "local": "development/model/fhgm-draft.schema.json",
+      "role": "transport-only overlay (K1)",
+      "size": 3191,
+      "sha256": "533b3120f4a86590f1b60a2175487597c99b646b3d092b7818b1f682c6cecf9b",
+      "note": "2026-11-18: the v0.6.0 branch gained the FHR-Specification alias URL and admits schemaVersion 1.1 as well as 1.2, matching the shared v0.6.0 release; its URI sets equal base-schemas.json schemaUrls (tests/test_fhgm_conformance.py checks that)."
+    },
+    {
+      "local": "development/model/validate_fhgm.py",
+      "role": "model-level checker (K3-K6) and base selector, the authority for every recorded outcome",
+      "size": 20782,
+      "sha256": "2cb973c83df96f7e5225da3c127bbe93f0502df63375e8c71649cffbe0346393",
+      "note": "Since 2026-11-18 the checker selects each loaded file's base by its cited schema URL (base-schemas.json schemaUrls) and refuses an unregistered citation or one whose bytes were not supplied, instead of selecting by schemaVersion with a fallback to other bytes; every sealed and matrix outcome was re-observed after that change. Earlier: the Copilot-Autofix guard merged 2026-11-15 (non-dict header -> clean ValueError instead of a traceback). Also 2026-11-18: K3 runs before K4/K5 and compares modelIds after NFC normalisation, and K4 requires the target gene row to carry no Parent."
+    },
+    {
+      "local": "development/model/base-schemas.json",
+      "role": "base-release registry consulted for every supplied --base-schema file",
+      "size": 6165,
+      "sha256": "8feb36c1957d151e22da9833b7a3421b339b5f18475d054ebe7e54cabcf72eac"
+    }
+  ],
+  "vectorGenerators": [
+    {
+      "local": "development/conformance/make_vectors.py",
+      "role": "generates the vectors under development/conformance/vectors/",
+      "size": 24680,
+      "sha256": "313d8e0a3cde117eb3a2a83d2387882a47bc556a8f6e7264e7d0f86a88c6a22a"
+    },
+    {
+      "local": "development/examples/model/make_fixtures.py",
+      "role": "generates the v0.1 fixture set that this suite cites in place (PR #11 bytes, unchanged)",
+      "size": 4651,
+      "sha256": "27ea5c6e237a39f018e7930fb91bffd14021c098e5fc6067aae32072f7979186"
+    },
+    {
+      "local": "development/examples/s6k/embed_models.py",
+      "role": "derives the S6k record vector from the committed profile fixture",
+      "size": 2982,
+      "sha256": "dc5578a95e3545997a1b41a8c48351901b874473567eedd5de358a59a9166b2a"
+    },
+    {
+      "local": "development/examples/revision/check_revision.py",
+      "role": "shared render, canonical-JSON and checksum helpers reused by both generators (PR #4 pilot machinery)",
+      "size": 6056,
+      "sha256": "9614c6c370bc532e18ea98886449d9e9278c0a17c792a63c16f61c00f14e8cb8"
+    },
+    {
+      "local": "development/conformance/make_dmel_vectors.py",
+      "role": "emits the promoted real-data vectors named dmel-* from the committed examples/dmel4 fixtures (draft promotion packet, PROMOTION-2026-11-15.md; one documented header mutation per case, canonical render with a fresh checksum, feature bytes untouched)",
+      "size": 5708,
+      "sha256": "4e0290a1651dcce402605077553398b185fda10a68769aefdc31a5497379424c"
+    },
+    {
+      "local": "development/conformance/noncoding-source.gff3",
+      "role": "verbatim RefSeq antisense-gene source rows used by make_vectors",
+      "size": 1539,
+      "sha256": "bf9c492ecfbf781c8c57f451924b2356d64e45c29829d9b7c97eac25858ee93c",
+      "note": "Whole archive and selection derivation in DECISIONS-2026-11-19.md. Original source licensing preserved."
+    }
+  ],
+  "observedWith": {
+    "python": "3.15.0 (CPython)",
+    "fair-bioheaders": "0.11.0",
+    "jsonschema": "4.26.0",
+    "PyYAML": "6.0.3",
+    "hashlibOpenSSL": "OpenSSL 4.1.0 23 Oct 2026",
+    "note": "Every sealed-lane outcome comes from a run of development/model/validate_fhgm.py with these versions. check_draft.py was additionally re-run with fair-bioheaders 0.8.1 (the shared conformance job's toolkit baseline in this repository's header-parity.yml), and run_conformance.py passed end to end under 0.8.1 as well. The 2026-11-15 dual-base rework re-observed both lanes with fair-bioheaders 0.11.0; the checker imports the toolkit's header reader and checksum implementation, and matrix twins are derived with the standard library. The 12 promoted dmel-* vectors were observed by the same checker and toolkit. The GFF3 feature lane was observed with gff3-validator 0.1.0 built from the local checkout and with the PyPI wheel (the CI environment); both report zero errors and zero warnings on the original 31 vectors, the 12 promoted vectors and, after sealing, their 12 matrix twins. The wrong-parent digest in dmel-reference-contradicts-file is the committed S6k fixture's own checksum, read from its bytes at generation time.",
+    "gff3-validator": "0.1.0"
+  },
+  "independence": {
+    "checksum": "run_conformance.py recomputes each vector's file-bound SHA-512/256 with hashlib over the exact bytes minus the root checksum line, as a second implementation next to the toolkit's, and requires the two to agree with the value the header states before it reports the model layer. For the matrix lane the twins are derived from the sealed bytes by a standard-library line rewrite plus the same independent recomputation, so the twin digests this file's matrix seals are verifiable without the toolkit.",
+    "vectorOutcomes": "No expectation in manifest.json was written from reading the code. Each one was observed by running the committed checker over the generated bytes, and run_conformance.py re-observes it on every run. base_matrix.json follows the same discipline for the 1.2 lane: every entry is a recorded observation of the committed checker over the derived twin bytes, sealed with --seal-matrix only after a clean run.",
+    "notRun": "gff3-validate 0.1.0 (local checkout build and the PyPI wheel) ran the feature layer over every vector; the lane is optional at run time and reports skipped where the tool is absent. Header checks were deliberately skipped with --no-header, because the FHGFF3 header identity is the base layer of this suite, not its subject."
+  },
+  "syntheticContent": {
+    "statement": "The original synthetic vector set, except s6k-derived-record-fixture, is synthetic. The accession SYNTHETIC_ASSEMBLY.1 and the SeqCol digest come from the revision pilot's one-record toy collection (>toy with 100 'A' bases), the accessions, model IDs, DOIs, URNs and evidence strings are placeholders scoped to these directories, and the synthetic FHR parent digest is computed over declared synthetic bytes. The dmel-* promotion-batch vectors are not synthetic: their feature rows, accessions, coordinates, identifiers and pointers come verbatim or by documented single-field mutation from the real-data fixtures under development/examples/dmel4/ (RefSeq GCF_000001215.4, chromosome NC_004353.4; see that directory's SOURCE.md and provenance.json); the only invented token is the clearly labelled gene-Dmel_absentFromThisFile, which asserts absence from the file and names no real resource. Matrix twins inherit their source vector's content with only the released-identity lines rewritten and the checksum recomputed; they invent nothing.",
+    "attribution": "s6k-derived-record-fixture wraps a feature payload derived from Laura K. Reed, 'Model: Gene model for the ortholog of S6k in Drosophila ananassae', CaltechDATA v1.0, CC BY 4.0 (deposit https://doi.org/10.22002/e86gh-a7p16), as recorded in development/examples/s6k/README.md. Its record reuses only identifiers, attribution and the verified reference result already recorded there."
+  },
+  "downstreamPins": [
+    {
+      "name": "shared CEDAR draft template pin",
+      "consumer": "FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+      "url": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/main/templates/cedar/drafts/provenance.json",
+      "path": "templates/cedar/drafts/provenance.json",
+      "pointer": "/snapshots/fhgm",
+      "tracks": "development/model/fhgm-model.schema.json",
+      "field": "sha256",
+      "asOf": "2026-11-18, measured with --check-downstream-pins against FHGM main f0b3aee: fresh - the pin records sha256 bf1553cac04dc88d8afaff1d39bc50360342e1ebedac4b73dfe3dff570ff410f, the reviewed 2026-11-14 record-contract bytes. (The 2026-11-15 note that it recorded the older 8b0ca00 bytes 9114780b... is superseded: the shared repository refreshed it.) The 2026-11-18 record-contract tightening (trimmed control-free text, R14 link schemes, non-blank reuseConditions, assemblyName and deposit) changes fhgm-model.schema.json, so this pin goes stale when that change merges. Refreshing it stays a shared-repository action against the merged commit, never an FHGM-side edit.",
+      "checkedBy": "run_conformance.py --check-downstream-pins (network; scheduled and dispatch only, so PR lanes stay offline)"
+    },
+    {
+      "name": "JavaScript library draft-lane transport-overlay pin",
+      "consumer": "FAIR-bioHeaders/FAIR-bioHeaders-Tools-JavaScript",
+      "url": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools-JavaScript/main/drafts/provenance.json",
+      "path": "drafts/provenance.json",
+      "pointer": "/drafts/FHGM/transportOverlay",
+      "tracks": "development/model/fhgm-draft.schema.json",
+      "field": "sha256",
+      "asOf": "2026-11-18, measured with --check-downstream-pins against FHGM main f0b3aee: fresh - the pin records sha256 d1619cced91b4ef554853bf5512b5b4ad593b1dc571c2beacb5ee92466ea244a, the dual-base overlay. (The 2026-11-15 note that it recorded the single-identity overlay dd9f6927... is superseded.) Base selection by cited URL changes the overlay bytes - the v0.6.0 branch gains the FHR-Specification alias URL and admits schemaVersion 1.1 - so this pin and the consumer's vendored copy go stale when that change merges. The refresh is the consumer's action against the merged commit, never an FHGM-side edit.",
+      "checkedBy": "run_conformance.py --check-downstream-pins (network; scheduled and dispatch only, so PR lanes stay offline)"
+    }
+  ],
+  "round14Decision": "2026-11-19 D4-D6 selected; native record constraints unchanged; checker adds earned evidence and absent Parent semantics; generator adds approved identity/noncoding and K4 scope controls."
+}

@@ -1,0 +1,11 @@
+##gff-version 3
+#~schema: "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0"
+#~schemaVersion: "1.1"
+#~annotation: "Synthetic annotation for the draft FHGM conformance vectors"
+#~taxon: {"name":"Synthetic example"}
+#~metadataAuthor: [{"name":"FHGM conformance vector generator (synthetic)"}]
+#~dateCreated: "2026-11-14"
+#~genomeReference: {"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}
+#~version: "1"
+#~x-fhgm-models: [{"featureId":"toy-a","modelId":"model-a","modelVersion":"1","reference":{"genomeReference":{"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}}}]
+#~checksum: yB4Ia4w9aG75DNkiQRb604Tlw3Bw9etizudWx/aWBi8=

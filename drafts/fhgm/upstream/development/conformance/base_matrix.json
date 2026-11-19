@@ -1,0 +1,2114 @@
+{
+  "matrixVersion": 1,
+  "status": "Draft FHGM base matrix: every sealed manifest vector re-observed against the released FHGFF3 1.2 (v0.6.0) base bytes. FHGM has no released contract, no schemaVersion, no schema URL and no schemas/versions.json entry, and selection rule V7 keeps it that way; this file publishes, adopts and claims nothing. Every outcome recorded below is an observation of development/model/validate_fhgm.py run over a twin derived from the committed vector bytes, re-verified by run_conformance.py --matrix.",
+  "decision": "maintainer decision 2026-11-15: FHGM supports both released FHGFF3 bases; the sealed 1.1 lane in manifest.json keeps its bytes, expectations and evidence trail unchanged and this lane adds the 1.2 observation alongside it.",
+  "specification": "../model/README.md",
+  "manifest": "manifest.json",
+  "base": "provenance.json matrixBaseSchema records the v0.6.0 bytes; base-schemas.json registers them for the checker.",
+  "method": "A twin replaces exactly two header lines of its sealed vector - a v0.5.0 #~schema citation moves to https://w3id.org/fair-bioheaders/fhgff3/v0.6.0 (any other citation, such as the v0.6.0 FHR-Specification alias or raw main, is kept) and #~schemaVersion to 1.2, both in the source's quoting style - and the #~checksum line follows: recomputed when the sealed record says verify, preserved when it says stale so the twin remains a stale-checksum case. Records, pointers and every feature byte are unchanged. A vector declaring FHGFF3 1.0 is evaluated as committed (method as-committed-1-0): its stated identity is the defect and there is no 1.2 form of the claim being tested. The checker is handed both registered base files and the same committed predecessors as the sealed lane, and selects the release each loaded file cites by its schema URL: a 1.2 twin is judged by the v0.6.0 bytes and its 1.1 predecessor by the v0.5.0 bytes it cites, which makes the lane a mixed-identity chain test. The base layer is the v0.6.0 release alone.",
+  "summary": {
+    "twins": 92,
+    "valid": 24,
+    "invalid": 68,
+    "identityRewritten": 90,
+    "asCommitted10": 2,
+    "verdictChangesAgainstSealed": 0,
+    "changedVectors": [],
+    "gapProofUnder12": 63
+  },
+  "findings": [],
+  "vectors": [
+    {
+      "id": "both-reference-forms",
+      "file": "vectors/valid/both-reference-forms.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K5"
+      ],
+      "twin": {
+        "size": 1215,
+        "sha256": "a2460d2f364102bcb41bc4fccd77cc5d26c946326a94ec1a91f6e176b9d8b573",
+        "checksum": "1t83U8UHNKM7d4+xLCQmFCdS/T4b8MXni7r47d1MtS0="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "contract-minimal-file",
+      "file": "../examples/contract/minimal.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2"
+      ],
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 755,
+        "sha256": "ddffa428246bf846806aafa0e9b222b7b32278f32de8815bc6ec086d58ca97d6",
+        "checksum": "UlnVDrDTtLqPPDXo8IUSrwjwxVYPSEcypTdkbrggfi4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "contract-rich-revision-chain",
+      "file": "../examples/contract/rich.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K6"
+      ],
+      "twin": {
+        "size": 1240,
+        "sha256": "10b5d518c2c17a476e5ce037006bd887e743033680b53900eb2f8cc4e7a64ada",
+        "checksum": "KMhv1d2rGAh5vK0Qu6XgyomzqWsu3gBanhcDVvkD79U="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "file-linked-by-fhr-parent",
+      "file": "vectors/valid/file-linked-by-fhr-parent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K5"
+      ],
+      "twin": {
+        "size": 935,
+        "sha256": "5ab84581e138621574f1e9c76e2c8e0ee943e46762fc98e173c2c6c04d1e1801",
+        "checksum": "1YzZPElBHUMnl0a42LjA7Z8BC54P7OJG8Ndmc11lwIk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "gap-pointer-without-recorded-successor",
+      "file": "../examples/model/version-gap-skip.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 1223,
+        "sha256": "9ea41fbb635d3e5126a9b73d9a7580191404588d70e4c00c1163e83acb971182",
+        "checksum": "Y//dF1pGqUPexGtiuzen+FVKlA9PETnN8qb4uvoyEF4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "history-with-unresolved-own-pointer",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 1223,
+        "sha256": "ab3ff365df1460e01957143dbc861730cdee4c8e1707063754271f3a427db702",
+        "checksum": "FkO1Kf4pFO2Fq9Bd/Xe+WVpHuaBqCMc3bPa1xVkQfxA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "percent-decoded-feature-target",
+      "file": "vectors/valid/percent-decoded-feature-target.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K4"
+      ],
+      "twin": {
+        "size": 960,
+        "sha256": "fa3857678ad76f6f528242ed36bbc013b056db138b3295262c2d747fa3ecb05f",
+        "checksum": "qDQj7QbDZyLtEht6Mb01nf6Zo6BJtUtGt3WC48SinzU="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "revision-resolves-supplied-history",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K3",
+        "K6"
+      ],
+      "twin": {
+        "size": 1223,
+        "sha256": "ab3ff365df1460e01957143dbc861730cdee4c8e1707063754271f3a427db702",
+        "checksum": "FkO1Kf4pFO2Fq9Bd/Xe+WVpHuaBqCMc3bPa1xVkQfxA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "s6k-derived-record-fixture",
+      "file": "../examples/s6k/DanaCAF1_S6k.fhgm-models.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K4"
+      ],
+      "twin": {
+        "size": 4574,
+        "sha256": "6404c00daed7b3fbee384284ccdbb07e25bbb4962f403d25f47674e514debc52",
+        "checksum": "5jOYNedEbvvMruJ16EUR6cie749RlAA/oIJ89DKjdsw="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "single-record",
+      "file": "../examples/model/valid-single.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2"
+      ],
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 923,
+        "sha256": "a28361423663cda4d50651793c4b6dff4d024680edc442c08eaeebc89d1114bd",
+        "checksum": "zJ+W/6Zs2rryKzYkJbBG4IerBGobDOt0ZrhGbcGZVDc="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "supplied-external-model-id",
+      "file": "vectors/valid/supplied-external-model-id.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K2"
+      ],
+      "twin": {
+        "size": 984,
+        "sha256": "5bc3dc6351c3680a18b62ffd80d72455319f50cd0001e26f22c3bab60d1616ae",
+        "checksum": "DxutD0vRZTYUW/Keb8fFXJ0vPj5Xg89/UKD3SxeThMI="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "two-records-unique-ids",
+      "file": "../examples/model/snapshot-v1.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 1100,
+        "sha256": "32c075fbdf9e10f967554a31f869e52391617ab426d999c2f247f3edcd6d35d9",
+        "checksum": "OYhEXagrYl0VFWWjKG8ZmErS8qq7WkwgQ85yym1gEVs="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "ambiguous-model-id-in-snapshot",
+      "file": "../examples/model/ambiguous-model-id.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K3",
+      "twin": {
+        "size": 1100,
+        "sha256": "79c8e5bb441278d00f222f0379b301e8b2282abf4f2af4f4624caec951476a3c",
+        "checksum": "kBCWdEH5Ifm73Waan3QA9uulJaBDDJBTCMTh05XyKHY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "Ambiguous model ID",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "empty-model-array",
+      "file": "vectors/invalid/empty-model-array.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K1",
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 782,
+        "sha256": "6ae6bf22b7deb611cd89fba80d4e52db59270fedef7ec805bf81fe3928583f3b",
+        "checksum": "7J3W82tqVSyAaGr9bihXGvI4ThbuTLJweJTQW7Yy01o="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "should be non-empty",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-absent",
+      "file": "vectors/invalid/feature-target-absent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 964,
+        "sha256": "ad16693dab94658ea18955c42ea33954f15bee63cb1563cc8bee308bf362697c",
+        "checksum": "R2wjTNckHy18X34x6s3torxkJnmuJ5PVLJboYatnnS4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-duplicate-rows",
+      "file": "vectors/invalid/feature-target-duplicate-rows.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 992,
+        "sha256": "e90107ba9c5e5b27e11f772b8f65ff747ffdc563149b3e5654a78c26f7e02290",
+        "checksum": "UJ0YSYJeiN/CQ6QemMOLUo+BfGaO4i7QgubbUa5Cixk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-transcript-row",
+      "file": "vectors/invalid/feature-target-transcript-row.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 962,
+        "sha256": "b9601457cdb0d0224a76119936a60cbf16b96c48ee17e1b99ac94f5073a316a5",
+        "checksum": "Ir+wWNDYM/DoqNWfvr2o6hO9WqMlPGI1FlwTZgP589M="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "gap-skip-with-recorded-successor-supplied",
+      "file": "../examples/model/version-gap-skip.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "9ea41fbb635d3e5126a9b73d9a7580191404588d70e4c00c1163e83acb971182",
+        "checksum": "Y//dF1pGqUPexGtiuzen+FVKlA9PETnN8qb4uvoyEF4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "already has a recorded successor",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "pointer-into-ambiguous-history",
+      "file": "vectors/invalid/pointer-into-ambiguous-history.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K3",
+      "twin": {
+        "size": 1081,
+        "sha256": "3f3fa65c849b2ad8cf6cbb73b6857c1d421091de6cd143034b6e38c5240275f8",
+        "checksum": "3rSFT1B3uyGf7ahzJt5NzkjqjvQOq3Si0iOQSb+ILGQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "Ambiguous model ID",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "predecessor-names-neighbor-model",
+      "file": "../examples/model/predecessor-name-mismatch.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "20e0f810f084f87b322b5e09f014f4769a644a349ff1716c1b9c2d9ef5bb6613",
+        "checksum": "Fgdgz0rqmrPT50cC8aDXCzu78AQue1cO4GKoHIlmQh4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the pointer names another model ID",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "predecessor-version-mismatch",
+      "file": "../examples/model/pointer-version-mismatch.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "421168d8834d4f45b95b54f8169fc168c69bf4d5dab20b424c7a662a81d1e207",
+        "checksum": "OVsOC8DawYVIxMgNtX7qSd586BwyHy7qRbZpfvv4fJY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the predecessor records version",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "predecessor-version-reused",
+      "file": "../examples/model/version-reuse.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "5266773d613abaad85ec59ab081ca39bf9bc16c72b7935c800c4696a4414ce39",
+        "checksum": "5y7m9wboDrUaD8o5TK5dWrEFzeYMZrsBFJS3B78tVNA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "reuses the predecessor model version",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-numeric-model-version",
+      "file": "vectors/invalid/record-numeric-model-version.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 956,
+        "sha256": "35f7d1df70dc7c68dc708a066f5786f7504f9f28de4b57328af282dabe5fb464",
+        "checksum": "M43lHUI/CGRxIjbpBimVfmKeN/f/WHWaxVuODBnHjwI="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is not of type 'string'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-reference-contradicts-file",
+      "file": "../examples/model/record-reference-conflict.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K5",
+      "twin": {
+        "size": 920,
+        "sha256": "27864f794be52902df4f479f2129e9f21fec015377a114f400af428eb1bdada8",
+        "checksum": "Oc8vngS9RWB/6iJeRqpdthJMQQ3pVGKmVcjzWo/w5E0="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "contradicts the file genome link",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-unknown-key",
+      "file": "vectors/invalid/record-unknown-key.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 983,
+        "sha256": "2d8831445034f7d17bbdfd70bac0a23791078a5141d7f26b2c46efdedf8055ef",
+        "checksum": "ev4AVkDwUZy5FRXHSu/SNLEn7Q2b+yliKf82VFMMa5o="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "Additional properties are not allowed",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-without-reference",
+      "file": "../examples/model/record-without-reference.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 807,
+        "sha256": "f7dab2d286bd5516bf35eca1fbb74f13b87a761f246f05914562815ccc4e0761",
+        "checksum": "IhjASE9WYaZinjlbi0Okt+e5Wa7MkF3feKRqw8Md/t4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'reference' is a required property",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "reference-forms-not-comparable",
+      "file": "vectors/invalid/reference-forms-not-comparable.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K5",
+      "twin": {
+        "size": 915,
+        "sha256": "673ff346fbcf2954dcac07db29b73ea81adc9ceda13948d718b72d090ec24bc1",
+        "checksum": "VaJh5IZq6PfWcNJdUAlTv/p8UVsXHqJN/cp95p7lVjQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "has no reference form comparable with the file genome link",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "revision-without-supplied-history",
+      "file": "../examples/model/snapshot-v2.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "ab3ff365df1460e01957143dbc861730cdee4c8e1707063754271f3a427db702",
+        "checksum": "FkO1Kf4pFO2Fq9Bd/Xe+WVpHuaBqCMc3bPa1xVkQfxA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "stale-pointer-absent-history",
+      "file": "../examples/model/pointer-absent-snapshot.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1223,
+        "sha256": "05fbb21485848e5792cee6c9195e5989d7c77241dfef24a30737bdf0d9e9d9a3",
+        "checksum": "OvuF7i3oRwRavVPqH8xWvvGoKCPZozqRXcQ957FYDxQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "tampered-record-bytes",
+      "file": "vectors/invalid/tampered-record-bytes.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "B1",
+      "sharedRules": [
+        "R3"
+      ],
+      "twin": {
+        "size": 953,
+        "sha256": "9b882bc1e29889a38cc4a573f646ba4e538a42f229ed4625d518fc3ee33c8507",
+        "checksum": "P+HDA/e5TBwmQagHan7vKSQZGpM7oIa57sPNPE/HOSs="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "stale",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "File checksum mismatch",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "transport-1-0-extension",
+      "file": "vectors/invalid/transport-1-0-extension.fhgff3.gff3",
+      "method": "as-committed-1-0",
+      "expected": "invalid",
+      "note": "its stated FHGFF3 1.0 identity is the defect, so the 1.2 lane evaluates the committed bytes against the v0.6.0 base",
+      "rule": "B1",
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 958,
+        "sha256": "787afca3c013253f68a8bbfea1d5947749cd3a5281abe4eac730b8dfb5c930a3",
+        "checksum": "sC8VDYBHC6KiuW7dExHaAda4Ls6r2wO5M0R9M1wYI40="
+      },
+      "layers": {
+        "base": "reject",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "which no registered FHGFF3 base release answers to",
+      "selectedBase": "unknown",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-snapshot-v1",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v1.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K4",
+        "K5"
+      ],
+      "twin": {
+        "size": 10096,
+        "sha256": "920b733bec6aa3cb5084b2cf9b37e76d334a3112a566bc626cd58d35909996be",
+        "checksum": "AeHVyX8K+GJzW7uh/MuKdbHYi9GSkjGfngsNqUJSGKg="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-snapshot-v2-resolved",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v2.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K6"
+      ],
+      "twin": {
+        "size": 10474,
+        "sha256": "06882594dbe48fb7b0f3f2e0641fb19f0f31bde148a02fc9ae7c28da20c19ec8",
+        "checksum": "Nd4jKMniGu+c96gvovPhdA+1J54ke4Y3bAlQbpoBxac="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-duplicate-model-id",
+      "file": "vectors/invalid/dmel-duplicate-model-id.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K3",
+      "twin": {
+        "size": 10686,
+        "sha256": "92b6f3c03980276800ff6d3970b3ef2f6dbfbd054216340c3c0674c614f456ed",
+        "checksum": "g7qeAWxzTEl/7VPF8zAGwrakn9EUEltR1xpS+t4ZwdE="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "Ambiguous model ID",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-empty-model-array",
+      "file": "vectors/invalid/dmel-empty-model-array.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K1",
+      "twin": {
+        "size": 8302,
+        "sha256": "c1ac9a99ce3d611cce4a12a63dc116f140892dbc7b3e638a60ce36f1aadc36f3",
+        "checksum": "/JST8oofKlhob4ye1kVVBWkWdWyNluFANooOYsB++84="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "should be non-empty",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-numeric-model-version",
+      "file": "vectors/invalid/dmel-numeric-model-version.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 9927,
+        "sha256": "8d42b48f9daed868e3a762cce680c163889252fc0bce619abcb8d91184c856e7",
+        "checksum": "c/DFBguIogW6DhMb7/jUqmlwR9QMF9vpqWNJ0JuaqdQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is not of type 'string'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-pointer-names-neighbor",
+      "file": "vectors/invalid/dmel-pointer-names-neighbor.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 10278,
+        "sha256": "8439620bfcd4035db79c3920f8859a38635afb37d80950bf178d39e1183c0277",
+        "checksum": "TXHQllYYAUEmedaM/z/e8sQnnpScD0ygIinLNfsHqQE="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the pointer names another model ID",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-pointer-reuses-version",
+      "file": "vectors/invalid/dmel-pointer-reuses-version.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 10278,
+        "sha256": "17c73af7b77e84457373aef0dcb7fade6b1c667291f8bb67acf5799ed836cf2e",
+        "checksum": "vOxhybmDDTK1M4rBqGhRBmUW2jhpS4lqrboQk0uy+24="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "reuses the predecessor model version",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-reference-contradicts-file",
+      "file": "vectors/invalid/dmel-reference-contradicts-file.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K5",
+      "twin": {
+        "size": 9929,
+        "sha256": "967d040f8f3fdece0bdd820328577020bf62f8e170c1fe4b7df3160738434128",
+        "checksum": "raLHxZpfhYo+CMEmncj8mCP76mYPfKa+rrKH0YfMO3o="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "contradicts the file genome link",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-reference-not-comparable",
+      "file": "vectors/invalid/dmel-reference-not-comparable.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K5",
+      "twin": {
+        "size": 9791,
+        "sha256": "a8bd748c8804908bb9647ecd908690ea466d80fc76a86097e81896f1ad9dd29f",
+        "checksum": "pIrMUSd4B5k6SADvR9wkcR3S3bOpBezdiI/+e0oz/fk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "has no reference form comparable with the file genome link",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-revision-without-history",
+      "file": "../examples/dmel4/Dmel_CG11076-Mpv17.snapshot-v2.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 10474,
+        "sha256": "06882594dbe48fb7b0f3f2e0641fb19f0f31bde148a02fc9ae7c28da20c19ec8",
+        "checksum": "Nd4jKMniGu+c96gvovPhdA+1J54ke4Y3bAlQbpoBxac="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the predecessor snapshot is the current file or was not supplied",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-target-absent",
+      "file": "vectors/invalid/dmel-target-absent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 9940,
+        "sha256": "19aa7e6b9f03c624a15e43e97461fcf87b2bd17219329c603930ae5acc8f43b4",
+        "checksum": "rUahsubGiHp1XxGmx/Vobks1Mk1oClxntii7OKdOZkU="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "dmel-target-transcript-row",
+      "file": "vectors/invalid/dmel-target-transcript-row.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 9927,
+        "sha256": "92af97626c2f04ff83c1276b568af0022c4c4d654217ed798b7b05d964e3fb64",
+        "checksum": "lYO9PecHPz6bLJzmbi8eu/gcNKhfoOVzfDV9rAuuiZk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "fhr-specification-alias-v0.6.0",
+      "file": "vectors/valid/fhr-specification-alias-v0.6.0.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "schemaVersion rewritten to 1.2 and checksum recomputed; the v0.6.0 FHR-Specification alias citation is kept, so the twin exercises the alias with 1.2",
+      "rules": [
+        "K1"
+      ],
+      "twin": {
+        "size": 998,
+        "sha256": "1b7a5076a78613645509e88d4f2b01623a654d277859911e10b4c83ac358264c",
+        "checksum": "H8n6SGytXYgImNoPidPSrUVmtQTgsgSdhKvIcjdsuog="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "v0.6.0-citation-stating-1.1",
+      "file": "vectors/valid/v0.6.0-citation-stating-1.1.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "schemaVersion rewritten to 1.2 and checksum recomputed; the v0.6.0 w3id citation is already the twin citation and is kept; every other byte is the sealed vector's",
+      "rules": [
+        "K1"
+      ],
+      "twin": {
+        "size": 958,
+        "sha256": "430b3b93431564faf7fffc3fe5d8038ad27cf9b5759cd9bd48d11374c689675e",
+        "checksum": "AQymhildbCoFfYVf7S5YmC+aWhTi+/0TEax5ZAADPvQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "carrier-cites-raw-main",
+      "file": "vectors/invalid/carrier-cites-raw-main.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "schemaVersion rewritten to 1.2 and checksum recomputed; the raw-main citation is kept, so the twin is refused at selection for the same reason",
+      "rule": "K1",
+      "twin": {
+        "size": 1008,
+        "sha256": "fabd8382efd6e0e2b734a4a0a903e44e7efa10d5141d4d1c250bcc6fb2f326b4",
+        "checksum": "Nnim/04x9/jdR8yMxdlwPWurZVJriqosqrEI9IstVBA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "which no registered FHGFF3 base release answers to",
+      "selectedBase": "unknown",
+      "sameAsSealed": true
+    },
+    {
+      "id": "transport-1-0-under-v0.5.0-citation",
+      "file": "vectors/invalid/transport-1-0-under-v0.5.0-citation.fhgff3.gff3",
+      "method": "as-committed-1-0",
+      "expected": "invalid",
+      "note": "its stated FHGFF3 1.0 identity is the defect, so the 1.2 lane evaluates the committed bytes against the v0.6.0 base",
+      "rule": "B1",
+      "sharedRules": [
+        "R15"
+      ],
+      "twin": {
+        "size": 958,
+        "sha256": "cd73204b809f1a5d91f41e0e5175be8c50a04599e266c0332bf94e7808727d4b",
+        "checksum": "tOfX/QxGzffwFaDIFSy7AHdsSosUiCIzn9BPczwc8jU="
+      },
+      "layers": {
+        "base": "reject",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'x-fhgm-models' should not be valid under",
+      "selectedBase": "v0.5.0 (20ce320f5d706f11...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "pointer-assembly-link-differs",
+      "file": "vectors/invalid/pointer-assembly-link-differs.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1160,
+        "sha256": "0d638eb5cf412f82410b145808ae83e6589250d29ffb4149728744546a0e41d7",
+        "checksum": "3pk6X9hhdROF3C1c0RjmOFZ1iO2q9SqecMI9NqiCFRg="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "no matching assembly link with the predecessor snapshot",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "pointer-record-reference-differs",
+      "file": "vectors/invalid/pointer-record-reference-differs.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1204,
+        "sha256": "9788b42ee183b40652a54c5e9e0134d7cb5c3574a4e43201cd870f0f2f7153d0",
+        "checksum": "sPnrIueX06GXT+MkfuC+JWa8Y2Hh5tCF4fGnVxqgmAc="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "no matching record reference with the predecessor record",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "pointer-snapshot-lacks-model",
+      "file": "vectors/invalid/pointer-snapshot-lacks-model.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K6",
+      "twin": {
+        "size": 1081,
+        "sha256": "670809841cd55fb69a5d9a094f1de91e5ebfe98907795114bc444196ffd16c5f",
+        "checksum": "OTz2+2jL0V9tYPhl1AOkL3WW9CNBCRPfFtUIVVKn39Y="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "the predecessor snapshot has no model",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-evidence-uri-not-a-uri",
+      "file": "vectors/invalid/record-evidence-uri-not-a-uri.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 1065,
+        "sha256": "62075228e0547250ba0e737b19217465f026503cb87e47723930f5064f08755d",
+        "checksum": "s/oSkvW8tRS1o4lrdf0UVeBzZqBrhtAm2rqXY1MF9NI="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is not a 'uri'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-evidence-uri-javascript-scheme",
+      "file": "vectors/invalid/record-evidence-uri-javascript-scheme.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 1045,
+        "sha256": "c230f7af5653aa72aa0bee1b99fe60cf6487e2d6702deb9e0b8ca75b23fdb115",
+        "checksum": "y35NY4O27gsvlKTYL1ww7y7zt2XEHn8yKgMqCav9Y6c="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "does not match '^(?:(?:[Hh][Tt][Tt][Pp][Ss]?",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-space",
+      "file": "vectors/invalid/record-model-id-trailing-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 959,
+        "sha256": "62e51f65961c96a75b55973d7ae24dfcd3df1a99202853e1e56599dd766633b6",
+        "checksum": "yhilKumNwLkP6+vSInbf8Vz0HIgUdticmlOWjY3mfaA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'model-a ' should not be valid under",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "model-ids-equal-under-nfc",
+      "file": "vectors/invalid/model-ids-equal-under-nfc.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K3",
+      "twin": {
+        "size": 1152,
+        "sha256": "3b7da95a03d97808a4dfc60f9ddd670ea7471a675ff6198a5b0e9cc9e3df307e",
+        "checksum": "r0IGEqBDD+LuQz1pJE5Yblra/gUFwCuYllvgKSa3xwY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "equal under NFC normalisation",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "duplicate-model-id-reported-before-record-checks",
+      "file": "vectors/invalid/duplicate-model-id-reported-before-record-checks.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K3",
+      "twin": {
+        "size": 1141,
+        "sha256": "e0ac48b5dfc14f2062231920f0e61c02fdb827592680057c016631b6b0c10e84",
+        "checksum": "N/uBIq9KU3OVqtVQCIxvpckLGSKzacRpbE4yO8aWRy4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "Ambiguous model ID 'model-a'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-id-names-percent-encoding",
+      "file": "vectors/invalid/feature-id-names-percent-encoding.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 962,
+        "sha256": "29f1a029844a951a93eef8539dfed0b9342914c41c24100fc7c134e3ffbdff71",
+        "checksum": "YZ3REBTbxgbBY8h1+SNglgrLOpBt3+UtVAXoACXmvrE="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row: 'toy%2Da'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-gene-with-parent",
+      "file": "vectors/invalid/feature-target-gene-with-parent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 975,
+        "sha256": "b111bcdf6457d12f3ac62eda172d07fed201a8056da6d41e8db20d9b711867f7",
+        "checksum": "MhGemGRewHocKA9raFh1BNNNrxDMFHLCwbRttwjMKy4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "has a Parent attribute, so it is not a root gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-root-transcript-row",
+      "file": "vectors/invalid/feature-target-root-transcript-row.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 958,
+        "sha256": "30e2b602d16fe66a93169b959aabb3c4c6de99154438d20087f6658f1440ee70",
+        "checksum": "kcX9DIGtIwhMMya0vfXlyCRSu/ForVV1gAKXG1wJmWg="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "must target one local gene row: 'toy-a'",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-links-user-info-before-host",
+      "file": "vectors/valid/record-links-user-info-before-host.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K2"
+      ],
+      "twin": {
+        "size": 1220,
+        "sha256": "5a75bee3d5c092e24e15b30e03d317933cfb46b04fd55be4597c4682beeeb718",
+        "checksum": "QzUQlJiRHEu9SVm/jxwXZJ1MXjvhpo5TQYo3nca6Muw="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-evidence-uri-user-info-without-host",
+      "file": "vectors/invalid/record-evidence-uri-user-info-without-host.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 1041,
+        "sha256": "054effc85fbebe2a5ea78708acd3efe156c0efb78ea65684646a7187d796140e",
+        "checksum": "M0loODcwwzIxPHBczEVeU5JgrACJO7d2c8TTJ49PaQc="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'https://user@/' does not match",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-software-uri-empty-user-info-and-host",
+      "file": "vectors/invalid/record-software-uri-empty-user-info-and-host.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 1037,
+        "sha256": "25c512b114c64f3f509a6553e3fdb84b6c3e5d73c18ecb1db02e16d1d45844a0",
+        "checksum": "04SOsxIryTP0zGF4EtW9O3/JFYQQ9ZqtACYuUHjG/5I="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'https://@/' does not match",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-methods-protocol-ftp-user-info-without-host",
+      "file": "vectors/invalid/record-methods-protocol-ftp-user-info-without-host.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 996,
+        "sha256": "4e87e651125dc0f327e4ef5b353c056a236ec062c47b7678edeef7f456051a76",
+        "checksum": "T21R5VyKTA6b9HWoWW1UnqE+0aOYGbrzoqkvc0fhhsY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'ftp://user@/' does not match",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-byte-order-mark",
+      "file": "vectors/invalid/record-model-id-byte-order-mark.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "3e6f4e4e3b7e965c14e5b40844945ee7b907b72b410e5c3c3dea8bc8a6687c50",
+        "checksum": "Ra2wq2ATrMvGx4QtCbnENUOF8PJT1BmMvrXvunIJDpo="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-invisible-plus",
+      "file": "vectors/invalid/record-model-id-invisible-plus.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "6a33147a9dd90d8ecb6ae69a31e6b40e7a971f6eec655f3cc36e639e00e80d61",
+        "checksum": "JrP4u1dXjOfh2wPxihyMaB9mu/BmiwIY7vpKoZV26Mg="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-leading-line-separator",
+      "file": "vectors/invalid/record-model-id-leading-line-separator.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "0b677a43dbeeca2cc8aba012491e1863fd5e3add23d1545e78c198691c46b0d0",
+        "checksum": "xg3/BVGSLnaAovk5oat4gMacIB9e071U5oTGGTU3/wk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-leading-ogham-space",
+      "file": "vectors/invalid/record-model-id-leading-ogham-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "580add0d3e8cbf36dd4e8298fe1379a690ad617badb8de7ae42107688334d1bc",
+        "checksum": "YRTL9ptQJzbdmB/zipQE/vlWfDf3asDbrIkfDIv1dbo="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-leading-paragraph-separator",
+      "file": "vectors/invalid/record-model-id-leading-paragraph-separator.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "031b9a5bd32a6242ee67d2452173e845c7dfa348779aa1f8a11879bc90e84000",
+        "checksum": "ORrtm95H1xemr/KnKlP0GMxDh6Jwq88KzKMBhoV5tvU="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-left-to-right-embedding",
+      "file": "vectors/invalid/record-model-id-left-to-right-embedding.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "13e81d94c4c84810e25ecc93bcf0e62b0ff84ae5d169a70ddc236bd7a95dfcb5",
+        "checksum": "wjhmvUchE4Jvc6kHHHLB5kOBb3iZXlZ5MZkdWbH70ts="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-right-to-left-mark",
+      "file": "vectors/invalid/record-model-id-right-to-left-mark.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "5ee6f32d1231709ea0ebb555225fde026eded6ae7920cbeb0eee319b6fb1fa3d",
+        "checksum": "l/YTQZky2qXBMD4D1hejrKi4i14Dx4EPIcoV8CnB9Wg="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-right-to-left-override",
+      "file": "vectors/invalid/record-model-id-right-to-left-override.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "36c78dea0b8461d0d5f9752888785d555d4dc8b4de9f297cfb2ddb314bf8055e",
+        "checksum": "iGDqlFJlJhEkZIZV5Vu0k0DgRPoPdtLesbFbdOUd4k4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-en-quad",
+      "file": "vectors/invalid/record-model-id-trailing-en-quad.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "305ec2c0fef65ebccea060f7cc3a8558e1e590efdc06d0be5ab75bc95deb6274",
+        "checksum": "fL64la0QAGMnrcHFweQ/fGvL2czvAbf3nlQj7RV19YA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-hair-space",
+      "file": "vectors/invalid/record-model-id-trailing-hair-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "af27d89d92ba85d69ab3c2e410fb59ce749517c49dd7fe5c0b1421e5c18e966e",
+        "checksum": "IxxtM/hNc5175R60nf3XmNBH3k8YP9ivWfUQbl3SEog="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-ideographic-space",
+      "file": "vectors/invalid/record-model-id-trailing-ideographic-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "49c3544c55fb759484edd9112574daebbc1ebad5328975654f16efcee73be5de",
+        "checksum": "9oRTsbsWyQUKrZzUJStPk4ZTkXPqofCHARJSyX/n+UY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-medium-mathematical-space",
+      "file": "vectors/invalid/record-model-id-trailing-medium-mathematical-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "52d88d1e7e38ca8bd88c3051d1cdbef377bab1111c5fc66069263f650c1debb8",
+        "checksum": "YdHceqH1lLRSdr+3670qZqHlpC1pYTiRGRyEVJPaJlQ="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-narrow-nbsp",
+      "file": "vectors/invalid/record-model-id-trailing-narrow-nbsp.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "9c169e0d86ed43c1a4e7661c395de8654a6077ac07ec9af72fcec6b5d0618ea9",
+        "checksum": "8rNHaHvuScAHIs1Ip9aZVzckYLSG4HhqNxsWowmZUqU="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-trailing-nbsp",
+      "file": "vectors/invalid/record-model-id-trailing-nbsp.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "1e3e20bf0ba8cc4e692287beda65c56cef1c522cf85b8f52680c2ba82f81c1df",
+        "checksum": "XqH3PCw6bK2bARQFpj+M6VXNkeaEzhBLg+Vy2+vcrGA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-word-joiner",
+      "file": "vectors/invalid/record-model-id-word-joiner.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "144d78a1e9859d70ddcce31e9b6f3ec9e2e5ebc4cd11164751ccb94b19a8e331",
+        "checksum": "NfRBtVYkYb6JQNC4p4diolJA39OYVVDMOqEUbys5kt0="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-zero-width-space",
+      "file": "vectors/invalid/record-model-id-zero-width-space.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 964,
+        "sha256": "2a94e42b115ca21de0d5aab4a3aedb97da6c5caf62b5125d6acc52e41fc53cea",
+        "checksum": "6hGqYf1v6MGAGkvU1MRRW9YxMRaJfV62NZdzaGTPAY0="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "is invalid under draft contract v0.1",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-absent",
+      "file": "vectors/invalid/record-model-id-absent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 938,
+        "sha256": "4a84c3b160a2b66e770a13c95871eab674b556aed0d68a851c9f6c8eaf7c7772",
+        "checksum": "+fxatR91WXh6r8rnadNW1u0hF/z4FuqWacGNOdjjxiI="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'modelId' is a required property",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "two-records-model-id-absent",
+      "file": "vectors/invalid/two-records-model-id-absent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K2",
+      "twin": {
+        "size": 1095,
+        "sha256": "cfffa99890a797009f324d2c0a5fe7d9e72b5e824b748b23d3e17a43918440ea",
+        "checksum": "BJw1nJKQe5tFqNFbRZR8+wxW4Pg9DI/g+5Sp2w3VT9E="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "'modelId' is a required property",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "record-model-id-interior-nbsp",
+      "file": "vectors/valid/record-model-id-interior-nbsp.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K1",
+        "K2",
+        "K4",
+        "K5"
+      ],
+      "twin": {
+        "size": 964,
+        "sha256": "ff11f6a95793f8d7f3a61fee307bd86a510a016308621daa49a33a8ec94f9607",
+        "checksum": "vIXvbES7I5ePhmFKiguoqZ1/PCUcY1wwYOAgxPGuSak="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "competing-model-ids-same-target",
+      "file": "vectors/valid/competing-model-ids-same-target.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K3"
+      ],
+      "twin": {
+        "size": 1135,
+        "sha256": "94f139a7ddbdabfd1e3e4f92cc5f0bf09115ecbd2a2ac590b392eb33375e8336",
+        "checksum": "nJIgEeBiiRFTWGbH+u1LUKzG9wihgged+3LS/aGlDO4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "changed-file-local-feature-id",
+      "file": "vectors/valid/changed-file-local-feature-id.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 1101,
+        "sha256": "2a37003689f92a39b2cc897e8f6d1617378f16926c40b8bb73a73354a7990c5f",
+        "checksum": "jwMfSv6ndl4y8T/vG+8aM298MACYAWNTG1XxdoJNRkA="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "opaque-version-a-initial",
+      "file": "vectors/valid/opaque-version-a-initial.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 958,
+        "sha256": "2b3bdfe9c635abe9605e523b12a6e96880feb04e0ea753fd3b18accc09334195",
+        "checksum": "JBE4rLkNvdvIB8j8ZqwzRWNkwhsjRPmT2U1Kf3eUFNs="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "opaque-version-b-successor",
+      "file": "vectors/valid/opaque-version-b-successor.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 1081,
+        "sha256": "1d24295ee2de46ea362dc74d941d851a8dd45735d531b8990c6f3c61f8463857",
+        "checksum": "v+VQAZFWbyxpws6MXHCHjYQ8MlbXCqBdJ5MAk1d2Unc="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "opaque-version-a-reused",
+      "file": "vectors/valid/opaque-version-a-reused.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K6"
+      ],
+      "twin": {
+        "size": 1087,
+        "sha256": "0deda15fdc788d6bdacbecb6d6c4ff7896b645d58d024a77a19ce65e235b7d0c",
+        "checksum": "UnAN7Jj+XsWtrM2OEwnXmFOESorJpqoGp/Z90iY2ki4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "noncoding-root-gene",
+      "file": "vectors/valid/noncoding-root-gene.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "valid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rules": [
+        "K4"
+      ],
+      "twin": {
+        "size": 2314,
+        "sha256": "0786fcbdcd0898eb14676fcfbbfa7ec1d4355bbbed669ceeb678655924995dae",
+        "checksum": "fA30n8ozaXANsK8CZIU70vefciULYNTmWjjvBQtY6S8="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "pass"
+      },
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-inventory-complete-empty",
+      "file": "vectors/invalid/feature-inventory-complete-empty.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 688,
+        "sha256": "5742ce927249a8c1983556e03a8c11c4b66a86a6149c90494285e73060990730",
+        "checksum": "WqKj3K5o8FTYiHIc2Ae3mlvOQyUAoRm07EhDvDFguV4="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-inventory-no-identifiers",
+      "file": "vectors/invalid/feature-inventory-no-identifiers.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 717,
+        "sha256": "57f7b225f1922f478d9628e56a1a62ad33a53f49600544af77a29fa231995521",
+        "checksum": "8vDrJeRyiHX8dNIz1uD/++pr+5TCM2y8vGuSLn3JqNY="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-bare-parent",
+      "file": "vectors/invalid/feature-target-bare-parent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 965,
+        "sha256": "ade1f82b5deacf7926b47fe5d5f48b09b3cffbf3805eeafcfe563e1fd3c712d9",
+        "checksum": "/N4wpeXGTEJJWq85QtJ8zbED67WLVTETuafjX+R5a0w="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "reject",
+        "model": "reject"
+      },
+      "reason": "root gene",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-empty-parent",
+      "file": "vectors/invalid/feature-target-empty-parent.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 966,
+        "sha256": "5220b1531e2e811f353ba54c179cadb4bc78091e88ac614d560261e97c21b7c0",
+        "checksum": "vNPlmwGcmibQIxYQavwJzmstaJ1YVaAkJl37JJQS/Sw="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "root gene",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    },
+    {
+      "id": "feature-target-other-so-type",
+      "file": "vectors/invalid/feature-target-other-so-type.fhgff3.gff3",
+      "method": "identity-rewrite",
+      "expected": "invalid",
+      "note": "identity lines rewritten to the v0.6.0 citation, checksum recomputed; every other byte and the supplied history are the sealed vector's",
+      "rule": "K4",
+      "twin": {
+        "size": 964,
+        "sha256": "830d86b9afa1bf7b4d5c8802e60ec27124ca54ac3e3e5e30a1c6b985eeb15e31",
+        "checksum": "tMSe/3rC98jklWQF8JjxxK7S/pdLggYBjRgxpjYNjKk="
+      },
+      "layers": {
+        "base": "accept",
+        "checksum": "verify",
+        "gff3": "accept",
+        "model": "reject"
+      },
+      "reason": "one local gene row",
+      "selectedBase": "v0.6.0 (1942be4cefc8b3a2...)",
+      "sameAsSealed": true
+    }
+  ]
+}

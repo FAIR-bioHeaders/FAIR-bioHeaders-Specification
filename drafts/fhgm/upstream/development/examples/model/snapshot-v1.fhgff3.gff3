@@ -1,0 +1,17 @@
+##gff-version 3
+#~schema: "https://w3id.org/fair-bioheaders/fhgff3/v0.5.0"
+#~schemaVersion: "1.1"
+#~annotation: "Synthetic annotation for the draft FHGM contract fixtures"
+#~taxon: {"name":"Synthetic example"}
+#~metadataAuthor: [{"name":"OpenAI Codex"}]
+#~dateCreated: "2026-11-12"
+#~genomeReference: {"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}
+#~version: "1"
+#~x-fhgm-models: [{"featureId":"toy-a","modelId":"model-a","modelVersion":"1","reference":{"genomeReference":{"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}}},{"featureId":"toy-b","modelId":"model-b","modelVersion":"1","reference":{"genomeReference":{"accession":"SYNTHETIC_ASSEMBLY.1","seqcol_id":"J3Hvvqu0USaOuxA-3wRFyZ3YPdnSEDCp"}}}]
+#~checksum: mLL01gudzlxP9lVjGu2XwxFI72RpAXMTEv5q2S9e4UM=
+toy	pilot	gene	10	30	.	+	.	ID=toy-a
+toy	pilot	lncRNA	10	30	.	+	.	ID=toy-a-rna;Parent=toy-a
+toy	pilot	exon	10	30	.	+	.	Parent=toy-a-rna
+toy	pilot	gene	60	80	.	+	.	ID=toy-b
+toy	pilot	lncRNA	60	80	.	+	.	ID=toy-b-rna;Parent=toy-b
+toy	pilot	exon	60	80	.	+	.	Parent=toy-b-rna

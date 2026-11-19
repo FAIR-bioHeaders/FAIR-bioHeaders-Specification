@@ -1,5 +1,29 @@
 # FHGM adoption decision packet (#204)
 
+## Current disposition — shared candidate submitted 2026-11-19
+
+The historical recommendation text below is retained as review history. Q5 is
+settled: hand-authored JSON Schema through v0.x. The accepted D4–D6 semantics,
+independent promotion review and noncoding coverage are delivered in
+[FHGM PR #34](https://github.com/FAIR-bioHeaders/FHGM-Specification/pull/34).
+The [concrete shared candidate](../../drafts/fhgm/README.md) now carries the exact
+accepted contract/checker and 92-case suite with source-byte parity and actual
+dual-base evidence CI. Separate checker-lane packaging preserves its contexts
+and local rule vocabulary without changing the released header manifest.
+
+Joint review should now accept or revise one concrete package: native contract
+label `0.1`, proposed publication path
+`model-contracts/fhgm/0.1/fhgm-model.schema.json`, separately selected contract
+identity and proposed alias described in the candidate. No alias is minted,
+header registry row created, existing pin refreshed or release published.
+Publication remains separately gated for specification v0.8.0; particular-model
+curator acceptance stays distinct. Shared #204 and FHGM #8/#9 remain open until
+their actual remaining acceptance is recorded. Historical Q5/K5/Q7, base and
+promotion-review questions below must not be treated as new blockers.
+
+## Historical packet
+
+
 **What this packet is:** a consolidated decision aid for the **joint-maintainer
 review of FHGM** under the recorded [2026-11-12 Option C ruling](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204#issuecomment-6829197859)
 (native gene-model contract + FHGFF3-embedded `x-` transport, release held).

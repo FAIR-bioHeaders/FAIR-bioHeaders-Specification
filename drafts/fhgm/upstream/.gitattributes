@@ -1,0 +1,14 @@
+# The FAIR FHGFF3 header development copy under header/ is byte-exact against
+# the pinned upstream revision recorded in header/provenance.json
+# (scripts/check_header_parity.py). Never convert its line endings: the CRLF
+# vectors and the checksummed examples must keep their exact bytes.
+header/** -text
+header/**/*.gz binary
+
+# The draft FHGM vector set under development/ is byte-exact and checksum-bound:
+# development/conformance/manifest.json records a size and SHA-256 per vector, and
+# development/examples/model and development/examples/s6k hold the v0.1 fixtures the
+# manifest cites in place. Never convert their line endings, and do not open and
+# re-save them - regenerate with make_vectors.py / make_fixtures.py instead.
+development/conformance/** -text
+development/examples/**/*.gff3 -text
