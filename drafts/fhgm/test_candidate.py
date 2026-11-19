@@ -79,6 +79,35 @@ class SnapshotBinding(unittest.TestCase):
         cls.receipt = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.receipt)
 
+    def test_rejection_requires_earned_predicate_even_when_counts_stay_unchanged(self):
+        from copy import deepcopy
+        from unittest.mock import patch
+        rules = {f'K{n}': {'status': 'not-run'} for n in range(1, 7)}
+        rules['K1']['status'] = 'pass'
+        rules['K2']['status'] = 'reject'
+        row = {'id': 'rejection-control', 'gff3': 'accept', 'matched': True,
+               'actualEvidence': {'fullModel': {'status': 'reject'},
+                                  'snapshots': [{'subject': 'carrier', 'rules': rules}]}}
+        matrix = deepcopy(row)
+        matrix['method'] = 'identity-rewrite'
+        receipt = {'status': 'completed', 'vectors': [row, matrix],
+            'counts': {'vectorsVisited': 2, 'rulePredicatesEvaluated': 4,
+                'layerExpectationsCompared': 8, 'completeVectorsMatched': 2,
+                'completeModelPasses': 0}}
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = Path(directory) / 'manifest.json'
+            manifest.write_text(json.dumps({'vectors': [{'id': 'rejection-control',
+                'evidenceExpectation': {'model': 'reject'}}]}))
+            with patch.object(self.receipt, 'MANIFEST', manifest):
+                self.assertEqual([], self.receipt.problems(receipt))
+                bad = deepcopy(receipt)
+                bad['vectors'][0]['actualEvidence']['snapshots'][0]['rules']['K2']['status'] = 'pass'
+                self.assertEqual(receipt['counts'], bad['counts'])
+                errors = self.receipt.problems(bad)
+                self.assertTrue(any('model rejection without an earned carrier predicate' in error
+                                    for error in errors))
+                self.assertFalse(any('aggregate evidence counts' in error for error in errors))
+
     def test_carrier_and_all_declared_predecessors_are_required(self):
         vector = {'id': 'case', 'context': {'predecessors': ['a/prior.gff3']}}
         good = [{'subject': 'carrier'}, {'subject': 'predecessor prior.gff3'}]

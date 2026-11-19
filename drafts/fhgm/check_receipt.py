@@ -133,7 +133,20 @@ def main():
                 snapshots[2]['subject'] = snapshots[1]['subject']
             if not problems(bad):
                 parser.exit(1, f'guard missed {defect}\n')
-        print('Detected seven receipt controls, including omitted/wrong/duplicated history subjects.')
+        bad = deepcopy(receipt)
+        target = next(row for row in bad['vectors'] if
+                      row['actualEvidence']['fullModel']['status'] == 'reject'
+                      and sum(rule['status'] == 'reject' for rule in
+                              row['actualEvidence']['snapshots'][0]['rules'].values()) == 1)
+        rejecting = next(rule for rule in target['actualEvidence']['snapshots'][0]['rules'].values()
+                         if rule['status'] == 'reject')
+        rejecting['status'] = 'pass'
+        errors = problems(bad)
+        if not any('model rejection without an earned carrier predicate' in error for error in errors):
+            parser.exit(1, 'guard missed unsupported rejection with unchanged counts\n')
+        if any('aggregate evidence counts' in error for error in errors):
+            parser.exit(1, 'unsupported-rejection control accidentally changed aggregate counts\n')
+        print('Detected eight receipt controls, including unsupported rejection with unchanged counts.')
     print(json.dumps(receipt['counts'], sort_keys=True))
     print('Verified actual dual-base draft evidence; no release or curator acceptance implied.')
 

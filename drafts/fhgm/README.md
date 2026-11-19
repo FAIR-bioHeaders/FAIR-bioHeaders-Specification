@@ -75,7 +75,7 @@ The workflow checks 92 vectors under both bases and uploads the actual JSON
 receipt. The receipt verifier checks all 184 visits against the independently
 reviewed expectations, recomputes the separate evidence counts and requires
 real GFF3 execution. Expected not-run cases cannot become full passes or complete
-vector matches. Its seven controls detect fabricated passes, inflated counts, skipped layers,
+vector matches. Its eight controls detect fabricated passes, unsupported rejections, inflated counts, skipped layers,
 unavailable supplied-history predicates and omitted, wrong or duplicated
 history subjects. Invalid execution prerequisites fail rather than producing an
 aggregate success claim.
@@ -99,9 +99,9 @@ split in `upstream/LICENSE`. No inherited feature-model tree is imported.
 The copied suite matched all 184 dual-base vector checks. The actual receipt
 contained 184 visits, 728 selected-carrier predicates evaluated, 736 layer
 expectations compared, 174 complete vector matches and 48 full model passes;
-ten expected not-run visits entered neither complete count. All seven receipt
+ten expected not-run visits entered neither complete count. All eight receipt
 controls were detected. Independent pinned-blob/file-set comparison verified
-all 134 copied files. Eight candidate parity/input-binding tests, 61 exact owning conformance
+all 134 copied files. Nine candidate parity/input-binding tests, 61 exact owning conformance
 tests and the dual-base draft self-check passed locally. These are draft
 technical results; joint package acceptance and publication remain separate.
 
@@ -113,3 +113,9 @@ refuses ambiguous identity rather than claiming a complete match. Repeating the
 same canonical file is permitted only with the matching number of receipts.
 The PR review's whole-snapshot omission, wrong-subject and duplicate-subject
 controls leave other evidence and aggregate counts unchanged and must still fail.
+
+A reported model rejection must have at least one actual rejecting carrier
+predicate. The additional actual-receipt control changes the last such
+predicate to pass while leaving the full rejection and counts unchanged; it
+must fail for unsupported evidence, not an incidental count mismatch. This
+preserves the user's native correction in commit `4aa3357`.
