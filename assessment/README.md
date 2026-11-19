@@ -25,9 +25,27 @@ expected outcomes. They follow the pattern of [`conformance/`](../conformance/).
   outcomes the fixture exercises. Its format is `manifest.schema.json`.
 - `pairs.tsv`: derived → related pairs for batch runs.
 
-Every file is byte-exact: `.gitattributes` turns off line-ending conversion here.
-Regenerate the synthetic files with `python scripts/make_assessment_fixtures.py`
-instead of editing them.
+Committed files are preserved byte-for-byte: `.gitattributes` turns off
+line-ending conversion here. Regenerate synthetic files into a scratch directory
+with `python scripts/make_assessment_fixtures.py --output DIR` instead of editing
+them. The regeneration oracle is explicit for every generated file in
+`generation-oracles.json`; new outputs must be classified before the test passes.
+
+- Plain files, headed files, pairs and `pairs.tsv` retain exact-byte comparison.
+- `edge/gzip-refseq.gff.gz` compares the fully decompressed payload, including
+  CRC/trailer verification, rather than the deflate representation.
+- `edge/bgzf-refseq.gff.gz` and `edge/stub.bam` compare the decompressed payload
+  and require valid BGZF block framing and the standard EOF block.
+- `edge/gff3-in-tar.gff.gz` is a **gzip-wrapped tar archive**, not a gzip member
+  inside a tar. Compare its decompressed tar bytes and require one regular
+  `annotation.gff3` member with GFF3 content. The pinned installed toolkit must
+  classify independently recompressed variants as `archive`,
+  `out_of_scope/archive-not-supported`, matching the manifest.
+
+No committed fixture or conformance digest is updated by these comparisons.
+Compressed assessment cases do not establish a stable compressor encoding;
+the shared conformance suite's checksum/digest-pinned compressed vectors retain
+their separate byte-exact generator checks.
 
 ## Manifest
 
@@ -77,9 +95,20 @@ rubric with the item table of
 writes the SC-001 review packet.
 
 `python scripts/make_assessment_fixtures.py [--output DIR]` regenerates `pairs/` and
-`edge/` deterministically (gzip members with `mtime=0` and OS byte 255, on any
-Python version); `tests/test_assessment_fixtures.py`
-checks that the committed files match its output and that every file is listed once.
+`edge/` deterministically within one runtime (gzip members with `mtime=0` and
+OS byte 255); `tests/test_assessment_fixtures.py` checks repeatability, the
+per-file regeneration oracles and complete fixture registration. Python 3.15's
+`gzip.compress` defaults to level 6, versus level 9 through 3.14. With the same
+zlib 1.2.12 locally, level 6 produces the 180-byte archive and explicit level 9
+reproduces the committed 174 bytes: this observed difference is the Python
+default, not a different zlib build. Pinning level 9 would conceal the test's
+unnecessary dependence on compressed representation rather than verify behaviour.
+
+CI runs this fixture/installed-assessment subset on Python 3.12, 3.13 and 3.15
+with the published toolkit version from `conformance/toolkit-pin.json`. This
+does not claim the separate LinkML build supports Python 3.15. Locally, set
+`ASSESSMENT_TOOLKIT` to that release's installed `bioheaders` executable to run
+the archive-scope checks; an unset executable is reported as not run.
 
 ## Other implementations
 

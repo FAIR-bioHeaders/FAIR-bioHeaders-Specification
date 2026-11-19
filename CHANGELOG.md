@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Repair the conformance harness's bounded ECMA pattern adapter: empty classes
+  retain ECMA meaning and unsupported translations produce validation findings
+  instead of exceptions (#273). Independent Node comparisons cover the corrected
+  cases; the pattern census remains a non-evaluating inventory. No contract changes.
+- Classify assessment regeneration oracles by artifact (#274): preserve exact
+  plain/embedded bytes and compare compressed payloads with archive/BGZF framing
+  checks. Verify real installed-toolkit archive rejection on Python 3.12/3.13/3.15;
+  preserve all committed fixture bytes, conformance digests and release pins.
+
 - Pattern-dialect enforcement point (#270; tooling and CI only — no schema
   change, no `schemaVersion`, no registry row, no release claim).
   `scripts/check_pattern_census.py` enumerates every JSON Schema `pattern` in the
