@@ -28,6 +28,7 @@ release object, alias, DOI, website enablement or consumer repin is created.
 - Vocabulary generation adds reachable FHT term definitions to the common
   namespace, preserving existing term definitions and the FHR JSON-LD context.
   There is **no FHT JSON-LD serializer/context or DCMI projection claim**.
+- [FHT-MICRODATA.md](FHT-MICRODATA.md) integrates the complete proposed F1–F7 binding, selector/API overrides and generated 29-field table.
 - `scripts/fht_microdata.py` is an attributed adaptation of the accepted typed
   HTML reference. It has a separate registry-selection path, explicit candidate
   opt-in, complete contract/C1 arithmetic checks, integer/type/order preservation,

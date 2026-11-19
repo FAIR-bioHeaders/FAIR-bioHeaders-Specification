@@ -194,6 +194,40 @@ def assert_expected(entry, data, reader):
         raise ValueError(entry['id'] + ': primary rule/context assertions failed: ' + '; '.join(reader.FAILURES))
 
 
+def root_bindings(schema):
+    """The accepted binding table, derived from actual proposed contract nodes."""
+    def resolve(part):
+        while '$ref' in part:
+            value = schema
+            for token in part['$ref'][2:].split('/'):
+                value = value[token.replace('~1', '/').replace('~0', '~')]
+            part = value
+        return part
+    rows = ['| Field | Contract shape | Required | Binding |', '| --- | --- | --- | --- |']
+    for name, raw in schema['properties'].items():
+        part = resolve(raw)
+        kind = part['type']
+        if kind == 'array':
+            item = resolve(part['items'])
+            shape, binding = 'array of ' + item.get('title', item['type']), 'ordered typed container'
+        elif kind == 'object':
+            shape, binding = part.get('title', 'object') + ' object', 'typed object scope'
+        else:
+            shape, binding = 'enum string' if 'enum' in part else kind, 'typed scalar'
+        required = 'yes' if name in schema['required'] else 'no'
+        rows.append(f'| `{name}` | {shape} | {required} | {binding} |')
+    return '\n'.join(rows)
+
+
+def binding_document():
+    path = ROOT / 'docs/FHT-MICRODATA.md'
+    text = path.read_text()
+    before, rest = text.split('<!-- BEGIN generated root bindings -->', 1)
+    _, after = rest.split('<!-- END generated root bindings -->', 1)
+    table = root_bindings(json.loads((ROOT / 'fht.json').read_text()))
+    return path, before + '<!-- BEGIN generated root bindings -->\n' + table + '\n<!-- END generated root bindings -->' + after
+
+
 def example_outputs():
     import fht_microdata as binding
     reader = owning_reader()
@@ -214,6 +248,9 @@ def example_outputs():
 
 
 def check_examples():
+    path, documented = binding_document()
+    if path.read_text() != documented:
+        raise ValueError('FHT proposed binding root table differs from actual contract')
     expected = example_outputs()
     actual = {p: p.read_bytes() for p in (ROOT / 'examples/fht').rglob('*') if p.is_file()}
     if actual != expected:
@@ -247,6 +284,9 @@ def main():
     parser.add_argument('--examples', action='store_true', help='include Python3.13 typed HTML counterpart generation/check')
     args = parser.parse_args()
     if args.write:
+        if args.examples:
+            location, text = binding_document()
+            location.write_text(text)
         for location, data in {**outputs(), **(example_outputs() if args.examples else {})}.items():
             location.parent.mkdir(parents=True, exist_ok=True)
             location.write_bytes(data)

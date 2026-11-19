@@ -215,6 +215,40 @@ class FHTPublicationTests(unittest.TestCase):
         self.assertIn('Unpublished', messages[0])
         self.assertIn('released=false', messages[0])
 
+    def test_shared_binding_executes_every_rule_specific_negative_html_fixture(self):
+        fixtures = candidate.OWNER / 'tests/fixtures/microdata'
+        manifest = json.loads((fixtures / 'manifest.json').read_text())['invalid']
+        self.assertEqual(len(manifest), 20)
+        self.assertEqual(set(manifest), {path.name for path in (fixtures / 'invalid').glob('*.html')})
+        overrides = {
+            'wrong-type.html': 'expected exactly one candidate FHT scope and no conflicting family scope',
+            'mixed-family.html': 'expected exactly one candidate FHT scope and no conflicting family scope',
+            'unknown-release.html': 'unsupported candidate FHT schema selection',
+            'wrong-version-type.html': 'unsupported FHT schemaVersion',
+        }
+        for name, expected in manifest.items():
+            with self.subTest(name=name, reason=expected['reason']):
+                text = (fixtures / 'invalid' / name).read_text()
+                counterpart = text.replace(candidate.RAW_DRAFT.decode(), binding.FHT_ITEMTYPE)
+                error = overrides.get(name, expected['error'])
+                self.assertTrue(error.strip())
+                with self.assertRaisesRegex(binding.MicrodataError, error):
+                    binding.read_page(counterpart, allow_candidate=True)
+
+    def test_shared_binding_document_has_exact_provenance_and_generated_contract_table(self):
+        path, expected = candidate.binding_document()
+        text = path.read_text()
+        self.assertEqual(text, expected)
+        self.assertIn(candidate.sha((ROOT / 'fht.json').read_bytes()), text)
+        self.assertIn(candidate.sha((candidate.OWNER / 'docs/FHT-MICRODATA.md').read_bytes()), text)
+        for label in range(1, 8):
+            self.assertIn('## F' + str(label) + ' —', text)
+        for name in self.schema['properties']:
+            self.assertIn('| `' + name + '` |', text)
+        self.assertIn('allow_candidate=False', text)
+        self.assertNotIn('4156353aa6d077', text)
+        self.assertIn('(FHT-MICRODATA.md)', (ROOT / 'docs/MICRODATA.md').read_text())
+
 
 if __name__ == '__main__':
     unittest.main()

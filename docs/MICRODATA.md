@@ -77,10 +77,10 @@ is outside this release.
 ## Type-specific bindings
 
 The escaping, typed-container and HTML parsing conventions above are shared.
-FHP and FHGFF3 reuse those conventions, but not the FHR-specific identity and
-validation requirements: their F1/H1 rules replace M1 with the type-specific
-itemtype, and their F2/H2 rules select the type-specific schema instead of
-validating against `fhr.json` as M4 does. The type-specific binding documents
+FHP, proposed FHT and FHGFF3 reuse those conventions, but not the FHR-specific
+identity and validation requirements. Their type-specific identity and selection
+rules replace M1 and select the appropriate contract instead of validating
+against `fhr.json` as M4 does. The type-specific binding documents
 are authoritative for the complete rules and required fields. **Naming a binding
 here is documentation, not a claim of toolkit, validator or website support**:
 runtime status is summarized in the rows below, and toolkit implementation is
@@ -89,6 +89,7 @@ vectors cover FHR microdata only; they do not record per-tool HTML support.
 
 | Type | Binding document | Itemtype (record scope) | Status |
 | --- | --- | --- | --- |
+| FHT | [proposed shared FHT binding](FHT-MICRODATA.md) | proposed versioned FHT itemtype; supported shared aliases under F1/F2 | Draft v0.7.0 publication preparation; reference/Chromium evidence only, no installed/default toolkit or website support |
 | FHR | this page (M1 to M5) | raw-main `fhr.json` | Released representation; shipped in the toolkit |
 | FHP | [FHP-Specification `docs/FHP-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHP-Specification/blob/main/docs/FHP-MICRODATA.md) | raw-main `fhp.json` | Binding reviewed in FHP-Specification; the toolkit reader/writer shipped in fair-bioheaders 0.8.2 ([Tools#58](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/issues/58)). No shared conformance vector exists for the FHP form; see #216 for the publication-vs-implementation ruling this row depends on |
 | FHGFF3 | [FHGFF3 `docs/FHGFF3-MICRODATA.md`](https://github.com/FAIR-bioHeaders/FHGFF3/blob/main/docs/FHGFF3-MICRODATA.md) | raw-main `fhgff3.json` | Draft binding reviewed in FHGFF3#5 (rules H1 to H8). The toolkit reader/writer (merged in [Tools#139](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/pull/139), hardened by [Tools#140](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/issues/140) / [Tools#141](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Tools/pull/141)) ships as **experimental** in fair-bioheaders 0.10.0 (released 2026-11-12): FHGFF3 HTML reading and writing emits `ExperimentalMicrodataWarning` while the binding awaits release under [FHGFF3#16](https://github.com/FAIR-bioHeaders/FHGFF3/pull/16). No shared conformance vector exists yet. Experimental runtime availability does not imply release of the draft binding or website enablement |
@@ -103,4 +104,4 @@ requirement and adopts no contract.
 
 ## Proposed FHT publication binding
 
-The [v0.7.0 candidate](FHT-PUBLICATION-CANDIDATE.md) prepares seven exact typed JSON/FASTA/HTML counterparts and a separate registry-aware reference reader/writer. Explicit candidate opt-in is required before publication. Types, array order, visible values and integers beyond binary64 precision are preserved. This is reference evidence, not installed toolkit/website enablement or FHT JSON-LD support. Original owning pairs remain unchanged.
+The [proposed F1–F7 binding](FHT-MICRODATA.md) and [v0.7.0 candidate](FHT-PUBLICATION-CANDIDATE.md) prepare seven exact typed JSON/FASTA/HTML counterparts and a separate registry-aware reference reader/writer. Explicit candidate opt-in is required before publication. Types, array order, visible values and integers beyond binary64 precision are preserved. This is reference evidence, not installed toolkit/website enablement or FHT JSON-LD support. Original owning pairs remain unchanged.

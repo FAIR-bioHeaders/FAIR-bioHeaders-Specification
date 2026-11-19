@@ -4,7 +4,7 @@
 """Shared v0.7.0 publication-candidate typed HTML reference; not toolkit support.
 
 DOM and typed-container code derives from FHP-Specification tests/fhp_microdata.py
-at bc7110fedb6f05b52b1d2348b5b14a79b91b0637. See docs/FHT-MICRODATA.md.
+at bc7110fedb6f05b52b1d2348b5b14a79b91b0637. See docs/FHT-MICRODATA.md (proposed shared F1-F7 clauses).
 Adapted from immutable FHT owning4ddda69/b62c4e2 source. No network or sequence checksum verification. Proposed release selectors remain gated.
 """
 
