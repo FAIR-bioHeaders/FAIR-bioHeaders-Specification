@@ -187,3 +187,35 @@ class RemoteFailureTests(unittest.TestCase):
             row['sourcePatterns'] = ['*.json']
             with self.subTest(body=body):
                 self.assertEqual(audit.audit(row, Malformed())['verdict'], 'QUERY_FAILED')
+
+
+class ReleaseIdentityPreflightTests(unittest.TestCase):
+    def test_actual_release_preflight_preserves_history_and_refuses_changed_main_identity(self):
+        import json
+        import shutil
+        import subprocess
+        import sys
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as directory:
+            candidate = Path(directory)
+            (candidate / 'scripts').mkdir()
+            (candidate / 'references').mkdir()
+            (candidate / 'schemas').mkdir()
+            for name in ('check_release.py', 'check_contract_identity.py'):
+                shutil.copyfile(root / 'scripts' / name, candidate / 'scripts' / name)
+            shutil.copyfile(root / 'references/released-identities.json', candidate / 'references/released-identities.json')
+            shutil.copyfile(root / 'schemas/versions.json', candidate / 'schemas/versions.json')
+            for name in ('fhr.json', 'fhp.json', 'fhgff3.json'):
+                shutil.copyfile(root / name, candidate / name)
+            command = [sys.executable, str(candidate / 'scripts/check_release.py'), '--identity-only']
+            self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)
+            target = candidate / 'fhp.json'
+            data = json.loads(target.read_text())
+            data['description'] = 'New publication candidate bytes with legacy floating identity'
+            target.write_text(json.dumps(data))
+            rejected = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(rejected.returncode, 1)
+            self.assertIn('fhp.json: New or changed published bytes', rejected.stderr)
+            data['$id'] = 'https://w3id.org/fair-bioheaders/fhp/v0.9.0'
+            target.write_text(json.dumps(data))
+            self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)

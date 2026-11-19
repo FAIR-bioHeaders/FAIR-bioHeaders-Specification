@@ -73,3 +73,11 @@ identity and receive explicit identity/release review. A passing syntactic
 preflight is not publication authorization, proof of alias resolution or adoption.
 There is no general exemption for `$id` changes in schema drift checks. Released
 bytes, drift baselines and archived tags are not rewritten by this policy.
+
+The publication identity check runs **first** in the existing companion release
+preflight, `python scripts/check_release.py --converter /path/to/toolkit`.
+For identity review without a companion checkout, use
+`python scripts/check_release.py --identity-only`. This is a release-preflight
+check, not a new always-on schema drift exception. The exact-byte legacy ledger
+is applied before assessing new publication candidates; modifying any other
+byte of a legacy contract removes that exception and requires a stable identity.
