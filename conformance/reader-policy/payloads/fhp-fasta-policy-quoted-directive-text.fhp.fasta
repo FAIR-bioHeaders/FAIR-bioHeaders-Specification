@@ -1,0 +1,21 @@
+;~schema: https://w3id.org/fair-bioheaders/fhp/v0.4.0
+;~schemaVersion: '1.0'
+;~proteome: Synthetic FHP conformance protein set
+;~sourceType: predicted
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: '1.0.0'
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~dateCreated: '2026-10-11'
+;~derivedFrom:
+;~- headerType: FHR
+;~  checksum: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+;~  relationship: translatedFrom
+;~documentation: "%YAML 1.1; %TAG !e! tag:example.com,2000:; ---"
+;~checksum: jliKb/YLMQOes9sImZc0F/9tMRykoWKDxeSzrdj95Yo=
+>prot1 synthetic protein with a terminal stop
+MKTAYIAKQRQISFVKSHFSRQ*
+>prot2 synthetic protein with rare and ambiguous residues
+MUOBZJXmkta-yi*AKQR

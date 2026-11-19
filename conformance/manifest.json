@@ -2375,8 +2375,8 @@
       }
     },
     {
-      "id": "fhp-fasta-lf",
-      "file": "valid/fhp-fasta-lf.fhp.fasta",
+      "id": "fhp-fasta-lf-canonical-parent",
+      "file": "valid/fhp-fasta-lf-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -2391,8 +2391,8 @@
         "R10",
         "R17"
       ],
-      "description": "Protein FASTA with stops, rare and ambiguous residues, lower case and a gap; LF line endings.",
-      "checksum": "n35sS+hcfZDQ7HOg1UhFktleFPIqv0MGdY2s/b2e8K0=",
+      "description": "Protein FASTA with stops, rare and ambiguous residues, lower case and a gap; LF line endings. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "u0GHCw4XZcLUn4PnCwQ35mo9x8ZH39L7VZDU4n4Nesk=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2400,8 +2400,8 @@
       }
     },
     {
-      "id": "fhp-fasta-crlf",
-      "file": "valid/fhp-fasta-crlf.fhp.fasta",
+      "id": "fhp-fasta-crlf-canonical-parent",
+      "file": "valid/fhp-fasta-crlf-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -2410,8 +2410,8 @@
         "R1",
         "R3"
       ],
-      "description": "CRLF line endings; CR bytes are hashed.",
-      "checksum": "kFopN0MNS3kRrcpgm7N1rF6OQlg9Qbwq8iBa3UnCWoA=",
+      "description": "CRLF line endings; CR bytes are hashed. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "iqYndX1ikM4wle1DKJxMECFaZTEZBdSUCYP1IZtxSsg=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2419,8 +2419,8 @@
       }
     },
     {
-      "id": "fhp-fasta-no-final-newline",
-      "file": "valid/fhp-fasta-no-final-newline.fhp.fasta",
+      "id": "fhp-fasta-no-final-newline-canonical-parent",
+      "file": "valid/fhp-fasta-no-final-newline-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -2428,8 +2428,8 @@
         "P1",
         "R1"
       ],
-      "description": "The last residue line has no terminator.",
-      "checksum": "06Y9cjeP5vmuQ8NfgiFzpcxtE7dx8fpaQeFTAwcLkZI=",
+      "description": "The last residue line has no terminator. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "LHPOs3i+vTgklfc4O8Hg+g9lolIH0VgnGS/UW2yuxgQ=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2437,8 +2437,8 @@
       }
     },
     {
-      "id": "fhp-fasta-comments-and-blank-lines",
-      "file": "valid/fhp-fasta-comments-and-blank-lines.fhp.fasta",
+      "id": "fhp-fasta-comments-and-blank-lines-canonical-parent",
+      "file": "valid/fhp-fasta-comments-and-blank-lines-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -2447,8 +2447,8 @@
         "R3",
         "R10"
       ],
-      "description": "An ordinary comment and a blank line before the FHP lines; both are hashed.",
-      "checksum": "H42XXYI7m5XVZcDQRYFL1fpz5UGCCbwcXugSZ8Jkn+4=",
+      "description": "An ordinary comment and a blank line before the FHP lines; both are hashed. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "UxkRmXBvhoeg5Pk7PSU9StPW5JUG6ftBKGOqYYaEVFo=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2456,8 +2456,8 @@
       }
     },
     {
-      "id": "fhp-fasta-escaped-record-markers",
-      "file": "valid/fhp-fasta-escaped-record-markers.fhp.fasta",
+      "id": "fhp-fasta-escaped-record-markers-canonical-parent",
+      "file": "valid/fhp-fasta-escaped-record-markers-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -2465,8 +2465,8 @@
         "P1",
         "R11"
       ],
-      "description": "An FHP value holding '>' and '@' written as \\x3E and \\x40 in a double-quoted scalar; it reads back with the real characters.",
-      "checksum": "MzKJfkBFGNsy96UljmFYWpuuW1zkmWfW5ZdR1xpbJZQ=",
+      "description": "An FHP value holding '>' and '@' written as \\x3E and \\x40 in a double-quoted scalar; it reads back with the real characters. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "7/a/sjcqGcIemKdxKI0AKaGPB2dfWm+3wv9553qKc+s=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2475,8 +2475,8 @@
       }
     },
     {
-      "id": "fhp-fasta-gzip",
-      "file": "valid/fhp-fasta-gzip.fhp.fasta.gz",
+      "id": "fhp-fasta-gzip-canonical-parent",
+      "file": "valid/fhp-fasta-gzip-canonical-parent.fhp.fasta.gz",
       "format": "fhp-fasta",
       "compressed": true,
       "compression": "gzip",
@@ -2485,8 +2485,8 @@
         "P1",
         "R1"
       ],
-      "description": "fhp-fasta-lf compressed as one gzip member; same checksum.",
-      "checksum": "n35sS+hcfZDQ7HOg1UhFktleFPIqv0MGdY2s/b2e8K0=",
+      "description": "fhp-fasta-lf compressed as one gzip member; same checksum. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "u0GHCw4XZcLUn4PnCwQ35mo9x8ZH39L7VZDU4n4Nesk=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2494,8 +2494,8 @@
       }
     },
     {
-      "id": "fhp-fasta-bgzf",
-      "file": "valid/fhp-fasta-bgzf.fhp.fasta.gz",
+      "id": "fhp-fasta-bgzf-canonical-parent",
+      "file": "valid/fhp-fasta-bgzf-canonical-parent.fhp.fasta.gz",
       "format": "fhp-fasta",
       "compressed": true,
       "compression": "bgzf",
@@ -2504,8 +2504,8 @@
         "P1",
         "R1"
       ],
-      "description": "fhp-fasta-lf compressed as multi-block BGZF; same checksum.",
-      "checksum": "n35sS+hcfZDQ7HOg1UhFktleFPIqv0MGdY2s/b2e8K0=",
+      "description": "fhp-fasta-lf compressed as multi-block BGZF; same checksum. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "u0GHCw4XZcLUn4PnCwQ35mo9x8ZH39L7VZDU4n4Nesk=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2531,16 +2531,16 @@
       }
     },
     {
-      "id": "fhp-fasta-mixed-sources",
-      "file": "valid/fhp-fasta-mixed-sources.fhp.fasta",
+      "id": "fhp-fasta-mixed-sources-canonical-parent",
+      "file": "valid/fhp-fasta-mixed-sources-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "P1"
       ],
-      "description": "sourceType mixed with a parent file, a database source and a contribution.",
-      "checksum": "swhZYZowXQm+9ho9Djd7+gvKBbJlBLw/l9PZOevRQPs=",
+      "description": "sourceType mixed with a parent file, a database source and a contribution. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "Hn6AV1fqqW4iU12kVwP14Q/JuCpmyMVLBG9X5bIVp3s=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2548,16 +2548,16 @@
       }
     },
     {
-      "id": "fhp-fasta-rich",
-      "file": "valid/fhp-fasta-rich.fhp.fasta",
+      "id": "fhp-fasta-rich-canonical-parent",
+      "file": "valid/fhp-fasta-rich-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "P1"
       ],
-      "description": "Every optional FHP field.",
-      "checksum": "8PFQl3axuAdJna/Thr/VqST9jtoUdK7Hy5wXv4HdMwc=",
+      "description": "Every optional FHP field. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "Ca74dKt4vFnJ0v/tn1WCg9hRUPTjI9OIY81+oqm74d8=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2565,16 +2565,16 @@
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-dotted",
-      "file": "valid/fhp-fasta-busco-lineage-dotted.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-dotted-canonical-parent",
+      "file": "valid/fhp-fasta-busco-lineage-dotted-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "P1"
       ],
-      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170).",
-      "checksum": "wVckjyO2MygTdILNVtSbTORFkw3zWSX5xaOG903164I=",
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHP 1.2 allows (#170). Canonical-parent replacement; historical payload preserved.",
+      "checksum": "tE/1W8fwBK/uhooO/GH7qoMfTq5UMQuSxRngyU/sCiU=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -2582,8 +2582,8 @@
       }
     },
     {
-      "id": "fhgff3-minimal-checksum-link",
-      "file": "valid/fhgff3-minimal-checksum-link.fhgff3.gff3",
+      "id": "fhgff3-minimal-checksum-link-canonical-parent",
+      "file": "valid/fhgff3-minimal-checksum-link-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2599,8 +2599,8 @@
         "R10",
         "R17"
       ],
-      "description": "The genome linked by its FHR checksum (derivedFrom annotates); header after ##gff-version 3; LF line endings.",
-      "checksum": "EUNVNynadF9SZugxxVE5qDnF8r8fc+uyfylccG2UeRQ=",
+      "description": "The genome linked by its FHR checksum (derivedFrom annotates); header after ##gff-version 3; LF line endings. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "xm7zbrQcqX6QT7650VKWkmN0ZlDzoWSaAyQRYjf8oB0=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
@@ -2623,24 +2623,24 @@
       }
     },
     {
-      "id": "fhgff3-both-links",
-      "file": "valid/fhgff3-both-links.fhgff3.gff3",
+      "id": "fhgff3-both-links-canonical-parent",
+      "file": "valid/fhgff3-both-links-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G2"
       ],
-      "description": "Both genome-link forms for the same genome; the checksum is authoritative.",
-      "checksum": "hRwS7IGOdgKUar114haeNjHVEHFDgEzX+2EIjXTq5N4=",
+      "description": "Both genome-link forms for the same genome; the checksum is authoritative. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "m+ywFVzvIi5uHqG+HlHtiH2s+ymDTFY0wRW0suNTX7c=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-directives-interleaved",
-      "file": "valid/fhgff3-directives-interleaved.fhgff3.gff3",
+      "id": "fhgff3-directives-interleaved-canonical-parent",
+      "file": "valid/fhgff3-directives-interleaved-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2649,48 +2649,48 @@
         "R3",
         "R10"
       ],
-      "description": "##sequence-region, #!genome-build, ##species and a comment before and between #~ lines; all are hashed.",
-      "checksum": "lQmsVoa3t+LaGtXmHN7AvKvp1D7BD1cpkYFuDBjzK90=",
+      "description": "##sequence-region, #!genome-build, ##species and a comment before and between #~ lines; all are hashed. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "6loQ76sDBQdm/RiOg4XoNLiSWvXq1EdNmzbnfayL8Q8=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-directives-after-header",
-      "file": "valid/fhgff3-directives-after-header.fhgff3.gff3",
+      "id": "fhgff3-directives-after-header-canonical-parent",
+      "file": "valid/fhgff3-directives-after-header-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G1"
       ],
-      "description": "Native directives after the #~ lines, before the first feature.",
-      "checksum": "jn7guoHrU8ax9NnX1GTKqHKQgCuSZH0Kb/jTpgAFOEo=",
+      "description": "Native directives after the #~ lines, before the first feature. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "e2FKYkjr8nrqsJvyjdZscD14huiF2nRdqyUe//Q3Vlc=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-triple-hash-before-features",
-      "file": "valid/fhgff3-triple-hash-before-features.fhgff3.gff3",
+      "id": "fhgff3-triple-hash-before-features-canonical-parent",
+      "file": "valid/fhgff3-triple-hash-before-features-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G1"
       ],
-      "description": "A ### directive before any feature stays inside the leading block.",
-      "checksum": "y3135nAVbCiWXWafTPLGjJc2qZO4e0/+mBw/Zn9PAtg=",
+      "description": "A ### directive before any feature stays inside the leading block. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "timHnrsrw3L8fjfvw5sI+KAViglmALr0FTOWioSkOAI=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-embedded-fasta",
-      "file": "valid/fhgff3-embedded-fasta.fhgff3.gff3",
+      "id": "fhgff3-embedded-fasta-canonical-parent",
+      "file": "valid/fhgff3-embedded-fasta-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2699,16 +2699,16 @@
         "R1",
         "R3"
       ],
-      "description": "A ##FASTA section after the features; its residues are hashed.",
-      "checksum": "ETqM44J8vEqJxLdxvE29CyQnQsT27b/wF4GVUtFiiJw=",
+      "description": "A ##FASTA section after the features; its residues are hashed. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "dRjQ6GsT+XJ3rf07uRCjglY8fR33Gvx4iV73iorWnyo=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-header-only",
-      "file": "valid/fhgff3-header-only.fhgff3.gff3",
+      "id": "fhgff3-header-only-canonical-parent",
+      "file": "valid/fhgff3-header-only-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2716,48 +2716,48 @@
         "G1",
         "G2"
       ],
-      "description": "A header and no features: an empty annotation.",
-      "checksum": "AkD3S0MaDJfO0fK4A4PhB6EDCTsWwi7JK16E9eyza2w=",
+      "description": "A header and no features: an empty annotation. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "T0gTBZHYVSKWZpMHoqEToelI+i6V/jOoY5WeX0P0f+s=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-version-3-1-26",
-      "file": "valid/fhgff3-version-3-1-26.fhgff3.gff3",
+      "id": "fhgff3-version-3-1-26-canonical-parent",
+      "file": "valid/fhgff3-version-3-1-26-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G1"
       ],
-      "description": "##gff-version 3.1.26 on line 1.",
-      "checksum": "quXvIKm2ZDCWtCF4DC9TiG5a/+Z/svA+xjY/fq+4l0Q=",
+      "description": "##gff-version 3.1.26 on line 1. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "GyvdyLQqg/JSWL6Ltnhvmf8SS+ip2Jjzr8PciNOkmM0=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-version-3-trailing-whitespace",
-      "file": "valid/fhgff3-version-3-trailing-whitespace.fhgff3.gff3",
+      "id": "fhgff3-version-3-trailing-whitespace-canonical-parent",
+      "file": "valid/fhgff3-version-3-trailing-whitespace-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G1"
       ],
-      "description": "##gff-version 3 followed by a space and a tab; G1 allows trailing spaces or tabs.",
-      "checksum": "AZKTL2vPK6JZRJN5EmCOVWGaaZrnC+w/m2SVWtXz2WQ=",
+      "description": "##gff-version 3 followed by a space and a tab; G1 allows trailing spaces or tabs. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "Di2qY+E8wPqGybEsztbZy/Ubr8ke22oISBuaNQ2mZYE=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-crlf",
-      "file": "valid/fhgff3-crlf.fhgff3.gff3",
+      "id": "fhgff3-crlf-canonical-parent",
+      "file": "valid/fhgff3-crlf-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2766,16 +2766,16 @@
         "R1",
         "R3"
       ],
-      "description": "CRLF line endings; CR bytes are hashed.",
-      "checksum": "fZYxQtxOb8F/zOzD7DYOWE/76FypNufTCRyp9Ju2eUk=",
+      "description": "CRLF line endings; CR bytes are hashed. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "x43tsJLF/Zjqk6qy3sA7sAjPB0Hpjo7dqJtenCAN3+g=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-gzip",
-      "file": "valid/fhgff3-gzip.fhgff3.gff3.gz",
+      "id": "fhgff3-gzip-canonical-parent",
+      "file": "valid/fhgff3-gzip-canonical-parent.fhgff3.gff3.gz",
       "format": "fhgff3",
       "compressed": true,
       "compression": "gzip",
@@ -2784,16 +2784,16 @@
         "G1",
         "R1"
       ],
-      "description": "fhgff3-minimal-checksum-link compressed as one gzip member; same checksum.",
-      "checksum": "EUNVNynadF9SZugxxVE5qDnF8r8fc+uyfylccG2UeRQ=",
+      "description": "fhgff3-minimal-checksum-link compressed as one gzip member; same checksum. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "xm7zbrQcqX6QT7650VKWkmN0ZlDzoWSaAyQRYjf8oB0=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-bgzf",
-      "file": "valid/fhgff3-bgzf.fhgff3.gff3.gz",
+      "id": "fhgff3-bgzf-canonical-parent",
+      "file": "valid/fhgff3-bgzf-canonical-parent.fhgff3.gff3.gz",
       "format": "fhgff3",
       "compressed": true,
       "compression": "bgzf",
@@ -2802,16 +2802,16 @@
         "G1",
         "R1"
       ],
-      "description": "fhgff3-minimal-checksum-link compressed as multi-block BGZF; same checksum.",
-      "checksum": "EUNVNynadF9SZugxxVE5qDnF8r8fc+uyfylccG2UeRQ=",
+      "description": "fhgff3-minimal-checksum-link compressed as multi-block BGZF; same checksum. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "xm7zbrQcqX6QT7650VKWkmN0ZlDzoWSaAyQRYjf8oB0=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-nested-parent-checksum",
-      "file": "valid/fhgff3-nested-parent-checksum.fhgff3.gff3",
+      "id": "fhgff3-nested-parent-checksum-canonical-parent",
+      "file": "valid/fhgff3-nested-parent-checksum-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -2820,24 +2820,24 @@
         "R2",
         "R3"
       ],
-      "description": "A second parent (a filtered FHGFF3 annotation); both nested checksums are covered by the root checksum.",
-      "checksum": "T1C1rV3KPPpv3zaHaXrHkyWC2pGVtHkCLgi711a+qoc=",
+      "description": "A second parent (a filtered FHGFF3 annotation); both nested checksums are covered by the root checksum. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "wJ0lTg5+HRXwJNSKXOLnITzlb9zU6Mc/CbBIUNCYuhE=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhgff3-busco-lineage-dotted",
-      "file": "valid/fhgff3-busco-lineage-dotted.fhgff3.gff3",
+      "id": "fhgff3-busco-lineage-dotted-canonical-parent",
+      "file": "valid/fhgff3-busco-lineage-dotted-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "G2"
       ],
-      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHGFF3 1.2 allows (#170).",
-      "checksum": "LrjUSzXWiq8RGhdN175fMb6sP97wK92Z+Z+FC/28SH4=",
+      "description": "BUSCO completeness with the dotted dataset version odb12.2 that FHGFF3 1.2 allows (#170). Canonical-parent replacement; historical payload preserved.",
+      "checksum": "EqBqnQGk7v4Toxw0T2EXaq+Pbt/Z2/xn3XdauWaWpKQ=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
@@ -3034,16 +3034,16 @@
       }
     },
     {
-      "id": "fhp-fasta-schema-canonical-raw-main",
-      "file": "valid/fhp-fasta-schema-canonical-raw-main.fhp.fasta",
+      "id": "fhp-fasta-schema-canonical-raw-main-canonical-parent",
+      "file": "valid/fhp-fasta-schema-canonical-raw-main-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "V1"
       ],
-      "description": "The raw-main FHP URL under the repository's current name selects the current FHP schema.",
-      "checksum": "b2+lbyBeQZ0AwzRVS1rIBN5OgaVe4BexhQ/AIyt2BBI=",
+      "description": "The raw-main FHP URL under the repository's current name selects the current FHP schema. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "4jx9naiSJ2y+F2ks+TVBb7ukP/5rgSoYiTZEecqrvKk=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -3051,24 +3051,24 @@
       }
     },
     {
-      "id": "fhgff3-schema-canonical-raw-main",
-      "file": "valid/fhgff3-schema-canonical-raw-main.fhgff3.gff3",
+      "id": "fhgff3-schema-canonical-raw-main-canonical-parent",
+      "file": "valid/fhgff3-schema-canonical-raw-main-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "V1"
       ],
-      "description": "The raw-main FHGFF3 URL under the repository's current name selects the current FHGFF3 schema.",
-      "checksum": "gGlU8Loh35l1DIFA9U6Qi/nszM2CRfw/FKoqXBgGDHE=",
+      "description": "The raw-main FHGFF3 URL under the repository's current name selects the current FHGFF3 schema. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "QwdPZsWPYlVFE8ACVU61P1pcdIF1t3KH3OSWIMJYYpU=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
       }
     },
     {
-      "id": "fhp-fasta-schema-raw-tag",
-      "file": "valid/fhp-fasta-schema-raw-tag.fhp.fasta",
+      "id": "fhp-fasta-schema-raw-tag-canonical-parent",
+      "file": "valid/fhp-fasta-schema-raw-tag-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -3076,8 +3076,8 @@
         "V2",
         "V4"
       ],
-      "description": "The v0.4.0 release publishes FHP, so its raw tag URL selects the FHP 1.0 schema.",
-      "checksum": "5s+pgLaxWa46DzZHU7ObzoUvz7KAlTowCXEv4h8ltZc=",
+      "description": "The v0.4.0 release publishes FHP, so its raw tag URL selects the FHP 1.0 schema. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "0ciCD1Vv55L0j8wOt1f/J6TPdEeBrKucl9l3pOUX16k=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -3085,16 +3085,16 @@
       }
     },
     {
-      "id": "fhgff3-schema-raw-main",
-      "file": "valid/fhgff3-schema-raw-main.fhgff3.gff3",
+      "id": "fhgff3-schema-raw-main-canonical-parent",
+      "file": "valid/fhgff3-schema-raw-main-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
       "rules": [
         "V1"
       ],
-      "description": "The raw-main FHGFF3 URL selects the current FHGFF3 schema.",
-      "checksum": "ubDdlbWYhSfh/7ofmosNnc+pdsDBPFA/0bYblwZupvA=",
+      "description": "The raw-main FHGFF3 URL selects the current FHGFF3 schema. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "tJR+7TzZA4hm6QN8sWcyufje3J3RYA0oN888uf7YPNg=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
@@ -3286,8 +3286,8 @@
       }
     },
     {
-      "id": "fhp-fasta-extension-fields",
-      "file": "valid/fhp-fasta-extension-fields.fhp.fasta",
+      "id": "fhp-fasta-extension-fields-canonical-parent",
+      "file": "valid/fhp-fasta-extension-fields-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "valid",
@@ -3295,8 +3295,8 @@
         "R15",
         "P1"
       ],
-      "description": "FHP 1.1 (v0.5.0) with an extension field holding an object.",
-      "checksum": "FTlHBeBO/h236zLVyppc8qPn9lWt/jGU4Pr7gIIu56s=",
+      "description": "FHP 1.1 (v0.5.0) with an extension field holding an object. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "tiJ/RrnXajLfXCB+9EAeDaquVMFaBqG/l2dpVQZUBLI=",
       "metadata": {
         "proteome": "Synthetic FHP conformance protein set",
         "version": "1.0.0",
@@ -3308,8 +3308,8 @@
       }
     },
     {
-      "id": "fhgff3-extension-fields",
-      "file": "valid/fhgff3-extension-fields.fhgff3.gff3",
+      "id": "fhgff3-extension-fields-canonical-parent",
+      "file": "valid/fhgff3-extension-fields-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "valid",
@@ -3317,8 +3317,8 @@
         "R15",
         "G2"
       ],
-      "description": "FHGFF3 1.1 (v0.5.0) with an extension field holding a list.",
-      "checksum": "z+xHAzS6jl4kC654SHZar5+oKs2xA++L1xrTPoJ3ECQ=",
+      "description": "FHGFF3 1.1 (v0.5.0) with an extension field holding a list. Canonical-parent replacement; historical payload preserved.",
+      "checksum": "m3So48GouwNn0eWXRJxukqLrlMtICIlOodL3XedWlIY=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0",
@@ -3509,6 +3509,76 @@
           "totalBasePairs": 3100000000,
           "N50": 2147483648
         }
+      }
+    },
+    {
+      "id": "fhp-fasta-cr",
+      "file": "valid/fhp-fasta-cr.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "Exact CR or mixed LF/CRLF/CR bytes are hashed; canonical synthetic parent.",
+      "checksum": "Irm6pQbIZSYr13An5GPniL7KzdB2K/Yk+4wyJyjAbYY=",
+      "metadata": {
+        "proteome": "Synthetic FHP conformance protein set",
+        "version": "1.0.0",
+        "sourceType": "predicted"
+      }
+    },
+    {
+      "id": "fhp-fasta-mixed-endings",
+      "file": "valid/fhp-fasta-mixed-endings.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "Exact CR or mixed LF/CRLF/CR bytes are hashed; canonical synthetic parent.",
+      "checksum": "4Kc7E/RwNDN9Ghhq7WNql+3EH2hidvtzmEZi1zrUkOI=",
+      "metadata": {
+        "proteome": "Synthetic FHP conformance protein set",
+        "version": "1.0.0",
+        "sourceType": "predicted"
+      }
+    },
+    {
+      "id": "fhgff3-cr",
+      "file": "valid/fhgff3-cr.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "Exact CR or mixed LF/CRLF/CR bytes are hashed; canonical synthetic parent.",
+      "checksum": "JAQpatufkdooKMslk4O3p+xcVY7pt6jrGzWjM+Vm764=",
+      "metadata": {
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fhgff3-mixed-endings",
+      "file": "valid/fhgff3-mixed-endings.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "Exact CR or mixed LF/CRLF/CR bytes are hashed; canonical synthetic parent.",
+      "checksum": "ZZOoq8XHt0Ub3QEKPkEv5pcuxqC+bluBDAgpis2GbiQ=",
+      "metadata": {
+        "annotation": "Synthetic FHGFF3 conformance annotation",
+        "version": "1.0.0"
       }
     },
     {
@@ -4578,13 +4648,13 @@
       "reason": "Expanded form with a root @id, which no FHR field holds."
     },
     {
-      "id": "fhp-fasta-busco-lineage-dotted-version-1-0",
-      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-0.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-0-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-0-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.6.0",
         "schemaVersion": "1.0",
@@ -4604,7 +4674,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -4618,17 +4688,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "XTv0auS8E2ORaF3k59sQOijK5zhgJGqRdrklXMlBljM="
+        "checksum": "4odx5DpGCME5DK4qre3bkiaY7BoEXjNjqZP2XrfwdRA="
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-dotted-version-1-1",
-      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-1.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-1-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-1-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.6.0",
         "schemaVersion": "1.1",
@@ -4648,7 +4718,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -4662,62 +4732,62 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "AJfXvRX3+fhzT0K2gq/1AlrYGLo+NWmNZ7s7okNStfE="
+        "checksum": "kQxHYMpBejJe8FvMu/VoENFLHlPxC4KkQX8g+qYUo6M="
       }
     },
     {
-      "id": "fhp-fasta-sequence-tampered",
-      "file": "invalid/fhp-fasta-sequence-tampered.fhp.fasta",
+      "id": "fhp-fasta-sequence-tampered-canonical-parent",
+      "file": "invalid/fhp-fasta-sequence-tampered-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R3",
-      "reason": "A residue changed after the checksum was computed (checksum mismatch)."
+      "reason": "A residue changed after the checksum was computed (checksum mismatch). Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-stop-normalized-checksum",
-      "file": "invalid/fhp-fasta-stop-normalized-checksum.fhp.fasta",
+      "id": "fhp-fasta-stop-normalized-checksum-canonical-parent",
+      "file": "invalid/fhp-fasta-stop-normalized-checksum-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R1",
-      "reason": "Checksum computed after removing terminal stop symbols."
+      "reason": "Checksum computed after removing terminal stop symbols. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-case-normalized-checksum",
-      "file": "invalid/fhp-fasta-case-normalized-checksum.fhp.fasta",
+      "id": "fhp-fasta-case-normalized-checksum-canonical-parent",
+      "file": "invalid/fhp-fasta-case-normalized-checksum-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R1",
-      "reason": "Checksum computed after upper-casing residues."
+      "reason": "Checksum computed after upper-casing residues. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-two-checksum-lines",
-      "file": "invalid/fhp-fasta-two-checksum-lines.fhp.fasta",
+      "id": "fhp-fasta-two-checksum-lines-canonical-parent",
+      "file": "invalid/fhp-fasta-two-checksum-lines-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R2",
-      "reason": "Two root-level checksum lines with the same value."
+      "reason": "Two root-level checksum lines with the same value. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-header-after-record",
-      "file": "invalid/fhp-fasta-header-after-record.fhp.fasta",
+      "id": "fhp-fasta-header-after-record-canonical-parent",
+      "file": "invalid/fhp-fasta-header-after-record-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R10",
-      "reason": "An FHP line after the first protein record."
+      "reason": "An FHP line after the first protein record. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-missing-source-type",
-      "file": "invalid/fhp-fasta-missing-source-type.fhp.fasta",
+      "id": "fhp-fasta-missing-source-type-canonical-parent",
+      "file": "invalid/fhp-fasta-missing-source-type-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "No sourceType.",
+      "reason": "No sourceType. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4736,22 +4806,22 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "j+ZpV9X7p9uL8K5fLvkuUK8FG60X1N13VCA5gy4hzZk="
+        "checksum": "kke/s9sN2o/07gKQKnmOd86QAslVW5i3gRYSV5g4CRw="
       }
     },
     {
-      "id": "fhp-fasta-curated-source-type",
-      "file": "invalid/fhp-fasta-curated-source-type.fhp.fasta",
+      "id": "fhp-fasta-curated-source-type-canonical-parent",
+      "file": "invalid/fhp-fasta-curated-source-type-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "sourceType curated is not an FHP value (use database or mixed).",
+      "reason": "sourceType curated is not an FHP value (use database or mixed). Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4771,22 +4841,22 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "p/XCyF6xoVMcrT70s/47v7QKqTm7WBxF+ahKDBVMRY0="
+        "checksum": "Zl5wrxJjSNWnHxfVxnFhe6D3pOEegQrofCFu778kQWU="
       }
     },
     {
-      "id": "fhp-fasta-genome-key",
-      "file": "invalid/fhp-fasta-genome-key.fhp.fasta",
+      "id": "fhp-fasta-genome-key-canonical-parent",
+      "file": "invalid/fhp-fasta-genome-key-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "The FHR-only key genome.",
+      "reason": "The FHR-only key genome. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4806,13 +4876,13 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
         "genome": "Synthetic genome",
-        "checksum": "NiPXCYWbTQiZ7wzsgHjTkmvbFM2KV994DnuD0CLLekk="
+        "checksum": "jq5KQfc8Kz48sTMQ3/azRd6WLDN8TIF/q3m5dghh24I="
       }
     },
     {
@@ -4850,13 +4920,13 @@
       }
     },
     {
-      "id": "fhp-fasta-derived-from-bad-relationship",
-      "file": "invalid/fhp-fasta-derived-from-bad-relationship.fhp.fasta",
+      "id": "fhp-fasta-derived-from-bad-relationship-canonical-parent",
+      "file": "invalid/fhp-fasta-derived-from-bad-relationship-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A derivedFrom relationship outside the shared vocabulary.",
+      "reason": "A derivedFrom relationship outside the shared vocabulary. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4876,22 +4946,22 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "encodes"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "XFGPUWfziH9IzVRkY/cPgehnjA1lSxB6rZUpnwpZNrQ="
+        "checksum": "BPRrfKlz5IACCDS5ZBMR/aIN8DpP8zZOw9eYdnYjKYQ="
       }
     },
     {
-      "id": "fhp-fasta-source-without-name",
-      "file": "invalid/fhp-fasta-source-without-name.fhp.fasta",
+      "id": "fhp-fasta-source-without-name-canonical-parent",
+      "file": "invalid/fhp-fasta-source-without-name-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A source entry without a name.",
+      "reason": "A source entry without a name. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4911,7 +4981,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -4921,17 +4991,17 @@
             "release": "2026_03"
           }
         ],
-        "checksum": "GQWVRXTM/OnYuIJEDz/WF0F/uWLDqSlm12b4AD533L0="
+        "checksum": "No9sK7Psp9kPtIH99bzyg5SE4M46OVrdhi+EuJjdqPg="
       }
     },
     {
-      "id": "fhp-fasta-unused-genetic-code",
-      "file": "invalid/fhp-fasta-unused-genetic-code.fhp.fasta",
+      "id": "fhp-fasta-unused-genetic-code-canonical-parent",
+      "file": "invalid/fhp-fasta-unused-genetic-code-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "geneticCode 7 is not an NCBI translation table.",
+      "reason": "geneticCode 7 is not an NCBI translation table. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4951,23 +5021,23 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
         "geneticCode": 7,
-        "checksum": "NFdUemfmAGbr+X2cfmNTNQXwQhi2nd+9C86O1OdLL3A="
+        "checksum": "XSyPaxlYvyidfmtI8JNibPmpqnfn6Bvmjxipkqvtu/M="
       }
     },
     {
-      "id": "fhp-fasta-busco-no-lineage-version",
-      "file": "invalid/fhp-fasta-busco-no-lineage-version.fhp.fasta",
+      "id": "fhp-fasta-busco-no-lineage-version-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-no-lineage-version-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A BUSCO lineage dataset without its version suffix (_odbNN).",
+      "reason": "A BUSCO lineage dataset without its version suffix (_odbNN). Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -4987,7 +5057,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5000,17 +5070,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "Fxt2rd3kRIik/sIw47RQg4wKds/A9jsmWnC7jp5w7NA="
+        "checksum": "2u351axDPTpCSIgE8hPN/iFFPwSMxyhyqo1xTvmFSA4="
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-trailing-dot",
-      "file": "invalid/fhp-fasta-busco-lineage-trailing-dot.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-trailing-dot-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-trailing-dot-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it.",
+      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -5030,7 +5100,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5043,17 +5113,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "1Zp2Kx4KR1XBVGFN01i33aIQ8gTPuoMXjG4WzKfcUA8="
+        "checksum": "Zmtc81tfTMeQHJQR4FwZa9yD1dYilpc5d2hBOsoWRkM="
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-leading-dot",
-      "file": "invalid/fhp-fasta-busco-lineage-leading-dot.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-leading-dot-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-leading-dot-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A malformed dotted BUSCO dataset version: _odb is followed by a dot, not a digit.",
+      "reason": "A malformed dotted BUSCO dataset version: _odb is followed by a dot, not a digit. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -5073,7 +5143,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5086,17 +5156,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "CklOeVn8zHmCRKoSJTxNYsvrSo7X3bd7hmIKJ7sWGV4="
+        "checksum": "iK3heDxSZ4RvTgy02fboxZX7rMfpuYfHny0aYSytHRk="
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-letter-component",
-      "file": "invalid/fhp-fasta-busco-lineage-letter-component.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-letter-component-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-letter-component-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A malformed dotted BUSCO dataset version: a version component is not all digits.",
+      "reason": "A malformed dotted BUSCO dataset version: a version component is not all digits. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -5116,7 +5186,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5129,17 +5199,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "DnT5hTGfmhWe4uPNzAnz67VG2fcuwdvMr2NPmVr4LVk="
+        "checksum": "24Ig4Kj/EDeXbdDdswYSSSxiDsEZ/VBSkX/viIW0NX0="
       }
     },
     {
-      "id": "fhp-fasta-busco-lineage-uppercase",
-      "file": "invalid/fhp-fasta-busco-lineage-uppercase.fhp.fasta",
+      "id": "fhp-fasta-busco-lineage-uppercase-canonical-parent",
+      "file": "invalid/fhp-fasta-busco-lineage-uppercase-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "A malformed dotted BUSCO dataset version: dataset names are lower case.",
+      "reason": "A malformed dotted BUSCO dataset version: dataset names are lower case. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -5159,7 +5229,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5172,17 +5242,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "UBb8RwJ0v0iw/C5Xxdw5BdL/aVWISV5z0SKtnq+8mn0="
+        "checksum": "k3gY0mzo/30qQeQQwjxvGGQDFt3r80cjgjbKsHhx6/I="
       }
     },
     {
-      "id": "fhp-fasta-pattern-trailing-newline",
-      "file": "invalid/fhp-fasta-pattern-trailing-newline.fhp.fasta",
+      "id": "fhp-fasta-pattern-trailing-newline-canonical-parent",
+      "file": "invalid/fhp-fasta-pattern-trailing-newline-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P1",
-      "reason": "The BUSCO lineageDataset ends with a line feed, which its pattern ^...$ does not allow under ECMA-262 regular expressions; validators whose $ also matches before a final line feed (Python re) wrongly accept it.",
+      "reason": "The BUSCO lineageDataset ends with a line feed, which its pattern ^...$ does not allow under ECMA-262 regular expressions; validators whose $ also matches before a final line feed (Python re) wrongly accept it. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhp/v0.4.0",
         "schemaVersion": "1.0",
@@ -5202,7 +5272,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
@@ -5215,17 +5285,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "MiM5GcWYBIQwHS7T/kaJ9q5GVm9+mMdXh0Y5hMUkZdM="
+        "checksum": "h/4pS4cHB300achcdtVpNP3V+1fYDypbHHvfjQUzbIg="
       }
     },
     {
-      "id": "fhp-fasta-cites-fhr-schema",
-      "file": "invalid/fhp-fasta-cites-fhr-schema.fhp.fasta",
+      "id": "fhp-fasta-cites-fhr-schema-canonical-parent",
+      "file": "invalid/fhp-fasta-cites-fhr-schema-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "P2",
-      "reason": "Protein metadata citing fhr.json is validated as FHR, and fails it.",
+      "reason": "Protein metadata citing fhr.json is validated as FHR, and fails it. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
         "schemaVersion": "1.0",
@@ -5245,22 +5315,22 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "translatedFrom"
           }
         ],
         "documentation": "Synthetic FHP conformance vector; the parent checksum is a placeholder.",
-        "checksum": "Y4Mv2iolMZ54Wk/Qw3290fkCov6/BJqLIbRnSYkn3dM="
+        "checksum": "Z8SWBBzaS2Z+24bAFfIl9tUf3i2XU55fhdKhhFEIZ38="
       }
     },
     {
-      "id": "fhgff3-busco-lineage-dotted-version-1-0",
-      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-0.fhgff3.gff3",
+      "id": "fhgff3-busco-lineage-dotted-version-1-0-canonical-parent",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-0-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.0, citing v0.6.0: the older stated minor retains its undotted pattern. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
         "schemaVersion": "1.0",
@@ -5279,7 +5349,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
@@ -5292,17 +5362,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "c7F1v4TMtSciB4HPkl8SaaTHaaIfVEa3VhJYlkoJ2B0="
+        "checksum": "a79pn9s7/r2qWWdRDHvIJla6Duyeh9lkBRejQsAKtrQ="
       }
     },
     {
-      "id": "fhgff3-busco-lineage-dotted-version-1-1",
-      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-1.fhgff3.gff3",
+      "id": "fhgff3-busco-lineage-dotted-version-1-1-canonical-parent",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-1-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern.",
+      "reason": "Dotted BUSCO dataset version with schemaVersion 1.1, citing v0.6.0: the older stated minor retains its undotted pattern. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
         "schemaVersion": "1.1",
@@ -5321,7 +5391,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
@@ -5334,89 +5404,89 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "2GWHPPdilAEkuhfpDpjfCKR694tqoPTp2DYxlHqrktk="
+        "checksum": "EhK/DLmflfXC15hLJtg+cVA9myxQDND3aGCnrdXBKFI="
       }
     },
     {
-      "id": "fhgff3-fasta-tampered",
-      "file": "invalid/fhgff3-fasta-tampered.fhgff3.gff3",
+      "id": "fhgff3-fasta-tampered-canonical-parent",
+      "file": "invalid/fhgff3-fasta-tampered-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R3",
-      "reason": "A residue of the ##FASTA section changed after the checksum was computed."
+      "reason": "A residue of the ##FASTA section changed after the checksum was computed. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-two-checksum-lines",
-      "file": "invalid/fhgff3-two-checksum-lines.fhgff3.gff3",
+      "id": "fhgff3-two-checksum-lines-canonical-parent",
+      "file": "invalid/fhgff3-two-checksum-lines-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R2",
-      "reason": "Two root-level checksum lines with the same value."
+      "reason": "Two root-level checksum lines with the same value. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-header-after-feature",
-      "file": "invalid/fhgff3-header-after-feature.fhgff3.gff3",
+      "id": "fhgff3-header-after-feature-canonical-parent",
+      "file": "invalid/fhgff3-header-after-feature-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R10",
-      "reason": "A #~ line after the first feature."
+      "reason": "A #~ line after the first feature. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-header-after-fasta",
-      "file": "invalid/fhgff3-header-after-fasta.fhgff3.gff3",
+      "id": "fhgff3-header-after-fasta-canonical-parent",
+      "file": "invalid/fhgff3-header-after-fasta-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G1",
-      "reason": "A #~ line after ##FASTA, before the first sequence line."
+      "reason": "A #~ line after ##FASTA, before the first sequence line. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-concatenated",
-      "file": "invalid/fhgff3-concatenated.fhgff3.gff3",
+      "id": "fhgff3-concatenated-canonical-parent",
+      "file": "invalid/fhgff3-concatenated-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R10",
-      "reason": "Two FHGFF3 files concatenated: the second #~ block follows features."
+      "reason": "Two FHGFF3 files concatenated: the second #~ block follows features. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-header-before-version",
-      "file": "invalid/fhgff3-header-before-version.fhgff3.gff3",
+      "id": "fhgff3-header-before-version-canonical-parent",
+      "file": "invalid/fhgff3-header-before-version-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G1",
-      "reason": "A #~ line on line 1, before ##gff-version 3."
+      "reason": "A #~ line on line 1, before ##gff-version 3. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-version-30",
-      "file": "invalid/fhgff3-version-30.fhgff3.gff3",
+      "id": "fhgff3-version-30-canonical-parent",
+      "file": "invalid/fhgff3-version-30-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G1",
-      "reason": "##gff-version 30 on line 1: G1 allows only 3 or 3.x.y."
+      "reason": "##gff-version 30 on line 1: G1 allows only 3 or 3.x.y. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-version-3x",
-      "file": "invalid/fhgff3-version-3x.fhgff3.gff3",
+      "id": "fhgff3-version-3x-canonical-parent",
+      "file": "invalid/fhgff3-version-3x-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G1",
-      "reason": "##gff-version 3x on line 1: G1 allows only 3 or 3.x.y."
+      "reason": "##gff-version 3x on line 1: G1 allows only 3 or 3.x.y. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-version-3-1",
-      "file": "invalid/fhgff3-version-3-1.fhgff3.gff3",
+      "id": "fhgff3-version-3-1-canonical-parent",
+      "file": "invalid/fhgff3-version-3-1-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G1",
-      "reason": "##gff-version 3.1 on line 1: G1 allows only 3 or 3.x.y."
+      "reason": "##gff-version 3.1 on line 1: G1 allows only 3 or 3.x.y. Canonical-parent replacement isolates this rejection from R4."
     },
     {
       "id": "fhgff3-no-genome-link",
@@ -5476,13 +5546,13 @@
       }
     },
     {
-      "id": "fhgff3-two-annotates",
-      "file": "invalid/fhgff3-two-annotates.fhgff3.gff3",
+      "id": "fhgff3-two-annotates-canonical-parent",
+      "file": "invalid/fhgff3-two-annotates-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "Two derivedFrom items with the relationship annotates.",
+      "reason": "Two derivedFrom items with the relationship annotates. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0",
         "schemaVersion": "1.0",
@@ -5501,27 +5571,27 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           },
           {
             "headerType": "FHR",
-            "checksum": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=",
+            "checksum": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA=",
             "relationship": "annotates"
           }
         ],
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
-        "checksum": "5RJnR6hZfcHoGV0P/BDgvPuhuyJl3qF7eOSF18pH9P0="
+        "checksum": "q4dBZP+YJFIdBIQv11UySFB/1xRIiM366BRERjwc0JY="
       }
     },
     {
-      "id": "fhgff3-annotates-fhp",
-      "file": "invalid/fhgff3-annotates-fhp.fhgff3.gff3",
+      "id": "fhgff3-annotates-fhp-canonical-parent",
+      "file": "invalid/fhgff3-annotates-fhp-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "An annotates link whose parent is not an FHR genome.",
+      "reason": "An annotates link whose parent is not an FHR genome. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0",
         "schemaVersion": "1.0",
@@ -5540,22 +5610,22 @@
         "derivedFrom": [
           {
             "headerType": "FHP",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
-        "checksum": "sSehrjBnb+eKEGdRWSHVTGo2Qn3D3nUlh7HmxVv0kEQ="
+        "checksum": "ynxtoQ1ovCpjem4d+AW8VtcD8YWWMH/0oujBawzAtlI="
       }
     },
     {
-      "id": "fhgff3-fhr-only-key",
-      "file": "invalid/fhgff3-fhr-only-key.fhgff3.gff3",
+      "id": "fhgff3-fhr-only-key-canonical-parent",
+      "file": "invalid/fhgff3-fhr-only-key-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "The FHR-only key genome.",
+      "reason": "The FHR-only key genome. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0",
         "schemaVersion": "1.0",
@@ -5574,23 +5644,23 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
         "genome": "Synthetic genome",
-        "checksum": "cDPwAc7S9binhK7akmV4hM6G4NKYNbvC1OC+/X2y4Po="
+        "checksum": "Ej0YGIl7IUL5E/JI14G6t02QgR4U39vYh61d6Cynmcs="
       }
     },
     {
-      "id": "fhgff3-busco-lineage-trailing-dot",
-      "file": "invalid/fhgff3-busco-lineage-trailing-dot.fhgff3.gff3",
+      "id": "fhgff3-busco-lineage-trailing-dot-canonical-parent",
+      "file": "invalid/fhgff3-busco-lineage-trailing-dot-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G2",
-      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it (#170).",
+      "reason": "A malformed dotted BUSCO dataset version: the last dot has no digits after it (#170). Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.4.0",
         "schemaVersion": "1.0",
@@ -5609,7 +5679,7 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
@@ -5622,17 +5692,17 @@
           "missing": 1,
           "total": 2
         },
-        "checksum": "tO3QgsCjIOCY1+10PONFv+HGDS1zzqCSbZrQ0qQ6uNU="
+        "checksum": "u12yHIT0gG5rG/WgxjPFAXppTGVePa26uZR7fO8p9Nw="
       }
     },
     {
-      "id": "fhgff3-cites-fhr-schema",
-      "file": "invalid/fhgff3-cites-fhr-schema.fhgff3.gff3",
+      "id": "fhgff3-cites-fhr-schema-canonical-parent",
+      "file": "invalid/fhgff3-cites-fhr-schema-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "G3",
-      "reason": "Annotation metadata citing fhr.json is validated as FHR, and fails it.",
+      "reason": "Annotation metadata citing fhr.json is validated as FHR, and fails it. Canonical-parent replacement isolates this rejection from R4.",
       "metadata": {
         "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
         "schemaVersion": "1.0",
@@ -5651,12 +5721,12 @@
         "derivedFrom": [
           {
             "headerType": "FHR",
-            "checksum": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "relationship": "annotates"
           }
         ],
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
-        "checksum": "RB/a6AKH0CbOstr5y6ovdm/ML1X3DTULG2Y1KyILPfA="
+        "checksum": "7Ad5ULOwjSwoo/XeNb6/4jF7gUVsQ9FGBgcJGLJQGgQ="
       }
     },
     {
@@ -5734,23 +5804,23 @@
       "reason": "Any other schema value is checked against the current FHR schema (2.0), so schemaVersion 1 fails."
     },
     {
-      "id": "fhp-fasta-schema-release-without-type",
-      "file": "invalid/fhp-fasta-schema-release-without-type.fhp.fasta",
+      "id": "fhp-fasta-schema-release-without-type-canonical-parent",
+      "file": "invalid/fhp-fasta-schema-release-without-type-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "V4",
-      "reason": "v0.3.1 published no FHP schema; the result is unsupported-version.",
+      "reason": "v0.3.1 published no FHP schema; the result is unsupported-version. Canonical-parent replacement isolates this rejection from R4.",
       "result": "unsupported-version"
     },
     {
-      "id": "fhgff3-schema-unknown-release",
-      "file": "invalid/fhgff3-schema-unknown-release.fhgff3.gff3",
+      "id": "fhgff3-schema-unknown-release-canonical-parent",
+      "file": "invalid/fhgff3-schema-unknown-release-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "V4",
-      "reason": "v0.0.0 is not a release; the result is unsupported-version.",
+      "reason": "v0.0.0 is not a release; the result is unsupported-version. Canonical-parent replacement isolates this rejection from R4.",
       "result": "unsupported-version"
     },
     {
@@ -5907,58 +5977,58 @@
       "reason": "The extension key x-refget-commonName appears twice."
     },
     {
-      "id": "fhp-fasta-extension-older-version",
-      "file": "invalid/fhp-fasta-extension-older-version.fhp.fasta",
+      "id": "fhp-fasta-extension-older-version-canonical-parent",
+      "file": "invalid/fhp-fasta-extension-older-version-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "The record cites v0.5.0 but states schemaVersion '1.0', which has no extension fields."
+      "reason": "The record cites v0.5.0 but states schemaVersion '1.0', which has no extension fields. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-extension-older-version",
-      "file": "invalid/fhgff3-extension-older-version.fhgff3.gff3",
+      "id": "fhgff3-extension-older-version-canonical-parent",
+      "file": "invalid/fhgff3-extension-older-version-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "The record cites v0.5.0 but states schemaVersion '1.0', which has no extension fields."
+      "reason": "The record cites v0.5.0 but states schemaVersion '1.0', which has no extension fields. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-extension-older-release",
-      "file": "invalid/fhp-fasta-extension-older-release.fhp.fasta",
+      "id": "fhp-fasta-extension-older-release-canonical-parent",
+      "file": "invalid/fhp-fasta-extension-older-release-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields."
+      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-extension-older-release",
-      "file": "invalid/fhgff3-extension-older-release.fhgff3.gff3",
+      "id": "fhgff3-extension-older-release-canonical-parent",
+      "file": "invalid/fhgff3-extension-older-release-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields."
+      "reason": "The record cites v0.4.0, whose schema (1.0) has no extension fields. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhp-fasta-extension-nested",
-      "file": "invalid/fhp-fasta-extension-nested.fhp.fasta",
+      "id": "fhp-fasta-extension-nested-canonical-parent",
+      "file": "invalid/fhp-fasta-extension-nested-canonical-parent.fhp.fasta",
       "format": "fhp-fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "An x- key inside a derivedFrom item: nested objects stay closed."
+      "reason": "An x- key inside a derivedFrom item: nested objects stay closed. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-extension-nested",
-      "file": "invalid/fhgff3-extension-nested.fhgff3.gff3",
+      "id": "fhgff3-extension-nested-canonical-parent",
+      "file": "invalid/fhgff3-extension-nested-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R15",
-      "reason": "An x- key inside a derivedFrom item: nested objects stay closed."
+      "reason": "An x- key inside a derivedFrom item: nested objects stay closed. Canonical-parent replacement isolates this rejection from R4."
     },
     {
       "id": "jsonld-extension-field",
@@ -5988,40 +6058,40 @@
       "reason": "The FHR item has the property x-refget-commonName, although the selected schema (FHR 2.1) would accept it in JSON or YAML."
     },
     {
-      "id": "fasta-fhgff3-header",
-      "file": "invalid/fasta-fhgff3-header.fhr.fasta",
+      "id": "fasta-fhgff3-header-canonical-parent",
+      "file": "invalid/fasta-fhgff3-header-canonical-parent.fhr.fasta",
       "format": "fasta",
       "compressed": false,
       "expected": "invalid",
       "rule": "R17",
-      "reason": "An FHGFF3 header in a FASTA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+      "reason": "An FHGFF3 header in a FASTA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "gfa-fhgff3-header",
-      "file": "invalid/gfa-fhgff3-header.fhr.gfa",
+      "id": "gfa-fhgff3-header-canonical-parent",
+      "file": "invalid/gfa-fhgff3-header-canonical-parent.fhr.gfa",
       "format": "gfa",
       "compressed": false,
       "expected": "invalid",
       "rule": "R17",
-      "reason": "An FHGFF3 header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+      "reason": "An FHGFF3 header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "gfa-fhp-header",
-      "file": "invalid/gfa-fhp-header.fhr.gfa",
+      "id": "gfa-fhp-header-canonical-parent",
+      "file": "invalid/gfa-fhp-header-canonical-parent.fhr.gfa",
       "format": "gfa",
       "compressed": false,
       "expected": "invalid",
       "rule": "R17",
-      "reason": "An FHP header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+      "reason": "An FHP header in a GFA file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file. Canonical-parent replacement isolates this rejection from R4."
     },
     {
-      "id": "fhgff3-fhp-header",
-      "file": "invalid/fhgff3-fhp-header.fhgff3.gff3",
+      "id": "fhgff3-fhp-header-canonical-parent",
+      "file": "invalid/fhgff3-fhp-header-canonical-parent.fhgff3.gff3",
       "format": "fhgff3",
       "compressed": false,
       "expected": "invalid",
       "rule": "R17",
-      "reason": "An FHP header in a GFF3 file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file."
+      "reason": "An FHP header in a GFF3 file: the record is valid under its own schema and its checksum matches, but that header type does not go in this file. Canonical-parent replacement isolates this rejection from R4."
     },
     {
       "id": "fhgff3-fhr-header",
@@ -6068,6 +6138,42 @@
       "rule": "V4",
       "reason": "The raw URL names the ref refs/heads/main, which is neither main nor a release tag, so the schema version is unsupported.",
       "result": "unsupported-version"
+    },
+    {
+      "id": "fhp-fasta-cr-normalized-checksum",
+      "file": "invalid/fhp-fasta-cr-normalized-checksum.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "The stored checksum incorrectly hashes LF-normalized bytes, rather than the exact CR/mixed bytes. The original bytes are unchanged by validation."
+    },
+    {
+      "id": "fhp-fasta-mixed-endings-normalized-checksum",
+      "file": "invalid/fhp-fasta-mixed-endings-normalized-checksum.fhp.fasta",
+      "format": "fhp-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "The stored checksum incorrectly hashes LF-normalized bytes, rather than the exact CR/mixed bytes. The original bytes are unchanged by validation."
+    },
+    {
+      "id": "fhgff3-cr-normalized-checksum",
+      "file": "invalid/fhgff3-cr-normalized-checksum.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "The stored checksum incorrectly hashes LF-normalized bytes, rather than the exact CR/mixed bytes. The original bytes are unchanged by validation."
+    },
+    {
+      "id": "fhgff3-mixed-endings-normalized-checksum",
+      "file": "invalid/fhgff3-mixed-endings-normalized-checksum.fhgff3.gff3",
+      "format": "fhgff3",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "The stored checksum incorrectly hashes LF-normalized bytes, rather than the exact CR/mixed bytes. The original bytes are unchanged by validation."
     }
   ],
   "retired": [
@@ -6083,6 +6189,630 @@
       "expected": "valid",
       "replacedBy": "jsonld-context-schemaorg-vocab",
       "reason": "Rule J3 (v0.4.2) allows only the FHR context, so a document compacted with a schema.org @vocab and an fhr prefix became invalid; the invalid vector jsonld-context-schemaorg-vocab now covers that form."
+    },
+    {
+      "id": "fhp-fasta-lf",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-lf.fhp.fasta",
+      "replacedBy": "fhp-fasta-lf-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-crlf",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-crlf.fhp.fasta",
+      "replacedBy": "fhp-fasta-crlf-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-no-final-newline",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-no-final-newline.fhp.fasta",
+      "replacedBy": "fhp-fasta-no-final-newline-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-comments-and-blank-lines",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-comments-and-blank-lines.fhp.fasta",
+      "replacedBy": "fhp-fasta-comments-and-blank-lines-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-escaped-record-markers",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-escaped-record-markers.fhp.fasta",
+      "replacedBy": "fhp-fasta-escaped-record-markers-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-gzip",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-gzip.fhp.fasta.gz",
+      "replacedBy": "fhp-fasta-gzip-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-bgzf",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-bgzf.fhp.fasta.gz",
+      "replacedBy": "fhp-fasta-bgzf-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-mixed-sources",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-mixed-sources.fhp.fasta",
+      "replacedBy": "fhp-fasta-mixed-sources-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-rich",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-rich.fhp.fasta",
+      "replacedBy": "fhp-fasta-rich-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-dotted",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-busco-lineage-dotted.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-dotted-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-minimal-checksum-link",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-minimal-checksum-link.fhgff3.gff3",
+      "replacedBy": "fhgff3-minimal-checksum-link-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-both-links",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-both-links.fhgff3.gff3",
+      "replacedBy": "fhgff3-both-links-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-directives-interleaved",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-directives-interleaved.fhgff3.gff3",
+      "replacedBy": "fhgff3-directives-interleaved-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-directives-after-header",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-directives-after-header.fhgff3.gff3",
+      "replacedBy": "fhgff3-directives-after-header-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-triple-hash-before-features",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-triple-hash-before-features.fhgff3.gff3",
+      "replacedBy": "fhgff3-triple-hash-before-features-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-embedded-fasta",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-embedded-fasta.fhgff3.gff3",
+      "replacedBy": "fhgff3-embedded-fasta-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-header-only",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-header-only.fhgff3.gff3",
+      "replacedBy": "fhgff3-header-only-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-version-3-1-26",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-version-3-1-26.fhgff3.gff3",
+      "replacedBy": "fhgff3-version-3-1-26-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-version-3-trailing-whitespace",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-version-3-trailing-whitespace.fhgff3.gff3",
+      "replacedBy": "fhgff3-version-3-trailing-whitespace-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-crlf",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-crlf.fhgff3.gff3",
+      "replacedBy": "fhgff3-crlf-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-gzip",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-gzip.fhgff3.gff3.gz",
+      "replacedBy": "fhgff3-gzip-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-bgzf",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-bgzf.fhgff3.gff3.gz",
+      "replacedBy": "fhgff3-bgzf-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-nested-parent-checksum",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-nested-parent-checksum.fhgff3.gff3",
+      "replacedBy": "fhgff3-nested-parent-checksum-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-busco-lineage-dotted.fhgff3.gff3",
+      "replacedBy": "fhgff3-busco-lineage-dotted-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-schema-canonical-raw-main",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-schema-canonical-raw-main.fhp.fasta",
+      "replacedBy": "fhp-fasta-schema-canonical-raw-main-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-schema-canonical-raw-main",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-schema-canonical-raw-main.fhgff3.gff3",
+      "replacedBy": "fhgff3-schema-canonical-raw-main-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-schema-raw-tag",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-schema-raw-tag.fhp.fasta",
+      "replacedBy": "fhp-fasta-schema-raw-tag-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-schema-raw-main",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-schema-raw-main.fhgff3.gff3",
+      "replacedBy": "fhgff3-schema-raw-main-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-extension-fields",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhp-fasta-extension-fields.fhp.fasta",
+      "replacedBy": "fhp-fasta-extension-fields-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-extension-fields",
+      "expected": "valid",
+      "rule": "R4",
+      "file": "valid/fhgff3-extension-fields.fhgff3.gff3",
+      "replacedBy": "fhgff3-extension-fields-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-0",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-0.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-dotted-version-1-0-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-dotted-version-1-1",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-dotted-version-1-1.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-dotted-version-1-1-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-sequence-tampered",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-sequence-tampered.fhp.fasta",
+      "replacedBy": "fhp-fasta-sequence-tampered-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-stop-normalized-checksum",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-stop-normalized-checksum.fhp.fasta",
+      "replacedBy": "fhp-fasta-stop-normalized-checksum-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-case-normalized-checksum",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-case-normalized-checksum.fhp.fasta",
+      "replacedBy": "fhp-fasta-case-normalized-checksum-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-two-checksum-lines",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-two-checksum-lines.fhp.fasta",
+      "replacedBy": "fhp-fasta-two-checksum-lines-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-header-after-record",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-header-after-record.fhp.fasta",
+      "replacedBy": "fhp-fasta-header-after-record-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-missing-source-type",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-missing-source-type.fhp.fasta",
+      "replacedBy": "fhp-fasta-missing-source-type-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-curated-source-type",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-curated-source-type.fhp.fasta",
+      "replacedBy": "fhp-fasta-curated-source-type-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-genome-key",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-genome-key.fhp.fasta",
+      "replacedBy": "fhp-fasta-genome-key-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-derived-from-bad-relationship",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-derived-from-bad-relationship.fhp.fasta",
+      "replacedBy": "fhp-fasta-derived-from-bad-relationship-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-source-without-name",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-source-without-name.fhp.fasta",
+      "replacedBy": "fhp-fasta-source-without-name-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-unused-genetic-code",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-unused-genetic-code.fhp.fasta",
+      "replacedBy": "fhp-fasta-unused-genetic-code-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-no-lineage-version",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-no-lineage-version.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-no-lineage-version-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-trailing-dot",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-trailing-dot.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-trailing-dot-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-leading-dot",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-leading-dot.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-leading-dot-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-letter-component",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-letter-component.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-letter-component-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-busco-lineage-uppercase",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-busco-lineage-uppercase.fhp.fasta",
+      "replacedBy": "fhp-fasta-busco-lineage-uppercase-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-pattern-trailing-newline",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-pattern-trailing-newline.fhp.fasta",
+      "replacedBy": "fhp-fasta-pattern-trailing-newline-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-cites-fhr-schema",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-cites-fhr-schema.fhp.fasta",
+      "replacedBy": "fhp-fasta-cites-fhr-schema-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted-version-1-0",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-0.fhgff3.gff3",
+      "replacedBy": "fhgff3-busco-lineage-dotted-version-1-0-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-busco-lineage-dotted-version-1-1",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-busco-lineage-dotted-version-1-1.fhgff3.gff3",
+      "replacedBy": "fhgff3-busco-lineage-dotted-version-1-1-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-fasta-tampered",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-fasta-tampered.fhgff3.gff3",
+      "replacedBy": "fhgff3-fasta-tampered-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-two-checksum-lines",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-two-checksum-lines.fhgff3.gff3",
+      "replacedBy": "fhgff3-two-checksum-lines-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-header-after-feature",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-header-after-feature.fhgff3.gff3",
+      "replacedBy": "fhgff3-header-after-feature-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-header-after-fasta",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-header-after-fasta.fhgff3.gff3",
+      "replacedBy": "fhgff3-header-after-fasta-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-concatenated",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-concatenated.fhgff3.gff3",
+      "replacedBy": "fhgff3-concatenated-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-header-before-version",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-header-before-version.fhgff3.gff3",
+      "replacedBy": "fhgff3-header-before-version-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-version-30",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-version-30.fhgff3.gff3",
+      "replacedBy": "fhgff3-version-30-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-version-3x",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-version-3x.fhgff3.gff3",
+      "replacedBy": "fhgff3-version-3x-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-version-3-1",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-version-3-1.fhgff3.gff3",
+      "replacedBy": "fhgff3-version-3-1-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-two-annotates",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-two-annotates.fhgff3.gff3",
+      "replacedBy": "fhgff3-two-annotates-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-annotates-fhp",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-annotates-fhp.fhgff3.gff3",
+      "replacedBy": "fhgff3-annotates-fhp-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-fhr-only-key",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-fhr-only-key.fhgff3.gff3",
+      "replacedBy": "fhgff3-fhr-only-key-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-busco-lineage-trailing-dot",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-busco-lineage-trailing-dot.fhgff3.gff3",
+      "replacedBy": "fhgff3-busco-lineage-trailing-dot-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-cites-fhr-schema",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-cites-fhr-schema.fhgff3.gff3",
+      "replacedBy": "fhgff3-cites-fhr-schema-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-schema-release-without-type",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-schema-release-without-type.fhp.fasta",
+      "replacedBy": "fhp-fasta-schema-release-without-type-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-schema-unknown-release",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-schema-unknown-release.fhgff3.gff3",
+      "replacedBy": "fhgff3-schema-unknown-release-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-extension-older-version",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-extension-older-version.fhp.fasta",
+      "replacedBy": "fhp-fasta-extension-older-version-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-extension-older-version",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-extension-older-version.fhgff3.gff3",
+      "replacedBy": "fhgff3-extension-older-version-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-extension-older-release",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-extension-older-release.fhp.fasta",
+      "replacedBy": "fhp-fasta-extension-older-release-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-extension-older-release",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-extension-older-release.fhgff3.gff3",
+      "replacedBy": "fhgff3-extension-older-release-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhp-fasta-extension-nested",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhp-fasta-extension-nested.fhp.fasta",
+      "replacedBy": "fhp-fasta-extension-nested-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-extension-nested",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-extension-nested.fhgff3.gff3",
+      "replacedBy": "fhgff3-extension-nested-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fasta-fhgff3-header",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fasta-fhgff3-header.fhr.fasta",
+      "replacedBy": "fasta-fhgff3-header-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "gfa-fhgff3-header",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/gfa-fhgff3-header.fhr.gfa",
+      "replacedBy": "gfa-fhgff3-header-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "gfa-fhp-header",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/gfa-fhp-header.fhr.gfa",
+      "replacedBy": "gfa-fhp-header-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
+    },
+    {
+      "id": "fhgff3-fhp-header",
+      "expected": "invalid",
+      "rule": "R4",
+      "file": "invalid/fhgff3-fhp-header.fhgff3.gff3",
+      "replacedBy": "fhgff3-fhp-header-canonical-parent",
+      "reason": "The historical payload contains a noncanonical synthetic parent checksum (B in the final base64 payload position). R4 applies to nested checksums too. Preserve its bytes and historical expectation; the replacement is generated by the same builder with a canonical parent so this unrelated failure cannot mask the case-specific rule."
     }
   ]
 }

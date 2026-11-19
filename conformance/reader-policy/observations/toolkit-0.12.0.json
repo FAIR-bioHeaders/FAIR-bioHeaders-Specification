@@ -1,0 +1,558 @@
+{
+  "package": "fair-bioheaders",
+  "version": "0.12.0",
+  "publishedWheelSha256": "fe1407bb91887bd41b2e47b756fb46a4b2a2e45405c29f5d6a325a284e6a29d6",
+  "corpusSha256": "b42d9c545d47ff9654f72b38a294f08640ed0e42aa4ff7fc756b0c33217db7c7",
+  "recorded": "2026-11-19",
+  "command": "python scripts/reader_policy.py --toolkit /path/to/published-0.12.0/bin/bioheaders",
+  "exit": 1,
+  "matched": 35,
+  "mismatched": 29,
+  "diagnosticPathPrefixRedacted": true,
+  "cases": 64,
+  "problems": [
+    "fhr-metadata-noncanonical-checksum: actual toolkit returned valid",
+    "fhr-metadata-noncanonical-checksum-yaml: actual toolkit returned valid",
+    "fhp-metadata-noncanonical-checksum: actual toolkit returned valid",
+    "fhp-metadata-noncanonical-checksum-yaml: actual toolkit returned valid",
+    "fhp-metadata-noncanonical-parent: actual toolkit returned valid",
+    "fhp-metadata-noncanonical-parent-yaml: actual toolkit returned valid",
+    "fhgff3-metadata-noncanonical-checksum: actual toolkit returned valid",
+    "fhgff3-metadata-noncanonical-checksum-yaml: actual toolkit returned valid",
+    "fhgff3-metadata-noncanonical-parent: actual toolkit returned valid",
+    "fhgff3-metadata-noncanonical-parent-yaml: actual toolkit returned valid",
+    "fasta-policy-yaml-1-1: actual toolkit returned valid",
+    "fasta-policy-yaml-1-2: actual toolkit returned valid",
+    "fasta-policy-tag: actual toolkit returned valid",
+    "fasta-policy-document-marker: actual toolkit returned valid",
+    "gfa-policy-yaml-1-1: actual toolkit returned valid",
+    "gfa-policy-yaml-1-2: actual toolkit returned valid",
+    "gfa-policy-tag: actual toolkit returned valid",
+    "gfa-policy-document-marker: actual toolkit returned valid",
+    "fhp-fasta-policy-yaml-1-1: actual toolkit returned valid",
+    "fhp-fasta-policy-yaml-1-2: actual toolkit returned valid",
+    "fhp-fasta-policy-tag: actual toolkit returned valid",
+    "fhp-fasta-policy-document-marker: actual toolkit returned valid",
+    "fhp-fasta-policy-noncanonical-parent: actual toolkit returned valid",
+    "fhgff3-policy-yaml-1-1: actual toolkit returned valid",
+    "fhgff3-policy-yaml-1-2: actual toolkit returned valid",
+    "fhgff3-policy-tag: actual toolkit returned valid",
+    "fhgff3-policy-document-marker: actual toolkit returned valid",
+    "fhgff3-policy-noncanonical-parent: actual toolkit returned valid",
+    "fasta-policy-gzip-fhcrc-wrong: actual toolkit returned valid"
+  ],
+  "runtime": [
+    {
+      "id": "fhr-metadata-canonical-checksum",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHR metadata is valid."
+    },
+    {
+      "id": "fhr-metadata-canonical-checksum-yaml",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHR metadata is valid."
+    },
+    {
+      "id": "fhr-metadata-noncanonical-checksum",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHR metadata is valid."
+    },
+    {
+      "id": "fhr-metadata-noncanonical-checksum-yaml",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHR metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-canonical-checksum",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-canonical-checksum-yaml",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-noncanonical-checksum",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-noncanonical-checksum-yaml",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-canonical-parent",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-canonical-parent-yaml",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-noncanonical-parent",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-noncanonical-parent-yaml",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHP metadata is valid."
+    },
+    {
+      "id": "fhp-metadata-selection-v0-4-0",
+      "expected": "invalid",
+      "actual": "invalid",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: schema validation failed at $.schemaVersion: '1.2' is not one of ['1.0']"
+    },
+    {
+      "id": "fhp-metadata-selection-v0-4-0-yaml",
+      "expected": "invalid",
+      "actual": "invalid",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: schema validation failed at $.schemaVersion: '1.2' is not one of ['1.0']"
+    },
+    {
+      "id": "fhp-metadata-selection-v0-3-1",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: unsupported schema version: https://w3id.org/fair-bioheaders/fhp/v0.3.1 (this tool has FHP schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhp-metadata-selection-v0-3-1-yaml",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: unsupported schema version: https://w3id.org/fair-bioheaders/fhp/v0.3.1 (this tool has FHP schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhp-metadata-selection-v99-0-0",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: unsupported schema version: https://w3id.org/fair-bioheaders/fhp/v99.0.0 (this tool has FHP schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhp-metadata-selection-v99-0-0-yaml",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHP: unsupported schema version: https://w3id.org/fair-bioheaders/fhp/v99.0.0 (this tool has FHP schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhgff3-metadata-canonical-checksum",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-canonical-checksum-yaml",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-noncanonical-checksum",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-noncanonical-checksum-yaml",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-canonical-parent",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-canonical-parent-yaml",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-noncanonical-parent",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-noncanonical-parent-yaml",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "FHGFF3 metadata is valid."
+    },
+    {
+      "id": "fhgff3-metadata-selection-v0-4-0",
+      "expected": "invalid",
+      "actual": "invalid",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: schema validation failed at $.schemaVersion: '1.2' is not one of ['1.0']"
+    },
+    {
+      "id": "fhgff3-metadata-selection-v0-4-0-yaml",
+      "expected": "invalid",
+      "actual": "invalid",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: schema validation failed at $.schemaVersion: '1.2' is not one of ['1.0']"
+    },
+    {
+      "id": "fhgff3-metadata-selection-v0-3-1",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: unsupported schema version: https://w3id.org/fair-bioheaders/fhgff3/v0.3.1 (this tool has FHGFF3 schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhgff3-metadata-selection-v0-3-1-yaml",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: unsupported schema version: https://w3id.org/fair-bioheaders/fhgff3/v0.3.1 (this tool has FHGFF3 schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhgff3-metadata-selection-v99-0-0",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: unsupported schema version: https://w3id.org/fair-bioheaders/fhgff3/v99.0.0 (this tool has FHGFF3 schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fhgff3-metadata-selection-v99-0-0-yaml",
+      "expected": "unsupported-version",
+      "actual": "unsupported-version",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHGFF3: unsupported schema version: https://w3id.org/fair-bioheaders/fhgff3/v99.0.0 (this tool has FHGFF3 schemas for main (v0.6.0), v0.4.0, v0.4.1, v0.4.2, v0.5.0, v0.6.0)"
+    },
+    {
+      "id": "fasta-policy-plain-control",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-quoted-directive-text",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-yaml-1-1",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-yaml-1-2",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-tag",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-document-marker",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-plain-control",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-quoted-directive-text",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-yaml-1-1",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-yaml-1-2",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-tag",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "gfa-policy-document-marker",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-plain-control",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-quoted-directive-text",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-yaml-1-1",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-yaml-1-2",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-tag",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-document-marker",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhp-fasta-policy-noncanonical-parent",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-plain-control",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-quoted-directive-text",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-yaml-1-1",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-yaml-1-2",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-tag",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-document-marker",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fhgff3-policy-noncanonical-parent",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-gzip-member",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-gzip-trailing-garbage",
+      "expected": "invalid",
+      "actual": "invalid",
+      "matched": true,
+      "exit": 1,
+      "diagnostic": "FHR: Invalid gzip input <spec-checkout>/conformance/reader-policy/payloads/fasta-policy-gzip-trailing-garbage.fhr.fasta.gz: Not a gzipped file (b'ga')"
+    },
+    {
+      "id": "fasta-policy-gzip-trailing-nul",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-gzip-fhcrc-correct",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-gzip-fhcrc-wrong",
+      "expected": "invalid",
+      "actual": "valid",
+      "matched": false,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    },
+    {
+      "id": "fasta-policy-gzip-multimember-trailing-nul",
+      "expected": "valid",
+      "actual": "valid",
+      "matched": true,
+      "exit": 0,
+      "diagnostic": "Checksum verified."
+    }
+  ]
+}
