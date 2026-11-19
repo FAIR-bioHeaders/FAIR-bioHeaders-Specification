@@ -12,7 +12,8 @@ import unittest
 from unittest.mock import patch
 
 import check_source
-from run_checks import installed_receipt, STAGED, unit_receipt
+from run_checks import installed_receipt, STAGED
+import sys
 
 
 class SourceControls(unittest.TestCase):
@@ -94,6 +95,31 @@ class SourceControls(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "remote"):
             self.verify()
 
+    def test_untracked_and_ignored_python_modules_fail_worktree_audit(self):
+        for name in ("tests/test_rogue.py", "tests/__pycache__/__init__.py",
+                     "tests/__pycache__/test_rogue.py"):
+            target = self.source / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text("print('not pinned source')")
+            with self.assertRaisesRegex(ValueError, "executed owning worktree inventory"):
+                self.verify()
+            target.unlink()
+
+    def test_symlink_directory_cannot_hide_discoverable_code(self):
+        hidden = self.base / "hidden"
+        hidden.mkdir()
+        (hidden / "__init__.py").write_text("")
+        (self.source / "tests").mkdir(exist_ok=True)
+        (self.source / "tests/rogue").symlink_to(hidden, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlink directory"):
+            self.verify()
+
+    def test_modified_executed_worktree_bytes_are_not_git_blob_parity(self):
+        (self.source / "required.txt").write_text("changed after checkout")
+        with self.assertRaisesRegex(ValueError, "executed owning worktree bytes"):
+            self.verify()
+
+
 
 class ReceiptControls(unittest.TestCase):
     def installed_output(self):
@@ -121,13 +147,67 @@ class ReceiptControls(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 installed_receipt(bad)
 
-    def test_unit_count_and_no_skips_are_required(self):
-        unit_receipt("Ran 114 tests in 1.2s\n\nOK\n")
-        for output in ("Ran 113 tests in 1.2s\n\nOK\n",
-                       "Ran 114 tests in 1.2s\n\nOK (skipped=1)\n",
-                       "Ran 114 tests in 1.2s\n\nFAILED\n"):
-            with self.assertRaises(RuntimeError):
-                unit_receipt(output)
+
+class ActualUnitControls(unittest.TestCase):
+    def run_suite(self, content, expected):
+        with tempfile.TemporaryDirectory() as work:
+            root = Path(work)
+            (root / "tests").mkdir()
+            (root / "tests/test_result_control.py").write_text(content)
+            receipt = root / "result.json"
+            result = subprocess.run([sys.executable, "-I",
+                str(Path(__file__).parent / "unittest_receipt.py"),
+                "--source", str(root), "--receipt", str(receipt),
+                "--expected", str(expected)], capture_output=True, text=True)
+            return result, json.loads(receipt.read_text())
+
+    def test_printed_fake_summary_cannot_spoof_actual_count(self):
+        result, data = self.run_suite(
+            "import unittest\nprint('Ran 114 tests in 1.2s\n\nOK\n')\n"
+            "class T(unittest.TestCase):\n def test_one(self): pass\n", 114)
+        self.assertIn("Ran 114 tests in 1.2s\n\nOK\n", result.stdout)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(data["testsRun"], 1)
+
+    def test_extra_or_skipped_tests_fail_even_with_success_output(self):
+        for body, count, skipped in (
+                (" def test_one(self): pass\n def test_extra(self): pass\n", 2, 0),
+                (" @unittest.skip('control')\n def test_one(self): pass\n", 1, 1)):
+            result, data = self.run_suite("import unittest\nclass T(unittest.TestCase):\n" + body, 1)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual((data["testsRun"], data["skipped"]), (count, skipped))
+
+    def test_actual_result_without_skips_passes(self):
+        result, data = self.run_suite(
+            "import unittest\nclass T(unittest.TestCase):\n def test_one(self): pass\n", 1)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(data["testsRun"], 1)
+
+
+class CheckoutControls(unittest.TestCase):
+    def test_real_autocrlf_checkout_preserves_entire_payload(self):
+        repo = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory() as work:
+            clone = Path(work) / "checkout"
+            subprocess.run(["git", "clone", "-q", "--no-checkout", "--shared", str(repo), str(clone)], check=True)
+            def git(*args):
+                return subprocess.check_output(["git", "-C", str(clone), *args], stderr=subprocess.DEVNULL)
+            git("config", "core.autocrlf", "true")
+            git("checkout", "-q", "--detach", "HEAD")
+            root = clone / "drafts/fht"
+            manifest = json.loads((root / "source.json").read_text())
+            for entry in manifest["files"]:
+                self.assertEqual(hashlib.sha256((root / entry["local"]).read_bytes()).hexdigest(),
+                                 entry["sha256"], entry["source"])
+            # Removing the ancestor rule really exposes non-fixture text blobs
+            # to CRLF conversion; do not mistake a no-op configuration for proof.
+            attributes = root / ".gitattributes"
+            attributes.write_text(attributes.read_text().replace("upstream/** -text", ""))
+            git("add", "drafts/fht/.gitattributes")
+            schema = root / "upstream/fht.json"
+            schema.unlink()
+            git("checkout", "--", "drafts/fht/upstream/fht.json")
+            self.assertIn(b"\r\n", schema.read_bytes())
 
 
 if __name__ == "__main__":

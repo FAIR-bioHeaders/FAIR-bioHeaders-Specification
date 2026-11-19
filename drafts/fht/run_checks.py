@@ -10,6 +10,8 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
+from unittest_receipt import validate as validate_unit_result
 
 from check_source import COMMIT, ROOT, verify
 
@@ -48,11 +50,6 @@ def installed_receipt(output):
             "consumerArithmeticAccepted": False}
 
 
-def unit_receipt(output):
-    if not re.search(r"Ran 114 tests in [\d.]+s\r?\n\r?\nOK\r?\n", output):
-        raise RuntimeError("owning unit receipt must contain 114 passing tests without skips")
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--upstream", type=Path, required=True)
@@ -82,10 +79,16 @@ def main():
         # The unchanged owning reference verifies its last schema-changing git
         # commit. Run those exact byte-parity-checked tests with owning history,
         # rather than invent a synthetic commit in this shared repository.
-        output = run(source, sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v")
-        unit_receipt(output)
+        expected_units = json.loads((ROOT / "source.json").read_text())["expectedEvidence"]["unitTests"]
+        with tempfile.TemporaryDirectory(prefix="fht-unit-result-") as work:
+            unit_result = Path(work) / "result.json"
+            run(source, sys.executable, "-I", str(ROOT / "unittest_receipt.py"),
+                "--source", str(source), "--receipt", str(unit_result),
+                "--expected", str(expected_units))
+            actual_units = json.loads(unit_result.read_text())
+            validate_unit_result(actual_units, expected_units)
         receipt = {"lane": "candidate-reference", "vectors": 93,
-                   "valid": 34, "invalid": 59, "owningUnitTests": 114,
+                   "valid": 34, "invalid": 59, "owningUnitTests": actual_units["testsRun"], "unitResult": actual_units,
                    "unitExecution": "exact owning checkout with required provenance history",
                    "consumerArithmeticAccepted": False}
     verify(upstream=source)

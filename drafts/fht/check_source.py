@@ -5,6 +5,8 @@
 import argparse
 import hashlib
 import json
+import os
+import re
 from pathlib import Path, PurePosixPath
 import subprocess
 
@@ -69,6 +71,29 @@ def verify(root=ROOT, upstream=None):
             raw = git(upstream, "show", f"{COMMIT}:{name}")
             if entries[name]["mode"] != mode or raw != (root / entries[name]["local"]).read_bytes():
                 raise ValueError(f"immutable owning blob differs: {name}")
+        # Units execute this worktree, not git-show output. Check every tracked
+        # file (including excluded guidance) and reject extra discoverable code.
+        tracked = set(git(upstream, "ls-tree", "-r", "--name-only", COMMIT).decode().splitlines())
+        actual_worktree = set()
+        for folder, dirs, names in os.walk(upstream):
+            if any((Path(folder) / name).is_symlink() for name in dirs):
+                raise ValueError("executed owning worktree contains a symlink directory")
+            dirs[:] = [name for name in dirs if not (Path(folder) == upstream and name == ".git")]
+            for name in names:
+                target = Path(folder) / name
+                relative = str(target.relative_to(upstream))
+                if ("__pycache__" in target.relative_to(upstream).parts
+                        and not target.is_symlink()
+                        and re.fullmatch(r".+\.cpython-\d+(?:\.opt-[12])?\.pyc", name)):
+                    continue  # Inert cache only; the unit runner uses a fresh cache root.
+                if relative != ".git":
+                    actual_worktree.add(relative)
+        if actual_worktree != tracked:
+            raise ValueError(f"executed owning worktree inventory differs: {sorted(actual_worktree ^ tracked)}")
+        for name in tracked:
+            target = upstream / name
+            if target.is_symlink() or target.read_bytes() != git(upstream, "show", f"{COMMIT}:{name}"):
+                raise ValueError(f"executed owning worktree bytes differ: {name}")
     schema = json.loads((root / "upstream/fht.json").read_text())
     expected_citation = "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json"
     for node in (schema, schema["$defs"]["FHT"]):

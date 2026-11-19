@@ -33,7 +33,11 @@ candidate. All 114 unchanged tests execute in the parity-checked owning checkout
 its HTML reference verifies the actual last schema-changing commit in owning git
 history. This avoids inventing a synthetic source revision or weakening that
 provenance assertion. The runner repeats parity after execution and writes a
-receipt only after every required command and exact count succeeds.
+receipt only after every required command and exact count succeeds. Executed
+owning worktree files must also match the immutable tree: extra or ignored
+Python modules and symlink directories fail preflight. Real bytecode-cache files
+are inert because the unit runner uses a fresh cache root. Unit counts, skips
+and failures come from the actual unittest result object, never printed text.
 
 The separate installed lane requires a throwaway environment containing
 `fair-bioheaders==0.11.0`:
