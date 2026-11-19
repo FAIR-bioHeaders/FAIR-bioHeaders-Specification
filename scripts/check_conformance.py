@@ -61,11 +61,11 @@ REGISTRY_PATH = ROOT / "schemas" / "versions.json"
 # as it was called before; the old URLs stay supported aliases. The ref may have
 # several path segments (refs/heads/main): only main or a release tag is supported (V4).
 RAW_SCHEMA = re.compile(r"https://raw\.githubusercontent\.com/FAIR-bioHeaders/"
-                        r"(?:FHR|FAIR-bioHeaders)-Specification/(.+)/(fhr|fhp|fhgff3)\.json")
-W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3)/"
+                        r"(?:FHR|FAIR-bioHeaders)-Specification/(.+)/(fhr|fhp|fhgff3|fht)\.json")
+W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3|fht)/"
                          r"(v[0-9]+\.[0-9]+\.[0-9]+)/?")
 RELEASE_TAG = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+")
-TYPE_NAMES = {"fhr": "FHR", "fhp": "FHP", "fhgff3": "FHGFF3"}
+TYPE_NAMES = {"fhr": "FHR", "fhp": "FHP", "fhgff3": "FHGFF3", "fht": "FHT"}
 UNSUPPORTED_VERSION = "unsupported schema version"
 
 
@@ -127,7 +127,7 @@ def generated_files(directory):
     return {
         path.relative_to(directory).as_posix(): path.read_bytes()
         for path in sorted(directory.rglob("*"))
-        if path.is_file() and (path.name == "manifest.json" or path.parent.name in {"valid", "invalid"})
+        if path.is_file() and not path.is_relative_to(directory / "fht-v0.7.0") and (path.name == "manifest.json" or path.parent.name in {"valid", "invalid"})
     }
 
 

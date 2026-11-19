@@ -41,6 +41,16 @@
       "patternEntries": 1
     },
     {
+      "path": "fht.json",
+      "label": "proposed FHT v0.7.0 contract (unpublished)",
+      "patternEntries": 40
+    },
+    {
+      "path": "fht_linkml.yml",
+      "label": "FHT publication candidate model",
+      "patternEntries": 14
+    },
+    {
       "path": "schemas/core.yaml",
       "label": "shared core slot model",
       "patternEntries": 7
@@ -56,7 +66,7 @@
       "patternEntries": 0
     }
   ],
-  "governedFileDigest": "sha256:3b42eec06a377180ed7c7aa64b00c0a24496b16cdac715334e003c07103cd485",
+  "governedFileDigest": "sha256:6517570b166ac6d3b1ba9b6f1673fb38d80140d2c383d92c031a7858e057a9c8",
   "excludedFiles": [
     {
       "path": "fhr_mappings.yml",
@@ -332,6 +342,226 @@
         "pattern": "^(not-masked|hard-masked|soft-masked|repeat-masked|unknown)$"
       }
     ],
+    "fht.json": [
+      {
+        "pointer": "/$defs/AssemblyAuthor/properties/name/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/AssemblyAuthor/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/$defs/Author/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/$defs/Completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=(?![\\s\\S])"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/dateCreated/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/instrument/items/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/libraryStrategy/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/schema/pattern",
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/sequencingRuns/items/pattern",
+        "pattern": "^(SRR|ERR|DRR)[0-9]+(?![\\s\\S])"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/transcriptome/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/transcriptomeSynonym/items/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/properties/version/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/FHT/propertyNames/not/pattern",
+        "pattern": "\n"
+      },
+      {
+        "pointer": "/$defs/MetadataAuthor/properties/name/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/MetadataAuthor/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/$defs/Sample/properties/condition/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/Sample/properties/developmentalStage/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/Sample/properties/strain/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/Sample/properties/tissue/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/Sample/properties/tissueIdentifier/pattern",
+        "pattern": "^[A-Za-z][A-Za-z0-9._-]*:[A-Za-z0-9._-]+(?![\\s\\S])"
+      },
+      {
+        "pointer": "/$defs/Taxon/properties/uri/pattern",
+        "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+      },
+      {
+        "pointer": "/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/properties/dateCreated/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/properties/instrument/items/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/properties/libraryStrategy/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/properties/schema/pattern",
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+      },
+      {
+        "pointer": "/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/properties/sequencingRuns/items/pattern",
+        "pattern": "^(SRR|ERR|DRR)[0-9]+(?![\\s\\S])"
+      },
+      {
+        "pointer": "/properties/transcriptome/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/properties/transcriptomeSynonym/items/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/properties/version/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/propertyNames/not/pattern",
+        "pattern": "\n"
+      }
+    ],
+    "fht_linkml.yml": [
+      {
+        "pointer": "/classes/AssemblyAuthor/slot_usage/name/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/FHT/slot_usage/schema/pattern",
+        "pattern": "^https://(?:raw\\.githubusercontent\\.com/FAIR-bioHeaders/(?:FAIR-bioHeaders|FHR)-Specification/(?:main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fht\\.json|w3id\\.org/fair-bioheaders/fht/v[0-9]+\\.[0-9]+\\.[0-9]+/?)(?![\\s\\S])"
+      },
+      {
+        "pointer": "/classes/FHT/slot_usage/version/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/MetadataAuthor/slot_usage/name/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/Sample/attributes/condition/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/Sample/attributes/developmentalStage/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/Sample/attributes/strain/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/Sample/attributes/tissue/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/classes/Sample/attributes/tissueIdentifier/pattern",
+        "pattern": "^[A-Za-z][A-Za-z0-9._-]*:[A-Za-z0-9._-]+(?![\\s\\S])"
+      },
+      {
+        "pointer": "/slots/instrument/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/slots/libraryStrategy/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/slots/sequencingRuns/pattern",
+        "pattern": "^(SRR|ERR|DRR)[0-9]+(?![\\s\\S])"
+      },
+      {
+        "pointer": "/slots/transcriptome/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      },
+      {
+        "pointer": "/slots/transcriptomeSynonym/pattern",
+        "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
+      }
+    ],
     "schemas/core.yaml": [
       {
         "pointer": "/classes/Author/attributes/uri/pattern",
@@ -370,9 +600,9 @@
     ],
     "schemas/versions.json": []
   },
-  "patternEntries": 72,
-  "distinctPatternStrings": 15,
-  "entriesEndingInDollar": 62,
-  "patternCount": 72,
-  "digest": "sha256:d8735e1d1fe8a15ff644d675614b28ce3dfe841f5d2d60eb21e4c58a72fd552e"
+  "patternEntries": 126,
+  "distinctPatternStrings": 20,
+  "entriesEndingInDollar": 76,
+  "patternCount": 126,
+  "digest": "sha256:b1f2ae8c6cf947ae6fc93546e32ee34f53e500f6151de7fcadb5bfed63f5beb8"
 }

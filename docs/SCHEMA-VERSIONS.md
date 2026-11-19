@@ -419,3 +419,24 @@ With a toolkit that implements V6, `bioheaders convert legacy.fa metadata.yaml` 
 the first step, since an FHR 1 header now validates. Older toolkits (before V6) reject such a
 file with `1.0 is not of type 'string'`; with them, recover the header text with `grep`, edit
 it, and recombine.
+
+## Proposed shared v0.7.0 FHT publication candidate
+
+This review branch sets `current` and `preRelease` to **v0.7.0** and proposes FHT
+`1.0` alongside unchanged FHR `2.1`, FHP `1.2` and FHGFF3 `1.2`. It is not a
+released selector registry for installed readers. The proposed FHT stable `$id`
+is `https://w3id.org/fair-bioheaders/fht/v0.7.0`; no alias is created. Historical
+291-vector v0.6.0 payloads and the frozen owning 93-case suite stay unchanged.
+The separately generated shared counterparts have new IDs and explicit source
+crosswalks. Shared raw-main/raw-tag/w3id selectors follow V1–V4; raw-owning tags
+remain V5. The owning raw-main citation remains only the separately opted-in
+historical draft lane, never a fallback for unknown released versions.
+
+This candidate deliberately retains existing released examples and guidance
+citations at supported v0.6.0 while staging separate FHT examples. That is an
+explicit exception to the above update-every-example release-line workflow,
+not a release or automatic consumer refresh. Joint acceptance, an arithmetic-
+capable installed reader, reviewed final release metadata, actual immutable
+aliases/tag/GitHub Release and post-publication consumer handoffs remain gates.
+Clear `preRelease` only in the commit actually tagged; do not merge this draft
+publication candidate under ordinary code-review authorization.

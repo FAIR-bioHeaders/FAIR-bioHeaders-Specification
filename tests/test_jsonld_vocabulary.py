@@ -28,7 +28,7 @@ BIOSCHEMAS_TERMS = {"http://purl.org/dc/terms/conformsTo"}
 FHR = Namespace("https://w3id.org/fair-bioheaders/terms#")
 SDO = Namespace("http://schema.org/")
 ONTOLOGY = URIRef("https://w3id.org/fair-bioheaders/terms")
-CLASSES = {"Agent", "VitalStats"}
+CLASSES = {"Agent", "VitalStats", "AssemblyAuthor", "Completeness", "DerivedFrom", "MetadataAuthor", "Sample"}
 PROPERTIES = {
     "schemaVersion", "metadataAuthor", "voucherSpecimen", "accessionID", "instrument",
     "relatedLink", "masking", "vitalStats", "checksum", "assemblySoftware",
@@ -37,6 +37,11 @@ PROPERTIES = {
     "readTechnology", "gcContent", "scaffoldN50", "scaffoldN90", "scaffoldL50", "scaffoldL90",
     "commandLineOption",
     "nameType",
+    "assemblyAuthor", "assemblyType", "averageTranscriptLength", "buscoVersion",
+    "completeDuplicated", "completeSingle", "completeness", "condition", "derivedFrom",
+    "developmentalStage", "fragmented", "headerType", "libraryStrategy", "lineageDataset",
+    "missing", "mode", "moleculeType", "relationship", "sample", "sequencingRuns", "strain",
+    "strandedness", "tissue", "tissueIdentifier", "total", "totalTranscripts",
 }
 
 
@@ -110,7 +115,7 @@ class VocabularyTests(unittest.TestCase):
     def test_no_terms_outside_schema_version_1(self):
         for name in ("derivedFrom", "headerType", "relationship", "DerivedFrom"):
             with self.subTest(term=name):
-                self.assertEqual(list(self.graph.predicate_objects(FHR[name])), [])
+                self.assertNotIn(str(FHR[name]), fhr_iris(self.context), 'FHT vocabulary must not silently expand the FHR JSON-LD context')
 
     def test_jsonld_vocabulary_has_the_same_triples(self):
         from rdflib.compare import isomorphic

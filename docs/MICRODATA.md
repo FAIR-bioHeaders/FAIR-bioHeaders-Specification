@@ -100,3 +100,7 @@ documents, is governed by the ruling requested in
 [#216](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/216).
 This section records that the bindings exist and where they live; it adds no
 requirement and adopts no contract.
+
+## Proposed FHT publication binding
+
+The [v0.7.0 candidate](FHT-PUBLICATION-CANDIDATE.md) prepares seven exact typed JSON/FASTA/HTML counterparts and a separate registry-aware reference reader/writer. Explicit candidate opt-in is required before publication. Types, array order, visible values and integers beyond binary64 precision are preserved. This is reference evidence, not installed toolkit/website enablement or FHT JSON-LD support. Original owning pairs remain unchanged.

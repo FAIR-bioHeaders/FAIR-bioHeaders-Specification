@@ -64,7 +64,8 @@ def constraints(node, document):
 # generated and must equal the generator's constraints (specs/006-protein-header
 # D-01, specs/007-gff3-header D-01).
 TYPES = (("FHR", "fhr.json", "generate"), ("FHP", "fhp.json", "generate_fhp"),
-         ("FHGFF3", "fhgff3.json", "generate_fhgff3"))
+         ("FHGFF3", "fhgff3.json", "generate_fhgff3"),
+         ("FHT", "fht.json", "generate_fht"))
 
 
 def main():

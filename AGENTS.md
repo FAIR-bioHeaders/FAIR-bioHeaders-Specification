@@ -503,3 +503,7 @@ authority; those retain their separate maintainer gates.
 
 Authority: [approval by another, different model](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984337685)
 and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984418624).
+
+## Shared FHT publication candidate (repository-local preparation)
+
+This review branch proposes root FHT model/contract, selectors, vocabulary and typed HTML for v0.7.0; current/preRelease are explicitly v0.7.0. It is not a released contract or default support claim. Follow [the concrete preparation and gates](docs/FHT-PUBLICATION-CANDIDATE.md). Preserve frozen owning and released payloads. No merge, Pages, alias, tag or release authority is granted; final joint acceptance and installed-runtime evidence remain separate.

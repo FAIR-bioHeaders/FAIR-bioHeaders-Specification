@@ -117,3 +117,9 @@ and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioH
 - [Project website](https://fhref.org/)
 - [Specification website](https://fhref.org/FAIR-bioHeaders-Specification/): vocabulary pages and JSON-LD files
 - [FAIR-bioHeaders-Nextflow](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Nextflow): Nextflow DSL2 modules and Dockstore workflow for creating and validating headers (formerly FHR-Nextflow)
+
+## Unpublished v0.7.0 publication candidate
+
+This branch prepares FHT `'1.0'` and preserves FHR `schemaVersion: '2.1'`, FHP `'1.2'`, FHGFF3 `'1.2'`. `schemas/versions.json` explicitly sets current/preRelease to v0.7.0; no tag or alias is created. Proposed review URLs (not live or recommended for current installed readers): https://w3id.org/fair-bioheaders/fhr/v0.7.0, https://w3id.org/fair-bioheaders/fhp/v0.7.0, https://w3id.org/fair-bioheaders/fhgff3/v0.7.0, https://w3id.org/fair-bioheaders/fht/v0.7.0. Continue using supported v0.6.0 citations for existing released types. FHT candidate consumers require explicit opt-in; installed arithmetic/default-runtime and joint acceptance gates remain. JSON-LD stays FHR-only; FHT typed HTML and vocabulary do not establish JSON-LD support.
+
+FHT candidate requires `schema`, `schemaVersion`, `transcriptome`, `assemblyType`, `taxon`, `version`, `metadataAuthor`, `dateCreated`, `checksum`; optional fields retain their accepted owning meanings.

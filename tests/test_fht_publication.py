@@ -1,0 +1,178 @@
+# SPDX-License-Identifier: MPL-2.0
+"""Proposed FHT release integration: exact constraints, selectors, bytes and types."""
+import copy
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+import unittest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
+import fht_publication as candidate
+from check_conformance import select_record, select_schema, schema_validator
+from check_linkml import constraints
+import fht_microdata as binding
+
+
+class FHTPublicationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.schema = json.loads((ROOT / 'fht.json').read_text())
+        cls.owner = json.loads((candidate.OWNER / 'fht.json').read_text())
+        cls.reader = candidate.owning_reader()
+
+    def test_every_nonselector_constraint_matches_accepted_owning_contract(self):
+        owner, proposed = copy.deepcopy(self.owner), copy.deepcopy(self.schema)
+        for document in (owner, proposed):
+            for node in (document, document['$defs']['FHT']):
+                node['properties']['schema'] = {'type': 'string'}
+        self.assertEqual(constraints(owner, owner), constraints(proposed, proposed))
+        self.assertEqual(candidate.sha((candidate.OWNER / 'fht.json').read_bytes()),
+                         'b62c4e227042e162b43d2c461cfe6c3ece3806636ca88a4cf9b0b2f902fb1fc3')
+        self.assertEqual(self.schema['$id'], 'https://w3id.org/fair-bioheaders/fht/v0.7.0')
+
+    def test_v1_through_v7_keep_distinct_selection_outcomes(self):
+        common = 'https://raw.githubusercontent.com/FAIR-bioHeaders/'
+        for repo in ('FAIR-bioHeaders-Specification', 'FHR-Specification'):
+            self.assertEqual(select_schema(common + repo + '/main/fht.json'), ('FHT', 'main', 'fht.json'))
+            self.assertEqual(select_schema(common + repo + '/v0.7.0/fht.json'), ('FHT', 'v0.7.0', 'fht.json'))
+        for suffix in ('', '/'):
+            self.assertEqual(select_schema('https://w3id.org/fair-bioheaders/fht/v0.7.0' + suffix), ('FHT', 'v0.7.0', 'fht.json'))
+        self.assertEqual(select_schema('https://w3id.org/fair-bioheaders/fht/v0.6.0'), ('FHT', None, None))
+        self.assertEqual(select_schema(common + 'FHT-Specification/v0.7.0/fht.json'), ('FHR', 'main', 'fhr.json'))
+        draft = common + 'FHT-Specification/main/fht.json'
+        self.assertEqual(select_schema(draft), ('FHR', 'main', 'fhr.json'))
+        self.assertEqual(candidate.owning_reader().schema_selection({'schema': draft}), 'current')  # Separate historical V7 opt-in.
+        self.assertEqual(select_record({'schema': common + 'FHR-Specification/main/fhr.json', 'schemaVersion': 1}), ('FHR', 'v0.3.1', 'fhr.json'))
+
+    def test_93_counterparts_and_changed_v4_dispositions_execute(self):
+        receipt = candidate.check()
+        self.assertEqual((receipt['cases'], receipt['valid']), (93, 34))
+        rows = {row['sourceId']: row for row in receipt['results']}
+        for identity in ('fht-fasta-schema-w3id-release-without-fht', 'fht-fasta-schema-shared-raw-tag'):
+            self.assertEqual(rows[identity]['rule'], 'V4')
+            self.assertEqual(rows[identity]['stage'], 'selection')
+        for identity in ('fht-fasta-completeness-sum-exceeds-total', 'fht-fasta-completeness-sum-below-total'):
+            self.assertEqual(rows[identity]['stage'], 'semantics')
+        self.assertFalse(receipt['released'])
+
+    def test_all_historical_v060_fixture_bytes_are_unchanged(self):
+        original = subprocess.check_output(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.6.0:conformance/manifest.json'])
+        manifest = json.loads(original)
+        self.assertEqual(len(manifest['vectors']), 291)
+        for vector in manifest['vectors']:
+            name = 'conformance/' + vector['file']
+            expected = subprocess.check_output(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.6.0:' + name])
+            self.assertEqual((ROOT / name).read_bytes(), expected, vector['id'])
+
+    def test_candidate_examples_preserve_bytes_metadata_and_typed_values(self):
+        self.assertEqual(candidate.check_examples(), 7)
+        for location in sorted((ROOT / 'examples/fht').glob('*.fht.json')):
+            record = json.loads(location.read_text())
+            html = location.with_suffix('.html').read_text()
+            actual = binding.read_page(html, allow_candidate=True, warn=lambda message: None)
+            self.assertEqual(json.dumps(actual, sort_keys=True), json.dumps(record, sort_keys=True))
+            data = location.with_suffix('.fasta').read_bytes()
+            stated, _, _ = self.reader.locate_checksum(data)
+            self.assertEqual(stated, self.reader.recomputed(data))
+            self.assertEqual(actual['checksum'], stated)
+            self.assertEqual(list(schema_validator(self.schema).iter_errors(actual)), [])
+
+    def test_binding_refuses_implicit_candidate_unknown_release_and_wrong_types(self):
+        record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
+        with self.assertRaisesRegex(binding.MicrodataError, 'allow_candidate'):
+            binding.write_page(record)
+        wrong = copy.deepcopy(record)
+        wrong['schema'] = 'https://w3id.org/fair-bioheaders/fht/v9.9.9'
+        with self.assertRaisesRegex(binding.MicrodataError, 'selection'):
+            binding.write_page(wrong, allow_candidate=True)
+        wrong = copy.deepcopy(record); wrong['schemaVersion'] = 1.0
+        with self.assertRaises(binding.MicrodataError):
+            binding.write_page(wrong, allow_candidate=True)
+        record['vitalStats'] = {'totalTranscripts': 9007199254740993}
+        text = binding.write_page(record, allow_candidate=True)
+        extracted = binding.read_page(text, allow_candidate=True, warn=lambda message: None)
+        self.assertEqual(extracted['vitalStats']['totalTranscripts'], 9007199254740993)
+        self.assertIs(type(extracted['vitalStats']['totalTranscripts']), int)
+        mutated = text.replace('data-fhr-type="integer"', 'data-fhr-type="string"', 1)
+        with self.assertRaises(binding.MicrodataError):
+            binding.read_page(mutated, allow_candidate=True, warn=lambda message: None)
+
+    def test_observation_detects_actual_covered_byte_mutation(self):
+        manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
+        entry = next(row for row in manifest['vectors'] if row['expected'] == 'valid' and not row['compressed'])
+        original = (candidate.TARGET / entry['file']).read_bytes()
+        self.assertTrue(candidate.observe(original, entry, self.reader)['valid'])
+        changed = original + b'\n; controlled covered-byte mutation\n'
+        self.assertNotEqual(original, changed)
+        result = candidate.observe(changed, entry, self.reader)
+        self.assertFalse(result['valid'])
+        self.assertEqual(result['stage'], 'checksum')
+
+    def test_primary_rule_cannot_be_masked_by_a_wrong_checksum(self):
+        manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
+        entry = next(row for row in manifest['vectors'] if row['sourceId'] == 'fht-fasta-completeness-sum-exceeds-total')
+        original = (candidate.TARGET / entry['file']).read_bytes()
+        changed = original + b'\n; wrong covered byte\n'
+        with self.assertRaisesRegex(ValueError, 'primary rule'):
+            candidate.assert_expected(entry, changed, self.reader)
+
+    def test_parent_context_must_bind_the_observed_child(self):
+        manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
+        entry = next(row for row in manifest['vectors'] if row['expected'] == 'valid' and any(link['result'] == 'checked-pass' for link in row['parentLink']))
+        data = (candidate.TARGET / entry['file']).read_bytes()
+        old = entry['parentLink'][0]['statedChecksum'].encode()
+        changed = data.replace(old, b'A' * 43 + b'=')
+        stated, position, length = self.reader.locate_checksum(changed)
+        line = changed[position:position + length]
+        changed = changed[:position] + line.replace(stated.encode(), self.reader.recomputed(changed).encode(), 1) + changed[position + length:]
+        outcome = candidate.observe(changed, entry, self.reader)
+        self.assertFalse(outcome['valid'])
+        self.assertEqual(outcome['stage'], 'parent-context')
+        with self.assertRaisesRegex(ValueError, 'primary rule'):
+            candidate.assert_expected(entry, changed, self.reader)
+
+    def test_binding_recognizes_all_family_aliases_before_conflict_check(self):
+        record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
+        html = binding.write_page(record, allow_candidate=True)
+        for selector in ('https://w3id.org/fair-bioheaders/fhr/v0.6.0',
+                         'https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fhp.json',
+                         'https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json'):
+            with self.subTest(selector=selector):
+                mixed = html.replace('itemtype="' + binding.FHT_ITEMTYPE + '"', 'itemtype="' + binding.FHT_ITEMTYPE + ' ' + selector + '"')
+                with self.assertRaisesRegex(binding.MicrodataError, 'family'):
+                    binding.read_page(mixed, allow_candidate=True)
+
+    def test_selected_reader_policy_boundaries_have_positive_and_negative_controls(self):
+        import gzip
+        import zlib
+        manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
+        entry = next(row for row in manifest['vectors'] if row['expected'] == 'valid' and not row['compressed'] and not row['parentLink'])
+        plain = (candidate.TARGET / entry['file']).read_bytes()
+        compressed = dict(entry, compressed=True)
+        wrapped = gzip.compress(plain, mtime=0)
+        self.assertTrue(candidate.observe(wrapped + b'\0\0', compressed, self.reader)['valid'])
+        self.assertFalse(candidate.observe(wrapped + b'junk', compressed, self.reader)['valid'])
+        header = bytearray(wrapped[:10]); header[3] |= 2
+        crc = (zlib.crc32(header) & 65535).to_bytes(2, 'little')
+        fhcrc = bytes(header) + crc + wrapped[10:]
+        self.assertTrue(candidate.observe(fhcrc, compressed, self.reader)['valid'])
+        wrong = bytearray(fhcrc); wrong[10] ^= 1
+        self.assertFalse(candidate.observe(bytes(wrong), compressed, self.reader)['valid'])
+        for statement, valid in ((b';~%YAML 1.2\n;~---\n', False), (b';~documentation: "%YAML quoted text"\n', True)):
+            if valid:
+                import re
+                changed, count = re.subn(rb'^;~documentation:[^\r\n]*(?:\r\n|\n|\r)', statement, plain, count=1, flags=re.M)
+                self.assertEqual(count, 1)
+            else:
+                changed = statement + plain
+            stated, position, length = self.reader.locate_checksum(changed)
+            line = changed[position:position + length]
+            changed = changed[:position] + line.replace(stated.encode(), self.reader.recomputed(changed).encode(), 1) + changed[position + length:]
+            self.assertEqual(candidate.observe(changed, entry, self.reader)['valid'], valid)
+
+
+if __name__ == '__main__':
+    unittest.main()

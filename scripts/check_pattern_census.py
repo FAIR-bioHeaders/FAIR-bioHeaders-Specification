@@ -138,6 +138,8 @@ ROOT = Path(__file__).resolve().parents[1]
 # are generated from or must agree with, the shared slot models they import, and
 # the version registry.
 RELEASED_SCOPE = (
+    ("fht.json", "proposed FHT v0.7.0 contract (unpublished)"),
+    ("fht_linkml.yml", "FHT publication candidate model"),
     ("fhr.json", "released FHR contract"),
     ("fhp.json", "released FHP contract"),
     ("fhgff3.json", "released FHGFF3 contract"),
@@ -1104,8 +1106,7 @@ def main():
     # broader scope, so the three-contract subset is printed here to keep the two
     # documents reconcilable instead of contradictory (#241 reference classes).
     three_paths = sorted(path for path, entry in found.items()
-                         if entry[0] == "released" and path.endswith(".json")
-                         and "/" not in path)
+                         if entry[0] == "released" and path in {"fhr.json", "fhp.json", "fhgff3.json"})
     three = [row for path in three_paths for row in found[path][2]]
     three_distinct = len({row["pattern"] for row in three})
     three_dollar = sum(1 for row in three if row["pattern"].endswith("$"))
