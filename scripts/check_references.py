@@ -138,7 +138,8 @@ class Checkouts:
         try:
             result = subprocess.run(['git', '-C', str(self.mapping[repo]), *args],
                 capture_output=True, timeout=30,
-                env={**os.environ, 'GIT_NO_LAZY_FETCH': '1', 'GIT_TERMINAL_PROMPT': '0'})
+                env={**os.environ, 'GIT_NO_LAZY_FETCH': '1', 'GIT_TERMINAL_PROMPT': '0',
+                     'GIT_NO_REPLACE_OBJECTS': '1'})
         except subprocess.TimeoutExpired as exc:
             raise QueryFailed(f'{repo}: local git query timed out') from exc
         if result.returncode:

@@ -48,6 +48,53 @@ The JSON report distinguishes an unperformed local comparison from one performed
 Advisory exit is zero; `--exit-on-findings` is available for controlled tests.
 Neither mode writes pins or consumer files.
 
+Tagged references also need their recorded dereferenced full commit; a missing
+commit is an incomplete declaration (`ABSENT`), not a fresh tag-only comparison.
+A full commit-kind revision already records that immutable commit. Missing-only
+authority/local file-set differences stay `ABSENT`; changed bytes, unexpected
+files or records outside the selected scope are `DRIFT`. A failed query remains
+`QUERY_FAILED`. Offline Git resolution disables replacement objects, so a
+`refs/replace` entry cannot substitute bytes or source sets for a recorded
+immutable commit. Exact `sourceExclusions` apply only inside an explicitly declared
+source scope; nonexistent or duplicate exclusions cannot produce `FRESH`.
+
+## Current staged draft declarations
+
+The dated `inventory.json` remains unchanged. The separate
+`scripts/audit_current_references.py` reads **current** `drafts/fht/source.json`
+and `drafts/fhgm/source.json` on each run, rather than freezing another copy of
+their file lists. Both are explicitly `copied-tree` references to draft material
+at full owning commits. Expected repositories, canonical source/local mappings,
+digests and selections are checked before querying authorities:
+
+- FHT selects all tracked owning files except exactly `AGENTS.md`.
+- FHGM selects `development/` and exactly `.gitattributes`, `LICENSE` and
+  `tests/test_fhgm_conformance.py`.
+
+The checker compares complete independent selected source and local sets, so
+deleting a file and its manifest entry together still reports `DRIFT`. Only
+recognized current-interpreter bytecode caches for declared Python modules,
+with valid bytecode headers, are local exceptions. Unknown Python/data files
+and cache-shaped data are not hidden. These reference comparisons do not replace
+the candidates' separate provenance, schema, conformance or runtime evidence.
+
+```sh
+python -I scripts/audit_current_references.py --plan
+python -I scripts/audit_current_references.py \
+  --checkout FAIR-bioHeaders/FHT-Specification=/path/to/owning-fht \
+  --checkout FAIR-bioHeaders/FHGM-Specification=/path/to/owning-fhgm
+```
+
+This audit has no GitHub API fallback: every authority is an explicit checkout,
+and unavailable objects/mappings are `QUERY_FAILED`. The scheduled/manual
+`current-references.yml` workflow checks out the commits from validated current
+declarations and retains the actual JSON, including a setup-failure fallback.
+It avoids an extra per-file GitHub API request budget for the staged trees.
+Normal PR tests use controlled temporary owning repositories; real declaration
+findings remain advisory, with no auto-repin, publication or new PR freshness
+gate. Neither this workflow nor the adapter updates `source.json`, payloads or
+the dated inventory.
+
 Consumer rollout must pin this checker by source commit/digest, declare the
 consumer's own references, schedule it with read-only permissions, retain the
 JSON artifact and surface findings without auto-repinning. Central delivery

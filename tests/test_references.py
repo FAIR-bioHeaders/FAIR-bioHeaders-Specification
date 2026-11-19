@@ -359,3 +359,33 @@ class RevisionAndBudgetTests(unittest.TestCase):
             results = list(pool.map(lambda row: audit.audit(row, resolver), inventory['references']))
         self.assertFalse(any(r['verdict'] == 'QUERY_FAILED' for r in results))
         self.assertLess(len(resolver._requests), 1000)
+
+
+class ImmutableCheckoutTests(unittest.TestCase):
+    def test_actual_replacement_refs_do_not_change_immutable_bytes_or_sets(self):
+        import os
+        import subprocess
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            environment = dict(os.environ)
+            environment.pop('GIT_NO_REPLACE_OBJECTS', None)
+            def git(*args):
+                return subprocess.check_output(['git', '-C', str(root), *args],
+                                               env=environment, stderr=subprocess.DEVNULL)
+            git('init', '-q')
+            git('config', 'user.name', 'Immutable reference control')
+            git('config', 'user.email', 'reference@example.invalid')
+            (root / 'schema.json').write_bytes(ORIGINAL)
+            git('add', '.')
+            git('commit', '-qm', 'original immutable source')
+            original = git('rev-parse', 'HEAD').decode().strip()
+            (root / 'schema.json').write_bytes(b'{"replaced":true}\n')
+            (root / 'unexpected.json').write_bytes(ORIGINAL)
+            git('add', '.')
+            git('commit', '-qm', 'replacement source')
+            replacement = git('rev-parse', 'HEAD').decode().strip()
+            git('replace', original, replacement)
+            self.assertNotEqual(git('show', original + ':schema.json'), ORIGINAL)
+            resolver = audit.Checkouts({'owner/authority': root})
+            self.assertEqual(resolver.read('owner/authority', original, 'schema.json'), ORIGINAL)
+            self.assertEqual(resolver.paths('owner/authority', original), {'schema.json'})
