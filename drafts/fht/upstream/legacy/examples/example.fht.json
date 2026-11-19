@@ -1,0 +1,37 @@
+{
+    "$schema":"https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+    "$id":"https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/examples/example.FHT.json",
+    "schema":"https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/FHT.jso",
+    "schemaVersion": 1.0,
+    "taxon" : {
+      "name":"Bombas huntii",
+      "uri": "https://identifiers.org/taxonomy:9606"
+    },
+    "transcriptome": "Bombas huntii",
+    "transcriptomeSynonym": ["B. huntii"],
+    "version": "0.0.1",
+    "metadataAuthor": [
+      { "name":"Adam Wright",
+      "uri":"https://orcid.org/0000-0002-5719-4024" }
+    ],
+    "assemblyAuthor": [
+      { "name":"David Molik",
+      "url":"https://orcid.org/0000-0003-3192-6538" }
+    ],
+   "dateCreated":"2022-03-21",
+    "accessionID": {
+      "name":"PBARC",
+      "url":"https://www.ars.usda.gov/pacific-west-area/hilo-hi/daniel-k-inouye-us-pacific-basin-agricultural-research-center/"
+    },     
+    "instrument": ["Sequel IIe", "Nanopore"],
+    "voucherSpecimen":"Located in Freezer 33, Drawer 137",
+    "scholarlyArticle":"10.1371/journal.pntd.0008755",
+    "assemblySoftware":"HiFiASM",
+    "funding":"funding",
+    "reuseConditions":"public domain",
+    "documentation":"Built assembly from... ",
+    "masking":"soft-masked",
+    "identifier": ["beetlebase:TC010103"],
+    "relatedLink": ["http://wfleabase.org/transcriptome/Daphnia_pulex/dpulex_jgi060905/fasta/"],
+    "checksum":"md5:7582b26fcb0a9775b87c38f836e97c42"
+}

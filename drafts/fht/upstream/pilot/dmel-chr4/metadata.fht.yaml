@@ -1,0 +1,82 @@
+# FHT header for the chr4 (NC_004353.4) transcript subset of *Drosophila
+# melanogaster* GCF_000001215.4 "Release 6 plus ISO1 MT".
+#
+# Pilot artifact for FAIR-bioHeaders/FHT-Specification#8 and #10. FHT has no
+# released contract: this record cites the development contract exactly as the
+# repository's fixtures do (raw main fht.json, schemaVersion "1.0") and claims
+# no release, no w3id URL, no version-registry row and no toolkit support
+# (shared rule V7; issues #9/#10). Authored with the RELEASED fair-bioheaders
+# 0.11.0 through its opt-in draft lane (BIOHEADERS_EXPERIMENTAL_FHT=1), which
+# computes the checksum; README.md beside this file records every probe.
+schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+schemaVersion: '1.0'
+transcriptome: Drosophila melanogaster Release 6 plus ISO1 MT chromosome 4 transcripts (NC_004353.4 subset)
+assemblyType: annotation-derived
+taxon:
+  name: Drosophila melanogaster
+  uri: https://identifiers.org/taxonomy:7227
+version: Release 6 plus ISO1 MT (chr4 subset, extracted 2026-11-15)
+metadataAuthor:
+  - name: David C Molik
+    uri: https://orcid.org/0000-0003-3192-6538
+    nameType: Personal
+dateCreated: '2026-11-15'
+derivedFrom:
+  - headerType: FHR
+    checksum: qQs9oEKygk63F7ppYVl9te6U8lVHeE8Fbzlf7lmB4Yw=
+    relationship: transcribedFrom
+    accessionID:
+      name: NC_004353.4
+      url: https://www.ncbi.nlm.nih.gov/nuccore/NC_004353.4
+sample:
+  - tissue: whole embryo
+    developmentalStage: embryos
+    strain: iso-1
+voucherSpecimen: >-
+  iso-1 isogenic strain, whole embryos, mixed sex (NCBI BioSample
+  SAMN02803731, sample name "iso-1", submitted by Lawrence Berkeley National
+  Laboratory); genotype y[1]; Gr22b[1] Gr22d[1] cn[1] CG33964[R4.2] bw[1]
+  sp[1]; LysC[1] MstProx[1] GstD5[1] Rh6[1]
+vitalStats:
+  totalTranscripts: 334
+  N50: 4898
+  averageTranscriptLength: 3995.2
+relatedLink:
+  - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/
+  - https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001215.4/
+  - https://www.ncbi.nlm.nih.gov/biosample/SAMN02803731
+  - https://www.ncbi.nlm.nih.gov/bioproject/PRJNA164
+documentation: >-
+  Annotation-derived transcript subset, not a published transcriptome delivery.
+  Content: 334 FASTA records copied verbatim, in source order, from
+  GCF_000001215.4_Release_6_plus_ISO1_MT_rna.fna (34526 records), selected by
+  exact accession membership in the transcript features that the delivery's
+  GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff places on sequence name
+  NC_004353.4 (##sequence-region NC_004353.4 1 1348131): 298 mRNA, 18 lnc_RNA,
+  15 antisense_RNA, 2 primary_transcript, 1 snoRNA. No sequence was assembled,
+  reverse-transcribed or edited; total transcript length 1334408 symbols, longest
+  record 27666, shortest 63, N50 4898, mean length 3995.2, all characters ACGT
+  uppercase with no N and no lowercase. Derivation from the cited parent is
+  checked, not asserted: for all 334 records the spliced join of that record's
+  GFF exon intervals on NC_004353.4, reverse-complemented on the minus strand,
+  equals the delivered transcript byte for byte. The parent is the subset FHR
+  file for NC_004353.4 only, identified by its own recomputed FHR checksum
+  qQs9oEKygk63F7ppYVl9te6U8lVHeE8Fbzlf7lmB4Yw=; it is NOT the whole-assembly
+  file GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna, whose checksum this
+  link deliberately does not carry, so a link verified here verifies this subset
+  and nothing larger. moleculeType is omitted because the set is heterogeneous
+  (protein-coding mRNA together with long non-coding, antisense, small
+  nucleolar and precursor RNAs). Four further annotated transcript features on
+  NC_004353.4 are excluded rather than invented: miRNA features at 400703-400724,
+  400744-400765, 626142-626162 and 626180-626200 carry FlyBase-internal
+  identifiers (gnl|FlyBase|CR46291-RB, gnl|FlyBase|CR46291-RA,
+  gnl|FlyBase|CR43009-RA, gnl|FlyBase|CR43009-RB), have no public accession and
+  therefore have no record in the _rna.fna delivery. dateCreated is the date this
+  subset was extracted; the underlying annotation is FlyBase's on Release 6 plus
+  ISO1 MT (assembly submitted 2014-08-01, RefSeq annotation descriptors last
+  changed 2023-12-27 per the delivery's annotation_hashes.txt). Sequence bytes
+  are reproduced unmodified from the NCBI RefSeq delivery, which supplies no
+  license statement, so no reuseConditions value is asserted here and nothing is
+  relicensed by this header. This is a teaching and pilot artifact for a bounded
+  chromosome subset: a real transcriptome deployment would describe a complete
+  transcript set and would point derivedFrom at the full assembly's FHR file.

@@ -1,0 +1,74 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+;~schemaVersion: '1.0'
+;~transcriptome: Synthetic FHT conformance transcript set
+;~assemblyType: de novo
+;~moleculeType: mRNA
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: '1.0.0'
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~dateCreated: '2026-11-10'
+;~documentation: 'Synthetic FHT conformance vector; not a real transcriptome.'
+;~accessionID:
+;~  name: Synthetic accession DB (placeholder)
+;~  url: https://example.org/fht/synthetic-set
+;~assemblyAuthor:
+;~- name: Synthetic assembler (placeholder)
+;~  nameType: Organizational
+;~assemblySoftware:
+;~- name: Synthetic Assembler (placeholder)
+;~  version: '0.0.1'
+;~  uri: https://example.org/synthetic-assembler
+;~  commandLineOption:
+;~  - '--no-variants'
+;~  - '--jellyfish'
+;~completeness:
+;~  lineageDataset: primates_odb10
+;~  completeSingle: 1
+;~  completeDuplicated: 0
+;~  fragmented: 0
+;~  missing: 0
+;~  total: 1
+;~funding: Synthetic Grant SYN-0001 (placeholder)
+;~identifier:
+;~- 'example.org:SYN-FHT-0001'
+;~instrument:
+;~- Synthetic Instrument 2000 (placeholder)
+;~libraryStrategy: RNA-Seq
+;~relatedLink:
+;~- https://example.org/synthetic-project
+;~reuseConditions: CC0-1.0
+;~sample:
+;~- tissue: synthetic tissue
+;~  tissueIdentifier: 'UBERON:0000000'
+;~  developmentalStage: placeholder stage
+;~- tissue: synthetic tissue
+;~  condition: placeholder condition
+;~scholarlyArticle: '10.5555/synthetic.example'
+;~sequencingRuns:
+;~- SRR9990001
+;~- ERR9990002
+;~- DRR9990003
+;~strandedness: reverse
+;~transcriptomeSynonym:
+;~- Synthetic set alias (placeholder)
+;~vitalStats:
+;~  totalTranscripts: 2
+;~  N50: 48
+;~  averageTranscriptLength: 36.0
+;~voucherSpecimen: Synthetic voucher, placeholder freezer shelf A1
+;~derivedFrom:
+;~- headerType: FHR
+;~  checksum: 'pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac='
+;~  relationship: transcribedFrom
+;~- headerType: FHT
+;~  checksum: 'pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA='
+;~  relationship: filteredFrom
+;~x-example-rich: extension in the rich record
+;~checksum: j35ZPDrXrJ0nn8RFYKzczaqhbk43IWKRzbdyn3FLAIM=
+>tx1 synthetic RNA transcript
+AUGGAACCUAGGUACGUAAUCCGGGUAACCCUAGGAAUCCGUACGAAG
+>tx2 synthetic RNA transcript in lower case
+augcuuauggccagguacguaaug

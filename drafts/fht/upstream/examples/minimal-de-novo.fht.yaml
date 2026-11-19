@@ -1,0 +1,13 @@
+schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+schemaVersion: '1.0'
+transcriptome: Bombus impatiens worker brain transcriptome (synthetic minimal example)
+assemblyType: de novo
+taxon:
+  name: Bombus impatiens
+  uri: https://identifiers.org/taxonomy:132113
+version: '1.0'
+metadataAuthor:
+- name: Example Pollinator Genomics Lab
+  nameType: Organizational
+dateCreated: '2026-09-15'
+checksum: 'HMcqSkUSomyhi7pCg2l/0x4c1w0qnnkoa1GtZXuhpbE='

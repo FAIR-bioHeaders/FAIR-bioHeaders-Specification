@@ -1,0 +1,248 @@
+id: https://w3id.org/fhr/core
+name: FAIRBioHeadersCore
+description: >-
+  Shared core for the FAIR-bioHeaders family (FHR, FHT, FHP, FHGFF3). Header-type
+  schemas import this module, list the core slots on their root class, and add
+  their own subject slot and type-specific slots. Slot names, types, patterns and
+  constraints match FHR schemaVersion 1 as tightened for v0.4
+  (docs/SCHEMA-CHANGES-v0.4.md). The id is provisional pending the
+  persistent schema URL decision (specs/004-shared-core-schema FR-004).
+prefixes:
+  linkml: https://w3id.org/linkml/
+  # Term IRIs for the JSON-LD context and vocabulary (specs/011-jsonld-mapping
+  # research R-05, R-08). Slots without a slot_uri get an fhr: term.
+  sdo: http://schema.org/
+  fhr: https://w3id.org/fair-bioheaders/terms#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  dcterms: http://purl.org/dc/terms/
+default_prefix: fhr
+default_range: string
+imports:
+- linkml:types
+types:
+  sha2:
+    base: str
+    uri: xsd:string
+    pattern: ^[A-Za-z0-9+/]{43}=$
+    description: >-
+      Base64 SHA-512/256 digest: standard padded base64 of 32 bytes (43 base64
+      characters, then one "="), as defined for FHR checksums. A syntactic check
+      only; it does not verify the file.
+slots:
+  # Required core slots (FR-001).
+  schema:
+    description: Centralized schema file
+    slot_uri: sdo:schemaVersion
+    annotations:
+      # fhr.json types schema as a plain string; JSON-LD coerces it to an IRI
+      # (specs/011-jsonld-mapping research R-06 rule 4, R-16).
+      jsonld_iri: true
+    required: true
+  schemaVersion:
+    description: >-
+      Version of the header type's schema contract, as "MAJOR.MINOR"
+      (docs/SCHEMA-VERSIONS.md); each header type pins its accepted values
+    range: string
+    pattern: ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$
+    required: true
+  taxon:
+    description: Species name and URL of the species information at identifiers.org
+    slot_uri: sdo:about
+    range: Taxon
+    inlined: true
+    required: true
+  version:
+    description: Version number of the described data
+    slot_uri: sdo:version
+    required: true
+  metadataAuthor:
+    description: Authors of the header instance
+    range: Author
+    multivalued: true
+    inlined_as_list: true
+    required: true
+  dateCreated:
+    description: Date the described data was created
+    slot_uri: sdo:dateCreated
+    range: date
+    required: true
+  checksum:
+    description: sha2-512/256 checksum value for hashing
+    range: sha2
+    required: true
+  # Optional core slots (FR-001).
+  identifier:
+    description: Identifiers of the described data
+    slot_uri: sdo:identifier
+    multivalued: true
+    pattern: ^[A-Za-z0-9._-]+:.+$
+  accessionID:
+    description: Accession of the described data
+    broad_mappings:
+    - sdo:identifier
+    range: AccessionID
+    inlined: true
+  scholarlyArticle:
+    description: DOI (without a resolver prefix) of the scholarly article where the data was published
+    slot_uri: sdo:citation
+    pattern: ^10\.[0-9]+(\.[0-9]+)*/\S+$
+  documentation:
+    description: Documentation about the described data
+    slot_uri: sdo:description
+    annotations:
+      # Maintainer decision 3 (specs/011-jsonld-mapping plan.md): an absolute
+      # URL value is written as this term instead.
+      jsonld_slot_uri_if_url: sdo:subjectOf
+  relatedLink:
+    description: Related URLs
+    range: uri
+    multivalued: true
+  funding:
+    description: Grant line item
+    slot_uri: sdo:funding
+  reuseConditions:
+    description: Reuse conditions or license
+    slot_uri: sdo:license
+  voucherSpecimen:
+    description: Description of the physical sample
+  # Shared definitions used by header types and by DerivedFrom.
+  # Defined in the core so DerivedFrom can reuse it; header types opt in by listing it.
+  seqcol_id:
+    description: Unprefixed refget sequence collection top-level digest (sha512t24u).
+    # The digest identifies the sequence content of the described assembly
+    # (specs/013-schemaorg-export research R-08), as accessionID does.
+    broad_mappings:
+    - sdo:identifier
+    range: string
+    pattern: ^[A-Za-z0-9_-]{32}$
+  derivedFrom:
+    description: >-
+      Parent files this file was derived from, identified by their FHR-family
+      checksum. Header types opt in by listing this slot; FHR schemaVersion 1
+      does not include it.
+    range: DerivedFrom
+    multivalued: true
+    inlined_as_list: true
+  headerType:
+    description: FAIR-bioHeaders type of the parent file
+    range: HeaderType
+  relationship:
+    description: >-
+      How this file relates to the parent. Provisional vocabulary: a PROV-O or
+      Relation Ontology mapping is pending a maintainer decision
+      (FAIR-bioHeaders-Specification#54).
+    range: DerivationRelationship
+classes:
+  Taxon:
+    description: Species name and taxonomy URI
+    class_uri: sdo:Taxon
+    attributes:
+      name:
+        description: Name of the species
+        slot_uri: sdo:name
+      uri:
+        description: Taxonomy URI
+        range: uri
+        annotations:
+          jsonld_node_id: true
+        pattern: ^https://identifiers\.org/taxonomy:[0-9]+$
+  Author:
+    description: Person or organization; uri is an ORCID URI
+    class_uri: fhr:Agent
+    close_mappings:
+    - dcterms:Agent
+    annotations:
+      # Writer typing (maintainer decision 4): an ORCID uri gives a Person and
+      # a ROR uri an Organization; anything else stays the class_uri, fhr:Agent.
+      jsonld_type_if_orcid: sdo:Person
+      jsonld_type_if_ror: sdo:Organization
+      vocabulary_comment: >-
+        A person or organization that the FHR record does not classify; FHR
+        records the kind of agent through nameType or an ORCID or ROR identifier.
+      vocabulary_subclass_of: sdo:Thing
+    attributes:
+      name:
+        description: Name of the person or organization
+        slot_uri: sdo:name
+      uri:
+        description: ORCID URI
+        range: uri
+        annotations:
+          jsonld_node_id: true
+        pattern: ^https://orcid\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$
+      nameType:
+        description: >-
+          Whether the author is a person (Personal) or an organization
+          (Organizational), as DataCite nameType
+        range: NameType
+        see_also:
+        - https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/creator/#nametype
+  AccessionID:
+    description: Accession identifier
+    class_uri: sdo:PropertyValue
+    attributes:
+      name:
+        description: Accession name
+        slot_uri: sdo:name
+      url:
+        description: Accession URL
+        range: uri
+        slot_uri: sdo:url
+  DerivedFrom:
+    description: >-
+      Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema
+      FR-003). Provisional until the relationship vocabulary is decided
+      (FAIR-bioHeaders-Specification#54).
+    slots:
+    - headerType
+    - checksum
+    - seqcol_id
+    - accessionID
+    - relationship
+    slot_usage:
+      headerType:
+        required: true
+      checksum:
+        description: FHR-family checksum of the parent file
+      seqcol_id:
+        description: Sequence collection digest of the parent, if supplied
+      accessionID:
+        description: Accession of the parent file
+      relationship:
+        required: true
+enums:
+  NameType:
+    description: Kind of author, with the values of DataCite nameType
+    permissible_values:
+      Personal:
+        description: A person
+        meaning: sdo:Person
+      Organizational:
+        description: An organization
+        meaning: sdo:Organization
+  HeaderType:
+    description: FAIR-bioHeaders header types
+    permissible_values:
+      FHR:
+        description: FAIR Header Reference genome
+      FHT:
+        description: FAIR Header Transcriptome
+      FHP:
+        description: FAIR Header Proteome
+      FHGFF3:
+        description: FAIR Header for GFF3 annotation
+  DerivationRelationship:
+    description: >-
+      Provisional relationship vocabulary for derivedFrom. Values and any PROV-O /
+      Relation Ontology mapping await a maintainer decision (FAIR-bioHeaders-Specification#54).
+    permissible_values:
+      annotates:
+        description: This file annotates the parent (e.g. GFF3 on a genome).
+      transcribedFrom:
+        description: This file's sequences are transcribed from the parent.
+      translatedFrom:
+        description: This file's sequences are translated from the parent.
+      filteredFrom:
+        description: This file is a subset or filtered copy of the parent.
+      assembledFrom:
+        description: This file was assembled from the parent.

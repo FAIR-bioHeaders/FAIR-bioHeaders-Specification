@@ -1,0 +1,105 @@
+{
+  "status": "draft binding reference tests, not shared conformance vectors",
+  "invalid": {
+    "wrong-type.html": {
+      "valid": false,
+      "reason": "M1: FHR identity is not FHT",
+      "error": "expected exactly one FHT scope and no conflicting family scope"
+    },
+    "unknown-release.html": {
+      "valid": false,
+      "reason": "V7: no FHT release is available",
+      "error": "unsupported FHT draft schema selection"
+    },
+    "repeated-scalar.html": {
+      "valid": false,
+      "reason": "M4: repeated scalar becomes an invalid list",
+      "error": "schema-invalid metadata: \\['1\\.0', '1\\.0'\\] is not of type 'string'"
+    },
+    "object-without-scope.html": {
+      "valid": false,
+      "reason": "M3: typed object requires its own item scope",
+      "error": "data-fhr-type=object without itemscope"
+    },
+    "array-stray-text.html": {
+      "valid": false,
+      "reason": "M4: array containers contain only item properties",
+      "error": "array container has stray text"
+    },
+    "mixed-family.html": {
+      "valid": false,
+      "reason": "M1: reject conflicting family record scopes",
+      "error": "expected exactly one FHT scope and no conflicting family scope"
+    },
+    "script-required-value.html": {
+      "valid": false,
+      "reason": "M2: script content cannot supply a required value",
+      "error": "schema-invalid metadata:.*should be non-empty"
+    },
+    "wrong-version-type.html": {
+      "valid": false,
+      "reason": "contract: schemaVersion must remain the string 1.0",
+      "error": "unsupported FHT draft schemaVersion"
+    },
+    "repeated-array-container.html": {
+      "valid": false,
+      "reason": "M4: repeated array containers remain nested and fail the array item schema",
+      "error": "schema-invalid metadata:.*is not of type 'object'"
+    },
+    "hidden-attribute.html": {
+      "valid": false,
+      "reason": "Visible values: a hidden property is not shown in the page",
+      "error": "not visible"
+    },
+    "display-none-ancestor.html": {
+      "valid": false,
+      "reason": "Visible values: an ancestor with display:none hides the value",
+      "error": "not visible"
+    },
+    "hidden-scope.html": {
+      "valid": false,
+      "reason": "Visible values: the FHT scope itself is concealed",
+      "error": "not visible"
+    },
+    "meta-content.html": {
+      "valid": false,
+      "reason": "Visible values: a meta content attribute is never shown",
+      "error": "not visible"
+    },
+    "noscript-property.html": {
+      "valid": false,
+      "reason": "Visible values: noscript contents are not rendered when scripting is enabled",
+      "error": "not visible"
+    },
+    "itemref.html": {
+      "valid": false,
+      "reason": "Visible values: itemref pulls properties from outside the item",
+      "error": "itemref"
+    },
+    "multi-token-itemprop.html": {
+      "valid": false,
+      "reason": "Visible values: one element cannot supply two fields",
+      "error": "several properties"
+    },
+    "javascript-href.html": {
+      "valid": false,
+      "reason": "R14: an active href outside http/https/ftp/urn/doi/info",
+      "error": "R14"
+    },
+    "data-value-differs.html": {
+      "valid": false,
+      "reason": "Visible values: a data value attribute must equal the text shown",
+      "error": "differs from the text"
+    },
+    "hidden-descendant.html": {
+      "valid": false,
+      "reason": "Visible values: an unmarked hidden descendant contributes concealed scalar text",
+      "error": "not visible"
+    },
+    "hidden-array-attribute.html": {
+      "valid": false,
+      "reason": "Visible values: a concealed array item cannot supply an href attribute",
+      "error": "not visible"
+    }
+  }
+}

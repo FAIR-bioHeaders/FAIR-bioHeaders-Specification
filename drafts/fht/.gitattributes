@@ -1,0 +1,5 @@
+# These exact historical source blobs contain intentional retained whitespace.
+# Do not rewrite their notices or legacy bytes while vendoring the snapshot.
+upstream/LICENSE -whitespace
+upstream/legacy/examples/example.fht.json -whitespace
+upstream/legacy/examples/example.microdata.fhr.html -whitespace

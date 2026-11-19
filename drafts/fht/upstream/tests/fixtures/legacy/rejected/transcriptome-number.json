@@ -1,0 +1,23 @@
+{
+  "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+  "schemaVersion": 0.1,
+  "transcriptome": 42,
+  "taxon": {
+    "name": "Arabidopsis thaliana",
+    "uri": "https://identifiers.org/taxonomy:3702"
+  },
+  "version": "1.0",
+  "metadataAuthor": [
+    {
+      "name": "Example author"
+    }
+  ],
+  "assemblyAuthor": [
+    {
+      "name": "Example assembler"
+    }
+  ],
+  "dateCreated": "2024-01-01",
+  "masking": "not-masked",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+}

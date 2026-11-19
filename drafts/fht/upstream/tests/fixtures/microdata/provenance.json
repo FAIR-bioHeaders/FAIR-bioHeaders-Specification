@@ -1,0 +1,21 @@
+{
+  "status": "unreleased draft binding proposal",
+  "fhtSchemaSha256": "b62c4e227042e162b43d2c461cfe6c3ece3806636ca88a4cf9b0b2f902fb1fc3",
+  "referenceParser": {
+    "repository": "FAIR-bioHeaders/FHP-Specification",
+    "commit": "bc7110fedb6f05b52b1d2348b5b14a79b91b0637",
+    "path": "tests/fhp_microdata.py",
+    "sha256": "fa7aeee589430a0c5644097f6c46bbdc52d716f994c37939dd0a3c7bf90e0946",
+    "adaptations": "FHT-only V7 draft identity, full contract/format validation, finite-number guard and one visible typed table; no release registry."
+  },
+  "canonicalSources": {
+    "annotation-derived.fht.json": "b39f54e1b4846a22f92e33d35beb940036d19001b35d88399258e167b17e66b4",
+    "de-novo.fht.json": "72931c258881d8136ee380e0a628d5a2a83d7aad02c23262c68f9fe9ebe7b358",
+    "genome-guided.fht.json": "5284d0a848d8b2a899242815bec062c224a2cd9fd2d3d58779de41550a4420c0",
+    "minimal-annotation-derived.fht.json": "f31b03b3879f4595033e6c7c655cd032edaf892cb07a5fadaa081dbfcc3cd1b9",
+    "minimal-de-novo.fht.json": "0704308ac7d57d92914139f075258a794ddf891a230f85cbc4b5e4cd92871a08",
+    "minimal-genome-guided.fht.json": "5275abb006894008d32dde9773bf694eb03ad001e93709a1b37a8e1de2317f75",
+    "mixed-molecules.fht.json": "ded89b91ca993516dbb48ef4bb6687b144748236876c6053bdc058f8b7e30a28"
+  },
+  "owningSource": "Resolved at read time, not stored: the commit that last changed fht.json on the checked-out history, accepted only when its stored fht.json hashes to fhtSchemaSha256 (tests/fht_microdata.py owning_commit). Re-anchoring after a schema change updates fhtSchemaSha256 only."
+}

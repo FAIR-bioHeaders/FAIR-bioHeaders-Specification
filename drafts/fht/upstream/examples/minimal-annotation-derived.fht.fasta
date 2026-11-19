@@ -1,0 +1,15 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+;~schemaVersion: '1.0'
+;~transcriptome: Arabidopsis thaliana Araport11 protein-coding transcripts (synthetic minimal example)
+;~assemblyType: annotation-derived
+;~taxon:
+;~  name: Arabidopsis thaliana
+;~  uri: https://identifiers.org/taxonomy:3702
+;~version: Araport11-extract-1
+;~metadataAuthor:
+;~- name: Example Plant Database Curation Team
+;~  nameType: Organizational
+;~dateCreated: '2026-10-01'
+;~checksum: C/TrdimrqL9TamMb7U9jKNH6KhQwziRJBMJjNDRwsv0=
+>synthetic_transcript_1
+ATGGCGTCTAAAGGTGAAGAACTGTTCACCGGTGTTGTTCCGATCCTGGTTGAACTGGATGGTGATGTTAACGGTCACAAATTC

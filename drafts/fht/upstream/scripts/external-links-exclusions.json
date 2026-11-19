@@ -1,0 +1,6 @@
+{
+  "description": "Exclusions for scripts/check_external_links.py (issue #14). The external-link lane runs only on a schedule and on demand, never as the sole PR signal. Each exclusion must be narrow (exact URL or explicit prefix), dated and justified by recorded evidence of a durable failure or a bot-hostile endpoint; transient failures are retried, not excluded.",
+  "policy": "docs/CI.md#external-links",
+  "baseline": "2026-11-10: all 32 URLs cited as Markdown links/autolinks resolved HTTP 200 from a local run; no exclusions were needed, so the list is intentionally empty.",
+  "exclusions": []
+}

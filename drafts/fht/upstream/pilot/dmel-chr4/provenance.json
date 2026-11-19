@@ -1,0 +1,309 @@
+{
+  "assembly": {
+    "annotation_descriptors_last_changed": "2023-12-27 (delivery annotation_hashes.txt)",
+    "assembly_description": "Release 6 plus ISO1 mitochondrial genome",
+    "assembly_level": "Chromosome",
+    "assembly_name": "Release 6 plus ISO1 MT",
+    "assembly_type": "haploid",
+    "bioproject_genbank": "PRJNA13812",
+    "bioproject_refseq": "PRJNA164",
+    "biosample": "SAMN02803731",
+    "genbank_accession": "GCA_000001215.4",
+    "genbank_release_date": "2014-08-08",
+    "last_updated": "2020-12-23",
+    "ncbi_assembly_uid": 202931,
+    "organism": "Drosophila melanogaster (fruit fly)",
+    "refseq_accession": "GCF_000001215.4",
+    "refseq_category": "reference genome",
+    "refseq_release_date": "2014-08-08",
+    "source": "NCBI eutils esummary.fcgi db=assembly id=202931 retmode=json, probed 2026-11-15; the uid came from esearch on the accession",
+    "submission_date": "2014-08-01",
+    "submitter_organization": "The FlyBase Consortium/Berkeley Drosophila Genome Project/Celera Genomics",
+    "taxid": 7227,
+    "ucsc_name": "dm6"
+  },
+  "authored_headers": {
+    "fhr": {
+      "bytes": 1368589,
+      "checksum_sha512_256": "qQs9oEKygk63F7ppYVl9te6U8lVHeE8Fbzlf7lmB4Yw=",
+      "contract": "FHR schemaVersion 2.1 at https://w3id.org/fair-bioheaders/fhr/v0.6.0 (released)",
+      "file": "GCF_000001215.4_chr4.fhr.fasta",
+      "header_bytes": 3556,
+      "header_file": "header.fhr.txt",
+      "header_sha256": "e2b5266f60a5146d95f0cca0f9093f8e3bc4803376a2de265ab870668fb145ef",
+      "sha256": "5e797185f974ccefe01ae7c2dfd5fd6e3c8cf221dab83f6548c29a00f0824f40",
+      "written_by": "bioheaders combine on the default path"
+    },
+    "fht": {
+      "bytes": 1387037,
+      "checksum_sha512_256": "BUcrVpAVDG29yRm+DPmX2U5uHwFOSK/trlZpByY2DTk=",
+      "contract": "FHT 1.0 development contract cited as https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json (draft: no release, no w3id URL, no versions.json row; rule V7)",
+      "file": "GCF_000001215.4_chr4_transcripts.fht.fasta",
+      "header_bytes": 4237,
+      "header_file": "header.fht.txt",
+      "header_sha256": "d90b0e90a61f4bf7813b42485319b086275ccc4da7008c47d1a664b5bcf3236b",
+      "sha256": "be72f9b29a138d4ab2f52189a750e849f738265f19c3488f97143a1ffb8f11f0",
+      "written_by": "bioheaders combine with BIOHEADERS_EXPERIMENTAL_FHT=1 (opt-in V7 draft lane)"
+    },
+    "toolkit": {
+      "name": "fair-bioheaders",
+      "python": "3.15.0",
+      "source": "PyPI wheel (pip install fair-bioheaders==0.11.0)",
+      "version": "0.11.0"
+    }
+  },
+  "decompressed_verification": {
+    "method": "whole-file gunzip, then MD5 over the complete uncompressed file, compared with the delivery's uncompressed_checksums.txt row (a ranged read of a .gz truncates mid-stream and is never used here)",
+    "results": [
+      {
+        "bytes": 145657746,
+        "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna",
+        "matches_ncbi": true,
+        "md5": "a201b53b7eab2eb161671e4b3ae670a0"
+      },
+      {
+        "bytes": 96785880,
+        "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_rna.fna",
+        "matches_ncbi": true,
+        "md5": "76e78617dd3457f256f884ae68933372"
+      },
+      {
+        "bytes": 164988613,
+        "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff",
+        "matches_ncbi": true,
+        "md5": "399b4ac37cc123b724895334be589fdc"
+      },
+      {
+        "bytes": 1365033,
+        "file": "chr4.fna",
+        "matches_ncbi": true,
+        "md5": "edd1c69d6360fe22ee850c3bca51894b"
+      }
+    ]
+  },
+  "derived_artifacts": {
+    "control_assembly_structure_chr4": {
+      "bytes": 1365033,
+      "differs_only_in_letter_case": true,
+      "identical_ignoring_letter_case": true,
+      "identical_to_extracted_slice": false,
+      "md5": "edd1c69d6360fe22ee850c3bca51894b",
+      "path": "chr4.fna.gz",
+      "sha256": "bbaaf2ec21842649d5c6313588f6107cfbf0afd4c041547cf5015554ec0d2da8"
+    },
+    "derivation_proof": {
+      "equal_including_the_parent_masking_case": 4,
+      "equal_only_after_case_folding_of_the_soft_masked_parent": 330,
+      "equals_exon_join_of_parent": 334,
+      "mismatches": [],
+      "mismatching": 0,
+      "negative_control_accession": "NM_001014685.3",
+      "negative_controls": {
+        "parent_bytes_are_case_variable": true,
+        "reverse_complement_table_is_correct": true,
+        "single_base_mutation_of_a_transcript_is_detected": true
+      },
+      "transcripts_checked": 334,
+      "transcripts_selected": 334,
+      "transcripts_selected_without_exon_rows": []
+    },
+    "reference_slice": {
+      "bytes": 1365033,
+      "md5": "d6f9e65e3fd14cfcd81bb054746c1806",
+      "path": "chr4_genomic.fna",
+      "sha256": "9ea85183fc77137381a6e81adf8f088c84c68a888dc323ef8b286b4ef165e184"
+    },
+    "reference_slice_gc_percent_of_letters": 35.2498,
+    "reference_slice_measures": {
+      "N50": 1348131,
+      "bases": 1348131,
+      "character_counts": {
+        "A": 286843,
+        "C": 186129,
+        "G": 188866,
+        "N": 17000,
+        "T": 294660,
+        "a": 138398,
+        "c": 46437,
+        "g": 47789,
+        "t": 142009
+      },
+      "longest_record": 1348131,
+      "lowercase_chars": 374633,
+      "lowercase_fraction_of_all_symbols": 0.27789065,
+      "lowercase_fraction_of_letters": 0.27789065,
+      "records": 1,
+      "shortest_record": 1348131,
+      "uppercase_chars": 973498
+    },
+    "selection": {
+      "excluded_without_public_accession": [
+        {
+          "end": 400724,
+          "feature_type": "miRNA",
+          "id": "gnl|FlyBase|CR46291-RB",
+          "start": 400703
+        },
+        {
+          "end": 400765,
+          "feature_type": "miRNA",
+          "id": "gnl|FlyBase|CR46291-RA",
+          "start": 400744
+        },
+        {
+          "end": 626162,
+          "feature_type": "miRNA",
+          "id": "gnl|FlyBase|CR43009-RA",
+          "start": 626142
+        },
+        {
+          "end": 626200,
+          "feature_type": "miRNA",
+          "id": "gnl|FlyBase|CR43009-RB",
+          "start": 626180
+        }
+      ],
+      "gff_sequence_region_line": "##sequence-region NC_004353.4 1 1348131",
+      "gff_transcript_features_on_slice": 338,
+      "rna_records_in_delivery": 34526,
+      "selected_by_feature_type": {
+        "antisense_RNA": 15,
+        "lnc_RNA": 18,
+        "mRNA": 298,
+        "primary_transcript": 2,
+        "snoRNA": 1
+      },
+      "with_public_accession": 334
+    },
+    "transcript_slice": {
+      "bytes": 1382800,
+      "md5": "c7a8582345766e516bad654447843312",
+      "path": "chr4_rna.fna",
+      "sha256": "f196bb2cd5cc98d56ae2c3c365d1322e93a42d33d8ba8c0cad66e86fb2cffd3c"
+    },
+    "transcript_slice_measures": {
+      "N50": 4898,
+      "bases": 1334408,
+      "character_counts": {
+        "A": 443977,
+        "C": 258845,
+        "G": 260779,
+        "T": 370807
+      },
+      "longest_record": 27666,
+      "lowercase_chars": 0,
+      "lowercase_fraction_of_all_symbols": 0.0,
+      "lowercase_fraction_of_letters": 0.0,
+      "records": 334,
+      "shortest_record": 63,
+      "uppercase_chars": 1334408
+    },
+    "transcript_table": {
+      "bytes": 20271,
+      "md5": "08a87953becbeee404c006baf0a2615a",
+      "path": "chr4_transcripts.tsv",
+      "sha256": "bf679f3c1a9127f1c02b4a84f13bd55851ed51fcdc829cd71d3e6885a7631f3f"
+    }
+  },
+  "donor_selection": "maintainer decision 2026-11-15, replacing the genome-only Prosapia bicincta GCA_036971475.1, which carries no annotation and cannot support an FHT subset",
+  "downloads": [
+    {
+      "bytes": 44235956,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz",
+      "md5": "869cf40e4f5c7ca27d04ca9ae7baee4f",
+      "md5_matches_ncbi_published": true,
+      "role": "source of the reference slice",
+      "sha256": "e69e907b5e87ce756236dcef93e82001cfd08f1a0ed5f22e36cbbd3a87ebc57d",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
+    },
+    {
+      "bytes": 23529984,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_rna.fna.gz",
+      "md5": "45a0b3380c3a364873bd8258db7a9291",
+      "md5_matches_ncbi_published": true,
+      "role": "source of the transcript slice",
+      "sha256": "bc3f402dbdb44b2ed075ddcd10800a1d15a123aeaf99c9cf16bf1085e3ec7855",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_rna.fna.gz"
+    },
+    {
+      "bytes": 8688226,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz",
+      "md5": "1de22f17786c44ae98d7922116967b4e",
+      "md5_matches_ncbi_published": true,
+      "role": "transcript and exon coordinates on NC_004353.4",
+      "sha256": "9a372f10f86f4fe4222d070a101716b7565affdd6cb96efae249e8afa3b2c726",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff.gz"
+    },
+    {
+      "bytes": 5753,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_gaps.txt.gz",
+      "role": "accounts the 17000 N characters in the slice",
+      "sha256": "e993042891ae03def7e2e32c559e23cd34c8692ba677ff12a4026d93ddd18041",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_gaps.txt.gz"
+    },
+    {
+      "bytes": 214116,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_assembly_report.txt",
+      "md5": "ecb1db60e27f4f5ce3dd35fa46b4d7c6",
+      "md5_matches_ncbi_published": true,
+      "role": "chromosome 4 accession, role and length row",
+      "sha256": "22bf2cefea3bf4abc56aab340bdfb32f27dcd02b78f57c0762f8f1036e7963e7",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_assembly_report.txt"
+    },
+    {
+      "bytes": 3929,
+      "file": "GCF_000001215.4_Release_6_plus_ISO1_MT_feature_count.txt",
+      "md5": "390ad2968539bd08d44810c8986fc188",
+      "md5_matches_ncbi_published": true,
+      "role": "assembly-wide annotation richness",
+      "sha256": "1bcc2d12804490dd10452dc9d98ca42c7125ccc2591dad0603ee9783c671d76d",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_feature_count.txt"
+    },
+    {
+      "bytes": 378797,
+      "file": "chr4.fna.gz",
+      "md5": "1531d6b6f84fe41947f21dcb8fa3db57",
+      "md5_matches_ncbi_published": true,
+      "role": "NCBI per-chromosome FASTA, used as a case-only control",
+      "sha256": "c0d89f2a877d3f75896b72340bfbe0be5b9c7edcfb733565021bea147c157f3e",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/chr4.fna.gz"
+    },
+    {
+      "bytes": 5747,
+      "file": "md5checksums.txt",
+      "role": "NCBI-published MD5 list for this delivery",
+      "sha256": "148f87060005d84a397d74a216cca8454d0f37bd8928be5ac9517169439c9fa1",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/md5checksums.txt"
+    },
+    {
+      "bytes": 3045,
+      "file": "uncompressed_checksums.txt",
+      "role": "NCBI-published MD5/CRC32/size of decompressed files",
+      "sha256": "edbc2647a9f35bca7c2695efde8690d65166249423b9d693ea0aefce635d632c",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/uncompressed_checksums.txt"
+    },
+    {
+      "bytes": 410,
+      "file": "annotation_hashes.txt",
+      "role": "annotation descriptors/features/locations last-changed dates",
+      "sha256": "8440fb061a189d21cc26f7d7db70d1daba6b242e17a3292ed480ccf2c1374ccc",
+      "url": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/annotation_hashes.txt"
+    }
+  ],
+  "licensing": "Sequence bytes are reproduced from an NCBI RefSeq delivery and are not relicensed by these headers; the delivery supplies no license statement. The header metadata authored here is an MPL-2.0 contribution under the repository LICENSE (March 2025 onward).",
+  "retrieved_by": "pilot author for FAIR-bioHeaders/FHT-Specification#8 (real examples/vectors) and #10 (pilot evidence)",
+  "retrieved_utc": "2026-11-15",
+  "sequence_bytes_committed": false,
+  "sliced_sequence": {
+    "assembly_unit": "Primary Assembly",
+    "assigned_molecule": "4",
+    "genbank": "AE014135.4",
+    "length_bp": 1348131,
+    "molecule_location_type": "Chromosome",
+    "refseq": "NC_004353.4",
+    "sequence_role": "assembled-molecule",
+    "source": "delivery GCF_000001215.4_Release_6_plus_ISO1_MT_assembly_report.txt data row (tab-separated), and its ##sequence-region line in GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.gff",
+    "ucsc_style_name": "chr4"
+  },
+  "title": "Provenance record: Drosophila melanogaster GCF_000001215.4 chromosome 4 subset (FHR parent, FHT transcript subset)"
+}

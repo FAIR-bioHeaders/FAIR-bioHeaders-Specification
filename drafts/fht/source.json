@@ -1,0 +1,1686 @@
+{
+  "status": "unreleased publication candidate; joint acceptance and publication pending",
+  "repository": "FAIR-bioHeaders/FHT-Specification",
+  "commit": "0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00",
+  "selection": {
+    "trackedFiles": "all",
+    "excluded": [
+      "AGENTS.md"
+    ],
+    "reason": "Retain the complete owning test/documentation dependency closure and original notices. Workspace guidance remains authoritative in the shared repository; this is not a guidance port."
+  },
+  "decisionRecord": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934",
+  "owningMerge": "https://github.com/FAIR-bioHeaders/FHT-Specification/pull/61",
+  "expectedEvidence": {
+    "unitTests": 114,
+    "vectors": 93,
+    "valid": 34,
+    "invalid": 59,
+    "installedOverlayCompared": 91,
+    "installedArithmeticNotRun": [
+      "fht-fasta-completeness-sum-exceeds-total",
+      "fht-fasta-completeness-sum-below-total"
+    ]
+  },
+  "files": [
+    {
+      "source": ".gitattributes",
+      "local": "upstream/.gitattributes",
+      "bytes": 735,
+      "sha256": "222a66f2b7cbb7eb853c7141de5691e49f6cb730a3c23dfb650c781f3385913e",
+      "mode": "100644"
+    },
+    {
+      "source": ".github/workflows/docs-checks.yml",
+      "local": "upstream/.github/workflows/docs-checks.yml",
+      "bytes": 2064,
+      "sha256": "e8f8a9ec61c8d8f12772adb2bb08cc4a1696289314fd6151ecc53e3e6e5d9185",
+      "mode": "100644"
+    },
+    {
+      "source": ".github/workflows/external-links.yml",
+      "local": "upstream/.github/workflows/external-links.yml",
+      "bytes": 955,
+      "sha256": "99d377ef1f462cf691d7b5c92e7dbc24ce1559135f270bd719937b518c44f434",
+      "mode": "100644"
+    },
+    {
+      "source": ".github/workflows/fht-fixtures.yml",
+      "local": "upstream/.github/workflows/fht-fixtures.yml",
+      "bytes": 4047,
+      "sha256": "65285583837d3bcb1e7c0225d56ddb3fe33018c17322348ab183d05b202e8427",
+      "mode": "100644"
+    },
+    {
+      "source": ".github/workflows/legacy-draft-checks.yml",
+      "local": "upstream/.github/workflows/legacy-draft-checks.yml",
+      "bytes": 2309,
+      "sha256": "ee3e763aaa92abf7e544fcfab0d330c6e31bb9f99fc946b561176042e2b821af",
+      "mode": "100644"
+    },
+    {
+      "source": ".github/workflows/validate-specification.yml",
+      "local": "upstream/.github/workflows/validate-specification.yml",
+      "bytes": 2135,
+      "sha256": "3d7c2325ebd1e35ec42152bd5a36dac12b448f0a30b39ea3272d736a72a77397",
+      "mode": "100644"
+    },
+    {
+      "source": ".gitignore",
+      "local": "upstream/.gitignore",
+      "bytes": 5419,
+      "sha256": "43a06852e4a6834426c53d7ade77e1037f30220c69896ca18ac6a08e80006e73",
+      "mode": "100644"
+    },
+    {
+      "source": ".markdownlint-cli2.jsonc",
+      "local": "upstream/.markdownlint-cli2.jsonc",
+      "bytes": 1026,
+      "sha256": "4d9c5efd6db582a1e0995a883f59e6068dc63bf1491267add94e49b2d6014436",
+      "mode": "100644"
+    },
+    {
+      "source": "CHANGELOG.md",
+      "local": "upstream/CHANGELOG.md",
+      "bytes": 6337,
+      "sha256": "bfc66da68bfd91870129f4b5836c9ba6bcd6a627ad107f3a9fb7c201791dd7c9",
+      "mode": "100644"
+    },
+    {
+      "source": "CITATION.cff",
+      "local": "upstream/CITATION.cff",
+      "bytes": 6013,
+      "sha256": "ac59ed8db060281c50e980e0bdf5c3ff00cd6f77fcf639ebeab6e0d3f49e1e70",
+      "mode": "100644"
+    },
+    {
+      "source": "Diagram.png",
+      "local": "upstream/Diagram.png",
+      "bytes": 389276,
+      "sha256": "4c69e9ff70b3819e577aadc4590b9037b920dbd0005ea3a15d1ba9afeb771a0b",
+      "mode": "100644"
+    },
+    {
+      "source": "LICENSE",
+      "local": "upstream/LICENSE",
+      "bytes": 21966,
+      "sha256": "ca6e9ba6b92bcb718bb10694b2f5a60bca379a9d3ccd45acd57ed626a02daee6",
+      "mode": "100644"
+    },
+    {
+      "source": "README.md",
+      "local": "upstream/README.md",
+      "bytes": 9873,
+      "sha256": "2b8270b3e04c74a463b663b2861b5bf7ec95ac46ee844c65dd49a187e89c44d2",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/README.md",
+      "local": "upstream/conformance/README.md",
+      "bytes": 42744,
+      "sha256": "8647b47257db9352ed68ade26e391a7b734bf6524b2787a54c53f7045425b60f",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-assembly-type-mixed.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-assembly-type-mixed.fht.fasta",
+      "bytes": 694,
+      "sha256": "107c88cc593aaecbc63d1e2c7cd93e7b4c5aacdf0eaaec60d347a007685c0867",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-bad-assembly-type.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-bad-assembly-type.fht.fasta",
+      "bytes": 695,
+      "sha256": "d62cc353bfa67af9611ad3bae8b9e4a9e8bcea49c894ee964223dfbb1c8acdbd",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-bad-run-accession.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-bad-run-accession.fht.fasta",
+      "bytes": 729,
+      "sha256": "ea9fa9fd0ffffbf6bd239a29a24fc27c3d24e348dd767a0ae39455e624663fa4",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-blank-transcriptome-bom.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-blank-transcriptome-bom.fht.fasta",
+      "bytes": 664,
+      "sha256": "3e790400994d6be3ca9083e4576ae021fa0eaaec4369a058f9432d7c8da2dd9a",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-blank-version-separator.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-blank-version-separator.fht.fasta",
+      "bytes": 695,
+      "sha256": "c8943919a38926d48f419a3096ee967d9a1a05b51712524571a0e5366c7b0303",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-block-literal-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-block-literal-checksum.fht.fasta",
+      "bytes": 703,
+      "sha256": "5350f43a98bc38443b0a413954447e9235faa3b41ca6e75a87243f4267439abc",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-case-normalized-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-case-normalized-checksum.fht.fasta",
+      "bytes": 696,
+      "sha256": "0e98d1ec0072e4abb57a4bc861808a72859e1027f7107f0a7b81b2ff15898791",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-checksum-non-canonical.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-checksum-non-canonical.fht.fasta",
+      "bytes": 696,
+      "sha256": "c7b42ae8f6cde3cd8ade7b923b5dddc471e18a148c70d1686873ba9d0891646d",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-checksum-sha256.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-checksum-sha256.fht.fasta",
+      "bytes": 696,
+      "sha256": "26cc58cebb70d498da2fdbcacd494243e90ef06d5916316b8c66979e6d5f8c08",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-checksum-truncated-sha512.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-checksum-truncated-sha512.fht.fasta",
+      "bytes": 696,
+      "sha256": "4fb57272ab1451c5b3ca009940dc38152a844da85bddd237a52ae3b8df8a8274",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-checksum-with-comment.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-checksum-with-comment.fht.fasta",
+      "bytes": 711,
+      "sha256": "5c3476bef05c1e906116db097f7c260d9eeecdb60d1d102d59ef31468af6c0b3",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-cites-arbitrary-url.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-cites-arbitrary-url.fht.fasta",
+      "bytes": 662,
+      "sha256": "d5824c00fbb4100b1483f32926a35fefc54ab66d389c63b279fc5f4271001f1f",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-cites-fhr-schema.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-cites-fhr-schema.fht.fasta",
+      "bytes": 696,
+      "sha256": "748d310e1ec5fb2f58fbd65af91fed3b6c814e743d7c2daccac891077ef6d8a5",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-completeness-missing-count.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-completeness-missing-count.fht.fasta",
+      "bytes": 825,
+      "sha256": "04c0fde7627a50269480d6a07a5524e0d4d917ac121cc8f223faa5bfa0f66c9f",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-completeness-sum-below-total.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-completeness-sum-below-total.fht.fasta",
+      "bytes": 840,
+      "sha256": "88559a852dcd8297d964c9abf2b2e57a95af44e05761cec29f736614a72725dc",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-completeness-sum-exceeds-total.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-completeness-sum-exceeds-total.fht.fasta",
+      "bytes": 840,
+      "sha256": "c40bd60b68d1b765ebb56e3a84eaf67c6e58896f9dabc47b0db649711428af6c",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-concatenated.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-concatenated.fht.fasta",
+      "bytes": 1392,
+      "sha256": "67af086600c0fd1ca12c696ac5288cce986cc747fe03a480549e1e6172306fd5",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-continued-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-continued-checksum.fht.fasta",
+      "bytes": 675,
+      "sha256": "71733df5f4f3111cfc1f464ec5373eb0213d62c9c76cc54c886699864723994f",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-crlf-normalized-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-crlf-normalized-checksum.fht.fasta",
+      "bytes": 714,
+      "sha256": "b9c793d86bf00c9e2b8bd64ad6b3946173fa5f6bf3c9694c3ae3ac7172023924",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-derived-from-bad-relationship.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-derived-from-bad-relationship.fht.fasta",
+      "bytes": 820,
+      "sha256": "fcd5f36e0da5b4833a53a82b6d5d7b377610036efad2cebbbce77681e0041a95",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-derived-from-duplicate.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-derived-from-duplicate.fht.fasta",
+      "bytes": 941,
+      "sha256": "5486ff788745cbb0628f4fd6064e69ae7bef5df45d40af6627e986823187481e",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-derived-from-fhp-parent.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-derived-from-fhp-parent.fht.fasta",
+      "bytes": 825,
+      "sha256": "cf4cc465ebf2165686e9d992f5d39857c7571ae56c451bbb84902c98129ad399",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-derived-from-no-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-derived-from-no-checksum.fht.fasta",
+      "bytes": 868,
+      "sha256": "11fe4c12db36da11162cd0f55e4b7182fabca4cda1a3f61786d9af89468dea50",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-doi-trailing-narrow-nbsp.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-doi-trailing-narrow-nbsp.fht.fasta",
+      "bytes": 743,
+      "sha256": "8c87e23fca72f51b5e799237e6c107e557a653c9d7786e84187d748a8b96c821",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-doi-trailing-nbsp.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-doi-trailing-nbsp.fht.fasta",
+      "bytes": 742,
+      "sha256": "c4fe84be7a9989845eae32e1c5dda4cf1bedc3ff7c698f7d3bfb93a1fa927495",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-duplicate-key.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-duplicate-key.fht.fasta",
+      "bytes": 713,
+      "sha256": "86b6d955dd6446adb55ef78f4ec9f4f3ac190c4a69d7d3f5f07be4fb61fbe39f",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-empty-sample.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-empty-sample.fht.fasta",
+      "bytes": 709,
+      "sha256": "4e8f71645a75fac3e204b42df81b7c1fa9fd92d75c3c2a2cc95ffe9df356034a",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-extension-nested-key.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-extension-nested-key.fht.fasta",
+      "bytes": 737,
+      "sha256": "2f04c4d7e1904bf3ce9a2956e712fb8c9128de404ce7459902c05004d56e0dda",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-extension-uppercase-key.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-extension-uppercase-key.fht.fasta",
+      "bytes": 743,
+      "sha256": "b457f781480a4ecd33a078cb795acb7bcae5c5b809a1df218e2a1e45c3b37697",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-fhr-key-genome.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-fhr-key-genome.fht.fasta",
+      "bytes": 723,
+      "sha256": "534fca572e3ca5a2be48ef087e5d2c32db4f52ad96fd71d9d5c46de8c8d752d1",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-gzip-sequence-tampered.fht.fasta.gz",
+      "local": "upstream/conformance/invalid/fht-fasta-gzip-sequence-tampered.fht.fasta.gz",
+      "bytes": 719,
+      "sha256": "7b75a71d6afd76828b754154193cd2bce11ea5efe3d05b088fc3a77b6837ada9",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-gzip-truncated.fht.fasta.gz",
+      "local": "upstream/conformance/invalid/fht-fasta-gzip-truncated.fht.fasta.gz",
+      "bytes": 713,
+      "sha256": "a5fadaf4ecfaeae42fbfc9ff728ff56ea9ba2f650a4ed6ef9a598354a659622b",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-header-after-record.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-header-after-record.fht.fasta",
+      "bytes": 736,
+      "sha256": "b9299472ad72f9a447bbdef79d04dfed91d41e66a35fa3b82ac93d7484bf7874",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-inf-vital-stats.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-inf-vital-stats.fht.fasta",
+      "bytes": 665,
+      "sha256": "3f4dd5685f871db02607deea1d90670f0607146418ad138910028be6e7954e57",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-legacy-key-masking.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-legacy-key-masking.fht.fasta",
+      "bytes": 718,
+      "sha256": "abe52ef25c831d26a4d9f142fb330ed38fb22817c14bfcc5415a02eaf7e84413",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-missing-assembly-type.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-missing-assembly-type.fht.fasta",
+      "bytes": 672,
+      "sha256": "b68cc525a3cddc57d2da6c85713501140a5b46e0390e08b8760d0ed011771812",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-missing-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-missing-checksum.fht.fasta",
+      "bytes": 639,
+      "sha256": "7709ca246399e915a79784c53591f65918cf4d8270c1940b11d6ecb610c79ffe",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-molecule-type-cdna.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-molecule-type-cdna.fht.fasta",
+      "bytes": 696,
+      "sha256": "2f36c5325271e2b7358941d186c6022da389929faca305fdef6a3fcc4f7ba501",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-molecule-type-mixed-case.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-molecule-type-mixed-case.fht.fasta",
+      "bytes": 697,
+      "sha256": "77560827025bc2c0a6723b85e79af49d69510c2f1268cf8e9bd940b6dedcf637",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-only-nested-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-only-nested-checksum.fht.fasta",
+      "bytes": 610,
+      "sha256": "eb78314ab222c1aef2dabecbdb591de9008b288da645b2f14a0a164647e4d3ce",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-parent-case-folded-digest.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-parent-case-folded-digest.fht.fasta",
+      "bytes": 849,
+      "sha256": "26ae69d908b324b2dbc8aea8dbef4016ff692763d01c60e9bcfa9faeeee345f4",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-parent-checksum-noncanonical.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-parent-checksum-noncanonical.fht.fasta",
+      "bytes": 826,
+      "sha256": "20034808577f70279aef0386b29b87eaafd809901c42b8670479541b770ffffd",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-parent-mismatched.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-parent-mismatched.fht.fasta",
+      "bytes": 826,
+      "sha256": "e33424a5a8ea2c01c57c13cae90c24bf161a283aafb47e5bbf373a023c559676",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-parent-mixed-verdicts.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-parent-mixed-verdicts.fht.fasta",
+      "bytes": 938,
+      "sha256": "a818e3fac618c8bdbad34e76d2fdc256c149b33342c1d3c4812b96c71f4a3afe",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-parent-real-digest-wrong-file.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-parent-real-digest-wrong-file.fht.fasta",
+      "bytes": 851,
+      "sha256": "03e17aa8b4a54df72871699fe2abe7d9098cea0cd0fdbedb66a37c5f99656fb6",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-run-accession-trailing-line-feed.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-run-accession-trailing-line-feed.fht.fasta",
+      "bytes": 733,
+      "sha256": "1bacd40e944bbf36663d1d7cf375dfd43c806a21d7c01eeb411ec26df1ada676",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-schema-raw-tag-unknown.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-schema-raw-tag-unknown.fht.fasta",
+      "bytes": 698,
+      "sha256": "10934831cbc47420b53e60c7d2a1840b77e3f01422631acad5c54bca4c828afe",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-schema-shared-raw-tag.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-schema-shared-raw-tag.fht.fasta",
+      "bytes": 710,
+      "sha256": "f0d5b40db4749bd02ad1332f15d62c962f8b3a514675af061956856f988ec1b0",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-schema-trailing-line-feed.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-schema-trailing-line-feed.fht.fasta",
+      "bytes": 700,
+      "sha256": "7c61220e2ec8877bbb46186521475c98b1d05be265a78b4f918171612936e531",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-schema-w3id-release-without-fht.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-schema-w3id-release-without-fht.fht.fasta",
+      "bytes": 658,
+      "sha256": "d2f4e56aa4a58052b36d4e9a757fd97a8789994fb1ed8c57c74a3148e49a09ed",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-schemaversion-number.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-schemaversion-number.fht.fasta",
+      "bytes": 694,
+      "sha256": "11fd700b852be7fb254f7f06d549856d27cfed5b767113b058f30aea7c179d7a",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-sequence-tampered.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-sequence-tampered.fht.fasta",
+      "bytes": 696,
+      "sha256": "148dc5d7d07c3dbf75ddecee6f746d86b879390ddb5b174344d5ba9020b9b95d",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-two-checksum-lines.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-two-checksum-lines.fht.fasta",
+      "bytes": 753,
+      "sha256": "4fb4c8e17d100be68de93ebcb00fa6fed5217588d40c29bce1c7c69d238d8573",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-u-normalized-checksum.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-u-normalized-checksum.fht.fasta",
+      "bytes": 696,
+      "sha256": "27c5f8c8bfa2117c3739cee834aed1a5d7aa676a817c4baf15dd81ea76a5bb34",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-u2028-in-header.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-u2028-in-header.fht.fasta",
+      "bytes": 690,
+      "sha256": "68e3a934ccf8079a4646b562b3747300ba8f6093fbdfdca8680c130a48801212",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-utf8-bom.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-utf8-bom.fht.fasta",
+      "bytes": 699,
+      "sha256": "d4f2185ef20183d3f094a742af4788870d24c01e6d50b5eb03fc7f5c8126c879",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-version-2-0-via-raw-main.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-version-2-0-via-raw-main.fht.fasta",
+      "bytes": 696,
+      "sha256": "cb71515153c902e2dc282439bb4b0e7d991547a6f31a3115f209e60a4bf90272",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-yaml-anchor-alias.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-yaml-anchor-alias.fht.fasta",
+      "bytes": 791,
+      "sha256": "0a970d3897d45704fa2225024bacde745674e11b36998dc7f746eea4f32ec406",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/invalid/fht-fasta-yaml-leading-zero.fht.fasta",
+      "local": "upstream/conformance/invalid/fht-fasta-yaml-leading-zero.fht.fasta",
+      "bytes": 657,
+      "sha256": "03060ba24380b829d3b777b25f9a6befa2383f1c038496d378800ebe0a2828b1",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/manifest.json",
+      "local": "upstream/conformance/manifest.json",
+      "bytes": 89146,
+      "sha256": "d0147d3ad97c0fad0ede94ae76340632a86a160f566b01129e592e643fd77492",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/parents/parent-genome-masked.fhr.fasta",
+      "local": "upstream/conformance/parents/parent-genome-masked.fhr.fasta",
+      "bytes": 604,
+      "sha256": "edd67713c81d1f14c9a53a49cb7f2a9913da11ed015fc28619faa76c9574fb95",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/parents/parent-genome-subset.fhr.fasta",
+      "local": "upstream/conformance/parents/parent-genome-subset.fhr.fasta",
+      "bytes": 557,
+      "sha256": "b4a52c6c930b740b97a7ad3122a8474b3018824b71c8218487d9e1a30a4961d1",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/parents/parent-genome.fhr.fasta",
+      "local": "upstream/conformance/parents/parent-genome.fhr.fasta",
+      "bytes": 612,
+      "sha256": "c8c7a420847e3ba732c957ceffc27684a7f0c3a0b508d30c8484f3f7ed8b7209",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-bgzf.fht.fasta.gz",
+      "local": "upstream/conformance/valid/fht-fasta-bgzf.fht.fasta.gz",
+      "bytes": 972,
+      "sha256": "e973b1b3193642f8e6053cd7a30c38c3d950a4be9216132863ee6f432f3da2c3",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-cdna.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-cdna.fht.fasta",
+      "bytes": 699,
+      "sha256": "46319756762662631fa1acd633ef685de996fcc256dd8cd8066aef6838c43b5b",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-checksum-first.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-checksum-first.fht.fasta",
+      "bytes": 696,
+      "sha256": "882d2ce6abc0fc358cdf50ff2828078061f486f4de0dc5b9f5dddebcedf11050",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-checksum-trailing-spaces.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-checksum-trailing-spaces.fht.fasta",
+      "bytes": 699,
+      "sha256": "35b7e2b979d09b2869f79f7f312a4e4b3cbeee82b21eb2290cadfd6037979ce4",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-comments-and-blank-lines.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-comments-and-blank-lines.fht.fasta",
+      "bytes": 852,
+      "sha256": "8d5c302401913f5dc92091fd8d83c07a750078aa5482827febc6b2ed6506ffa8",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-completeness-zero-components.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-completeness-zero-components.fht.fasta",
+      "bytes": 840,
+      "sha256": "4eb161a374a5fa2b53ae54bc6cf6c34d2164c57ed4da8109a5062fd6c4941514",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-cr.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-cr.fht.fasta",
+      "bytes": 696,
+      "sha256": "8249b2f39610cbd08782c96b714302f0f14dcc9eead933d6b3c4e8576a062110",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-crlf.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-crlf.fht.fasta",
+      "bytes": 714,
+      "sha256": "a6da68f885bed2ed3c0976a495fc34dbc9800a65b13f93f23616efb4377bbb41",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-doi-ascii.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-doi-ascii.fht.fasta",
+      "bytes": 740,
+      "sha256": "2c6723f2475c7c1977a21da7ab6790bea6141a266b4911d37ecf9493ae8db4ef",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-doi-internal-zwj.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-doi-internal-zwj.fht.fasta",
+      "bytes": 743,
+      "sha256": "0e64f21d04f72a2e254fec0d65f4bfd1ee4e461a7292ed24836ce0cec75a0ae9",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-escaped-record-markers.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-escaped-record-markers.fht.fasta",
+      "bytes": 693,
+      "sha256": "a0dcfe6ce5c3485ed52de0d3377d15ba294079204bf38c7b63f4e793e920b5b7",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-extension-fields.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-extension-fields.fht.fasta",
+      "bytes": 906,
+      "sha256": "5cbec7e4c6c8d9eb62d8a435afc4da2fa529e9c7e343f29804e0bcc021e12953",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-gzip-multimember.fht.fasta.gz",
+      "local": "upstream/conformance/valid/fht-fasta-gzip-multimember.fht.fasta.gz",
+      "bytes": 742,
+      "sha256": "661df21c716093c25ff6fe0c370d5eab5f7c3c39c102ea6c97ca78816b4a02d6",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-gzip.fht.fasta.gz",
+      "local": "upstream/conformance/valid/fht-fasta-gzip.fht.fasta.gz",
+      "bytes": 719,
+      "sha256": "5adcf3c6aacf82f8b18782089755da5f27ae01519e91bfc26bb4f92b502de176",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-lf.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-lf.fht.fasta",
+      "bytes": 696,
+      "sha256": "4c61416b26aa595a879e5d0dd3f16d33f4b4bced93e38b115eebbf3b879784ba",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-link-scheme-warning.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-link-scheme-warning.fht.fasta",
+      "bytes": 736,
+      "sha256": "beed66bf44fb72e4d481b97f7659919bf605a1f099fa872fa4d2f752b1f759e0",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-minimal.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-minimal.fht.fasta",
+      "bytes": 537,
+      "sha256": "0cf3cf2d7dd7df080b29bdec37c5258f1e61f936e50df02f5181248c3b8c3086",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-mixed-endings.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-mixed-endings.fht.fasta",
+      "bytes": 702,
+      "sha256": "3d88cf286aa9ef674eeb9b262c56515c8a20fd068dd35fecfe08573b24cfdff7",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-molecule-type-mixed.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-molecule-type-mixed.fht.fasta",
+      "bytes": 715,
+      "sha256": "28569b22101bcadd2965a7043369d646f0b066441dc3cc8de446a830d1f19029",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-nested-checksum.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-nested-checksum.fht.fasta",
+      "bytes": 826,
+      "sha256": "3137306adcaf4df7e16b66a236e7fbac6aeadd6050ae6bc349fd725a663b86fc",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-no-final-newline.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-no-final-newline.fht.fasta",
+      "bytes": 695,
+      "sha256": "be6c287ade57040d0aafdd59246a44a218764a337d87b3565c442cf973da83b2",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-optional-empty-values-retained.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-optional-empty-values-retained.fht.fasta",
+      "bytes": 885,
+      "sha256": "b0cb3e72d1a400ead61caedff926d9afc793f189710e973a07dd9b7a41190b7e",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-parent-filtered-from.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-parent-filtered-from.fht.fasta",
+      "bytes": 841,
+      "sha256": "eafa8ba7e5fcee263fb5ac47cfb19ad95e7d57899ed03af0fbce544a0815066c",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-parent-masked-exact.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-parent-masked-exact.fht.fasta",
+      "bytes": 847,
+      "sha256": "7f7bd279722dc55728614af1d0f9a3c5f90afdb4910c53b0708c697cf5b4a612",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-parent-subset-citing-whole.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-parent-subset-citing-whole.fht.fasta",
+      "bytes": 840,
+      "sha256": "851e3a1aa7755aeab3df7c4682541af3447eac0bef9433b9c3bd8c83b068c0ac",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-parent-transcribed-from.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-parent-transcribed-from.fht.fasta",
+      "bytes": 944,
+      "sha256": "33eb82fe57f38b123ea80930137ab0b8d38f1cea9ed9ff01d2c964a9c2bc4588",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-parent-unavailable.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-parent-unavailable.fht.fasta",
+      "bytes": 826,
+      "sha256": "3137306adcaf4df7e16b66a236e7fbac6aeadd6050ae6bc349fd725a663b86fc",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-quoted-value.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-quoted-value.fht.fasta",
+      "bytes": 698,
+      "sha256": "68c2028bf0c06be37382ecb435cb4250e1895b0b442f8349ae8a2e42c5d7b2c6",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-rich.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-rich.fht.fasta",
+      "bytes": 2327,
+      "sha256": "d0465e34c21a592b4ec8c2046b7c00d8682c7d450a2b656c5b516f14432a16d5",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-root-indented.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-root-indented.fht.fasta",
+      "bytes": 710,
+      "sha256": "fe0a83d6dda4f978dbc97a98ff2d914b6f3527139b220441faef1cb76921cc54",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-schema-raw-main.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-schema-raw-main.fht.fasta",
+      "bytes": 696,
+      "sha256": "4c61416b26aa595a879e5d0dd3f16d33f4b4bced93e38b115eebbf3b879784ba",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-space-before-colon.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-space-before-colon.fht.fasta",
+      "bytes": 698,
+      "sha256": "9424448bdc008e6a1cb1dafb28e6bf4c86d9ea84efa1578f4429d436ea249356",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-utf8-metadata.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-utf8-metadata.fht.fasta",
+      "bytes": 705,
+      "sha256": "478ddbbd62c0ce8318447089e5bcecf1cc295256429837b020665ac41d262069",
+      "mode": "100644"
+    },
+    {
+      "source": "conformance/valid/fht-fasta-yaml-plain-date.fht.fasta",
+      "local": "upstream/conformance/valid/fht-fasta-yaml-plain-date.fht.fasta",
+      "bytes": 694,
+      "sha256": "5560024f58b1f3301188f08b916e12e1c72770e94430931fd7609787d9e9764a",
+      "mode": "100644"
+    },
+    {
+      "source": "docs/CI.md",
+      "local": "upstream/docs/CI.md",
+      "bytes": 25535,
+      "sha256": "de3085d6566f1c347f348e5bb24ba9870a8a9e56d58c6723bd50503bc52f57a2",
+      "mode": "100644"
+    },
+    {
+      "source": "docs/FHT-DECISION-DOCKET.md",
+      "local": "upstream/docs/FHT-DECISION-DOCKET.md",
+      "bytes": 8221,
+      "sha256": "0a650fd0c941c7c9b311374b8c12521b7bc4e78d79c8e03a6e0f7f64836b7af5",
+      "mode": "100644"
+    },
+    {
+      "source": "docs/FHT-MICRODATA.md",
+      "local": "upstream/docs/FHT-MICRODATA.md",
+      "bytes": 18132,
+      "sha256": "a971f3848a3b845fb22765239ecf735a43c3d6062c876483492645b474176666",
+      "mode": "100644"
+    },
+    {
+      "source": "docs/FHT-MIGRATION.md",
+      "local": "upstream/docs/FHT-MIGRATION.md",
+      "bytes": 17370,
+      "sha256": "89de54eac603bfb945559f3afd71ecdc18879689e10b45d16b120049de883d2d",
+      "mode": "100644"
+    },
+    {
+      "source": "docs/FHT-READINESS.md",
+      "local": "upstream/docs/FHT-READINESS.md",
+      "bytes": 13679,
+      "sha256": "dd719326a9dc23e37d43ab91b0435f06f902cad35820ecac716d37929896cdb0",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/annotation-derived.fht.fasta",
+      "local": "upstream/examples/annotation-derived.fht.fasta",
+      "bytes": 1463,
+      "sha256": "15f4f29cc4459301580a092071eae4d334f1d0be1e04b21a4d8552c1d74a7ca8",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/annotation-derived.fht.json",
+      "local": "upstream/examples/annotation-derived.fht.json",
+      "bytes": 1540,
+      "sha256": "b39f54e1b4846a22f92e33d35beb940036d19001b35d88399258e167b17e66b4",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/annotation-derived.fht.yaml",
+      "local": "upstream/examples/annotation-derived.fht.yaml",
+      "bytes": 1293,
+      "sha256": "81e5d4a769724161b1996f171363619068155a05c845cc2580d835dd92705ce8",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/de-novo.fht.fasta",
+      "local": "upstream/examples/de-novo.fht.fasta",
+      "bytes": 1498,
+      "sha256": "14455ea05e3c7ec5dcde527fde424f57de787248d4f5826a1e40b09cde4895ac",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/de-novo.fht.json",
+      "local": "upstream/examples/de-novo.fht.json",
+      "bytes": 1691,
+      "sha256": "72931c258881d8136ee380e0a628d5a2a83d7aad02c23262c68f9fe9ebe7b358",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/de-novo.fht.yaml",
+      "local": "upstream/examples/de-novo.fht.yaml",
+      "bytes": 1299,
+      "sha256": "fbba98588831597e6b562a79f920cc134bc90e5475c286cf8e11563df46723d0",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/genome-guided.fht.fasta",
+      "local": "upstream/examples/genome-guided.fht.fasta",
+      "bytes": 1597,
+      "sha256": "8f5f9ca5c47abc8afd4f5b24232e5abbed777cfec7b54f0b6992bb2b4c20f2d0",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/genome-guided.fht.json",
+      "local": "upstream/examples/genome-guided.fht.json",
+      "bytes": 1800,
+      "sha256": "5284d0a848d8b2a899242815bec062c224a2cd9fd2d3d58779de41550a4420c0",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/genome-guided.fht.yaml",
+      "local": "upstream/examples/genome-guided.fht.yaml",
+      "bytes": 1418,
+      "sha256": "1154d6a80c0ca0148a98d6f129538649370019781a0cdb41a81f13ac373fcc19",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/annotation-derived.fht.html",
+      "local": "upstream/examples/html/annotation-derived.fht.html",
+      "bytes": 5028,
+      "sha256": "e00314b09e25f4e89f667313d28a9371083a67cf46495048902826767a01b76e",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/de-novo.fht.html",
+      "local": "upstream/examples/html/de-novo.fht.html",
+      "bytes": 6875,
+      "sha256": "6030f4e5a1095250c032685d890abb5ff37210094ce1579d7b0b3e55ee6fd08f",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/genome-guided.fht.html",
+      "local": "upstream/examples/html/genome-guided.fht.html",
+      "bytes": 6646,
+      "sha256": "4412a5efdbaac99f8f87a1f778255e4e596ba67fc32fe36353b359fc1629e98e",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/minimal-annotation-derived.fht.html",
+      "local": "upstream/examples/html/minimal-annotation-derived.fht.html",
+      "bytes": 2740,
+      "sha256": "78935dcae8584bc9ccca73af066b1c0948c044bda6482aaa4f4df0fd8a1c8337",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/minimal-de-novo.fht.html",
+      "local": "upstream/examples/html/minimal-de-novo.fht.html",
+      "bytes": 2670,
+      "sha256": "047dab416f89e681db1c1a6ccbe0f091871af81bc1364f19b5cdcfb10d3e0143",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/minimal-genome-guided.fht.html",
+      "local": "upstream/examples/html/minimal-genome-guided.fht.html",
+      "bytes": 2656,
+      "sha256": "96ebcb151b3e9e90ce534b3963c2474ba0225ce2629e62533279b120bfd06bbf",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/html/mixed-molecules.fht.html",
+      "local": "upstream/examples/html/mixed-molecules.fht.html",
+      "bytes": 2832,
+      "sha256": "db97424eea8a996e737b197efddf13421730278f445542f07b754c3323a84b68",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-annotation-derived.fht.fasta",
+      "local": "upstream/examples/minimal-annotation-derived.fht.fasta",
+      "bytes": 659,
+      "sha256": "d020ebe4140989eb932acf5d47a63b041a4bccc1c2e1dc600aaa819f187588e1",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-annotation-derived.fht.json",
+      "local": "upstream/examples/minimal-annotation-derived.fht.json",
+      "bytes": 636,
+      "sha256": "f31b03b3879f4595033e6c7c655cd032edaf892cb07a5fadaa081dbfcc3cd1b9",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-annotation-derived.fht.yaml",
+      "local": "upstream/examples/minimal-annotation-derived.fht.yaml",
+      "bytes": 526,
+      "sha256": "77fd25afe6be0e3f83f98eaa66c7a0487f70e84d75dac7f87584e036f14450f8",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-de-novo.fht.fasta",
+      "local": "upstream/examples/minimal-de-novo.fht.fasta",
+      "bytes": 613,
+      "sha256": "d8d52ee574341730cfda32676c47431aeec9cc28be32d60f97a8d7447151aa95",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-de-novo.fht.json",
+      "local": "upstream/examples/minimal-de-novo.fht.json",
+      "bytes": 588,
+      "sha256": "0704308ac7d57d92914139f075258a794ddf891a230f85cbc4b5e4cd92871a08",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-de-novo.fht.yaml",
+      "local": "upstream/examples/minimal-de-novo.fht.yaml",
+      "bytes": 480,
+      "sha256": "5525c34724f4888777f97fb9454eb77956c8867c773b1080ff9931efa31160ae",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-genome-guided.fht.fasta",
+      "local": "upstream/examples/minimal-genome-guided.fht.fasta",
+      "bytes": 587,
+      "sha256": "f581f3eec03cb0b5a7e4a0dd74263a7617d44d7a4bb2e80bc5e89abc0a80901d",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-genome-guided.fht.json",
+      "local": "upstream/examples/minimal-genome-guided.fht.json",
+      "bytes": 562,
+      "sha256": "5275abb006894008d32dde9773bf694eb03ad001e93709a1b37a8e1de2317f75",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/minimal-genome-guided.fht.yaml",
+      "local": "upstream/examples/minimal-genome-guided.fht.yaml",
+      "bytes": 454,
+      "sha256": "07d7a7ec8e43724cf6cd64610ead67e094faf37b3d019fcbd3aa22b0d84ca258",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/mixed-molecules.fht.fasta",
+      "local": "upstream/examples/mixed-molecules.fht.fasta",
+      "bytes": 715,
+      "sha256": "28569b22101bcadd2965a7043369d646f0b066441dc3cc8de446a830d1f19029",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/mixed-molecules.fht.json",
+      "local": "upstream/examples/mixed-molecules.fht.json",
+      "bytes": 652,
+      "sha256": "ded89b91ca993516dbb48ef4bb6687b144748236876c6053bdc058f8b7e30a28",
+      "mode": "100644"
+    },
+    {
+      "source": "examples/mixed-molecules.fht.yaml",
+      "local": "upstream/examples/mixed-molecules.fht.yaml",
+      "bytes": 541,
+      "sha256": "bfe4f4e7ce67a315d3922bb13c03236265b7714c7297e0ea493e194d044027c9",
+      "mode": "100644"
+    },
+    {
+      "source": "fht.json",
+      "local": "upstream/fht.json",
+      "bytes": 35293,
+      "sha256": "b62c4e227042e162b43d2c461cfe6c3ece3806636ca88a4cf9b0b2f902fb1fc3",
+      "mode": "100644"
+    },
+    {
+      "source": "fht_linkml.yml",
+      "local": "upstream/fht_linkml.yml",
+      "bytes": 14615,
+      "sha256": "09a49459288bd76ab5e4da2d1abc43ea3e75f9a4cd7e0ebafc7d8bcc4e8babc5",
+      "mode": "100644"
+    },
+    {
+      "source": "json-schema-generator.py",
+      "local": "upstream/json-schema-generator.py",
+      "bytes": 8531,
+      "sha256": "fdc6d65556f4e6a204d67a36655ba99bf376feea185112751b1bf86405f800ec",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/README.md",
+      "local": "upstream/legacy/README.md",
+      "bytes": 956,
+      "sha256": "bbc3758768af3536a56fcdb5fd14a8987bbbb16416b5f71ea0fe985fd7538557",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/examples/example.fht.fasta",
+      "local": "upstream/legacy/examples/example.fht.fasta",
+      "bytes": 1139,
+      "sha256": "3e10bdea29a2ea8dfcd18756c5d0360f693880da69eee30a1584ad6402310981",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/examples/example.fht.json",
+      "local": "upstream/legacy/examples/example.fht.json",
+      "bytes": 1521,
+      "sha256": "2fc700003702d7eda3a1d93677f15459c02460763af8b8523692f358cabb62bf",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/examples/example.fht.yaml",
+      "local": "upstream/legacy/examples/example.fht.yaml",
+      "bytes": 1036,
+      "sha256": "d6918eeed57c70dc2d55f4d387262600e1a50b8f3b5e94ca8625fea034c43b1e",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/examples/example.microdata.fhr.html",
+      "local": "upstream/legacy/examples/example.microdata.fhr.html",
+      "bytes": 1946,
+      "sha256": "c6029850006d5b581957e874342c1b0059ccae6cc88a790d60c1eba924966593",
+      "mode": "100644"
+    },
+    {
+      "source": "legacy/fht-v0.1.json",
+      "local": "upstream/legacy/fht-v0.1.json",
+      "bytes": 7006,
+      "sha256": "34eec2e5c0dd9355ec3ffe3bdff8861d80345336d779b94b5e8a3ccf8ea894aa",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/README.md",
+      "local": "upstream/pilot/README.md",
+      "bytes": 11046,
+      "sha256": "8b1ab1a1cad965efd69109b7c3f1e47fc022b99a88b6b046a876e161dea5639c",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/README.md",
+      "local": "upstream/pilot/dmel-chr4/README.md",
+      "bytes": 27215,
+      "sha256": "d63df4c49e34bddc346ea570b5df4476a75bdbad3cf269af483414158c872ee4",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/chr4_transcripts.tsv",
+      "local": "upstream/pilot/dmel-chr4/chr4_transcripts.tsv",
+      "bytes": 20271,
+      "sha256": "bf679f3c1a9127f1c02b4a84f13bd55851ed51fcdc829cd71d3e6885a7631f3f",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/extract_chr4.py",
+      "local": "upstream/pilot/dmel-chr4/extract_chr4.py",
+      "bytes": 16173,
+      "sha256": "0d54268bbbeb706f1de32288eecca4ea9b698d87d5f1bab0ee6c7baa929f30e2",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/header.fhr.txt",
+      "local": "upstream/pilot/dmel-chr4/header.fhr.txt",
+      "bytes": 3556,
+      "sha256": "e2b5266f60a5146d95f0cca0f9093f8e3bc4803376a2de265ab870668fb145ef",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/header.fht.txt",
+      "local": "upstream/pilot/dmel-chr4/header.fht.txt",
+      "bytes": 4237,
+      "sha256": "d90b0e90a61f4bf7813b42485319b086275ccc4da7008c47d1a664b5bcf3236b",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/metadata.fhr.yaml",
+      "local": "upstream/pilot/dmel-chr4/metadata.fhr.yaml",
+      "bytes": 3912,
+      "sha256": "e2bfa4cb6fe19ccd4b07d4e420a88b9827c2e346d0deb181d8a09e5b848a40ca",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/metadata.fht.yaml",
+      "local": "upstream/pilot/dmel-chr4/metadata.fht.yaml",
+      "bytes": 4754,
+      "sha256": "d8f50183146d34af6b9ac4ecb51eb5c2e2138cd22eb274d72c374aefdf38e32b",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/provenance.json",
+      "local": "upstream/pilot/dmel-chr4/provenance.json",
+      "bytes": 13216,
+      "sha256": "8ff4efe31ca50ac5f7182621ecab993a23fcf08c4d8dd504a8c75e5e19b42e8f",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/rederive_checksum.py",
+      "local": "upstream/pilot/dmel-chr4/rederive_checksum.py",
+      "bytes": 4493,
+      "sha256": "077e278ee6748941a6656a1bd7c569ea32f1eda020fa40c67a5d6d14f3c8bf2c",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/dmel-chr4/reproduce.sh",
+      "local": "upstream/pilot/dmel-chr4/reproduce.sh",
+      "bytes": 11195,
+      "sha256": "0b73bc3b67f804d2e7f79aa5b25ddc673bf5ecbdba61075c98c3b6024018727f",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/metadata.fhr.yaml",
+      "local": "upstream/pilot/metadata.fhr.yaml",
+      "bytes": 3065,
+      "sha256": "261f746ca079e99bff34ff8b4c8f8174abbb864850c5b019aaf90f40364c1be7",
+      "mode": "100644"
+    },
+    {
+      "source": "pilot/reproduce.sh",
+      "local": "upstream/pilot/reproduce.sh",
+      "bytes": 2112,
+      "sha256": "f826d06b4029176798697cfc2759f2d70ed16148c7bbaa5f3f68e2c0fcd1693d",
+      "mode": "100755"
+    },
+    {
+      "source": "requirements-linkml.txt",
+      "local": "upstream/requirements-linkml.txt",
+      "bytes": 2124,
+      "sha256": "af5dad2f8e45dc6b5ec7c387992aff22f51a4a9fe3f6243bea4a73caae14bfe0",
+      "mode": "100644"
+    },
+    {
+      "source": "requirements-validation.txt",
+      "local": "upstream/requirements-validation.txt",
+      "bytes": 41,
+      "sha256": "f7343cbed4e52f2f0894af8835cf7856704e123da519cf7834e8547574bf794a",
+      "mode": "100644"
+    },
+    {
+      "source": "schemas/core-v0.4.yaml",
+      "local": "upstream/schemas/core-v0.4.yaml",
+      "bytes": 8581,
+      "sha256": "2bd657ece8c8cbfb4dfbba1f68cb3f708c1ab91baa0fcd50d97ddc58b7e96b5e",
+      "mode": "100644"
+    },
+    {
+      "source": "schemas/fhr-v0.6.0.json",
+      "local": "upstream/schemas/fhr-v0.6.0.json",
+      "bytes": 10295,
+      "sha256": "694ab5afaf8c3743eacf9e2aacb5551f7cbe37073b6f4afc3ae4a65b47f9d4df",
+      "mode": "100644"
+    },
+    {
+      "source": "schemas/provenance.json",
+      "local": "upstream/schemas/provenance.json",
+      "bytes": 1451,
+      "sha256": "edf7ef51d20d349ad9210d662517b5d43904cf334cafe2c1f67575439c115344",
+      "mode": "100644"
+    },
+    {
+      "source": "schemas/shared.yaml",
+      "local": "upstream/schemas/shared.yaml",
+      "bytes": 3925,
+      "sha256": "19afd1d83a6728f5ca9084878adca80a00d61399e2f5854854053eed8cf1d209",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_docs.py",
+      "local": "upstream/scripts/check_docs.py",
+      "bytes": 10664,
+      "sha256": "19e1c0de4efdbff0edbaae43a0601f367702b9d5ff34eaf9c8b858fc78165f68",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_external_links.py",
+      "local": "upstream/scripts/check_external_links.py",
+      "bytes": 4765,
+      "sha256": "8b346bf92830c21d5bddd0014615b40fde5a43dde8a69e8244f1a24087bf91c5",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_fht_fixtures.py",
+      "local": "upstream/scripts/check_fht_fixtures.py",
+      "bytes": 50451,
+      "sha256": "e28cd5b7e3e7c63109162989ef332f261cb816b0627c0e35c7999951667466fb",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_fht_html_browser.mjs",
+      "local": "upstream/scripts/check_fht_html_browser.mjs",
+      "bytes": 3683,
+      "sha256": "f64b2d2a8f8ec9ba01d684ba0ff7cab138b5696852a9d5e91c73b6eb64d9f4fd",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_legacy_examples.py",
+      "local": "upstream/scripts/check_legacy_examples.py",
+      "bytes": 9323,
+      "sha256": "e49252163c86dadea548095445b216d4ef3582809fdde060f14a35eccf6a2567",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_legacy_schema.py",
+      "local": "upstream/scripts/check_legacy_schema.py",
+      "bytes": 12698,
+      "sha256": "8e59b41047ab8aa00eadad79625850ca05a3c1b2a3c44292e0cc6f1ec6fbeca5",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/check_provenance.py",
+      "local": "upstream/scripts/check_provenance.py",
+      "bytes": 2638,
+      "sha256": "60b68859d6a7cc8fb5c6a6c179aed67409f2c7ef403465dbab10d14e39d017b4",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/external-links-exclusions.json",
+      "local": "upstream/scripts/external-links-exclusions.json",
+      "bytes": 606,
+      "sha256": "2117bf9f37f591406482e0556bf95d8003c90e679b214b3a10bb686cc74dfb51",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/fht_semantics.py",
+      "local": "upstream/scripts/fht_semantics.py",
+      "bytes": 1264,
+      "sha256": "11bb0875d862e1b25ef1a592b220ea9ce05ded7b83387175d060ee94839c9aa9",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/make_fht_fixtures.py",
+      "local": "upstream/scripts/make_fht_fixtures.py",
+      "bytes": 105709,
+      "sha256": "d4394fa8ddf48a11b7a4d6d52a46cb488e67c3ceb9a3ef42093dcd1da38fe6eb",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/make_fht_microdata.py",
+      "local": "upstream/scripts/make_fht_microdata.py",
+      "bytes": 3365,
+      "sha256": "0ef2637724e00cecba9e40f65a72826f979cf78626dbacaf847fde5cc154d040",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/make_legacy_fixtures.py",
+      "local": "upstream/scripts/make_legacy_fixtures.py",
+      "bytes": 5027,
+      "sha256": "f3e2c7dfeb82b89433e12f8726acb3bf44877e3c70e1d7918f9ef49bd4bafad4",
+      "mode": "100644"
+    },
+    {
+      "source": "scripts/run_toolkit_lane.py",
+      "local": "upstream/scripts/run_toolkit_lane.py",
+      "bytes": 34057,
+      "sha256": "935b26705622c3afe4262f7d2840d5a5f981c0baeaca56757e534e37b4292c13",
+      "mode": "100644"
+    },
+    {
+      "source": "specs/005-rna-transcriptome-header/spec.md",
+      "local": "upstream/specs/005-rna-transcriptome-header/spec.md",
+      "bytes": 10716,
+      "sha256": "31a7e680f8345029f339f7f2544e1a671d4978cb11c62efffd071168da3b82f7",
+      "mode": "100644"
+    },
+    {
+      "source": "specs/fht-field-decisions.md",
+      "local": "upstream/specs/fht-field-decisions.md",
+      "bytes": 17818,
+      "sha256": "2aa3e8ea3d14c179dc9f259ecd8b7be11c8675ef715df82f1347e665938abca6",
+      "mode": "100644"
+    },
+    {
+      "source": "specs/fht-record-designs.md",
+      "local": "upstream/specs/fht-record-designs.md",
+      "bytes": 11980,
+      "sha256": "a3833e6c6b0ea764fd5a498d94bb2ac3d3a09ea60865f8268aa803be48384e9d",
+      "mode": "100644"
+    },
+    {
+      "source": "specs/insdc-fht-coverage.md",
+      "local": "upstream/specs/insdc-fht-coverage.md",
+      "bytes": 19524,
+      "sha256": "67c9975e2e678199bcb7bf7a7623ceb85622900e191082c8910bd5f76a4df45c",
+      "mode": "100644"
+    },
+    {
+      "source": "specs/insdc-fht-mapping-strategy.md",
+      "local": "upstream/specs/insdc-fht-mapping-strategy.md",
+      "bytes": 6188,
+      "sha256": "bee65be617f235f9fd5cb811a837de5d4fbd8bf5c2dbd4a7db5a647dd867f9d9",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fht_microdata.py",
+      "local": "upstream/tests/fht_microdata.py",
+      "bytes": 27839,
+      "sha256": "329402636a337e75b5b01fa56f78f4092d0cb1b03e096fd3335341f38022e147",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/classification.json",
+      "local": "upstream/tests/fixtures/legacy/classification.json",
+      "bytes": 5800,
+      "sha256": "f75c16ea7b0a823234d67d05221723e468e30e1883c9cd05e4b7e84973142bf9",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/checksum-bad-charset.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/checksum-bad-charset.json",
+      "bytes": 563,
+      "sha256": "0c43ba7c5a0d5a1d09d92e66249a6661a861dd2f35efac01c5b7ae677abd132f",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/checksum-md5-prefixed.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/checksum-md5-prefixed.json",
+      "bytes": 555,
+      "sha256": "2170e70195d14fe728994068aa0411761c7731ff27ebfb6b5c5496b558c63caa",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/datecreated-prose.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/datecreated-prose.json",
+      "bytes": 566,
+      "sha256": "f24fdc7d5c3219680fad87dc701a96c7ef08421cbe96b78aa02e30aff60d5051",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/expected.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/expected.json",
+      "bytes": 1839,
+      "sha256": "7f929e4f46f039e5536b1e9d91c4b1ff5078eccb7da8dc71e7b36e8dd933b169",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/masking-hard-masked.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/masking-hard-masked.json",
+      "bytes": 564,
+      "sha256": "05f760faa319c58394ec9bfb4b662d686fbfef7dcaa273bb85bfd48816644574",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/missing-checksum.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/missing-checksum.json",
+      "bytes": 501,
+      "sha256": "98105b67915a98826e43c225eb29a7e1797dad48c5c72b5c27e6007797f31ff8",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/missing-masking.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/missing-masking.json",
+      "bytes": 536,
+      "sha256": "140d7e9416ec9f280dcf8b3a7fed20108f12512b12cd4cbdfe1867edbb99c241",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/relatedlink-not-a-uri.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/relatedlink-not-a-uri.json",
+      "bytes": 603,
+      "sha256": "89924522d08626ff0978e4dbab1d20eeb873a993fb6cdd7181e654c1baa20c08",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/schemaversion-string.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/schemaversion-string.json",
+      "bytes": 565,
+      "sha256": "8fe16ae9b640e17bea715349c5e226e023701d7f6bdafc52239051c5818d8956",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/taxon-uri-no-pattern.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/taxon-uri-no-pattern.json",
+      "bytes": 554,
+      "sha256": "7dcf74d87e2f7d31635fd153e0b7f62f8b9e2ffb0afe9ffea638ba2b3745eea5",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/transcriptome-number.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/transcriptome-number.json",
+      "bytes": 535,
+      "sha256": "1e5794c1f5ddb6aba2678f31a47cd4e8666fe8d9aee1c8557998ccc797b82f66",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/rejected/unknown-top-level-property.json",
+      "local": "upstream/tests/fixtures/legacy/rejected/unknown-top-level-property.json",
+      "bytes": 590,
+      "sha256": "58c95f120cc3ed1c30b384d50c716a2f9b4555048f1aac28d1f87b97e6434e14",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/legacy/valid/full-legacy-record.json",
+      "local": "upstream/tests/fixtures/legacy/valid/full-legacy-record.json",
+      "bytes": 1187,
+      "sha256": "7b8fedf39b40125594f78014a2a7ed40fd8d818f40cf6ea353d441b02c987f07",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/array-stray-text.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/array-stray-text.html",
+      "bytes": 2620,
+      "sha256": "c1f8b25b4ba324d95d2f9dc45935d559aad90eeb2788602298dadf47362fbe20",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/data-value-differs.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/data-value-differs.html",
+      "bytes": 2659,
+      "sha256": "e7629b94cd5c1625d11204b80d7ab742e97984848bfa0d4e569460fb18bda885",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/display-none-ancestor.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/display-none-ancestor.html",
+      "bytes": 2715,
+      "sha256": "7e8949bd0b61bafff3b11ba8be1e98f2482f3a9af325ae0dbf0f3f51431fbfe8",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/hidden-array-attribute.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/hidden-array-attribute.html",
+      "bytes": 2863,
+      "sha256": "2f762e929f42f4e9cbb31a460dd1b06a4e7651ca7ef0c0a959cb772b42df6691",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/hidden-attribute.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/hidden-attribute.html",
+      "bytes": 2677,
+      "sha256": "2b06a070f762b24ee48880adf1bd49b23681fd30d585d245df61773c08294828",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/hidden-descendant.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/hidden-descendant.html",
+      "bytes": 2672,
+      "sha256": "50aeac18f0d8db0304883edc96e83423d9b78d53e9e8c470788dfa99e2d4c232",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/hidden-scope.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/hidden-scope.html",
+      "bytes": 2696,
+      "sha256": "546f2cda7d5053fb38c970434338756fffae8408cb98a50e8b389c350d9a0b68",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/itemref.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/itemref.html",
+      "bytes": 2690,
+      "sha256": "fd0f97daac9846d079e5fc55dcc5ee473cad9ab58532581af5ef59ef82611237",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/javascript-href.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/javascript-href.html",
+      "bytes": 2797,
+      "sha256": "8a1a7b5cae7578b2177f6ffec3335d299f6623060a79e787b2ce4fd00642c538",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/meta-content.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/meta-content.html",
+      "bytes": 2651,
+      "sha256": "a2279478897803086948de179d951566d421492a0843a67e8039c6c1bca98dac",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/mixed-family.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/mixed-family.html",
+      "bytes": 2731,
+      "sha256": "ca759a0dbf922e2aadc51d6e05af4b3517baaa733338f19467521e91e6f4ab5f",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/multi-token-itemprop.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/multi-token-itemprop.html",
+      "bytes": 2684,
+      "sha256": "ace06ab0f4b0633f3f6f4897b3deeb595f85cc80557d224e4ffe1c9a0b5a23de",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/noscript-property.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/noscript-property.html",
+      "bytes": 2655,
+      "sha256": "2d22ab9564220e70aeeb2418355b3a418950df6474a2abbf79dda780ae599d36",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/object-without-scope.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/object-without-scope.html",
+      "bytes": 2595,
+      "sha256": "12167a70f22d64ec59934242764d818c87284e34870af4b73eeacb0373700c72",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/repeated-array-container.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/repeated-array-container.html",
+      "bytes": 3064,
+      "sha256": "f2ae0c1418fba29a8d636c9d878bcfc7000e020ffd728c94f2a07066b50a7c94",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/repeated-scalar.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/repeated-scalar.html",
+      "bytes": 2663,
+      "sha256": "463d4c0f74d3e8a90af677fc45cf3aa3f7b43ff21f1fed6e860441ea5353f88e",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/script-required-value.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/script-required-value.html",
+      "bytes": 2562,
+      "sha256": "1995f5b7e934500f3c9404203bca46fc1608f9b0ee48befe51831526fc58a2dc",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/unknown-release.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/unknown-release.html",
+      "bytes": 2569,
+      "sha256": "3ed777c10a242334ae500934f57669bcfec08d4b315baa04713e091a3a19f2fc",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/wrong-type.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/wrong-type.html",
+      "bytes": 2629,
+      "sha256": "30941f914987313412cb571c42da92edae382ac9a1b82726815cfa192d27e2d5",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/invalid/wrong-version-type.html",
+      "local": "upstream/tests/fixtures/microdata/invalid/wrong-version-type.html",
+      "bytes": 2605,
+      "sha256": "36288771fe3e69e2d4e49c25334f3a26b319e6e54060eefecf5eca403c7b8a8c",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/manifest.json",
+      "local": "upstream/tests/fixtures/microdata/manifest.json",
+      "bytes": 3714,
+      "sha256": "9d809a3fcadab98942bb0fa29651924a3e8d7af4519cd60dfabe08db4fbfe7fd",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/fixtures/microdata/provenance.json",
+      "local": "upstream/tests/fixtures/microdata/provenance.json",
+      "bytes": 1584,
+      "sha256": "2522764f1a20d0f2efa7d587a9550c2c2aa94d83e4f9c0fe4bad353a9c5c0e4f",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_ci_checks.py",
+      "local": "upstream/tests/test_ci_checks.py",
+      "bytes": 4111,
+      "sha256": "bb68528fc7d60f5989cb5c298ce00768116b73c54fa1ff195009ae0a3e1b83b5",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_examples.py",
+      "local": "upstream/tests/test_examples.py",
+      "bytes": 3528,
+      "sha256": "5be2261f21fb046eeef502e5e27f4011d363c2f57d849ad12ef9febda8c6c18c",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_fht_decisions.py",
+      "local": "upstream/tests/test_fht_decisions.py",
+      "bytes": 6147,
+      "sha256": "189129c1cb700aeec166e8bc9ac016bc21d0a99a6af55e594a4a1fe2bbec08c8",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_fht_microdata.py",
+      "local": "upstream/tests/test_fht_microdata.py",
+      "bytes": 28188,
+      "sha256": "de3b88c5e13c5d35a9867c564e8b45e614a7e99228cec4a3cc95e6a67f71a891",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_fht_schema.py",
+      "local": "upstream/tests/test_fht_schema.py",
+      "bytes": 22526,
+      "sha256": "ad55d9b529e95a7f36b739d68dd09badefcd1b457846a824963c23b3ea46b426",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_fixture_reader.py",
+      "local": "upstream/tests/test_fixture_reader.py",
+      "bytes": 8355,
+      "sha256": "5596fecb827aff1f5fc748e71ffeb777cb72fe253772f67378968eb0e210b756",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_fixtures.py",
+      "local": "upstream/tests/test_fixtures.py",
+      "bytes": 1480,
+      "sha256": "e9385a18269ac770065f4bcf39652dc1afcce35568415d876f8ab2018d48f8fd",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_generation.py",
+      "local": "upstream/tests/test_generation.py",
+      "bytes": 4002,
+      "sha256": "badaa5c13c3d162822854922357e69b3b30281f6167cf0bd44b71c3a6455dce2",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_parent_link_confinement.py",
+      "local": "upstream/tests/test_parent_link_confinement.py",
+      "bytes": 7701,
+      "sha256": "51c5b773b9499b0ee69821291964e04e0d680f2ed3a73404f27dfe73bc114112",
+      "mode": "100644"
+    },
+    {
+      "source": "tests/test_toolkit_lane.py",
+      "local": "upstream/tests/test_toolkit_lane.py",
+      "bytes": 12341,
+      "sha256": "ab2c11e702ded3d0f022d7c6d4acd43a7ae7fc1684f913f38341b09c88c23a20",
+      "mode": "100644"
+    }
+  ]
+}

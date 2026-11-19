@@ -1,0 +1,30 @@
+name: External link check
+
+# Scheduled/manual lane only (issue #14): fetches every http(s) URL cited by
+# repository Markdown so that transient remote failures never gate a pull
+# request. The PR link signal is the owned local check in docs-checks.yml.
+# Narrow, dated exclusions live in scripts/external-links-exclusions.json and
+# require recorded evidence (see docs/CI.md).
+
+on:
+  schedule:
+    # Mondays 05:17 UTC
+    - cron: '17 5 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  external-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Check every cited external URL (one retry each)
+        run: python scripts/check_external_links.py

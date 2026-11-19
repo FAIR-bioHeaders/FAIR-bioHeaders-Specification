@@ -1,0 +1,30 @@
+schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+schemaVersion: '1.0'
+transcriptome: Arabidopsis thaliana Araport11 protein-coding transcripts (synthetic example)
+assemblyType: annotation-derived
+moleculeType: mRNA
+taxon:
+  name: Arabidopsis thaliana
+  uri: https://identifiers.org/taxonomy:3702
+version: Araport11-extract-1
+metadataAuthor:
+- name: Example Plant Database Curation Team
+  nameType: Organizational
+dateCreated: '2026-10-01'
+assemblySoftware:
+- name: gffread
+  version: '0.12.9'
+  commandLineOption:
+  - '-w'
+  - transcripts.fa
+  - '-g'
+  - TAIR10_chr_all.fas
+vitalStats:
+  totalTranscripts: 48359
+  N50: 1911
+  averageTranscriptLength: 1622.8
+relatedLink:
+- https://www.arabidopsis.org/download/
+documentation: 'Protein-coding transcripts extracted from the Araport11 annotation and the TAIR10 genome with gffread. No new reads were assembled. No derivedFrom parent is given because no FHR-headed genome file is cited here; a real record adds an FHR transcribedFrom parent with its checksum when one exists. Synthetic example for the FHT development contract: names, statistics and sequence bytes are invented; taxon and ontology identifiers are real.'
+reuseConditions: CC-BY-4.0
+checksum: 'Y6A5rek39VLFxvqe6dn8D8Diz8h8jVK34rW/ByOV0Tk='

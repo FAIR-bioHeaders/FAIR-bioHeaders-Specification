@@ -1,0 +1,135 @@
+# Identity (FHT-Specification#27): this file describes the FHT *development*
+# repository only. It carries no DOI of its own — this repository publishes no
+# GitHub releases or tags, the FHT contract itself is not yet released by
+# FAIR-bioHeaders-Specification, and no FHT Zenodo or Zenodo-concept record
+# exists, so none is implied here. The previously claimed resource identifiers
+# (the shared concept DOI 10.5281/zenodo.6762549 and the FHR preprint DOI
+# 10.1101/2023.11.29.569306) and the FAIR-bioHeaders-Tools repository-code
+# target were defects and are removed; the concept DOI identifies the shared
+# publication repository's releases, and the preprint is an FHR manuscript.
+# The registered bibliographic titles in `references` below ("FAIR-bioHeaders
+# Specification") belong to the shared publication lineage; FHT work must not
+# rename them, and they do not identify this development repository. Any future
+# FHT release record is a maintainer action coordinated through
+# FAIR-bioHeaders-Specification#107 (FHT lane F of
+# FAIR-bioHeaders-Specification#211; publication requires maintainer approval).
+#
+# Source provenance of the draft contract: fht.json (title "FHT", JSON Schema
+# 2020-12, served from the main branch only) was first generated from the FHT
+# 1.0 LinkML model at PR #21 (merge commit
+# 0ceb6f460e1f749f9eb2afb0a8b2f83cddb0e07a) and extended with top-level x- keys
+# at PR #24 (commit 2d582f1); later draft revisions are in this repository's
+# history. It imports the shared core and shared objects pinned in
+# schemas/provenance.json: FAIR-bioHeaders-Specification release v0.6.0, tag
+# commit recorded below. The schemaVersion "1.0" value
+# is a development draft, not a released contract: FAIR-bioHeaders-Specification
+# v0.6.0 registers only FHR, FHP and FHGFF3 in schemas/versions.json, and no
+# https://w3id.org/fair-bioheaders/fht/ alias exists.
+# Pinned shared-source-commit: 0ae18b00ee4bd71ab2dc28bae706b0f9d195076b
+cff-version: 1.2.0
+title: FHT Specification (development repository)
+message: >-
+  There is no citable FHT contract yet. This repository develops the FHT
+  (transcriptome-set) header of the FAIR BioHeaders family, but no FAIR-
+  bioHeaders-Specification release carries an FHT contract, so no FHT version
+  DOI, w3id alias or concept record exists and none may be cited. To reference
+  the work in progress, cite this development repository URL
+  (https://github.com/FAIR-bioHeaders/FHT-Specification) together with the
+  draft trail: issue #7 (shared-core integration), PR #21 (FHT 1.0 LinkML model
+  and generated draft fht.json) and PR #24 (x- extension fields). The records
+  listed under `references` are FHR-lineage publications kept as labeled
+  related citations, not FHT identifiers, and nothing here indicates FHT
+  adoption or publication. Historical USDA public-domain material remains
+  public domain; applicable subsequent project contributions from March 2025
+  onward use MPL-2.0. Third-party terms and provenance details are documented
+  in LICENSE.
+type: dataset
+authors:
+- given-names: David
+  family-names: Molik
+  email: molik@fhref.org
+  orcid: https://orcid.org/0000-0003-3192-6538
+- given-names: Adam
+  family-names: Wright
+  email: wright@fhref.org
+  affiliation: OICR
+  orcid: https://orcid.org/0000-0002-5719-4024
+# No `identifiers`, `doi`, `version` or `date-released`: this development
+# repository publishes no release artifacts or DOI, and the FHT contract is
+# unreleased (tracked in FHT-Specification#27; do not borrow the lineage
+# records below).
+repository-code: https://github.com/FAIR-bioHeaders/FHT-Specification
+url: https://github.com/FAIR-bioHeaders/FHT-Specification
+abstract: >-
+  The FAIR bioHeaders Transcriptome set (FHT) standard embeds a small YAML
+  metadata header inside transcriptome FASTA files, validated against a
+  per-type JSON Schema contract and covered by a checksum of the file's exact
+  bytes. This repository is the FHT development surface: the FHT 1.0 LinkML
+  model, the generated draft fht.json contract (JSON Schema 2020-12, pinned to
+  the shared core snapshot in schemas/provenance.json) and synthetic examples
+  are developed and served here. FHT is not yet part
+  of any FAIR-bioHeaders-Specification release; publication and release DOIs
+  remain future maintainer actions.
+keywords:
+- FAIR
+- TRUST
+- transcriptome
+- transcriptome assembly
+- fasta
+- yaml
+- json
+license: MPL-2.0
+# Historical permissions and third-party exceptions are documented in LICENSE.
+references:
+# The motivating family publication; it describes FHR, not FHT.
+- type: article
+  title: 'FAIR Header Reference genome: a TRUSTworthy standard'
+  authors:
+  - given-names: Adam
+    family-names: Wright
+  - given-names: Mark D
+    family-names: Wilkinson
+  - given-names: Christopher
+    family-names: Mungall
+  - given-names: Scott
+    family-names: Cain
+  - given-names: Stephen
+    family-names: Richards
+  - given-names: Paul
+    family-names: Sternberg
+  - given-names: Ellen
+    family-names: Provin
+  - given-names: Jonathan L
+    family-names: Jacobs
+  - given-names: Scott
+    family-names: Geib
+  - given-names: Daniela
+    family-names: Raciti
+  - given-names: Karen
+    family-names: Yook
+  - given-names: Lincoln
+    family-names: Stein
+  - given-names: David C
+    family-names: Molik
+  doi: 10.1093/bib/bbae122
+  journal: Briefings in Bioinformatics
+  volume: '25'
+  issue: '3'
+  start: bbae122
+  year: 2024
+# Shared publication lineage (concept record; registered title verified live at
+# "FAIR-bioHeaders Specification"). It identifies the shared publication
+# repository's releases and is not this repository's identifier.
+- type: data
+  title: 'FAIR-bioHeaders Specification'
+  authors:
+  - given-names: David
+    family-names: Molik
+  - given-names: Adam
+    family-names: Wright
+  publisher:
+    name: Zenodo
+  year: 2026
+  doi: 10.5281/zenodo.6762549
+  repository-code: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification
+  url: https://zenodo.org/doi/10.5281/zenodo.6762549

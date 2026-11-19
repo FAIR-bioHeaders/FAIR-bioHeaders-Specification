@@ -1,0 +1,17 @@
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.5.0
+;~schemaVersion: '2.1'
+;~genome: Synthetic FHR parent genome for FHT link fixtures (placeholder)
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: '1.0.0'
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~dateCreated: '2026-11-10'
+;~masking: not-masked
+;~documentation: 'Synthetic parent fixture for FHT-Specification#8; not a real assembly.'
+;~checksum: pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=
+>ctgA synthetic scaffold
+ACGTACGTACGTACGTACGTACGTACGT
+>ctgB synthetic scaffold
+GGTTAACCATCGATCGAT

@@ -1,0 +1,13 @@
+# Conformance vectors and their manifest are byte-exact: never convert line
+# endings (CR and CRLF vectors must survive every checkout unchanged).
+conformance/** -text
+conformance/**/*.gz binary
+# Examples carry checksums over their exact bytes.
+examples/** -text
+# These vectors intentionally contain CR bytes (R1 line-ending coverage) or
+# trailing spaces (R5): whitespace lint must not try to "repair" them.
+conformance/valid/fht-fasta-crlf.fht.fasta -whitespace
+conformance/valid/fht-fasta-cr.fht.fasta -whitespace
+conformance/valid/fht-fasta-mixed-endings.fht.fasta -whitespace
+conformance/valid/fht-fasta-checksum-trailing-spaces.fht.fasta -whitespace
+conformance/invalid/fht-fasta-crlf-normalized-checksum.fht.fasta -whitespace

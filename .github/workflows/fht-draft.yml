@@ -1,0 +1,98 @@
+name: FHT publication candidate
+
+on:
+  pull_request:
+    paths: ['drafts/fht/**', 'docs/FHT.md', '.github/workflows/fht-draft.yml']
+  push:
+    branches: [main]
+    paths: ['drafts/fht/**', 'docs/FHT.md', '.github/workflows/fht-draft.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Checkout the immutable owning source with provenance history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHT-Specification
+          ref: 0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00
+          path: _fht-owning
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Install the exact owning model/test environment
+        run: python -m pip install -r drafts/fht/upstream/requirements-linkml.txt
+      - name: Exercise candidate integrity controls
+        run: python -m unittest discover -s drafts/fht -p 'test_candidate.py' -v
+      - name: Verify parity, 93 vendored fixtures and 114 owning-history unit tests
+        run: |
+          python drafts/fht/run_checks.py --upstream "$GITHUB_WORKSPACE/_fht-owning" \
+            --receipt "$RUNNER_TEMP/fht-reference.json"
+      - name: Upload the actual reference receipt
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fht-candidate-reference
+          path: ${{ runner.temp }}/fht-reference.json
+          if-no-files-found: error
+
+  installed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: FAIR-bioHeaders/FHT-Specification
+          ref: 0f6eb7763aa88d05a42fa69b02cf3f89f5cc3b00
+          path: _fht-owning
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Install checker dependencies and the named released toolkit
+        run: |
+          python -m pip install 'jsonschema[format]==4.26.0' 'PyYAML==6.0.3'
+          python -m venv "$RUNNER_TEMP/fht-toolkit"
+          "$RUNNER_TEMP/fht-toolkit/bin/python" -m pip install 'fair-bioheaders==0.11.0'
+      - name: Compare 91 cases and explicitly account for two unsupported arithmetic cases
+        run: |
+          python drafts/fht/run_checks.py --upstream "$GITHUB_WORKSPACE/_fht-owning" \
+            --toolkit-venv "$RUNNER_TEMP/fht-toolkit" \
+            --receipt "$RUNNER_TEMP/fht-installed.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fht-candidate-installed
+          path: ${{ runner.temp }}/fht-installed.json
+          if-no-files-found: error
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+      - name: Install the owning browser dependency outside the candidate
+        run: |
+          npm install --prefix "$RUNNER_TEMP/fht-browser" --ignore-scripts playwright@1.65.0
+          "$RUNNER_TEMP/fht-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Extract the seven unchanged HTML pairs through Chromium
+        env:
+          FHT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/fht-browser/node_modules/playwright
+        run: node drafts/fht/upstream/scripts/check_fht_html_browser.mjs

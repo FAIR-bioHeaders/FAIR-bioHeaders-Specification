@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+  "title": "FHR",
+  "description": "FAIR Header Reference genome Schema for Genome Assemblies",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "description": "centralized schema file"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "enum": [
+        "2.0",
+        "2.1"
+      ],
+      "description": "Version of the FHR schema contract, as \"MAJOR.MINOR\"; 2.0 from v0.4, 2.1 (extension fields) from v0.5 (docs/SCHEMA-VERSIONS.md)"
+    },
+    "genome": {
+      "type": "string",
+      "description": "Name of the Genome"
+    },
+    "genomeSynonym": {
+      "type": "array",
+      "description": "Other common names of the genome",
+      "items": {
+        "type": "string"
+      }
+    },
+    "taxon": {
+      "type": "object",
+      "description": "Species name and URL of the species information at identifiers.org",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "version": {
+      "type": "string",
+      "description": "Version number of Genome eg. 1.2.0"
+    },
+    "metadataAuthor": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Author of the FHR Instance (Person or Org)",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "uri": {
+            "$ref": "#/definitions/orcidUri"
+          },
+          "nameType": {
+            "type": "string",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assemblyAuthor": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Assembler of the Genome (Person or Org)",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "uri": {
+            "$ref": "#/definitions/orcidUri"
+          },
+          "nameType": {
+            "type": "string",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ],
+            "description": "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dateCreated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the genome assembly was created"
+    },
+    "voucherSpecimen": {
+      "type": "string",
+      "description": "Description of the physical sample"
+    },
+    "accessionID": {
+      "type": "object",
+      "description": "accessionID genome assembly was created",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "instrument": {
+      "type": "array",
+      "description": "Physical tools and instruments used in the creation of the genome assembly",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scholarlyArticle": {
+      "type": "string",
+      "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$",
+      "description": "DOI (without a resolver prefix) of the scholarly article where the genome was published, e.g. 10.5281/zenodo.6762550"
+    },
+    "documentation": {
+      "type": "string",
+      "description": "Documentation about the genome"
+    },
+    "identifier": {
+      "type": "array",
+      "description": "Identifiers of the genome as prefix:accession (CURIE-like)",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      }
+    },
+    "relatedLink": {
+      "type": "array",
+      "description": "Related URLS to the genome",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "funding": {
+      "type": "string",
+      "description": "Grant Line Item"
+    },
+    "reuseConditions": {
+      "type": "string",
+      "description": "license and reuse conditions for the use of the Genome"
+    },
+    "masking": {
+      "type": "string",
+      "pattern": "^(not-masked|hard-masked|soft-masked|repeat-masked|unknown)$",
+      "description": "masking applied to the genome assembly"
+    },
+    "vitalStats": {
+      "type": "object",
+      "description": "general statistics about the genome assembly; N50, N90, L50 and L90 are contig statistics, the scaffold* fields are scaffold statistics",
+      "properties": {
+        "L50": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Contig L50: the smallest number of contigs whose lengths sum to at least 50 percent of the assembly length."
+        },
+        "N50": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Contig N50: contig length in base pairs at 50 percent of the assembly length."
+        },
+        "L90": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Contig L90: the smallest number of contigs whose lengths sum to at least 90 percent of the assembly length."
+        },
+        "totalBasePairs": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total base pairs of the genome assembly"
+        },
+        "numberContigs": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "number of contigs of the genome assembly"
+        },
+        "numberScaffolds": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "number of scaffolds of the genome assembly"
+        },
+        "readTechnology": {
+          "type": "string",
+          "description": "read technology of the genome assembly (short, long, hifi, etc...)"
+        },
+        "N90": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Contig length in base pairs at 90 percent of the assembly length."
+        },
+        "scaffoldN50": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Scaffold N50: scaffold length in base pairs at 50 percent of the assembly length."
+        },
+        "scaffoldN90": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Scaffold N90: scaffold length in base pairs at 90 percent of the assembly length."
+        },
+        "scaffoldL50": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Scaffold L50: the smallest number of scaffolds whose lengths sum to at least 50 percent of the assembly length."
+        },
+        "scaffoldL90": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Scaffold L90: the smallest number of scaffolds whose lengths sum to at least 90 percent of the assembly length."
+        },
+        "gcContent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "GC content as a percentage (0 to 100), not a fraction: write 42.0 for 42 percent; 0.42 means 0.42 percent."
+        }
+      },
+      "additionalProperties": false
+    },
+    "checksum": {
+      "$ref": "#/definitions/sha2"
+    },
+    "assemblySoftware": {
+      "description": "Assembly software provenance; a legacy name string is also accepted.",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "uri": {
+                "type": "string",
+                "format": "uri"
+              },
+              "version": {
+                "type": "string"
+              },
+              "commandLineOption": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      ]
+    },
+    "assemblyProtocol": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI of the assembly protocol or workflow documentation."
+    },
+    "seqcol_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{32}$",
+      "description": "Unprefixed GA4GH refget sequence collection top-level digest (sha512t24u); supplied by the user, not calculated by FHR.",
+      "minLength": 32,
+      "maxLength": 32
+    }
+  },
+  "required": [
+    "schema",
+    "schemaVersion",
+    "genome",
+    "taxon",
+    "version",
+    "metadataAuthor",
+    "assemblyAuthor",
+    "dateCreated",
+    "masking",
+    "checksum"
+  ],
+  "definitions": {
+    "orcidUri": {
+      "format": "uri",
+      "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$",
+      "type": "string"
+    },
+    "sha2": {
+      "type": "string",
+      "minLength": 44,
+      "maxLength": 44,
+      "pattern": "^[A-Za-z0-9+/]{43}=$",
+      "description": "sha2-512/256 checksum value: standard padded base64 of the 32-byte digest (43 characters, then =)"
+    }
+  },
+  "patternProperties": {
+    "^x-[A-Za-z0-9][A-Za-z0-9_.-]*$": {
+      "description": "Extension field (docs/FORMAT.md R15): any value; it means nothing to the standard"
+    }
+  },
+  "propertyNames": {
+    "not": {
+      "pattern": "\n"
+    }
+  },
+  "allOf": [
+    {
+      "description": "A record that states schemaVersion 2.0 has no extension fields (docs/SCHEMA-VERSIONS.md)",
+      "if": {
+        "required": [
+          "schemaVersion"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": "2.0"
+          }
+        }
+      },
+      "then": {
+        "propertyNames": {
+          "not": {
+            "pattern": "^x-"
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}
