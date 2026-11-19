@@ -145,6 +145,63 @@ class TreeSetTests(unittest.TestCase):
             self.assertEqual(result['verdict'], 'DRIFT')
             self.assertEqual(result['onlyLocal'], ['tree/unrecorded.json'])
 
+    def test_exact_source_exclusion_does_not_hide_an_omitted_source_file(self):
+        class Selected(Authority):
+            def paths(self, *args):
+                return {'schema.json', 'AGENTS.md', 'omitted.json'}
+        row = self.row('copied-tree')
+        row['sourcePatterns'] = ['*']
+        row['sourceExclusions'] = ['AGENTS.md']
+        result = audit.audit(row, Selected())
+        self.assertEqual(result['verdict'], 'DRIFT')
+        self.assertEqual(result['onlyAuthority'], ['omitted.json'])
+        self.assertEqual(result['excludedAuthorityPaths'], ['AGENTS.md'])
+        row['files'].append({'path': 'omitted.json', 'sha256': hashlib.sha256(ORIGINAL).hexdigest()})
+        self.assertEqual(audit.audit(row, Selected())['verdict'], 'FRESH')
+
+    def test_nonexistent_or_invalid_exclusions_are_not_fresh(self):
+        class Selected(Authority):
+            def paths(self, *args):
+                return {'schema.json'}
+        for exclusions in (['typo.md'], ['AGENTS.md', 'AGENTS.md'], 'AGENTS.md'):
+            row = self.row('copied-tree')
+            row.update(sourcePatterns=['*'], sourceExclusions=exclusions)
+            self.assertEqual(audit.audit(row, Selected())['verdict'], 'DRIFT')
+
+    def test_missing_only_authority_or_local_paths_remain_absent(self):
+        class MissingAuthority(Authority):
+            def read(self, repo, commit, name):
+                raise audit.Missing(name)
+            def paths(self, *args):
+                return set()
+        row = self.row('copied-tree')
+        row['sourcePatterns'] = ['*.json']
+        result = audit.audit(row, MissingAuthority())
+        self.assertEqual(result['verdict'], 'ABSENT')
+        self.assertEqual(result['onlyRecord'], ['schema.json'])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'tree').mkdir()
+            row['files'][0]['local'] = 'tree/copy.json'
+            row['localTree'] = 'tree'
+            # The authority has the recorded file; only its local copy is absent.
+            class Complete(Authority):
+                def paths(self, *args):
+                    return {'schema.json'}
+            result = audit.audit(row, Complete(), root)
+            self.assertEqual(result['verdict'], 'ABSENT')
+            self.assertEqual(result['missingLocal'], ['tree/copy.json'])
+            (root / 'tree/unexpected.json').write_bytes(ORIGINAL)
+            self.assertEqual(audit.audit(row, Complete(), root)['verdict'], 'DRIFT')
+
+    def test_existing_record_outside_selected_scope_is_drift_not_missing(self):
+        class DifferentSelection(Authority):
+            def paths(self, *args):
+                return {'schema.json'}
+        row = self.row('copied-tree')
+        row['sourcePatterns'] = ['selected-only/*']
+        self.assertEqual(audit.audit(row, DifferentSelection())['verdict'], 'DRIFT')
+
 
 class RemoteFailureTests(unittest.TestCase):
     row = ReferenceTests.row
@@ -243,6 +300,24 @@ class RevisionAndBudgetTests(unittest.TestCase):
         self.assertEqual(audit.audit(row, Authority())['verdict'], 'FRESH')
         row.update(revision='v1.0.0', revisionKind='tag')
         self.assertEqual(audit.audit(row, Authority())['verdict'], 'DRIFT')
+
+    def test_missing_tag_commit_is_absent_without_querying_authority(self):
+        class NoQuery(Authority):
+            def revision(self, *args):
+                raise AssertionError('incomplete declarations must not be queried')
+        for value in (None, ''):
+            row = self.row()
+            row['commit'] = value
+            self.assertEqual(audit.audit(row, NoQuery())['verdict'], 'ABSENT')
+        row = self.row()
+        row.pop('commit')
+        self.assertEqual(audit.audit(row, NoQuery())['verdict'], 'ABSENT')
+
+    def test_commit_kind_revision_itself_is_a_recorded_commit(self):
+        row = self.row('conformance-suite')
+        row.update(revision=COMMIT, revisionKind='commit')
+        row.pop('commit')
+        self.assertEqual(audit.audit(row, Authority())['verdict'], 'FRESH')
 
     def test_concurrent_identical_requests_share_one_fetch(self):
         import concurrent.futures

@@ -199,6 +199,19 @@ def audit(row, resolver, local=None):
     if kind == 'commit' and not re.fullmatch('[0-9a-f]{40}', ref):
         result.update(verdict='DRIFT', reason='A commit reference must be a full immutable commit')
         return result
+    recorded_commit = row.get('commit', ref if kind == 'commit' else None)
+    if recorded_commit is None or recorded_commit == '':
+        result['reason'] = 'Incomplete recorded reference: dereferenced commit is absent'
+        return result
+    if not isinstance(recorded_commit, str) or not re.fullmatch('[0-9a-f]{40}', recorded_commit):
+        result.update(verdict='DRIFT', reason='Recorded commit must be a full immutable commit')
+        return result
+    exclusions = row.get('sourceExclusions', [])
+    if (not isinstance(exclusions, list) or any(not isinstance(p, str) or not p for p in exclusions)
+            or len(set(exclusions)) != len(exclusions)
+            or (exclusions and not row.get('sourcePatterns'))):
+        result.update(verdict='DRIFT', reason='Source exclusions require unique exact paths and a declared source scope')
+        return result
     if len({f.get('local') or f['path'] for f in files}) != len(files):
         result.update(verdict='DRIFT', reason='Duplicate paths in declared reference set')
         return result
@@ -211,16 +224,18 @@ def audit(row, resolver, local=None):
             result['negativeControl'] = 'confirmed-missing'
         else:
             raise QueryFailed('Negative control unexpectedly returned bytes')
-        if row.get('commit') and row['commit'] != commit:
+        if recorded_commit != commit:
             result.update(verdict='DRIFT', reason='Tag/recorded commit disagree')
             return result
         result['verdict'] = 'FRESH'
+        absent_authority = set()
         for f in files:
             item = {'path': f['path'], 'local': f.get('local')}
             try:
                 data = resolver.read(row['repository'], commit, f['path'])
             except Missing:
                 item['verdict'] = 'ABSENT'
+                absent_authority.add(f['path'])
             else:
                 if not data:
                     raise QueryFailed(f'{f["path"]}: empty authority measurement')
@@ -245,12 +260,19 @@ def audit(row, resolver, local=None):
         if row.get('sourcePatterns'):
             source = {p for p in resolver.paths(row['repository'], commit)
                       if any(fnmatch.fnmatchcase(p, pattern) for pattern in row['sourcePatterns'])}
+            unused_exclusions = set(exclusions) - source
+            if exclusions:
+                result['excludedAuthorityPaths'] = sorted(source & set(exclusions))
+                result['unusedSourceExclusions'] = sorted(unused_exclusions)
+                source -= set(exclusions)
             recorded = {f['path'] for f in files}
             result['onlyAuthority'] = sorted(source - recorded)
             result['onlyRecord'] = sorted(recorded - source)
             result['sourceSetComparison'] = 'performed'
-            if source != recorded:
+            if (source - recorded or (recorded - source) - absent_authority or unused_exclusions):
                 result['verdict'] = 'DRIFT'
+            elif recorded - source and result['verdict'] != 'DRIFT':
+                result['verdict'] = 'ABSENT'
         else:
             result['sourceSetComparison'] = 'not-run: selected file references; no complete source scope declared'
         if row.get('localTree') and local is not None:
@@ -259,8 +281,10 @@ def audit(row, resolver, local=None):
             exclusions = set(row.get('localExclusions', []))
             result['onlyLocal'] = sorted(present - recorded - exclusions)
             result['missingLocal'] = sorted(recorded - present)
-            if result['onlyLocal'] or result['missingLocal']:
+            if result['onlyLocal']:
                 result['verdict'] = 'DRIFT'
+            elif result['missingLocal'] and result['verdict'] != 'DRIFT':
+                result['verdict'] = 'ABSENT'
     except Missing as exc:
         # A revision-stage HTTP 404 can conceal an inaccessible private repo.
         # Establish independent positive content access and a negative control
