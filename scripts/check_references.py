@@ -65,21 +65,46 @@ class Github:
         # The commits endpoint dereferences annotated tags; it also accepts
         # branches, so verify tag existence separately before using it.
         if kind == 'tag':
-            self.get(f'{repo}/git/ref/tags/{urllib.parse.quote(ref, safe="")}')
+            tag = self.get(f'{repo}/git/ref/tags/{urllib.parse.quote(ref, safe="")}')
+            if not isinstance(tag, dict) or tag.get('ref') != 'refs/tags/' + ref:
+                raise QueryFailed(f'{repo}@{ref}: malformed tag-ref response')
         data = self.get(f'{repo}/commits/{urllib.parse.quote(ref, safe="")}')
-        sha = data.get('sha', '')
-        if not re.fullmatch('[0-9a-f]{40}', sha):
+        sha = data.get('sha', '') if isinstance(data, dict) else ''
+        if not isinstance(sha, str) or not re.fullmatch('[0-9a-f]{40}', sha):
             raise QueryFailed(f'{repo}@{ref}: no full commit measurement')
         return sha
+
+    def accessible_revision(self, repo):
+        """Positive content access, independent of a possibly missing named ref."""
+        try:
+            metadata = self.get(repo)
+            branch = metadata.get('default_branch') if isinstance(metadata, dict) else None
+            if not isinstance(branch, str) or not branch:
+                raise QueryFailed(f'{repo}: repository accessibility was not established')
+            commit = self.revision(repo, branch, 'branch')
+            # A metadata-only token may see repository metadata while lacking
+            # content access. Require a successful, shaped content-tree read too.
+            self.paths(repo, commit)
+            return commit
+        except Missing as exc:
+            raise QueryFailed(f'{repo}: repository/content access is ambiguous (HTTP 404)') from exc
 
     def read(self, repo, commit, name):
         return self.get(f'{repo}/contents/{urllib.parse.quote(name, safe="/")}?ref={commit}', True)
 
     def paths(self, repo, commit):
         tree = self.get(f'{repo}/git/trees/{commit}?recursive=1')
+        if not isinstance(tree, dict) or not isinstance(tree.get('tree'), list):
+            raise QueryFailed(f'{repo}@{commit}: malformed authority tree response')
         if tree.get('truncated'):
             raise QueryFailed('Truncated authority tree cannot establish a complete set')
-        return {r['path'] for r in tree['tree'] if r['type'] == 'blob'}
+        paths = set()
+        for row in tree['tree']:
+            if not isinstance(row, dict) or not isinstance(row.get('path'), str) or not row['path'] or not isinstance(row.get('type'), str) or row['type'] not in {'blob', 'tree', 'commit'}:
+                raise QueryFailed(f'{repo}@{commit}: malformed authority tree entry')
+            if row['type'] == 'blob':
+                paths.add(row['path'])
+        return paths
 
 
 class Checkouts:
@@ -103,6 +128,9 @@ class Checkouts:
     def revision(self, repo, ref, kind):
         target = 'refs/tags/' + ref if kind == 'tag' else ref
         return self.git(repo, 'rev-parse', '--verify', target + '^{commit}').decode().strip()
+
+    def accessible_revision(self, repo):
+        return self.revision(repo, 'HEAD', 'commit')
 
     def read(self, repo, commit, name):
         # Validate the commit independently so a missing object cannot masquerade
@@ -200,7 +228,21 @@ def audit(row, resolver, local=None):
             if result['onlyLocal'] or result['missingLocal']:
                 result['verdict'] = 'DRIFT'
     except Missing as exc:
-        result.update(verdict='ABSENT', reason=f'Confirmed missing authority: {exc}')
+        # A revision-stage HTTP 404 can conceal an inaccessible private repo.
+        # Establish independent positive content access and a negative control
+        # at a known existing revision before calling the named ref absent.
+        try:
+            witness = resolver.accessible_revision(row['repository'])
+            try:
+                resolver.read(row['repository'], witness, CONTROL)
+            except Missing:
+                result.update(verdict='ABSENT', reason=f'Confirmed missing authority: {exc}',
+                              accessibilityCommit=witness,
+                              negativeControl='confirmed-missing-at-accessible-revision')
+            else:
+                raise QueryFailed('Accessibility negative control unexpectedly returned bytes')
+        except (QueryFailed, Missing, AttributeError) as error:
+            result.update(verdict='QUERY_FAILED', reason=f'Cannot establish authority accessibility: {error}')
     except QueryFailed as exc:
         result.update(verdict='QUERY_FAILED', reason=str(exc))
     return result

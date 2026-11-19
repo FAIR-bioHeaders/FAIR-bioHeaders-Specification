@@ -143,3 +143,47 @@ class TreeSetTests(unittest.TestCase):
             result = audit.audit(row, Authority(), root)
             self.assertEqual(result['verdict'], 'DRIFT')
             self.assertEqual(result['onlyLocal'], ['tree/unrecorded.json'])
+
+
+class RemoteFailureTests(unittest.TestCase):
+    row = ReferenceTests.row
+
+    def test_revision_404_requires_independent_access_and_control(self):
+        class MissingRevision(Authority):
+            def revision(self, *args):
+                raise audit.Missing('missing tag')
+            def accessible_revision(self, repo):
+                return COMMIT
+        class Inaccessible(MissingRevision):
+            def accessible_revision(self, repo):
+                raise audit.QueryFailed('repository access HTTP 404')
+        self.assertEqual(audit.audit(self.row(), MissingRevision())['verdict'], 'ABSENT')
+        self.assertEqual(audit.audit(self.row(), Inaccessible())['verdict'], 'QUERY_FAILED')
+
+    def test_inaccessible_github_repository_404_is_not_confirmed_absence(self):
+        class Hidden(audit.Github):
+            def get(self, *args, **kwargs):
+                raise audit.Missing('HTTP 404')
+        self.assertEqual(audit.audit(self.row(), Hidden())['verdict'], 'QUERY_FAILED')
+
+    def test_malformed_valid_json_commit_shapes_are_query_failures(self):
+        for body in ([], {}, None, {'sha': 1}, {'sha': ''}):
+            class Malformed(audit.Github):
+                def get(self, route, **kwargs):
+                    if '/git/ref/tags/' in route:
+                        return {'ref': 'refs/tags/v1.0.0'}
+                    return body
+            with self.subTest(body=body):
+                self.assertEqual(audit.audit(self.row(), Malformed())['verdict'], 'QUERY_FAILED')
+
+    def test_malformed_valid_json_tree_shapes_are_query_failures(self):
+        for body in ([], {}, {'tree': None}, {'tree': [{}]}, {'tree': [None]}, {'tree': [{'type': [], 'path': 'x'}]}, {'tree': [{'type': 'blob', 'path': None}]}):
+            class Malformed(audit.Github, Authority):
+                def get(self, *args, **kwargs):
+                    return body
+                revision = Authority.revision
+                read = Authority.read
+            row = self.row('copied-tree')
+            row['sourcePatterns'] = ['*.json']
+            with self.subTest(body=body):
+                self.assertEqual(audit.audit(row, Malformed())['verdict'], 'QUERY_FAILED')
