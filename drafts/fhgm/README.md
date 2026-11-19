@@ -75,8 +75,9 @@ The workflow checks 92 vectors under both bases and uploads the actual JSON
 receipt. The receipt verifier checks all 184 visits against the independently
 reviewed expectations, recomputes the separate evidence counts and requires
 real GFF3 execution. Expected not-run cases cannot become full passes or complete
-vector matches. Its controls must detect a fabricated pass, inflated count,
-skipped layer and unavailable supplied-history predicate. Invalid execution prerequisites fail rather than producing an
+vector matches. Its seven controls detect fabricated passes, inflated counts, skipped layers,
+unavailable supplied-history predicates and omitted, wrong or duplicated
+history subjects. Invalid execution prerequisites fail rather than producing an
 aggregate success claim.
 
 ## Publication and acceptance gates
@@ -98,8 +99,17 @@ split in `upstream/LICENSE`. No inherited feature-model tree is imported.
 The copied suite matched all 184 dual-base vector checks. The actual receipt
 contained 184 visits, 728 selected-carrier predicates evaluated, 736 layer
 expectations compared, 174 complete vector matches and 48 full model passes;
-ten expected not-run visits entered neither complete count. All four receipt
+ten expected not-run visits entered neither complete count. All seven receipt
 controls were detected. Independent pinned-blob/file-set comparison verified
-all 134 copied files. Four candidate parity tests, 61 exact owning conformance
+all 134 copied files. Eight candidate parity/input-binding tests, 61 exact owning conformance
 tests and the dual-base draft self-check passed locally. These are draft
 technical results; joint package acceptance and publication remain separate.
+
+The receipt wrapper requires carrier first and every declared predecessor
+subject, with multiplicity and order, for a full pass. Matrix twins use the
+same committed predecessor inputs. The byte-exact owning receipt labels history
+by basename: if different declared files have the same basename, this wrapper
+refuses ambiguous identity rather than claiming a complete match. Repeating the
+same canonical file is permitted only with the matching number of receipts.
+The PR review's whole-snapshot omission, wrong-subject and duplicate-subject
+controls leave other evidence and aggregate counts unchanged and must still fail.

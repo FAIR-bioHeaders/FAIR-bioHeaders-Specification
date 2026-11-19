@@ -72,5 +72,46 @@ class SourceParity(unittest.TestCase):
         self.assertIn('not published', record['candidate']['publicationStatus'])
 
 
+class SnapshotBinding(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location('candidate_receipt', HERE / 'check_receipt.py')
+        cls.receipt = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.receipt)
+
+    def test_carrier_and_all_declared_predecessors_are_required(self):
+        vector = {'id': 'case', 'context': {'predecessors': ['a/prior.gff3']}}
+        good = [{'subject': 'carrier'}, {'subject': 'predecessor prior.gff3'}]
+        self.assertEqual([], self.receipt.snapshot_problems(vector, good))
+        for bad in (good[:1], [], good[1:], list(reversed(good)),
+                    [{'subject': 'carrier'}, {'subject': 'predecessor wrong.gff3'}]):
+            self.assertTrue(self.receipt.snapshot_problems(vector, bad))
+
+    def test_duplicate_subject_cannot_replace_a_distinct_declared_input(self):
+        vector = {'id': 'case', 'context': {'predecessors': ['a/first.gff3', 'a/second.gff3']}}
+        good = [{'subject': 'carrier'}, {'subject': 'predecessor first.gff3'},
+                {'subject': 'predecessor second.gff3'}]
+        self.assertEqual([], self.receipt.snapshot_problems(vector, good))
+        self.assertTrue(self.receipt.snapshot_problems(vector, good[:2] + [good[1]]))
+
+    def test_repeated_same_file_is_counted_and_distinct_same_basename_is_refused(self):
+        subjects = [{'subject': 'carrier'}, {'subject': 'predecessor prior.gff3'},
+                    {'subject': 'predecessor prior.gff3'}]
+        repeated = {'id': 'repeated', 'context': {'predecessors': ['a/prior.gff3', 'a/prior.gff3']}}
+        self.assertEqual([], self.receipt.snapshot_problems(repeated, subjects))
+        self.assertTrue(self.receipt.snapshot_problems(repeated, subjects[:2]))
+        ambiguous = {'id': 'ambiguous', 'context': {'predecessors': ['a/prior.gff3', 'b/prior.gff3']}}
+        self.assertTrue(any('ambiguous predecessor identity' in error for error in
+                            self.receipt.snapshot_problems(ambiguous, subjects)))
+
+    def test_matrix_context_uses_the_committed_predecessor_subjects(self):
+        manifest = json.loads(self.receipt.MANIFEST.read_text())
+        vector = next(v for v in manifest['vectors'] if v['id'] == 'contract-rich-revision-chain')
+        self.assertEqual([], self.receipt.snapshot_problems(vector,
+            [{'subject': 'carrier'}, {'subject': 'predecessor minimal.fhgff3.gff3'}]))
+        self.assertTrue(self.receipt.snapshot_problems(vector,
+            [{'subject': 'carrier'}, {'subject': 'predecessor minimal-twin.fhgff3.gff3'}]))
+
+
 if __name__ == '__main__':
     unittest.main()

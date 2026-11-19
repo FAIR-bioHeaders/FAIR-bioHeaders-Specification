@@ -10,9 +10,37 @@ HERE = Path(__file__).resolve().parent
 MANIFEST = HERE / 'upstream/development/conformance/manifest.json'
 
 
+def snapshot_problems(vector, snapshots):
+    """Bind full-pass evidence to every declared input, not only surviving rows.
+
+    The byte-exact owning receipt names history subjects by basename. Distinct
+    declared files sharing a basename cannot be distinguished by that interface;
+    refuse that ambiguity rather than claiming identity. Repeated references to
+    the same canonical file remain countable and must appear equally often.
+    Matrix twins use the identical committed predecessors, not rewritten history.
+    """
+    prior = vector.get('context', {}).get('predecessors', [])
+    identities = {}
+    expected = ['carrier']
+    for relative in prior:
+        subject = 'predecessor ' + Path(relative).name
+        identities.setdefault(subject, set()).add(str((MANIFEST.parent / relative).resolve()))
+        expected.append(subject)
+    errors = []
+    if any(len(files) > 1 for files in identities.values()):
+        errors.append('ambiguous predecessor identity in basename-only receipt: ' + vector['id'])
+    subjects = [snapshot.get('subject') for snapshot in snapshots]
+    if not subjects or subjects[0] != 'carrier':
+        errors.append('full-pass receipt does not begin with carrier: ' + vector['id'])
+    if subjects != expected:
+        errors.append('full-pass snapshot subjects differ from declared predecessor inputs: ' + vector['id'])
+    return errors
+
+
 def problems(receipt):
     manifest = json.loads(MANIFEST.read_text())
-    expected = {v['id']: v['evidenceExpectation']['model'] for v in manifest['vectors']}
+    vectors = {v['id']: v for v in manifest['vectors']}
+    expected = {key: v['evidenceExpectation']['model'] for key, v in vectors.items()}
     rows = receipt.get('vectors', [])
     errors = []
     if receipt.get('status') != 'completed':
@@ -30,7 +58,9 @@ def problems(receipt):
         if model != expected.get(row['id']):
             errors.append('earned model state differs: ' + row['id'])
         if model == 'pass':
-            for index, snapshot in enumerate(actual['snapshots']):
+            if row['id'] in vectors:
+                errors.extend(snapshot_problems(vectors[row['id']], actual.get('snapshots', [])))
+            for index, snapshot in enumerate(actual.get('snapshots', [])):
                 required = [f'K{n}' for n in range(1, 7 if index == 0 else 6)]
                 if any(snapshot['rules'][rule]['status'] != 'pass' for rule in required):
                     errors.append('full pass without required snapshot predicates: ' + row['id'])
@@ -40,7 +70,8 @@ def problems(receipt):
     counts = {
         'vectorsVisited': len(rows),
         'rulePredicatesEvaluated': sum(rule['status'] in ('pass', 'reject')
-            for row in measured for rule in row['actualEvidence']['snapshots'][0]['rules'].values()),
+            for row in measured for snapshot in row['actualEvidence'].get('snapshots', [])[:1]
+            for rule in snapshot['rules'].values()),
         'layerExpectationsCompared': sum(3 + (row['gff3'] != 'skipped') for row in measured),
         'completeVectorsMatched': sum(bool(row['matched'] and row['gff3'] != 'skipped'
             and row['actualEvidence']['fullModel']['status'] in ('pass', 'reject')) for row in measured),
@@ -82,7 +113,23 @@ def main():
         target['actualEvidence']['snapshots'][1]['rules']['K4']['status'] = 'not-run'
         if not problems(bad):
             parser.exit(1, 'guard missed unavailable supplied-history K4 evidence\n')
-        print('Detected fabricated-pass, inflated-count, skipped-layer and missing-history-predicate controls.')
+        for defect in ('omitted-history', 'wrong-history-subject', 'duplicate-history-subject'):
+            bad = deepcopy(receipt)
+            target = next(row for row in bad['vectors'] if
+                          row['actualEvidence']['fullModel']['status'] == 'pass'
+                          and (len(row['actualEvidence']['snapshots']) > 2
+                               if defect == 'duplicate-history-subject'
+                               else row['id'] == 'contract-rich-revision-chain'))
+            snapshots = target['actualEvidence']['snapshots']
+            if defect == 'omitted-history':
+                del snapshots[1]
+            elif defect == 'wrong-history-subject':
+                snapshots[1]['subject'] = 'predecessor wrong-file.gff3'
+            else:
+                snapshots[2]['subject'] = snapshots[1]['subject']
+            if not problems(bad):
+                parser.exit(1, f'guard missed {defect}\n')
+        print('Detected seven receipt controls, including omitted/wrong/duplicated history subjects.')
     print(json.dumps(receipt['counts'], sort_keys=True))
     print('Verified actual dual-base draft evidence; no release or curator acceptance implied.')
 
