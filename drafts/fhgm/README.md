@@ -101,7 +101,7 @@ contained 184 visits, 728 selected-carrier predicates evaluated, 736 layer
 expectations compared, 174 complete vector matches and 48 full model passes;
 ten expected not-run visits entered neither complete count. All eight receipt
 controls were detected. Independent pinned-blob/file-set comparison verified
-all 134 copied files. Nine candidate parity/input-binding tests, 61 exact owning conformance
+all 134 copied files. Ten candidate parity/input-binding tests, 61 exact owning conformance
 tests and the dual-base draft self-check passed locally. These are draft
 technical results; joint package acceptance and publication remain separate.
 
@@ -119,3 +119,10 @@ predicate. The additional actual-receipt control changes the last such
 predicate to pass while leaving the full rejection and counts unchanged; it
 must fail for unsupported evidence, not an incidental count mismatch. This
 preserves the user's native correction in commit `4aa3357`.
+
+The candidate-local `.gitattributes` marks the entire copied `upstream/` tree
+as byte-preserved, including model schemas and code that the owning nested
+attributes did not cover. A fresh `core.autocrlf=true` checkout regression uses
+actual representative source bytes. Without the candidate rule its schema/code
+controls convert to CRLF; with the rule every representative remains exact.
+No byte in the copied source tree is edited to achieve this.

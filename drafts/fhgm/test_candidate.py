@@ -37,6 +37,53 @@ class SourceParity(unittest.TestCase):
             ['development/a', 'LICENSE', 'unrelated'],
             {'prefixes': ['development/'], 'files': ['LICENSE']}))
 
+    def test_fresh_autocrlf_checkout_preserves_copied_schema_and_code_bytes(self):
+        import subprocess
+        representatives = [
+            'upstream/.gitattributes',
+            'upstream/development/model/fhgm-model.schema.json',
+            'upstream/development/model/validate_fhgm.py',
+            'upstream/development/conformance/vectors/valid/noncoding-root-gene.fhgff3.gff3',
+        ]
+        expected = {relative: (HERE / relative).read_bytes() for relative in representatives}
+        observed = {}
+        with tempfile.TemporaryDirectory() as directory:
+            for protected in (False, True):
+                source = Path(directory) / ('protected-source' if protected else 'control-source')
+                target = Path(directory) / ('protected-checkout' if protected else 'control-checkout')
+                source.mkdir()
+                subprocess.run(['git', 'init', '-q', str(source)], check=True)
+                candidate = source / 'drafts/fhgm'
+                for relative, data in expected.items():
+                    file = candidate / relative
+                    file.parent.mkdir(parents=True, exist_ok=True)
+                    file.write_bytes(data)
+                if protected:
+                    (candidate / '.gitattributes').write_bytes((HERE / '.gitattributes').read_bytes())
+                subprocess.run(['git', '-C', str(source), '-c', 'core.autocrlf=false',
+                    '-c', 'core.attributesFile=/dev/null', 'add', '.'], check=True, capture_output=True)
+                subprocess.run(['git', '-C', str(source), '-c', 'commit.gpgsign=false',
+                    '-c', 'core.autocrlf=false', '-c', 'user.name=Checkout parity fixture',
+                    '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture'],
+                    check=True, capture_output=True)
+                subprocess.run(['git', 'clone', '--quiet', '--no-checkout', str(source), str(target)],
+                    check=True, capture_output=True)
+                subprocess.run(['git', '-C', str(target), '-c', 'core.autocrlf=true',
+                    '-c', 'core.attributesFile=/dev/null', 'checkout', '--force', 'HEAD'],
+                    check=True, capture_output=True)
+                observed[protected] = {relative: (target / 'drafts/fhgm' / relative).read_bytes()
+                                       for relative in representatives}
+        for relative in representatives:
+            self.assertEqual(expected[relative], observed[True][relative], relative)
+        for relative in ('upstream/development/model/fhgm-model.schema.json',
+                         'upstream/development/model/validate_fhgm.py'):
+            self.assertNotEqual(expected[relative], observed[False][relative], relative)
+            self.assertIn(b'\r\n', observed[False][relative], relative)
+        # Existing nested owning attributes already protected the GFF3 case;
+        # the new rule extends that protection to all copied schemas and code.
+        data_file = representatives[-1]
+        self.assertEqual(expected[data_file], observed[False][data_file])
+
     def test_upstream_tree_catches_selfconsistent_manifest_and_file_omission(self):
         import hashlib
         import subprocess
