@@ -114,11 +114,16 @@ empty records are excluded, and rejects an input with no sequence-bearing
 records. This is source implementation evidence, not a claim about an installed
 release or a requirement to use that producer.
 
-The maintainers must classify the publication under
-[SCHEMA-VERSIONS](SCHEMA-VERSIONS.md#schemaversion): descriptions qualify for no
-version change only when valid values retain their meaning; a changed meaning
-requires the corresponding major-contract process. This PR assigns no release
-or contract version and does not expand the existing guidance-only v0.6.1 scope.
+The [D8 maintainer decision](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934)
+retains the recorded **No change / normative clarification** classification.
+R16 is explicit producer-methodology guidance, not a retroactive reinterpretation
+of a published field. In particular, frozen schema descriptions saying “assembly
+length” are not rewritten to change older values to the summed-contig convention.
+Keep their actual producer method with those values; do not assert that an old
+record used R16 merely because its schemaVersion is supported. The established
+guidance-only publication vehicle is v0.6.1, with published schema descriptions,
+validation bytes and contract versions unchanged. No statistics implementation
+or release publication is authorized by this text.
 
 <a id="checksum-decision-for-v03"></a>
 
@@ -136,6 +141,11 @@ helpers used MD5 and described different coverage. v0.3 explicitly adopts:
    at LF, at CRLF, or at a CR that is not followed by LF; the terminator belongs to
    the line. Every rule below uses lines in this sense. Writers should use LF or
    CRLF, because some FASTA readers treat a lone CR as an ordinary byte.
+   A compressed input consists of complete gzip members (including BGZF members).
+   Reject trailing non-gzip garbage. Permit trailing NUL padding after the final
+   member; those transport padding bytes are not decompressed file content.
+   When FHCRC is present, verify the header CRC, as well as the member data
+   integrity checks; an incorrect FHCRC makes the input invalid.
 2. [R2] Require exactly one root-level header line matching `;~checksum:` (FASTA) or
    `#~checksum:` (GFA), with an unquoted key. Spaces may appear before the key
    only to match the root indentation of the other header lines, and before the
@@ -219,6 +229,10 @@ reader must agree on what the checksum line contains:
   without a decimal point (`1e3`). Plain scalars that look like dates or times are
   strings, exactly as written. Quote such a value to keep it as text. Writers
   quote every string that either YAML version would read as another type.
+  `%YAML` and `%TAG` directives and the `---` document-start marker are invalid
+  in metadata YAML, including when written on prefixed header lines. A quoted
+  string containing those characters remains ordinary text; this does not forbid
+  that text inside a value.
 - [R13] A numeric metadata value must be a finite number. YAML's `.nan`, `.inf`
   and `-.inf`, and `NaN` or `Infinity` written as a JSON extension, make the
   record invalid, as does a value that overflows to infinity. JSON cannot

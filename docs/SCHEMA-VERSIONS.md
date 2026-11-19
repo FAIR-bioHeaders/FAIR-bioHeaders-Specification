@@ -73,9 +73,55 @@ In YAML headers write the version quoted: `schemaVersion: '2.0'`. Unquoted, `2.0
 
 ## Values the schema does not check
 
-The schemas are the validation contract, but two requirements are not expressed by their
-keywords. They are normative for a conforming record and validator. A third, link schemes,
-is a recommendation that validators report as a warning.
+The schemas are the validation contract, but their keywords do not implement the
+complete reader contract. The requirements below remain normative; link-scheme
+advice is reported as a warning as described separately.
+
+### Select the cited contract before validating
+
+A generic JSON Schema validator given a particular schema does not itself
+implement V1–V4 selection. A conforming reader first selects the contract from
+the record's `schema` citation, then validates against those selected bytes;
+it does not validate every citation against today's schema. For example, an FHP
+or FHGFF3 record citing v0.4.0 and stating `schemaVersion: '1.2'` fails the
+selected older contract, even though a generic validator supplied v0.6.0 bytes
+may accept it. An unknown release, or a release without that header type,
+produces `unsupported-version`; it is never silently substituted with main.
+The complete V1–V7 rules below, including the explicit V7 draft boundary, remain
+unchanged.
+
+### Check canonical checksum encodings outside schema validation
+
+R4's canonical standard padded base64 rule applies to every standard checksum
+field: the root `checksum` in metadata-only JSON/YAML as well as carrier files,
+and each typed `derivedFrom[].checksum`. The final payload character before `=`
+must be one of `AEIMQUYcgkosw048`; decoding to 32 bytes and re-encoding must
+reproduce the exact original text. A value ending in `B=` can decode to the same
+bytes as one ending in `A=` but is noncanonical and invalid.
+
+Released schema patterns do not enforce those unused bits. Conforming readers
+therefore apply R4 in runtime validation even when no file bytes or parent file
+are available. This checks encoding, not the identity of an unavailable parent;
+file verification and parent-link comparison remain separate operations.
+Arbitrary extension data does not become a standard checksum field merely by
+using the word `checksum`. Frozen schema patterns and URL/version constraints
+are not tightened by this clarification; amendments to those schema bytes
+require their own classified contract cycle.
+
+### Classification of the November 2026 reader-policy decisions
+
+The [D8–D10 decision](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934)
+retains R16 as a non-retroactive producer-methodology clarification for the
+guidance-only v0.6.1 vehicle. V1–V4 selection and R4 canonical encoding are
+clarifications of existing reader obligations. Refusing YAML directives and
+document-start markers, rejecting trailing non-gzip garbage, permitting trailing
+NUL padding and requiring FHCRC verification are **newly selected format
+policy**, closing previously undecided cases under R12/R1. They belong to the
+format patch-publication process above, with immutable new case IDs; they are
+not retroactively claimed as outcomes defined by earlier releases. Source
+guidance and case delivery do not establish runtime implementation or authorize
+release publication. The [reader-policy corpus](../conformance/reader-policy/README.md)
+records the exact expectations and consumer handoff.
 
 ### Required values are non-empty
 

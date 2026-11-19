@@ -175,3 +175,30 @@ vector: the `fair-bioheaders` package from PyPI at the version pinned in
 `toolkit-pin.json`, which provides the `bioheaders` CLI and the `fhr-*`
 commands. To add a vector, edit the generator, rerun it, and commit the script
 together with its output.
+
+## November 2026 reader-policy handoff
+
+The current carrier suite has **319** active cases. Eight new R1 cases cover FHP
+and FHGFF3 lone-CR and mixed LF/CRLF/CR bytes, plus corresponding rejections whose
+stored checksum was calculated after incorrect LF normalization.
+
+R4 review found the historical synthetic parent placeholder (`B` repeated 43
+times followed by `=`) had nonzero unused base64 bits. The current manifest
+retires **78** affected expectations: **30 valid** cases and **48 invalid** cases.
+All 311 pre-packet payloads remain byte-identical at their historical paths;
+retired entries retain their historical outcomes. New IDs ending
+`-canonical-parent` use the same builders with a canonical synthetic parent and
+appropriately recomputed outer checksums. Regenerating the invalid cases too
+keeps their intended rejection predicate isolated from the unrelated parent
+encoding error. The old names are not live aliases: consumers use the actual
+new IDs and the [machine-readable crosswalk](reader-policy/retirement-crosswalk.json).
+The main suite's pinned published-toolkit gap list renames only the inherited
+FHP trailing-newline case through that crosswalk; it still names exactly three
+inherited gaps and changes neither the toolkit pin nor any bundled schema.
+
+The separate [reader-policy corpus](reader-policy/README.md) has **64** explicit
+JSON/YAML metadata, nested checksum, YAML directive and gzip cases. Its count is
+not added to the 319 carrier cases. It records both existing-rule clarifications
+and newly selected format policy. The recorded published 0.12.0 runtime run
+matches 35 and mismatches 29; those failures remain concrete consumer work,
+not accepted implementation outcomes or new broad tolerances.
