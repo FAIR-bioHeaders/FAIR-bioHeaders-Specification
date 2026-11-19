@@ -182,3 +182,39 @@ class ReaderPolicyTests(unittest.TestCase):
         self.assertTrue(policy.receipt_problems(expected, missing, 1, digest))
         self.assertTrue(policy.receipt_problems(expected, expected, 0, digest))
         self.assertTrue(policy.receipt_problems(expected, expected, 1, '0' * 64))
+
+    def test_all_active_valid_carrier_checksums_are_canonical(self):
+        manifest = json.loads((ROOT / 'conformance/manifest.json').read_text())
+        checked = parents = 0
+        for vector in manifest['vectors']:
+            if vector['expected'] != 'valid' or vector['format'] not in policy.shared.PREFIXES:
+                continue
+            data = (ROOT / 'conformance' / vector['file']).read_bytes()
+            if vector['compressed']:
+                data = policy.strict_gzip(data)
+            record = policy.header_record(data, vector['format'])
+            for pointer, value in policy.checksum_values(record):
+                self.assertTrue(policy.canonical(value), (vector['id'], pointer, value))
+                checked += 1
+                parents += pointer.startswith('derivedFrom/')
+        self.assertGreater(checked, 100)
+        self.assertGreater(parents, 30)
+
+    def test_second_parent_is_canonical_and_cardinality_is_the_only_schema_failure(self):
+        manifest = json.loads((ROOT / 'conformance/manifest.json').read_text())
+        vectors = {v['id']: v for v in manifest['vectors']}
+        for identity, valid in [('fhgff3-nested-parent-checksum-canonical-parent', True),
+                                ('fhgff3-two-annotates-canonical-parent', False)]:
+            vector = vectors[identity]
+            data = (ROOT / 'conformance' / vector['file']).read_bytes()
+            stated, computed = policy.shared.fhr_checksum(data, 'fhgff3')
+            self.assertEqual(stated, computed)
+            record = policy.header_record(data, 'fhgff3')
+            self.assertEqual(len(record['derivedFrom']), 2)
+            self.assertTrue(all(policy.canonical(p['checksum']) for p in record['derivedFrom']))
+            self.assertNotEqual(record['derivedFrom'][0]['checksum'], record['derivedFrom'][1]['checksum'])
+            validator = policy.shared.schema_validator(policy.shared.load_schema('v0.4.0', 'fhgff3.json'))
+            self.assertEqual(validator.is_valid(record), valid)
+            if not valid:
+                # Removing only the extra genome parent removes the rejection.
+                self.assertTrue(validator.is_valid(dict(record, derivedFrom=record['derivedFrom'][:1])))

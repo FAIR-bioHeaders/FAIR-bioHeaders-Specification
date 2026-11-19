@@ -2821,7 +2821,7 @@
         "R3"
       ],
       "description": "A second parent (a filtered FHGFF3 annotation); both nested checksums are covered by the root checksum. Canonical-parent replacement; historical payload preserved.",
-      "checksum": "q9auHwY3Z/x8U3t99jiCPirX5lRqGzpDByf+yp8z29s=",
+      "checksum": "wJ0lTg5+HRXwJNSKXOLnITzlb9zU6Mc/CbBIUNCYuhE=",
       "metadata": {
         "annotation": "Synthetic FHGFF3 conformance annotation",
         "version": "1.0.0"
@@ -5576,12 +5576,12 @@
           },
           {
             "headerType": "FHR",
-            "checksum": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=",
+            "checksum": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA=",
             "relationship": "annotates"
           }
         ],
         "documentation": "Synthetic FHGFF3 conformance vector; genome identifiers are placeholders.",
-        "checksum": "X9he9Ur7TCd1noNd6mhFjhgWBg+S8kOfqjjq5m7XzMM="
+        "checksum": "q4dBZP+YJFIdBIQv11UySFB/1xRIiM366BRERjwc0JY="
       }
     },
     {

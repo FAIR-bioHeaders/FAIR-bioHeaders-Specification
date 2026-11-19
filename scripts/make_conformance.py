@@ -791,6 +791,13 @@ def build():
 FHP_SCHEMA = f"{W3ID}fhp/{RELEASE}"
 PROTEOME = "Synthetic FHP conformance protein set"
 PARENT_CHECKSUM = "B" * 43 + "="  # Placeholder for a parent genome's checksum.
+
+
+def parent_placeholder(value):
+    """Preserve historical text; canonicalize case-specific replacement parents."""
+    if _CANONICAL_PARENT_PASS:
+        return base64.b64encode(base64.b64decode(value, validate=True)).decode('ascii')
+    return value
 # The FHP record as data, so the expected metadata of every vector is exact; the
 # header lines are written from it by ``yaml_lines`` (standard library only).
 FHP_RECORD = {
@@ -1142,7 +1149,7 @@ def build_fhgff3():
     VALID[-1]["expected_metadata"] = FHGFF3_EXPECTED
     fhgff3_valid("fhgff3-nested-parent-checksum",
                  fhgff3_lines(fhgff3_record(derivedFrom=[GENOME_LINK, {
-                     "headerType": "FHGFF3", "checksum": "C" * 43 + "=",
+                     "headerType": "FHGFF3", "checksum": parent_placeholder("C" * 43 + "="),
                      "relationship": "filteredFrom"}])),
                  ["G2", "R2", "R3"], "A second parent (a filtered FHGFF3 annotation); both nested "
                  "checksums are covered by the root checksum.")
@@ -1214,7 +1221,7 @@ def build_fhgff3():
                    "G2", "A genomeReference without its SeqCol digest.")
     fhgff3_invalid("fhgff3-two-annotates",
                    fhgff3_record(derivedFrom=[GENOME_LINK,
-                                              dict(GENOME_LINK, checksum="C" * 43 + "=")]),
+                                              dict(GENOME_LINK, checksum=parent_placeholder("C" * 43 + "="))]),
                    "G2", "Two derivedFrom items with the relationship annotates.")
     fhgff3_invalid("fhgff3-annotates-fhp",
                    fhgff3_record(derivedFrom=[dict(GENOME_LINK, headerType="FHP")]),
