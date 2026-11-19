@@ -14,6 +14,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSESSMENT = ROOT / "assessment"
@@ -42,7 +43,11 @@ def fixture_value(name, content):
             size = int.from_bytes(block[16:18], "little") + 1
             if size < 28 or size > 65536 or offset + size > len(content):
                 raise AssertionError(f"{name}: invalid BGZF block size")
-            gzip.decompress(block[:size])
+            decoder = zlib.decompressobj(31)
+            decoder.decompress(block[:size])
+            decoder.flush()
+            if not decoder.eof or decoder.unused_data or decoder.unconsumed_tail:
+                raise AssertionError(f"{name}: BSIZE must delimit exactly one gzip member")
             offset += size
         if content[-28:] != bytes.fromhex("1f8b08040000000000ff0600424302001b0003000000000000000000"):
             raise AssertionError(f"{name}: missing standard BGZF EOF block")
@@ -164,6 +169,20 @@ class AssessmentFixtureTests(unittest.TestCase):
                 if oracle == "bgzf-payload":
                     with self.assertRaisesRegex(AssertionError, "BGZF"):
                         fixture_value(name, gzip.compress(gzip.decompress(content), mtime=0))
+
+    def test_bgzf_block_size_cannot_swallow_the_next_member(self):
+        for name in ("edge/bgzf-refseq.gff.gz", "edge/stub.bam"):
+            with self.subTest(name=name):
+                content = (ASSESSMENT / name).read_bytes()
+                first_size = int.from_bytes(content[16:18], "little") + 1
+                second_size = int.from_bytes(content[first_size + 16:first_size + 18], "little") + 1
+                self.assertLessEqual(first_size + second_size, 65536)
+                mutated = bytearray(content)
+                mutated[16:18] = (first_size + second_size - 1).to_bytes(2, "little")
+                self.assertNotEqual(mutated, content)
+                self.assertEqual(gzip.decompress(mutated), gzip.decompress(content))
+                with self.assertRaisesRegex(AssertionError, "exactly one gzip member"):
+                    fixture_value(name, bytes(mutated))
 
 
 class AssessmentInstalledToolkitTests(unittest.TestCase):
