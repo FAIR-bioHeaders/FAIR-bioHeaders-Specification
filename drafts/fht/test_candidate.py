@@ -162,10 +162,11 @@ class ActualUnitControls(unittest.TestCase):
             return result, json.loads(receipt.read_text())
 
     def test_printed_fake_summary_cannot_spoof_actual_count(self):
-        result, data = self.run_suite(
-            "import unittest\nprint('Ran 114 tests in 1.2s\n\nOK\n')\n"
-            "class T(unittest.TestCase):\n def test_one(self): pass\n", 114)
-        self.assertIn("Ran 114 tests in 1.2s\n\nOK\n", result.stdout)
+        fake = "Ran 114 tests in 1.2s\n\nOK\n"
+        content = ("import unittest\nprint(" + repr(fake) + ")\n"
+                   "class T(unittest.TestCase):\n def test_one(self): pass\n")
+        result, data = self.run_suite(content, 114)
+        self.assertIn(fake, result.stdout)
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(data["testsRun"], 1)
 
