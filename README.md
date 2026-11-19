@@ -277,3 +277,7 @@ Machine-readable entries are maintained in
 [![License: MPL-2.0](https://img.shields.io/badge/License-MPL--2.0-blue.svg)](LICENSE)
 
 New project contributions from March 2025 onward use [MPL-2.0](LICENSE). David Molik left USDA in February 2025. Historical USDA public-domain material remains public domain within the United States; its original notice is preserved in LICENSE. Previously granted permissions and third-party terms remain intact. The project includes both historical material and subsequent MPL-2.0 contributions; file notices and history identify provenance.
+
+## Shared FHT publication candidate (repository-local preparation)
+
+This review branch proposes root FHT model/contract, selectors, vocabulary and typed HTML for v0.7.0; current/preRelease are explicitly v0.7.0. It is not a released contract or default support claim. Follow [the concrete preparation and gates](docs/FHT-PUBLICATION-CANDIDATE.md). Preserve frozen owning and released payloads. No merge, Pages, alias, tag or release authority is granted; final joint acceptance and installed-runtime evidence remain separate.

@@ -263,7 +263,7 @@ class ReleaseIdentityPreflightTests(unittest.TestCase):
                 shutil.copyfile(root / 'scripts' / name, candidate / 'scripts' / name)
             shutil.copyfile(root / 'references/released-identities.json', candidate / 'references/released-identities.json')
             shutil.copyfile(root / 'schemas/versions.json', candidate / 'schemas/versions.json')
-            for name in ('fhr.json', 'fhp.json', 'fhgff3.json'):
+            for name in ('fhr.json', 'fhp.json', 'fhgff3.json', 'fht.json'):
                 shutil.copyfile(root / name, candidate / name)
             command = [sys.executable, str(candidate / 'scripts/check_release.py'), '--identity-only']
             self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)

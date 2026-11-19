@@ -272,7 +272,25 @@ def generate_fhgff3():
     return apply_fhgff3_rules(generated, "FHGFF3")
 
 
-GENERATORS = {"fhr": generate, "fhp": generate_fhp, "fhgff3": generate_fhgff3}
+def generate_fht():
+    """Generate the proposed shared publication contract using accepted FHT rules.
+
+    The frozen owning generator supplies FHT postprocessing (including canonical
+    parent encodings); the shared candidate model changes selector annotations
+    only. The candidate check compares every other validation constraint with
+    the immutable owning contract, so no import/model drift is accepted silently.
+    """
+    import importlib.util
+    source = ROOT / 'drafts/fht/upstream/json-schema-generator.py'
+    spec = importlib.util.spec_from_file_location('accepted_fht_generator', source)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.ROOT = ROOT
+    module.SCHEMA_ID = 'https://w3id.org/fair-bioheaders/fht/v0.7.0'
+    return module.generate()
+
+
+GENERATORS = {"fhr": generate, "fhp": generate_fhp, "fhgff3": generate_fhgff3, "fht": generate_fht}
 
 
 def main():

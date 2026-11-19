@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Proposed v0.7.0 publication candidate (not released)
+
+- Prepare generated FHT contract `1.0`, stable proposed identity, shared registry
+  and V1–V7 selection integration under an explicit v0.7.0 preRelease marker.
+- Add typed HTML/vocabulary, seven synthetic counterpart pairs and a separately
+  executed 93-case immutable-ID release crosswalk, preserving all owning and
+  historical released fixture bytes. No FHT JSON-LD/default-toolkit claim.
+- Joint acceptance, arithmetic-capable installed receipts, the preceding v0.6.1
+  stage, final metadata and actual tag/release/alias/publication remain gated;
+  see docs/FHT-PUBLICATION-CANDIDATE.md.
+
+
 - Record adopted D8–D10 dispositions (#257/#258/#267): retain non-retroactive R16
   producer-methodology guidance for v0.6.1; clarify schema selection and canonical
   root/nested checksum runtime duties without changing published schema bytes.

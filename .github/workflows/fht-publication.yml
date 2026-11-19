@@ -1,0 +1,63 @@
+name: FHT proposed release integration
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  candidate:
+    name: FHT publication constraints and 93-case absorption
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Install explicit reference dependencies
+        run: python -m pip install -r requirements-linkml.txt -r requirements-jsonld.txt
+      - name: Check independently derived constraints, selectors, bytes and typed examples
+        run: python -m unittest discover -s tests -p test_fht_publication.py -v
+      - name: Execute every new counterpart and regenerate all seven pairs
+        run: python scripts/fht_publication.py --examples > fht-publication-receipt.json
+      - name: Verify future identity and generated LinkML/vocabulary
+        run: |
+          python scripts/check_release.py --identity-only
+          python scripts/check_linkml.py
+          python scripts/make_jsonld.py --check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: fht-publication-reference-only
+          path: fht-publication-receipt.json
+          if-no-files-found: error
+
+  browser:
+    name: FHT proposed typed binding in Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+      - name: Install the pinned browser separately from source
+        run: |
+          npm install --prefix "$RUNNER_TEMP/fht-browser" --ignore-scripts playwright@1.65.0
+          "$RUNNER_TEMP/fht-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Check lossless integer/type controls and all seven proposed pairs
+        env:
+          FHT_PLAYWRIGHT_MODULE: ${{ runner.temp }}/fht-browser/node_modules/playwright
+        run: |
+          node --test drafts/fht/upstream/tests/test_browser_integers.mjs
+          node scripts/check_fht_publication_browser.mjs

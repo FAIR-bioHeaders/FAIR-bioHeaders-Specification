@@ -24,6 +24,31 @@ fhr:Agent a rdfs:Class ;
     skos:closeMatch dcterms:Agent ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
+fhr:AssemblyAuthor a rdfs:Class ;
+    rdfs:label "AssemblyAuthor"@en ;
+    rdfs:comment "An assembly author with a supplied non-blank name (Q4 follow-up). The assemblyAuthor list stays optional; when present, every item names its person or organization."@en ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:Completeness a rdfs:Class ;
+    rdfs:label "Completeness"@en ;
+    rdfs:comment "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10 or enterobacterales_odb12.2)"@en ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:DerivedFrom a rdfs:Class ;
+    rdfs:label "DerivedFrom"@en ;
+    rdfs:comment "Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema FR-003). Provisional until the relationship vocabulary is decided (FAIR-bioHeaders-Specification#54)."@en ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:MetadataAuthor a rdfs:Class ;
+    rdfs:label "MetadataAuthor"@en ;
+    rdfs:comment "A metadata author with a supplied non-blank name, under the approved Q4 follow-up. Optional assemblyAuthor items follow the same rule (AssemblyAuthor)."@en ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:Sample a rdfs:Class ;
+    rdfs:label "Sample"@en ;
+    rdfs:comment "One supplied biological sample context. Pooled material is represented by repeated items, not by one fabricated uniform value."@en ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
 fhr:VitalStats a rdfs:Class ;
     rdfs:label "VitalStats"@en ;
     rdfs:comment "General statistics about the genome assembly, computed as FORMAT.md R16 defines. N50, N90, L50 and L90 are contig statistics; the scaffold* variants are the scaffold statistics."@en ;
@@ -33,9 +58,16 @@ fhr:VitalStats a rdfs:Class ;
 fhr:accessionID a rdf:Property ;
     rdfs:label "accessionID"@en ;
     rdfs:comment "Genome assembly accession"@en ;
-    sdo:domainIncludes sdo:Dataset ;
+    sdo:domainIncludes sdo:Dataset, fhr:DerivedFrom ;
     sdo:rangeIncludes sdo:PropertyValue ;
     rdfs:subPropertyOf sdo:identifier ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:assemblyAuthor a rdf:Property ;
+    rdfs:label "assemblyAuthor"@en ;
+    rdfs:comment "Attributions for the assembly or extraction, when supplied"@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes fhr:AssemblyAuthor ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:assemblyProtocol a rdf:Property ;
@@ -52,10 +84,31 @@ fhr:assemblySoftware a rdf:Property ;
     sdo:rangeIncludes sdo:Text, sdo:SoftwareApplication ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
+fhr:assemblyType a rdf:Property ;
+    rdfs:label "assemblyType"@en ;
+    rdfs:comment "Construction case for the whole described transcript set"@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:averageTranscriptLength a rdf:Property ;
+    rdfs:label "averageTranscriptLength"@en ;
+    rdfs:comment "Mean number of sequence symbols per record, excluding deflines and line endings"@en ;
+    sdo:domainIncludes fhr:VitalStats ;
+    sdo:rangeIncludes sdo:Number ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:buscoVersion a rdf:Property ;
+    rdfs:label "buscoVersion"@en ;
+    rdfs:comment "Version of BUSCO"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
 fhr:checksum a rdf:Property ;
     rdfs:label "checksum"@en ;
     rdfs:comment "sha2-512/256 checksum value for hashing"@en ;
-    sdo:domainIncludes sdo:Dataset ;
+    sdo:domainIncludes sdo:Dataset, fhr:DerivedFrom ;
     sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
@@ -66,11 +119,67 @@ fhr:commandLineOption a rdf:Property ;
     sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
+fhr:completeDuplicated a rdf:Property ;
+    rdfs:label "completeDuplicated"@en ;
+    rdfs:comment "Complete duplicated BUSCOs (D)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:completeness a rdf:Property ;
+    rdfs:label "completeness"@en ;
+    rdfs:comment "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus one or more dot-separated numeric version components, such as hymenoptera_odb10 or hymenoptera_odb12.2), as widened by shared #170 for v0.6.0. Do not rename or coerce a measured lineage to fit the pattern; if a measured value cannot be represented, omit completeness and keep the lineage and counts in documentation. When completeSingle, completeDuplicated, fragmented, missing and total are all supplied as integers, the four mutually exclusive component counts must sum exactly to total (C1). This cross-field arithmetic is checked by the owning reader, not expressible in standard JSON Schema."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes fhr:Completeness ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:completeSingle a rdf:Property ;
+    rdfs:label "completeSingle"@en ;
+    rdfs:comment "Complete single-copy BUSCOs (S)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:condition a rdf:Property ;
+    rdfs:label "condition"@en ;
+    rdfs:comment "Supplied treatment, disease or other condition context"@en ;
+    sdo:domainIncludes fhr:Sample ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:derivedFrom a rdf:Property ;
+    rdfs:label "derivedFrom"@en ;
+    rdfs:comment "Reviewed FAIR-bioHeaders parent-file relationships only. This contract permits an FHT filteredFrom parent or an FHR transcribedFrom parent when the transcript bases were extracted from that genome; genome guidance alone never justifies transcribedFrom. Annotation coordinates and other sources stay in relatedLink/documentation until the shared relationship vocabulary is decided (#54). A genome-guided set whose final sequences were actually extracted from that genome also uses FHR transcribedFrom; construction history alone does not establish the source of its bases. The shared DerivedFrom object requires the parent's FHR-family checksum; an accession alone is not a verified family link. Identical parent entries are not allowed. A parent checksum uses canonical padded base64 for the 32-byte SHA-512/256 digest."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes fhr:DerivedFrom ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:developmentalStage a rdf:Property ;
+    rdfs:label "developmentalStage"@en ;
+    rdfs:comment "Supplied developmental stage or life stage"@en ;
+    sdo:domainIncludes fhr:Sample ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:fragmented a rdf:Property ;
+    rdfs:label "fragmented"@en ;
+    rdfs:comment "Fragmented BUSCOs (F)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
 fhr:gcContent a rdf:Property ;
     rdfs:label "gcContent"@en ;
     rdfs:comment "GC content as a percentage from 0 to 100, not a fraction (write 42.0 for 42 percent; 0.42 means 0.42 percent); N and other ambiguity letters are excluded from numerator and denominator (see FORMAT.md R16)"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Number ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:headerType a rdf:Property ;
+    rdfs:label "headerType"@en ;
+    rdfs:comment "FAIR-bioHeaders type of the parent file"@en ;
+    sdo:domainIncludes fhr:DerivedFrom ;
+    sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:instrument a rdf:Property ;
@@ -94,6 +203,20 @@ fhr:L90 a rdf:Property ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
+fhr:libraryStrategy a rdf:Property ;
+    rdfs:label "libraryStrategy"@en ;
+    rdfs:comment "One supplied library strategy term for the whole set, using the producer's ENA term where applicable. Omit when experiments differ or the value is unknown; this slot is not an ENA-controlled enum."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:lineageDataset a rdf:Property ;
+    rdfs:label "lineageDataset"@en ;
+    rdfs:comment "BUSCO lineage dataset, including its version suffix; one or more dot-separated numeric version components are allowed, as BUSCO datasets are re-released (for example odb12.2)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
 fhr:masking a rdf:Property ;
     rdfs:label "masking"@en ;
     rdfs:comment "Masking applied to the genome assembly"@en ;
@@ -105,7 +228,28 @@ fhr:metadataAuthor a rdf:Property ;
     rdfs:label "metadataAuthor"@en ;
     rdfs:comment "Authors of the FHR instance"@en ;
     sdo:domainIncludes sdo:Dataset ;
-    sdo:rangeIncludes sdo:Person, sdo:Organization, fhr:Agent ;
+    sdo:rangeIncludes sdo:Person, sdo:Organization, fhr:Agent, fhr:MetadataAuthor ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:missing a rdf:Property ;
+    rdfs:label "missing"@en ;
+    rdfs:comment "Missing BUSCOs (M)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:mode a rdf:Property ;
+    rdfs:label "mode"@en ;
+    rdfs:comment "BUSCO mode"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:moleculeType a rdf:Property ;
+    rdfs:label "moleculeType"@en ;
+    rdfs:comment "One producer-supported biological molecule classification for the whole described set. Use mixed for a known heterogeneous set of biological RNA classes; omit when the classification is unknown. total RNA and cDNA are preparation contexts, not biological classes or evidence of a mixture."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:N50 a rdf:Property ;
@@ -125,7 +269,7 @@ fhr:N90 a rdf:Property ;
 fhr:nameType a rdf:Property ;
     rdfs:label "nameType"@en ;
     rdfs:comment "Whether the author is a person (Personal) or an organization (Organizational), as DataCite nameType"@en ;
-    sdo:domainIncludes fhr:Agent ;
+    sdo:domainIncludes fhr:Agent, fhr:AssemblyAuthor, fhr:MetadataAuthor ;
     sdo:rangeIncludes sdo:Text ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
@@ -155,6 +299,20 @@ fhr:relatedLink a rdf:Property ;
     rdfs:comment "Related URLs to the genome"@en ;
     sdo:domainIncludes sdo:Dataset ;
     sdo:rangeIncludes sdo:URL ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:relationship a rdf:Property ;
+    rdfs:label "relationship"@en ;
+    rdfs:comment "How this file relates to the parent. Provisional vocabulary: a PROV-O or Relation Ontology mapping is pending a maintainer decision (FAIR-bioHeaders-Specification#54)."@en ;
+    sdo:domainIncludes fhr:DerivedFrom ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:sample a rdf:Property ;
+    rdfs:label "sample"@en ;
+    rdfs:comment "Supplied biological sample context. Repeat the object for pooled material; each item carries only the values actually known for that source. This is not a complete BioSample record and does not establish a uniform pooled identity."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes fhr:Sample ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:scaffoldL50 a rdf:Property ;
@@ -195,14 +353,63 @@ fhr:schemaVersion a rdf:Property ;
 fhr:seqcol_id a rdf:Property ;
     rdfs:label "seqcol_id"@en ;
     rdfs:comment "Unprefixed refget sequence collection top-level digest (sha512t24u)."@en ;
-    sdo:domainIncludes sdo:Dataset ;
+    sdo:domainIncludes sdo:Dataset, fhr:DerivedFrom ;
     sdo:rangeIncludes sdo:Text ;
     rdfs:subPropertyOf sdo:identifier ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:sequencingRuns a rdf:Property ;
+    rdfs:label "sequencingRuns"@en ;
+    rdfs:comment "Actual SRA/ENA/DDBJ run accessions supporting the set. An SRS sample accession is not a run and must not be substituted."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:strain a rdf:Property ;
+    rdfs:label "strain"@en ;
+    rdfs:comment "Supplied strain, breed or cultivar"@en ;
+    sdo:domainIncludes fhr:Sample ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:strandedness a rdf:Property ;
+    rdfs:label "strandedness"@en ;
+    rdfs:comment "Supplied library strandedness under the FHT read/read-1 convention: forward means the single read or read 1 is sense relative to the originating transcript, reverse means antisense. Unknown or mixed protocols are omitted, never defaulted to unstranded."@en ;
+    sdo:domainIncludes sdo:Dataset ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:tissue a rdf:Property ;
+    rdfs:label "tissue"@en ;
+    rdfs:comment "Supplied tissue or anatomical source label"@en ;
+    sdo:domainIncludes fhr:Sample ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:tissueIdentifier a rdf:Property ;
+    rdfs:label "tissueIdentifier"@en ;
+    rdfs:comment "CURIE for the supplied tissue concept, preferably UBERON, PO or CL. The pattern checks CURIE form, not that the identifier resolves."@en ;
+    sdo:domainIncludes fhr:Sample ;
+    sdo:rangeIncludes sdo:Text ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:total a rdf:Property ;
+    rdfs:label "total"@en ;
+    rdfs:comment "Number of BUSCO groups searched (n)"@en ;
+    sdo:domainIncludes fhr:Completeness ;
+    sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
 
 fhr:totalBasePairs a rdf:Property ;
     rdfs:label "totalBasePairs"@en ;
     rdfs:comment "Total base pairs of the genome assembly, the summed scaffold length including N and other ambiguity letters (see FORMAT.md R16)"@en ;
+    sdo:domainIncludes fhr:VitalStats ;
+    sdo:rangeIncludes sdo:Integer ;
+    rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .
+
+fhr:totalTranscripts a rdf:Property ;
+    rdfs:label "totalTranscripts"@en ;
+    rdfs:comment "Number of FASTA records, including isoforms"@en ;
     sdo:domainIncludes fhr:VitalStats ;
     sdo:rangeIncludes sdo:Integer ;
     rdfs:isDefinedBy <https://w3id.org/fair-bioheaders/terms> .

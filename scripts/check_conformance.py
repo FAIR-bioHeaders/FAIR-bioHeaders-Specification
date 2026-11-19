@@ -61,11 +61,11 @@ REGISTRY_PATH = ROOT / "schemas" / "versions.json"
 # as it was called before; the old URLs stay supported aliases. The ref may have
 # several path segments (refs/heads/main): only main or a release tag is supported (V4).
 RAW_SCHEMA = re.compile(r"https://raw\.githubusercontent\.com/FAIR-bioHeaders/"
-                        r"(?:FHR|FAIR-bioHeaders)-Specification/(.+)/(fhr|fhp|fhgff3)\.json")
-W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3)/"
+                        r"(?:FHR|FAIR-bioHeaders)-Specification/(.+)/(fhr|fhp|fhgff3|fht)\.json")
+W3ID_SCHEMA = re.compile(r"https://w3id\.org/fair-bioheaders/(fhr|fhp|fhgff3|fht)/"
                          r"(v[0-9]+\.[0-9]+\.[0-9]+)/?")
 RELEASE_TAG = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+")
-TYPE_NAMES = {"fhr": "FHR", "fhp": "FHP", "fhgff3": "FHGFF3"}
+TYPE_NAMES = {"fhr": "FHR", "fhp": "FHP", "fhgff3": "FHGFF3", "fht": "FHT"}
 UNSUPPORTED_VERSION = "unsupported schema version"
 
 
@@ -76,6 +76,11 @@ def select_schema(value, registry=None):
     if isinstance(value, str):
         raw, w3id = RAW_SCHEMA.fullmatch(value), W3ID_SCHEMA.fullmatch(value)
         if raw:
+            # The historical FHR repository aliases existing released types,
+            # but no FHT artifact/compatibility mirror exists there. A new FHT
+            # contract must not manufacture authority by sharing their regex.
+            if raw.group(2) == 'fht' and not value.startswith('https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/'):
+                return 'FHR', 'main', registry['files']['FHR']  # V5, not FHT.
             ref, header_type = raw.group(1), TYPE_NAMES[raw.group(2)]
         elif w3id:
             ref, header_type = w3id.group(2), TYPE_NAMES[w3id.group(1)]
@@ -127,7 +132,7 @@ def generated_files(directory):
     return {
         path.relative_to(directory).as_posix(): path.read_bytes()
         for path in sorted(directory.rglob("*"))
-        if path.is_file() and (path.name == "manifest.json" or path.parent.name in {"valid", "invalid"})
+        if path.is_file() and not path.is_relative_to(directory / "fht-v0.7.0") and (path.name == "manifest.json" or path.parent.name in {"valid", "invalid"})
     }
 
 

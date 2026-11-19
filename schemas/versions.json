@@ -1,16 +1,18 @@
 {
   "description": "FAIR-bioHeaders schema versions by FAIR-bioHeaders-Specification release (docs/SCHEMA-VERSIONS.md). 'current' is the release the schemas in this working tree belong to: the release being prepared on a release line, or the latest release on main. 'preRelease' is null for a published release; while preparing a release before its tag exists it names the same tag as 'current', so the release-identity check can skip that explicit case instead of treating a typo as a shallow checkout.",
-  "current": "v0.6.0",
-  "preRelease": null,
+  "current": "v0.7.0",
+  "preRelease": "v0.7.0",
   "files": {
     "FHR": "fhr.json",
     "FHP": "fhp.json",
-    "FHGFF3": "fhgff3.json"
+    "FHGFF3": "fhgff3.json",
+    "FHT": "fht.json"
   },
   "w3id": {
     "FHR": "fhr",
     "FHP": "fhp",
-    "FHGFF3": "fhgff3"
+    "FHGFF3": "fhgff3",
+    "FHT": "fht"
   },
   "releases": {
     "v0.3.0": {
@@ -43,6 +45,18 @@
       "FHR": "2.1",
       "FHP": "1.2",
       "FHGFF3": "1.2"
+    },
+    "v0.7.0": {
+      "FHR": "2.1",
+      "FHP": "1.2",
+      "FHGFF3": "1.2",
+      "FHT": "1.0"
     }
+  },
+  "candidate": {
+    "status": "Unpublished review candidate; not joint acceptance or release authority",
+    "previousPublished": "v0.6.0",
+    "jointAcceptance": false,
+    "aliasesCreated": false
   }
 }

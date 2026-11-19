@@ -64,8 +64,8 @@ class SchemaVersionTests(unittest.TestCase):
         if pre_release is not None:
             self.assertEqual(pre_release, REGISTRY["current"])
             self.assertRegex(pre_release, r"^v[0-9]+\.[0-9]+\.[0-9]+$")
-        self.assertEqual(set(REGISTRY["files"]), {"FHR", "FHP", "FHGFF3"})
-        self.assertEqual(REGISTRY["w3id"], {"FHR": "fhr", "FHP": "fhp", "FHGFF3": "fhgff3"})
+        self.assertEqual(set(REGISTRY["files"]), {"FHR", "FHP", "FHGFF3", "FHT"})
+        self.assertEqual(REGISTRY["w3id"], {"FHR": "fhr", "FHP": "fhp", "FHGFF3": "fhgff3", "FHT": "fht"})
         for tag, types in REGISTRY["releases"].items():
             self.assertRegex(tag, r"^v[0-9]+\.[0-9]+\.[0-9]+$")
             for header_type, version in types.items():
@@ -141,7 +141,10 @@ class SchemaVersionTests(unittest.TestCase):
 
     def test_examples_cite_the_current_release(self):
         """FR-010, SC-003: examples cite their type's versioned URL and version."""
-        current = REGISTRY["current"]
+        # Historical released examples remain byte-identical while a new
+        # publication candidate is under review; new FHT examples have their
+        # own checksum/type/selector round-trip checks.
+        current = REGISTRY.get('candidate', {}).get('previousPublished', REGISTRY['current']) if REGISTRY.get('preRelease') else REGISTRY['current']
         releases = REGISTRY["releases"][current]
         urls = {f"https://w3id.org/fair-bioheaders/{segment}/{current}": header_type
                 for header_type, segment in REGISTRY["w3id"].items()}
@@ -150,6 +153,8 @@ class SchemaVersionTests(unittest.TestCase):
             if path.suffix not in {".json", ".yaml", ".fasta", ".gfa", ".gff3"} or \
                     path.name == "no-header.gff3":
                 continue
+            if path.is_relative_to(ROOT / 'examples' / 'fht'):
+                continue  # Executed independently by test_fht_publication.py.
             text = path.read_text(encoding="utf-8")
             with self.subTest(example=path.name):
                 self.assertNotIn("FHR-Specification/main/", text)

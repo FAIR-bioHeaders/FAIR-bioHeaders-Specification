@@ -106,7 +106,7 @@ class ExtensionFieldTests(unittest.TestCase):
         self.assertEqual(REGISTRY["releases"]["v0.5.0"],
                          {"FHR": "2.1", "FHP": "1.1", "FHGFF3": "1.1"})
         self.assertEqual(REGISTRY["releases"][REGISTRY["current"]],
-                         {"FHR": "2.1", "FHP": "1.2", "FHGFF3": "1.2"})
+                         {"FHR": "2.1", "FHP": "1.2", "FHGFF3": "1.2", "FHT": "1.0"})
         for header_type, (name, _, first, new, _) in TYPES.items():
             with self.subTest(header_type=header_type):
                 schema = load(name)

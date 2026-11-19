@@ -341,7 +341,11 @@ def git_blob_sha1(path: Path) -> str:
 def load_registry():
     """Current release per type: (contract schemaVersion, fixed schema URL, release tag)."""
     registry = json.loads(VERSIONS_PATH.read_text(encoding="utf-8"))
-    release = registry["current"]
+    release = registry['current']
+    if registry.get('preRelease'):
+        release = registry.get('candidate', {}).get('previousPublished')
+        if not isinstance(release, str) or not release or release == registry['current'] or release not in registry['releases']:
+            raise ValueError('CEDAR preRelease requires an explicit registered previousPublished authority; never promote candidate forms')
     out = {}
     for header_type, stem in TYPES.items():
         version = registry["releases"][release][header_type]

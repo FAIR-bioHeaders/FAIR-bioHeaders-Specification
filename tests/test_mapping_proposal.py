@@ -186,7 +186,8 @@ class MappingProposalTests(unittest.TestCase):
 
     def test_adoption_status_preserves_identity_without_official_or_fht_claims(self):
         registry = json.loads((ROOT / "schemas/versions.json").read_text())
-        self.assertNotIn("FHT", registry["files"])
+        self.assertNotIn("FHT", registry["releases"]["v0.6.0"])
+        self.assertEqual(registry["preRelease"], "v0.7.0")
         self.assertEqual(self.table["status"], "adopted")
         self.assertEqual(self.status["status"], "adopted")
         self.assertEqual(self.status["targets"]["dcmi-qualified"]["status"], "adopted-foundation")

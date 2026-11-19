@@ -166,12 +166,12 @@ def header_type(stem):
 
 
 def contract_version(stem):
-    return REGISTRY["releases"][REGISTRY["current"]][header_type(stem)]
+    return REGISTRY['releases']['v0.6.0'][header_type(stem)]
 
 
 def contract_url(stem):
     return (f"https://w3id.org/fair-bioheaders/{REGISTRY['w3id'][header_type(stem)]}"
-            f"/{REGISTRY['current']}")
+            '/v0.6.0')
 
 
 def to_plain(value):
@@ -1169,6 +1169,25 @@ class CedarToolkitPinTests(unittest.TestCase):
             text = (TEMPLATE_DIR / f"{stem}.json").read_text(encoding="utf-8")
             self.assertIsNone(re.search(r"fair-bioheaders(==| )\d|\b0\.1[0-9]\.\d\b", text),
                               f"{stem}: template text names a toolkit release")
+
+
+class CedarPreReleaseGuardTests(unittest.TestCase):
+    def test_missing_or_invalid_previous_publication_never_defaults_to_candidate(self):
+        from unittest.mock import patch
+        for previous in (None, '', 'v9.9.9', 'v0.7.0'):
+            with self.subTest(previous=previous), tempfile.TemporaryDirectory() as directory:
+                registry = json.loads((ROOT / 'schemas/versions.json').read_text())
+                registry['candidate']['previousPublished'] = previous
+                location = Path(directory) / 'versions.json'
+                location.write_text(json.dumps(registry))
+                with patch.object(make_cedar, 'VERSIONS_PATH', location):
+                    with self.assertRaisesRegex(ValueError, 'previousPublished'):
+                        make_cedar.load_registry()
+
+    def test_current_forms_remain_at_independently_recorded_published_release(self):
+        actual = make_cedar.load_registry()
+        self.assertEqual({row['release'] for row in actual.values()}, {'v0.6.0'})
+        self.assertEqual(actual['fhr']['url'], 'https://w3id.org/fair-bioheaders/fhr/v0.6.0')
 
 
 if __name__ == "__main__":

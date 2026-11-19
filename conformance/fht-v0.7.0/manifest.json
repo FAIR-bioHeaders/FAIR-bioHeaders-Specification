@@ -1,0 +1,1661 @@
+{
+  "manifestVersion": 1,
+  "status": "Unpublished v0.7.0 publication candidate; no installed/default support claim",
+  "sourceCommit": "4ddda69cbcbb3920a06ab657173c0198672cd7bf",
+  "sourceManifestSha256": "d0147d3ad97c0fad0ede94ae76340632a86a160f566b01129e592e643fd77492",
+  "historicalShared": "291 immutable v0.6.0 cases remain separate; current shared carrier lane is also unchanged",
+  "sourceCount": 93,
+  "vectors": [
+    {
+      "id": "fht-v070-fasta-lf",
+      "file": "valid/fht-v070-fasta-lf.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-lf",
+      "sourceFile": "valid/fht-fasta-lf.fht.fasta",
+      "sourceSha256": "4c61416b26aa595a879e5d0dd3f16d33f4b4bced93e38b115eebbf3b879784ba",
+      "sha256": "87231cf3fce1076bd9541ec72ae371a65df4b9045b2be0e33668b82295a78c4f",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R7",
+        "R8",
+        "R10",
+        "R12"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-crlf",
+      "file": "valid/fht-v070-fasta-crlf.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-crlf",
+      "sourceFile": "valid/fht-fasta-crlf.fht.fasta",
+      "sourceSha256": "a6da68f885bed2ed3c0976a495fc34dbc9800a65b13f93f23616efb4377bbb41",
+      "sha256": "efe0c5f9eacf62364951210ac300f50deeb2e9efdac19041198d2c09a63ab725",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-cr",
+      "file": "valid/fht-v070-fasta-cr.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-cr",
+      "sourceFile": "valid/fht-fasta-cr.fht.fasta",
+      "sourceSha256": "8249b2f39610cbd08782c96b714302f0f14dcc9eead933d6b3c4e8576a062110",
+      "sha256": "98bf51ce1a9f918b5e9d8b00f0555ccda12b3dfe50fab28eca7e7ebf149edbb1",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-mixed-endings",
+      "file": "valid/fht-v070-fasta-mixed-endings.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-mixed-endings",
+      "sourceFile": "valid/fht-fasta-mixed-endings.fht.fasta",
+      "sourceSha256": "3d88cf286aa9ef674eeb9b262c56515c8a20fd068dd35fecfe08573b24cfdff7",
+      "sha256": "23245edd6b64469294dec493dfe85b20d8fb3ff22f65851753085766e17331d4",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-no-final-newline",
+      "file": "valid/fht-v070-fasta-no-final-newline.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-no-final-newline",
+      "sourceFile": "valid/fht-fasta-no-final-newline.fht.fasta",
+      "sourceSha256": "be6c287ade57040d0aafdd59246a44a218764a337d87b3565c442cf973da83b2",
+      "sha256": "05432c6d58e953d3ffccf16294b06022309671ed6cd0961cd6c14cedb2bd836e",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-cdna",
+      "file": "valid/fht-v070-fasta-cdna.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-cdna",
+      "sourceFile": "valid/fht-fasta-cdna.fht.fasta",
+      "sourceSha256": "46319756762662631fa1acd633ef685de996fcc256dd8cd8066aef6838c43b5b",
+      "sha256": "1d684ec9d69ccc4373a91f29a45b41a917feed5dd216bae77218062b854c520c",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "R1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-minimal",
+      "file": "valid/fht-v070-fasta-minimal.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-minimal",
+      "sourceFile": "valid/fht-fasta-minimal.fht.fasta",
+      "sourceSha256": "0cf3cf2d7dd7df080b29bdec37c5258f1e61f936e50df02f5181248c3b8c3086",
+      "sha256": "b9b94a75d615e93d649bf24a65b77787d2538c7c45f6f068098003458eea532f",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-comments-and-blank-lines",
+      "file": "valid/fht-v070-fasta-comments-and-blank-lines.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-comments-and-blank-lines",
+      "sourceFile": "valid/fht-fasta-comments-and-blank-lines.fht.fasta",
+      "sourceSha256": "8d5c302401913f5dc92091fd8d83c07a750078aa5482827febc6b2ed6506ffa8",
+      "sha256": "c50c6c2418f328c78bef45fdcc83bb8399094f6a7a3589869418bd5eb885ec7f",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R3",
+        "R10"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-root-indented",
+      "file": "valid/fht-v070-fasta-root-indented.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-root-indented",
+      "sourceFile": "valid/fht-fasta-root-indented.fht.fasta",
+      "sourceSha256": "fe0a83d6dda4f978dbc97a98ff2d914b6f3527139b220441faef1cb76921cc54",
+      "sha256": "0766df1c25bd7d28605f9041957638da3912ee5547ec6dbeb16e5ffbeee1782e",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R2"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-space-before-colon",
+      "file": "valid/fht-v070-fasta-space-before-colon.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-space-before-colon",
+      "sourceFile": "valid/fht-fasta-space-before-colon.fht.fasta",
+      "sourceSha256": "9424448bdc008e6a1cb1dafb28e6bf4c86d9ea84efa1578f4429d436ea249356",
+      "sha256": "bf061c7cdfbce6ded45ff0d7388c89039e4d4ecec060400dd22154746790fca5",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R2"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-first",
+      "file": "valid/fht-v070-fasta-checksum-first.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-checksum-first",
+      "sourceFile": "valid/fht-fasta-checksum-first.fht.fasta",
+      "sourceSha256": "882d2ce6abc0fc358cdf50ff2828078061f486f4de0dc5b9f5dddebcedf11050",
+      "sha256": "1f29ea671402d7e03dea83c97cab8d8de6c21b641e99a37788060738d9d7f5ee",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R3"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-trailing-spaces",
+      "file": "valid/fht-v070-fasta-checksum-trailing-spaces.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-checksum-trailing-spaces",
+      "sourceFile": "valid/fht-fasta-checksum-trailing-spaces.fht.fasta",
+      "sourceSha256": "35b7e2b979d09b2869f79f7f312a4e4b3cbeee82b21eb2290cadfd6037979ce4",
+      "sha256": "47e13ae8bc0e4e89da0c6c3a379731a5c17cf04cc477d36f40f05d6b6c5bcb78",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-quoted-value",
+      "file": "valid/fht-v070-fasta-quoted-value.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-quoted-value",
+      "sourceFile": "valid/fht-fasta-quoted-value.fht.fasta",
+      "sourceSha256": "68c2028bf0c06be37382ecb435cb4250e1895b0b442f8349ae8a2e42c5d7b2c6",
+      "sha256": "428e7979895d37e6361afec80cafcaec66c571c84a32ae631e6c02e4693079ae",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R2",
+        "R5"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-nested-checksum",
+      "file": "valid/fht-v070-fasta-nested-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-nested-checksum",
+      "sourceFile": "valid/fht-fasta-nested-checksum.fht.fasta",
+      "sourceSha256": "3137306adcaf4df7e16b66a236e7fbac6aeadd6050ae6bc349fd725a663b86fc",
+      "sha256": "0ff3971cb3a5c0aa40db3a22913c39dc36126f75d8497dbd316046a3c7bc4295",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R2",
+        "R3",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-escaped-record-markers",
+      "file": "valid/fht-v070-fasta-escaped-record-markers.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-escaped-record-markers",
+      "sourceFile": "valid/fht-fasta-escaped-record-markers.fht.fasta",
+      "sourceSha256": "a0dcfe6ce5c3485ed52de0d3377d15ba294079204bf38c7b63f4e793e920b5b7",
+      "sha256": "8a190a84ae266f05413a4a9f0c5d542deb5a0a469b0aa7290ad92b399fa5a304",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R11",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-utf8-metadata",
+      "file": "valid/fht-v070-fasta-utf8-metadata.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-utf8-metadata",
+      "sourceFile": "valid/fht-fasta-utf8-metadata.fht.fasta",
+      "sourceSha256": "478ddbbd62c0ce8318447089e5bcecf1cc295256429837b020665ac41d262069",
+      "sha256": "fd3824c5d0b7b9b2c1dbbd9b8ca576914c0ca6ee854b56171c09d2b7dcced805",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R6",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-yaml-plain-date",
+      "file": "valid/fht-v070-fasta-yaml-plain-date.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-yaml-plain-date",
+      "sourceFile": "valid/fht-fasta-yaml-plain-date.fht.fasta",
+      "sourceSha256": "5560024f58b1f3301188f08b916e12e1c72770e94430931fd7609787d9e9764a",
+      "sha256": "b7db37ee6a503352b1c4b07c0736af89b17165ebbcb26279736e8f266dc80805",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R12",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-extension-fields",
+      "file": "valid/fht-v070-fasta-extension-fields.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-extension-fields",
+      "sourceFile": "valid/fht-fasta-extension-fields.fht.fasta",
+      "sourceSha256": "5cbec7e4c6c8d9eb62d8a435afc4da2fa529e9c7e343f29804e0bcc021e12953",
+      "sha256": "e5de3ae69aa5814b98945789e6f2bf199f373b58290289a9196fa5be3e6f14d8",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R15",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-link-scheme-warning",
+      "file": "valid/fht-v070-fasta-link-scheme-warning.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-link-scheme-warning",
+      "sourceFile": "valid/fht-fasta-link-scheme-warning.fht.fasta",
+      "sourceSha256": "beed66bf44fb72e4d481b97f7659919bf605a1f099fa872fa4d2f752b1f759e0",
+      "sha256": "95d166c8977cdfa7b0751acd69f77d7e4f17d19502bc48d3b510025fa44f3ebe",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R14",
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-gzip",
+      "file": "valid/fht-v070-fasta-gzip.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "expected": "valid",
+      "sourceId": "fht-fasta-gzip",
+      "sourceFile": "valid/fht-fasta-gzip.fht.fasta.gz",
+      "sourceSha256": "5adcf3c6aacf82f8b18782089755da5f27ae01519e91bfc26bb4f92b502de176",
+      "sha256": "aac621b56e06aff8ba00c6ad9ebd2d3ca634b9e57431f7a70c7b534b81eb2051",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-bgzf",
+      "file": "valid/fht-v070-fasta-bgzf.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "expected": "valid",
+      "sourceId": "fht-fasta-bgzf",
+      "sourceFile": "valid/fht-fasta-bgzf.fht.fasta.gz",
+      "sourceSha256": "e973b1b3193642f8e6053cd7a30c38c3d950a4be9216132863ee6f432f3da2c3",
+      "sha256": "aac621b56e06aff8ba00c6ad9ebd2d3ca634b9e57431f7a70c7b534b81eb2051",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-gzip-multimember",
+      "file": "valid/fht-v070-fasta-gzip-multimember.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "expected": "valid",
+      "sourceId": "fht-fasta-gzip-multimember",
+      "sourceFile": "valid/fht-fasta-gzip-multimember.fht.fasta.gz",
+      "sourceSha256": "661df21c716093c25ff6fe0c370d5eab5f7c3c39c102ea6c97ca78816b4a02d6",
+      "sha256": "aac621b56e06aff8ba00c6ad9ebd2d3ca634b9e57431f7a70c7b534b81eb2051",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "R1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-schema-raw-main",
+      "file": "valid/fht-v070-fasta-schema-raw-main.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-schema-raw-main",
+      "sourceFile": "valid/fht-fasta-schema-raw-main.fht.fasta",
+      "sourceSha256": "4c61416b26aa595a879e5d0dd3f16d33f4b4bced93e38b115eebbf3b879784ba",
+      "sha256": "87231cf3fce1076bd9541ec72ae371a65df4b9045b2be0e33668b82295a78c4f",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "V1",
+        "C2"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-molecule-type-mixed",
+      "file": "valid/fht-v070-fasta-molecule-type-mixed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-molecule-type-mixed",
+      "sourceFile": "valid/fht-fasta-molecule-type-mixed.fht.fasta",
+      "sourceSha256": "28569b22101bcadd2965a7043369d646f0b066441dc3cc8de446a830d1f19029",
+      "sha256": "f7dad6271922f84c87ec6b3c7edb21f305626fbe6833c2d80cda62a79cba5699",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-doi-ascii",
+      "file": "valid/fht-v070-fasta-doi-ascii.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-doi-ascii",
+      "sourceFile": "valid/fht-fasta-doi-ascii.fht.fasta",
+      "sourceSha256": "2c6723f2475c7c1977a21da7ab6790bea6141a266b4911d37ecf9493ae8db4ef",
+      "sha256": "7429cfbfb65c0e8a97381df36d28123ea902d28d6300564f6d11fc0aa7476487",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-doi-internal-zwj",
+      "file": "valid/fht-v070-fasta-doi-internal-zwj.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-doi-internal-zwj",
+      "sourceFile": "valid/fht-fasta-doi-internal-zwj.fht.fasta",
+      "sourceSha256": "0e64f21d04f72a2e254fec0d65f4bfd1ee4e461a7292ed24836ce0cec75a0ae9",
+      "sha256": "126e40d4cc2b64bdd41436891a6910088ce358cad71137c01e4f615493af2993",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-optional-empty-values-retained",
+      "file": "valid/fht-v070-fasta-optional-empty-values-retained.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-optional-empty-values-retained",
+      "sourceFile": "valid/fht-fasta-optional-empty-values-retained.fht.fasta",
+      "sourceSha256": "b0cb3e72d1a400ead61caedff926d9afc793f189710e973a07dd9b7a41190b7e",
+      "sha256": "fa08feca331531019f8519e680076cff281cee88765846b222bbd2088951a350",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-completeness-zero-components",
+      "file": "valid/fht-v070-fasta-completeness-zero-components.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-completeness-zero-components",
+      "sourceFile": "valid/fht-fasta-completeness-zero-components.fht.fasta",
+      "sourceSha256": "4eb161a374a5fa2b53ae54bc6cf6c34d2164c57ed4da8109a5062fd6c4941514",
+      "sha256": "edd258b1d73a2816f42fe345db4ab762837d4c131d002ae9c8f239a05c4c499c",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1"
+      ],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-parent-transcribed-from",
+      "file": "valid/fht-v070-fasta-parent-transcribed-from.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-parent-transcribed-from",
+      "sourceFile": "valid/fht-fasta-parent-transcribed-from.fht.fasta",
+      "sourceSha256": "33eb82fe57f38b123ea80930137ab0b8d38f1cea9ed9ff01d2c964a9c2bc4588",
+      "sha256": "6a05b9ff65009819c8bfe39a4f928ec074fce9bec85601dba391c82fc6e4e1b9",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom",
+          "accessionID": {
+            "name": "Synthetic accession DB (placeholder)",
+            "url": "https://example.org/fhr/synthetic-genome"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-filtered-from",
+      "file": "valid/fht-v070-fasta-parent-filtered-from.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-parent-filtered-from",
+      "sourceFile": "valid/fht-fasta-parent-filtered-from.fht.fasta",
+      "sourceSha256": "eafa8ba7e5fcee263fb5ac47cfb19ad95e7d57899ed03af0fbce544a0815066c",
+      "sha256": "077f6a378ae83070ab950c3fdaeb34202bf02c45f2778874cd2155ec6da78675",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-pass"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHT",
+          "checksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "relationship": "filteredFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-unavailable",
+      "file": "valid/fht-v070-fasta-parent-unavailable.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-parent-unavailable",
+      "sourceFile": "valid/fht-fasta-parent-unavailable.fht.fasta",
+      "sourceSha256": "3137306adcaf4df7e16b66a236e7fbac6aeadd6050ae6bc349fd725a663b86fc",
+      "sha256": "0ff3971cb3a5c0aa40db3a22913c39dc36126f75d8497dbd316046a3c7bc4295",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": null,
+          "statedChecksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "result": "unchecked"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-rich",
+      "file": "valid/fht-v070-fasta-rich.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-rich",
+      "sourceFile": "valid/fht-fasta-rich.fht.fasta",
+      "sourceSha256": "d0465e34c21a592b4ec8c2046b7c00d8682c7d450a2b656c5b516f14432a16d5",
+      "sha256": "0bf72b652f59671e0725b849aa9187134ceaf68dd0122486d63dbbcb2d73b9c1",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "R13",
+        "R15",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        },
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-pass"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        },
+        {
+          "headerType": "FHT",
+          "checksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "relationship": "filteredFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-subset-citing-whole",
+      "file": "valid/fht-v070-fasta-parent-subset-citing-whole.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-parent-subset-citing-whole",
+      "sourceFile": "valid/fht-fasta-parent-subset-citing-whole.fht.fasta",
+      "sourceSha256": "851e3a1aa7755aeab3df7c4682541af3447eac0bef9433b9c3bd8c83b068c0ac",
+      "sha256": "fc9d4a1cd26e8856fdc9ecad587c70de9cda4ca2a07984453bde8559d8881d9a",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-masked-exact",
+      "file": "valid/fht-v070-fasta-parent-masked-exact.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "sourceId": "fht-fasta-parent-masked-exact",
+      "sourceFile": "valid/fht-fasta-parent-masked-exact.fht.fasta",
+      "sourceSha256": "7f7bd279722dc55728614af1d0f9a3c5f90afdb4910c53b0708c697cf5b4a612",
+      "sha256": "c9b08c4ac30cf4df0bdd0ee261c21888b98ce3cdf41a0d0972e69961b60d7828",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": null,
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-masked.fhr.fasta",
+          "statedChecksum": "2WBzTRWHA/8A0y8TvwMCVENlk1FetSR9Gt4zz0hrCT8=",
+          "result": "checked-pass"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "2WBzTRWHA/8A0y8TvwMCVENlk1FetSR9Gt4zz0hrCT8=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-crlf-normalized-checksum",
+      "file": "invalid/fht-v070-fasta-crlf-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-crlf-normalized-checksum",
+      "sourceFile": "invalid/fht-fasta-crlf-normalized-checksum.fht.fasta",
+      "sourceSha256": "b9c793d86bf00c9e2b8bd64ad6b3946173fa5f6bf3c9694c3ae3ac7172023924",
+      "sha256": "6475456278c971091a6eb7f801646f1ab43a261c8f13d1f93512273b1e4f0cae",
+      "transformation": "shared release selector; named faulty checksum preserved",
+      "rule": "R1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-u-normalized-checksum",
+      "file": "invalid/fht-v070-fasta-u-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-u-normalized-checksum",
+      "sourceFile": "invalid/fht-fasta-u-normalized-checksum.fht.fasta",
+      "sourceSha256": "27c5f8c8bfa2117c3739cee834aed1a5d7aa676a817c4baf15dd81ea76a5bb34",
+      "sha256": "614352cb02016daba9f64729709e9e8630a70086ca8255d587ae42f6f1c86817",
+      "transformation": "shared release selector; named faulty checksum preserved",
+      "rule": "R1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-case-normalized-checksum",
+      "file": "invalid/fht-v070-fasta-case-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-case-normalized-checksum",
+      "sourceFile": "invalid/fht-fasta-case-normalized-checksum.fht.fasta",
+      "sourceSha256": "0e98d1ec0072e4abb57a4bc861808a72859e1027f7107f0a7b81b2ff15898791",
+      "sha256": "ba8e4b70424baa1f6584b0dba0614994d4470ff02145ceca2876b11c49a3bbd5",
+      "transformation": "shared release selector; named faulty checksum preserved",
+      "rule": "R1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-sequence-tampered",
+      "file": "invalid/fht-v070-fasta-sequence-tampered.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-sequence-tampered",
+      "sourceFile": "invalid/fht-fasta-sequence-tampered.fht.fasta",
+      "sourceSha256": "148dc5d7d07c3dbf75ddecee6f746d86b879390ddb5b174344d5ba9020b9b95d",
+      "sha256": "8c05f8e12afa85846ca3c51f15839fc9982afbe3c506dbd6822ca3ede3c184ff",
+      "transformation": "shared release selector; checksum defect preserved",
+      "rule": "R3",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-gzip-sequence-tampered",
+      "file": "invalid/fht-v070-fasta-gzip-sequence-tampered.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-gzip-sequence-tampered",
+      "sourceFile": "invalid/fht-fasta-gzip-sequence-tampered.fht.fasta.gz",
+      "sourceSha256": "7b75a71d6afd76828b754154193cd2bce11ea5efe3d05b088fc3a77b6837ada9",
+      "sha256": "32782f35bf78d28a989a6ee6ccb7496d37bbc83143cc8df1c9b2205fa98e6cfc",
+      "transformation": "shared release selector; checksum defect preserved",
+      "rule": "R3",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-gzip-truncated",
+      "file": "invalid/fht-v070-fasta-gzip-truncated.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-gzip-truncated",
+      "sourceFile": "invalid/fht-fasta-gzip-truncated.fht.fasta.gz",
+      "sourceSha256": "a5fadaf4ecfaeae42fbfc9ff728ff56ea9ba2f650a4ed6ef9a598354a659622b",
+      "sha256": "a5fadaf4ecfaeae42fbfc9ff728ff56ea9ba2f650a4ed6ef9a598354a659622b",
+      "transformation": "unreadable compression preserved; selection not run",
+      "rule": "R1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-sha256",
+      "file": "invalid/fht-v070-fasta-checksum-sha256.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-checksum-sha256",
+      "sourceFile": "invalid/fht-fasta-checksum-sha256.fht.fasta",
+      "sourceSha256": "26cc58cebb70d498da2fdbcacd494243e90ef06d5916316b8c66979e6d5f8c08",
+      "sha256": "519bde90046bbc33346d63b542e0d7224508236c9902c86c7e6082fe2990940a",
+      "transformation": "shared release selector; named faulty checksum preserved",
+      "rule": "R4",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-truncated-sha512",
+      "file": "invalid/fht-v070-fasta-checksum-truncated-sha512.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-checksum-truncated-sha512",
+      "sourceFile": "invalid/fht-fasta-checksum-truncated-sha512.fht.fasta",
+      "sourceSha256": "4fb57272ab1451c5b3ca009940dc38152a844da85bddd237a52ae3b8df8a8274",
+      "sha256": "3843c0dd15e2e78eb8d3d3da32fdfee278c40c876bb82166fb505577971ac148",
+      "transformation": "shared release selector; named faulty checksum preserved",
+      "rule": "R4",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-non-canonical",
+      "file": "invalid/fht-v070-fasta-checksum-non-canonical.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-checksum-non-canonical",
+      "sourceFile": "invalid/fht-fasta-checksum-non-canonical.fht.fasta",
+      "sourceSha256": "c7b42ae8f6cde3cd8ade7b923b5dddc471e18a148c70d1686873ba9d0891646d",
+      "sha256": "10e09e09e7dd4f2be063a87c66e8e8bde9f016c6169ebc79e177c846c3176078",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R4",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-missing-checksum",
+      "file": "invalid/fht-v070-fasta-missing-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-missing-checksum",
+      "sourceFile": "invalid/fht-fasta-missing-checksum.fht.fasta",
+      "sourceSha256": "7709ca246399e915a79784c53591f65918cf4d8270c1940b11d6ecb610c79ffe",
+      "sha256": "d7b84f2ef4561897ade30d5e8afb3ccbb97829a31c1a4725ccaa35044670e2e0",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-two-checksum-lines",
+      "file": "invalid/fht-v070-fasta-two-checksum-lines.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-two-checksum-lines",
+      "sourceFile": "invalid/fht-fasta-two-checksum-lines.fht.fasta",
+      "sourceSha256": "4fb4c8e17d100be68de93ebcb00fa6fed5217588d40c29bce1c7c69d238d8573",
+      "sha256": "c904b50839309ecc0ab3d84982d59742f832413db1e969dd870f941ba9ac359a",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-only-nested-checksum",
+      "file": "invalid/fht-v070-fasta-only-nested-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-only-nested-checksum",
+      "sourceFile": "invalid/fht-fasta-only-nested-checksum.fht.fasta",
+      "sourceSha256": "eb78314ab222c1aef2dabecbdb591de9008b288da645b2f14a0a164647e4d3ce",
+      "sha256": "77e2ea1fb0c573d60401af69395cb1527f32d6e29695123b221aa0effc2a4d40",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-block-literal-checksum",
+      "file": "invalid/fht-v070-fasta-block-literal-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-block-literal-checksum",
+      "sourceFile": "invalid/fht-fasta-block-literal-checksum.fht.fasta",
+      "sourceSha256": "5350f43a98bc38443b0a413954447e9235faa3b41ca6e75a87243f4267439abc",
+      "sha256": "47adc0ca2ef64f862295b649ee213344b4fa39fbc2931c7e14bd7473c7d44784",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R5",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-continued-checksum",
+      "file": "invalid/fht-v070-fasta-continued-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-continued-checksum",
+      "sourceFile": "invalid/fht-fasta-continued-checksum.fht.fasta",
+      "sourceSha256": "71733df5f4f3111cfc1f464ec5373eb0213d62c9c76cc54c886699864723994f",
+      "sha256": "800dd1e7637e2399d2c3886c14a2fe5a4ddc3dfe047b154a8e87eaa8b5c7428c",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R5",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-checksum-with-comment",
+      "file": "invalid/fht-v070-fasta-checksum-with-comment.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-checksum-with-comment",
+      "sourceFile": "invalid/fht-fasta-checksum-with-comment.fht.fasta",
+      "sourceSha256": "5c3476bef05c1e906116db097f7c260d9eeecdb60d1d102d59ef31468af6c0b3",
+      "sha256": "acd7d65fa2ce51102ef9a639db34fb267a06a4f4c324d7b72d8359852313caf3",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R5",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-u2028-in-header",
+      "file": "invalid/fht-v070-fasta-u2028-in-header.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-u2028-in-header",
+      "sourceFile": "invalid/fht-fasta-u2028-in-header.fht.fasta",
+      "sourceSha256": "68e3a934ccf8079a4646b562b3747300ba8f6093fbdfdca8680c130a48801212",
+      "sha256": "7fdb1dadb3fc9a21835ac8ffa64eb53b3ca2db9ca6d0ac7a730332585972f237",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R6",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-utf8-bom",
+      "file": "invalid/fht-v070-fasta-utf8-bom.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-utf8-bom",
+      "sourceFile": "invalid/fht-fasta-utf8-bom.fht.fasta",
+      "sourceSha256": "d4f2185ef20183d3f094a742af4788870d24c01e6d50b5eb03fc7f5c8126c879",
+      "sha256": "327d41580d30bf3a6bc49f1df83a7eb069c987f5728a97842060c99c1ef34938",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R7",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-duplicate-key",
+      "file": "invalid/fht-v070-fasta-duplicate-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-duplicate-key",
+      "sourceFile": "invalid/fht-fasta-duplicate-key.fht.fasta",
+      "sourceSha256": "86b6d955dd6446adb55ef78f4ec9f4f3ac190c4a69d7d3f5f07be4fb61fbe39f",
+      "sha256": "11f06b44c1aeff5378e0913b1fc93fd8a5c6b5096acc0a369773d2e94569497d",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R8",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-yaml-anchor-alias",
+      "file": "invalid/fht-v070-fasta-yaml-anchor-alias.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-yaml-anchor-alias",
+      "sourceFile": "invalid/fht-fasta-yaml-anchor-alias.fht.fasta",
+      "sourceSha256": "0a970d3897d45704fa2225024bacde745674e11b36998dc7f746eea4f32ec406",
+      "sha256": "992cabe1eb6dc6c8aac40c489eeb8aabdca77f797eef9b4f46bea435e2866ffe",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R8",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-header-after-record",
+      "file": "invalid/fht-v070-fasta-header-after-record.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-header-after-record",
+      "sourceFile": "invalid/fht-fasta-header-after-record.fht.fasta",
+      "sourceSha256": "b9299472ad72f9a447bbdef79d04dfed91d41e66a35fa3b82ac93d7484bf7874",
+      "sha256": "3ac53e0caf795e1eba4d802ef4249bfedd1c7fc1ddddabb2fecb17a8598cfe53",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R10",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-concatenated",
+      "file": "invalid/fht-v070-fasta-concatenated.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-concatenated",
+      "sourceFile": "invalid/fht-fasta-concatenated.fht.fasta",
+      "sourceSha256": "67af086600c0fd1ca12c696ac5288cce986cc747fe03a480549e1e6172306fd5",
+      "sha256": "3ad0dc9e513edca2db929fd8993e8b49276c92189d90c8287756dc0f06f086f2",
+      "transformation": "shared release selector; malformed checksum/header defect preserved",
+      "rule": "R10",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-yaml-leading-zero",
+      "file": "invalid/fht-v070-fasta-yaml-leading-zero.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-yaml-leading-zero",
+      "sourceFile": "invalid/fht-fasta-yaml-leading-zero.fht.fasta",
+      "sourceSha256": "03060ba24380b829d3b777b25f9a6befa2383f1c038496d378800ebe0a2828b1",
+      "sha256": "416154663099a673a38b552762c476402068891624f65ebe6ad28bae32e4bb2c",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R12",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-inf-vital-stats",
+      "file": "invalid/fht-v070-fasta-inf-vital-stats.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-inf-vital-stats",
+      "sourceFile": "invalid/fht-fasta-inf-vital-stats.fht.fasta",
+      "sourceSha256": "3f4dd5685f871db02607deea1d90670f0607146418ad138910028be6e7954e57",
+      "sha256": "dad1747d07a8952e6f99104a01bd6d87f1a8fc69c4a3f15d0d4bd56662a83fd7",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R13",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-extension-nested-key",
+      "file": "invalid/fht-v070-fasta-extension-nested-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-extension-nested-key",
+      "sourceFile": "invalid/fht-fasta-extension-nested-key.fht.fasta",
+      "sourceSha256": "2f04c4d7e1904bf3ce9a2956e712fb8c9128de404ce7459902c05004d56e0dda",
+      "sha256": "6fc3099d58b1bf7db4f277889011b688fc2f663da01a403c57202f66c30b5838",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R15",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-extension-uppercase-key",
+      "file": "invalid/fht-v070-fasta-extension-uppercase-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-extension-uppercase-key",
+      "sourceFile": "invalid/fht-fasta-extension-uppercase-key.fht.fasta",
+      "sourceSha256": "b457f781480a4ecd33a078cb795acb7bcae5c5b809a1df218e2a1e45c3b37697",
+      "sha256": "908daa7c26a2939f0d1369fb99faab2191ca5b2d6b7c2553961e30ed3919fcba",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "R15",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-derived-from-duplicate",
+      "file": "invalid/fht-v070-fasta-derived-from-duplicate.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-derived-from-duplicate",
+      "sourceFile": "invalid/fht-fasta-derived-from-duplicate.fht.fasta",
+      "sourceSha256": "5486ff788745cbb0628f4fd6064e69ae7bef5df45d40af6627e986823187481e",
+      "sha256": "28c2cb8d30b87c63726d4a611709de1945460c6f573781a62875125d912ce07b",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-parent-checksum-noncanonical",
+      "file": "invalid/fht-v070-fasta-parent-checksum-noncanonical.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-parent-checksum-noncanonical",
+      "sourceFile": "invalid/fht-fasta-parent-checksum-noncanonical.fht.fasta",
+      "sourceSha256": "20034808577f70279aef0386b29b87eaafd809901c42b8670479541b770ffffd",
+      "sha256": "590aea3371e469478fbabe5c06c5ab8956bef67cbe5b546864f2504256a8e230",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-completeness-sum-exceeds-total",
+      "file": "invalid/fht-v070-fasta-completeness-sum-exceeds-total.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-completeness-sum-exceeds-total",
+      "sourceFile": "invalid/fht-fasta-completeness-sum-exceeds-total.fht.fasta",
+      "sourceSha256": "c40bd60b68d1b765ebb56e3a84eaf67c6e58896f9dabc47b0db649711428af6c",
+      "sha256": "30421d27a5744e8ddc0885cacafcfc82b981697f8928fcba1a8459cf9efe8621",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-completeness-sum-below-total",
+      "file": "invalid/fht-v070-fasta-completeness-sum-below-total.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-completeness-sum-below-total",
+      "sourceFile": "invalid/fht-fasta-completeness-sum-below-total.fht.fasta",
+      "sourceSha256": "88559a852dcd8297d964c9abf2b2e57a95af44e05761cec29f736614a72725dc",
+      "sha256": "ca6684e0355008d0a6043bd2b6f0337cfcb13cc0c8f8b018125fb98cc0a84445",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-completeness-missing-count",
+      "file": "invalid/fht-v070-fasta-completeness-missing-count.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-completeness-missing-count",
+      "sourceFile": "invalid/fht-fasta-completeness-missing-count.fht.fasta",
+      "sourceSha256": "04c0fde7627a50269480d6a07a5524e0d4d917ac121cc8f223faa5bfa0f66c9f",
+      "sha256": "d31b7c12d1b547cac8405348f913669f2a22293c650ffb229129b973480df7f2",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-doi-trailing-nbsp",
+      "file": "invalid/fht-v070-fasta-doi-trailing-nbsp.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-doi-trailing-nbsp",
+      "sourceFile": "invalid/fht-fasta-doi-trailing-nbsp.fht.fasta",
+      "sourceSha256": "c4fe84be7a9989845eae32e1c5dda4cf1bedc3ff7c698f7d3bfb93a1fa927495",
+      "sha256": "25f1b8db4e63d47e9dd113fa82fa8399102130d8a6753e3bd074505787fb0136",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-doi-trailing-narrow-nbsp",
+      "file": "invalid/fht-v070-fasta-doi-trailing-narrow-nbsp.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-doi-trailing-narrow-nbsp",
+      "sourceFile": "invalid/fht-fasta-doi-trailing-narrow-nbsp.fht.fasta",
+      "sourceSha256": "8c87e23fca72f51b5e799237e6c107e557a653c9d7786e84187d748a8b96c821",
+      "sha256": "6b32a5a57420bf4f51ac3b131bb9ac1829164a4dc3c377ea2179dc2844909402",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-missing-assembly-type",
+      "file": "invalid/fht-v070-fasta-missing-assembly-type.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-missing-assembly-type",
+      "sourceFile": "invalid/fht-fasta-missing-assembly-type.fht.fasta",
+      "sourceSha256": "b68cc525a3cddc57d2da6c85713501140a5b46e0390e08b8760d0ed011771812",
+      "sha256": "bcbbc38a2763e9ad54e4bf40b47e4935b3c8115220b025b1bee8c45d126547d5",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-bad-assembly-type",
+      "file": "invalid/fht-v070-fasta-bad-assembly-type.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-bad-assembly-type",
+      "sourceFile": "invalid/fht-fasta-bad-assembly-type.fht.fasta",
+      "sourceSha256": "d62cc353bfa67af9611ad3bae8b9e4a9e8bcea49c894ee964223dfbb1c8acdbd",
+      "sha256": "8cc173b37f1b9a95359bc4f06a35b20eb4ef72116c9994084c09023072fb9f05",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-molecule-type-cdna",
+      "file": "invalid/fht-v070-fasta-molecule-type-cdna.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-molecule-type-cdna",
+      "sourceFile": "invalid/fht-fasta-molecule-type-cdna.fht.fasta",
+      "sourceSha256": "2f36c5325271e2b7358941d186c6022da389929faca305fdef6a3fcc4f7ba501",
+      "sha256": "b4787471f69044893ac643902154a0c6d988898d60b84b731b580d3940c29009",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-molecule-type-mixed-case",
+      "file": "invalid/fht-v070-fasta-molecule-type-mixed-case.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-molecule-type-mixed-case",
+      "sourceFile": "invalid/fht-fasta-molecule-type-mixed-case.fht.fasta",
+      "sourceSha256": "77560827025bc2c0a6723b85e79af49d69510c2f1268cf8e9bd940b6dedcf637",
+      "sha256": "e625cf2fe261d1c743f99f008890c797335f27aae6e5bcac6997147134fed8ab",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-assembly-type-mixed",
+      "file": "invalid/fht-v070-fasta-assembly-type-mixed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-assembly-type-mixed",
+      "sourceFile": "invalid/fht-fasta-assembly-type-mixed.fht.fasta",
+      "sourceSha256": "107c88cc593aaecbc63d1e2c7cd93e7b4c5aacdf0eaaec60d347a007685c0867",
+      "sha256": "af54e806462f0fb8cd33986df5faa53ff6a29bb66f4cc20325344c4037878096",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-empty-sample",
+      "file": "invalid/fht-v070-fasta-empty-sample.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-empty-sample",
+      "sourceFile": "invalid/fht-fasta-empty-sample.fht.fasta",
+      "sourceSha256": "4e8f71645a75fac3e204b42df81b7c1fa9fd92d75c3c2a2cc95ffe9df356034a",
+      "sha256": "9b27f3c999bab0a2f89828d61a2bd0bd6d41788be74cd67f2e4cc27634d58a7a",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-fhr-key-genome",
+      "file": "invalid/fht-v070-fasta-fhr-key-genome.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-fhr-key-genome",
+      "sourceFile": "invalid/fht-fasta-fhr-key-genome.fht.fasta",
+      "sourceSha256": "534fca572e3ca5a2be48ef087e5d2c32db4f52ad96fd71d9d5c46de8c8d752d1",
+      "sha256": "a1b474c440308c3705c7d44edb0b3f8e04a84688378db4fa86dfbc85e104abcc",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-legacy-key-masking",
+      "file": "invalid/fht-v070-fasta-legacy-key-masking.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-legacy-key-masking",
+      "sourceFile": "invalid/fht-fasta-legacy-key-masking.fht.fasta",
+      "sourceSha256": "abe52ef25c831d26a4d9f142fb330ed38fb22817c14bfcc5415a02eaf7e84413",
+      "sha256": "d379c85ae4c4c8ed75da8a7a000fda6a1a44248e2875f1696f8143304b4e46f0",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-bad-run-accession",
+      "file": "invalid/fht-v070-fasta-bad-run-accession.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-bad-run-accession",
+      "sourceFile": "invalid/fht-fasta-bad-run-accession.fht.fasta",
+      "sourceSha256": "ea9fa9fd0ffffbf6bd239a29a24fc27c3d24e348dd767a0ae39455e624663fa4",
+      "sha256": "5a321a3196acab88c8414322829d1826a6466348fd3cf038bb1cdbe8ddc6ad72",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-derived-from-no-checksum",
+      "file": "invalid/fht-v070-fasta-derived-from-no-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-derived-from-no-checksum",
+      "sourceFile": "invalid/fht-fasta-derived-from-no-checksum.fht.fasta",
+      "sourceSha256": "11fe4c12db36da11162cd0f55e4b7182fabca4cda1a3f61786d9af89468dea50",
+      "sha256": "36201424d437c6ff14e544a6eef1e809ab8f376bdbb5131c28748c8adc1f9290",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-derived-from-fhp-parent",
+      "file": "invalid/fht-v070-fasta-derived-from-fhp-parent.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-derived-from-fhp-parent",
+      "sourceFile": "invalid/fht-fasta-derived-from-fhp-parent.fht.fasta",
+      "sourceSha256": "cf4cc465ebf2165686e9d992f5d39857c7571ae56c451bbb84902c98129ad399",
+      "sha256": "16b52aec995248c4e1d72bc956c28d5b1ad4db6b7ffb67f58a680864f705e316",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-derived-from-bad-relationship",
+      "file": "invalid/fht-v070-fasta-derived-from-bad-relationship.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-derived-from-bad-relationship",
+      "sourceFile": "invalid/fht-fasta-derived-from-bad-relationship.fht.fasta",
+      "sourceSha256": "fcd5f36e0da5b4833a53a82b6d5d7b377610036efad2cebbbce77681e0041a95",
+      "sha256": "7cdcf89f216178e63b1068d412b8815ff89bb3b7e82ea34ca5bc6b999dfd1ba5",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-cites-fhr-schema",
+      "file": "invalid/fht-v070-fasta-cites-fhr-schema.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-cites-fhr-schema",
+      "sourceFile": "invalid/fht-fasta-cites-fhr-schema.fht.fasta",
+      "sourceSha256": "748d310e1ec5fb2f58fbd65af91fed3b6c814e743d7c2daccac891077ef6d8a5",
+      "sha256": "748d310e1ec5fb2f58fbd65af91fed3b6c814e743d7c2daccac891077ef6d8a5",
+      "transformation": "selector unchanged; explicit selection outcome retained",
+      "rule": "C2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-cites-arbitrary-url",
+      "file": "invalid/fht-v070-fasta-cites-arbitrary-url.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-cites-arbitrary-url",
+      "sourceFile": "invalid/fht-fasta-cites-arbitrary-url.fht.fasta",
+      "sourceSha256": "d5824c00fbb4100b1483f32926a35fefc54ab66d389c63b279fc5f4271001f1f",
+      "sha256": "d5824c00fbb4100b1483f32926a35fefc54ab66d389c63b279fc5f4271001f1f",
+      "transformation": "selector unchanged; explicit selection outcome retained",
+      "rule": "C2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-schema-trailing-line-feed",
+      "file": "invalid/fht-v070-fasta-schema-trailing-line-feed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-schema-trailing-line-feed",
+      "sourceFile": "invalid/fht-fasta-schema-trailing-line-feed.fht.fasta",
+      "sourceSha256": "7c61220e2ec8877bbb46186521475c98b1d05be265a78b4f918171612936e531",
+      "sha256": "b9d1c9ef9e984534b6238df345187c40b25be328df94dd23c6008ddad8504a2c",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C2",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-run-accession-trailing-line-feed",
+      "file": "invalid/fht-v070-fasta-run-accession-trailing-line-feed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-run-accession-trailing-line-feed",
+      "sourceFile": "invalid/fht-fasta-run-accession-trailing-line-feed.fht.fasta",
+      "sourceSha256": "1bacd40e944bbf36663d1d7cf375dfd43c806a21d7c01eeb411ec26df1ada676",
+      "sha256": "08054bca371f3efec55f5aaccab283809b1f98f01a02805c1229f3a5995ea8eb",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-blank-transcriptome-bom",
+      "file": "invalid/fht-v070-fasta-blank-transcriptome-bom.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-blank-transcriptome-bom",
+      "sourceFile": "invalid/fht-fasta-blank-transcriptome-bom.fht.fasta",
+      "sourceSha256": "3e790400994d6be3ca9083e4576ae021fa0eaaec4369a058f9432d7c8da2dd9a",
+      "sha256": "7ea946733efc58ee41c05eeb74c1f9fae7c7c1282381b57586810dcf079ae967",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-blank-version-separator",
+      "file": "invalid/fht-v070-fasta-blank-version-separator.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-blank-version-separator",
+      "sourceFile": "invalid/fht-fasta-blank-version-separator.fht.fasta",
+      "sourceSha256": "c8943919a38926d48f419a3096ee967d9a1a05b51712524571a0e5366c7b0303",
+      "sha256": "0f42ff1e67ebd5fab89e8b7077330dad623e42703697fb3d4437fe6423630f5e",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-version-2-0-via-raw-main",
+      "file": "invalid/fht-v070-fasta-version-2-0-via-raw-main.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-version-2-0-via-raw-main",
+      "sourceFile": "invalid/fht-fasta-version-2-0-via-raw-main.fht.fasta",
+      "sourceSha256": "cb71515153c902e2dc282439bb4b0e7d991547a6f31a3115f209e60a4bf90272",
+      "sha256": "4a6384b067be13a799a23c1e231b515a66edc29546cc4bc773fc964937ee4794",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "V1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-schemaversion-number",
+      "file": "invalid/fht-v070-fasta-schemaversion-number.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-schemaversion-number",
+      "sourceFile": "invalid/fht-fasta-schemaversion-number.fht.fasta",
+      "sourceSha256": "11fd700b852be7fb254f7f06d549856d27cfed5b767113b058f30aea7c179d7a",
+      "sha256": "0ae789752b8cde06b09465a38248ee33d302c07ab779c53f45cf6be33edb36f8",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "V1",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-schema-w3id-release-without-fht",
+      "file": "invalid/fht-v070-fasta-schema-w3id-release-without-fht.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-schema-w3id-release-without-fht",
+      "sourceFile": "invalid/fht-fasta-schema-w3id-release-without-fht.fht.fasta",
+      "sourceSha256": "d2f4e56aa4a58052b36d4e9a757fd97a8789994fb1ed8c57c74a3148e49a09ed",
+      "sha256": "d2f4e56aa4a58052b36d4e9a757fd97a8789994fb1ed8c57c74a3148e49a09ed",
+      "transformation": "selector unchanged; explicit selection outcome retained",
+      "rule": "V4",
+      "rules": [],
+      "parentLink": [],
+      "disposition": "Previously V5 before FHT registration; named older shared release lacks FHT. Expected invalid remains, rejection is now unsupported-version; historical source unchanged."
+    },
+    {
+      "id": "fht-v070-fasta-schema-raw-tag-unknown",
+      "file": "invalid/fht-v070-fasta-schema-raw-tag-unknown.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-schema-raw-tag-unknown",
+      "sourceFile": "invalid/fht-fasta-schema-raw-tag-unknown.fht.fasta",
+      "sourceSha256": "10934831cbc47420b53e60c7d2a1840b77e3f01422631acad5c54bca4c828afe",
+      "sha256": "10934831cbc47420b53e60c7d2a1840b77e3f01422631acad5c54bca4c828afe",
+      "transformation": "selector unchanged; explicit selection outcome retained",
+      "rule": "V5",
+      "rules": [],
+      "parentLink": []
+    },
+    {
+      "id": "fht-v070-fasta-schema-shared-raw-tag",
+      "file": "invalid/fht-v070-fasta-schema-shared-raw-tag.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-schema-shared-raw-tag",
+      "sourceFile": "invalid/fht-fasta-schema-shared-raw-tag.fht.fasta",
+      "sourceSha256": "f0d5b40db4749bd02ad1332f15d62c962f8b3a514675af061956856f988ec1b0",
+      "sha256": "f0d5b40db4749bd02ad1332f15d62c962f8b3a514675af061956856f988ec1b0",
+      "transformation": "selector unchanged; explicit selection outcome retained",
+      "rule": "V4",
+      "rules": [],
+      "parentLink": [],
+      "disposition": "Previously V5 before FHT registration; named older shared release lacks FHT. Expected invalid remains, rejection is now unsupported-version; historical source unchanged."
+    },
+    {
+      "id": "fht-v070-fasta-parent-mismatched",
+      "file": "invalid/fht-v070-fasta-parent-mismatched.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-parent-mismatched",
+      "sourceFile": "invalid/fht-fasta-parent-mismatched.fht.fasta",
+      "sourceSha256": "e33424a5a8ea2c01c57c13cae90c24bf161a283aafb47e5bbf373a023c559676",
+      "sha256": "2432fe35266de75360757a8694100259bd88bed094aa23083e25500d33d11aba",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C3",
+      "rules": [],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "dpDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "dpDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-real-digest-wrong-file",
+      "file": "invalid/fht-v070-fasta-parent-real-digest-wrong-file.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-parent-real-digest-wrong-file",
+      "sourceFile": "invalid/fht-fasta-parent-real-digest-wrong-file.fht.fasta",
+      "sourceSha256": "03e17aa8b4a54df72871699fe2abe7d9098cea0cd0fdbedb66a37c5f99656fb6",
+      "sha256": "4534bfbffec1d254fdbf4321d308df4d0663acccd2fcda9c723829df6a1bfbd4",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C3",
+      "rules": [],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-subset.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-case-folded-digest",
+      "file": "invalid/fht-v070-fasta-parent-case-folded-digest.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-parent-case-folded-digest",
+      "sourceFile": "invalid/fht-fasta-parent-case-folded-digest.fht.fasta",
+      "sourceSha256": "26ae69d908b324b2dbc8aea8dbef4016ff692763d01c60e9bcfa9faeeee345f4",
+      "sha256": "39c4955b706e87555fce3148ca0fe55ef39e223917c03b5dfe600090bfc4405b",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C3",
+      "rules": [],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-masked.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        }
+      ]
+    },
+    {
+      "id": "fht-v070-fasta-parent-mixed-verdicts",
+      "file": "invalid/fht-v070-fasta-parent-mixed-verdicts.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "sourceId": "fht-fasta-parent-mixed-verdicts",
+      "sourceFile": "invalid/fht-fasta-parent-mixed-verdicts.fht.fasta",
+      "sourceSha256": "a818e3fac618c8bdbad34e76d2fdc256c149b33342c1d3c4812b96c71f4a3afe",
+      "sha256": "e5a77989024d77da820bee297e43982ca936bfdbc1efd886ca19dc8b4b66477c",
+      "transformation": "shared release selector; root digest recomputed",
+      "rule": "C3",
+      "rules": [],
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        },
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "jprV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-fail"
+        }
+      ],
+      "parentClaims": [
+        {
+          "headerType": "FHR",
+          "checksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "relationship": "transcribedFrom"
+        },
+        {
+          "headerType": "FHT",
+          "checksum": "jprV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "relationship": "filteredFrom"
+        }
+      ]
+    }
+  ]
+}

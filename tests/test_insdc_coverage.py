@@ -19,7 +19,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "docs" / "insdc-coverage.md"
 FIXTURE = ROOT / "tests" / "fixtures" / "insdc-requirements.json"
-SCHEMAS = {"FHR": "fhr.json", "FHP": "fhp.json", "FHGFF3": "fhgff3.json"}
+SCHEMAS = {"FHR": "fhr.json", "FHP": "fhp.json", "FHGFF3": "fhgff3.json", "FHT": "fht.json"}
 
 HEADER = ["ID", "INSDC requirement", "FH type(s)", "Cov.", "Location in FH", "Disposition"]
 DISPOSITION = re.compile(r"^\*\*(Covered|Partial|Out of scope|Follow-up)\*\*(.*)$")
@@ -127,9 +127,10 @@ class InsdcCoverageTests(unittest.TestCase):
         line = next(line for line in self.text.splitlines()
                     if line.startswith("- **FAIR-bioHeaders, released**"))
         for header, file in SCHEMAS.items():
+            assessed_line = next(row for row in self.text.splitlines() if row.startswith('- **FHT, draft')) if header == 'FHT' else line
             current = json.loads((ROOT / file).read_text(encoding="utf-8"))["properties"]["schemaVersion"]["enum"]
             with self.subTest(header=header):
-                assessed = re.search(rf"\b{header}\b[^`]*(?:`schemaVersion` )?`([0-9]+\.[0-9]+)`", line)
+                assessed = re.search(rf"\b{header}\b[^`]*(?:`schemaVersion` )?`([0-9]+\.[0-9]+)`", assessed_line)
                 self.assertIsNotNone(assessed)
                 # A schema accepts every minor of its major (docs/SCHEMA-VERSIONS.md);
                 # the assessment pins the newest one.

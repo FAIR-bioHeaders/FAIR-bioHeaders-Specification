@@ -53,6 +53,81 @@
       }
     },
     {
+      "@id": "fhr:AssemblyAuthor",
+      "@type": "rdfs:Class",
+      "rdfs:label": {
+        "@value": "AssemblyAuthor",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "An assembly author with a supplied non-blank name (Q4 follow-up). The assemblyAuthor list stays optional; when present, every item names its person or organization.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:Completeness",
+      "@type": "rdfs:Class",
+      "rdfs:label": {
+        "@value": "Completeness",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "BUSCO completeness as counts, with the lineage dataset whose name gives its version (for example primates_odb10 or enterobacterales_odb12.2)",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:DerivedFrom",
+      "@type": "rdfs:Class",
+      "rdfs:label": {
+        "@value": "DerivedFrom",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Link to a parent file by its FHR-family checksum (specs/004-shared-core-schema FR-003). Provisional until the relationship vocabulary is decided (FAIR-bioHeaders-Specification#54).",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:MetadataAuthor",
+      "@type": "rdfs:Class",
+      "rdfs:label": {
+        "@value": "MetadataAuthor",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "A metadata author with a supplied non-blank name, under the approved Q4 follow-up. Optional assemblyAuthor items follow the same rule (AssemblyAuthor).",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:Sample",
+      "@type": "rdfs:Class",
+      "rdfs:label": {
+        "@value": "Sample",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "One supplied biological sample context. Pooled material is represented by repeated items, not by one fabricated uniform value.",
+        "@language": "en"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
       "@id": "fhr:VitalStats",
       "@type": "rdfs:Class",
       "rdfs:label": {
@@ -86,6 +161,9 @@
       "sdo:domainIncludes": [
         {
           "@id": "sdo:Dataset"
+        },
+        {
+          "@id": "fhr:DerivedFrom"
         }
       ],
       "sdo:rangeIncludes": [
@@ -96,6 +174,31 @@
       "rdfs:subPropertyOf": [
         {
           "@id": "sdo:identifier"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:assemblyAuthor",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "assemblyAuthor",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Attributions for the assembly or extraction, when supplied",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "fhr:AssemblyAuthor"
         }
       ],
       "rdfs:isDefinedBy": {
@@ -156,6 +259,81 @@
       }
     },
     {
+      "@id": "fhr:assemblyType",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "assemblyType",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Construction case for the whole described transcript set",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:averageTranscriptLength",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "averageTranscriptLength",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Mean number of sequence symbols per record, excluding deflines and line endings",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:VitalStats"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Number"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:buscoVersion",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "buscoVersion",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Version of BUSCO",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
       "@id": "fhr:checksum",
       "@type": "rdf:Property",
       "rdfs:label": {
@@ -169,6 +347,9 @@
       "sdo:domainIncludes": [
         {
           "@id": "sdo:Dataset"
+        },
+        {
+          "@id": "fhr:DerivedFrom"
         }
       ],
       "sdo:rangeIncludes": [
@@ -206,6 +387,181 @@
       }
     },
     {
+      "@id": "fhr:completeDuplicated",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "completeDuplicated",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Complete duplicated BUSCOs (D)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:completeness",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "completeness",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Optional BUSCO completeness counts from the actual run. lineageDataset must match the pinned shared pattern (a name ending in _odb plus one or more dot-separated numeric version components, such as hymenoptera_odb10 or hymenoptera_odb12.2), as widened by shared #170 for v0.6.0. Do not rename or coerce a measured lineage to fit the pattern; if a measured value cannot be represented, omit completeness and keep the lineage and counts in documentation. When completeSingle, completeDuplicated, fragmented, missing and total are all supplied as integers, the four mutually exclusive component counts must sum exactly to total (C1). This cross-field arithmetic is checked by the owning reader, not expressible in standard JSON Schema.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:completeSingle",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "completeSingle",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Complete single-copy BUSCOs (S)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:condition",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "condition",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied treatment, disease or other condition context",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Sample"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:derivedFrom",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "derivedFrom",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Reviewed FAIR-bioHeaders parent-file relationships only. This contract permits an FHT filteredFrom parent or an FHR transcribedFrom parent when the transcript bases were extracted from that genome; genome guidance alone never justifies transcribedFrom. Annotation coordinates and other sources stay in relatedLink/documentation until the shared relationship vocabulary is decided (#54). A genome-guided set whose final sequences were actually extracted from that genome also uses FHR transcribedFrom; construction history alone does not establish the source of its bases. The shared DerivedFrom object requires the parent's FHR-family checksum; an accession alone is not a verified family link. Identical parent entries are not allowed. A parent checksum uses canonical padded base64 for the 32-byte SHA-512/256 digest.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "fhr:DerivedFrom"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:developmentalStage",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "developmentalStage",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied developmental stage or life stage",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Sample"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:fragmented",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "fragmented",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Fragmented BUSCOs (F)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
       "@id": "fhr:gcContent",
       "@type": "rdf:Property",
       "rdfs:label": {
@@ -224,6 +580,31 @@
       "sdo:rangeIncludes": [
         {
           "@id": "sdo:Number"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:headerType",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "headerType",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "FAIR-bioHeaders type of the parent file",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:DerivedFrom"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
         }
       ],
       "rdfs:isDefinedBy": {
@@ -306,6 +687,56 @@
       }
     },
     {
+      "@id": "fhr:libraryStrategy",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "libraryStrategy",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "One supplied library strategy term for the whole set, using the producer's ENA term where applicable. Omit when experiments differ or the value is unknown; this slot is not an ENA-controlled enum.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:lineageDataset",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "lineageDataset",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "BUSCO lineage dataset, including its version suffix; one or more dot-separated numeric version components are allowed, as BUSCO datasets are re-released (for example odb12.2)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
       "@id": "fhr:masking",
       "@type": "rdf:Property",
       "rdfs:label": {
@@ -355,6 +786,84 @@
         },
         {
           "@id": "fhr:Agent"
+        },
+        {
+          "@id": "fhr:MetadataAuthor"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:missing",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "missing",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Missing BUSCOs (M)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:mode",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "mode",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "BUSCO mode",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:moleculeType",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "moleculeType",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "One producer-supported biological molecule classification for the whole described set. Use mixed for a known heterogeneous set of biological RNA classes; omit when the classification is unknown. total RNA and cDNA are preparation contexts, not biological classes or evidence of a mixture.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
         }
       ],
       "rdfs:isDefinedBy": {
@@ -425,6 +934,12 @@
       "sdo:domainIncludes": [
         {
           "@id": "fhr:Agent"
+        },
+        {
+          "@id": "fhr:AssemblyAuthor"
+        },
+        {
+          "@id": "fhr:MetadataAuthor"
         }
       ],
       "sdo:rangeIncludes": [
@@ -530,6 +1045,56 @@
       "sdo:rangeIncludes": [
         {
           "@id": "sdo:URL"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:relationship",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "relationship",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "How this file relates to the parent. Provisional vocabulary: a PROV-O or Relation Ontology mapping is pending a maintainer decision (FAIR-bioHeaders-Specification#54).",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:DerivedFrom"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:sample",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "sample",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied biological sample context. Repeat the object for pooled material; each item carries only the values actually known for that source. This is not a complete BioSample record and does not establish a uniform pooled identity.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "fhr:Sample"
         }
       ],
       "rdfs:isDefinedBy": {
@@ -675,6 +1240,9 @@
       "sdo:domainIncludes": [
         {
           "@id": "sdo:Dataset"
+        },
+        {
+          "@id": "fhr:DerivedFrom"
         }
       ],
       "sdo:rangeIncludes": [
@@ -692,6 +1260,156 @@
       }
     },
     {
+      "@id": "fhr:sequencingRuns",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "sequencingRuns",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Actual SRA/ENA/DDBJ run accessions supporting the set. An SRS sample accession is not a run and must not be substituted.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:strain",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "strain",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied strain, breed or cultivar",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Sample"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:strandedness",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "strandedness",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied library strandedness under the FHT read/read-1 convention: forward means the single read or read 1 is sense relative to the originating transcript, reverse means antisense. Unknown or mixed protocols are omitted, never defaulted to unstranded.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "sdo:Dataset"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:tissue",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "tissue",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Supplied tissue or anatomical source label",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Sample"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:tissueIdentifier",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "tissueIdentifier",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "CURIE for the supplied tissue concept, preferably UBERON, PO or CL. The pattern checks CURIE form, not that the identifier resolves.",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Sample"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Text"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:total",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "total",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Number of BUSCO groups searched (n)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:Completeness"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
       "@id": "fhr:totalBasePairs",
       "@type": "rdf:Property",
       "rdfs:label": {
@@ -700,6 +1418,31 @@
       },
       "rdfs:comment": {
         "@value": "Total base pairs of the genome assembly, the summed scaffold length including N and other ambiguity letters (see FORMAT.md R16)",
+        "@language": "en"
+      },
+      "sdo:domainIncludes": [
+        {
+          "@id": "fhr:VitalStats"
+        }
+      ],
+      "sdo:rangeIncludes": [
+        {
+          "@id": "sdo:Integer"
+        }
+      ],
+      "rdfs:isDefinedBy": {
+        "@id": "https://w3id.org/fair-bioheaders/terms"
+      }
+    },
+    {
+      "@id": "fhr:totalTranscripts",
+      "@type": "rdf:Property",
+      "rdfs:label": {
+        "@value": "totalTranscripts",
+        "@language": "en"
+      },
+      "rdfs:comment": {
+        "@value": "Number of FASTA records, including isoforms",
         "@language": "en"
       },
       "sdo:domainIncludes": [

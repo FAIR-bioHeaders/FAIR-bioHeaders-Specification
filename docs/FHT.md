@@ -73,3 +73,5 @@ Tracks [FHT #5](https://github.com/FAIR-bioHeaders/FHT-Specification/issues/5),
 and [#107](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/107).
 These remain open for their actual final gates. Source-PR merge approval and final
 joint adoption/publication authority remain distinct.
+
+The actual released-layout proposal is now prepared in [FHT-PUBLICATION-CANDIDATE.md](FHT-PUBLICATION-CANDIDATE.md), including generated root artifacts, registry selection, vocabulary/binding and a separately executed conformance crosswalk. It remains an unpublished draft review, with the gates above unchanged.

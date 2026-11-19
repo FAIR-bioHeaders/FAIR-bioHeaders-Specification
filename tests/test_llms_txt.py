@@ -6,7 +6,7 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = {"FHR": "fhr.json", "FHP": "fhp.json", "FHGFF3": "fhgff3.json"}
+FILES = {"FHR": "fhr.json", "FHP": "fhp.json", "FHGFF3": "fhgff3.json", "FHT": "fht.json"}
 
 
 class LlmsTxtTests(unittest.TestCase):

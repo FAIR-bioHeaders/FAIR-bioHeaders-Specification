@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: FAIR-bioHeaders Specification
-message: For a general description of FHR, cite the preferred paper; cite this resource
+message: This checkout prepares an unpublished v0.7.0 candidate; no release date or version DOI is claimed. For a general description of FHR, cite the preferred paper; cite this resource
   DOI for direct use. Use the version DOI below for the v0.6.0 specification; the
   concept DOI identifies the specification across versions. Historical USDA public-domain
   material remains public domain;
@@ -105,5 +105,4 @@ preferred-citation:
   start: bbae122
   year: 2024
 
-version: 0.6.0
-date-released: 2026-11-13
+version: 0.7.0-preparation
