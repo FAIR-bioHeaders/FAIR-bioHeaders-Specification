@@ -1,0 +1,18 @@
+;~schema: https://w3id.org/fair-bioheaders/fht/v0.5.0
+;~schemaVersion: '1.0'
+;~transcriptome: Synthetic FHT conformance transcript set
+;~assemblyType: de novo
+;~moleculeType: mRNA
+;~taxon:
+;~  name: Homo sapiens
+;~  uri: https://identifiers.org/taxonomy:9606
+;~version: '1.0.0'
+;~metadataAuthor:
+;~- name: Synthetic metadata author (placeholder)
+;~dateCreated: '2026-11-10'
+;~documentation: 'Synthetic FHT conformance vector; not a real transcriptome.'
+;~checksum: uTKhr++P4z9N9VqVZqW31rWPz1d70Ug20IoNvechss8=
+>tx1 synthetic RNA transcript
+AUGGAACCUAGGUACGUAAUCCGGGUAACCCUAGGAAUCCGUACGAAG
+>tx2 synthetic RNA transcript in lower case
+augcuuauggccagguacguaaug

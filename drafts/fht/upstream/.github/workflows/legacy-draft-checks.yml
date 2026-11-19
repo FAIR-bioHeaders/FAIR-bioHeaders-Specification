@@ -1,0 +1,56 @@
+name: Legacy draft checks
+
+# PR/push lane for the preserved legacy draft (issue #14): schema health of
+# legacy/fht-v0.1.json under its declared JSON Schema dialect with explicit
+# format checking, the documented defect registry, positive/rejection
+# fixtures, and byte-pinned classification of legacy/examples/. The current
+# FHT 1.0 development contract is covered by validate-specification.yml; this
+# lane does not claim the legacy draft implements the family contract.
+# Both steps run and always report through the summary gate.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  legacy-draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - name: Install pinned validation tools
+        # Exact pins recorded in docs/CI.md; requirements-validation.txt keeps
+        # ranges for development and is intentionally not used here.
+        run: python -m pip install "jsonschema[format]==4.26.0" "PyYAML==6.0.3"
+      - name: Legacy schema health (dialect, meta-validation, defect registry)
+        id: schema
+        continue-on-error: true
+        run: python scripts/check_legacy_schema.py
+      - name: Legacy examples and fixtures (classified, byte-pinned)
+        id: examples
+        continue-on-error: true
+        run: python scripts/check_legacy_examples.py
+      - name: Summary and gate
+        if: always()
+        run: |
+          {
+            echo '## Legacy draft checks'
+            echo "- scripts/check_legacy_schema.py (declared dialect + explicit formats + defect registry): ${{ steps.schema.outcome }}"
+            echo "- scripts/check_legacy_examples.py (fixtures + legacy/examples classification): ${{ steps.examples.outcome }}"
+            echo "- jsonschema 4.26.0, PyYAML 6.0.3"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.schema.outcome }}" != 'success' ] || \
+             [ "${{ steps.examples.outcome }}" != 'success' ]; then
+            echo 'A legacy draft check failed above.' >&2
+            exit 1
+          fi

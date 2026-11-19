@@ -1,0 +1,54 @@
+name: Documentation checks
+
+# PR/push lane for owned documentation signals (issue #14): Markdownlint with
+# the reviewed local configuration (.markdownlint-cli2.jsonc), plus local
+# relative links, whitespace and conflict-marker checks. External links are
+# NOT fetched here; see external-links.yml (schedule/manual). All steps run on
+# every push/PR; the summary step always reports and gates the job so the
+# check is required-check friendly with a single status.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+      - name: Markdownlint (pinned markdownlint-cli2 0.24.0)
+        id: markdownlint
+        continue-on-error: true
+        run: npx -y markdownlint-cli2@0.24.0
+      - name: Owned checks (local links, whitespace, conflict markers)
+        id: local
+        continue-on-error: true
+        run: python scripts/check_docs.py
+      - name: Summary and gate
+        if: always()
+        run: |
+          {
+            echo '## Documentation checks'
+            echo "- markdownlint-cli2 0.24.0 (config .markdownlint-cli2.jsonc): ${{ steps.markdownlint.outcome }}"
+            echo "- scripts/check_docs.py (local links, whitespace, conflict markers): ${{ steps.local.outcome }}"
+            echo "- External links: not checked here (scheduled/manual lane: external-links.yml)"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.markdownlint.outcome }}" != 'success' ] || \
+             [ "${{ steps.local.outcome }}" != 'success' ]; then
+            echo 'A documentation check failed above.' >&2
+            exit 1
+          fi

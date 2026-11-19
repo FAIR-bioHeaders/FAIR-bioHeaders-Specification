@@ -1,0 +1,47 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+;~schemaVersion: '1.0'
+;~transcriptome: Bombus impatiens worker brain transcriptome (synthetic example)
+;~assemblyType: de novo
+;~moleculeType: mRNA
+;~taxon:
+;~  name: Bombus impatiens
+;~  uri: https://identifiers.org/taxonomy:132113
+;~version: '1.0'
+;~metadataAuthor:
+;~- name: Example Pollinator Genomics Lab
+;~  nameType: Organizational
+;~assemblyAuthor:
+;~- name: R. Example
+;~  nameType: Personal
+;~dateCreated: '2026-09-15'
+;~assemblySoftware:
+;~- name: Trinity
+;~  version: 2.15.2
+;~  uri: https://github.com/trinityrnaseq/trinityrnaseq
+;~  commandLineOption:
+;~  - --SS_lib_type
+;~  - RF
+;~sample:
+;~- tissue: brain
+;~  tissueIdentifier: UBERON:0000955
+;~  developmentalStage: adult worker
+;~libraryStrategy: RNA-Seq
+;~strandedness: reverse
+;~vitalStats:
+;~  totalTranscripts: 84211
+;~  N50: 1874
+;~  averageTranscriptLength: 1032.6
+;~completeness:
+;~  lineageDataset: hymenoptera_odb10
+;~  buscoVersion: 6.1.0
+;~  mode: transcriptome
+;~  completeSingle: 5012
+;~  completeDuplicated: 712
+;~  fragmented: 98
+;~  missing: 169
+;~  total: 5991
+;~documentation: 'Synthetic example for the FHT development contract: names, statistics and sequence bytes are invented; taxon and ontology identifiers are real.'
+;~reuseConditions: CC-BY-4.0
+;~checksum: YNB8LtJpcoVxZEzr3rkga8nGgFSWFQuVpy1U6KR1EDU=
+>synthetic_transcript_1
+ATGGCGTCTAAAGGTGAAGAACTGTTCACCGGTGTTGTTCCGATCCTGGTTGAACTGGATGGTGATGTTAACGGTCACAAATTC

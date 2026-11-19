@@ -1,0 +1,77 @@
+# FHR header for the chr4 (NC_004353.4) subset of *Drosophila melanogaster*
+# GCF_000001215.4 "Release 6 plus ISO1 MT".
+#
+# Pilot artifact for FAIR-bioHeaders/FHT-Specification#8 and #10. Every value is
+# traceable to a primary source probed on 2026-11-15 and recorded in README.md
+# beside this file. Written with the RELEASED fair-bioheaders 0.11.0
+# (`bioheaders combine`), which computes the checksum; nothing here is FHT and
+# nothing here claims FHT has a released contract (shared rule V7).
+schema: https://w3id.org/fair-bioheaders/fhr/v0.6.0
+schemaVersion: '2.1'
+genome: Drosophila melanogaster Release 6 plus ISO1 MT chromosome 4 (NC_004353.4 subset)
+genomeSynonym:
+  - dm6
+version: Release 6 plus ISO1 MT
+taxon:
+  name: Drosophila melanogaster
+  uri: https://identifiers.org/taxonomy:7227
+masking: soft-masked
+accessionID:
+  name: NC_004353.4
+  url: https://www.ncbi.nlm.nih.gov/nuccore/NC_004353.4
+identifier:
+  - GCF:GCF_000001215.4
+  - GCA:GCA_000001215.4
+  - INSDC:AE014135.4
+scholarlyArticle: 10.1101/gr.185579.114
+metadataAuthor:
+  - name: David C Molik
+    uri: https://orcid.org/0000-0003-3192-6538
+    nameType: Personal
+assemblyAuthor:
+  - name: FlyBase Consortium
+    nameType: Organizational
+  - name: Berkeley Drosophila Genome Project
+    nameType: Organizational
+  - name: Celera Genomics
+    nameType: Organizational
+dateCreated: '2014-08-01'
+voucherSpecimen: >-
+  iso-1 isogenic strain, whole embryos, mixed sex (NCBI BioSample
+  SAMN02803731, sample name "iso-1", submitted by Lawrence Berkeley National
+  Laboratory); genotype y[1]; Gr22b[1] Gr22d[1] cn[1] CG33964[R4.2] bw[1]
+  sp[1]; LysC[1] MstProx[1] GstD5[1] Rh6[1]
+vitalStats:
+  totalBasePairs: 1348131
+  gcContent: 35.25
+relatedLink:
+  - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/
+  - https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001215.4/
+  - https://www.ncbi.nlm.nih.gov/nuccore/AE014135.4
+  - https://www.ncbi.nlm.nih.gov/biosample/SAMN02803731
+  - https://www.ncbi.nlm.nih.gov/bioproject/PRJNA164
+documentation: >-
+  Subset reference file, not a published assembly delivery. It holds exactly one
+  sequence record: chromosome 4 of Drosophila melanogaster Release 6 plus ISO1
+  MT, RefSeq NC_004353.4 (GenBank AE014135.4, assembled molecule, chromosome,
+  1348131 bp, UCSC name chr4), copied verbatim as one FASTA record from the
+  delivery's GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna. The remaining
+  1869 sequence records of that assembly, including the other six chromosomes and
+  the mitochondrion, are NOT present: the whole-assembly checksum is therefore
+  not the checksum of this file, and any parent link to this file means this
+  subset. Masking was measured on the shipped bytes, not assumed: 374633 of the
+  1331131 ACGT characters (28.14% of letters, 27.79% of all symbols) are
+  lowercase, so the file is soft-masked; the uppercase NCBI component file
+  assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/chr4.fna
+  (md5 edd1c69d6360fe22ee850c3bca51894b) is identical to this record except for
+  letter case. The 17000 N characters are one NCBI-reported within-scaffold gap
+  at 1200663-1217662 with map linkage evidence, from the delivery's
+  _genomic_gaps.txt. totalBasePairs and gcContent (35.25% of ACGT characters,
+  case-insensitive) are recomputed from these bytes; scaffold and contig counts
+  are omitted because a one-record slice does not describe an assembly's
+  contig/scaffold structure. Sequence bytes are reproduced unmodified from the
+  NCBI RefSeq delivery and are not relicensed by this header; the delivery itself
+  supplies no license statement, so no reuseConditions value is asserted here.
+  This file exists to exercise a real FHR-to-FHT parent link for a chr4-only
+  transcript subset (a teaching and pilot artifact): a real deployment would point
+  at the full GCF_000001215.4 assembly file instead.

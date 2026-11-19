@@ -1,0 +1,94 @@
+{
+  "description": "Classification of the preserved historical examples in legacy/examples/ for issue #14. These files are review inputs from the pre-contract legacy draft, byte-pinned by sha256; do not repair them in place. Each entry records how the file behaves against legacy/fht-v0.1.json when validated with jsonschema 4.26.0, Draft 2020-12 dialect, explicit FormatChecker (the procedure scripts/check_legacy_examples.py re-measures). Statuses: 'nonconforming-historical' = parses but fails the legacy schema with the recorded errors; 'unparseable-historical' = the header block cannot even be parsed as YAML; 'not-json-or-yaml-historical' = outside the supported example formats, preserved as a presentation artifact. None of these files is advertised as a valid example of anything; 'notes' list additional defects a schema cannot express (semantic mismatches, typos). The current FHT 1.0 examples live in examples/ and are tested by tests/test_examples.py.",
+  "schemaFile": "legacy/fht-v0.1.json",
+  "schemaSha256": "34eec2e5c0dd9355ec3ffe3bdff8861d80345336d779b94b5e8a3ccf8ea894aa",
+  "trackedBy": "https://github.com/FAIR-bioHeaders/FHT-Specification/issues/14",
+  "examples": [
+    {
+      "file": "legacy/examples/example.fht.json",
+      "sha256": "2fc700003702d7eda3a1d93677f15459c02460763af8b8523692f358cabb62bf",
+      "format": "json",
+      "classification": "nonconforming-historical",
+      "expectedErrors": [
+        {
+          "path": [],
+          "contains": [
+            "Additional properties are not allowed",
+            "'$id'",
+            "'$schema'",
+            "'assemblySoftware'",
+            "'reuseConditions'"
+          ]
+        },
+        { "path": ["checksum"], "contains": ["is too short"] },
+        { "path": ["checksum"], "contains": ["does not match", "[A-Za-z0-9/+=]"] },
+        { "path": ["masking"], "contains": ["does not match", "not-masked"] }
+      ],
+      "reasons": [
+        "Embeds JSON Schema keywords ($schema, $id) in a data instance the legacy draft forbids at top level.",
+        "Carries assemblySoftware and reuseConditions, which the legacy draft's property list does not define (they re-enter the family later, per the field decisions on specs/fht-field-decisions.md).",
+        "Checksum is prefixed 'md5:' and 36 characters: too short for the draft's own 44-character sha2 definition and not base64 charset.",
+        "masking value 'soft-masked' is not one of the draft's alternation words."
+      ],
+      "notes": [
+        "taxon.uri points at taxonomy:9606 (Homo sapiens) while the record names 'Bombas huntii' — the unanchored pattern cannot catch a wrong-but-shaped URI; the genus is also misspelled (Bombus).",
+        "The 'schema' field ends '.../FHT.jso' (truncated); the legacy draft types it as a plain string, so the schema cannot catch it.",
+        "assemblyAuthor uses a 'url' key instead of 'uri'; nested objects do not close additionalProperties, so the typo is silently accepted (defect L5 in scripts/check_legacy_schema.py)."
+      ]
+    },
+    {
+      "file": "legacy/examples/example.fht.yaml",
+      "sha256": "d6918eeed57c70dc2d55f4d387262600e1a50b8f3b5e94ca8625fea034c43b1e",
+      "format": "yaml",
+      "classification": "nonconforming-historical",
+      "expectedErrors": [
+        {
+          "path": [],
+          "contains": [
+            "Additional properties are not allowed",
+            "'assemblySoftware'",
+            "'reuseConditions'"
+          ]
+        },
+        { "path": ["checksum"], "contains": ["is too short"] },
+        { "path": ["checksum"], "contains": ["does not match", "[A-Za-z0-9/+=]"] },
+        { "path": ["masking"], "contains": ["does not match", "not-masked"] }
+      ],
+      "reasons": [
+        "Same field-level defects as example.fht.json (without the embedded $schema/$id keys).",
+        "schemaVersion is the YAML integer 1 — valid against the legacy number typing, yet another sign these files predate the string '1.0' contract."
+      ],
+      "notes": [
+        "taxon.uri 9606 mismatches 'Bombas huntii' as in the JSON instance.",
+        "metadataAuthor/assemblyAuthor uris are correct here, unlike the JSON instance's 'url' typo."
+      ]
+    },
+    {
+      "file": "legacy/examples/example.fht.fasta",
+      "sha256": "3e10bdea29a2ea8dfcd18756c5d0360f693880da69eee30a1584ad6402310981",
+      "format": "fasta",
+      "classification": "unparseable-historical",
+      "expectedParseErrorContains": ["expected <block end>"],
+      "reasons": [
+        "The ;~ header block, after prefix stripping, is not well-formed YAML: the metadataAuthor/assemblyAuthor list items indent 'uri:' inconsistently with the '- name:' line, so safe parsing fails before any schema validation.",
+        "Even if repaired, it would carry the same value-level defects as example.fht.yaml (md5 checksum, soft-masked)."
+      ],
+      "notes": [
+        "Sequence bytes and the taxon mismatch are preserved as historical; the current FASTA examples in examples/ show the supported ;~ block layout with verified checksums."
+      ]
+    },
+    {
+      "file": "legacy/examples/example.microdata.fhr.html",
+      "sha256": "c6029850006d5b581957e874342c1b0059ccae6cc88a790d60c1eba924966593",
+      "format": "html",
+      "classification": "not-json-or-yaml-historical",
+      "reasons": [
+        "HTML microdata presentation artifact from the retired converter era; it is not a JSON or YAML instance, so the JSON-Schema lane does not apply. Kept so the recorded rendering history is not lost."
+      ],
+      "notes": [
+        "The filename says 'fhr' while the itemtype is the FHT schema URL — a historical naming slip, left verbatim.",
+        "Contains 'Bomnas huntii' (typo of Bombus) and stray double quotes inside uri/url span values."
+      ]
+    }
+  ]
+}

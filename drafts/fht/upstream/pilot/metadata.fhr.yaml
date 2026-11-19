@@ -1,0 +1,73 @@
+# FHR pilot metadata for GCA_036971475.1 (USDA_Prosapia_bicincta_1.0)
+# Authored for FAIR-bioHeaders/FHT-Specification#40 (pilot split from #10,
+# maintainer decision 2026-11-14). Every value below is traceable to a
+# primary source probed on 2026-11-14; the probe commands and outputs are
+# recorded in pilot/README.md. Written for the RELEASED fair-bioheaders
+# 0.11.0 `bioheaders combine` (FHR 2.1 via https://w3id.org/fair-bioheaders/fhr/v0.6.0);
+# the checksum is computed by the tool over the combined file bytes.
+schema: https://w3id.org/fair-bioheaders/fhr/v0.6.0
+schemaVersion: '2.1'
+genome: USDA_Prosapia_bicincta_1.0
+version: '1.0'
+taxon:
+  name: Prosapia bicincta
+  uri: https://identifiers.org/taxonomy:139605
+masking: soft-masked
+accessionID:
+  name: GCA_036971475.1
+  url: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_036971475.1/
+scholarlyArticle: 10.1093/g3journal/jkae129
+metadataAuthor:
+  - name: David C Molik
+    uri: https://orcid.org/0000-0003-3192-6538
+    nameType: Personal
+assemblyAuthor:
+  - name: David C Molik
+    uri: https://orcid.org/0000-0003-3192-6538
+    nameType: Personal
+  - name: Tyler J Simmonds
+    uri: https://orcid.org/0000-0002-9703-5140
+    nameType: Personal
+  - name: Renee L Corpuz
+    uri: https://orcid.org/0009-0005-6600-0788
+    nameType: Personal
+  - name: Angela N Kauwe
+    uri: https://orcid.org/0000-0003-3505-7472
+    nameType: Personal
+  - name: Charles J Mason
+    uri: https://orcid.org/0000-0002-9205-8511
+    nameType: Personal
+  - name: Sheina B Sim
+    uri: https://orcid.org/0000-0003-0914-6914
+    nameType: Personal
+  - name: Scott M Geib
+    uri: https://orcid.org/0000-0002-9511-5139
+    nameType: Personal
+dateCreated: '2023-05-16'
+documentation: >-
+  FAIR-bioHeaders FHR pilot for the two-lined spittlebug reference genome
+  (Prosapia bicincta, isolate DM-2020), assembled with HiFiASM v. 0.16.0-r369
+  from PacBio Sequel HiFi data as described in the GenBank assembly record.
+  The published _genomic.fna bytes are soft-masked: 1,129,108,786 of
+  2,219,553,221 ACGT characters are lowercase (measured 2026-11-14); the
+  only N bases are the 41,900 scaffold-gap characters reported by NCBI. The masking
+  agent is not documented in the GenBank structured comment, so soft-masked
+  (the observable lowercase encoding) is asserted rather than repeat-masked.
+  This assembly is genome-only: its FTP delivery offers no _protein.faa.gz,
+  _genomic.gff.gz or _cds_from_genomic.fna.gz, and _feature_count.txt reports
+  gene protein_coding with Unique Ids 0 and Placements 0 (re-probed
+  2026-11-14), so it supports no FHP, FHGFF3 or FHT header.
+relatedLink:
+  - https://www.ncbi.nlm.nih.gov/bioproject/PRJNA987615
+  - https://www.ncbi.nlm.nih.gov/biosample/SAMN35984262
+  - https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/036/971/475/GCA_036971475.1_USDA_Prosapia_bicincta_1.0/
+vitalStats:
+  totalBasePairs: 2219595121
+  numberScaffolds: 428
+  numberContigs: 833
+  scaffoldN50: 270856870
+  scaffoldL50: 4
+  scaffoldN90: 9050718
+  scaffoldL90: 14
+  gcContent: 33.22
+  readTechnology: PacBio Sequel

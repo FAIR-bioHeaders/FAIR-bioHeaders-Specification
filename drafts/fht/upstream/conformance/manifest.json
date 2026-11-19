@@ -1,0 +1,2133 @@
+{
+  "manifestVersion": 1,
+  "status": "Development vectors for the FHT 1.0 contract (FHT-Specification#8). No FHT schema is released and no installed toolkit reads FHT in its default path: every expected outcome is derived from the rule text, never from an implementation under test. D3 file-identity expectation acceptance is recorded separately in expectationReviews.",
+  "specification": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FORMAT.md (rules R1-R15)",
+  "schemaVersionsSpecification": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMA-VERSIONS.md (rules V1, V5, V7)",
+  "fhtContract": "fht.json \u2014 the generated FHT 1.0 development schema (specs/005-rna-transcriptome-header/spec.md)",
+  "fhtRuleText": "conformance/README.md (C1-C3; renamed from the provisional T1-T3 in FHT-Specification#36)",
+  "checksumDefinition": "base64(SHA-512/256) over the (decompressed) file bytes except the root-level checksum line and its terminator (docs/FORMAT.md R1-R5); written by scripts/make_fht_fixtures.py and cross-checked by scripts/check_fht_fixtures.py",
+  "generator": "scripts/make_fht_fixtures.py",
+  "rules": {
+    "R1": {
+      "summary": "Checksum rule 1: hash the exact file bytes without normalization; for gzip/BGZF input, the decompressed bytes. A line ends at LF, CRLF or a CR not followed by LF."
+    },
+    "R2": {
+      "summary": "Checksum rule 2: exactly one root-level checksum line with an unquoted key; spaces only to match root indentation and before the colon; nested checksum properties (such as a derivedFrom parent checksum) stay covered."
+    },
+    "R3": {
+      "summary": "Checksum rule 3: exclude that entire line and its terminator; hash every other byte, so changing covered bytes invalidates the checksum."
+    },
+    "R4": {
+      "summary": "Checksum rule 4: SHA-512/256 digest in standard padded base64, no prefix; the encoding is canonical (the unused bits are zero) and checksums compare as exact strings."
+    },
+    "R5": {
+      "summary": "Header parsing: the checksum line holds only the 44-character value, plain or quoted, with optional spaces; comments, tags, other text, block scalars and continuation lines are invalid."
+    },
+    "R6": {
+      "summary": "Header parsing: FHT header lines are UTF-8 without U+0085, U+2028 or U+2029; bytes outside header lines are not decoded."
+    },
+    "R7": {
+      "summary": "Header parsing: a FASTA file must not begin with a UTF-8 byte order mark."
+    },
+    "R8": {
+      "summary": "Header parsing: no duplicate mapping keys, YAML anchors, aliases or merge keys."
+    },
+    "R9": {
+      "summary": "Header parsing: in microdata the first of repeated attributes applies; itemtype and itemprop are space-separated token lists.",
+      "notApplicable": "R9 is a microdata rule (docs/FORMAT.md: repeated attributes, `itemtype`/`itemprop` token lists) and has no FASTA vector; no FHT microdata reader or writer exists, so issue #8 box 2 keeps it out of this suite. Measured 2026-11-15 with fair-bioheaders 0.11.0: `bioheaders convert <fht file> out.html --to html` exits 1 with 'HTML microdata output is not available for FHT metadata: no reviewed FHT binding exists (FHT-Specification#9)'. The typed-HTML lane is issue #11."
+    },
+    "R10": {
+      "summary": "Header parsing: header lines form the leading block before the first FASTA record; a ';~' line after that point, including one from a concatenated file, is invalid; ordinary ';' comments and blank lines may be mixed in around and inside the block."
+    },
+    "R11": {
+      "summary": "Header writing (FASTA): header lines should not contain a raw '>' or '@'; writers escape them as \\x3E and \\x40 in double-quoted YAML scalars, which read back as the same characters.",
+      "notApplicable": "R11 is a writing recommendation: a raw '>' or '@' keeps the file valid and validators warn; the shared suite likewise has no invalid R11 vector."
+    },
+    "R12": {
+      "summary": "Header parsing: YAML metadata is read with YAML 1.2 core-schema types and must read the same under YAML 1.1; explicit tags and plain scalars that the two versions read differently (010, 1_000, 1:30, yes, on, 1e3) are invalid; plain scalars that look like dates or times are strings, as written."
+    },
+    "R13": {
+      "summary": "Numbers: a numeric metadata value must be a finite number. YAML .nan, .inf and -.inf make the record invalid."
+    },
+    "R14": {
+      "summary": "Links: a value whose schema format is uri should use http or https (ftp, urn, doi and info are also accepted); any other scheme stays schema-valid, but validators warn.",
+      "notApplicable": "R14 makes validators warn, not reject: an unexpected link scheme is schema-valid. Its valid vector carries \"warnings\": [\"R14\"]."
+    },
+    "R15": {
+      "summary": "Extension fields: from the FHT 1.0 development contract (FR-010), a top-level key matching ^x-[A-Za-z0-9][A-Za-z0-9_.-]*$ may hold any value; every other unknown key and an x- key in a nested object stay invalid."
+    },
+    "V1": {
+      "summary": "Schema selection: raw-main selects the reader's **current** schema of that type, with no fallback to an older release. The shared rule text lists the shared publication repository's raw-main URLs; for FHT the citation is the owning development repository's raw-main URL, which V7 places in the opt-in draft lane. What the V1 vectors here turn on is the no-fallback half: a record that states a version other than the contract the citation selects is rejected, not retried against another schema."
+    },
+    "V5": {
+      "summary": "Schema selection: any schema value outside the recognized released-schema URLs is FHR, checked against the reader's current FHR schema; a near-miss URL additionally draws the reader's warning (FAIR-bioHeaders-Tools#125). While no release registers FHT, its release-form URLs (an fht w3id URL, an FHT-Specification raw tag) are such values \u2014 the V7 draft lane is the owning development repository's raw-main URL only \u2014 and V4 unsupported-version begins only when FHT enters schemas/versions.json.",
+      "notApplicable": "V5 outcomes depend on the record's bytes; no record that is valid against the FHT contract can be FHR-valid (FHT states schemaVersion '1.0', which the current FHR schema rejects, and the required field sets are disjoint), so V5 has no valid side here. V4 is not registered as a rule of this suite at all: with no FHT row in schemas/versions.json there is no citation it can resolve to."
+    },
+    "V7": {
+      "summary": "Schema selection: a reader **may** recognise a draft contract cited as the raw-main URL of the development repository that owns the type, only where the user explicitly chose that lane, reading the draft at the revision the reader is built with and warning on every such record; without the choice, V5 governs and the outcome is exactly what it was before V7 existed. V7 is the precondition of this whole suite, not a per-vector outcome: no expected result changes because of it, so it has no valid/invalid pair here. Measured 2026-11-15 with fair-bioheaders 0.11.0 (docs/CI.md): with the lane closed all 72 vectors are invalid as FHR; with it open the 28 valid vectors are accepted and the 44 rejections hold.",
+      "notApplicable": "V7 is a reader **configuration**, not a per-vector outcome: it decides whether any record in this suite is read as the draft at all, so it cannot have a valid/invalid pair inside one byte-exact suite. The positive selection vector is `fht-fasta-schema-raw-main`; the lane-closed behavior (every record here becomes invalid as FHR under V5) is measured in docs/CI.md's manual named-toolkit lane, and a configuration-dependent expectation needs its own manifest vocabulary \u2014 see conformance/README.md, 'The rule this suite cannot carry yet'."
+    },
+    "C1": {
+      "summary": "FHT development contract (text in conformance/README.md): the parsed header metadata must validate against fht.json \u2014 required fields, enums, patterns, nested cardinality and the closed top level (plus R15 extension keys), and complete supplied BUSCO component counts must sum exactly to total (a separate arithmetic check, not JSON Schema)."
+    },
+    "C2": {
+      "summary": "FHT development contract (text in conformance/README.md): a record's schema value must be the one URL the FHT draft accepts, this repository's raw-main fht.json (rule V7: a draft never takes a release form; release forms are added at publication). Another type's schema, a release-form or arbitrary URL fails fht.json; it never silently selects the FHT schema."
+    },
+    "C3": {
+      "summary": "FHT development contract (text in conformance/README.md): a derivedFrom parent checksum must equal the checksum recomputed over the supplied parent file's bytes, per link; a mismatch is an invalid link (checked-fail), and a parent that was not supplied makes the link unchecked, never verified."
+    }
+  },
+  "vectors": [
+    {
+      "id": "fht-fasta-lf",
+      "file": "valid/fht-fasta-lf.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R7",
+        "R8",
+        "R10",
+        "R12"
+      ],
+      "description": "RNA transcript set (U alphabet); LF line endings; the checksum line is the last header line; plain scalars and mappings follow R8/R12.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-crlf",
+      "file": "valid/fht-fasta-crlf.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "CRLF line endings; CR bytes are hashed.",
+      "checksum": "WlwlWAQ1bnyFmzMN+N6TksuBN1b57eCa2bMLdgjaPFA=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-cr",
+      "file": "valid/fht-fasta-cr.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "Lone CR line endings.",
+      "checksum": "K1w+PQ5in/26LBhVdAuFuRy5w39tahjzmaq3Z3KWB2A=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-mixed-endings",
+      "file": "valid/fht-fasta-mixed-endings.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "LF, CRLF and CR line endings mixed in one file.",
+      "checksum": "fvLeGQdf+5JTMIxhKjMqW9xFpe/msuRkrwseqiNypXQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-no-final-newline",
+      "file": "valid/fht-fasta-no-final-newline.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R1",
+        "R3"
+      ],
+      "description": "The last sequence line has no terminator.",
+      "checksum": "bPPyutFj6XGFXVDJmTNgjzJxgsMfDdRwr7a2WKUnXX4=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-cdna",
+      "file": "valid/fht-fasta-cdna.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "R1"
+      ],
+      "description": "cDNA representation (T alphabet) of the same synthetic set: coverage is alphabet-independent (FR-006) and the supplied T bytes are preserved, not converted to U.",
+      "checksum": "uRSVTKkO9PeJhPIRyB5p6RpCEW6SMrjTX1fF3pKo8bA=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-minimal",
+      "file": "valid/fht-fasta-minimal.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "Exactly the nine required fields (FR-001); no optional field is defaulted or written null.",
+      "checksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set (minimal)",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-comments-and-blank-lines",
+      "file": "valid/fht-fasta-comments-and-blank-lines.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R3",
+        "R10"
+      ],
+      "description": "Ordinary ';' comments, blank lines and a ';~#' YAML comment around or inside the header block; a plain ';' comment after a record stays a comment (only ';~' lines after records break R10); all of it is hashed.",
+      "checksum": "uBuOjEXZXZ14ycENu2PgkZAAJPVD+x/790R2MZ5f2FU=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-root-indented",
+      "file": "valid/fht-fasta-root-indented.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2"
+      ],
+      "description": "Every header line, including the checksum line, has root indentation 1.",
+      "checksum": "F7abLkJ8ju/aTFG6Ikd1SHRihUn5D6EmbrZS+fn2Sc0=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-space-before-colon",
+      "file": "valid/fht-fasta-space-before-colon.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2"
+      ],
+      "description": "Spaces before the colon on the checksum line.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-checksum-first",
+      "file": "valid/fht-fasta-checksum-first.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R3"
+      ],
+      "description": "The checksum line is first in the header block: R3 excludes the line wherever it sits, so the value matches fht-fasta-lf.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-checksum-trailing-spaces",
+      "file": "valid/fht-fasta-checksum-trailing-spaces.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "description": "Trailing spaces on the checksum line are excluded with it.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-quoted-value",
+      "file": "valid/fht-fasta-quoted-value.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2",
+        "R5"
+      ],
+      "description": "The checksum value is a quoted single-line scalar; the key stays unquoted.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-nested-checksum",
+      "file": "valid/fht-fasta-nested-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R2",
+        "R3",
+        "C1"
+      ],
+      "description": "A root checksum line plus the indented nested parent checksum under derivedFrom: only the root line is excluded; the nested checksum is covered metadata (R2).",
+      "checksum": "/u0FOiLGjCmd4g+iqDhrTAHzUoEw/idh3/ImGL0QtmQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-escaped-record-markers",
+      "file": "valid/fht-fasta-escaped-record-markers.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R11",
+        "C1"
+      ],
+      "description": "A header value holding '>' and '@' written as \\x3E and \\x40 in a double-quoted scalar; it reads back with the real characters.",
+      "checksum": "IQGWTyyfrAMyxbAoBvdbkMyGY8nN8jCjKJb/ijh4BeY=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "documentation": "transcripts > 1000 nt; contact someone@example.org"
+      }
+    },
+    {
+      "id": "fht-fasta-utf8-metadata",
+      "file": "valid/fht-fasta-utf8-metadata.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R6",
+        "C1"
+      ],
+      "description": "Raw non-ASCII UTF-8 (U+00E9) in a header value is allowed; only U+0085, U+2028 and U+2029 are excluded from header lines.",
+      "checksum": "+zrshU+usPmCfzXH/vvVJk1LzC9R4GEzsL6SQbqEhLs=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "documentation": "Synthetic FHT conformance vector; caf\u00e9 (placeholder UTF-8 metadata)"
+      }
+    },
+    {
+      "id": "fht-fasta-yaml-plain-date",
+      "file": "valid/fht-fasta-yaml-plain-date.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R12",
+        "C1"
+      ],
+      "description": "dateCreated written as the plain (unquoted) scalar 2026-11-10: under R12 a plain scalar that looks like a date is a string, exactly as written, so the record reads the same under YAML 1.1 and 1.2 and passes the date format (the FHT form of the shared fasta-yaml-portable-types vector).",
+      "checksum": "e+VZ9vSU8d3x5rvHJHrZ2H6nntB3DlboQdDe5+MHDM8=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "dateCreated": "2026-11-10"
+      }
+    },
+    {
+      "id": "fht-fasta-extension-fields",
+      "file": "valid/fht-fasta-extension-fields.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R15",
+        "C1"
+      ],
+      "description": "Top-level x- extension fields of every JSON type (FR-010, R15): string, integer, number, boolean, list (with null) and object.",
+      "checksum": "mWc298KrEnEn9ZbjvjuQQGnmJUnJicffHmBrusQVJq0=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-link-scheme-warning",
+      "file": "valid/fht-fasta-link-scheme-warning.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "R14",
+        "C1"
+      ],
+      "description": "A relatedLink URI with a non-link scheme stays schema-valid; validators warn (R14).",
+      "checksum": "IGvy+HmJDIh7tJ9WUXx+4WCnjbLnqL7MTS2TSRnQWKo=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "relatedLink": [
+          "javascript:void(0)"
+        ]
+      },
+      "warnings": [
+        "R14"
+      ]
+    },
+    {
+      "id": "fht-fasta-gzip",
+      "file": "valid/fht-fasta-gzip.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "compression": "gzip",
+      "expected": "valid",
+      "rules": [
+        "R1"
+      ],
+      "description": "fht-fasta-lf compressed as one gzip member; the checksum covers the decompressed bytes and is unchanged.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-bgzf",
+      "file": "valid/fht-fasta-bgzf.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "compression": "bgzf",
+      "expected": "valid",
+      "rules": [
+        "R1"
+      ],
+      "description": "fht-fasta-lf compressed as multi-block BGZF (with EOF block); same checksum.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-gzip-multimember",
+      "file": "valid/fht-fasta-gzip-multimember.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "compression": "gzip",
+      "expected": "valid",
+      "rules": [
+        "R1"
+      ],
+      "description": "fht-fasta-lf as two gzip members split inside the checksum line; same checksum (R1 hashes the decompressed bytes, so stream framing is not hashed and the members are one file).",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-schema-raw-main",
+      "file": "valid/fht-fasta-schema-raw-main.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "V1",
+        "C2"
+      ],
+      "description": "The raw-main FHT schema URL with schemaVersion '1.0' selects the reader's current FHT contract \u2014 today the 1.0 development schema. The bytes are those of fht-fasta-lf under a stable V1 vector id.",
+      "checksum": "G3P+vlkJHjxIHXmoGaotGyiEdpRmeJkQH/8U/8f/RDQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0"
+      }
+    },
+    {
+      "id": "fht-fasta-molecule-type-mixed",
+      "file": "valid/fht-fasta-molecule-type-mixed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "The producer explicitly asserts known heterogeneous biological RNA classes using the fifth moleculeType value mixed (Molik ruling, #8 comment 6928571815). Unknown remains omission; this syntactic fixture does not verify biological classes.",
+      "checksum": "HB5+nubpasPH60rGkyf8bii0ItXafNaZt2hIIqWOYDE=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set (mixed molecules)",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "moleculeType": "mixed"
+      }
+    },
+    {
+      "id": "fht-fasta-doi-ascii",
+      "file": "valid/fht-fasta-doi-ascii.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "An ASCII scholarlyArticle DOI-shaped placeholder satisfies the existing imported pattern; no DOI is resolved or asserted real.",
+      "checksum": "UWEk5ca5oCwV8/QZtS61oczPbRc10jxUwojxCdAn5Js=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "scholarlyArticle": "10.5555/synthetic-fht"
+      }
+    },
+    {
+      "id": "fht-fasta-doi-internal-zwj",
+      "file": "valid/fht-fasta-doi-internal-zwj.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "An internal U+200D ZWJ is not whitespace under ECMA-262, so the existing scholarlyArticle pattern permits it. This pins the bound of the pattern, not DOI registration or a general invisible-text policy.",
+      "checksum": "Ie7utk6tdrYy2sRL2NIDlarBoktemg2wT3JjVR4B4NI=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo",
+        "scholarlyArticle": "10.5555/synthetic\u200d-fht"
+      }
+    },
+    {
+      "id": "fht-fasta-optional-empty-values-retained",
+      "file": "valid/fht-fasta-optional-empty-values-retained.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "D1 retains existing software and optional empty values; an empty CLI argument is not a missing array item. This is syntax, not a recommendation to invent empty metadata.",
+      "checksum": "TU+9S0/s1+vVPb2gdaSQXhpY9SFGfO5hN5sgjIIBHqQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-completeness-zero-components",
+      "file": "valid/fht-fasta-completeness-zero-components.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1"
+      ],
+      "description": "D2: complete supplied mutually exclusive BUSCO counts sum to total; measured zero components remain zero.",
+      "checksum": "PqYweJkcaKJ9t75lG6VrS8atGllKzYX9U8dlO7qeBrc=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      }
+    },
+    {
+      "id": "fht-fasta-parent-transcribed-from",
+      "file": "valid/fht-fasta-parent-transcribed-from.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "description": "A transcribedFrom FHR parent: the supplied parents/parent-genome.fhr.fasta recomputes to exactly the cited checksum (checked-pass). The accessionID is additional, not a substitute.",
+      "checksum": "4rH9yZLqholGSGWwFjZMsU2FbqhBHu1/cBI/Ag+9c/A=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-filtered-from",
+      "file": "valid/fht-fasta-parent-filtered-from.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "description": "A filteredFrom FHT parent whose file is the fht-fasta-minimal vector, cited by its recomputed checksum (checked-pass).",
+      "checksum": "lJBFzlPaMmaSXWlP1SoLWuPwEIQheAKjfU6ERd1sgFY=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set (filtered subset)",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-pass"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-unavailable",
+      "file": "valid/fht-fasta-parent-unavailable.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "description": "A well-formed parent checksum whose parent file was not supplied: the record is valid and the link is unchecked \u2014 a reader must not report it verified and must not reject the record for the absent parent.",
+      "checksum": "/u0FOiLGjCmd4g+iqDhrTAHzUoEw/idh3/ImGL0QtmQ=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": null,
+          "statedChecksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+          "result": "unchecked"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-rich",
+      "file": "valid/fht-fasta-rich.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "R13",
+        "R15",
+        "C3"
+      ],
+      "description": "Every optional FHT field; vitalStats are genuinely computed from the vector's own sequence bytes; both permitted parent relationships cite the supplied parent fixtures' recomputed checksums (checked-pass); one extension field.",
+      "checksum": "j35ZPDrXrJ0nn8RFYKzczaqhbk43IWKRzbdyn3FLAIM=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        },
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "pjrV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-pass"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-subset-citing-whole",
+      "file": "valid/fht-fasta-parent-subset-citing-whole.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "description": "A transcript subset citing the WHOLE parent (parents/parent-genome.fhr.fasta): the stated checksum recomputes equal, so C3 returns checked-pass and the record stays valid. FR-007 fixes the permitted pair and the required parent checksum, and C3 fixes the comparison; neither mentions coverage, so no rule here can make this a rejection. The vector exists to pin what the pass does NOT say: a reader must not report the subset relationship, or the derivation of any record, as verified (hazard measured in pilot #45).",
+      "checksum": "D/UktbtHaYOmuB1q2L4D4oHlRgWR52EKj4IJu+t+qqE=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set (ctgA subset)",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-masked-exact",
+      "file": "valid/fht-fasta-parent-masked-exact.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "valid",
+      "rules": [
+        "C1",
+        "C3"
+      ],
+      "description": "A child citing parents/parent-genome-masked.fhr.fasta \u2014 the same records with one sequence line written in lower case and `masking: soft-masked` \u2014 at that file's own recomputed digest: checked-pass. Case is part of the hashed bytes (R1), so the masked file has a digest of its own and citing it exactly is correct, not a normalization to be undone.",
+      "checksum": "j1Km+a4xr1WcNl3OYdCIX05Yr8Um8mQ3tO8xv/lOlIM=",
+      "selfChecksum": "matches",
+      "metadata": {
+        "transcriptome": "Synthetic FHT conformance transcript set (soft-masked parent)",
+        "version": "1.0.0",
+        "assemblyType": "de novo"
+      },
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-masked.fhr.fasta",
+          "statedChecksum": "2WBzTRWHA/8A0y8TvwMCVENlk1FetSR9Gt4zz0hrCT8=",
+          "result": "checked-pass"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-crlf-normalized-checksum",
+      "file": "invalid/fht-fasta-crlf-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "Checksum computed after normalizing CRLF line endings to LF.",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-u-normalized-checksum",
+      "file": "invalid/fht-fasta-u-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "Checksum computed after U-to-T (RNA-to-cDNA) normalization of the sequence lines; the supplied bytes keep U (FR-006).",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-case-normalized-checksum",
+      "file": "invalid/fht-fasta-case-normalized-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "Checksum computed after upper-casing the lower-case sequence line.",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-sequence-tampered",
+      "file": "invalid/fht-fasta-sequence-tampered.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R3",
+      "reason": "A nucleotide changed after the checksum was computed (checksum mismatch); the metadata itself is untouched and still valid.",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-gzip-sequence-tampered",
+      "file": "invalid/fht-fasta-gzip-sequence-tampered.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "compression": "gzip",
+      "expected": "invalid",
+      "rule": "R3",
+      "reason": "fht-fasta-sequence-tampered compressed as one gzip member: the covered bytes still disagree after decompression, so the mismatch survives framing.",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-gzip-truncated",
+      "file": "invalid/fht-fasta-gzip-truncated.fht.fasta.gz",
+      "format": "fht-fasta",
+      "compressed": true,
+      "compression": "gzip",
+      "expected": "invalid",
+      "rule": "R1",
+      "reason": "fht-fasta-lf as one gzip member truncated six bytes before its end, inside the CRC-32/ISIZE trailer: the stream is incomplete, so there are no decompressed bytes for R1 to hash and the file is rejected before any checksum comparison.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-checksum-sha256",
+      "file": "invalid/fht-fasta-checksum-sha256.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R4",
+      "reason": "The value is standard padded base64 of a SHA-256 digest, not of SHA-512/256; exact-string comparison fails.",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-checksum-truncated-sha512",
+      "file": "invalid/fht-fasta-checksum-truncated-sha512.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R4",
+      "reason": "The value is SHA-512 truncated to 32 bytes and re-encoded; SHA-512/256 is a distinct algorithm, so the exact string differs (and the encoding may not even be canonical).",
+      "selfChecksum": "broken"
+    },
+    {
+      "id": "fht-fasta-checksum-non-canonical",
+      "file": "invalid/fht-fasta-checksum-non-canonical.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R4",
+      "reason": "The final payload character is outside the canonical set AEIMQUYcgkosw048, so a 32-byte digest can never encode to it.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-missing-checksum",
+      "file": "invalid/fht-fasta-missing-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "No root-level checksum line at all.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-two-checksum-lines",
+      "file": "invalid/fht-fasta-two-checksum-lines.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "Two root-level checksum lines with the same value.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-only-nested-checksum",
+      "file": "invalid/fht-fasta-only-nested-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R2",
+      "reason": "Only the indented derivedFrom parent checksum is present; a nested checksum never substitutes for the root line.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-block-literal-checksum",
+      "file": "invalid/fht-fasta-block-literal-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "The checksum line is a YAML block scalar indicator ('|-') and the value sits on the next header line; R5 requires the value on the checksum line itself.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-continued-checksum",
+      "file": "invalid/fht-fasta-continued-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A checksum value continued on the following header line (a folded plain scalar); R5 allows one line only.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-checksum-with-comment",
+      "file": "invalid/fht-fasta-checksum-with-comment.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R5",
+      "reason": "A YAML comment follows the checksum value; the line holds the value and nothing else.",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-u2028-in-header",
+      "file": "invalid/fht-fasta-u2028-in-header.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R6",
+      "reason": "A raw U+2028 byte inside a header line: YAML treats it as a line break (R6 excludes it; U+0085 and U+2029 behave the same way).",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-utf8-bom",
+      "file": "invalid/fht-fasta-utf8-bom.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R7",
+      "reason": "The file begins with a UTF-8 byte order mark; the BOM also removes the ';~' prefix from the first header line.",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-duplicate-key",
+      "file": "invalid/fht-fasta-duplicate-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R8",
+      "reason": "A duplicate root-level 'version' mapping key.",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-yaml-anchor-alias",
+      "file": "invalid/fht-fasta-yaml-anchor-alias.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R8",
+      "reason": "A YAML anchor on relatedLink reused through an alias on transcriptomeSynonym.",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-header-after-record",
+      "file": "invalid/fht-fasta-header-after-record.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R10",
+      "reason": "A ';~' line after the first FASTA record; it is neither ignored nor merged. (The stated checksum is consistent with the bytes, but a reader must reject the shape before the comparison stage, so this vector is classified 'unreachable'.)",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-concatenated",
+      "file": "invalid/fht-fasta-concatenated.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R10",
+      "reason": "Two complete FHT files concatenated; each part is internally checksum-consistent, but the second header block follows records (and adds a second root checksum line).",
+      "selfChecksum": "unreachable"
+    },
+    {
+      "id": "fht-fasta-yaml-leading-zero",
+      "file": "invalid/fht-fasta-yaml-leading-zero.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R12",
+      "reason": "A plain integer with a leading zero: YAML 1.1 reads 011 as octal 9, YAML 1.2 reads decimal 11, so the value is ambiguous (the schema cannot see this \u2014 only the R12 rule rejects it).",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-inf-vital-stats",
+      "file": "invalid/fht-fasta-inf-vital-stats.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R13",
+      "reason": "vitalStats.averageTranscriptLength is the YAML .inf: not a finite number (type 'number' alone accepts it, so R13 is the rejection).",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-extension-nested-key",
+      "file": "invalid/fht-fasta-extension-nested-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R15",
+      "reason": "An x- key inside the nested taxon object: extension fields are top level only.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606",
+          "x-note": "extension in a nested object"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "QtYFK7mW/jO7JfygbA/Roji7TjWBXqIIxQq2qcYBrGM="
+      }
+    },
+    {
+      "id": "fht-fasta-extension-uppercase-key",
+      "file": "invalid/fht-fasta-extension-uppercase-key.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "R15",
+      "reason": "A top-level key starting with 'X-' does not match the extension pattern and is an unknown key.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "X-Wrongcase": "extension keys are lowercase x-",
+        "checksum": "U5zVWwhhiOoGItnEykDO0of/InUdS1GnMwP7cGLEsyM="
+      }
+    },
+    {
+      "id": "fht-fasta-derived-from-duplicate",
+      "file": "invalid/fht-fasta-derived-from-duplicate.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "D2 rejects identical derivedFrom entries (uniqueItems); the file checksum is valid and no parent lookup is needed.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "relationship": "transcribedFrom"
+          },
+          {
+            "headerType": "FHR",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "relationship": "transcribedFrom"
+          }
+        ],
+        "checksum": "9y4WVUdwlhtZIQsH3T7OuB6FBgltgRXTJ71v5+aUFZg="
+      }
+    },
+    {
+      "id": "fht-fasta-parent-checksum-noncanonical",
+      "file": "invalid/fht-fasta-parent-checksum-noncanonical.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "D2 requires canonical base64 in the parent checksum: B has nonzero unused bits; the root checksum still matches.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB=",
+            "relationship": "transcribedFrom"
+          }
+        ],
+        "checksum": "Z3TcxD9zV1NL3kykT5ojAK9jY66JkmSkvVtziXu4UH0="
+      }
+    },
+    {
+      "id": "fht-fasta-completeness-sum-exceeds-total",
+      "file": "invalid/fht-fasta-completeness-sum-exceeds-total.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "D2 arithmetic: All component counts are supplied; sum 5 exceeds total 1. This is schema-valid but violates the separate C1 sum rule.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "completeness": {
+          "lineageDataset": "insecta_odb10",
+          "completeSingle": 5,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 0,
+          "total": 1
+        },
+        "checksum": "Q1iR002KxGvhFodBK/pbFYeXWIph85HNjTVdXvF+5Vw="
+      }
+    },
+    {
+      "id": "fht-fasta-completeness-sum-below-total",
+      "file": "invalid/fht-fasta-completeness-sum-below-total.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "D2 arithmetic: All component counts are supplied; sum 1 is below total 2. This is schema-valid but violates the separate C1 sum rule.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "completeness": {
+          "lineageDataset": "insecta_odb10",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "missing": 0,
+          "total": 2
+        },
+        "checksum": "MW0rfTvmtVdMCg8pZVUjFZ/LrlJSwPNwoghp3S0rLmE="
+      }
+    },
+    {
+      "id": "fht-fasta-completeness-missing-count",
+      "file": "invalid/fht-fasta-completeness-missing-count.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The pinned shared Completeness object already requires missing when supplied; no absent count is defaulted to zero.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "completeness": {
+          "lineageDataset": "insecta_odb10",
+          "completeSingle": 1,
+          "completeDuplicated": 0,
+          "fragmented": 0,
+          "total": 1
+        },
+        "checksum": "hDMRHYZnJcx1zM/aAfykvRIsTrtzanwUVZY+VACzBXc="
+      }
+    },
+    {
+      "id": "fht-fasta-doi-trailing-nbsp",
+      "file": "invalid/fht-fasta-doi-trailing-nbsp.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The scholarlyArticle DOI-shaped value ends in U+00A0 NBSP; ECMA-262 \\S excludes this whitespace, so the existing imported DOI pattern rejects it. The exact-byte checksum still matches.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "scholarlyArticle": "10.5555/synthetic-fht\u00a0",
+        "checksum": "u2APxa/aVljRksRHfu7cLq9JYRI2FQWkEdBTx2RUFhQ="
+      }
+    },
+    {
+      "id": "fht-fasta-doi-trailing-narrow-nbsp",
+      "file": "invalid/fht-fasta-doi-trailing-narrow-nbsp.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The scholarlyArticle DOI-shaped value ends in U+202F narrow NBSP; ECMA-262 \\S excludes this whitespace, so the existing imported DOI pattern rejects it. The exact-byte checksum still matches.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "scholarlyArticle": "10.5555/synthetic-fht\u202f",
+        "checksum": "gqj57ipdNTG4oo8OLfQVK4he/O3qmiq+vx6TP7FZDcs="
+      }
+    },
+    {
+      "id": "fht-fasta-missing-assembly-type",
+      "file": "invalid/fht-fasta-missing-assembly-type.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The required assemblyType field is absent.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "cLfDGau/I6Kl7P8ZP0vpEf2gV93zWK3JHZHM30vS09g="
+      }
+    },
+    {
+      "id": "fht-fasta-bad-assembly-type",
+      "file": "invalid/fht-fasta-bad-assembly-type.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "assemblyType hybrid is not an FHT value (de novo, genome-guided, annotation-derived).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "hybrid",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "xIFFvQADDjoNgRMGrhdj7J+2weQZj3ivnWMLu3ERT64="
+      }
+    },
+    {
+      "id": "fht-fasta-molecule-type-cdna",
+      "file": "invalid/fht-fasta-molecule-type-cdna.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "moleculeType cDNA is not an FHT value: cDNA is a preparation context, not a biological molecule class (D1, FR-002).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "cDNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "HwXbpojZPAypQrFp6x1nKGiLziZT+y9HhSmBd8nrzF8="
+      }
+    },
+    {
+      "id": "fht-fasta-molecule-type-mixed-case",
+      "file": "invalid/fht-fasta-molecule-type-mixed-case.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "Molecule classifications are exact controlled strings: Mixed is not the explicitly added lowercase mixed value.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "Mixed",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "swXSYF1+n94SzNO/7a827wmjYiRFI6R5sNq09QHwvOY="
+      }
+    },
+    {
+      "id": "fht-fasta-assembly-type-mixed",
+      "file": "invalid/fht-fasta-assembly-type-mixed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "mixed is a moleculeType classification, not a fourth construction type; the three assemblyType values stay fixed.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "mixed",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "Ati/N/csy6Mu3A1CdyOvWaUe27L+BCBBOHS35sEyqS4="
+      }
+    },
+    {
+      "id": "fht-fasta-empty-sample",
+      "file": "invalid/fht-fasta-empty-sample.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "An optional array written empty instead of omitted (sample requires at least one item when present, FR-003).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "sample": [],
+        "checksum": "NYRX1g4bucDtVL16znmqUEcjycWERW9a/N8rcfX7rz4="
+      }
+    },
+    {
+      "id": "fht-fasta-fhr-key-genome",
+      "file": "invalid/fht-fasta-fhr-key-genome.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The FHR-only key genome: the FHT top level is closed.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "genome": "Synthetic genome",
+        "checksum": "2kXj95JNR0peji4GFs2tViY43BcF/3H4KMA0nQ9f6EM="
+      }
+    },
+    {
+      "id": "fht-fasta-legacy-key-masking",
+      "file": "invalid/fht-fasta-legacy-key-masking.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "The legacy FHT key masking was removed by the FHT 1.0 contract (FR-009); it is an unknown key.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "masking": "not-masked",
+        "checksum": "SGLvN4ynmue5/Da4wZf0PynoTkrDzjVwQ+yV05gpylg="
+      }
+    },
+    {
+      "id": "fht-fasta-bad-run-accession",
+      "file": "invalid/fht-fasta-bad-run-accession.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "An SRS sample accession in sequencingRuns; only SRR/ERR/DRR run accessions are allowed (FR-003).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "sequencingRuns": [
+          "SRS1234567"
+        ],
+        "checksum": "K6yStxRNnzCbfODX3Dc0S5j+mxyChYXHqqcsGqhWTXY="
+      }
+    },
+    {
+      "id": "fht-fasta-derived-from-no-checksum",
+      "file": "invalid/fht-fasta-derived-from-no-checksum.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "A derivedFrom entry without the parent checksum: an accessionID alone is never a substitute (FR-007).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "relationship": "transcribedFrom",
+            "accessionID": {
+              "name": "Synthetic accession DB (placeholder)",
+              "url": "https://example.org/fhr/x"
+            }
+          }
+        ],
+        "checksum": "TYHO/KUZ26xnDVK3SUjlNcvsK/zEUYE5Ymq0ZMC9djA="
+      }
+    },
+    {
+      "id": "fht-fasta-derived-from-fhp-parent",
+      "file": "invalid/fht-fasta-derived-from-fhp-parent.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "An FHP parent with translatedFrom: FHT permits only FHR + transcribedFrom and FHT + filteredFrom (FR-007).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "derivedFrom": [
+          {
+            "headerType": "FHP",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "relationship": "translatedFrom"
+          }
+        ],
+        "checksum": "3/36AIK0LxCb8OOjHBQ6Z7sCv5tBjRf5ds1hFnLEtN0="
+      }
+    },
+    {
+      "id": "fht-fasta-derived-from-bad-relationship",
+      "file": "invalid/fht-fasta-derived-from-bad-relationship.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "relationship annotates with an FHR parent: the FHR pair must use transcribedFrom (FR-007).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "derivedFrom": [
+          {
+            "headerType": "FHR",
+            "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "relationship": "annotates"
+          }
+        ],
+        "checksum": "ojqCuHYPocnN95zbV3D3CbHh9pxz0jCzpbnKOYqjPOo="
+      }
+    },
+    {
+      "id": "fht-fasta-cites-fhr-schema",
+      "file": "invalid/fht-fasta-cites-fhr-schema.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C2",
+      "reason": "Citing the FHR raw-main schema URL: the FHT contract's schema value rejects it, and a reader that selected FHR from the URL instead would still reject FHT-only keys \u2014 the record never silently validates.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "Z7cDdxYhNuic2qG1aGnmu/G+e7EAL45FyMLjxY0Qj5k="
+      }
+    },
+    {
+      "id": "fht-fasta-cites-arbitrary-url",
+      "file": "invalid/fht-fasta-cites-arbitrary-url.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C2",
+      "reason": "A schema value other than the FHT draft's URL: unlike released FHR, whose schema field is unconstrained (V5), the FHT development contract accepts only its own raw-main URL.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://example.org/schemas/my-fht-profile.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "MJu3/S27xpP/NNdJqihMi1VI/75+IoBNHQp5rd5hVjw="
+      }
+    },
+    {
+      "id": "fht-fasta-schema-trailing-line-feed",
+      "file": "invalid/fht-fasta-schema-trailing-line-feed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C2",
+      "reason": "The raw-main URL followed by a line feed (a double-quoted \\n escape): not the URL. The contract compares the whole value, so a regular expression whose '$' also matches before a final line feed (Python's re) cannot accept it where ECMA-262 rejects it.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json\n",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "ueZ3+4w8F25QvwH7dW5oHMqcSj1SX1tCOfk1QX5PI1U="
+      }
+    },
+    {
+      "id": "fht-fasta-run-accession-trailing-line-feed",
+      "file": "invalid/fht-fasta-run-accession-trailing-line-feed.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "A run accession followed by a line feed. Python's '$' matches before a final line feed, so an anchored ^...$ pattern accepted it there while ECMA-262 rejected it; the pattern now ends with (?![\\s\\S]).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "sequencingRuns": [
+          "SRR9990001\n"
+        ],
+        "checksum": "fZGLoIldBS0Hi6QfwpDItnt+7TrvbKLrTPi10ZG2R7o="
+      }
+    },
+    {
+      "id": "fht-fasta-blank-transcriptome-bom",
+      "file": "invalid/fht-fasta-blank-transcriptome-bom.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "transcriptome is a lone U+FEFF (zero width no-break space), written as a \\ufeff escape: blank. ECMA-262 counts it as whitespace and Python's \\S did not, so the old pattern accepted it in Python only.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "\ufeff",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "2yKaAHINmlnbH4D2DWwRgsfwO5tMpOblL+quuK4XJMM="
+      }
+    },
+    {
+      "id": "fht-fasta-blank-version-separator",
+      "file": "invalid/fht-fasta-blank-version-separator.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C1",
+      "reason": "version is a lone U+001C (file separator), written as a \\x1c escape: blank. Python counts U+001C-U+001F and U+0085 as whitespace and ECMA-262 does not, so the old pattern accepted it in ajv and browsers only.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "\u001c",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "ar6Rgovno2LeCiPtEVLr5MLuY7DYJJ73+jVG2jmnOOs="
+      }
+    },
+    {
+      "id": "fht-fasta-version-2-0-via-raw-main",
+      "file": "invalid/fht-fasta-version-2-0-via-raw-main.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V1",
+      "reason": "Raw main selects the reader's current FHT contract (1.0); a future major stated against it is rejected \u2014 no fallback and no newer FHT schema exists (FR-008).",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+        "schemaVersion": "2.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "5fMUCWbhZzly9eTUq7XkC+vatgnJzsheHbbW+ON6fQg="
+      }
+    },
+    {
+      "id": "fht-fasta-schemaversion-number",
+      "file": "invalid/fht-fasta-schemaversion-number.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V1",
+      "reason": "schemaVersion written as the unquoted YAML number 1.0: the current contract requires the string '1.0' (docs/SCHEMA-VERSIONS.md quotes it for exactly this reason).",
+      "selfChecksum": "matches"
+    },
+    {
+      "id": "fht-fasta-schema-w3id-release-without-fht",
+      "file": "invalid/fht-fasta-schema-w3id-release-without-fht.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V5",
+      "reason": "No release registers FHT, so this release-form w3id URL matches no V1-V3 form (matching is exact) and stays 'any other value' under V5 \u2014 read as FHR against the reader's current FHR schema, near-miss warning included (FAIR-bioHeaders-Tools#125), never as the draft: the V7 lane is the raw-main URL only (ruling of 2026-11-13, FAIR-bioHeaders-Specification#221). From the record's bytes the FHR reading rejects it: schemaVersion '1.0' is outside FHR's accepted set; required genome, assemblyAuthor and masking are absent; transcriptome, assemblyType and moleculeType breach FHR's closed top level (schema bytes pinned in conformance/README.md). V4 unsupported-version begins only when FHT enters schemas/versions.json.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://w3id.org/fair-bioheaders/fht/v0.5.0",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "uTKhr++P4z9N9VqVZqW31rWPz1d70Ug20IoNvechss8="
+      },
+      "result": "invalid-as-fhr"
+    },
+    {
+      "id": "fht-fasta-schema-raw-tag-unknown",
+      "file": "invalid/fht-fasta-schema-raw-tag-unknown.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V5",
+      "reason": "A raw tag URL of the FHT development repository names no registered release; the V7 lane admits only the raw-main URL, so this value is likewise 'any other value' under V5 \u2014 read as FHR with the near-miss warning (Tools#125), not V4 unsupported-version (FAIR-bioHeaders-Specification#221 ruling, 2026-11-13). It carries the same record bytes as fht-fasta-schema-w3id-release-without-fht and meets the same FHR-invalid outcome (conformance/README.md pins the checked FHR schema bytes). The FHT development contract rejects the URL too: it accepts only its raw-main URL.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/v9.9.9/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "1bqVEGvt+PjLbQDCOC7a6127yxhi3yl2k65brQoerLc="
+      },
+      "result": "invalid-as-fhr"
+    },
+    {
+      "id": "fht-fasta-schema-shared-raw-tag",
+      "file": "invalid/fht-fasta-schema-shared-raw-tag.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "V5",
+      "reason": "The V2 raw-tag form of the shared publication repository for an fht.json no release carries. V7: a raw tag URL naming a release for a type that no release registers stays 'any other value' under V5, so it is read as FHR (near-miss warning included) and rejected there by the same FHR errors as the other V5 vectors. The FHT development contract rejects it too: a draft never takes a release form.",
+      "selfChecksum": "matches",
+      "metadata": {
+        "schema": "https://raw.githubusercontent.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/v0.6.0/fht.json",
+        "schemaVersion": "1.0",
+        "transcriptome": "Synthetic FHT conformance transcript set",
+        "assemblyType": "de novo",
+        "moleculeType": "mRNA",
+        "taxon": {
+          "name": "Homo sapiens",
+          "uri": "https://identifiers.org/taxonomy:9606"
+        },
+        "version": "1.0.0",
+        "metadataAuthor": [
+          {
+            "name": "Synthetic metadata author (placeholder)"
+          }
+        ],
+        "dateCreated": "2026-11-10",
+        "documentation": "Synthetic FHT conformance vector; not a real transcriptome.",
+        "checksum": "RqXNhgeI0z5CWQs8VqswvJssHKucDUkf9He6rIrnoSs="
+      },
+      "result": "invalid-as-fhr"
+    },
+    {
+      "id": "fht-fasta-parent-mismatched",
+      "file": "invalid/fht-fasta-parent-mismatched.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C3",
+      "reason": "The child's bytes, metadata and self-checksum are all valid, but the cited parent checksum does not equal the checksum recomputed over the supplied parents/parent-genome.fhr.fasta (checked-fail): a verifier must report an invalid link, not treat it as unchecked and not pass it silently.",
+      "selfChecksum": "matches",
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "dpDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-real-digest-wrong-file",
+      "file": "invalid/fht-fasta-parent-real-digest-wrong-file.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C3",
+      "reason": "The link states the genuine digest of parents/parent-genome.fhr.fasta, but the parent the reader holds is parents/parent-genome-subset.fhr.fasta \u2014 a second real file, holding a proper subset of those records, with its own computed digest. C3 compares exact strings, so the verdict is checked-fail: not unchecked, not a shape error, and not something to skip. A reader that reports a match has checked that the value is somebody's digest, not that it is this parent's.",
+      "selfChecksum": "matches",
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-subset.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-case-folded-digest",
+      "file": "invalid/fht-fasta-parent-case-folded-digest.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C3",
+      "reason": "The link states the digest of parents/parent-genome.fhr.fasta while the supplied parent is parents/parent-genome-masked.fhr.fasta. The two files carry the same records and the same letters, differing only in the case of one sequence line, the genome title and the masking value that describes it. R1 hashes exact bytes and C3 compares exact strings, so the verdict is checked-fail: case is not a normalization a verifier may apply, and the uppercase and masked copies of a molecule are two files with two digests (measured on real data in pilot #45).",
+      "selfChecksum": "matches",
+      "parentLink": [
+        {
+          "file": "parents/parent-genome-masked.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-fail"
+        }
+      ]
+    },
+    {
+      "id": "fht-fasta-parent-mixed-verdicts",
+      "file": "invalid/fht-fasta-parent-mixed-verdicts.fht.fasta",
+      "format": "fht-fasta",
+      "compressed": false,
+      "expected": "invalid",
+      "rule": "C3",
+      "reason": "Two parent links, two verdicts: the FHR transcribedFrom checksum recomputes from parents/parent-genome.fhr.fasta (checked-pass) while the FHT filteredFrom checksum does not equal the value recomputed over the supplied valid/fht-fasta-minimal.fht.fasta (checked-fail). parentLink results are per-entry: a passing link in the same file does not mask the failing one, and a verifier must report the mismatched link as invalid (finalized #37 semantics).",
+      "selfChecksum": "matches",
+      "parentLink": [
+        {
+          "file": "parents/parent-genome.fhr.fasta",
+          "statedChecksum": "pdDy56KE7+tzfZfk9eVOAQOPc/Fj78DfNBWOpJC4xac=",
+          "result": "checked-pass"
+        },
+        {
+          "file": "valid/fht-fasta-minimal.fht.fasta",
+          "statedChecksum": "jprV6TbP1evu4BPuWQS4nKUvwtr4FAN4EuuqtaJW4mA=",
+          "result": "checked-fail"
+        }
+      ]
+    }
+  ],
+  "retired": [],
+  "expectationReviews": [
+    {
+      "status": "accepted-file-identity-only",
+      "decision": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934",
+      "decisionId": "D3",
+      "date": "2026-11-19",
+      "review": "Independent clause derivations and SHA-512/256 recomputation were recorded before David Molik accepted the recommendations.",
+      "vectors": [
+        "fht-fasta-parent-subset-citing-whole",
+        "fht-fasta-parent-real-digest-wrong-file",
+        "fht-fasta-parent-masked-exact",
+        "fht-fasta-parent-case-folded-digest"
+      ],
+      "limitation": "Matching proves exact cited parent-file identity only; no biological derivation or extraction is established."
+    }
+  ]
+}

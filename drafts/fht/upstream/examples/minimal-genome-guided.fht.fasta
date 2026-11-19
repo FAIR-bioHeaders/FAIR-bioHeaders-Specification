@@ -1,0 +1,15 @@
+;~schema: https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json
+;~schemaVersion: '1.0'
+;~transcriptome: Zea mays B73 leaf drought-response transcriptome (synthetic minimal example)
+;~assemblyType: genome-guided
+;~taxon:
+;~  name: Zea mays
+;~  uri: https://identifiers.org/taxonomy:4577
+;~version: '2.1'
+;~metadataAuthor:
+;~- name: M. Example
+;~  nameType: Personal
+;~dateCreated: '2026-07-02'
+;~checksum: mmLxZRyOeMVtWb6TOwsbOHfScDYhAVziOMfFDNp1ths=
+>synthetic_transcript_1
+ATGGCGTCTAAAGGTGAAGAACTGTTCACCGGTGTTGTTCCGATCCTGGTTGAACTGGATGGTGATGTTAACGGTCACAAATTC

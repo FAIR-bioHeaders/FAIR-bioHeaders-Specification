@@ -1,0 +1,21 @@
+{
+  "description": "Pinned shared files for the FHT development contract, copied verbatim from FAIR-bioHeaders-Specification at the pinned release commit: the LinkML imports the FHT model builds on, and the released FHR schema that rule V5 routes non-FHT schema citations to (scripts/check_fht_fixtures.py). They must be replaced from a reviewed release, not edited by hand.",
+  "source_repository": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification",
+  "source_commit": "0ae18b00ee4bd71ab2dc28bae706b0f9d195076b",
+  "source_release": "v0.6.0 (tag commit 0ae18b0). schemas/core.yaml is byte-identical at v0.4.0, v0.5.0, v0.6.0 and the pinned commit, so the stored core-v0.4.yaml copy is unchanged; schemas/shared.yaml is the v0.6.0 model with the #170 widened lineageDataset pattern",
+  "files": {
+    "schemas/core-v0.4.yaml": {
+      "source_path": "schemas/core.yaml",
+      "sha256": "2bd657ece8c8cbfb4dfbba1f68cb3f708c1ab91baa0fcd50d97ddc58b7e96b5e"
+    },
+    "schemas/shared.yaml": {
+      "source_path": "schemas/shared.yaml",
+      "sha256": "19afd1d83a6728f5ca9084878adca80a00d61399e2f5854854053eed8cf1d209"
+    },
+    "schemas/fhr-v0.6.0.json": {
+      "source_path": "fhr.json",
+      "sha256": "694ab5afaf8c3743eacf9e2aacb5551f7cbe37073b6f4afc3ae4a65b47f9d4df",
+      "role": "released FHR 2.1 contract (tag v0.6.0; byte-identical at v0.5.0): the reader's current FHR schema for V5-routed conformance vectors"
+    }
+  }
+}

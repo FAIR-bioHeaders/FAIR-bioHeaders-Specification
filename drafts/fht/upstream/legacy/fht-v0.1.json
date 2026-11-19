@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/FAIR-bioHeaders/FHT-Specification/main/fht.json",
+  "title": "FHT",
+  "description": "FAIR Header Reference transcriptome Schema for Genome Assemblies",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "description": "centralized schema file"
+    },
+    "schemaVersion": {
+      "type": "number",
+      "description": "Version of FHT"
+    },
+    "transcriptome": {
+      "type": "string",
+      "description": "Name of the Genome"
+    },
+    "transcriptomeSynonym": {
+      "type": "array",
+      "description": "Other common names of the transcriptome",
+      "items": {
+        "type": "string"
+      }
+    },
+    "taxon": {
+      "type": "object",
+      "description": "Species name and URL of the species information at identifiers.org",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "https://identifiers.org/taxonomy:[0-9]+"
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "description": "Version number of Genome eg. 1.2.0"
+    },
+    "metadataAuthor": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Author of the FHT Instance (Person or Org)",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "uri": {
+            "$ref": "#/definitions/orcidUri"
+          }
+        }
+      }
+    },
+    "assemblyAuthor": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "Assembler of the Genome (Person or Org)",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "uri": {
+            "$ref": "#/definitions/orcidUri"
+          }
+        }
+      }
+    },
+    "dateCreated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the transcriptome assembly was created"
+    },
+    "voucherSpecimen": {
+      "type": "string",
+      "description": "Description of the physical sample(s) from which the transcriptome was derived. This may include details such as tissue type, developmental stage, environmental conditions, or any other relevant characteristics."
+    },
+    "accessionID": {
+      "type": "object",
+      "description": "accessionID transcriptome assembly was created",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "instrument": {
+      "type": "array",
+      "description": "Physical tools and instruments used in the creation of the transcriptome assembly",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scholarlyArticle": {
+      "type": "string",
+      "pattern": "^10.",
+      "description": "Scholarly article transcriptome was published e.g. 10.5281/zenodo.6762550 "
+    },
+    "documentation": {
+      "type": "string",
+      "description": "Documentation about the transcriptome"
+    },
+    "identifier": {
+      "type": "array",
+      "description": "Identifies of the transcriptome",
+      "items": {
+        "type": "string",
+        "pattern": "[a-z0-9]*:.*"
+      }
+    },
+    "relatedLink": {
+      "type": "array",
+      "description": "Related URLS to the transcriptome",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "funding": {
+      "type": "string",
+      "description": "Grant Line Item"
+    },
+    "license": {
+      "type": "string",
+      "description": "license for the use of the Transciptome"
+    },
+    "masking": {
+      "type": "string",
+      "pattern": "(not-masked|repeat-masked|poly-A-T-masked|quality-masked|unknown)",
+      "description": "Masking applied to the transcriptome assembly, if any."
+    },
+    "vitalStats": {
+      "type": "object",
+      "description": "General statistics about the transcriptome assembly",
+      "properties": {
+        "N50": {
+          "type": "integer",
+          "description": "N50 of the transcriptome assembly, representing the contig length at which half of the total assembly size is contained in contigs of this size or larger."
+        },
+        "totalTranscripts": {
+          "type": "integer",
+          "description": "Total number of transcripts assembled, providing an indication of the complexity and coverage of the transcriptome."
+        },
+        "averageTranscriptLength": {
+          "type": "number",
+          "description": "Average length of transcripts, offering insights into the typical size of transcribed sequences."
+        },
+        "GCContent": {
+          "type": "number",
+          "description": "GC content of the transcriptome, representing the percentage of nucleotides that are either guanine (G) or cytosine (C)."
+        },
+        "isoformDiversity": {
+          "type": "integer",
+          "description": "Number of alternative isoforms identified in the transcriptome assembly, highlighting the complexity of gene expression patterns and alternative splicing events."
+        },
+        "expressionLevels": {
+          "type": "string",
+          "description": "Metrics related to expression levels, such as TPM (Transcripts Per Million) or FPKM (Fragments Per Kilobase Million), quantifying the abundance of transcripts and gene expression."
+        },
+        "transcriptomeCompleteness": {
+          "type": "string",
+          "description": "Assessment of transcriptome completeness, typically evaluated using metrics such as BUSCO (Benchmarking Universal Single-Copy Orthologs) completeness scores or comparison against reference transcriptome databases. This field provides insight into the comprehensiveness and coverage of the assembled transcriptome."
+        },
+        "novelTranscripts": {
+          "type": "integer",
+          "description": "Number and proportion of transcripts identified as novel, not previously annotated or characterized. This metric indicates the extent to which the transcriptome assembly contributes to the discovery of previously uncharacterized transcripts, enhancing our understanding of gene expression dynamics and transcriptomic diversity."
+        }
+      }
+    },
+    "checksum": {
+      "$ref": "#/definitions/sha2"
+    }
+  },
+  "required": [
+    "schema",
+    "schemaVersion",
+    "transcriptome",
+    "taxon",
+    "version",
+    "metadataAuthor",
+    "assemblyAuthor",
+    "dateCreated",
+    "masking",
+    "checksum"
+  ],
+  "definitions": {
+    "orcidUri": {
+      "format": "uri",
+      "pattern": "^https://orcid.org/[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9X]"
+    },
+    "sha2": {
+      "type": "string",
+      "minLength": 44,
+      "maxLength": 44,
+      "pattern": "^[A-Za-z0-9/+=]+$",
+      "description": "sha2-512/256 checksum value for hashing"
+    }
+  },
+  "additionalProperties": false
+}
