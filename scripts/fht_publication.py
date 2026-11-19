@@ -38,7 +38,45 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def counter_bytes(original, compressed, reader):
+def deterministic_gzip(data):
+    compressed = bytearray(gzip.compress(data, mtime=0))
+    compressed[9] = 255
+    return bytes(compressed)
+
+
+def sequence_transform(data, transform):
+    transformed, in_fasta = [], False
+    for line in data.splitlines(keepends=True):
+        content = line.rstrip(b'\r\n')
+        ending = line[len(content):]
+        if content.startswith(b'>'):
+            in_fasta = True
+        elif in_fasta and content and not content.startswith(b';'):
+            content = transform(content)
+        transformed.append(content + ending)
+    return b''.join(transformed)
+
+
+def named_faulty_checksum(data, source_id, reader):
+    if source_id == 'fht-fasta-crlf-normalized-checksum':
+        return reader.recomputed(data.replace(b'\r\n', b'\n'))
+    if source_id == 'fht-fasta-u-normalized-checksum':
+        normalized = sequence_transform(data, lambda line: line.replace(b'U', b'T').replace(b'u', b't'))
+        return reader.recomputed(normalized)
+    if source_id == 'fht-fasta-case-normalized-checksum':
+        return reader.recomputed(sequence_transform(data, bytes.upper))
+    if source_id in ('fht-fasta-checksum-sha256', 'fht-fasta-checksum-truncated-sha512'):
+        _, position, length = reader.locate_checksum(data)
+        covered = data[:position] + data[position + length:]
+        algorithm = 'sha256' if source_id == 'fht-fasta-checksum-sha256' else 'sha512'
+        digest = hashlib.new(algorithm, covered).digest()
+        if algorithm == 'sha512':
+            digest = digest[:32]
+        return base64.b64encode(digest).decode('ascii')
+    return None
+
+
+def counter_bytes(original, compressed, reader, source_id=None):
     try:
         data = reader.decompress(original) if compressed else original
     except reader.CompressionError:
@@ -54,15 +92,21 @@ def counter_bytes(original, compressed, reader):
         computed = reader.recomputed(data)
         source_stated = reader.locate_checksum(before)[0]
         matched = source_stated == reader.recomputed(before)
-        # Preserve deliberate checksum mismatch, rather than repairing a C2/R3
-        # rejection. Only the unique root line changes, never a parent's digest.
-        replacement = computed if matched else ('A' if computed[0] != 'A' else 'B') + computed[1:]
+        replacement = named_faulty_checksum(data, source_id, reader)
+        if replacement is not None:
+            if replacement == computed:
+                raise AssertionError(source_id + ': named faulty checksum unexpectedly matches')
+            policy = 'shared release selector; named faulty checksum preserved'
+        else:
+            # Preserve deliberate checksum mismatch, rather than repairing a C2/R3
+            # rejection. Only the unique root line changes, never a parent's digest.
+            replacement = computed if matched else ('A' if computed[0] != 'A' else 'B') + computed[1:]
+            policy = 'shared release selector; root digest recomputed' if matched else 'shared release selector; checksum defect preserved'
         line = data[position:position + length]
         data = data[:position] + line.replace(stated.encode(), replacement.encode(), 1) + data[position + length:]
-        policy = 'shared release selector; root digest recomputed' if matched else 'shared release selector; checksum defect preserved'
     except ValueError:
         policy = 'shared release selector; malformed checksum/header defect preserved'
-    return (gzip.compress(data, mtime=0) if compressed else data), policy
+    return (deterministic_gzip(data) if compressed else data), policy
 
 
 def outputs():
@@ -71,7 +115,7 @@ def outputs():
     result, vectors = {}, []
     for entry in source['vectors']:
         original = (OWNER / 'conformance' / entry['file']).read_bytes()
-        data, policy = counter_bytes(original, entry['compressed'], reader)
+        data, policy = counter_bytes(original, entry['compressed'], reader, entry['id'])
         identity = 'fht-v070-' + entry['id'].removeprefix('fht-')
         filename = entry['file'].rsplit('/', 1)[-1].replace(entry['id'], identity)
         relative = entry['expected'] + '/' + filename

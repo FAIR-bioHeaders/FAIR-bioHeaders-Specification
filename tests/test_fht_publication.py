@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: MPL-2.0
 """Proposed FHT release integration: exact constraints, selectors, bytes and types."""
+import base64
 import copy
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -57,6 +59,54 @@ class FHTPublicationTests(unittest.TestCase):
         for identity in ('fht-fasta-completeness-sum-exceeds-total', 'fht-fasta-completeness-sum-below-total'):
             self.assertEqual(rows[identity]['stage'], 'semantics')
         self.assertFalse(receipt['released'])
+
+    def test_named_checksum_faults_match_their_faulty_digest_relationships(self):
+        manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
+        entries = {row['sourceId']: row for row in manifest['vectors']}
+
+        def transformed_sequence(data, transform):
+            output, in_fasta = [], False
+            for line in data.splitlines(keepends=True):
+                content = line.rstrip(b'\r\n')
+                ending = line[len(content):]
+                if content.startswith(b'>'):
+                    in_fasta = True
+                elif in_fasta and content and not content.startswith(b';'):
+                    content = transform(content)
+                output.append(content + ending)
+            return b''.join(output)
+
+        for source_id in (
+            'fht-fasta-crlf-normalized-checksum',
+            'fht-fasta-u-normalized-checksum',
+            'fht-fasta-case-normalized-checksum',
+            'fht-fasta-checksum-sha256',
+            'fht-fasta-checksum-truncated-sha512',
+        ):
+            with self.subTest(source_id=source_id):
+                entry = entries[source_id]
+                data = (candidate.TARGET / entry['file']).read_bytes()
+                stated, position, length = self.reader.locate_checksum(data)
+                if source_id == 'fht-fasta-crlf-normalized-checksum':
+                    faulty_bytes = data.replace(b'\r\n', b'\n')
+                    faulty_digest = self.reader.recomputed(faulty_bytes)
+                elif source_id == 'fht-fasta-u-normalized-checksum':
+                    faulty_bytes = transformed_sequence(
+                        data, lambda line: line.replace(b'U', b'T').replace(b'u', b't'))
+                    faulty_digest = self.reader.recomputed(faulty_bytes)
+                elif source_id == 'fht-fasta-case-normalized-checksum':
+                    faulty_bytes = transformed_sequence(data, bytes.upper)
+                    faulty_digest = self.reader.recomputed(faulty_bytes)
+                else:
+                    covered = data[:position] + data[position + length:]
+                    algorithm = 'sha256' if source_id.endswith('sha256') else 'sha512'
+                    digest = hashlib.new(algorithm, covered).digest()
+                    if algorithm == 'sha512':
+                        digest = digest[:32]
+                    faulty_digest = base64.b64encode(digest).decode('ascii')
+                self.assertEqual(stated, faulty_digest)
+                self.assertNotEqual(stated, self.reader.recomputed(data))
+                self.assertFalse(candidate.observe(data, entry, self.reader)['valid'])
 
     def test_all_historical_v060_fixture_bytes_are_unchanged(self):
         original = subprocess.check_output(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.6.0:conformance/manifest.json'])

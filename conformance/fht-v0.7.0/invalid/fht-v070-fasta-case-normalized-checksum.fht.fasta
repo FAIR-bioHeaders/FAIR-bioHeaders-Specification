@@ -11,7 +11,7 @@
 ;~- name: Synthetic metadata author (placeholder)
 ;~dateCreated: '2026-11-10'
 ;~documentation: 'Synthetic FHT conformance vector; not a real transcriptome.'
-;~checksum: AUurN7Yp/godsXw9lBXJxDZxkYEvUkLyAtg8hi+9Z0k=
+;~checksum: fB+2tvC2pq/CoubodiRTk9z3Y0gBBRQrOS3cq9h9+W8=
 >tx1 synthetic RNA transcript
 AUGGAACCUAGGUACGUAAUCCGGGUAACCCUAGGAAUCCGUACGAAG
 >tx2 synthetic RNA transcript in lower case
