@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Record adopted D8–D10 dispositions (#257/#258/#267): retain non-retroactive R16
+  producer-methodology guidance for v0.6.1; clarify schema selection and canonical
+  root/nested checksum runtime duties without changing published schema bytes.
+  Select R12 refusal of YAML directives/document markers and R1 gzip trailing-data,
+  NUL-padding and FHCRC policy, with their separate format-publication classification.
+- Add eight immutable-ID FHP/FHGFF3 CR/mixed-ending controls. Preserve every old
+  carrier payload and retire 78 noncanonical-parent expectations (30 valid, 48
+  invalid); regenerate isolated replacements under new IDs with an exact crosswalk.
+  Add 64 supplementary metadata/reader cases and a strict actual-0.12.0 receipt:
+  35 match, 29 mismatch. Runtime fixes/consumer rollout remain pending; no new
+  schema, pin refresh, contract adoption or release is claimed.
+
 - Repair the conformance harness's bounded ECMA pattern adapter: empty classes
   retain ECMA meaning and unsupported translations produce validation findings
   instead of exceptions (#273). Independent Node comparisons cover the corrected

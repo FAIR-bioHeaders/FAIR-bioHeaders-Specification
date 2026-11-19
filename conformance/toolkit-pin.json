@@ -4,7 +4,7 @@
   "version": "0.12.0",
   "fhtDraftSha256": "59ad9641adcb0e5591045c2d894c066d1adc9984cca84c5ff6502f8dad88487e",
   "knownGaps": {
-    "fhp-fasta-pattern-trailing-newline": "Python re: $ also matches before a final line feed, so the ECMA-262 pattern ^...$ accepts a value that ends with one; the toolkit's jsonschema pattern check needs ECMA-262 $ semantics.",
+    "fhp-fasta-pattern-trailing-newline-canonical-parent": "Python re: $ also matches before a final line feed, so the ECMA-262 pattern ^...$ accepts a value that ends with one; the toolkit's jsonschema pattern check needs ECMA-262 $ semantics.",
     "jsonld-direction-value": "JSONLD.md J5 (clarified): a value with @direction is invalid like a language-tagged one; 0.12.0 rejects @language but drops a lone @direction.",
     "microdata-itemref": "MICRODATA.md M1 (clarified): itemref is not supported and makes the document invalid; 0.12.0 ignores the attribute."
   }

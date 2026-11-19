@@ -1,0 +1,29 @@
+{
+  "schema": "https://w3id.org/fair-bioheaders/fhgff3/v0.6.0",
+  "schemaVersion": "1.2",
+  "annotation": "Synthetic annotation of a genome without an FHR header",
+  "taxon": {
+    "name": "Homo sapiens",
+    "uri": "https://identifiers.org/taxonomy:9606"
+  },
+  "version": "1.0.0",
+  "metadataAuthor": [
+    {
+      "name": "Synthetic metadata author (placeholder)"
+    }
+  ],
+  "dateCreated": "2026-10-13",
+  "genomeReference": {
+    "accession": "SYNTHETIC_ASSEMBLY.1",
+    "seqcol_id": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
+  },
+  "documentation": "Synthetic example; the accession and SeqCol digest are placeholders.",
+  "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "derivedFrom": [
+    {
+      "headerType": "FHR",
+      "relationship": "annotates",
+      "checksum": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB="
+    }
+  ]
+}
