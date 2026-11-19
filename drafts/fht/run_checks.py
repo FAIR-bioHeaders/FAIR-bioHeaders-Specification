@@ -6,6 +6,7 @@ import argparse
 import ast
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -17,8 +18,11 @@ from check_source import COMMIT, ROOT, verify
 
 
 def run(cwd, *args):
-    result = subprocess.run(list(args), cwd=cwd, text=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    with tempfile.TemporaryDirectory(prefix="fht-command-cache-") as cache:
+        environment = dict(os.environ, PYTHONPYCACHEPREFIX=cache,
+                           PYTHONDONTWRITEBYTECODE="1")
+        result = subprocess.run(list(args), cwd=cwd, text=True, env=environment,
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(result.stdout, end="", flush=True)
     if result.returncode:
         raise RuntimeError(f"candidate evidence command failed: {args}")
