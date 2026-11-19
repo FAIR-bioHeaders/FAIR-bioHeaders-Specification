@@ -197,6 +197,8 @@ class FHTPublicationTests(unittest.TestCase):
                 html = binding.write_page(record)
                 self.assertIn('FHT tag-verified reference metadata', html)
                 self.assertNotIn('publication-candidate metadata', html)
+                self.assertNotIn('Unreleased FHT draft binding example', html)
+                self.assertIn('<p>FHT reference checked against the exact v0.7.0 tag; GitHub Release and publication have not been verified.', html)
                 messages = []
                 self.assertEqual(binding.read_page(html, warn=messages.append), record)
                 self.assertEqual(len(messages), 1)

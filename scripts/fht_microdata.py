@@ -722,6 +722,8 @@ def write_page(
     }
     _html_text(emitted)
     _html_text(title)
+    status = ('Unreleased FHT draft binding example.' if mode == 'publication-candidate' else
+              'FHT reference checked against the exact v0.7.0 tag; GitHub Release and publication have not been verified.')
     return (
         '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">'
         '<meta name="robots" content="noindex"><title>' + escape(title) + "</title>"
@@ -731,7 +733,7 @@ def write_page(
         "ol{margin:0;padding-left:1.5em}</style></head><body><h1>"
         + escape(title)
         + "</h1>"
-        "<p>Unreleased FHT draft binding example. Structural validation is not file, parent or biological verification.</p>"
+        + '<p>' + status + ' Structural validation is not file, parent or biological verification.</p>'
         + omission
         + f'<table itemscope itemtype="{FHT_ITEMTYPE}"><caption>FHT metadata record</caption><tbody>'
         + _rows(emitted)
