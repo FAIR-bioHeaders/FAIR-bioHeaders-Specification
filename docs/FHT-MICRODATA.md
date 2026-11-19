@@ -54,7 +54,8 @@ A supplied schema object must equal the local selected root contract.
 While `current = preRelease = v0.7.0`, both APIs require
 `allow_candidate=True` and successful reads report unpublished candidate status.
 Clearing the marker without an actual byte-matching v0.7.0 tag is refused. With
-that exact tag, the reference reports **tag bytes verified**, without claiming
+that exact tag, the reference parses the same byte snapshot used in the comparison
+and reports **tag bytes verified**, without claiming
 that a GitHub Release, joint acceptance or publication has been verified. The
 visible page paragraph, default title and read diagnostic reflect this state.
 These are reference states, not a way to bypass the release gates.

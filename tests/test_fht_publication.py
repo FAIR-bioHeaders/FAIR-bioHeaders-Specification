@@ -194,6 +194,25 @@ class FHTPublicationTests(unittest.TestCase):
                 with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
                     binding.write_page(record)
                 git('tag', 'v0.7.0')  # Only inside the temporary repository, never the shared checkout.
+                # A real working-file swap after its bytes are read must not
+                # change the schema object that claims exact tag provenance.
+                schema_file = fixture / 'fht.json'
+                committed = schema_file.read_bytes()
+                weaker = dict(self.schema, required=[])
+                original_read = Path.read_bytes
+                swapped = []
+                def swap_after_snapshot(location):
+                    raw = original_read(location)
+                    if location == schema_file and not swapped:
+                        location.write_text(json.dumps(weaker))
+                        swapped.append(True)
+                    return raw
+                with patch.object(Path, 'read_bytes', swap_after_snapshot):
+                    selected, mode = binding._candidate_schema(False, None)
+                self.assertTrue(swapped)
+                self.assertEqual(selected, self.schema)
+                self.assertEqual(mode, 'tag-verified-reference')
+                schema_file.write_bytes(committed)
                 html = binding.write_page(record)
                 self.assertIn('FHT tag-verified reference metadata', html)
                 self.assertNotIn('publication-candidate metadata', html)

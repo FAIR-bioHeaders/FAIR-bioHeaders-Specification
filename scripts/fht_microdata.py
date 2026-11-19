@@ -579,18 +579,19 @@ def _candidate_schema(allow_candidate, schema):
     registry = json.loads((ROOT / 'schemas/versions.json').read_text())
     if registry.get('current') != 'v0.7.0':
         raise MicrodataError('This binding targets the proposed v0.7.0 contract only')
+    raw = (ROOT / 'fht.json').read_bytes()
     mode = 'publication-candidate'
     if registry.get('preRelease') == 'v0.7.0':
         if not allow_candidate:
             raise MicrodataError('Unpublished binding requires allow_candidate=True; no release is claimed')
     elif registry.get('preRelease') is None:
         immutable = subprocess.run(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.7.0:fht.json'], capture_output=True)
-        if immutable.returncode or immutable.stdout != (ROOT / 'fht.json').read_bytes():
+        if immutable.returncode or immutable.stdout != raw:
             raise MicrodataError('Tag-reference binding requires actual byte-matching v0.7.0 tag; no fallback to candidate')
         mode = 'tag-verified-reference'
     else:
         raise MicrodataError('Invalid FHT preRelease guard')
-    local = json.loads((ROOT / 'fht.json').read_text())
+    local = json.loads(raw)
     if schema is not None and schema != local:
         raise MicrodataError('custom schema must match the shared candidate')
     Draft202012Validator.check_schema(local)
