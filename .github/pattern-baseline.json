@@ -1,0 +1,378 @@
+{
+  "baselineVersion": 2,
+  "note": "Two gates, one file. (1) WHICH FILES are governed: the released surface is discovered by rule and every discovered document must appear here either in governedFiles or in excludedFiles with a reason, so a new contract fails even when it contains no `pattern` at all. (2) WHAT EACH GOVERNED FILE ASSERTS: every JSON Schema `pattern` entry below, by file and JSON pointer. Refresh only through a reviewed contract change: python scripts/check_pattern_census.py --update-baseline (refuses to run in CI). See https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/270.",
+  "policy": "ECMA-262 is the floor for `pattern`; the v0.4 lookahead sentence is historical, not current policy; no released contract may be widened.",
+  "policySource": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/270",
+  "countingScope": {
+    "keyword": "the `pattern` keyword only; `patternProperties` keys are regular expressions too and are out of this scope by design (#270 follow-up), so this is narrower than the regex-entry census in the #271 docs page",
+    "unit": "entry = one (file, JSON pointer) pair; the same string under two pointers counts twice; entriesEndingInDollar counts entries whose text ends in `$`; distinctPatternStrings counts unique strings",
+    "governedFiles": "discovered by rule, not enumerated; see discoveryRule"
+  },
+  "discoveryRule": "*.json / *.yaml / *.yml at the repository root, plus every *.json / *.yaml / *.yml under schemas/ (recursive)",
+  "governedFiles": [
+    {
+      "path": "fhgff3.json",
+      "label": "released FHGFF3 contract",
+      "patternEntries": 26
+    },
+    {
+      "path": "fhgff3_linkml.yml",
+      "label": "FHGFF3 LinkML model",
+      "patternEntries": 3
+    },
+    {
+      "path": "fhp.json",
+      "label": "released FHP contract",
+      "patternEntries": 23
+    },
+    {
+      "path": "fhp_linkml.yml",
+      "label": "FHP LinkML model",
+      "patternEntries": 1
+    },
+    {
+      "path": "fhr.json",
+      "label": "released FHR contract",
+      "patternEntries": 10
+    },
+    {
+      "path": "fhr_linkml.yml",
+      "label": "FHR LinkML model",
+      "patternEntries": 1
+    },
+    {
+      "path": "schemas/core.yaml",
+      "label": "shared core slot model",
+      "patternEntries": 7
+    },
+    {
+      "path": "schemas/shared.yaml",
+      "label": "shared type-independent slot model",
+      "patternEntries": 1
+    },
+    {
+      "path": "schemas/versions.json",
+      "label": "contract version registry",
+      "patternEntries": 0
+    }
+  ],
+  "governedFileDigest": "sha256:3b42eec06a377180ed7c7aa64b00c0a24496b16cdac715334e003c07103cd485",
+  "excludedFiles": [
+    {
+      "path": "fhr_mappings.yml",
+      "reason": "FHR-to-DCMI mapping table (source/target schema references and class derivations): a mapping document, not a JSON Schema or LinkML model, and it declares no pattern keyword"
+    }
+  ],
+  "files": {
+    "fhgff3.json": [
+      {
+        "pointer": "/$defs/Author/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/$defs/Completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/allOf/2/then/propertyNames/not/pattern",
+        "pattern": "^x-"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/allOf/3/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/allOf/4/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/properties/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhgff3\\.json|https://w3id\\.org/fair-bioheaders/fhgff3/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/$defs/FHGFF3/propertyNames/not/pattern",
+        "pattern": "\n"
+      },
+      {
+        "pointer": "/$defs/FeatureCount/properties/featureType/pattern",
+        "pattern": "^\\S+$"
+      },
+      {
+        "pointer": "/$defs/GenomeReference/properties/accession/pattern",
+        "pattern": "^\\S+$"
+      },
+      {
+        "pointer": "/$defs/GenomeReference/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/$defs/Taxon/properties/uri/pattern",
+        "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+      },
+      {
+        "pointer": "/allOf/2/then/propertyNames/not/pattern",
+        "pattern": "^x-"
+      },
+      {
+        "pointer": "/allOf/3/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/allOf/4/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/properties/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhgff3\\.json|https://w3id\\.org/fair-bioheaders/fhgff3/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      },
+      {
+        "pointer": "/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/propertyNames/not/pattern",
+        "pattern": "\n"
+      }
+    ],
+    "fhgff3_linkml.yml": [
+      {
+        "pointer": "/classes/FHGFF3/slot_usage/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhgff3\\.json|https://w3id\\.org/fair-bioheaders/fhgff3/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      },
+      {
+        "pointer": "/classes/FeatureCount/attributes/featureType/pattern",
+        "pattern": "^\\S+$"
+      },
+      {
+        "pointer": "/classes/GenomeReference/attributes/accession/pattern",
+        "pattern": "^\\S+$"
+      }
+    ],
+    "fhp.json": [
+      {
+        "pointer": "/$defs/Author/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/$defs/Completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/DerivedFrom/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/$defs/FHP/allOf/0/then/propertyNames/not/pattern",
+        "pattern": "^x-"
+      },
+      {
+        "pointer": "/$defs/FHP/allOf/1/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/$defs/FHP/allOf/2/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/$defs/FHP/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/FHP/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/$defs/FHP/properties/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhp\\.json|https://w3id\\.org/fair-bioheaders/fhp/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      },
+      {
+        "pointer": "/$defs/FHP/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/$defs/FHP/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/$defs/FHP/propertyNames/not/pattern",
+        "pattern": "\n"
+      },
+      {
+        "pointer": "/$defs/Taxon/properties/uri/pattern",
+        "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+      },
+      {
+        "pointer": "/allOf/0/then/propertyNames/not/pattern",
+        "pattern": "^x-"
+      },
+      {
+        "pointer": "/allOf/1/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/allOf/2/then/properties/completeness/properties/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+$"
+      },
+      {
+        "pointer": "/properties/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/properties/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhp\\.json|https://w3id\\.org/fair-bioheaders/fhp/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      },
+      {
+        "pointer": "/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/propertyNames/not/pattern",
+        "pattern": "\n"
+      }
+    ],
+    "fhp_linkml.yml": [
+      {
+        "pointer": "/classes/FHP/slot_usage/schema/pattern",
+        "pattern": "^(https://raw\\.githubusercontent\\.com/FAIR-bioHeaders/(FHR|FAIR-bioHeaders)-Specification/(main|v[0-9]+\\.[0-9]+\\.[0-9]+)/fhp\\.json|https://w3id\\.org/fair-bioheaders/fhp/v[0-9]+\\.[0-9]+\\.[0-9]+/?)$"
+      }
+    ],
+    "fhr.json": [
+      {
+        "pointer": "/allOf/0/then/propertyNames/not/pattern",
+        "pattern": "^x-"
+      },
+      {
+        "pointer": "/definitions/orcidUri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/definitions/sha2/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/properties/identifier/items/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/properties/masking/pattern",
+        "pattern": "^(not-masked|hard-masked|soft-masked|repeat-masked|unknown)$"
+      },
+      {
+        "pointer": "/properties/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/properties/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/properties/taxon/properties/uri/pattern",
+        "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+      },
+      {
+        "pointer": "/propertyNames/not/pattern",
+        "pattern": "\n"
+      }
+    ],
+    "fhr_linkml.yml": [
+      {
+        "pointer": "/slots/masking/pattern",
+        "pattern": "^(not-masked|hard-masked|soft-masked|repeat-masked|unknown)$"
+      }
+    ],
+    "schemas/core.yaml": [
+      {
+        "pointer": "/classes/Author/attributes/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/classes/Taxon/attributes/uri/pattern",
+        "pattern": "^https://identifiers\\.org/taxonomy:[0-9]+$"
+      },
+      {
+        "pointer": "/slots/identifier/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:.+$"
+      },
+      {
+        "pointer": "/slots/schemaVersion/pattern",
+        "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      },
+      {
+        "pointer": "/slots/scholarlyArticle/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      },
+      {
+        "pointer": "/slots/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/types/sha2/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      }
+    ],
+    "schemas/shared.yaml": [
+      {
+        "pointer": "/classes/Completeness/attributes/lineageDataset/pattern",
+        "pattern": "^[a-z0-9_]+_odb[0-9]+(\\.[0-9]+)*$"
+      }
+    ],
+    "schemas/versions.json": []
+  },
+  "patternEntries": 72,
+  "distinctPatternStrings": 15,
+  "entriesEndingInDollar": 62,
+  "patternCount": 72,
+  "digest": "sha256:d8735e1d1fe8a15ff644d675614b28ce3dfe841f5d2d60eb21e4c58a72fd552e"
+}
