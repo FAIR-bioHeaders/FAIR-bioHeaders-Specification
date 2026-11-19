@@ -5,14 +5,38 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from check_contract_identity import check as check_identity
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def identity_preflight(root=ROOT):
+    """Check publication candidates before any companion self-consistency checks."""
+    ledger = json.loads((root / 'references/released-identities.json').read_text())
+    registry = json.loads((root / 'schemas/versions.json').read_text())
+    errors = []
+    for name in registry['files'].values():
+        state, error = check_identity((root / name).read_bytes(), name, ledger)
+        if error:
+            errors.append(f'{name}: {error}')
+    return errors
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--converter", type=Path, required=True)
+    parser.add_argument("--converter", type=Path)
+    parser.add_argument('--identity-only', action='store_true',
+                        help='run the publication identity preflight without companion checks')
     args = parser.parse_args()
+    if not args.identity_only and args.converter is None:
+        parser.error('--converter is required unless --identity-only is selected')
+    errors = identity_preflight()
+    if errors:
+        print('\n'.join(errors), file=sys.stderr)
+        return 1
+    if args.identity_only:
+        print('Publication identity preflight passed; release/publication remains separately authorized.')
+        return 0
     schema = json.loads((ROOT / "fhr.json").read_text())
     for relative in ("fhr_schema.json", "fhr/fhr_schema.json"):
         path = args.converter / relative

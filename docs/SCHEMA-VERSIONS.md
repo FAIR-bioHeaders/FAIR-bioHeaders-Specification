@@ -7,6 +7,14 @@ gff3-validator header checks and the website follow it. The design is in
 [specs/012-schema-versioning](../specs/012-schema-versioning/spec.md) (maintainer decision on
 [#44](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/44), 2026-10-14).
 
+Released contracts retain their exact legacy `$id` bytes. An identifier is a
+namespace identity, not an instruction to retrieve today's raw-main file.
+Authoritative retrieval uses the named release tag, its dereferenced commit and
+the artifact digest. The [reference policy and audit](../references/README.md)
+records the five reference classes, immutable legacy-identity ledger and future
+publication preflight. This does not exempt `$id` from ordinary drift checks or
+change the selection rules below.
+
 Known gaps between this normative text and what the current schemas can express, with
 their status, target release and decisions, are tracked in
 [SCHEMA-GAP-AUDIT.md](SCHEMA-GAP-AUDIT.md).
