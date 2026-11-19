@@ -6,6 +6,7 @@ import contextlib
 import hashlib
 import importlib.util
 import json
+import marshal
 import io
 import os
 from pathlib import Path
@@ -150,6 +151,20 @@ class CurrentReferenceTests(unittest.TestCase):
         self.assertEqual(row['onlyLocal'], [])
         cache.write_bytes(b'data at a cache-shaped path')
         self.assertEqual(self.result()['verdict'], 'DRIFT')
+
+    def test_valid_header_cannot_hide_truncated_or_malformed_payloads(self):
+        tree = self.root / 'drafts/fht/upstream'
+        cache = tree / '__pycache__' / ('module.' + sys.implementation.cache_tag + '.pyc')
+        cache.parent.mkdir()
+        py_compile.compile(str(tree / 'module.py'), cfile=str(cache), doraise=True)
+        valid = cache.read_bytes()
+        self.assertEqual(self.result()['verdict'], 'FRESH')
+        for data in (valid[:17], valid[:16] + b'not marshaled code',
+                     valid[:16] + marshal.dumps({'data': 'not code'}), valid + b'trailing data'):
+            cache.write_bytes(data)
+            self.assertEqual(self.result()['verdict'], 'DRIFT')
+        cache.write_bytes(valid)
+        self.assertEqual(self.result()['verdict'], 'FRESH')
 
     def test_unperformed_queries_and_missing_declarations_are_distinct(self):
         self.assertEqual(self.result(mapping={})['verdict'], 'QUERY_FAILED')

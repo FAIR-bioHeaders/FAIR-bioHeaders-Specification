@@ -6,11 +6,13 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import marshal
 import os
 from pathlib import Path, PurePosixPath
 import re
 import sys
 import tempfile
+import types
 
 ROOT = Path(__file__).resolve().parents[1]
 CONSUMER = 'FAIR-bioHeaders/FAIR-bioHeaders-Specification'
@@ -68,10 +70,18 @@ def cache_exclusions(root, tree, files):
                 continue
             with candidate.open('rb') as stream:
                 header = stream.read(16)
-            if (len(header) == 16 and candidate.stat().st_size > 16
-                    and header[:4] == importlib.util.MAGIC_NUMBER
-                    and int.from_bytes(header[4:8], 'little') in (0, 1, 3)):
-                exclusions.append(relative)
+                valid_header = (len(header) == 16
+                                and header[:4] == importlib.util.MAGIC_NUMBER
+                                and int.from_bytes(header[4:8], 'little') in (0, 1, 3))
+                if valid_header:
+                    try:
+                        # Decode, never execute. A header alone, a non-code
+                        # value or trailing bytes cannot hide arbitrary data.
+                        code = marshal.load(stream)
+                        if isinstance(code, types.CodeType) and not stream.read(1):
+                            exclusions.append(relative)
+                    except (ValueError, EOFError, TypeError, OverflowError, RecursionError):
+                        pass
     return sorted(exclusions)
 
 

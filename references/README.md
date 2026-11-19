@@ -74,7 +74,8 @@ digests and selections are checked before querying authorities:
 The checker compares complete independent selected source and local sets, so
 deleting a file and its manifest entry together still reports `DRIFT`. Only
 recognized current-interpreter bytecode caches for declared Python modules,
-with valid bytecode headers, are local exceptions. Unknown Python/data files
+with valid headers and a complete marshaled code-object payload (decoded but
+never executed, with no trailing data), are local exceptions. Unknown Python/data files
 and cache-shaped data are not hidden. These reference comparisons do not replace
 the candidates' separate provenance, schema, conformance or runtime evidence.
 
