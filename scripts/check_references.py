@@ -196,6 +196,12 @@ def audit(row, resolver, local=None):
     if row['class'] in {'released-contract', 'base-carrier'} and kind != 'tag':
         result.update(verdict='DRIFT', reason='Released material must name a tag')
         return result
+    if kind not in {'tag', 'commit'}:
+        result.update(verdict='DRIFT', reason='References must name a tag or a full immutable commit')
+        return result
+    if row['class'] == 'draft-contract' and kind != 'commit':
+        result.update(verdict='DRIFT', reason='Draft contracts must name a full immutable commit')
+        return result
     if kind == 'commit' and not re.fullmatch('[0-9a-f]{40}', ref):
         result.update(verdict='DRIFT', reason='A commit reference must be a full immutable commit')
         return result
