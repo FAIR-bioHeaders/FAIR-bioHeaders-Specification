@@ -4,10 +4,11 @@
 
 Guidance and newly selected format policy; unchanged released schema contracts.
 
-- Prepare the adopted guidance patch with the exact v0.6.0 contract-version row
+- Record the adopted guidance patch with the exact v0.6.0 contract-version row
   and unchanged schema/fixture bytes. Authoring remains pinned to v0.6.0 pending
   an installed reader supporting v0.6.1. No tag, GitHub Release or alias is created
-  by this preparation; see docs/RELEASE-v0.6.1.md.
+  by the source files alone; actual publication evidence belongs to the GitHub
+  Release. See docs/RELEASE-v0.6.1.md.
 
 - Record adopted D8–D10 dispositions (#257/#258/#267): retain non-retroactive R16
   producer-methodology guidance for v0.6.1; clarify schema selection and canonical

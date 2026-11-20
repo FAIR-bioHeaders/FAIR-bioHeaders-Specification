@@ -233,8 +233,8 @@ consumer pins and example/documentation citations. Until then, keep using the
 supported v0.6.0 citation. The v0.6.1 registry row repeats the v0.6.0 row exactly; preRelease is
 cleared only in the commit that is tagged. `authoringRelease: v0.6.0` deliberately keeps CEDAR, examples and
 usage guidance on the installed-reader authority; it is separate from the
-specification release being prepared. Advance that authoring pin only after an
-actual installed-package receipt. Preparation is not publication
+specification release identity. Advance that authoring pin only after an
+actual installed-package receipt. A registry entry alone is not publication
 (FAIR-bioHeaders-Specification#244).
 
 ## Schema files on main
