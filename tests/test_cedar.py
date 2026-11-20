@@ -166,12 +166,12 @@ def header_type(stem):
 
 
 def contract_version(stem):
-    return REGISTRY["releases"][REGISTRY["current"]][header_type(stem)]
+    return REGISTRY["releases"][REGISTRY.get("authoringRelease", REGISTRY["current"])][header_type(stem)]
 
 
 def contract_url(stem):
     return (f"https://w3id.org/fair-bioheaders/{REGISTRY['w3id'][header_type(stem)]}"
-            f"/{REGISTRY['current']}")
+            f"/{REGISTRY.get('authoringRelease', REGISTRY['current'])}")
 
 
 def to_plain(value):

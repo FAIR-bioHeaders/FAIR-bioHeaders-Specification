@@ -341,7 +341,9 @@ def git_blob_sha1(path: Path) -> str:
 def load_registry():
     """Current release per type: (contract schemaVersion, fixed schema URL, release tag)."""
     registry = json.loads(VERSIONS_PATH.read_text(encoding="utf-8"))
-    release = registry["current"]
+    release = registry.get("authoringRelease", registry["current"])
+    if release not in registry["releases"]:
+        raise ValueError("Unregistered authoringRelease")
     out = {}
     for header_type, stem in TYPES.items():
         version = registry["releases"][release][header_type]

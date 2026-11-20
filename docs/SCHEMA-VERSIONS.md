@@ -230,8 +230,12 @@ instructions recommend v0.6.1 URLs, publish and verify a toolkit release that
 registers v0.6.1 and bundles the corresponding immutable contract bytes. Check
 its installed artifact against that release and run conformance, then update
 consumer pins and example/documentation citations. Until then, keep using the
-supported v0.6.0 citation. Preparing this rollout does not publish v0.6.1 or
-change `schemas/versions.json` (FAIR-bioHeaders-Specification#244).
+supported v0.6.0 citation. The prepared registry now records current/preRelease v0.6.1 and repeats the v0.6.0
+row exactly. `authoringRelease: v0.6.0` deliberately keeps CEDAR, examples and
+usage guidance on the installed-reader authority; it is separate from the
+specification release being prepared. Advance that authoring pin only after an
+actual installed-package receipt. Preparation is not publication
+(FAIR-bioHeaders-Specification#244).
 
 ## Schema files on main
 
@@ -250,7 +254,9 @@ release is not an exception.
 The exception is a deliberate, reviewed schema change that must be prepared before its release
 tag exists. Record it in the pull request and the release tracker, set `current` and its
 `releases` entry to the release being prepared, set `preRelease` to the same tag, and update
-every example and `llms.txt` to the prepared release's URL and version: the example and
+every example and `llms.txt` to the prepared release's URL and version (a
+guidance-only patch may instead keep an explicit `authoringRelease` pin while
+installed readers catch up): the example and
 `llms.txt` tests follow `current`, so they do not skip. The schema-byte check skips only for
 that explicit marker until the tag exists. For publication, clear `preRelease` in the final
 release-branch commit, tag that commit, and then run the release-identity check. The check
