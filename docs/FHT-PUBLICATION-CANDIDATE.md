@@ -1,4 +1,4 @@
-> The preparation below is retained as the acceptance and readiness record. The final v0.7.0 tag package clears `preRelease` and records the FHT assessment status. Actual release/archive/alias evidence is governed by [RELEASE-v0.7.0.md](RELEASE-v0.7.0.md); source files alone do not establish publication.
+> The preparation below is retained as the acceptance and readiness record at preparation commit `f8aeeab839875ecd07f621acc4dc9ec8cca24f1c`. Present-tense preparation statements describe that snapshot, not the final tag state. The final v0.7.0 tag package clears `preRelease` and records the FHT assessment status. Actual release/archive/alias evidence is governed by [RELEASE-v0.7.0.md](RELEASE-v0.7.0.md); source files alone do not establish publication.
 
 # FHT v0.7.0 publication preparation
 
@@ -16,9 +16,9 @@ release object, alias, DOI, website enablement or consumer repin is created.
   differ from the accepted owning schema; tests compare all other resolved
   constraints. Selected contract identity:
   `https://w3id.org/fair-bioheaders/fht/v0.7.0` (not live).
-- `schemas/versions.json` marks **current = preRelease = v0.7.0**, adding FHT
+- At that preparation snapshot, `schemas/versions.json` marked **current = preRelease = v0.7.0**, adding FHT
   `1.0` beside byte-identical FHR `2.1`, FHP/FHGFF3 `1.2`. Existing release rows
-  remain unchanged. The candidate metadata records joint acceptance and the still-unpublished
+  remain unchanged. The candidate metadata then recorded joint acceptance and the still-unpublished
   FHT state; no FHT alias has been activated. The preceding guidance release
   [v0.6.1](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.6.1)
   is published at `1812c3bf132fe47f4c30aa8bebd59baeb580988a`, with actual archive DOI

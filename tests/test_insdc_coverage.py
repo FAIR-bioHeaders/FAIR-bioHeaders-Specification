@@ -117,6 +117,9 @@ class InsdcCoverageTests(unittest.TestCase):
         digest = hashlib.sha256((ROOT / "fht.json").read_bytes()).hexdigest()
         self.assertIn(digest, self.text)
         self.assertIn("shared v0.7.0 contract", self.text)
+        self.assertNotIn("No released type has a sample object", self.text)
+        self.assertNotIn("FHT (draft, transcriptome FASTA)", self.text)
+        self.assertIn("FHT 1.0 requires at least one named metadata author", self.text)
 
     def test_pinned_insdc_commit(self):
         commit = self.fixture["commit"]
