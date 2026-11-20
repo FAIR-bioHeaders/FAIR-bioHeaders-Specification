@@ -95,3 +95,6 @@ Never regenerate or repin them merely to clean up prose.
 Report reproducible problems with the command, runtime, source revision, input
 provenance and actual output in this repository's issues. Follow SECURITY.md
 where present for sensitive reports; do not put credentials in an issue.
+
+The [November 20 maintenance record](MAINTENANCE-2026-11-20.md) records
+scan scope, source review, findings and retained work.
