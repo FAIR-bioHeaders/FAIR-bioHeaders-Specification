@@ -2,9 +2,9 @@ name: Check schema drift
 
 on:
   push:
-    branches: [main, release-v0.4]
+    branches: [main, release-v0.4, release-v0.6.1]
   pull_request:
-    branches: [main, release-v0.4]
+    branches: [main, release-v0.4, release-v0.6.1]
 
 permissions:
   contents: read
