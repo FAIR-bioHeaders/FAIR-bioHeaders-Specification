@@ -58,6 +58,15 @@ def release_identity_mode(registry, tag_available=None):
 
 
 class SchemaVersionTests(unittest.TestCase):
+    def test_guidance_patch_preserves_contracts_and_authoring_authority(self):
+        self.assertEqual(REGISTRY['releases']['v0.6.1'], REGISTRY['releases']['v0.6.0'])
+        if REGISTRY['current'] != 'v0.6.1':
+            return  # Later contract releases have their own immutable authority.
+        for name in ('fhr.json', 'fhp.json', 'fhgff3.json'):
+            frozen = subprocess.run(['git', 'show', 'v0.6.0:' + name],
+                                    cwd=ROOT, check=True, capture_output=True).stdout
+            self.assertEqual((ROOT / name).read_bytes(), frozen, name)
+
     def test_registry_shape(self):
         self.assertIn(REGISTRY["current"], REGISTRY["releases"])
         pre_release = REGISTRY.get("preRelease")
@@ -141,7 +150,7 @@ class SchemaVersionTests(unittest.TestCase):
 
     def test_examples_cite_the_current_release(self):
         """FR-010, SC-003: examples cite their type's versioned URL and version."""
-        current = REGISTRY["current"]
+        current = REGISTRY.get("authoringRelease", REGISTRY["current"])
         releases = REGISTRY["releases"][current]
         urls = {f"https://w3id.org/fair-bioheaders/{segment}/{current}": header_type
                 for header_type, segment in REGISTRY["w3id"].items()}

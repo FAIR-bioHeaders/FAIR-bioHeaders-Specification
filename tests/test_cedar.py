@@ -166,12 +166,12 @@ def header_type(stem):
 
 
 def contract_version(stem):
-    return REGISTRY["releases"][REGISTRY["current"]][header_type(stem)]
+    return REGISTRY["releases"][REGISTRY.get("authoringRelease", REGISTRY["current"])][header_type(stem)]
 
 
 def contract_url(stem):
     return (f"https://w3id.org/fair-bioheaders/{REGISTRY['w3id'][header_type(stem)]}"
-            f"/{REGISTRY['current']}")
+            f"/{REGISTRY.get('authoringRelease', REGISTRY['current'])}")
 
 
 def to_plain(value):
@@ -535,13 +535,15 @@ class CedarDraftTemplateTests(unittest.TestCase):
         tracked = ROOT / entry["local"]
         tracked_digest = hashlib.sha256(tracked.read_bytes()).hexdigest()
         committed = (TEMPLATE_DIR / "fhgm.json").read_bytes()
+        released_registry = make_cedar.load_registry()
         with tempfile.TemporaryDirectory(prefix="cedar-pin-") as scratch:
             root = Path(scratch)
             drafts = root / make_cedar.DRAFT_DIR.relative_to(ROOT)
             shutil.copytree(make_cedar.DRAFT_DIR, drafts)
             copy_path = root / entry["local"]
             original = copy_path.read_bytes()
-            with mock.patch.object(make_cedar, "ROOT", root), \
+            with mock.patch.object(make_cedar, "load_registry", return_value=released_registry), \
+                    mock.patch.object(make_cedar, "ROOT", root), \
                     mock.patch.object(make_cedar, "DRAFT_PROVENANCE_PATH",
                                       drafts / make_cedar.DRAFT_PROVENANCE_PATH.name):
                 self.assertEqual(make_cedar.render("fhgm").encode("utf-8"), committed,
