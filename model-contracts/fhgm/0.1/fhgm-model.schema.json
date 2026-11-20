@@ -1,8 +1,8 @@
 {
   "$id": "https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "FHGM gene-model record - draft contract v0.1 (proposal)",
-  "description": "Draft native FHGM model record. Reviewed under FAIR-bioHeaders-Specification#204 on 2026-11-14: field names, modelId/modelVersion semantics, contract identity by validator selection, and the four flagged deviations were confirmed at the joint review (see ../../development/CONTRACT-REVIEW.md). Publication is authorized in direction and NOT performed: no adopted contract, no schemaVersion, no released schema URI and no toolkit support is claimed. Field names and shapes follow the released FHGFF3 1.1 objects where their meanings match (docs/FORMAT.md R15, fhgff3.json). Object-level constraints that a JSON Schema cannot express - model ID uniqueness, feature-target resolution, record/file reference agreement and predecessor-pointer resolution with the resolvable, unresolvable and ambiguous verdicts - are enforced by the separate model-level checker in validate_fhgm.py.",
+  "title": "FHGM native gene-model record contract 0.1",
+  "description": "Native FHGM model record selected independently of its enclosing FHGFF3 file header. The native contract defines record structure; the separate model-level checker establishes model ID uniqueness, eligible feature-target resolution, record/file reference agreement and bounded immediate-predecessor resolution. Base-header validity, exact-byte integrity, feature/biology validity and curator acceptance remain separate outcomes. The reviewed source and development decisions are preserved at https://github.com/FAIR-bioHeaders/FHGM-Specification/blob/d9d131a02b042023f4784d842a874232fc891069/development/CONTRACT-REVIEW.md. Model-contract selection introduces no FHGM header schemaVersion or in-record schema field.",
   "type": "object",
   "additionalProperties": false,
   "required": [

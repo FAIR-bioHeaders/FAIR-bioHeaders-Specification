@@ -13,6 +13,17 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = Path('model-contracts/fhgm/0.1')
 IDENTITY = 'https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1'
+ANNOTATIONS = {'title': 'FHGM native gene-model record contract 0.1',
+ 'description': 'Native FHGM model record selected independently of its enclosing FHGFF3 file '
+                'header. The native contract defines record structure; the separate model-level '
+                'checker establishes model ID uniqueness, eligible feature-target resolution, '
+                'record/file reference agreement and bounded immediate-predecessor resolution. '
+                'Base-header validity, exact-byte integrity, feature/biology validity and curator '
+                'acceptance remain separate outcomes. The reviewed source and development '
+                'decisions are preserved at '
+                'https://github.com/FAIR-bioHeaders/FHGM-Specification/blob/d9d131a02b042023f4784d842a874232fc891069/development/CONTRACT-REVIEW.md. '
+                'Model-contract selection introduces no FHGM header schemaVersion or in-record '
+                'schema field.'}
 SOURCE_COMMIT = 'd9d131a02b042023f4784d842a874232fc891069'
 SOURCE_MANIFEST_SHA256 = '16cd2d029424877305b63b689a415632ab2b1b3443ee435d11e23ef6c1a2efa4'
 SOURCE_SCHEMA_SHA256 = 'b7075e5872e0a5ffce5ae61c590ce182f1f219fa269413cad3b1a966753cfeae'
@@ -54,8 +65,13 @@ def verify(root=ROOT):
     native = json.loads(native_bytes)
     if native.pop('$id', None) != IDENTITY:
         errors.append('native schema has wrong model-contract identity')
-    if native != json.loads(source_schema.read_bytes()):
-        errors.append('native counterpart changes more than schema resource identity')
+    original = json.loads(source_schema.read_bytes())
+    for key, wanted in ANNOTATIONS.items():
+        if native.get(key) != wanted:
+            errors.append('native counterpart has unexpected root annotation: ' + key)
+        native[key] = original[key]
+    if native != original:
+        errors.append('native counterpart changes validation semantics or unapproved annotations')
     metadata = json.loads((package / 'publication.json').read_bytes())
     for field, wanted in [('publicationState', 'candidate-unpublished'),
                           ('kind', 'native-model-contract'), ('modelContractVersion', '0.1'),
@@ -142,7 +158,7 @@ def main():
             receipt = run_conformance(args.base_schema, args.gff3_validate, args.report_json)
             print(json.dumps(receipt['counts'], sort_keys=True))
         else:
-            print('Native FHGM 0.1 identity-only counterpart verified; publication remains gated.')
+            print('Native FHGM 0.1 identity/annotation-only counterpart verified; publication remains gated.')
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, str(error) + '\n')
 

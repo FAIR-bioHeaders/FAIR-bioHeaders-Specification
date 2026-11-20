@@ -19,7 +19,7 @@ class NativePublication(unittest.TestCase):
                         ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
         shutil.copytree(ROOT / publication.PACKAGE, root / publication.PACKAGE)
 
-    def test_current_native_counterpart_is_identity_only(self):
+    def test_current_native_counterpart_has_only_selected_identity_and_annotations(self):
         self.assertEqual([], publication.verify())
         schema = json.loads((ROOT / publication.PACKAGE / 'fhgm-model.schema.json').read_bytes())
         self.assertEqual(publication.IDENTITY, schema['$id'])
@@ -27,7 +27,7 @@ class NativePublication(unittest.TestCase):
         self.assertNotIn('schemaVersion', schema['properties'])
 
     def test_identity_or_constraint_mutation_is_rejected_even_with_matching_metadata_digest(self):
-        for defect in ('identity', 'required'):
+        for defect in ('identity', 'required', 'title', 'description'):
             with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 self.copy(root)
@@ -36,8 +36,10 @@ class NativePublication(unittest.TestCase):
                 schema = json.loads(file.read_bytes())
                 if defect == 'identity':
                     schema['$id'] += '/wrong'
-                else:
+                elif defect == 'required':
                     schema['required'].remove('reference')
+                else:
+                    schema[defect] = 'unreviewed annotation'
                 file.write_text(json.dumps(schema))
                 metadata = json.loads((package / 'publication.json').read_bytes())
                 metadata['sha256'] = publication.digest(file.read_bytes())

@@ -5,7 +5,7 @@
   "intendedRelease": "v0.8.0",
   "identity": "https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1",
   "artifact": "fhgm-model.schema.json",
-  "sha256": "f0e97bc07d13ac13618e12d9dd61199429c83abbc24e07fd83884d959130bc34",
+  "sha256": "56c0a5a91e9e56c50c0919a375505c01f52bce5f1792841c40b87b1cd18e9336",
   "source": {
     "repository": "FAIR-bioHeaders/FHGM-Specification",
     "commit": "d9d131a02b042023f4784d842a874232fc891069",
@@ -20,7 +20,11 @@
     "addedJsonPointers": [
       "/$id"
     ],
-    "note": "Only schema resource identity is added. Object member ordering/formatting differ; all original JSON values, fixture bytes and vector IDs are preserved. The in-record properties are unchanged."
+    "note": "Resource identity is added; only the root title and description are refreshed to publication-neutral annotations with an immutable canonical source link. All validation keywords, nested annotations, original fixtures and vector IDs are unchanged.",
+    "changedJsonPointers": [
+      "/title",
+      "/description"
+    ]
   },
   "acceptance": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941",
   "suite": {

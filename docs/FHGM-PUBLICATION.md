@@ -18,8 +18,10 @@ Native model selection stays outside the record. There is no FHGM header
 schemaVersion, record schema field or header `schemas/versions.json` row.
 
 This is a schema resource identity/publication addition. The new schema differs
-from the accepted native schema only by the resource-level `$id` and JSON
-formatting; no field, requiredness, enum, predicate or existing identifier changes.
+from the accepted native schema only by the resource-level `$id`, root
+`title`/`description` annotations and JSON formatting. The root annotations use
+publication-neutral wording and an immutable absolute review link; no field,
+requiredness, enum, predicate or existing identifier changes.
 Its internal fragment references keep the same targets. The exact crosswalk and
 byte digests are in `model-contracts/fhgm/0.1/publication.json`. The owning native
 schema, transport overlay, semantic checker, generators, examples and 92 vectors
@@ -57,7 +59,9 @@ python scripts/fhgm_publication.py --run-conformance \
 
 The receipt path must be fresh, never an old success file. The wrapper first
 checks every accepted source byte and file-set against the pinned manifest;
-then checks schema structural identity after removing only `$id`. It creates a
+then checks exact schema equality after removing `$id` and restoring only the
+two specifically reviewed root annotation values. Unreviewed annotation changes
+fail just as validation-constraint changes do. It creates a
 private execution copy, substitutes the native schema, and updates only that
 schema's digest/size in the private conformance provenance. The unchanged owning
 runner, checker, examples, vector bytes, IDs and independently recorded
@@ -103,3 +107,15 @@ installed receipts deliberately, then hand the named released artifact/runtime
 to website and Nextflow consumers. Preserve the old draft lane and fixture
 history. Downstream microPublication pilots are Project 12 work and add no
 Project 9 completion gate; model/biological curator acceptance remains separate.
+
+
+### Independent annotation-review follow-up
+
+Review 5985542913 identified stale root draft-status prose and a broken relative
+review link in the new publication location. The original source stays byte-exact.
+The new counterpart now uses neutral root title/description and an immutable
+absolute source link; only these two root annotations and `$id` may differ.
+Mutation tests reject unreviewed root annotations as well as validation changes.
+The fresh native 92-case dual-base rerun again produced 184 visits, 728 evaluated
+predicates, 736 layer comparisons, 174 complete matches, 48 full model passes
+and ten expected not-run visits; all eight receipt guards passed.

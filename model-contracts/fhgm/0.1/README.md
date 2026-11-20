@@ -7,9 +7,11 @@ The intended shared publication vehicle is **v0.8.0, after actual FHT v0.7.0**.
 
 `fhgm-model.schema.json` is a self-contained JSON Schema 2020-12 record contract.
 This is a **schema publication/identity addition**, not a new record constraint:
-compared with the accepted owning schema, only the resource-level `$id` is added.
-All original schema JSON values are retained, including historical draft prose.
-`publication.json` records the exact source and identity-only counterpart.
+compared with the accepted owning schema, the resource-level `$id` is added and
+only the root `title`/`description` annotations are refreshed to neutral contract
+wording and an immutable canonical review link. All validation keywords and
+nested annotations are unchanged. `publication.json` records this exact
+identity/annotation counterpart.
 No FHGM header `schemaVersion`, in-record `schema` field or header-registry row
 is introduced. Select the native contract outside the record; the enclosing file
 continues to cite its released FHGFF3 1.1 or 1.2 contract.
