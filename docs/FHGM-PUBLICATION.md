@@ -119,3 +119,18 @@ Mutation tests reject unreviewed root annotations as well as validation changes.
 The fresh native 92-case dual-base rerun again produced 184 visits, 728 evaluated
 predicates, 736 layer comparisons, 174 complete matches, 48 full model passes
 and ten expected not-run visits; all eight receipt guards passed.
+
+
+### Typed schema parity guard
+
+Copilot review 5985592157 identified Python dictionary equality collapsing
+booleans into equal integers. The guard now compares sorted canonical JSON
+with non-finite values refused, retaining nested boolean/number and
+integer/float distinctions after the exact annotation whitelist is handled.
+Effectual controls change nested `minLength: 1` to `true` and root
+`additionalProperties: false` to `0`, update the reported schema digest, and
+still require rejection. Whitelisted root annotations retain exact typed
+values. Eight publication tests pass; the native artifact itself remains
+SHA-256 `56c0a5a91e9e56c50c0919a375505c01f52bce5f1792841c40b87b1cd18e9336`,
+so the recorded fresh dual-base semantic receipt continues to name these exact
+contract bytes. Current-head CI independently reruns the complete native lane.

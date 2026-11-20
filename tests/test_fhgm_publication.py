@@ -46,6 +46,52 @@ class NativePublication(unittest.TestCase):
                 (package / 'publication.json').write_text(json.dumps(metadata))
                 self.assertTrue(publication.verify(root))
 
+    def test_nested_boolean_number_changes_cannot_hide_behind_equal_python_values(self):
+        for defect in ('nested-true-for-one', 'root-zero-for-false'):
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.copy(root)
+                package = root / publication.PACKAGE
+                file = package / 'fhgm-model.schema.json'
+                schema = json.loads(file.read_bytes())
+                if defect == 'nested-true-for-one':
+                    self.assertEqual(type(schema['$defs']['text']['minLength']), int)
+                    schema['$defs']['text']['minLength'] = True
+                else:
+                    self.assertIs(schema['additionalProperties'], False)
+                    schema['additionalProperties'] = 0
+                file.write_text(json.dumps(schema))
+                metadata = json.loads((package / 'publication.json').read_bytes())
+                metadata['sha256'] = publication.digest(file.read_bytes())
+                (package / 'publication.json').write_text(json.dumps(metadata))
+                self.assertTrue(any('validation semantics' in error for error in publication.verify(root)))
+
+    def test_canonical_comparison_preserves_nested_scalar_types(self):
+        for before, after in (({'nested': [True]}, {'nested': [1]}),
+                              ({'nested': [False]}, {'nested': [0]}),
+                              ({'nested': [1]}, {'nested': [1.0]})):
+            self.assertEqual(before, after, 'control reproduces Python type-erasing equality')
+            self.assertNotEqual(publication.typed_json(before), publication.typed_json(after))
+        self.assertEqual(publication.typed_json({'a': 1, 'b': 2}),
+                         publication.typed_json({'b': 2, 'a': 1}))
+
+    def test_whitelisted_root_annotations_still_require_exact_typed_values(self):
+        for key in ('title', 'description'):
+            for value in (True, 1, None, 'unreviewed annotation'):
+                with self.subTest(key=key, value=value), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy(root)
+                    package = root / publication.PACKAGE
+                    file = package / 'fhgm-model.schema.json'
+                    schema = json.loads(file.read_bytes())
+                    schema[key] = value
+                    file.write_text(json.dumps(schema))
+                    metadata = json.loads((package / 'publication.json').read_bytes())
+                    metadata['sha256'] = publication.digest(file.read_bytes())
+                    (package / 'publication.json').write_text(json.dumps(metadata))
+                    self.assertTrue(any('unexpected root annotation: ' + key in error
+                                        for error in publication.verify(root)))
+
     def test_changed_or_missing_vector_and_coordinated_source_omission_are_rejected(self):
         for defect in ('changed', 'missing', 'manifest-omission', 'extra'):
             with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory:

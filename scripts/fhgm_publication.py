@@ -33,6 +33,12 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def typed_json(value):
+    """Canonical JSON text retains bool/number and integer/float distinctions."""
+    return json.dumps(value, sort_keys=True, ensure_ascii=False,
+                      separators=(",", ":"), allow_nan=False)
+
+
 def verify(root=ROOT):
     """Fail on semantic drift, source-set omission or altered accepted source bytes."""
     errors = []
@@ -67,10 +73,10 @@ def verify(root=ROOT):
         errors.append('native schema has wrong model-contract identity')
     original = json.loads(source_schema.read_bytes())
     for key, wanted in ANNOTATIONS.items():
-        if native.get(key) != wanted:
+        if typed_json(native.get(key)) != typed_json(wanted):
             errors.append('native counterpart has unexpected root annotation: ' + key)
         native[key] = original[key]
-    if native != original:
+    if typed_json(native) != typed_json(original):
         errors.append('native counterpart changes validation semantics or unapproved annotations')
     metadata = json.loads((package / 'publication.json').read_bytes())
     for field, wanted in [('publicationState', 'candidate-unpublished'),
