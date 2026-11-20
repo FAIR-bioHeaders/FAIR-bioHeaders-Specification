@@ -91,7 +91,7 @@ comparison verified all 134 preserved source files. This is measured technical
 candidate evidence, not a release or biological/curator approval. The exact
 receipt is attached to the preparation PR / CI artifact;
 
-CI uploads `fhgm-native-unpublished-evidence` separately from the exact draft
+CI uploads `fhgm-native-source-validation-evidence` separately from the exact draft
 receipt. No skipped GFF3 execution is counted as passing.
 
 Before v0.8.0: independently review the current artifact/head, complete all
