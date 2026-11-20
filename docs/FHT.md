@@ -80,4 +80,4 @@ and [#107](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issu
 These remain open for their actual final gates. Source-PR merge approval and final
 joint adoption/publication authority remain distinct.
 
-The actual released-layout proposal is now prepared in [FHT-PUBLICATION-CANDIDATE.md](FHT-PUBLICATION-CANDIDATE.md), including generated root artifacts, registry selection, vocabulary/binding and a separately executed conformance crosswalk. It remains an unpublished draft review, with the gates above unchanged.
+The historical released-layout preparation is retained in [FHT-PUBLICATION-CANDIDATE.md](FHT-PUBLICATION-CANDIDATE.md). Actual v0.7.0 publication supersedes its unpublished status; installed-runtime handoffs and source-issue completion remain separate.

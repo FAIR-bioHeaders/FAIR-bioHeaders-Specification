@@ -1,4 +1,15 @@
-# FHGM: FAIR header gene model — draft overview
+# FHGM native publication and historical overview
+
+The accepted native model contract 0.1 is prepared for v0.8.0 in
+[FHGM-PUBLICATION.md](FHGM-PUBLICATION.md). Its publication remains pending;
+there is no FHGM header contract or header registry row. Native resource identity
+and source preparation do not establish alias resolution or runtime support.
+
+## Historical draft overview
+
+The following preserves the earlier V7/extension-carrier design record. Current
+native publication status is described above.
+
 
 **Status: a draft under rule V7. There is no released FHGM contract.** The
 maintainers have adopted FHGM's form and most of its draft design (see

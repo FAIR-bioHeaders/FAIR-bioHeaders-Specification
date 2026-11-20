@@ -6,7 +6,7 @@
 [![File Converter DOI](https://img.shields.io/badge/File_Converter_DOI-10.5281%2Fzenodo.6762547-blue)](https://doi.org/10.5281/zenodo.6762547)
 
 This repository holds the released FAIR-bioHeaders specifications: FHR (reference
-genomes), FHP (protein FASTA) and FHGFF3 (GFF3 annotation) headers, the
+genomes), FHP (protein FASTA), FHT (transcriptome) and FHGFF3 (GFF3 annotation) headers, the
 shared core schema, the format rules, the JSON-LD context and vocabulary, and the
 conformance suite. It was called `FHR-Specification` until 2026-10-14 (#108).
 
@@ -21,7 +21,7 @@ comes here by pull request:
 | FHP | [FHP-Specification](https://github.com/FAIR-bioHeaders/FHP-Specification) |
 | FHT | [FHT-Specification](https://github.com/FAIR-bioHeaders/FHT-Specification) |
 | FHGFF3 | [FHGFF3](https://github.com/FAIR-bioHeaders/FHGFF3) |
-| FHGM (draft, no contract — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
+| FHGM (native publication preparation — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
 
 Schema URLs under the old name
 (`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`
@@ -59,21 +59,17 @@ published schemas, with a draft AgBioData example under
 [`profiles/`](profiles/). It is a proposal; no community profile is adopted and the
 published contracts are unchanged.
 
-## Draft gene-model records (FHGM)
+## Native gene-model records (FHGM)
 
-[docs/FHGM.md](docs/FHGM.md) is a draft overview of FHGM (FAIR Header Gene
-Model): record-level metadata for a gene-model contribution, in contrast to the
-FHGFF3 header that describes the enclosing annotation file. The current pilot
-embeds repeatable model-level records inside an FHGFF3 file as `x-` extension
-fields and separates file integrity (the exact-byte checksum) from model-level
-revision resolution, which needs its own check. Contract ownership, required
-fields, serialization and model-level validation are under review in
-[#204](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204);
-pilot datasets are tracked in
-[#206](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/206).
-FHGM is **not** a released contract: it has no schema, no version and no entry
-in `schemas/versions.json` (released contracts only), and no toolkit, validator
-or builder support is claimed.
+The separately accepted native FHGM model contract 0.1 is prepared for v0.8.0
+in [the publication package](docs/FHGM-PUBLICATION.md). The native contract
+selects model records independently of their enclosing FHGFF3 file header.
+It is still unpublished: source preparation does not establish a fixed alias,
+release artifact or installed runtime support. FHGM has no header `schemaVersion`
+or entry in the header registry. The preserved owning draft and historical
+extension-carrier design are described in [docs/FHGM.md](docs/FHGM.md).
+[#204](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204)
+tracks publication; downstream pilot datasets in #206 are Project 12 work.
 
 ## Metadata
 
