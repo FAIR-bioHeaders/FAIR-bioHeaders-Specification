@@ -531,9 +531,11 @@ class ScopeHygieneTests(unittest.TestCase):
             token = relative.lower()
             if token in {"fht.json", "fht_linkml.yml"}:
                 registry = json.loads((ROOT / 'schemas/versions.json').read_text())
-                self.assertEqual(registry['preRelease'], 'v0.7.0')
+                self.assertEqual(registry['releases']['v0.7.0']['FHT'], '1.0')
                 self.assertNotIn('FHT', registry['releases']['v0.6.0'])
-                continue  # Explicit new publication candidate, not an accidental draft promotion.
+                frozen = subprocess.check_output(['git', '--no-replace-objects', 'show', 'v0.7.0:fht.json'], cwd=ROOT)
+                self.assertEqual(frozen, (ROOT / 'fht.json').read_bytes())
+                continue  # Exact newly released contract, never an owning-draft snapshot.
             self.assertNotIn("fht", token)
             self.assertNotIn("fhgm", token)
             self.assertNotIn("FHT", label)
@@ -733,8 +735,11 @@ class GovernedFileDiscoveryTests(unittest.TestCase):
         for path in sorted(governed):
             token = path.lower()
             if token in {'fht.json', 'fht_linkml.yml'}:
-                self.assertEqual(_pre, 'v0.7.0')
                 self.assertEqual(files['FHT'], 'fht.json')
+                registry = json.loads((ROOT / 'schemas/versions.json').read_text())
+                self.assertEqual(registry['releases']['v0.7.0']['FHT'], '1.0')
+                frozen = subprocess.check_output(['git', '--no-replace-objects', 'show', 'v0.7.0:fht.json'], cwd=ROOT)
+                self.assertEqual(frozen, (ROOT / 'fht.json').read_bytes())
                 continue
             self.assertNotIn("fht", token)
             self.assertNotIn("fhgm", token)

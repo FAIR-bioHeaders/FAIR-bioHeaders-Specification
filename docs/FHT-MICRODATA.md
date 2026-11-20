@@ -14,9 +14,7 @@ The accepted owning contract SHA-256 is
 The shared root contract is [fht.json](../fht.json), SHA-256
 `082b0790b7878940c4496c97d7485e32c65de8ba75ecc080e53f04fb44251a43`.
 Tests compare every non-selector resolved validation constraint; only the
-selector forms and annotations change. No URI below is minted or advertised
-as live by this branch. Joint package acceptance is recorded in the preparation record; the publication gates in
-[FHT-PUBLICATION-CANDIDATE.md](FHT-PUBLICATION-CANDIDATE.md) remain separate.
+selector forms and annotations change. The logical identifiers below do not establish a live external redirect. Joint package acceptance is recorded in the preparation record; actual tag, GitHub Release, archive and alias verification follow [RELEASE-v0.7.0.md](RELEASE-v0.7.0.md).
 
 ## F1 — scope and itemtype
 

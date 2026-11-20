@@ -187,7 +187,7 @@ class MappingProposalTests(unittest.TestCase):
     def test_adoption_status_preserves_identity_without_official_or_fht_claims(self):
         registry = json.loads((ROOT / "schemas/versions.json").read_text())
         self.assertNotIn("FHT", registry["releases"]["v0.6.0"])
-        self.assertEqual(registry["preRelease"], "v0.7.0")
+        self.assertEqual(registry["releases"]["v0.7.0"]["FHT"], "1.0")
         self.assertEqual(self.table["status"], "adopted")
         self.assertEqual(self.status["status"], "adopted")
         self.assertEqual(self.status["targets"]["dcmi-qualified"]["status"], "adopted-foundation")
@@ -203,9 +203,9 @@ class MappingProposalTests(unittest.TestCase):
             record = self.status["header_types"][kind]
             self.assertEqual(record["released_schema_version"], registry["releases"][record["release"]][kind])
         fht = self.status["header_types"]["FHT"]
-        self.assertEqual(fht["status"], "blocked")
+        self.assertEqual(fht["status"], "deferred")
         self.assertNotIn("released_schema_version", fht)
-        self.assertEqual(fht["blocking_issues"], ["https://github.com/FAIR-bioHeaders/FHT-Specification/issues/10"])
+        self.assertNotIn("blocking_issues", fht)
 
     def test_cli_only_checks_context_despite_adoption(self):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/check_mapping_context.py"),

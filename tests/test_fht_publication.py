@@ -132,8 +132,25 @@ class FHTPublicationTests(unittest.TestCase):
 
     def test_binding_refuses_implicit_candidate_unknown_release_and_wrong_types(self):
         record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
-        with self.assertRaisesRegex(binding.MicrodataError, 'allow_candidate'):
-            binding.write_page(record)
+        # Candidate opt-in is independent of whether this checkout already has
+        # its real release tag. Exercise that state in a private fixture.
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = Path(directory)
+            (fixture / 'schemas').mkdir()
+            registry = json.loads((ROOT / 'schemas/versions.json').read_text())
+            registry['preRelease'] = 'v0.7.0'
+            (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+            (fixture / 'fht.json').write_bytes((ROOT / 'fht.json').read_bytes())
+            with patch.object(binding, 'ROOT', fixture):
+                with self.assertRaisesRegex(binding.MicrodataError, 'allow_candidate'):
+                    binding.write_page(record)
+                candidate_html = binding.write_page(record, allow_candidate=True)
+                self.assertEqual(binding.read_page(candidate_html, allow_candidate=True, warn=lambda message: None), record)
+        if json.loads((ROOT / 'schemas/versions.json').read_text())['preRelease'] is None:
+            tagged_html = binding.write_page(record)
+            self.assertEqual(binding.read_page(tagged_html, warn=lambda message: None), record)
         wrong = copy.deepcopy(record)
         wrong['schema'] = 'https://w3id.org/fair-bioheaders/fht/v9.9.9'
         with self.assertRaisesRegex(binding.MicrodataError, 'selection'):

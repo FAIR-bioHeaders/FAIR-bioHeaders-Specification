@@ -66,9 +66,10 @@ have. (The Copilot thread proposed leaving that informational too; the maintaine
 instruction for this round was to fail closed, and the content/coverage line above
 is what reconciles the two.)
 
-Rule V7 is respected throughout: FHT and FHGM are labelled drafts everywhere in
-the output; nothing here assigns them a ``schemaVersion``, a registry row, a w3id
-or tag URL, or a toolkit support claim. No draft type can enter the governed set:
+Rule V7 is respected for the legacy owning FHT and FHGM snapshots in the
+informational scope. The separately accepted shared FHT 1.0 contract enters the
+governed scope through its v0.7.0 release; no FHGM header or toolkit support
+claim is created. No draft type can enter the governed set:
 the registry's ``files`` map names the released types, and that set is asserted by
 a test to be exactly what is governed.
 
@@ -133,13 +134,13 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Gated scope: the released specification surface. The three root JSON contracts
+# Gated scope: the released specification surface. The four root JSON contracts
 # (they live at the repository root, not under schemas/), the LinkML models they
 # are generated from or must agree with, the shared slot models they import, and
 # the version registry.
 RELEASED_SCOPE = (
-    ("fht.json", "proposed FHT v0.7.0 contract (unpublished)"),
-    ("fht_linkml.yml", "FHT publication candidate model"),
+    ("fht.json", "released FHT 1.0 contract"),
+    ("fht_linkml.yml", "FHT LinkML model"),
     ("fhr.json", "released FHR contract"),
     ("fhp.json", "released FHP contract"),
     ("fhgff3.json", "released FHGFF3 contract"),
