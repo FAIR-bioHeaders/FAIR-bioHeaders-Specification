@@ -44,6 +44,34 @@ class BuildPagesTests(unittest.TestCase):
             versions = build_pages.build(site)
         return site, versions
 
+    def test_checkout_and_ancestor_outputs_are_refused_before_deletion(self):
+        for target in (ROOT, ROOT / ".", ROOT.parent):
+            with self.subTest(target=target), mock.patch.object(build_pages.shutil, "rmtree") as remove:
+                with self.assertRaisesRegex(ValueError, "repository or an ancestor"):
+                    build_pages.build(target)
+                remove.assert_not_called()
+        self.assertTrue((ROOT / "scripts/build_pages.py").is_file())
+
+    def test_other_git_worktree_is_not_deleted(self):
+        target = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        (target / ".git").write_text("gitdir: /some/worktree/metadata\n")
+        sentinel = target / "keep.txt"
+        sentinel.write_text("user work")
+        with self.assertRaisesRegex(ValueError, "repository or an ancestor"):
+            build_pages.build(target)
+        self.assertEqual(sentinel.read_text(), "user work")
+
+    def test_symlink_output_does_not_delete_its_target(self):
+        folder = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        target = folder / "user-work"
+        target.mkdir()
+        (target / "keep.txt").write_text("keep")
+        output = folder / "site-link"
+        output.symlink_to(target, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            build_pages.build(output)
+        self.assertEqual((target / "keep.txt").read_text(), "keep")
+
     def test_site_layout(self):
         site, versions = self.build()
         self.assertEqual(versions, ["main"])

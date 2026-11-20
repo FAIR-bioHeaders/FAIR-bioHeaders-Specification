@@ -179,6 +179,15 @@ specification</a>. Cite them through their persistent URLs:</p>
 
 
 def build(site):
+    # Resolve before deletion: a typo such as "." or ".." must not remove
+    # the checkout (or a parent containing it). Git worktrees use a .git file.
+    site = Path(site)
+    if site.is_symlink():
+        raise ValueError("output must not be a symlink")
+    site = site.resolve()
+    root = ROOT.resolve()
+    if site == root or site in root.parents or (site / ".git").exists():
+        raise ValueError("output must not be a repository or an ancestor of this checkout")
     if site.exists():
         shutil.rmtree(site)
     (site / "terms").mkdir(parents=True)
