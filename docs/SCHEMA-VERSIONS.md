@@ -427,7 +427,7 @@ the first step, since an FHR 1 header now validates. Older toolkits (before V6) 
 file with `1.0 is not of type 'string'`; with them, recover the header text with `grep`, edit
 it, and recombine.
 
-## Published FHT and native FHGM preparation
+## Published FHT and native FHGM release metadata
 
 Specification v0.7.0 published FHT `schemaVersion: '1.0'`, retaining FHR `'2.1'`,
 FHP `'1.2'` and FHGFF3 `'1.2'`. Its immutable tag is
@@ -436,11 +436,11 @@ FHP `'1.2'` and FHGFF3 `'1.2'`. Its immutable tag is
 rule V7 remains a separate opt-in. Fixed alias enablement is pending external
 w3id PR 7241; contract publication does not establish installed reader support.
 
-The working tree prepares **v0.8.0**, with `current = preRelease = v0.8.0`.
+The final **v0.8.0** metadata sets `current = v0.8.0` and `preRelease = null`.
 Its header-version row repeats v0.7.0 exactly. Native FHGM model contract 0.1
 is a separate resource under `model-contracts/fhgm/0.1/`; it adds no FHGM header
 row and no in-record `schema` or `schemaVersion`. See
-[FHGM publication preparation](FHGM-PUBLICATION.md). All four header schema
+[FHGM publication procedure](FHGM-PUBLICATION.md). All four header schema
 bytes and historical payloads remain unchanged. `authoringRelease` remains
 v0.6.0 until an actual supporting toolkit release is available. No preparation
 merge itself creates a tag, release, archive DOI, alias or default runtime support.

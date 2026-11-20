@@ -1,4 +1,4 @@
-# FHGM native 0.1 publication preparation
+# FHGM native 0.1 publication procedure
 
 ## Selected package and authority
 
@@ -8,12 +8,11 @@ on [#211, comment 7025645941](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders
 This records joint package acceptance through the operating agent; it is not a
 fabricated native human PR review or an assertion that publication occurred.
 
-The candidate artifact is
+The selected native artifact is
 [`model-contracts/fhgm/0.1/fhgm-model.schema.json`](../model-contracts/fhgm/0.1/fhgm-model.schema.json).
 The selected identifier is
 `https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1`; it must resolve to
-that artifact at the actual immutable v0.8.0 release. No alias is created by
-this preparation. v0.8.0 follows actual FHT v0.7.0, with a distinct release gate.
+that artifact at the actual immutable v0.8.0 release. An alias is not established by source metadata. v0.8.0 follows actual FHT v0.7.0, with a distinct release gate.
 Native model selection stays outside the record. There is no FHGM header
 schemaVersion, record schema field or header `schemas/versions.json` row.
 
@@ -135,27 +134,35 @@ SHA-256 `56c0a5a91e9e56c50c0919a375505c01f52bce5f1792841c40b87b1cd18e9336`,
 so the recorded fresh dual-base semantic receipt continues to name these exact
 contract bytes. Current-head CI independently reruns the complete native lane.
 
-## v0.8.0 preparation after actual FHT publication
+## v0.8.0 metadata after actual FHT publication
 
 FHT v0.7.0 was published at tag
 `623c79fe58edeb238a20fb6de518c62dd69b92bc`, GitHub Release 452203176,
-DOI `10.5281/zenodo.24385024`. This tree prepares current/preRelease v0.8.0;
-its four header-version entries repeat v0.7.0 exactly. Native FHGM 0.1 remains
-an unpublished candidate, outside the header registry. The accepted native
+DOI `10.5281/zenodo.24385024`. This final metadata tree sets current v0.8.0 and preRelease null;
+its four header-version entries repeat v0.7.0 exactly. Native FHGM 0.1 is selected for that immutable release, outside the header registry.
+The source manifest state is released; this source assertion is not proof of the
+GitHub Release, archive DOI or live alias. The accepted native
 contract now enters the pattern drift gate independently of that registry.
 Publication provenance metadata is explicitly excluded from contract discovery.
 
-The final metadata act must clear preRelease, set CFF version/date deliberately,
-set native publicationState to `released`, and create the exact immutable v0.8.0
-tag before validating that final state. A private temporary Git tag is only a
+The final metadata clears preRelease, sets CFF version/date deliberately and
+sets native publicationState to `released`. The exact immutable v0.8.0
+tag must exist before validating that final state. A private temporary Git tag is only a
 preflight; it never proves GitHub Release, archive or alias publication. The native
 runner reports `source-contract-conformance` and `publicationVerified: false`
 in either source state. The final metadata changes require independent review,
 current CI and the root's exact-head validation before publication. No native
-schema byte or accepted owning source may change in that act. Add the v0.8.0
-FHR context URL to the context inventory when finalizing the release, then run
-its inventory tests. Do not invent a version DOI; add only actual archive evidence.
+schema byte or accepted owning source may change in that act. The v0.8.0 FHR context URL is included in the context inventory;
+its bytes and the inventory tests must be checked. Do not invent a version DOI; add only actual archive evidence.
 
 Authoring remains v0.6.0 until a supporting toolkit is actually published. FHT
 and native FHGM alias readiness is external w3id PR 7241. These publication steps
 do not adopt FHT JSON-LD, DCMI mappings or a new FHGM header contract.
+
+
+## Final release sequence
+
+See [RELEASE-v0.8.0.md](RELEASE-v0.8.0.md) for exact private preflight, independent
+review, public tag/CI/merge, GitHub Release and actual archive verification steps.
+The final tagged source does not assert a guessed v0.8.0 version DOI. The native
+schema digest remains `56c0a5a91e9e56c50c0919a375505c01f52bce5f1792841c40b87b1cd18e9336`.

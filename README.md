@@ -21,7 +21,7 @@ comes here by pull request:
 | FHP | [FHP-Specification](https://github.com/FAIR-bioHeaders/FHP-Specification) |
 | FHT | [FHT-Specification](https://github.com/FAIR-bioHeaders/FHT-Specification) |
 | FHGFF3 | [FHGFF3](https://github.com/FAIR-bioHeaders/FHGFF3) |
-| FHGM (native publication preparation — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
+| FHGM (native model contract 0.1 — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
 
 Schema URLs under the old name
 (`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`
@@ -61,10 +61,10 @@ published contracts are unchanged.
 
 ## Native gene-model records (FHGM)
 
-The separately accepted native FHGM model contract 0.1 is prepared for v0.8.0
+The separately accepted native FHGM model contract 0.1 has finalized v0.8.0 publication metadata
 in [the publication package](docs/FHGM-PUBLICATION.md). The native contract
 selects model records independently of their enclosing FHGFF3 file header.
-It is still unpublished: source preparation does not establish a fixed alias,
+Source metadata alone does not establish a fixed alias,
 release artifact or installed runtime support. FHGM has no header `schemaVersion`
 or entry in the header registry. The preserved owning draft and historical
 extension-carrier design are described in [docs/FHGM.md](docs/FHGM.md).
@@ -274,7 +274,7 @@ Machine-readable entries are maintained in
 
 New project contributions from March 2025 onward use [MPL-2.0](LICENSE). David Molik left USDA in February 2025. Historical USDA public-domain material remains public domain within the United States; its original notice is preserved in LICENSE. Previously granted permissions and third-party terms remain intact. The project includes both historical material and subsequent MPL-2.0 contributions; file notices and history identify provenance.
 
-## Published FHT and native FHGM preparation
+## Published FHT and native FHGM publication metadata
 
 FHT 1.0 is published in [specification v0.7.0](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.7.0),
 immutable tag `623c79fe58edeb238a20fb6de518c62dd69b92bc`,
@@ -284,7 +284,7 @@ Older installed tools do not gain support merely because the contract is publish
 Fixed aliases remain pending external [w3id PR 7241](https://github.com/perma-id/w3id.org/pull/7241);
 do not claim FHT or native FHGM identifiers resolve before live probes.
 
-This tree prepares current/preRelease v0.8.0 for native FHGM model contract 0.1,
+This tree finalizes current v0.8.0 with preRelease null for native FHGM model contract 0.1,
 not an FHGM header. FHR 2.1, FHP 1.2, FHGFF3 1.2 and FHT 1.0 remain unchanged.
 There is no FHGM header registry row or in-record schema/schemaVersion field.
 See [the native package and remaining gates](docs/FHGM-PUBLICATION.md).
