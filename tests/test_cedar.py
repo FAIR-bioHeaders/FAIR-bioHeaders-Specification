@@ -166,12 +166,12 @@ def header_type(stem):
 
 
 def contract_version(stem):
-    return REGISTRY['releases']['v0.6.0'][header_type(stem)]
+    return REGISTRY["releases"][REGISTRY.get("authoringRelease", REGISTRY["current"])][header_type(stem)]
 
 
 def contract_url(stem):
     return (f"https://w3id.org/fair-bioheaders/{REGISTRY['w3id'][header_type(stem)]}"
-            '/v0.6.0')
+            f"/{REGISTRY.get('authoringRelease', REGISTRY['current'])}")
 
 
 def to_plain(value):
@@ -535,13 +535,15 @@ class CedarDraftTemplateTests(unittest.TestCase):
         tracked = ROOT / entry["local"]
         tracked_digest = hashlib.sha256(tracked.read_bytes()).hexdigest()
         committed = (TEMPLATE_DIR / "fhgm.json").read_bytes()
+        released_registry = make_cedar.load_registry()
         with tempfile.TemporaryDirectory(prefix="cedar-pin-") as scratch:
             root = Path(scratch)
             drafts = root / make_cedar.DRAFT_DIR.relative_to(ROOT)
             shutil.copytree(make_cedar.DRAFT_DIR, drafts)
             copy_path = root / entry["local"]
             original = copy_path.read_bytes()
-            with mock.patch.object(make_cedar, "ROOT", root), \
+            with mock.patch.object(make_cedar, "load_registry", return_value=released_registry), \
+                    mock.patch.object(make_cedar, "ROOT", root), \
                     mock.patch.object(make_cedar, "DRAFT_PROVENANCE_PATH",
                                       drafts / make_cedar.DRAFT_PROVENANCE_PATH.name):
                 self.assertEqual(make_cedar.render("fhgm").encode("utf-8"), committed,
@@ -1177,7 +1179,9 @@ class CedarPreReleaseGuardTests(unittest.TestCase):
         for previous in (None, '', 'v9.9.9', 'v0.7.0'):
             with self.subTest(previous=previous), tempfile.TemporaryDirectory() as directory:
                 registry = json.loads((ROOT / 'schemas/versions.json').read_text())
-                registry['candidate']['previousPublished'] = previous
+                registry.pop('authoringRelease', None)
+                registry['preRelease'] = 'v0.7.0'
+                registry.setdefault('candidate', {})['previousPublished'] = previous
                 location = Path(directory) / 'versions.json'
                 location.write_text(json.dumps(registry))
                 with patch.object(make_cedar, 'VERSIONS_PATH', location):

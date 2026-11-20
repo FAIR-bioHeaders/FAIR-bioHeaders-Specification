@@ -1,17 +1,30 @@
 # Changelog
 
-## Unreleased
+## v0.7.0 — publication preparation
 
-### Proposed v0.7.0 publication candidate (not released)
+- Reconcile the accepted FHT 1.0 publication package with the actual v0.6.1
+  release, recording its version DOI without inventing a v0.7.0 identifier.
+  Keep `preRelease` set until the final tag commit and supported authoring at
+  v0.6.0 until a published reader supports the newer citations.
+- Retain the exact accepted FHT contract and 93 counterpart payloads. Make
+  synthetic reference HTML presentation and conformance receipt labels stable
+  before and after the exact tag appears, without bypassing tag verification.
+- Keep the fixed FHT 1.0 reference usable in later family release preparation
+  when the registry and actual v0.7.0 tag retain that same contract.
+- Joint acceptance and arithmetic-capable installed candidate evidence are
+  recorded separately from the pending final tag, GitHub Release, archive,
+  fixed alias and consumer/default promotion. No FHT JSON-LD support is added.
 
-- Prepare generated FHT contract `1.0`, stable proposed identity, shared registry
-  and V1–V7 selection integration under an explicit v0.7.0 preRelease marker.
-- Add typed HTML/vocabulary, seven synthetic counterpart pairs and a separately
-  executed 93-case immutable-ID release crosswalk, preserving all owning and
-  historical released fixture bytes. No FHT JSON-LD/default-toolkit claim.
-- Joint acceptance, arithmetic-capable installed receipts, the preceding v0.6.1
-  stage, final metadata and actual tag/release/alias/publication remain gated;
-  see docs/FHT-PUBLICATION-CANDIDATE.md.
+## v0.6.1 — 2026-11-19
+
+Guidance and newly selected format policy; unchanged released schema contracts.
+
+- Record the adopted guidance patch with the exact v0.6.0 contract-version row
+  and unchanged schema/fixture bytes. Authoring remains pinned to v0.6.0 pending
+  an installed reader supporting v0.6.1. No tag, GitHub Release or alias is created
+  by the source files alone; actual publication evidence belongs to the GitHub
+  Release. See docs/RELEASE-v0.6.1.md.
+
 
 
 - Record adopted D8–D10 dispositions (#257/#258/#267): retain non-retroactive R16

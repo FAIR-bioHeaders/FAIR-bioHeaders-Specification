@@ -1,6 +1,6 @@
-# Proposed shared FHT typed HTML microdata binding
+# Shared FHT 1.0 typed HTML microdata binding
 
-**Draft v0.7.0 publication candidate, not a released binding or runtime support.**
+**Accepted v0.7.0 publication package; actual release and runtime support require separate evidence.**
 This document incorporates the accepted owning binding at
 [`4ddda69cbcbb3920a06ab657173c0198672cd7bf`](../drafts/fht/upstream/docs/FHT-MICRODATA.md)
 with the explicit shared selector, API and provenance transitions below. The
@@ -11,28 +11,28 @@ F1–F7 are shared review labels, not additional field constraints.
 
 The accepted owning contract SHA-256 is
 `b62c4e227042e162b43d2c461cfe6c3ece3806636ca88a4cf9b0b2f902fb1fc3`.
-The proposed root contract is [fht.json](../fht.json), SHA-256
+The shared root contract is [fht.json](../fht.json), SHA-256
 `082b0790b7878940c4496c97d7485e32c65de8ba75ecc080e53f04fb44251a43`.
 Tests compare every non-selector resolved validation constraint; only the
 selector forms and annotations change. No URI below is minted or advertised
-as live by this branch. Final joint acceptance and the publication gates in
+as live by this branch. Joint package acceptance is recorded in the preparation record; the publication gates in
 [FHT-PUBLICATION-CANDIDATE.md](FHT-PUBLICATION-CANDIDATE.md) remain separate.
 
 ## F1 — scope and itemtype
 
 Exactly one FHT record scope is required. No conflicting FHR/FHP/FHGFF3 scope,
 FHT owning-draft scope or family itemtype token is allowed. FHR identity never
-identifies an FHT record. The proposed writer uses
+identifies an FHT record. The writer uses
 `https://w3id.org/fair-bioheaders/fht/v0.7.0` as its `itemtype`.
 
 The reader recognizes shared raw-main, shared raw-tag and versioned w3id family
 aliases before detecting conflicts; an unknown version cannot evade that check.
-A recognized FHT itemtype must resolve to the same proposed FHT1.0 contract.
+A recognized FHT itemtype must resolve to the same FHT1.0 contract.
 The record's ordinary `schema` property is separately selected under F2.
 
 ## F2 — selectors and reference states
 
-The proposed v0.7.0 registry permits these FHT selectors:
+The v0.7.0 registry permits these FHT selectors:
 
 - canonical shared raw-main `.../FAIR-bioHeaders-Specification/main/fht.json`
   selects the reader's current FHT contract under V1. FHR-Specification is not an
@@ -58,7 +58,12 @@ that exact tag, the reference parses the same byte snapshot used in the comparis
 and reports **tag bytes verified**, without claiming
 that a GitHub Release, joint acceptance or publication has been verified. The
 visible page paragraph, default title and read diagnostic reflect this state.
-These are reference states, not a way to bypass the release gates.
+Stored synthetic reference examples have publication-neutral titles and visible
+paragraphs, so their generated HTML does not change when the exact tag appears.
+This presentation does not bypass the schema/tag checks or alter read diagnostics.
+When a later family `current` still registers FHT 1.0, this reference continues to
+check the exact v0.7.0 bytes; it does not substitute another contract. These are
+reference states, not a way to bypass the release gates.
 
 ## F3 — properties and objects
 
@@ -203,7 +208,7 @@ write_page(record, schema=None, *, allow_candidate=False, title=None, warn=None)
 read_page(text, schema=None, *, allow_candidate=False, warn=None)
 ```
 
-The seven [proposed counterpart triples](../examples/fht/) are synthetic. Frozen
+The seven [counterpart triples](../examples/fht/) are synthetic. Frozen
 owning examples and invalid fixture expectations remain byte-identical under
 `drafts/fht/upstream/`; selector-adjusted in-memory negative tests verify the
 shared reader's actual primary rejection reasons. The shared counterpart

@@ -577,20 +577,23 @@ def _validate(record, schema):
 
 def _candidate_schema(allow_candidate, schema):
     registry = json.loads((ROOT / 'schemas/versions.json').read_text())
-    if registry.get('current') != 'v0.7.0':
-        raise MicrodataError('This binding targets the proposed v0.7.0 contract only')
+    current = registry.get('current')
+    releases = registry.get('releases', {})
+    if (releases.get('v0.7.0', {}).get('FHT') != '1.0' or
+            releases.get(current, {}).get('FHT') != '1.0'):
+        raise MicrodataError('This binding requires the registered FHT 1.0 contract')
+    if registry.get('preRelease') not in (None, current):
+        raise MicrodataError('Invalid FHT preRelease guard')
     raw = (ROOT / 'fht.json').read_bytes()
     mode = 'publication-candidate'
     if registry.get('preRelease') == 'v0.7.0':
         if not allow_candidate:
             raise MicrodataError('Unpublished binding requires allow_candidate=True; no release is claimed')
-    elif registry.get('preRelease') is None:
+    else:
         immutable = subprocess.run(['git', '--no-replace-objects', '-C', str(ROOT), 'show', 'v0.7.0:fht.json'], capture_output=True)
         if immutable.returncode or immutable.stdout != raw:
             raise MicrodataError('Tag-reference binding requires actual byte-matching v0.7.0 tag; no fallback to candidate')
         mode = 'tag-verified-reference'
-    else:
-        raise MicrodataError('Invalid FHT preRelease guard')
     local = json.loads(raw)
     if schema is not None and schema != local:
         raise MicrodataError('custom schema must match the shared candidate')
@@ -694,7 +697,8 @@ def _write_property(name, value):
 
 
 def write_page(
-    record, schema=None, *, allow_candidate=False, title=None, warn=None
+    record, schema=None, *, allow_candidate=False, title=None, warn=None,
+    _reference_example=False
 ):
     """Write one visible typed table; omit M5 extension fields with an explicit warning."""
     schema, mode = _candidate_schema(allow_candidate, schema)
@@ -723,7 +727,11 @@ def write_page(
     }
     _html_text(emitted)
     _html_text(title)
-    status = ('Unreleased FHT draft binding example.' if mode == 'publication-candidate' else
+    # Stored synthetic examples have stable presentation across publication.
+    # This changes no validation/tag guard or runtime read diagnostic.
+    status = ('FHT v0.7.0 synthetic reference example; publication is not established by this page.'
+              if _reference_example else
+              'Unreleased FHT draft binding example.' if mode == 'publication-candidate' else
               'FHT reference checked against the exact v0.7.0 tag; GitHub Release and publication have not been verified.')
     return (
         '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">'

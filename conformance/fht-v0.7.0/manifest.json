@@ -1,6 +1,6 @@
 {
   "manifestVersion": 1,
-  "status": "Unpublished v0.7.0 publication candidate; no installed/default support claim",
+  "status": "FHT v0.7.0 conformance counterparts; publication and installed support are verified separately",
   "sourceCommit": "4ddda69cbcbb3920a06ab657173c0198672cd7bf",
   "sourceManifestSha256": "d0147d3ad97c0fad0ede94ae76340632a86a160f566b01129e592e643fd77492",
   "historicalShared": "291 immutable v0.6.0 cases remain separate; current shared carrier lane is also unchanged",

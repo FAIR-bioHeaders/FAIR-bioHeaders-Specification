@@ -99,6 +99,7 @@ import hashlib
 import json
 import math
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -341,11 +342,27 @@ def git_blob_sha1(path: Path) -> str:
 def load_registry():
     """Current release per type: (contract schemaVersion, fixed schema URL, release tag)."""
     registry = json.loads(VERSIONS_PATH.read_text(encoding="utf-8"))
-    release = registry['current']
-    if registry.get('preRelease'):
+    release = registry.get("authoringRelease", registry["current"])
+    if 'authoringRelease' not in registry and registry.get('preRelease'):
         release = registry.get('candidate', {}).get('previousPublished')
         if not isinstance(release, str) or not release or release == registry['current'] or release not in registry['releases']:
             raise ValueError('CEDAR preRelease requires an explicit registered previousPublished authority; never promote candidate forms')
+    if release not in registry["releases"]:
+        raise ValueError("Unregistered authoringRelease")
+    if registry.get('authoringRelease') or registry.get('preRelease'):
+        if release == registry.get('preRelease'):
+            raise ValueError('Authoring authority cannot be the unpublished candidate')
+        try:
+            subprocess.run(['git', 'rev-parse', '--verify', 'refs/tags/' + release + '^{commit}'],
+                           cwd=ROOT, check=True, capture_output=True)
+            for header_type in TYPES:
+                name = registry['files'][header_type]
+                frozen = subprocess.run(['git', 'show', 'refs/tags/' + release + ':' + name],
+                                        cwd=ROOT, check=True, capture_output=True).stdout
+                if frozen != (ROOT / name).read_bytes():
+                    raise ValueError('Authoring authority bytes differ from generator input: ' + name)
+        except subprocess.CalledProcessError as exc:
+            raise ValueError('Authoring authority must resolve to an existing complete release tag') from exc
     out = {}
     for header_type, stem in TYPES.items():
         version = registry["releases"][release][header_type]
