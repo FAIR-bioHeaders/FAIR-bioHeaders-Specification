@@ -91,7 +91,7 @@ comparison verified all 134 preserved source files. This is measured technical
 candidate evidence, not a release or biological/curator approval. The exact
 receipt is attached to the preparation PR / CI artifact;
 
-CI uploads `fhgm-native-unpublished-evidence` separately from the exact draft
+CI uploads `fhgm-native-source-validation-evidence` separately from the exact draft
 receipt. No skipped GFF3 execution is counted as passing.
 
 Before v0.8.0: independently review the current artifact/head, complete all
@@ -134,3 +134,28 @@ values. Eight publication tests pass; the native artifact itself remains
 SHA-256 `56c0a5a91e9e56c50c0919a375505c01f52bce5f1792841c40b87b1cd18e9336`,
 so the recorded fresh dual-base semantic receipt continues to name these exact
 contract bytes. Current-head CI independently reruns the complete native lane.
+
+## v0.8.0 preparation after actual FHT publication
+
+FHT v0.7.0 was published at tag
+`623c79fe58edeb238a20fb6de518c62dd69b92bc`, GitHub Release 452203176,
+DOI `10.5281/zenodo.24385024`. This tree prepares current/preRelease v0.8.0;
+its four header-version entries repeat v0.7.0 exactly. Native FHGM 0.1 remains
+an unpublished candidate, outside the header registry. The accepted native
+contract now enters the pattern drift gate independently of that registry.
+Publication provenance metadata is explicitly excluded from contract discovery.
+
+The final metadata act must clear preRelease, set CFF version/date deliberately,
+set native publicationState to `released`, and create the exact immutable v0.8.0
+tag before validating that final state. A private temporary Git tag is only a
+preflight; it never proves GitHub Release, archive or alias publication. The native
+runner reports `source-contract-conformance` and `publicationVerified: false`
+in either source state. The final metadata changes require independent review,
+current CI and the root's exact-head validation before publication. No native
+schema byte or accepted owning source may change in that act. Add the v0.8.0
+FHR context URL to the context inventory when finalizing the release, then run
+its inventory tests. Do not invent a version DOI; add only actual archive evidence.
+
+Authoring remains v0.6.0 until a supporting toolkit is actually published. FHT
+and native FHGM alias readiness is external w3id PR 7241. These publication steps
+do not adopt FHT JSON-LD, DCMI mappings or a new FHGM header contract.

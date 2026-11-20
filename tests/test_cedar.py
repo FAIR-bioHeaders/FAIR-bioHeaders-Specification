@@ -1176,11 +1176,11 @@ class CedarToolkitPinTests(unittest.TestCase):
 class CedarPreReleaseGuardTests(unittest.TestCase):
     def test_missing_or_invalid_previous_publication_never_defaults_to_candidate(self):
         from unittest.mock import patch
-        for previous in (None, '', 'v9.9.9', 'v0.7.0'):
+        for previous in (None, '', 'v9.9.9', 'v0.8.0'):
             with self.subTest(previous=previous), tempfile.TemporaryDirectory() as directory:
                 registry = json.loads((ROOT / 'schemas/versions.json').read_text())
                 registry.pop('authoringRelease', None)
-                registry['preRelease'] = 'v0.7.0'
+                registry['preRelease'] = registry['current']
                 registry.setdefault('candidate', {})['previousPublished'] = previous
                 location = Path(directory) / 'versions.json'
                 location.write_text(json.dumps(registry))

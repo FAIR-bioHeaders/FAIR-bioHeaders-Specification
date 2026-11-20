@@ -4,6 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import unittest
 
@@ -18,6 +19,35 @@ class NativePublication(unittest.TestCase):
         shutil.copytree(ROOT / 'drafts/fhgm', root / 'drafts/fhgm',
                         ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
         shutil.copytree(ROOT / publication.PACKAGE, root / publication.PACKAGE)
+
+    def test_final_state_requires_final_registry_and_exact_local_tag(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy(root)
+            (root / 'schemas').mkdir()
+            metadata_file = root / publication.PACKAGE / 'publication.json'
+            metadata = json.loads(metadata_file.read_text())
+            metadata['publicationState'] = 'released'
+            metadata_file.write_text(json.dumps(metadata))
+            registry_file = root / 'schemas/versions.json'
+            registry_file.write_text(json.dumps({'current': 'v0.8.0', 'preRelease': 'v0.8.0', 'releases': {'v0.8.0': {}}}))
+            self.assertTrue(publication.verify(root))
+            registry_file.write_text(json.dumps({'current': 'v0.8.0', 'preRelease': None, 'releases': {'v0.8.0': {}}}))
+            self.assertTrue(publication.verify(root))
+            def git(*args):
+                subprocess.run(['git', '-C', str(root), *args], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            git('init', '-q')
+            git('add', 'model-contracts', 'schemas')
+            git('-c', 'user.name=Private preflight', '-c', 'user.email=preflight@example.invalid',
+                '-c', 'commit.gpgsign=false', 'commit', '-qm', 'Private final-state control')
+            git('tag', 'v0.8.0')
+            self.assertEqual([], publication.verify(root))
+            schema = root / publication.PACKAGE / 'fhgm-model.schema.json'
+            schema.write_bytes(schema.read_bytes() + b'\n')
+            metadata['sha256'] = publication.digest(schema.read_bytes())
+            metadata_file.write_text(json.dumps(metadata))
+            self.assertTrue(any('immutable' in error for error in publication.verify(root)))
 
     def test_current_native_counterpart_has_only_selected_identity_and_annotations(self):
         self.assertEqual([], publication.verify())

@@ -6,7 +6,7 @@
 [![File Converter DOI](https://img.shields.io/badge/File_Converter_DOI-10.5281%2Fzenodo.6762547-blue)](https://doi.org/10.5281/zenodo.6762547)
 
 This repository holds the released FAIR-bioHeaders specifications: FHR (reference
-genomes), FHP (protein FASTA) and FHGFF3 (GFF3 annotation) headers, the
+genomes), FHP (protein FASTA), FHT (transcriptome) and FHGFF3 (GFF3 annotation) headers, the
 shared core schema, the format rules, the JSON-LD context and vocabulary, and the
 conformance suite. It was called `FHR-Specification` until 2026-10-14 (#108).
 
@@ -21,7 +21,7 @@ comes here by pull request:
 | FHP | [FHP-Specification](https://github.com/FAIR-bioHeaders/FHP-Specification) |
 | FHT | [FHT-Specification](https://github.com/FAIR-bioHeaders/FHT-Specification) |
 | FHGFF3 | [FHGFF3](https://github.com/FAIR-bioHeaders/FHGFF3) |
-| FHGM (draft, no contract — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
+| FHGM (native publication preparation — see below) | [FHGM-Specification](https://github.com/FAIR-bioHeaders/FHGM-Specification) |
 
 Schema URLs under the old name
 (`https://raw.githubusercontent.com/FAIR-bioHeaders/FHR-Specification/main/fhr.json`
@@ -59,21 +59,17 @@ published schemas, with a draft AgBioData example under
 [`profiles/`](profiles/). It is a proposal; no community profile is adopted and the
 published contracts are unchanged.
 
-## Draft gene-model records (FHGM)
+## Native gene-model records (FHGM)
 
-[docs/FHGM.md](docs/FHGM.md) is a draft overview of FHGM (FAIR Header Gene
-Model): record-level metadata for a gene-model contribution, in contrast to the
-FHGFF3 header that describes the enclosing annotation file. The current pilot
-embeds repeatable model-level records inside an FHGFF3 file as `x-` extension
-fields and separates file integrity (the exact-byte checksum) from model-level
-revision resolution, which needs its own check. Contract ownership, required
-fields, serialization and model-level validation are under review in
-[#204](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204);
-pilot datasets are tracked in
-[#206](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/206).
-FHGM is **not** a released contract: it has no schema, no version and no entry
-in `schemas/versions.json` (released contracts only), and no toolkit, validator
-or builder support is claimed.
+The separately accepted native FHGM model contract 0.1 is prepared for v0.8.0
+in [the publication package](docs/FHGM-PUBLICATION.md). The native contract
+selects model records independently of their enclosing FHGFF3 file header.
+It is still unpublished: source preparation does not establish a fixed alias,
+release artifact or installed runtime support. FHGM has no header `schemaVersion`
+or entry in the header registry. The preserved owning draft and historical
+extension-carrier design are described in [docs/FHGM.md](docs/FHGM.md).
+[#204](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/204)
+tracks publication; downstream pilot datasets in #206 are Project 12 work.
 
 ## Metadata
 
@@ -278,6 +274,23 @@ Machine-readable entries are maintained in
 
 New project contributions from March 2025 onward use [MPL-2.0](LICENSE). David Molik left USDA in February 2025. Historical USDA public-domain material remains public domain within the United States; its original notice is preserved in LICENSE. Previously granted permissions and third-party terms remain intact. The project includes both historical material and subsequent MPL-2.0 contributions; file notices and history identify provenance.
 
-## Shared FHT publication candidate (repository-local preparation)
+## Published FHT and native FHGM preparation
 
-This review branch proposes root FHT model/contract, selectors, vocabulary and typed HTML for v0.7.0; current/preRelease are explicitly v0.7.0. It is not a released contract or default support claim. Follow [the concrete preparation and gates](docs/FHT-PUBLICATION-CANDIDATE.md). Preserve frozen owning and released payloads. No merge, Pages, alias, tag or release authority is granted; final joint acceptance and installed-runtime evidence remain separate.
+FHT 1.0 is published in [specification v0.7.0](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.7.0),
+immutable tag `623c79fe58edeb238a20fb6de518c62dd69b92bc`,
+[DOI 10.5281/zenodo.24385024](https://doi.org/10.5281/zenodo.24385024).
+The historical owning draft remains a separate explicit rule-V7 opt-in.
+Older installed tools do not gain support merely because the contract is published.
+Fixed aliases remain pending external [w3id PR 7241](https://github.com/perma-id/w3id.org/pull/7241);
+do not claim FHT or native FHGM identifiers resolve before live probes.
+
+This tree prepares current/preRelease v0.8.0 for native FHGM model contract 0.1,
+not an FHGM header. FHR 2.1, FHP 1.2, FHGFF3 1.2 and FHT 1.0 remain unchanged.
+There is no FHGM header registry row or in-record schema/schemaVersion field.
+See [the native package and remaining gates](docs/FHGM-PUBLICATION.md).
+Authoring guidance stays on v0.6.0 until an actual supporting toolkit release.
+JSON-LD remains FHR-only; typed FHT HTML does not adopt JSON-LD or DCMI projection.
+
+FHT requires `schema`, `schemaVersion`, `transcriptome`, `assemblyType`, `taxon`,
+`version`, `metadataAuthor`, `dateCreated`, `checksum`; optional fields retain their
+accepted owning meanings.

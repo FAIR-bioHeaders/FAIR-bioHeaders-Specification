@@ -80,7 +80,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: fhgm-native-unpublished-evidence
+          name: fhgm-native-source-validation-evidence
           path: ${{ runner.temp }}/fhgm-native-evidence.json
           if-no-files-found: warn
       - name: Upload actual draft evidence receipt
