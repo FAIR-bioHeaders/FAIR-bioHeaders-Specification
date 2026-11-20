@@ -1,5 +1,8 @@
 # FAIR-bioHeaders Specification
 
+Start with the [reader and maintainer guide](docs/WORKING-GUIDE.md) for
+setup, runnable checks, generator options and interpretation of results.
+
 [![Specification checks](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/actions/workflows/validate-specification.yml/badge.svg?branch=main)](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/actions/workflows/validate-specification.yml)
 [![Schema drift checks](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/actions/workflows/check-schema-drift.yml/badge.svg?branch=main)](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/actions/workflows/check-schema-drift.yml)
 [![Specification DOI](https://img.shields.io/badge/Specification_DOI-10.5281%2Fzenodo.6762549-blue)](https://doi.org/10.5281/zenodo.6762549)

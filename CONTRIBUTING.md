@@ -47,3 +47,12 @@ Use Chicago bibliography entries with DOI resolver links in human-readable citat
 ## License of contributions
 
 New project contributions from March 2025 onward use [MPL-2.0](LICENSE). David Molik left USDA in February 2025. Historical USDA public-domain material remains public domain within the United States; its original notice is preserved in LICENSE. Previously granted permissions and third-party terms remain intact. The project includes both historical material and subsequent MPL-2.0 contributions; file notices and history identify provenance. New contributions must have the rights needed for their declared license; retain source notices.
+
+## Review and merge handoff
+
+Every PR receives independent review from another actual model, preferably from
+a different family. Record author and reviewer identities. Agents fix failing CI
+and actionable overall/inline reviews and hand the validated current head to a
+human. Only humans merge; agents never merge, enable auto-merge, queue a merge,
+use a merge proxy or push a default branch as a substitute. See
+[AGENTS.md](AGENTS.md) for the current policy and review dispositions.

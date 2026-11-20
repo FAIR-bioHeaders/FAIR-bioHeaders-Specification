@@ -88,29 +88,39 @@ unless genuinely outside scope; explain that disposition and link the follow-up.
 
 Do not push directly to a repository's main branch.
 
-The maintainer's independent-review rule (2026-11-18) applies only to
-FAIR-bioHeaders repositories and agents operated by David Molik (`molikd`) or
-Adam Wright (`adamjohnwright`). A PR submitted by either maintainer or their
-agents may satisfy the approval gate through an independent **different model**:
-Copilot, or a model operated by David or Adam. The approving model/agent must be
-other than the submitter; an agent must not self-approve its PR, and another
-instance of the same model does not satisfy the different-model requirement.
-Record author/reviewer model provenance when needed to establish independence.
-David and Adam themselves may self-approve their PRs; this exception does not
-apply to their agents.
+## Agent review and human-only PR merges (maintainer direction, 2026-11-20)
 
-An eligible agent may merge only after that approval requirement is met, all
-applicable CI checks are green, and its own validation of the current changes
-passes, including changes after review. Recheck the exact head, base branch,
-findings and dependencies immediately before merging. Missing checks are not
-passing checks, and branch protection must not be bypassed. Read every overall
-review and inline finding, reply with its disposition and fix/evidence, resolve
-handled threads, and post an overall response. Merge authorization does not grant
-contract adoption, curator acceptance, release, publication or deployment
-authority; those retain their separate maintainer gates.
+[Authoritative Round 16 policy and plan](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7042896529) supersedes the former conditional agent-merge authorization.
+This rule applies to all repositories and operators, including FAIR-bioHeaders,
+external upstream repositories and personal forks.
 
-Authority: [approval by another, different model](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984337685)
-and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984418624).
+Agents must never merge pull requests. A human performs the merge. Agents must
+not enable auto-merge, enter a merge queue, use another agent/service as a merge
+proxy, or push directly to a default branch instead of merging a PR. Model
+review never grants an agent merge authority. Preserve platform protections;
+do not forge approval or work around repository permissions.
+
+Every PR receives independent review from another actual model. Prefer another
+model family, for example Qwen or Gemma reviewing Codex work, but a different
+family is a preference rather than a hard requirement. A second session of the
+same model is not another model. Record actual author/reviewer model identities
+and never invent review provenance.
+
+Agents continue monitoring CI and fixing failures and actionable review
+findings. Read overall and inline reviews, fix in new commits, reply with
+disposition/evidence, resolve handled findings and acknowledge clean reviews.
+Validate the current head after changes; hand the human exact head/base,
+review, CI, dependency and remaining-risk information. Missing, failed and
+NOT_RUN checks are not passes. Contract adoption, curator acceptance and
+publication keep their separate authority and gates.
+
+Port the current policy through live AGENTS and applicable existing LLM/llms,
+plugin/skill, contribution and workplan guidance. The six specification holders
+remain semantically in step, not byte-identical; preserve local sections.
+Immutable published/vendored historical instruction copies keep their bytes
+and provenance and are explicitly non-operative from current parent guidance.
+Their older text never authorizes an agent merge. Earlier rounds' authorized
+merges and dated receipts remain historical facts, not future permission.
 
 ## Optional
 
