@@ -134,7 +134,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Gated scope: the released specification surface. The three root JSON contracts
+# Gated scope: the released specification surface. The four root JSON contracts
 # (they live at the repository root, not under schemas/), the LinkML models they
 # are generated from or must agree with, the shared slot models they import, and
 # the version registry.
