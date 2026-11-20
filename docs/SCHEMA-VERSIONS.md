@@ -257,7 +257,8 @@ tag exists. Record it in the pull request and the release tracker, set `current`
 every example and `llms.txt` to the prepared release's URL and version (a
 guidance-only patch may instead keep an explicit `authoringRelease` pin while
 installed readers catch up): the example and
-`llms.txt` tests follow `current`, so they do not skip. The schema-byte check skips only for
+`llms.txt` tests follow the explicit authoring pin when present, otherwise
+`current`, so they do not skip. The schema-byte check skips only for
 that explicit marker until the tag exists. For publication, clear `preRelease` in the final
 release-branch commit, tag that commit, and then run the release-identity check. The check
 will fail between clearing the marker and creating the tag. Carry the cleared registry to
