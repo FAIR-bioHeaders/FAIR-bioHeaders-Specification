@@ -504,6 +504,6 @@ authority; those retain their separate maintainer gates.
 Authority: [approval by another, different model](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984337685)
 and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984418624).
 
-## Shared FHT publication candidate (repository-local preparation)
+## Shared FHT release package (repository-local)
 
-This tree prepares the accepted root FHT model/contract, selectors, vocabulary and typed HTML for v0.7.0; current/preRelease remain explicitly v0.7.0 until the final tag commit. Joint acceptance is attributed in [the concrete preparation record](docs/FHT-PUBLICATION-CANDIDATE.md), which also records the actual preceding v0.6.1 release. Preserve frozen owning and released payloads. Preparation files and reference checks do not themselves establish release, Pages, alias or installed-support publication; the recorded maintainer authority and actual event evidence remain separate.
+This tree carries the accepted FHT 1.0 contract for v0.7.0. The final tag commit clears `preRelease`; actual tag, GitHub Release, archive and alias evidence remain separately verified under [the release procedure](docs/RELEASE-v0.7.0.md). The [preparation record](docs/FHT-PUBLICATION-CANDIDATE.md) preserves joint acceptance and preceding v0.6.1 evidence. Preserve frozen owning and released bytes. Existing authoring citations remain v0.6.0 until supporting packages are actually published. No FHGM contract publication or FHT JSON-LD support is implied.

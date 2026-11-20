@@ -106,11 +106,17 @@ class InsdcCoverageTests(unittest.TestCase):
                 for _, _, repo, number in ISSUE_LINK.findall(row[5]):
                     self.assertIn((repo, number), listed, f"{row[0]} links an issue not in Related follow-ups")
 
-    def test_fht_rows_are_marked_draft(self):
+    def test_fht_rows_reflect_the_published_contract(self):
         for row in self.rows:
             for cell in row[2:5]:
                 with self.subTest(row=row[0]):
-                    self.assertNotRegex(cell, r"\bFHT\b(?! \(draft\))")
+                    self.assertNotIn("FHT (draft)", cell)
+
+    def test_fht_released_digest_matches_the_assessed_contract(self):
+        import hashlib
+        digest = hashlib.sha256((ROOT / "fht.json").read_bytes()).hexdigest()
+        self.assertIn(digest, self.text)
+        self.assertIn("shared v0.7.0 contract", self.text)
 
     def test_pinned_insdc_commit(self):
         commit = self.fixture["commit"]
@@ -127,7 +133,7 @@ class InsdcCoverageTests(unittest.TestCase):
         line = next(line for line in self.text.splitlines()
                     if line.startswith("- **FAIR-bioHeaders, released**"))
         for header, file in SCHEMAS.items():
-            assessed_line = next(row for row in self.text.splitlines() if row.startswith('- **FHT, draft')) if header == 'FHT' else line
+            assessed_line = next(row for row in self.text.splitlines() if row.startswith('- **FHT, released')) if header == 'FHT' else line
             current = json.loads((ROOT / file).read_text(encoding="utf-8"))["properties"]["schemaVersion"]["enum"]
             with self.subTest(header=header):
                 assessed = re.search(rf"\b{header}\b[^`]*(?:`schemaVersion` )?`([0-9]+\.[0-9]+)`", assessed_line)

@@ -1,10 +1,12 @@
 # Changelog
 
-## v0.7.0 — publication preparation
+## v0.7.0 — 2026-11-19
+
+Final FHT 1.0 tag package; actual publication is established by its GitHub Release.
 
 - Reconcile the accepted FHT 1.0 publication package with the actual v0.6.1
   release, recording its version DOI without inventing a v0.7.0 identifier.
-  Keep `preRelease` set until the final tag commit and supported authoring at
+  Clear `preRelease` in this final tag commit. Keep supported authoring at
   v0.6.0 until a published reader supports the newer citations.
 - Retain the exact accepted FHT contract and 93 counterpart payloads. Make
   synthetic reference HTML presentation and conformance receipt labels stable
@@ -14,6 +16,11 @@
 - Joint acceptance and arithmetic-capable installed candidate evidence are
   recorded separately from the pending final tag, GitHub Release, archive,
   fixed alias and consumer/default promotion. No FHT JSON-LD support is added.
+
+- Record FHT 1.0 publication in assessment v6 with its exact shared digest;
+  every INSDC requirement, coverage outcome and disposition remains unchanged.
+- Add the unchanged FHR context alias for v0.7.0 and finalize citation version/date.
+  No v0.7.0 version DOI is guessed; see docs/RELEASE-v0.7.0.md.
 
 ## v0.6.1 — 2026-11-19
 

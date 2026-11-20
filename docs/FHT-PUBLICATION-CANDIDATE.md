@@ -1,3 +1,5 @@
+> The preparation below is retained as the acceptance and readiness record. The final v0.7.0 tag package clears `preRelease` and records the FHT assessment status. Actual release/archive/alias evidence is governed by [RELEASE-v0.7.0.md](RELEASE-v0.7.0.md); source files alone do not establish publication.
+
 # FHT v0.7.0 publication preparation
 
 **Accepted, unpublished preparation artifact. Publication remains separately gated.**
