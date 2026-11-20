@@ -1,9 +1,9 @@
 # FHT v0.7.0 publication preparation
 
-**Draft review artifact. Do not merge or publish under ordinary code approval.**
+**Accepted, unpublished preparation artifact. Publication remains separately gated.**
 This branch proposes the actual shared publication layout for FHT contract
 `1.0`, using accepted owning `4ddda69cbcbb3920a06ab657173c0198672cd7bf`.
-Final joint David/Adam acceptance of this exact package remains pending. No tag,
+David accepted this package and recorded Adam’s concurrence on his behalf in [the joint acceptance record](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941). This attributed record is not a native GitHub approval by Adam. No tag,
 release object, alias, DOI, website enablement or consumer repin is created.
 
 ## Proposed artifacts and compatibility
@@ -16,8 +16,8 @@ release object, alias, DOI, website enablement or consumer repin is created.
   `https://w3id.org/fair-bioheaders/fht/v0.7.0` (not live).
 - `schemas/versions.json` marks **current = preRelease = v0.7.0**, adding FHT
   `1.0` beside byte-identical FHR `2.1`, FHP/FHGFF3 `1.2`. Existing release rows
-  remain unchanged. The candidate metadata explicitly records no joint acceptance
-  or aliases. The planned guidance-only v0.6.1 stage remains separate: rebase
+  remain unchanged. The candidate metadata records joint acceptance and the still-unpublished
+  state; no aliases have been activated. The planned guidance-only v0.6.1 stage remains separate: rebase
   this candidate on its actual accepted release before the final release review;
   do not fabricate that release or pre-register nonexistent historical aliases.
 - V1/V2/V3 recognize shared raw-main, shared raw-tag and versioned w3id forms;
@@ -80,12 +80,14 @@ independently verifies all 239 immutable owning paths.
 
 ## Final gates and publication order
 
-1. Joint David/Adam acceptance of this exact contract, binding, examples and
-   selection package; preserve the settled field decisions rather than repeating
-   the questionnaire. Independent model review remains technical review only.
-2. B supplies reviewed arithmetic-capable current-contract implementation and
-   actual installed receipts. Existing old-runtime receipts prove only 91 cases
-   with **two named arithmetic NOT-RUN** gaps, never full 93-case support.
+1. Joint package acceptance is recorded above. Preserve the settled field decisions.
+   Independent model review remains technical review only.
+2. The merged toolkit implementation at adb0f5e and owning harness at ac53af9 now
+   have an installed development-candidate receipt for all 93 owning cases, with
+   zero unsupported/staged cases. These development wheels are not the published
+   0.12.0 package. Shared-selector/default support is prepared separately in Tools
+   #200 and remains unpublished. Preserve older 91-case receipts with their two
+   named arithmetic NOT-RUN gaps as historical evidence.
 3. Reconcile the real preceding v0.6.1 guidance stage, current base and all current
    checks. Verify releases/aliases against actual immutable bytes; do not turn the
    proposed URLs in this branch into live usage recommendations prematurely.
