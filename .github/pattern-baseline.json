@@ -8,7 +8,7 @@
     "unit": "entry = one (file, JSON pointer) pair; the same string under two pointers counts twice; entriesEndingInDollar counts entries whose text ends in `$`; distinctPatternStrings counts unique strings",
     "governedFiles": "discovered by rule, not enumerated; see discoveryRule"
   },
-  "discoveryRule": "*.json / *.yaml / *.yml at the repository root, plus every *.json / *.yaml / *.yml under schemas/ (recursive)",
+  "discoveryRule": "*.json / *.yaml / *.yml at the repository root, plus every *.json / *.yaml / *.yml under schemas/ and model-contracts/ (recursive)",
   "governedFiles": [
     {
       "path": "fhgff3.json",
@@ -51,6 +51,11 @@
       "patternEntries": 14
     },
     {
+      "path": "model-contracts/fhgm/0.1/fhgm-model.schema.json",
+      "label": "accepted native FHGM 0.1 publication contract",
+      "patternEntries": 9
+    },
+    {
       "path": "schemas/core.yaml",
       "label": "shared core slot model",
       "patternEntries": 7
@@ -66,11 +71,15 @@
       "patternEntries": 0
     }
   ],
-  "governedFileDigest": "sha256:2959f82598e0f1e6a75987297900ae69cfeb68651b9c7e2d462b77ab17e30765",
+  "governedFileDigest": "sha256:1db7e4e2943b29d8a3257c1cb6e40c4a762ededaaabefe2895dbec06c4fa239f",
   "excludedFiles": [
     {
       "path": "fhr_mappings.yml",
       "reason": "FHR-to-DCMI mapping table (source/target schema references and class derivations): a mapping document, not a JSON Schema or LinkML model, and it declares no pattern keyword"
+    },
+    {
+      "path": "model-contracts/fhgm/0.1/publication.json",
+      "reason": "Publication provenance metadata, not a validation contract"
     }
   ],
   "files": {
@@ -562,6 +571,44 @@
         "pattern": "[^\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]"
       }
     ],
+    "model-contracts/fhgm/0.1/fhgm-model.schema.json": [
+      {
+        "pointer": "/$defs/checksum/pattern",
+        "pattern": "^[A-Za-z0-9+/]{43}=$"
+      },
+      {
+        "pointer": "/$defs/curie/pattern",
+        "pattern": "^[A-Za-z0-9._-]+:\\S"
+      },
+      {
+        "pointer": "/$defs/genomeReference/properties/accession/pattern",
+        "pattern": "^\\S+$"
+      },
+      {
+        "pointer": "/$defs/genomeReference/properties/seqcol_id/pattern",
+        "pattern": "^[A-Za-z0-9_-]{32}$"
+      },
+      {
+        "pointer": "/$defs/link/pattern",
+        "pattern": "^(?:(?:[Hh][Tt][Tt][Pp][Ss]?|[Ff][Tt][Pp])://(?:[^/?#@\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*@)?(?:\\[[^\\]\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]+\\]|[^/?#@:\\[\\]\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]+)(?::[^/?#@\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*)?(?:[/?#]|(?![\\s\\S]))|(?:[Uu][Rr][Nn]|[Dd][Oo][Ii]|[Ii][Nn][Ff][Oo]):)"
+      },
+      {
+        "pointer": "/$defs/text/not/pattern",
+        "pattern": "\\s$|[\\u0000-\\u001f\\u007f-\\u009f\\u200b-\\u200f\\u202a-\\u202e\\u2060-\\u2064\\ufeff]"
+      },
+      {
+        "pointer": "/$defs/text/pattern",
+        "pattern": "^\\S"
+      },
+      {
+        "pointer": "/properties/contributors/items/properties/uri/pattern",
+        "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+      },
+      {
+        "pointer": "/properties/publication/properties/article/pattern",
+        "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+      }
+    ],
     "schemas/core.yaml": [
       {
         "pointer": "/classes/Author/attributes/uri/pattern",
@@ -600,9 +647,9 @@
     ],
     "schemas/versions.json": []
   },
-  "patternEntries": 126,
-  "distinctPatternStrings": 20,
-  "entriesEndingInDollar": 76,
-  "patternCount": 126,
-  "digest": "sha256:8489e3dbc67f59577164d7d34a03569e849982ecfd9b83214a1c14c662151214"
+  "patternEntries": 135,
+  "distinctPatternStrings": 24,
+  "entriesEndingInDollar": 81,
+  "patternCount": 135,
+  "digest": "sha256:16e6ca60f6459a1befcbfbfcc69b658092b03df9c81ebf737e22db7d159b63e6"
 }

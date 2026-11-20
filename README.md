@@ -278,6 +278,23 @@ Machine-readable entries are maintained in
 
 New project contributions from March 2025 onward use [MPL-2.0](LICENSE). David Molik left USDA in February 2025. Historical USDA public-domain material remains public domain within the United States; its original notice is preserved in LICENSE. Previously granted permissions and third-party terms remain intact. The project includes both historical material and subsequent MPL-2.0 contributions; file notices and history identify provenance.
 
-## Shared FHT publication candidate (repository-local preparation)
+## Published FHT and native FHGM preparation
 
-This review branch proposes root FHT model/contract, selectors, vocabulary and typed HTML for v0.7.0; current/preRelease are explicitly v0.7.0. It is not a released contract or default support claim. Follow [the concrete preparation and gates](docs/FHT-PUBLICATION-CANDIDATE.md). Preserve frozen owning and released payloads. No merge, Pages, alias, tag or release authority is granted; final joint acceptance and installed-runtime evidence remain separate.
+FHT 1.0 is published in [specification v0.7.0](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.7.0),
+immutable tag `623c79fe58edeb238a20fb6de518c62dd69b92bc`,
+[DOI 10.5281/zenodo.24385024](https://doi.org/10.5281/zenodo.24385024).
+The historical owning draft remains a separate explicit rule-V7 opt-in.
+Older installed tools do not gain support merely because the contract is published.
+Fixed aliases remain pending external [w3id PR 7241](https://github.com/perma-id/w3id.org/pull/7241);
+do not claim FHT or native FHGM identifiers resolve before live probes.
+
+This tree prepares current/preRelease v0.8.0 for native FHGM model contract 0.1,
+not an FHGM header. FHR 2.1, FHP 1.2, FHGFF3 1.2 and FHT 1.0 remain unchanged.
+There is no FHGM header registry row or in-record schema/schemaVersion field.
+See [the native package and remaining gates](docs/FHGM-PUBLICATION.md).
+Authoring guidance stays on v0.6.0 until an actual supporting toolkit release.
+JSON-LD remains FHR-only; typed FHT HTML does not adopt JSON-LD or DCMI projection.
+
+FHT requires `schema`, `schemaVersion`, `transcriptome`, `assemblyType`, `taxon`,
+`version`, `metadataAuthor`, `dateCreated`, `checksum`; optional fields retain their
+accepted owning meanings.

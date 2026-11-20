@@ -1,12 +1,18 @@
-# FHT shared publication candidate
+# Published FHT 1.0
 
-FHT remains **unreleased**. The [reviewable candidate](../drafts/fht/README.md)
-vendors the accepted owning draft at
-[`4ddda69cbcbb3920a06ab657173c0198672cd7bf`](https://github.com/FAIR-bioHeaders/FHT-Specification/commit/4ddda69cbcbb3920a06ab657173c0198672cd7bf)
-with its exact dependency closure, conformance suite and typed HTML reference.
-It prepares shared handoff before final joint acceptance. It neither adds a
-released root `fht.json` nor changes any registry, vocabulary, existing shared
-manifest, consumer pin or publication identifier.
+FHT 1.0 was published in specification v0.7.0 at immutable tag
+`623c79fe58edeb238a20fb6de518c62dd69b92bc`, GitHub Release 452203176,
+DOI [10.5281/zenodo.24385024](https://doi.org/10.5281/zenodo.24385024).
+The root `fht.json` and registered FHT 1.0 contract are distinct from the
+preserved owning-draft snapshot. Joint package acceptance is recorded in
+[#211 comment 7025645941](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941).
+Installed-runtime support and the fixed alias pending external w3id PR 7241
+must be verified independently; publication does not upgrade existing readers.
+
+## Historical candidate evidence
+
+The following describes the preserved candidate handoff and its measured
+runtime limitations at that time. It does not override the published status above.
 
 David Molik's [adopted D1–D3 decisions](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7017854934)
 are implemented in the owning snapshot: retain existing optional-value behavior;

@@ -264,6 +264,9 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, target)
+        metadata = self.root / 'model-contracts/fhgm/0.1/publication.json'
+        metadata.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / 'model-contracts/fhgm/0.1/publication.json', metadata)
         (self.root / ".github").mkdir(parents=True, exist_ok=True)
         shutil.copyfile(BASELINE, self.root / ".github" / "pattern-baseline.json")
         self.contract = self.root / "fhr.json"
@@ -286,7 +289,7 @@ class ReleasedGateEndToEndTests(unittest.TestCase):
         result = self.run_census()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("no released pattern added, removed or edited", result.stdout)
-        self.assertIn("11 governed", result.stdout)
+        self.assertIn(f"{len(census.RELEASED_SCOPE)} governed", result.stdout)
 
     def test_one_character_change_to_a_released_pattern_is_red(self):
         def mutate(document):
@@ -536,6 +539,11 @@ class ScopeHygieneTests(unittest.TestCase):
                 frozen = subprocess.check_output(['git', '--no-replace-objects', 'show', 'v0.7.0:fht.json'], cwd=ROOT)
                 self.assertEqual(frozen, (ROOT / 'fht.json').read_bytes())
                 continue  # Exact newly released contract, never an owning-draft snapshot.
+            if token == "model-contracts/fhgm/0.1/fhgm-model.schema.json":
+                native = json.loads((ROOT / relative).read_text())
+                self.assertEqual(native['$id'], 'https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1')
+                self.assertNotIn('FHGM', json.loads((ROOT / 'schemas/versions.json').read_text())['files'])
+                continue  # Native contract is independently governed, never a header row.
             self.assertNotIn("fht", token)
             self.assertNotIn("fhgm", token)
             self.assertNotIn("FHT", label)
@@ -562,12 +570,13 @@ class ScopeHygieneTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(yaml is not None, "PyYAML is required (released scope includes YAML)")
-    def test_released_surface_carries_no_lookaround(self):
+    def test_governed_surface_preserves_accepted_native_lookaround(self):
         """Factual snapshot of the released inventory that #270 reported (re-measured)."""
         found = census.expand(ROOT)
         released = [row for name, entry in found.items() if entry[0] == "released"
                     and name not in {'fht.json', 'fht_linkml.yml'} for row in entry[2]]
-        self.assertEqual([row["pointer"] for row in released if row["lookaround"]], [])
+        self.assertEqual([row["pointer"] for row in released if row["lookaround"]],
+                             ["/$defs/link/pattern"])
         self.assertEqual([row["pointer"] for row in released if row["inline_flags"]], [])
         self.assertEqual([row["pointer"] for row in released if row["empty_class"]], [])
 
@@ -609,6 +618,9 @@ class GovernedFileDiscoveryTests(unittest.TestCase):
         for extra in ("fhr_mappings.yml",):
             if (ROOT / extra).is_file():
                 shutil.copyfile(ROOT / extra, self.root / extra)
+        metadata = self.root / 'model-contracts/fhgm/0.1/publication.json'
+        metadata.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / 'model-contracts/fhgm/0.1/publication.json', metadata)
         (self.root / ".github").mkdir(parents=True, exist_ok=True)
         shutil.copyfile(BASELINE, self.root / ".github" / "pattern-baseline.json")
 
@@ -741,6 +753,9 @@ class GovernedFileDiscoveryTests(unittest.TestCase):
                 frozen = subprocess.check_output(['git', '--no-replace-objects', 'show', 'v0.7.0:fht.json'], cwd=ROOT)
                 self.assertEqual(frozen, (ROOT / 'fht.json').read_bytes())
                 continue
+            if token == "model-contracts/fhgm/0.1/fhgm-model.schema.json":
+                self.assertNotIn('FHGM', json.loads((ROOT / 'schemas/versions.json').read_text())['files'])
+                continue  # Native contract is independently governed, never a header row.
             self.assertNotIn("fht", token)
             self.assertNotIn("fhgm", token)
             self.assertNotIn("draft", token)

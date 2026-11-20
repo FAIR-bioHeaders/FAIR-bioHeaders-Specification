@@ -140,6 +140,7 @@ class FHTPublicationTests(unittest.TestCase):
             fixture = Path(directory)
             (fixture / 'schemas').mkdir()
             registry = json.loads((ROOT / 'schemas/versions.json').read_text())
+            registry['current'] = 'v0.7.0'
             registry['preRelease'] = 'v0.7.0'
             (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
             (fixture / 'fht.json').write_bytes((ROOT / 'fht.json').read_bytes())
@@ -252,6 +253,7 @@ class FHTPublicationTests(unittest.TestCase):
             (fixture / 'fht.json').write_bytes((ROOT / 'fht.json').read_bytes())
             record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
             with patch.object(binding, 'ROOT', fixture):
+                registry['current'] = 'v0.7.0'
                 registry['preRelease'] = 'v0.7.0'
                 (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
                 before = binding.write_page(record, allow_candidate=True,

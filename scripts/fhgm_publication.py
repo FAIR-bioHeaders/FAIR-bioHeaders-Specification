@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MPL-2.0
-"""Verify the unpublished native FHGM 0.1 counterpart; optionally run its full suite."""
+"""Verify the native FHGM 0.1 counterpart; optionally run its full suite."""
 import argparse
 import hashlib
 import json
@@ -79,12 +79,25 @@ def verify(root=ROOT):
     if typed_json(native) != typed_json(original):
         errors.append('native counterpart changes validation semantics or unapproved annotations')
     metadata = json.loads((package / 'publication.json').read_bytes())
-    for field, wanted in [('publicationState', 'candidate-unpublished'),
-                          ('kind', 'native-model-contract'), ('modelContractVersion', '0.1'),
+    for field, wanted in [('kind', 'native-model-contract'), ('modelContractVersion', '0.1'),
                           ('intendedRelease', 'v0.8.0'), ('identity', IDENTITY),
                           ('artifact', 'fhgm-model.schema.json'), ('sha256', digest(native_bytes))]:
         if metadata.get(field) != wanted:
             errors.append('wrong publication metadata: ' + field)
+    if metadata.get('publicationState') not in {'candidate-unpublished', 'released'}:
+        errors.append('wrong publication metadata: publicationState')
+    if metadata.get('publicationState') == 'released':
+        try:
+            registry = json.loads((root / 'schemas/versions.json').read_bytes())
+            if registry.get('preRelease') == 'v0.8.0' or 'v0.8.0' not in registry.get('releases', {}):
+                errors.append('released native metadata requires finalized v0.8.0 registry')
+            tagged = subprocess.check_output(
+                ['git', '--no-replace-objects', '-C', str(root), 'show',
+                 'v0.8.0:' + str(PACKAGE / 'fhgm-model.schema.json')], stderr=subprocess.DEVNULL)
+            if tagged != native_bytes:
+                errors.append('released native metadata differs from immutable v0.8.0 contract')
+        except (OSError, ValueError, subprocess.CalledProcessError):
+            errors.append('released native metadata requires the actual local v0.8.0 tag')
     if metadata.get('source', {}).get('commit') != SOURCE_COMMIT:
         errors.append('publication metadata names wrong owning commit')
     if metadata.get('source', {}).get('sha256') != SOURCE_SCHEMA_SHA256:
@@ -142,7 +155,8 @@ def run_conformance(bases, validator, report, root=ROOT):
     receipt = json.loads(report.read_bytes())
     receipt['nativeContract'] = {'identity': IDENTITY, 'path': str(PACKAGE / 'fhgm-model.schema.json'),
                                  'sha256': digest((root / PACKAGE / 'fhgm-model.schema.json').read_bytes()),
-                                 'sourceCommit': SOURCE_COMMIT, 'status': 'candidate-unpublished'}
+                                 'sourceCommit': SOURCE_COMMIT, 'status': 'source-contract-conformance',
+                                 'publicationVerified': False}
     report.write_text(json.dumps(receipt, indent=2) + '\n')
     return receipt
 

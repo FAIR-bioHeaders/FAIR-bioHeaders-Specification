@@ -68,10 +68,11 @@ is what reconciles the two.)
 
 Rule V7 is respected for the legacy owning FHT and FHGM snapshots in the
 informational scope. The separately accepted shared FHT 1.0 contract enters the
-governed scope through its v0.7.0 release; no FHGM header or toolkit support
-claim is created. No draft type can enter the governed set:
-the registry's ``files`` map names the released types, and that set is asserted by
-a test to be exactly what is governed.
+governed scope through its v0.7.0 release. The accepted native FHGM 0.1
+publication contract is independently governed under model-contracts/ for v0.8.0
+preparation; it creates no FHGM header row or toolkit support claim. Owning
+draft snapshots remain informational. The header registry plus explicit native
+contract seed defines the mandatory governed set.
 
 No network access. The live owning repositories of the FHT and FHGM drafts are
 probed only through local sibling checkouts when one happens to exist; when it
@@ -139,6 +140,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # are generated from or must agree with, the shared slot models they import, and
 # the version registry.
 RELEASED_SCOPE = (
+    ("model-contracts/fhgm/0.1/fhgm-model.schema.json", "accepted native FHGM 0.1 publication contract"),
     ("fht.json", "released FHT 1.0 contract"),
     ("fht_linkml.yml", "FHT LinkML model"),
     ("fhr.json", "released FHR contract"),
@@ -183,12 +185,12 @@ DRAFT_GLOBS = ("specs/*/contracts/*.json",)
 # from one hand-written tuple can never see a file the tuple does not already name, so
 # a brand-new contract with no `pattern` in it passed. The rule below is what finds
 # such a file. `docs/TERMS.md` places the released contracts at the repository root,
-# and the shared models and registry under schemas/, so exactly those two places are
-# the surface. Root-level discovery is deliberately NOT recursive: examples/,
+# and the shared models and registry under schemas/. Native contracts reside
+# under model-contracts/; every document there is discovered too. Root-level discovery is deliberately NOT recursive: examples/,
 # templates/ and conformance/ hold instances and generated artifacts, and the
 # informational sweep still reports any `pattern` they carry.
 DISCOVERY_RULE = ("*.json / *.yaml / *.yml at the repository root, plus every "
-                  "*.json / *.yaml / *.yml under schemas/ (recursive)")
+                  "*.json / *.yaml / *.yml under schemas/ and model-contracts/ (recursive)")
 SURFACE_SUFFIXES = {".json", ".yaml", ".yml"}
 
 
@@ -520,11 +522,12 @@ def discover_governed_surface(root):
     for path in root.iterdir():
         if path.is_file() and path.suffix in SURFACE_SUFFIXES:
             found.add(path.relative_to(root).as_posix())
-    schemas = root / "schemas"
-    if schemas.is_dir():
-        for path in schemas.rglob("*"):
-            if path.is_file() and path.suffix in SURFACE_SUFFIXES:
-                found.add(path.relative_to(root).as_posix())
+    for directory in ("schemas", "model-contracts"):
+        schemas = root / directory
+        if schemas.is_dir():
+            for path in schemas.rglob("*"):
+                if path.is_file() and path.suffix in SURFACE_SUFFIXES:
+                    found.add(path.relative_to(root).as_posix())
     return sorted(found)
 
 

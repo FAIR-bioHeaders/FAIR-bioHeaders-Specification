@@ -118,8 +118,23 @@ and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioH
 - [Specification website](https://fhref.org/FAIR-bioHeaders-Specification/): vocabulary pages and JSON-LD files
 - [FAIR-bioHeaders-Nextflow](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Nextflow): Nextflow DSL2 modules and Dockstore workflow for creating and validating headers (formerly FHR-Nextflow)
 
-## Unpublished v0.7.0 publication candidate
+## Published FHT and native FHGM preparation
 
-This branch prepares FHT `'1.0'` and preserves FHR `schemaVersion: '2.1'`, FHP `'1.2'`, FHGFF3 `'1.2'`. `schemas/versions.json` explicitly sets current/preRelease to v0.7.0; no tag or alias is created. Proposed review URLs (not live or recommended for current installed readers): https://w3id.org/fair-bioheaders/fhr/v0.7.0, https://w3id.org/fair-bioheaders/fhp/v0.7.0, https://w3id.org/fair-bioheaders/fhgff3/v0.7.0, https://w3id.org/fair-bioheaders/fht/v0.7.0. Continue using supported v0.6.0 citations for existing released types. FHT candidate consumers require explicit opt-in; installed arithmetic/default-runtime and joint acceptance gates remain. JSON-LD stays FHR-only; FHT typed HTML and vocabulary do not establish JSON-LD support.
+FHT 1.0 is published in [specification v0.7.0](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.7.0),
+immutable tag `623c79fe58edeb238a20fb6de518c62dd69b92bc`,
+[DOI 10.5281/zenodo.24385024](https://doi.org/10.5281/zenodo.24385024).
+The historical owning draft remains a separate explicit rule-V7 opt-in.
+Older installed tools do not gain support merely because the contract is published.
+Fixed aliases remain pending external [w3id PR 7241](https://github.com/perma-id/w3id.org/pull/7241);
+do not claim FHT or native FHGM identifiers resolve before live probes.
 
-FHT candidate requires `schema`, `schemaVersion`, `transcriptome`, `assemblyType`, `taxon`, `version`, `metadataAuthor`, `dateCreated`, `checksum`; optional fields retain their accepted owning meanings.
+This tree prepares current/preRelease v0.8.0 for native FHGM model contract 0.1,
+not an FHGM header. FHR 2.1, FHP 1.2, FHGFF3 1.2 and FHT 1.0 remain unchanged.
+There is no FHGM header registry row or in-record schema/schemaVersion field.
+See [the native package and remaining gates](docs/FHGM-PUBLICATION.md).
+Authoring guidance stays on v0.6.0 until an actual supporting toolkit release.
+JSON-LD remains FHR-only; typed FHT HTML does not adopt JSON-LD or DCMI projection.
+
+FHT requires `schema`, `schemaVersion`, `transcriptome`, `assemblyType`, `taxon`,
+`version`, `metadataAuthor`, `dateCreated`, `checksum`; optional fields retain their
+accepted owning meanings.

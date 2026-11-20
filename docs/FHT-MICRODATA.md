@@ -49,7 +49,7 @@ The v0.7.0 registry permits these FHT selectors:
 The schema version remains the string `"1.0"`. No remote schema is fetched.
 A supplied schema object must equal the local selected root contract.
 
-While `current = preRelease = v0.7.0`, both APIs require
+In the historical preparation state `current = preRelease = v0.7.0`, both APIs require
 `allow_candidate=True` and successful reads report unpublished candidate status.
 Clearing the marker without an actual byte-matching v0.7.0 tag is refused. With
 that exact tag, the reference parses the same byte snapshot used in the comparison
