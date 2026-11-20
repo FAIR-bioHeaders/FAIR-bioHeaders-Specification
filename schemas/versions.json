@@ -54,9 +54,10 @@
     }
   },
   "candidate": {
-    "status": "Unpublished review candidate; not joint acceptance or release authority",
+    "status": "Jointly accepted unpublished FHT package; actual preceding release, final metadata and publication remain gated",
     "previousPublished": "v0.6.0",
-    "jointAcceptance": false,
-    "aliasesCreated": false
+    "jointAcceptance": true,
+    "aliasesCreated": false,
+    "jointAcceptanceRecord": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941"
   }
 }
