@@ -25,8 +25,8 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-import unicodedata
 import sys
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 JSONLD_FILES = ("fhr.context.jsonld", "terms.ttl", "terms.jsonld")
