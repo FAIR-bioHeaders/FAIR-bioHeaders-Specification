@@ -56,9 +56,10 @@ Frozen `drafts/` source was excluded from automated editing/scanning; its pinned
 
 `scripts/build_pages.py` replaced an existing output with recursive deletion before
 checking whether it was the checkout or its ancestor. A mistaken `.`/`..` could
-delete source. The fix rejects repository/ancestor and symlink outputs before
-removal. Regression tests prove no deletion of checkout, parent, another Git
-worktree or a symlink target, while ordinary scratch builds still work.
+delete source. The fix rejects repository/ancestor, Git metadata, tracked-source and symlink
+outputs before removal. Regression tests prove no deletion of checkout, parent, another Git
+worktree, Git metadata, tracked docs or a symlink target, while ordinary scratch
+builds still work.
 This is a local data-loss/correctness finding, not a remote exploit claim.
 
 ## Guidance, workplans and retained branches

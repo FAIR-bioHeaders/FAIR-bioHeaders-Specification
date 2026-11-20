@@ -186,8 +186,19 @@ def build(site):
         raise ValueError("output must not be a symlink")
     site = site.resolve()
     root = ROOT.resolve()
-    if site == root or site in root.parents or (site / ".git").exists():
+    if (site == root or site in root.parents or ".git" in site.parts
+            or (site / ".git").exists()):
         raise ValueError("output must not be a repository or an ancestor of this checkout")
+    if site.is_relative_to(root):
+        try:
+            tracked = subprocess.run(
+                ["git", "--literal-pathspecs", "ls-files", "-z", "--",
+                 site.relative_to(root).as_posix()],
+                cwd=root, check=True, capture_output=True)
+        except (OSError, subprocess.CalledProcessError) as error:
+            raise ValueError("cannot establish that output contains no tracked source") from error
+        if tracked.stdout:
+            raise ValueError("output contains tracked source files")
     if site.exists():
         shutil.rmtree(site)
     (site / "terms").mkdir(parents=True)

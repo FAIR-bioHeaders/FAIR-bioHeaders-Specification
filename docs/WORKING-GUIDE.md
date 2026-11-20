@@ -75,8 +75,8 @@ that persistent aliases currently resolve or that an older toolkit supports them
 
 `scripts/build_pages.py OUTPUT_DIRECTORY` builds JSON-LD hosting files from
 local source and available release tags. It replaces an existing output directory;
-choose disposable scratch output. Repository roots and ancestors of the current
-checkout are refused before deletion. It does not fetch tags or deploy Pages.
+choose disposable scratch output. Repository roots, ancestors, Git metadata, symlinks and tracked source
+directories are refused before deletion. It does not fetch tags or deploy Pages.
 
 ## Review and retained work
 

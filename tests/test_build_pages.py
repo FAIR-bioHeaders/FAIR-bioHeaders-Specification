@@ -61,6 +61,23 @@ class BuildPagesTests(unittest.TestCase):
             build_pages.build(target)
         self.assertEqual(sentinel.read_text(), "user work")
 
+    def test_tracked_source_directory_is_refused_before_deletion(self):
+        with mock.patch.object(build_pages.shutil, "rmtree") as remove:
+            with self.assertRaisesRegex(ValueError, "tracked source"):
+                build_pages.build(ROOT / "docs")
+            remove.assert_not_called()
+        self.assertTrue((ROOT / "docs/TERMS.md").is_file())
+
+    def test_git_metadata_output_is_not_deleted(self):
+        folder = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        metadata = folder / ".git" / "objects"
+        metadata.mkdir(parents=True)
+        sentinel = metadata / "keep"
+        sentinel.write_text("git object")
+        with self.assertRaisesRegex(ValueError, "repository or an ancestor"):
+            build_pages.build(metadata)
+        self.assertEqual(sentinel.read_text(), "git object")
+
     def test_symlink_output_does_not_delete_its_target(self):
         folder = Path(self.enterContext(tempfile.TemporaryDirectory()))
         target = folder / "user-work"
