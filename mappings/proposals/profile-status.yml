@@ -58,8 +58,6 @@ header_types:
     release: v0.6.0
     remaining: Review annotation-resource creators, source identity and genome-reference relationships.
   FHT:
-    status: blocked
-    blocking_issues:
-    - https://github.com/FAIR-bioHeaders/FHT-Specification/issues/10
-    remaining: No released shared FHT contract; future family-specific review follows actual publication.
-      Closed development issues 6/7 are not live blockers; do not copy legacy fields into this profile.
+    status: deferred
+    remaining: FHT 1.0 publication in v0.7.0 does not adopt an FHT mapping or context projection.
+      Family-specific mapping review remains outside the adopted v1 foundation; do not copy legacy fields into this profile.

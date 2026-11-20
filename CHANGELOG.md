@@ -17,6 +17,8 @@ Final FHT 1.0 tag package; actual publication is established by its GitHub Relea
   recorded separately from the pending final tag, GitHub Release, archive,
   fixed alias and consumer/default promotion. No FHT JSON-LD support is added.
 
+- Classify FHT 1.0 as released in the existing pattern census, preserving every
+  pattern entry; FHT mappings stay explicitly deferred outside adopted v1.
 - Record FHT 1.0 publication in assessment v6 with its exact shared digest;
   every INSDC requirement, coverage outcome and disposition remains unchanged.
 - Add the unchanged FHR context alias for v0.7.0 and finalize citation version/date.

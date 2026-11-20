@@ -42,12 +42,12 @@
     },
     {
       "path": "fht.json",
-      "label": "proposed FHT v0.7.0 contract (unpublished)",
+      "label": "released FHT 1.0 contract",
       "patternEntries": 40
     },
     {
       "path": "fht_linkml.yml",
-      "label": "FHT publication candidate model",
+      "label": "FHT LinkML model",
       "patternEntries": 14
     },
     {
