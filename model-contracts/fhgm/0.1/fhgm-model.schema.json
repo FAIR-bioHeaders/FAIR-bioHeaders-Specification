@@ -1,0 +1,256 @@
+{
+  "$id": "https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FHGM gene-model record - draft contract v0.1 (proposal)",
+  "description": "Draft native FHGM model record. Reviewed under FAIR-bioHeaders-Specification#204 on 2026-11-14: field names, modelId/modelVersion semantics, contract identity by validator selection, and the four flagged deviations were confirmed at the joint review (see ../../development/CONTRACT-REVIEW.md). Publication is authorized in direction and NOT performed: no adopted contract, no schemaVersion, no released schema URI and no toolkit support is claimed. Field names and shapes follow the released FHGFF3 1.1 objects where their meanings match (docs/FORMAT.md R15, fhgff3.json). Object-level constraints that a JSON Schema cannot express - model ID uniqueness, feature-target resolution, record/file reference agreement and predecessor-pointer resolution with the resolvable, unresolvable and ambiguous verdicts - are enforced by the separate model-level checker in validate_fhgm.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "modelId",
+    "modelVersion",
+    "featureId",
+    "reference"
+  ],
+  "properties": {
+    "modelId": {
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Opaque model identifier, unique within one annotation snapshot and stable across a revision of the same model on the same assembly. File-local identity is the default and needs no minting authority; a producer-supplied external identifier may occupy this field, with its authority recorded beside it. Who may mint external model IDs is still a curator question.",
+      "$ref": "#/$defs/text"
+    },
+    "modelVersion": {
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Opaque model version, kept opaque through v0.x: equality and difference only. An immediate revision must use a value different from its predecessor; no ordering is implied, claimed or checked, and ordering requirements await curator use cases the pilots did not supply.",
+      "$ref": "#/$defs/text"
+    },
+    "featureId": {
+      "description": "Draft (#204: model identity and scope; reviewed 2026-11-14). Exact decoded local GFF3 feature ID targeted by this record. The v0.1 default resolves one root gene row (no Parent); transcript-only scope stays open (#204 Q6, curator decision). Resolution is a model-level check, not a schema constraint.",
+      "$ref": "#/$defs/text"
+    },
+    "reference": {
+      "description": "Draft (#204: reference coordinates; required by deviation D1, confirmed 2026-11-14). Reference assembly binding carried on the record so it stays interpretable when extracted from its file. Mirrors the FHGFF3 genome-link alternative: an FHR parent checksum, or an assembly accession with the supplied SeqCol digest; both forms may be supplied. The model-level check requires at least one form comparable with the enclosing FHGFF3 header's genome link and rejects any contradiction of it, so a record bound by an FHR checksum is not accepted in a file whose link is an accession plus digest. Never inferred; values are producer-supplied assertions.",
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "genomeReference"
+          ]
+        },
+        {
+          "required": [
+            "annotates"
+          ]
+        }
+      ],
+      "properties": {
+        "genomeReference": {
+          "$ref": "#/$defs/genomeReference"
+        },
+        "annotates": {
+          "description": "FHR-family checksum of the annotated genome file, when the record is bound to an FHR parent rather than asserted by accession and digest",
+          "$ref": "#/$defs/checksum"
+        }
+      }
+    },
+    "predecessor": {
+      "description": "Draft (#204: new and revised models). Immediate same-assembly predecessor: the prior annotation snapshot's file checksum with the prior record's model ID and version. Absent means no revision claim. A resolved pointer identifies a predecessor record; it never asserts curator acceptance.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotationChecksum",
+        "modelId",
+        "modelVersion"
+      ],
+      "properties": {
+        "annotationChecksum": {
+          "description": "Exact-byte checksum of the prior annotation snapshot file",
+          "$ref": "#/$defs/checksum"
+        },
+        "modelId": {
+          "description": "Predecessor model ID; it must equal this record's own modelId (deviation D2, confirmed 2026-11-14). Model renames belong to the split/merge semantics #204 Q6 leaves open, so v0.x admits none.",
+          "$ref": "#/$defs/text"
+        },
+        "modelVersion": {
+          "description": "Predecessor model version, exactly as recorded in the prior snapshot",
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "contributors": {
+      "description": "Draft (#204: credit and publication). Supplied model contributors and their roles. File metadata authors stay in the FHGFF3 metadataAuthor field; article authorship, journal review and curator acceptance stay outside this record.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "role"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "role": {
+            "$ref": "#/$defs/text"
+          },
+          "nameType": {
+            "description": "DataCite nameType, mirroring the shared FHGFF3 Author object",
+            "enum": [
+              "Personal",
+              "Organizational"
+            ]
+          },
+          "uri": {
+            "description": "ORCID URI, mirroring the shared FHGFF3 Author object",
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://orcid\\.org/[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "description": "Draft (#204: evidence and methods). Supplied evidence statements for the model. These are producer assertions, distinct from validation results; the feature layer and external tools remain the place where evidence is checked.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "description"
+        ],
+        "properties": {
+          "description": {
+            "$ref": "#/$defs/text"
+          },
+          "uri": {
+            "description": "Location of the cited evidence, when one was supplied",
+            "$ref": "#/$defs/link"
+          }
+        }
+      }
+    },
+    "methods": {
+      "description": "Draft (#204: evidence and methods). Computational methods: software with versions, a protocol reference, and supplied limitations or uncertainty.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "software": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "version": {
+                "$ref": "#/$defs/text"
+              },
+              "uri": {
+                "$ref": "#/$defs/link"
+              }
+            }
+          }
+        },
+        "protocol": {
+          "description": "Curation protocol or workflow reference URI, mirroring the FHGFF3 annotationProtocol role",
+          "$ref": "#/$defs/link"
+        },
+        "limitations": {
+          "description": "Supplied limitations or uncertainty statements",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "publication": {
+      "description": "Draft (#204: credit and publication). Publication context of the model contribution. The article and the deposited model data keep separate, independently resolvable identities; the assembly identity stays in reference.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "article": {
+          "description": "Article DOI, mirroring the FHGFF3 scholarlyArticle pattern",
+          "type": "string",
+          "pattern": "^10\\.[0-9]+(\\.[0-9]+)*/\\S+$"
+        },
+        "deposit": {
+          "description": "Identifiers of the deposited model data, mirroring the FHGFF3 identifier curie pattern",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/curie"
+          }
+        }
+      }
+    },
+    "reuseConditions": {
+      "description": "Draft (#204: packaging and integrity). Reuse conditions supplied for this model record; not inferred from the article or file license.",
+      "$ref": "#/$defs/text"
+    }
+  },
+  "$defs": {
+    "text": {
+      "description": "A non-empty opaque string with no leading or trailing whitespace (Unicode whitespace included) and no control, zero-width or bidirectional formatting character anywhere (C0, DEL, C1, U+200B-U+200F, U+202A-U+202E, U+2060-U+2064, U+FEFF), so two values that print alike cannot differ invisibly. Identifier uniqueness is additionally compared after Unicode NFC normalisation by the model-level checker.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S",
+      "not": {
+        "pattern": "\\s$|[\\u0000-\\u001f\\u007f-\\u009f\\u200b-\\u200f\\u202a-\\u202e\\u2060-\\u2064\\ufeff]"
+      }
+    },
+    "link": {
+      "description": "A URI whose scheme is one the shared docs/FORMAT.md R14 accepts: http, https or ftp with // and a host, or a urn:, doi: or info: identifier, the scheme compared without regard to letter case. The released header types only warn about other schemes; this draft record contract rejects them (for example javascript:, data:, vbscript: and file:), so a renderer can link every accepted value. format: uri still rejects whitespace and control characters anywhere.",
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(?:(?:[Hh][Tt][Tt][Pp][Ss]?|[Ff][Tt][Pp])://(?:[^/?#@\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*@)?(?:\\[[^\\]\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]+\\]|[^/?#@:\\[\\]\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]+)(?::[^/?#@\\t-\\r \\x1c-\\x1f\\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff]*)?(?:[/?#]|(?![\\s\\S]))|(?:[Uu][Rr][Nn]|[Dd][Oo][Ii]|[Ii][Nn][Ff][Oo]):)"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{43}=$",
+      "minLength": 44,
+      "maxLength": 44
+    },
+    "curie": {
+      "description": "prefix:local identifier, mirroring the FHGFF3 identifier curie pattern, with the text constraints applied: the local part starts with a non-whitespace character and the value has no trailing whitespace or control character",
+      "allOf": [
+        {
+          "$ref": "#/$defs/text"
+        }
+      ],
+      "pattern": "^[A-Za-z0-9._-]+:\\S"
+    },
+    "genomeReference": {
+      "description": "Mirrors the FHGFF3 1.1 GenomeReference object: accession and supplied SeqCol digest are required; assemblyName is optional and, when present, non-blank text",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accession",
+        "seqcol_id"
+      ],
+      "properties": {
+        "accession": {
+          "type": "string",
+          "pattern": "^\\S+$"
+        },
+        "seqcol_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{32}$",
+          "minLength": 32,
+          "maxLength": 32
+        },
+        "assemblyName": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    }
+  }
+}

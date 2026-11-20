@@ -1,0 +1,35 @@
+{
+  "publicationState": "candidate-unpublished",
+  "kind": "native-model-contract",
+  "modelContractVersion": "0.1",
+  "intendedRelease": "v0.8.0",
+  "identity": "https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1",
+  "artifact": "fhgm-model.schema.json",
+  "sha256": "f0e97bc07d13ac13618e12d9dd61199429c83abbc24e07fd83884d959130bc34",
+  "source": {
+    "repository": "FAIR-bioHeaders/FHGM-Specification",
+    "commit": "d9d131a02b042023f4784d842a874232fc891069",
+    "path": "development/model/fhgm-model.schema.json",
+    "sha256": "b7075e5872e0a5ffce5ae61c590ce182f1f219fa269413cad3b1a966753cfeae",
+    "sharedMirror": "drafts/fhgm/upstream",
+    "sourceManifest": "drafts/fhgm/source.json",
+    "sourceManifestSha256": "16cd2d029424877305b63b689a415632ab2b1b3443ee435d11e23ef6c1a2efa4"
+  },
+  "counterpart": {
+    "semanticChanges": false,
+    "addedJsonPointers": [
+      "/$id"
+    ],
+    "note": "Only schema resource identity is added. Object member ordering/formatting differ; all original JSON values, fixture bytes and vector IDs are preserved. The in-record properties are unchanged."
+  },
+  "acceptance": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941",
+  "suite": {
+    "vectorCount": 92,
+    "lanes": [
+      "sealed-v0.5.0",
+      "matrix-v0.6.0"
+    ],
+    "manifest": "drafts/fhgm/upstream/development/conformance/manifest.json",
+    "expectedNotRunVisits": 10
+  }
+}

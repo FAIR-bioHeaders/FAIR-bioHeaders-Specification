@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'drafts/fhgm/**'
+      - 'model-contracts/fhgm/0.1/**'
+      - 'scripts/fhgm_publication.py'
+      - 'tests/test_fhgm_publication.py'
+      - 'docs/FHGM-PUBLICATION.md'
       - '.github/workflows/fhgm-draft.yml'
       - 'docs/FHGM.md'
       - 'docs/proposals/fhgm-adoption-packet.md'
@@ -11,6 +15,10 @@ on:
     branches: [main]
     paths:
       - 'drafts/fhgm/**'
+      - 'model-contracts/fhgm/0.1/**'
+      - 'scripts/fhgm_publication.py'
+      - 'tests/test_fhgm_publication.py'
+      - 'docs/FHGM-PUBLICATION.md'
       - '.github/workflows/fhgm-draft.yml'
   workflow_dispatch:
 
@@ -21,7 +29,7 @@ jobs:
   fhgm-candidate:
     name: Exact FHGM source and dual-base earned evidence
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -60,6 +68,21 @@ jobs:
           python -m unittest discover -s drafts/fhgm/upstream/tests -p test_fhgm_conformance.py -v
           python drafts/fhgm/upstream/development/model/check_draft.py \
             "$RUNNER_TEMP/fhgm-base-v050.json" "$RUNNER_TEMP/fhgm-base-v060.json"
+      - name: Check native publication counterpart and run all accepted cases
+        run: |
+          python -m unittest discover -s tests -p test_fhgm_publication.py -v
+          python scripts/fhgm_publication.py --run-conformance \
+            --base-schema "$RUNNER_TEMP/fhgm-base-v050.json" \
+            --base-schema "$RUNNER_TEMP/fhgm-base-v060.json" \
+            --gff3-validate "$(command -v gff3-validate)" \
+            --report-json "$RUNNER_TEMP/fhgm-native-evidence.json"
+      - name: Upload native publication counterpart receipt
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fhgm-native-unpublished-evidence
+          path: ${{ runner.temp }}/fhgm-native-evidence.json
+          if-no-files-found: warn
       - name: Upload actual draft evidence receipt
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
