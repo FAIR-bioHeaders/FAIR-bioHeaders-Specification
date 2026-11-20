@@ -46,6 +46,11 @@
       "FHP": "1.2",
       "FHGFF3": "1.2"
     },
+    "v0.6.1": {
+      "FHR": "2.1",
+      "FHP": "1.2",
+      "FHGFF3": "1.2"
+    },
     "v0.7.0": {
       "FHR": "2.1",
       "FHP": "1.2",
@@ -54,10 +59,11 @@
     }
   },
   "candidate": {
-    "status": "Jointly accepted unpublished FHT package; actual preceding release, final metadata and publication remain gated",
-    "previousPublished": "v0.6.0",
+    "status": "Jointly accepted FHT package; v0.6.1 is published, final FHT publication remains gated",
+    "previousPublished": "v0.6.1",
     "jointAcceptance": true,
     "aliasesCreated": false,
     "jointAcceptanceRecord": "https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7025645941"
-  }
+  },
+  "authoringRelease": "v0.6.0"
 }

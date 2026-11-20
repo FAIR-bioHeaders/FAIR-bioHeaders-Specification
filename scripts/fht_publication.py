@@ -131,7 +131,7 @@ def outputs():
         if entry['id'] in ('fht-fasta-schema-w3id-release-without-fht', 'fht-fasta-schema-shared-raw-tag'):
             row.update(rule='V4', disposition='Previously V5 before FHT registration; named older shared release lacks FHT. Expected invalid remains, rejection is now unsupported-version; historical source unchanged.')
         vectors.append(row)
-    manifest = dict(manifestVersion=1, status='Unpublished v0.7.0 publication candidate; no installed/default support claim',
+    manifest = dict(manifestVersion=1, status='FHT v0.7.0 conformance counterparts; publication and installed support are verified separately',
                     sourceCommit=COMMIT, sourceManifestSha256=sha((OWNER / 'conformance/manifest.json').read_bytes()),
                     historicalShared='291 immutable v0.6.0 cases remain separate; current shared carrier lane is also unchanged',
                     sourceCount=93, vectors=vectors)
@@ -286,7 +286,7 @@ def example_outputs():
         results[target / fasta.name] = data
         results[target / location.name] = (json.dumps(record, indent=2, ensure_ascii=False) + '\n').encode()
         text = binding.write_page(record, allow_candidate=True, warn=lambda message: None,
-            title=location.stem + ' (unpublished v0.7.0 candidate)')
+            title=location.stem + ' (FHT v0.7.0 synthetic example)', _reference_example=True)
         results[target / location.with_suffix('.html').name] = text.encode()
     return results
 
@@ -319,7 +319,7 @@ def check():
         if entry['rule'] == 'V4' and outcome.get('rule') != 'V4':
             raise ValueError(entry['id'] + ': V4 masked by earlier failure ' + str(outcome))
         rows.append(dict(id=entry['id'], sourceId=entry['sourceId'], **outcome))
-    return dict(status='candidate-only', released=False, cases=len(rows), valid=sum(row['valid'] for row in rows), results=rows)
+    return dict(status='source-contract-conformance', publicationVerified=False, cases=len(rows), valid=sum(row['valid'] for row in rows), results=rows)
 
 
 def main():

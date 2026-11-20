@@ -21,7 +21,7 @@ class LlmsTxtTests(unittest.TestCase):
         self.assertIn("\n## Optional\n", self.text)
 
     def test_current_release_and_schema_versions(self):
-        current = self.versions["current"]
+        current = self.versions.get("authoringRelease", self.versions["current"])
         for header, version in self.versions["releases"][current].items():
             with self.subTest(header=header):
                 url = f"https://w3id.org/fair-bioheaders/{self.versions['w3id'][header]}/{current}"

@@ -58,7 +58,7 @@ class FHTPublicationTests(unittest.TestCase):
             self.assertEqual(rows[identity]['stage'], 'selection')
         for identity in ('fht-fasta-completeness-sum-exceeds-total', 'fht-fasta-completeness-sum-below-total'):
             self.assertEqual(rows[identity]['stage'], 'semantics')
-        self.assertFalse(receipt['released'])
+        self.assertFalse(receipt['publicationVerified'])
 
     def test_named_checksum_faults_match_their_faulty_digest_relationships(self):
         manifest = json.loads((candidate.TARGET / 'manifest.json').read_text())
@@ -234,6 +234,13 @@ class FHTPublicationTests(unittest.TestCase):
             (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
             (fixture / 'fht.json').write_bytes((ROOT / 'fht.json').read_bytes())
             record = json.loads((ROOT / 'examples/fht/minimal-de-novo.fht.json').read_text())
+            with patch.object(binding, 'ROOT', fixture):
+                registry['preRelease'] = 'v0.7.0'
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+                before = binding.write_page(record, allow_candidate=True,
+                    title='Stable synthetic example', _reference_example=True)
+                registry['preRelease'] = None
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
             def git(*args):
                 return subprocess.check_output(['git', '-C', str(fixture), *args], stderr=subprocess.DEVNULL)
             git('init', '-q')
@@ -243,6 +250,8 @@ class FHTPublicationTests(unittest.TestCase):
             with patch.object(binding, 'ROOT', fixture):
                 with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
                     binding.write_page(record)
+                with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
+                    binding.write_page(record, _reference_example=True)
                 git('tag', 'v0.7.0')  # Only inside the temporary repository, never the shared checkout.
                 # A real working-file swap after its bytes are read must not
                 # change the schema object that claims exact tag provenance.
@@ -263,6 +272,20 @@ class FHTPublicationTests(unittest.TestCase):
                 self.assertEqual(selected, self.schema)
                 self.assertEqual(mode, 'tag-verified-reference')
                 schema_file.write_bytes(committed)
+                self.assertEqual(binding.write_page(record, title='Stable synthetic example',
+                    _reference_example=True), before)
+                registry['current'] = 'v0.8.0'
+                registry['preRelease'] = 'v0.8.0'
+                registry['releases']['v0.8.0'] = dict(registry['releases']['v0.7.0'])
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+                self.assertEqual(binding.write_page(record, title='Stable synthetic example',
+                    _reference_example=True), before)
+                registry['releases']['v0.8.0']['FHT'] = '2.0'
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+                with self.assertRaisesRegex(binding.MicrodataError, 'registered FHT 1.0'):
+                    binding.write_page(record)
+                registry['releases']['v0.8.0']['FHT'] = '1.0'
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
                 html = binding.write_page(record)
                 self.assertIn('FHT tag-verified reference metadata', html)
                 self.assertNotIn('publication-candidate metadata', html)
@@ -278,11 +301,16 @@ class FHTPublicationTests(unittest.TestCase):
                 (fixture / 'fht.json').write_text(json.dumps(changed))
                 with self.assertRaisesRegex(binding.MicrodataError, 'actual byte-matching'):
                     binding.write_page(record)
-        messages = []
-        source = (ROOT / 'examples/fht/minimal-de-novo.fht.html').read_text()
-        binding.read_page(source, allow_candidate=True, warn=messages.append)
-        self.assertIn('Unpublished', messages[0])
-        self.assertIn('released=false', messages[0])
+                # Candidate diagnostics are checked independently of the actual
+                # checkout's publication state, using this private Git fixture.
+                schema_file.write_bytes(committed)
+                registry['current'] = registry['preRelease'] = 'v0.7.0'
+                (fixture / 'schemas/versions.json').write_text(json.dumps(registry))
+                messages = []
+                self.assertEqual(binding.read_page(before, allow_candidate=True,
+                                                  warn=messages.append), record)
+                self.assertIn('Unpublished', messages[0])
+                self.assertIn('released=false', messages[0])
 
     def test_shared_binding_executes_every_rule_specific_negative_html_fixture(self):
         fixtures = candidate.OWNER / 'tests/fixtures/microdata'
