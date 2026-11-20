@@ -21,8 +21,8 @@ David and Adam jointly hold schema and release authority. Read the shared
 GOVERNANCE.md; its optional steering group is not active. Read the local README,
 relevant issues, current files and applicable contribution/license instructions.
 Do not let stale copied README, badges or citation identities override current
-repository roles. The retired FHT-File-Converter is an archive; active family
-conversion/validation belongs in FAIR-bioHeaders-Tools. Core GFF3 feature
+repository roles. The historical FHR-File-Converter repository name redirects to
+FAIR-bioHeaders-Tools; active family conversion/validation belongs there. Core GFF3 feature
 validation belongs in gff3-validator, separate from optional FHGFF3 headers.
 
 The [2024 FHR paper](https://doi.org/10.1093/bib/bbae122) motivates small required
