@@ -64,7 +64,7 @@ CANONICAL_CONTEXT_URL = (
 # byte-identical to the current file (tests/test_jsonld_context.py checks this
 # against the tags), so a reader serves all of them from its own copy. A release
 # that changes the context needs its own copy, not just an entry here.
-CONTEXT_RELEASES = ("v0.4.0", "v0.4.1", "v0.4.2", "v0.5.0", "v0.6.0", "v0.6.1", "v0.7.0")
+CONTEXT_RELEASES = ("v0.4.0", "v0.4.1", "v0.4.2", "v0.5.0", "v0.6.0", "v0.6.1", "v0.7.0", "v0.8.0")
 
 
 def release_context_urls(release):

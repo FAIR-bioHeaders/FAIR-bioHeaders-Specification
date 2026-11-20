@@ -24,7 +24,7 @@ Key facts (FAIR-bioHeaders-Specification v0.6.0 with fair-bioheaders 0.11.0, the
 - [JSON-LD form](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/JSONLD.md) and [schema.org export](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/SCHEMAORG-EXPORT.md)
 - [Tool compatibility](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/TOOL_COMPATIBILITY.md): which tools accept headers, workarounds, upstream support status
 - [INSDC coverage review](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/insdc-coverage.md): which INSDC minimum-specification requirements FH covers, and how to use headers alongside an INSDC submission (strip before upload; a header is not deposit readiness)
-- [FHGM native publication preparation](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHGM-PUBLICATION.md): accepted native model contract 0.1, prepared for v0.8.0 but still unpublished. Model records remain distinct from the enclosing FHGFF3 file header; the historical owning draft stays separate.
+- [FHGM native publication procedure](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FHGM-PUBLICATION.md): accepted native model contract 0.1 with finalized v0.8.0 source metadata; actual release/archive and alias evidence must be checked separately. Model records remain distinct from the enclosing FHGFF3 file header; the historical owning draft stays separate.
 - [FAIR header guideline](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/docs/FAIR_HEADER_GUIDELINE.md): metadata to put in any file's native header
 - [Specification repository](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification): released schemas, LinkML models, examples and conformance vectors
 
@@ -39,7 +39,7 @@ Key facts (FAIR-bioHeaders-Specification v0.6.0 with fair-bioheaders 0.11.0, the
 - [Vocabulary](https://w3id.org/fair-bioheaders/terms): FAIR-bioHeaders terms (HTML, Turtle or JSON-LD by content negotiation)
 - [JSON-LD context v0.4.0](https://w3id.org/fair-bioheaders/fhr/v0.4.0/jsonld/fhr.context.jsonld)
 
-Native FHGM model contract 0.1 remains an unpublished candidate. Its selected identity is https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1; do not claim that alias is live. FHGM has no header `schemaVersion` or header registry entry.
+Native FHGM model contract 0.1 is selected by finalized v0.8.0 source metadata. Source metadata alone does not verify actual publication. Its selected identity is https://w3id.org/fair-bioheaders/model-contracts/fhgm/0.1; do not claim that alias is live. FHGM has no header `schemaVersion` or header registry entry.
 
 ## Tools
 
@@ -118,7 +118,7 @@ and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioH
 - [Specification website](https://fhref.org/FAIR-bioHeaders-Specification/): vocabulary pages and JSON-LD files
 - [FAIR-bioHeaders-Nextflow](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Nextflow): Nextflow DSL2 modules and Dockstore workflow for creating and validating headers (formerly FHR-Nextflow)
 
-## Published FHT and native FHGM preparation
+## Published FHT and native FHGM publication metadata
 
 FHT 1.0 is published in [specification v0.7.0](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/releases/tag/v0.7.0),
 immutable tag `623c79fe58edeb238a20fb6de518c62dd69b92bc`,
@@ -128,7 +128,7 @@ Older installed tools do not gain support merely because the contract is publish
 Fixed aliases remain pending external [w3id PR 7241](https://github.com/perma-id/w3id.org/pull/7241);
 do not claim FHT or native FHGM identifiers resolve before live probes.
 
-This tree prepares current/preRelease v0.8.0 for native FHGM model contract 0.1,
+This tree finalizes current v0.8.0 with preRelease null for native FHGM model contract 0.1,
 not an FHGM header. FHR 2.1, FHP 1.2, FHGFF3 1.2 and FHT 1.0 remain unchanged.
 There is no FHGM header registry row or in-record schema/schemaVersion field.
 See [the native package and remaining gates](docs/FHGM-PUBLICATION.md).

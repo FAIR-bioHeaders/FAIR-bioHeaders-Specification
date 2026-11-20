@@ -52,7 +52,7 @@
     },
     {
       "path": "model-contracts/fhgm/0.1/fhgm-model.schema.json",
-      "label": "accepted native FHGM 0.1 publication contract",
+      "label": "native FHGM 0.1 contract selected for v0.8.0",
       "patternEntries": 9
     },
     {
@@ -71,7 +71,7 @@
       "patternEntries": 0
     }
   ],
-  "governedFileDigest": "sha256:1db7e4e2943b29d8a3257c1cb6e40c4a762ededaaabefe2895dbec06c4fa239f",
+  "governedFileDigest": "sha256:728d7d0af658898d7e62b6d021a92b137083535ad6c9886371b38edc7522a524",
   "excludedFiles": [
     {
       "path": "fhr_mappings.yml",

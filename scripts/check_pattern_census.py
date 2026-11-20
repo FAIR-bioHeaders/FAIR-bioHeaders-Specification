@@ -69,8 +69,7 @@ is what reconciles the two.)
 Rule V7 is respected for the legacy owning FHT and FHGM snapshots in the
 informational scope. The separately accepted shared FHT 1.0 contract enters the
 governed scope through its v0.7.0 release. The accepted native FHGM 0.1
-publication contract is independently governed under model-contracts/ for v0.8.0
-preparation; it creates no FHGM header row or toolkit support claim. Owning
+publication contract is independently governed under model-contracts/ for v0.8.0; it creates no FHGM header row or toolkit support claim. Owning
 draft snapshots remain informational. The header registry plus explicit native
 contract seed defines the mandatory governed set.
 
@@ -140,7 +139,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # are generated from or must agree with, the shared slot models they import, and
 # the version registry.
 RELEASED_SCOPE = (
-    ("model-contracts/fhgm/0.1/fhgm-model.schema.json", "accepted native FHGM 0.1 publication contract"),
+    ("model-contracts/fhgm/0.1/fhgm-model.schema.json", "native FHGM 0.1 contract selected for v0.8.0"),
     ("fht.json", "released FHT 1.0 contract"),
     ("fht_linkml.yml", "FHT LinkML model"),
     ("fhr.json", "released FHR contract"),

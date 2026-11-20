@@ -1,7 +1,7 @@
 # FHGM native publication and historical overview
 
-The accepted native model contract 0.1 is prepared for v0.8.0 in
-[FHGM-PUBLICATION.md](FHGM-PUBLICATION.md). Its publication remains pending;
+The accepted native model contract 0.1 has finalized v0.8.0 source metadata in
+[FHGM-PUBLICATION.md](FHGM-PUBLICATION.md). Actual release, archive and alias publication require separate evidence;
 there is no FHGM header contract or header registry row. Native resource identity
 and source preparation do not establish alias resolution or runtime support.
 
