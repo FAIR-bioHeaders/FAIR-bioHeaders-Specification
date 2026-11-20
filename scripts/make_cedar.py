@@ -99,6 +99,7 @@ import hashlib
 import json
 import math
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -344,6 +345,20 @@ def load_registry():
     release = registry.get("authoringRelease", registry["current"])
     if release not in registry["releases"]:
         raise ValueError("Unregistered authoringRelease")
+    if registry.get('authoringRelease'):
+        if release == registry.get('preRelease'):
+            raise ValueError('Authoring authority cannot be the unpublished candidate')
+        try:
+            subprocess.run(['git', 'rev-parse', '--verify', 'refs/tags/' + release + '^{commit}'],
+                           cwd=ROOT, check=True, capture_output=True)
+            for header_type in TYPES:
+                name = registry['files'][header_type]
+                frozen = subprocess.run(['git', 'show', 'refs/tags/' + release + ':' + name],
+                                        cwd=ROOT, check=True, capture_output=True).stdout
+                if frozen != (ROOT / name).read_bytes():
+                    raise ValueError('Authoring authority bytes differ from generator input: ' + name)
+        except subprocess.CalledProcessError as exc:
+            raise ValueError('Authoring authority must resolve to an existing complete release tag') from exc
     out = {}
     for header_type, stem in TYPES.items():
         version = registry["releases"][release][header_type]

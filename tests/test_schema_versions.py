@@ -60,6 +60,8 @@ def release_identity_mode(registry, tag_available=None):
 class SchemaVersionTests(unittest.TestCase):
     def test_guidance_patch_preserves_contracts_and_authoring_authority(self):
         self.assertEqual(REGISTRY['releases']['v0.6.1'], REGISTRY['releases']['v0.6.0'])
+        if REGISTRY['current'] != 'v0.6.1':
+            return  # Later contract releases have their own immutable authority.
         self.assertEqual(REGISTRY['authoringRelease'], 'v0.6.0')
         for name in ('fhr.json', 'fhp.json', 'fhgff3.json'):
             frozen = subprocess.run(['git', 'show', 'v0.6.0:' + name],
