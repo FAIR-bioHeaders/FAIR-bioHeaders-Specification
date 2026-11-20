@@ -499,7 +499,9 @@ Do not push directly to a repository's main branch.
 
 [Authoritative Round 16 policy and plan](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7042896529) supersedes the former conditional agent-merge authorization.
 This rule applies to all repositories and operators, including FAIR-bioHeaders,
-external upstream repositories and personal forks.
+external upstream repositories and personal forks. This is a restriction on
+agent actions, not authority to alter upstream policy, bind other maintainers or
+change account/repository permissions.
 
 Agents must never merge pull requests. A human performs the merge. Agents must
 not enable auto-merge, enter a merge queue, use another agent/service as a merge
@@ -531,4 +533,4 @@ merges and dated receipts remain historical facts, not future permission.
 
 ## Shared FHT release package (repository-local)
 
-This tree carries the accepted FHT 1.0 contract for v0.7.0. The final tag commit clears `preRelease`; actual tag, GitHub Release, archive and alias evidence remain separately verified under [the release procedure](docs/RELEASE-v0.7.0.md). The [preparation record](docs/FHT-PUBLICATION-CANDIDATE.md) preserves joint acceptance and preceding v0.6.1 evidence. Preserve frozen owning and released bytes. Existing authoring citations remain v0.6.0 until supporting packages are actually published. Native FHGM model contract 0.1 was separately published in shared v0.8.0; see docs/FHGM-PUBLICATION.md. This does not imply FHT JSON-LD support.
+This tree carries the accepted FHT 1.0 contract for v0.7.0. The final tag commit clears `preRelease`; actual tag, GitHub Release, archive and alias evidence remain separately verified under [the release procedure](docs/RELEASE-v0.7.0.md). The [preparation record](docs/FHT-PUBLICATION-CANDIDATE.md) preserves joint acceptance and preceding v0.6.1 evidence. Preserve frozen owning and released bytes. Existing frozen authoring citations retain their recorded identities. Newly authored records must cite a release their actual consumer supports; toolkit 0.13.1 now supports published FHT by default, while its native FHGM implementation remains explicitly opt-in. Native FHGM model contract 0.1 was separately published in shared v0.8.0; see docs/FHGM-PUBLICATION.md. This does not imply FHT JSON-LD support.

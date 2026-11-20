@@ -92,7 +92,9 @@ Do not push directly to a repository's main branch.
 
 [Authoritative Round 16 policy and plan](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7042896529) supersedes the former conditional agent-merge authorization.
 This rule applies to all repositories and operators, including FAIR-bioHeaders,
-external upstream repositories and personal forks.
+external upstream repositories and personal forks. This is a restriction on
+agent actions, not authority to alter upstream policy, bind other maintainers or
+change account/repository permissions.
 
 Agents must never merge pull requests. A human performs the merge. Agents must
 not enable auto-merge, enter a merge queue, use another agent/service as a merge
