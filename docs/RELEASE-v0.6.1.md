@@ -1,7 +1,8 @@
-# v0.6.1 guidance release candidate
+# v0.6.1 guidance release procedure
 
-This is preparation, not a published release. The preceding published release
-is v0.6.0. Round 15 authorizes the staged publication sequence conditionally;
+This procedure records preparation and publication gates for the v0.6.1
+package. The preceding published release is v0.6.0. Actual publication is
+established by the tag and GitHub Release, not by this document. Round 15 authorizes the staged publication sequence conditionally;
 current-head independent different-model review, applicable CI and final
 validation remain required. David and Adam jointly hold release authority.
 

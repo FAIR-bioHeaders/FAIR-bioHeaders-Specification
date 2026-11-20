@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.6.1 — 2026-11-19
 
-### v0.6.1 guidance publication candidate
+Guidance and newly selected format policy; unchanged released schema contracts.
 
 - Prepare the adopted guidance patch with the exact v0.6.0 contract-version row
   and unchanged schema/fixture bytes. Authoring remains pinned to v0.6.0 pending

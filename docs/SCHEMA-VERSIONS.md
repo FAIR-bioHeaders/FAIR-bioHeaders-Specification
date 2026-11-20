@@ -222,7 +222,7 @@ released in v0.4.0.
 
 ### Coordinating a documentation patch with readers
 
-The planned v0.6.1 documentation patch repeats the v0.6.0 contract versions;
+The v0.6.1 documentation patch repeats the v0.6.0 contract versions;
 that does not make its citation interchangeable for a version-aware reader.
 A reader that has not registered v0.6.1 reports its citation as unsupported (V4),
 even when the contract bytes would be identical. Before examples or usage
@@ -230,8 +230,8 @@ instructions recommend v0.6.1 URLs, publish and verify a toolkit release that
 registers v0.6.1 and bundles the corresponding immutable contract bytes. Check
 its installed artifact against that release and run conformance, then update
 consumer pins and example/documentation citations. Until then, keep using the
-supported v0.6.0 citation. The prepared registry now records current/preRelease v0.6.1 and repeats the v0.6.0
-row exactly. `authoringRelease: v0.6.0` deliberately keeps CEDAR, examples and
+supported v0.6.0 citation. The v0.6.1 registry row repeats the v0.6.0 row exactly; preRelease is
+cleared only in the commit that is tagged. `authoringRelease: v0.6.0` deliberately keeps CEDAR, examples and
 usage guidance on the installed-reader authority; it is separate from the
 specification release being prepared. Advance that authoring pin only after an
 actual installed-package receipt. Preparation is not publication
