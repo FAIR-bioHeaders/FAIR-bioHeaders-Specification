@@ -21,8 +21,8 @@ David and Adam jointly hold schema and release authority. Read the shared
 GOVERNANCE.md; its optional steering group is not active. Read the local README,
 relevant issues, current files and applicable contribution/license instructions.
 Do not let stale copied README, badges or citation identities override current
-repository roles. The retired FHT-File-Converter is an archive; active family
-conversion/validation belongs in FAIR-bioHeaders-Tools. Core GFF3 feature
+repository roles. The historical FHR-File-Converter repository name redirects to
+FAIR-bioHeaders-Tools; active family conversion/validation belongs there. Core GFF3 feature
 validation belongs in gff3-validator, separate from optional FHGFF3 headers.
 
 The [2024 FHR paper](https://doi.org/10.1093/bib/bbae122) motivates small required
@@ -359,9 +359,10 @@ or establish that release artifacts have been published.
 FHR-Specification development happens on branches. Reviewed schema changes publish
 in FAIR-bioHeaders-Specification first; then synchronize the compatibility files
 on FHR main. `.github/workflows/published-files.yml` runs
-`scripts/check_development_tree.py --remote`, which checks every published copy
-against the pinned shared release tag (not shared main, which may move between
-releases). Do not merge an independent schema
+`scripts/check_development_tree.py --remote`, which checks local frozen digests
+and classification as well as every published copy against the pinned shared
+release tag. External agreement never replaces the local frozen gate; shared
+main is an explicitly advisory observation. Do not merge an independent schema
 change into FHR main that makes those public raw URLs diverge. Preserve historical
 tags and file-bound examples; schema addition review still follows its own cycle.
 
@@ -495,30 +496,42 @@ When a PR receives code review (human or model):
 
 Do not push directly to a repository's main branch.
 
-The maintainer's independent-review rule (2026-11-18) applies only to
-FAIR-bioHeaders repositories and agents operated by David Molik (`molikd`) or
-Adam Wright (`adamjohnwright`). A PR submitted by either maintainer or their
-agents may satisfy the approval gate through an independent **different model**:
-Copilot, or a model operated by David or Adam. The approving model/agent must be
-other than the submitter; an agent must not self-approve its PR, and another
-instance of the same model does not satisfy the different-model requirement.
-Record author/reviewer model provenance when needed to establish independence.
-David and Adam themselves may self-approve their PRs; this exception does not
-apply to their agents.
+## Agent review and human-only PR merges (maintainer direction, 2026-11-20)
 
-An eligible agent may merge only after that approval requirement is met, all
-applicable CI checks are green, and its own validation of the current changes
-passes, including changes after review. Recheck the exact head, base branch,
-findings and dependencies immediately before merging. Missing checks are not
-passing checks, and branch protection must not be bypassed. Read every overall
-review and inline finding, reply with its disposition and fix/evidence, resolve
-handled threads, and post an overall response. Merge authorization does not grant
-contract adoption, curator acceptance, release, publication or deployment
-authority; those retain their separate maintainer gates.
+[Authoritative Round 16 policy and plan](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/211#issuecomment-7042896529) supersedes the former conditional agent-merge authorization.
+This rule applies to all repositories and operators, including FAIR-bioHeaders,
+external upstream repositories and personal forks. This is a restriction on
+agent actions, not authority to alter upstream policy, bind other maintainers or
+change account/repository permissions.
 
-Authority: [approval by another, different model](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984337685)
-and [human self-approval exception](https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/268#issuecomment-6984418624).
+Agents must never merge pull requests. A human performs the merge. Agents must
+not enable auto-merge, enter a merge queue, use another agent/service as a merge
+proxy, or push directly to a default branch instead of merging a PR. Model
+review never grants an agent merge authority. Preserve platform protections;
+do not forge approval or work around repository permissions.
+
+Every PR receives independent review from another actual model. Prefer another
+model family, for example Qwen or Gemma reviewing Codex work, but a different
+family is a preference rather than a hard requirement. A second session of the
+same model is not another model. Record actual author/reviewer model identities
+and never invent review provenance.
+
+Agents continue monitoring CI and fixing failures and actionable review
+findings. Read overall and inline reviews, fix in new commits, reply with
+disposition/evidence, resolve handled findings and acknowledge clean reviews.
+Validate the current head after changes; hand the human exact head/base,
+review, CI, dependency and remaining-risk information. Missing, failed and
+NOT_RUN checks are not passes. Contract adoption, curator acceptance and
+publication keep their separate authority and gates.
+
+Port the current policy through live AGENTS and applicable existing LLM/llms,
+plugin/skill, contribution and workplan guidance. The six specification holders
+remain semantically in step, not byte-identical; preserve local sections.
+Immutable published/vendored historical instruction copies keep their bytes
+and provenance and are explicitly non-operative from current parent guidance.
+Their older text never authorizes an agent merge. Earlier rounds' authorized
+merges and dated receipts remain historical facts, not future permission.
 
 ## Shared FHT release package (repository-local)
 
-This tree carries the accepted FHT 1.0 contract for v0.7.0. The final tag commit clears `preRelease`; actual tag, GitHub Release, archive and alias evidence remain separately verified under [the release procedure](docs/RELEASE-v0.7.0.md). The [preparation record](docs/FHT-PUBLICATION-CANDIDATE.md) preserves joint acceptance and preceding v0.6.1 evidence. Preserve frozen owning and released bytes. Existing authoring citations remain v0.6.0 until supporting packages are actually published. No FHGM contract publication or FHT JSON-LD support is implied.
+This tree carries the accepted FHT 1.0 contract for v0.7.0. The final tag commit clears `preRelease`; actual tag, GitHub Release, archive and alias evidence remain separately verified under [the release procedure](docs/RELEASE-v0.7.0.md). The [preparation record](docs/FHT-PUBLICATION-CANDIDATE.md) preserves joint acceptance and preceding v0.6.1 evidence. Preserve frozen owning and released bytes. Existing frozen authoring citations retain their recorded identities. Newly authored records must cite a release their actual consumer supports; toolkit 0.13.1 now supports published FHT by default, while its native FHGM implementation remains explicitly opt-in. Native FHGM model contract 0.1 was separately published in shared v0.8.0; see docs/FHGM-PUBLICATION.md. This does not imply FHT JSON-LD support.

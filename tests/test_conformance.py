@@ -468,6 +468,7 @@ class ConformanceTests(unittest.TestCase):
             "if vector.get('result') == 'unsupported-version':\n"
             "    print('FHR: unsupported schema version: ' + sys.argv[1], file=sys.stderr)\n"
             "if vector['expected'] != 'valid':\n"
+            "    print('FHR: invalid metadata: ' + sys.argv[1], file=sys.stderr)\n"
             "    raise SystemExit(1)\n"
             "if vector.get('warnings'):\n"
             "    print('FHR: warning: link scheme (docs/FORMAT.md R14)', file=sys.stderr)\n"

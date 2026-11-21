@@ -26,6 +26,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 JSONLD_FILES = ("fhr.context.jsonld", "terms.ttl", "terms.jsonld")
@@ -178,7 +179,56 @@ specification</a>. Cite them through their persistent URLs:</p>
     return PAGE.format(title="FAIR-bioHeaders JSON-LD", links="", body=body)
 
 
+def same_existing_path(first, second):
+    """Compare filesystem identity, including case/Unicode aliases on macOS."""
+    if first == second:
+        return True
+    try:
+        return first.samefile(second)
+    except FileNotFoundError:
+        return False
+    except OSError as error:
+        raise ValueError("cannot establish output filesystem identity") from error
+
+
+def path_key(path):
+    # Conservatively refuse case/Unicode-equivalent indexed paths even on a
+    # case-sensitive filesystem. Git's icase matching alone is not Unicode-wide.
+    return tuple(unicodedata.normalize("NFC", part).casefold() for part in path.parts)
+
+
 def build(site):
+    # Resolve before deletion, then compare physical identities: resolve() does
+    # not canonicalize case spelling on case-insensitive filesystems.
+    site = Path(site)
+    if site.is_symlink():
+        raise ValueError("output must not be a symlink")
+    site = site.resolve()
+    root = ROOT.resolve()
+    if any(same_existing_path(site, ancestor) for ancestor in (root, *root.parents)):
+        raise ValueError("output is this checkout or its ancestor")
+    if any(part.casefold() == ".git" for part in site.parts):
+        raise ValueError("output is Git metadata")
+    marker = site / ".git"
+    if marker.exists() or marker.is_symlink():
+        raise ValueError("output is another repository or worktree")
+    relative = None
+    for ancestor in (site, *site.parents):
+        if same_existing_path(ancestor, root):
+            relative = site.relative_to(ancestor)
+            break
+    if relative is not None:
+        try:
+            tracked = subprocess.run(
+                ["git", "ls-files", "-z"],
+                cwd=root, check=True, capture_output=True)
+        except (OSError, subprocess.CalledProcessError) as error:
+            raise ValueError("cannot establish that output contains no tracked source") from error
+        prefix = path_key(relative)
+        indexed = (path_key(Path(name.decode("utf-8", errors="surrogateescape")))
+                   for name in tracked.stdout.split(b"\0") if name)
+        if any(parts[:len(prefix)] == prefix for parts in indexed):
+            raise ValueError("output contains tracked source files")
     if site.exists():
         shutil.rmtree(site)
     (site / "terms").mkdir(parents=True)
