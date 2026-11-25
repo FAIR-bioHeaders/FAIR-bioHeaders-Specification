@@ -1,0 +1,771 @@
+# NPP/Janeway publication slice for FHR 2.1 — DRAFT, not adopted, not official.
+# MPL-2.0; see LICENSE.
+# Purpose: #249 (Project 13 / #292 round NPP-2) machine-readable crosswalk of every
+# FHR 2.1 property path onto the three publication targets of the New Prairie Press
+# Janeway slice: JATS (article plus verified-metadata table), HTML (published FHR
+# microdata binding and the curated schema.org export), and DOI registration
+# metadata (Crossref 5.5 dataset/article records — the only agency path Janeway core
+# v1.8.4 reaches; DataCite stays deferred per profile-status.yml).
+# Authority: semantics and identity discipline from #56 (mappings/fhr-jsonld-dcmi.yml,
+# mappings/fhr-schemaorg-export.yml, docs/MICRODATA.md); workflow and the meaning of
+# verified from #248. This file proposes no schema change and claims no exporter,
+# registration or official label.
+# Publisher-dependent columns carry tbd(Qn) markers resolved by
+# FAIR-bioHeader-Tools-Janeway-Plugin#1 questions; the slice cannot be adopted before
+# those pins land plus maintainer review per #249.
+profile_version: 0.1.0-draft.1
+status: draft
+official: false
+adoption_decision: null
+source_schema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
+source_schema_version: '2.1'
+resource_scope: assembly
+coverage: Exactly one entry per FHR property path, in the same property order as mappings/fhr-jsonld-dcmi.yml;
+  no path omitted, no path added.
+existing_mapping_tables:
+  dcmi_and_jsonld: mappings/fhr-jsonld-dcmi.yml
+  schemaorg_export: mappings/fhr-schemaorg-export.yml
+  html_binding: docs/MICRODATA.md
+targets:
+  jats:
+    name: JATS Archiving and Publishing
+    version: tbd(Q3) - the pilot target flavor must be the NPP deployment's, not the latest
+    reference: https://jats.nlm.nih.gov/archiving/tag-library/1.3/
+    invariants:
+    - 'Every FHR value renders at minimum as a labeled row of the stable-ID verified-metadata table described
+      by #248; structured targets below are additive.'
+    - The table binds its input revision and digests through its associated file and report links; the
+      table alone never claims more than the report records.
+    - Generated table content is deterministic from pinned inputs; no live services.
+  html:
+    microdata:
+      name: FHR HTML microdata binding
+      reference: docs/MICRODATA.md
+      rule: itemprop equals the FHR property path; typed containers and escaping per M1-M5; values are
+        never emitted as href or src.
+    schemaorg:
+      name: schema.org export
+      version: v30.1
+      reference: mappings/fhr-schemaorg-export.yml
+      rule: Property citations below point into the curated export table; this slice re-declares nothing.
+  doi:
+    agency: crossref
+    record_types:
+      dataset: Crossref 5.5.0 dataset record (candidate pinned via profile-status.yml; final pin tbd Q6)
+      article: Crossref 5.5.0 journal-article record - receives article context only; FH field values
+        enter the article deposit only where listed
+    reference: https://www.crossref.org/documentation/schema-library/metadata-deposit-schema-5-5-0/
+    invariants:
+    - Article, dataset and metadata-record identities never merge; assembly creators are not article authors;
+      no value moves between records without its subject declared.
+    - The plugin prepares; only the publisher registers. No identifier is minted or invented anywhere
+      in this table.
+    - Unsupported technical detail stays in the authoritative FH file and linked report with the loss
+      recorded in loss; it is never stuffed into unrelated fields.
+kind_vocabulary:
+  structured: Has a named element or property target on this axis.
+  row-only: Renders only as a labeled verified-metadata table row on this axis.
+  conditional: Structured target applies only when the stated condition holds; otherwise row-only.
+  unsupported: No faithful target on this axis; explicit loss recorded.
+entries:
+- path: schema
+  source_cardinality: '1'
+  subject: metadata-record
+  jats:
+    kind: unsupported
+    note: Record self-description; the article cites the file, not the reverse
+  html:
+    microdata: schema
+    schemaorg: sdo:schemaVersion
+  doi:
+    record: none
+    kind: unsupported
+    loss: Registration agencies have no FH-contract citation element; the cited alias rides with the linked
+      authoritative record
+- path: schemaVersion
+  source_cardinality: '1'
+  subject: metadata-record
+  jats:
+    kind: structured
+    target: Table row "Contract version" plus an attribute of the related-object linking the file
+  html:
+    microdata: schemaVersion
+    schemaorg: fhr:schemaVersion
+  doi:
+    record: none
+    kind: unsupported
+    loss: Keep contract version with the record, distinct from publication version (profile-status note)
+- path: genome
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: related-object document-id component; data-availability prose; table row
+  html:
+    microdata: genome
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: structured
+    property: titles.title
+    condition: Dataset record name composes genome plus version per agency norms; the article title comes
+      from the manuscript, never from FHR
+- path: genomeSynonym[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: structured
+    target: alt-title of the data-availability section; table rows
+  html:
+    microdata: genomeSynonym
+    schemaorg: sdo:alternateName
+  doi:
+    record: dataset
+    kind: conditional
+    property: alt-title or originalLanguage equivalent
+    condition: Agency alt-title support tbd(Q6); otherwise descriptions text
+- path: taxon
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: kwd-group kwd-group-type=taxon wrapping name and uri
+  html:
+    microdata: taxon
+    schemaorg: sdo:about
+  doi:
+    record: dataset
+    kind: structured
+    property: subjects.subject with subjectScheme=NCBI Taxonomy
+- path: taxon.name
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: kwd text
+  html:
+    microdata: taxon.name
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: structured
+    property: subjects.subject.value
+- path: taxon.uri
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: kwd specific-use=uri; ext-link xref in data-availability
+  html:
+    microdata: taxon.uri
+    schemaorg: '@id'
+  doi:
+    record: dataset
+    kind: structured
+    property: subjects.subject.subjectURI
+    condition: Value passes the R14 link-scheme rule
+- path: version
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: related-object version attribute slot tbd(Q3); table row Assembly version
+  html:
+    microdata: version
+    schemaorg: sdo:version
+  doi:
+    record: dataset
+    kind: conditional
+    property: Composed into titles.title
+    condition: Crossref 5.5 dataset has no standalone version element (tbd Q6); never drop silently, composition
+      or descriptions text is mandatory
+- path: metadataAuthor[]
+  source_cardinality: 1..n
+  subject: metadata-record
+  jats:
+    kind: structured
+    target: person-group rows in the table; never merged into article contrib
+  html:
+    microdata: metadataAuthor
+    schemaorg: sdo:creator
+  doi:
+    record: dataset
+    kind: structured
+    property: contributor.personName with contributorType=other
+    note: Metadata curators, distinct from dataset creators and article authors
+- path: metadataAuthor[].name
+  source_cardinality: '1'
+  subject: metadata-record
+  jats:
+    kind: structured
+    target: person name in table scope
+  html:
+    microdata: metadataAuthor.name
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: structured
+    property: contributor.personName.name
+- path: metadataAuthor[].uri
+  source_cardinality: 0..1
+  subject: metadata-record
+  jats:
+    kind: conditional
+    target: named-content or ext-link inside the table row
+    condition: R14 pass; microdata values are never hrefs; structured JATS slot tbd(Q3)
+  html:
+    microdata: metadataAuthor.uri
+    schemaorg: '@id'
+  doi:
+    record: dataset
+    kind: structured
+    property: contributor person identifier slot
+    condition: Only identifier types the agency recognizes (ORCID tbd Q6)
+- path: metadataAuthor[].nameType
+  source_cardinality: '1'
+  subject: metadata-record
+  jats:
+    kind: row-only
+    target: table row suffix
+  html:
+    microdata: metadataAuthor.nameType
+    schemaorg: '@type'
+  doi:
+    record: dataset
+    kind: structured
+    property: contributor.nameType
+    condition: Agency enum match; otherwise loss recorded
+- path: assemblyAuthor[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: structured
+    target: person-group rows labeled Assembly creator in the table
+  html:
+    microdata: assemblyAuthor
+    schemaorg: sdo:creator
+  doi:
+    record: dataset
+    kind: structured
+    property: creators.creatorName
+    condition: Dataset record registration only (tbd Q6); assembly creators are dataset creators, never
+      copied to article authors
+- path: assemblyAuthor[].name
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: person name in table scope
+  html:
+    microdata: assemblyAuthor.name
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: structured
+    property: creators personName or institutionName name
+- path: assemblyAuthor[].uri
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: conditional
+    target: Same conditions as metadataAuthor uri
+  html:
+    microdata: assemblyAuthor.uri
+    schemaorg: '@id'
+  doi:
+    record: dataset
+    kind: structured
+    property: creators personIdentifier (ORCID)
+    condition: Recognized identifier type only; R14 pass
+- path: assemblyAuthor[].nameType
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row suffix
+  html:
+    microdata: assemblyAuthor.nameType
+    schemaorg: '@type'
+  doi:
+    record: dataset
+    kind: structured
+    property: creators.nameType
+    condition: Agency enum match; otherwise loss recorded
+- path: dateCreated
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: date date-type=data-creation in data-availability; table row
+  html:
+    microdata: dateCreated
+    schemaorg: sdo:dateCreated
+  doi:
+    record: dataset
+    kind: structured
+    property: dates dateType=Created iso8601
+    note: Distinct from the publication date; never backfilled from article dates
+- path: voucherSpecimen
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row; methods prose candidate tbd(Q1)
+  html:
+    microdata: voucherSpecimen
+    schemaorg: fhr:voucherSpecimen
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions text
+    condition: Editorial approval; free text only, no structured voucher model (#139 ceiling respected)
+- path: accessionID
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: related-object with document-id attributes; ext-link
+  html:
+    microdata: accessionID
+    schemaorg: sdo:identifier
+  doi:
+    record: dataset
+    kind: structured
+    property: relatedIdentifiers with relatedIdentifierType=accession
+- path: accessionID.name
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: document-id component; table row
+  html:
+    microdata: accessionID.name
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: structured
+    property: relatedIdentifiers.value
+- path: accessionID.url
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: ext-link href
+    condition: R14 pass; link checked at production
+  html:
+    microdata: accessionID.url
+    schemaorg: sdo:url
+  doi:
+    record: dataset
+    kind: structured
+    property: resource URL of the registered dataset
+    condition: Only when identical with the deposit's own URL; never substituted
+- path: instrument[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: row-only
+    target: table rows; methods section prose tbd(Q1)
+  html:
+    microdata: instrument
+    schemaorg: fhr:instrument
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions text
+- path: scholarlyArticle
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: related-article xref in back matter
+    condition: DOI resolves
+  html:
+    microdata: scholarlyArticle
+    schemaorg: sdo:subjectOf
+  doi:
+    record: dataset
+    kind: structured
+    property: relatedIdentifiers relationType=IsDescribedBy
+    note: Direction discipline; the dataset is described by the article, not vice versa; identities stay
+      distinct
+- path: documentation
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: ext-link xref in the supplementary-material group; table row
+  html:
+    microdata: documentation
+    schemaorg: sdo:description
+  doi:
+    record: dataset
+    kind: conditional
+    property: text links element
+    condition: Crossref text-links support tbd(Q6); otherwise descriptions text
+- path: identifier[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: structured
+    target: pub-id alternates of the related-object
+    condition: Only values that parse as identifiers; otherwise rows
+  html:
+    microdata: identifier
+    schemaorg: sdo:identifier
+  doi:
+    record: dataset
+    kind: conditional
+    property: relatedIdentifiers
+    condition: Registered identifiers only; unregistered strings must not be presented as identifiers
+      (no-invention rule), otherwise descriptions text
+- path: relatedLink[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: structured
+    target: ext-link xref group; table rows
+  html:
+    microdata: relatedLink
+    schemaorg: fhr:relatedLink
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions text
+    condition: No relationship-type inference from bare URLs (direction discipline)
+- path: funding
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: funding-group funding-statement text; table row
+    condition: Verbatim single line; no award-id elements invented
+  html:
+    microdata: funding
+    schemaorg: sdo:funding
+  doi:
+    record: dataset
+    kind: structured
+    property: fundingData funder funderName
+    condition: Funder extractable verbatim; award identifiers only when literally present; otherwise descriptions
+      text with loss recorded
+- path: reuseConditions
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row; the permissions/license slot is forbidden unless the value IS a recognized license
+      (no coercion)
+  html:
+    microdata: reuseConditions
+    schemaorg: sdo:license
+  doi:
+    record: dataset
+    kind: conditional
+    property: rightsList rights
+    condition: Only a resolvable license URI; free text stays in the row, no SPDX guessing
+- path: masking
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row
+  html:
+    microdata: masking
+    schemaorg: fhr:masking
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions text
+- path: vitalStats
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: table sub-group; section specific-type=stats tbd(Q3)
+  html:
+    microdata: vitalStats
+    schemaorg: sdo:observationAbout
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions composed summary
+    condition: Values verbatim; the composition is labeled as generated
+- path: vitalStats.L50
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.L50
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.N50
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.N50
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.L90
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.L90
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.totalBasePairs
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.totalBasePairs
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.numberContigs
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.numberContigs
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.numberScaffolds
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.numberScaffolds
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.readTechnology
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row
+  html:
+    microdata: vitalStats.readTechnology
+    schemaorg: fhr:readTechnology
+  doi:
+    record: dataset
+    kind: conditional
+    property: methods or seq-manifest equivalent tbd(Q6)
+- path: vitalStats.N90
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.N90
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.scaffoldN50
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.scaffoldN50
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.scaffoldN90
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.scaffoldN90
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.scaffoldL50
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.scaffoldL50
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.scaffoldL90
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.scaffoldL90
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: vitalStats.gcContent
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row with units
+  html:
+    microdata: vitalStats.gcContent
+    schemaorg: sdo:value
+  doi:
+    record: dataset
+    kind: row-only
+    note: Grouped into the composed summary when that axis is approved
+- path: checksum
+  source_cardinality: '1'
+  subject: metadata-record
+  jats:
+    kind: row-only
+    target: Table row with the full value; file integrity is asserted by the linked file and report, not
+      by prose
+  html:
+    microdata: checksum
+    schemaorg: fhr:checksum
+  doi:
+    record: none
+    kind: unsupported
+    loss: No faithful Crossref element; stays in the authoritative record; never invented into unrelated
+      fields
+- path: assemblySoftware
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: section specific-type=methods software-context rows
+  html:
+    microdata: assemblySoftware
+    schemaorg: sdo:instrument
+  doi:
+    record: dataset
+    kind: conditional
+    property: Composed descriptions or software citation row
+    condition: Crossref has no first-class software element (tbd Q6)
+- path: assemblySoftware[].name
+  source_cardinality: '1'
+  subject: resource
+  jats:
+    kind: structured
+    target: named-content row value
+  html:
+    microdata: assemblySoftware.name
+    schemaorg: sdo:name
+  doi:
+    record: dataset
+    kind: conditional
+    property: composed descriptions text
+- path: assemblySoftware[].uri
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: conditional
+    target: ext-link within the methods section
+    condition: R14 pass
+  html:
+    microdata: assemblySoftware.uri
+    schemaorg: sdo:url
+  doi:
+    record: dataset
+    kind: conditional
+    property: composed descriptions text with the literal URL
+- path: assemblySoftware[].version
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row suffix
+  html:
+    microdata: assemblySoftware.version
+    schemaorg: sdo:softwareVersion
+  doi:
+    record: dataset
+    kind: conditional
+    property: composed descriptions text
+- path: assemblySoftware[].commandLineOption[]
+  source_cardinality: 0..n
+  subject: resource
+  jats:
+    kind: row-only
+    target: table rows, verbatim and escaped; never rendered as executable
+  html:
+    microdata: assemblySoftware.commandLineOption
+    schemaorg: fhr:commandLineOption
+  doi:
+    record: none
+    kind: unsupported
+    loss: Prose, table and record only; command strings are data (FORMAT.md)
+- path: assemblyProtocol
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: structured
+    target: methods section prose reference
+    condition: The verbatim citation or URL passes R14
+  html:
+    microdata: assemblyProtocol
+    schemaorg: sdo:actionProcess
+  doi:
+    record: dataset
+    kind: conditional
+    property: descriptions text
+- path: seqcol_id
+  source_cardinality: 0..1
+  subject: resource
+  jats:
+    kind: row-only
+    target: table row, labeled as the supplied GA4GH digest
+  html:
+    microdata: seqcol_id
+    schemaorg: sdo:value
+  doi:
+    record: none
+    kind: unsupported
+    loss: No faithful element; the authoritative record and linked digest page carry it
