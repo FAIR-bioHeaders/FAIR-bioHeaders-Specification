@@ -45,11 +45,13 @@ targets:
     status: draft
     candidate_version: 0.1.0-draft.1
     reference: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/mappings/proposals/npp-fhr-publication.yml
-    remaining: 'FHR-only NPP/Janeway slice (#249, round NPP-2 on #292). Needs the publisher
-      pins tbd(Q1/Q3/Q6) from FAIR-bioHeader-Tools-Janeway-Plugin#1, maintainer review,
-      fixtures and loss/conflict examples per #249; DataCite stays with the deferred datacite
-      row until G2 (no DataCite path in Janeway core v1.8.4) is resolved. Draft here creates
-      no adoption, exporter or registration claim.'
+    remaining: 'FHR-only NPP/Janeway slice (#249, round NPP-2 on #292). Base discovery
+      pins Q1 (Genome Notes prospective venue), Q2 (Janeway 1.8.4), Q3 (JATS 1.4 / NISO
+      Z39.96-2024 target) and Q6 (Crossref 5.5.0 article + preprint routes) are recorded;
+      open sub-questions tbd(Q1b/Q3b/Q6b), maintainer adoption review and website #29
+      coordination remain. DataCite stays with the deferred datacite row until G2 (no
+      DataCite path in Janeway core v1.8.4) is resolved. Draft here creates no adoption,
+      exporter or registration claim.'
 header_types:
   FHR:
     status: adopted-foundation

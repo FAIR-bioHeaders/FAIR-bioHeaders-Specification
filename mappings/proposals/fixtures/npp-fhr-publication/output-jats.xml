@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
-<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS flow, slots tbd(Q3) -->
+<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS 1.4 flow, toolchain slots tbd(Q3b) -->
 <jats-fragment xmlns:xlink="http://www.w3.org/1999/xlink">
 <table-wrap id="fh-metadata-synthetic-example" specific-use="fa-bioheaders">
 <label>FAIR-bioHeaders metadata (FHR)</label>
