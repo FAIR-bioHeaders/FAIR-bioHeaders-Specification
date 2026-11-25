@@ -1,0 +1,2 @@
+expectedCodes: [CHECKSUM_MISMATCH]
+rationale: The header's SHA-512/256 must match the exact file bytes; a one-byte payload edit is reported, never repaired or ignored.

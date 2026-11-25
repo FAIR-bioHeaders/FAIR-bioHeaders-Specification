@@ -1,0 +1,74 @@
+profileVersion: 0.1.0-draft.1
+generatedBy: scripts/npp_projection.py (fixture harness; deterministic - timestamps excluded from outputs)
+binding:
+  sourceSchema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
+  sourceSchemaVersion: '2.1'
+  associatedFileSha512_256: LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=
+  articleDoi: 10.5555/example.data-note-1
+  datasetDoi: 10.5555/example.dataset-1
+coveredPaths:
+- accessionID.name
+- accessionID.url
+- assemblyAuthor[].name
+- assemblyProtocol
+- assemblySoftware[].name
+- assemblySoftware[].uri
+- assemblySoftware[].version
+- checksum
+- dateCreated
+- documentation
+- funding
+- genome
+- genomeSynonym[]
+- identifier[]
+- instrument[]
+- masking
+- metadataAuthor[].name
+- metadataAuthor[].uri
+- relatedLink[]
+- reuseConditions
+- schema
+- schemaVersion
+- scholarlyArticle
+- seqcol_id
+- taxon.name
+- taxon.uri
+- version
+- vitalStats.L50
+- vitalStats.L90
+- vitalStats.N50
+- vitalStats.N90
+- vitalStats.gcContent
+- vitalStats.numberContigs
+- vitalStats.numberScaffolds
+- vitalStats.scaffoldL50
+- vitalStats.scaffoldL90
+- vitalStats.scaffoldN50
+- vitalStats.scaffoldN90
+- vitalStats.totalBasePairs
+- voucherSpecimen
+losses:
+- path: assemblySoftware[].commandLineOption[]
+  axis: doi
+  note: Prose, table and record only; command strings are data (FORMAT.md)
+- path: checksum
+  axis: doi
+  note: No faithful Crossref element; stays in the authoritative record; never invented into unrelated
+    fields
+- path: schema
+  axis: doi
+  note: Registration agencies have no FH-contract citation element; the cited alias rides with the linked
+    authoritative record
+- path: schema
+  axis: jats
+  note: Record self-description; the article cites the file, not the reverse
+- path: schemaVersion
+  axis: doi
+  note: Keep contract version with the record, distinct from publication version (profile-status note)
+- path: seqcol_id
+  axis: doi
+  note: No faithful element; the authoritative record and linked digest page carry it
+conditionalsApplied:
+  taxonUriAsKwd: true
+  rightsList: false
+  composedStats: true

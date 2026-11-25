@@ -1,0 +1,2 @@
+expectedCodes: [AGENCY_UNPINNED]
+rationale: Without a pinned agency route no DOI projection may be claimed; the failure must be explicit, never defaulted.

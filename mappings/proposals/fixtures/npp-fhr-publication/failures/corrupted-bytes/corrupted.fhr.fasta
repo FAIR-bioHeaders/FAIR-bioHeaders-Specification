@@ -1,0 +1,56 @@
+;~schema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
+;~schemaVersion: '2.1'
+;~genome: Spikeset synthetic genome
+;~genomeSynonym:
+;~- SPK-SYN-1
+;~taxon:
+;~  name: Drosophila busckii
+;~  uri: https://identifiers.org/taxonomy:470723
+;~version: '1'
+;~metadataAuthor:
+;~- name: Casey Curator
+;~  uri: https://orcid.org/0000-0002-1825-0097
+;~- name: Sparky Metadata Bot
+;~assemblyAuthor:
+;~- name: Genome Education Partnership
+;~dateCreated: '2026-11-25'
+;~voucherSpecimen: SpikeVoucher-0001 (synthetic example)
+;~accessionID:
+;~  name: GCA_000000000.1
+;~  url: https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/
+;~instrument:
+;~- Illumina synthetic
+;~- PacBio synthetic
+;~scholarlyArticle: 10.5555/example.data-note-1
+;~documentation: https://example.org/spikeset/docs
+;~identifier:
+;~- doi:10.5555/example.dataset-1
+;~- handle:20.500.1/example/42
+;~relatedLink:
+;~- https://example.org/spikeset/related
+;~funding: NSF synthetic award 0000000
+;~reuseConditions: CC0-1.0 (example; verify before use)
+;~masking: soft-masked
+;~vitalStats:
+;~  L50: 1
+;~  N50: 61
+;~  L90: 2
+;~  totalBasePairs: 73
+;~  numberContigs: 2
+;~  numberScaffolds: 1
+;~  N90: 8
+;~  scaffoldN50: 73
+;~  scaffoldN90: 73
+;~  scaffoldL50: 1
+;~  scaffoldL90: 1
+;~  gcContent: 50.72
+;~assemblySoftware:
+;~- name: spikeassembler
+;~  version: '2.0'
+;~  uri: https://example.org/spikeassembler
+;~assemblyProtocol: https://www.protocols.io/view/spike-protocol
+;~seqcol_id: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+;~checksum: LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=
+>synthetic chrS example scaffold
+ACGTACGTNNNNACGTTAGCGATCGATCGATCG
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACTT

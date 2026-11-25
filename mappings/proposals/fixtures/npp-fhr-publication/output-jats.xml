@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
+<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS flow, slots tbd(Q3) -->
+<jats-fragment xmlns:xlink="http://www.w3.org/1999/xlink">
+<table-wrap id="fh-metadata-synthetic-example" specific-use="fa-bioheaders">
+<label>FAIR-bioHeaders metadata (FHR)</label>
+<caption><title>Verified FAIR-bioHeaders header of the associated data file</title></caption>
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>
+<tr><th>schema</th><td>https://w3id.org/fair-bioheaders/fhr/v0.8.0</td></tr>
+<tr><th>schemaVersion</th><td>2.1</td></tr>
+<tr><th>genome</th><td>Spikeset synthetic genome</td></tr>
+<tr><th>genomeSynonym[0]</th><td>SPK-SYN-1</td></tr>
+<tr><th>taxon.name</th><td>Drosophila busckii</td></tr>
+<tr><th>taxon.uri</th><td>https://identifiers.org/taxonomy:470723</td></tr>
+<tr><th>version</th><td>1</td></tr>
+<tr><th>metadataAuthor[0].name</th><td>Casey Curator</td></tr>
+<tr><th>metadataAuthor[0].uri</th><td>https://orcid.org/0000-0002-1825-0097</td></tr>
+<tr><th>metadataAuthor[1].name</th><td>Sparky Metadata Bot</td></tr>
+<tr><th>assemblyAuthor[0].name</th><td>Genome Education Partnership</td></tr>
+<tr><th>dateCreated</th><td>2026-11-25</td></tr>
+<tr><th>voucherSpecimen</th><td>SpikeVoucher-0001 (synthetic example)</td></tr>
+<tr><th>accessionID.name</th><td>GCA_000000000.1</td></tr>
+<tr><th>accessionID.url</th><td>https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/</td></tr>
+<tr><th>instrument[0]</th><td>Illumina synthetic</td></tr>
+<tr><th>instrument[1]</th><td>PacBio synthetic</td></tr>
+<tr><th>scholarlyArticle</th><td>10.5555/example.data-note-1</td></tr>
+<tr><th>documentation</th><td>https://example.org/spikeset/docs</td></tr>
+<tr><th>identifier[0]</th><td>doi:10.5555/example.dataset-1</td></tr>
+<tr><th>identifier[1]</th><td>handle:20.500.1/example/42</td></tr>
+<tr><th>relatedLink[0]</th><td>https://example.org/spikeset/related</td></tr>
+<tr><th>funding</th><td>NSF synthetic award 0000000</td></tr>
+<tr><th>reuseConditions</th><td>CC0-1.0 (example; verify before use)</td></tr>
+<tr><th>masking</th><td>soft-masked</td></tr>
+<tr><th>vitalStats.L50</th><td>1 (bp)</td></tr>
+<tr><th>vitalStats.N50</th><td>61 (bp)</td></tr>
+<tr><th>vitalStats.L90</th><td>2 (bp)</td></tr>
+<tr><th>vitalStats.totalBasePairs</th><td>73 (bp)</td></tr>
+<tr><th>vitalStats.numberContigs</th><td>2</td></tr>
+<tr><th>vitalStats.numberScaffolds</th><td>1</td></tr>
+<tr><th>vitalStats.N90</th><td>8 (bp)</td></tr>
+<tr><th>vitalStats.scaffoldN50</th><td>73 (bp)</td></tr>
+<tr><th>vitalStats.scaffoldN90</th><td>73 (bp)</td></tr>
+<tr><th>vitalStats.scaffoldL50</th><td>1 (bp)</td></tr>
+<tr><th>vitalStats.scaffoldL90</th><td>1 (bp)</td></tr>
+<tr><th>vitalStats.gcContent</th><td>50.72 (% of A+C+G+T+U)</td></tr>
+<tr><th>assemblySoftware[0].name</th><td>spikeassembler</td></tr>
+<tr><th>assemblySoftware[0].version</th><td>2.0</td></tr>
+<tr><th>assemblySoftware[0].uri</th><td>https://example.org/spikeassembler</td></tr>
+<tr><th>assemblyProtocol</th><td>https://www.protocols.io/view/spike-protocol</td></tr>
+<tr><th>seqcol_id</th><td>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td></tr>
+<tr><th>checksum</th><td>LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=</td></tr>
+</tbody></table>
+</table-wrap>
+<kwd-group kwd-group-type="taxonomic-classification">
+<kwd>Drosophila busckii</kwd>
+<kwd specific-use="uri">https://identifiers.org/taxonomy:470723</kwd>
+</kwd-group>
+<date date-type="data-creation"><year>2026</year><month>11</month><day>25</day></date>
+<related-object object-type="dataset" document-id="GCA_000000000.1" content-type="genome-assembly"><ext-link ext-link-type="uri" xlink:href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/">https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/</ext-link> Spikeset synthetic genome version 1</related-object>
+<funding-group><funding-statement>NSF synthetic award 0000000</funding-statement></funding-group>
+<supplementary-material id="fh-link-1"><ext-link ext-link-type="uri" xlink:href="https://example.org/spikeset/docs">https://example.org/spikeset/docs</ext-link></supplementary-material>
+<supplementary-material id="fh-link-2"><ext-link ext-link-type="uri" xlink:href="https://example.org/spikeset/related">https://example.org/spikeset/related</ext-link></supplementary-material>
+<supplementary-material id="fh-link-3"><ext-link ext-link-type="uri" xlink:href="https://www.protocols.io/view/spike-protocol">https://www.protocols.io/view/spike-protocol</ext-link></supplementary-material>
+<supplementary-material id="fh-link-4"><ext-link ext-link-type="uri" xlink:href="https://example.org/spikeassembler">https://example.org/spikeassembler</ext-link></supplementary-material>
+</jats-fragment>

@@ -1,0 +1,23 @@
+# NPP/Janeway FHR publication slice — example context (synthetic; fixture for #249).
+# Article context is SEPARATE from the FH* contract record by design (#248);
+# all identifiers below are reserved-example or placeholder values, never real.
+profileVersion: 0.1.0-draft.1
+article:
+  title: Synthetic genomic data note for projection fixtures
+  authors:
+  - name: Ariel Example
+    uri: https://orcid.org/0000-0001-5109-3700
+  - name: Riley Example
+  doi: 10.5555/example.data-note-1
+  journalTitle: Spike Journal of Synthetic Genomics (example)
+  publicationYear: '2026'
+deposit:
+  publisher: Spike University Press (example)
+  agency: crossref
+  surface: journal-article
+  datasetRecord:
+    doi: 10.5555/example.dataset-1
+    registrant: spike-press-example
+editorial:
+  composedSummariesApproved: true
+  methodsProseApproved: false
