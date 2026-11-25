@@ -3,7 +3,7 @@
      NOT a deposit, NOT schema-validated (Crossref XSD pin is open per profile-status.yml) -->
 <dataset xmlns:xlink="http://www.w3.org/1999/xlink">
 <contributors><names>
-<!-- assembly creators map to dataset-record creators and metadata curators to contributors;
+<!-- assembly creators map to record creators and metadata curators to contributors;
      undifferentiated author_name is used because FHR may omit nameType and person vs
      organization classification must not be invented (no-invention rule) -->
 <name><author_name>Genome Education Partnership</author_name><!-- role: creator (dataset record) --></name>

@@ -1,0 +1,23 @@
+# NPP/Janeway FHR publication slice — REPOSITORY (preprint) surface context.
+# Synthetic example per the 2026-11-21 both-surfaces direction (#292). The
+# journalTitle key carries the repository's display title on this surface
+# (documented in the context schema). Identifiers are reserved 10.5555 examples.
+profileVersion: 0.1.0-draft.1
+article:
+  title: Synthetic genomic data note posted as a preprint
+  authors:
+  - name: Ariel Example
+    uri: https://orcid.org/0000-0001-5109-3700
+  doi: 10.5555/example.preprint-1
+  journalTitle: Spike Repository of Synthetic Preprints (example)
+  publicationYear: '2026'
+deposit:
+  publisher: Spike University Press (example)
+  agency: crossref
+  surface: repository-preprint
+  datasetRecord:
+    doi: 10.5555/example.dataset-1
+    registrant: spike-press-example
+editorial:
+  composedSummariesApproved: true
+  methodsProseApproved: false

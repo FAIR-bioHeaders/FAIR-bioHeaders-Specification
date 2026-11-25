@@ -4,49 +4,107 @@
   "title": "NPP/Janeway publication context for the FHR slice (draft fixture schema)",
   "description": "Publication/deposit context that sits beside, never inside, an FH* contract record (#248: context is an explicit validated form separate from the FH* contract; #56: article, dataset and metadata-record identities stay distinct). All values in the shipped fixtures are synthetic examples; reserved 10.5555 DOIs only. This schema is a proposals-level fixture contract, not an adopted profile and not a registration claim.",
   "type": "object",
-  "required": ["profileVersion", "article", "deposit"],
+  "required": [
+    "profileVersion",
+    "article",
+    "deposit"
+  ],
   "additionalProperties": false,
   "properties": {
-    "profileVersion": {"type": "string", "const": "0.1.0-draft.1"},
+    "profileVersion": {
+      "type": "string",
+      "const": "0.1.0-draft.1"
+    },
     "article": {
       "type": "object",
-      "required": ["title", "authors", "doi", "journalTitle"],
+      "required": [
+        "title",
+        "authors",
+        "doi",
+        "journalTitle"
+      ],
       "additionalProperties": false,
       "properties": {
-        "title": {"type": "string", "minLength": 1},
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
         "authors": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "additionalProperties": false,
             "properties": {
-              "name": {"type": "string", "minLength": 1},
-              "uri": {"type": "string", "pattern": "^https://"}
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uri": {
+                "type": "string",
+                "pattern": "^https://"
+              }
             }
           }
         },
-        "doi": {"type": "string", "pattern": "^10\\.[0-9]+/.+"},
-        "journalTitle": {"type": "string", "minLength": 1},
-        "publicationYear": {"type": "string", "pattern": "^[0-9]{4}$"}
+        "doi": {
+          "type": "string",
+          "pattern": "^10\\.[0-9]+/.+"
+        },
+        "journalTitle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Journal title on the journal-article surface; repository display title on the repository-preprint surface (single schema, surface chosen by deposit.surface)."
+        },
+        "publicationYear": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$"
+        }
       }
     },
     "deposit": {
       "type": "object",
-      "required": ["publisher"],
+      "required": [
+        "publisher"
+      ],
       "additionalProperties": false,
       "properties": {
-        "publisher": {"type": "string", "minLength": 1},
-        "agency": {"type": "string", "enum": ["crossref"], "description": "Only agency route Janeway core v1.8.4 reaches (Plugin #1 discovery). DataCite remains a deferred target, not an option here."},
-        "surface": {"type": "string", "enum": ["journal-article", "repository-preprint"], "description": "Both-surfaces rule (2026-11-21 maintainer direction); the shipped fixture is journal-article until the repository projection is added."},
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agency": {
+          "type": "string",
+          "enum": [
+            "crossref"
+          ],
+          "description": "Only agency route Janeway core v1.8.4 reaches (Plugin #1 discovery). DataCite remains a deferred target, not an option here."
+        },
+        "surface": {
+          "type": "string",
+          "enum": [
+            "journal-article",
+            "repository-preprint"
+          ],
+          "description": "Both-surfaces rule (2026-11-21 maintainer direction); the shipped fixture is journal-article until the repository projection is added."
+        },
         "datasetRecord": {
           "type": "object",
-          "required": ["doi"],
+          "required": [
+            "doi"
+          ],
           "additionalProperties": false,
           "properties": {
-            "doi": {"type": "string", "pattern": "^10\\.[0-9]+/.+"},
-            "registrant": {"type": "string"}
+            "doi": {
+              "type": "string",
+              "pattern": "^10\\.[0-9]+/.+"
+            },
+            "registrant": {
+              "type": "string"
+            }
           },
           "description": "Separate dataset registration identity. When absent, the dataset record is not claimed as registered; the projection still prepares it offline without inventing a DOI."
         }
@@ -56,8 +114,14 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "composedSummariesApproved": {"type": "boolean", "default": false},
-        "methodsProseApproved": {"type": "boolean", "default": false}
+        "composedSummariesApproved": {
+          "type": "boolean",
+          "default": false
+        },
+        "methodsProseApproved": {
+          "type": "boolean",
+          "default": false
+        }
       }
     }
   }
