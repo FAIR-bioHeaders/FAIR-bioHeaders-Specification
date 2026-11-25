@@ -10,9 +10,10 @@
 # mappings/fhr-schemaorg-export.yml, docs/MICRODATA.md); workflow and the meaning of
 # verified from #248. This file proposes no schema change and claims no exporter,
 # registration or official label.
-# Publisher-dependent columns carry tbd(Qn) markers resolved by
-# FAIR-bioHeader-Tools-Janeway-Plugin#1 questions; the slice cannot be adopted before
-# those pins land plus maintainer review per #249.
+# Publisher-dependent columns record settled pins from #292 (comment 7174452756:
+# Q1 Genome Notes prospective venue, Q2 Janeway 1.8.4, Q3 JATS 1.4 / NISO Z39.96-2024
+# target with toolchain verification caveat Q3b, Q6 Crossref article + preprint routes);
+# remaining open sub-questions carry tbd(Q1b/Q3b/Q6b) markers.
 profile_version: 0.1.0-draft.1
 status: draft
 official: false
@@ -29,8 +30,8 @@ existing_mapping_tables:
 targets:
   jats:
     name: JATS Archiving and Publishing
-    version: tbd(Q3) - the pilot target flavor must be the NPP deployment's, not the latest
-    reference: https://jats.nlm.nih.gov/archiving/tag-library/1.3/
+    version: '1.4 (NISO Z39.96-2024, pinned per #292 Q3; NPP deployment production-toolchain slot verification retained as tbd Q3b)'
+    reference: https://jats.nlm.nih.gov/archiving/tag-library/1.4/
     invariants:
     - 'Every FHR value renders at minimum as a labeled row of the stable-ID verified-metadata table described
       by #248; structured targets below are additive.'
@@ -51,9 +52,11 @@ targets:
   doi:
     agency: crossref
     record_types:
-      dataset: Crossref 5.5.0 dataset record (candidate pinned via profile-status.yml; final pin tbd Q6)
-      article: Crossref 5.5.0 journal-article record - receives article context only; FH field values
-        enter the article deposit only where listed
+      dataset: Crossref 5.5.0 dataset record (candidate pinned via profile-status.yml; dataset-DOI registration ownership tbd Q6b)
+      article: 'Crossref 5.5.0 journal-article record (confirmed Janeway 1.8.4 register_crossref_doi route per #292 Q6) - receives article context only; FH field values
+        enter the article deposit only where listed'
+      preprint: 'Crossref 5.5.0 posted_content / preprint record (confirmed Janeway 1.8.4 register_preprint_doi route per #292 Q6) - receives preprint manuscript context only;
+        never conflated with dataset record title or assembly creators'
     reference: https://www.crossref.org/documentation/schema-library/metadata-deposit-schema-5-5-0/
     invariants:
     - Article, dataset and metadata-record identities never merge; assembly creators are not article authors;
@@ -123,7 +126,7 @@ entries:
     record: dataset
     kind: conditional
     property: alt-title or originalLanguage equivalent
-    condition: Agency alt-title support tbd(Q6); otherwise descriptions text
+    condition: Agency alt-title support tbd(Q6b); otherwise descriptions text
 - path: taxon
   source_cardinality: '1'
   subject: resource
@@ -169,7 +172,7 @@ entries:
   subject: resource
   jats:
     kind: structured
-    target: related-object version attribute slot tbd(Q3); table row Assembly version
+    target: related-object version attribute slot in JATS 1.4 (toolchain verification tbd Q3b); table row Assembly version
   html:
     microdata: version
     schemaorg: sdo:version
@@ -177,7 +180,7 @@ entries:
     record: dataset
     kind: conditional
     property: Composed into titles.title
-    condition: Crossref 5.5 dataset has no standalone version element (tbd Q6); never drop silently, composition
+    condition: Crossref 5.5 dataset has no standalone version element (dataset-DOI route tbd Q6b); never drop silently, composition
       or descriptions text is mandatory
 - path: metadataAuthor[]
   source_cardinality: 1..n
@@ -212,7 +215,7 @@ entries:
   jats:
     kind: conditional
     target: named-content or ext-link inside the table row
-    condition: R14 pass; microdata values are never hrefs; structured JATS slot tbd(Q3)
+    condition: R14 pass; microdata values are never hrefs; structured JATS 1.4 slot (toolchain verification tbd Q3b)
   html:
     microdata: metadataAuthor.uri
     schemaorg: '@id'
@@ -220,7 +223,7 @@ entries:
     record: dataset
     kind: structured
     property: contributor person identifier slot
-    condition: Only identifier types the agency recognizes (ORCID tbd Q6)
+    condition: Only identifier types the agency recognizes (Crossref ORCID slot, dataset-DOI route tbd Q6b)
 - path: metadataAuthor[].nameType
   source_cardinality: '1'
   subject: metadata-record
@@ -248,7 +251,7 @@ entries:
     record: dataset
     kind: structured
     property: creators.creatorName
-    condition: Dataset record registration only (tbd Q6); assembly creators are dataset creators, never
+    condition: Dataset record registration only (dataset-DOI route tbd Q6b); assembly creators are dataset creators, never
       copied to article authors
 - path: assemblyAuthor[].name
   source_cardinality: '1'
@@ -310,7 +313,7 @@ entries:
   subject: resource
   jats:
     kind: row-only
-    target: table row; methods prose candidate tbd(Q1)
+    target: table row; methods prose candidate for Genome Notes tbd(Q1b)
   html:
     microdata: voucherSpecimen
     schemaorg: fhr:voucherSpecimen
@@ -365,7 +368,7 @@ entries:
   subject: resource
   jats:
     kind: row-only
-    target: table rows; methods section prose tbd(Q1)
+    target: table rows; methods section prose for Genome Notes tbd(Q1b)
   html:
     microdata: instrument
     schemaorg: fhr:instrument
@@ -402,7 +405,7 @@ entries:
     record: dataset
     kind: conditional
     property: text links element
-    condition: Crossref text-links support tbd(Q6); otherwise descriptions text
+    condition: Crossref text-links support tbd(Q6b); otherwise descriptions text
 - path: identifier[]
   source_cardinality: 0..n
   subject: resource
@@ -482,7 +485,7 @@ entries:
   subject: resource
   jats:
     kind: structured
-    target: table sub-group; section specific-type=stats tbd(Q3)
+    target: table sub-group; JATS 1.4 section specific-type=stats (toolchain verification tbd Q3b)
   html:
     microdata: vitalStats
     schemaorg: sdo:observationAbout
@@ -581,7 +584,7 @@ entries:
   doi:
     record: dataset
     kind: conditional
-    property: methods or seq-manifest equivalent tbd(Q6)
+    property: methods or seq-manifest equivalent tbd(Q6b)
 - path: vitalStats.N90
   source_cardinality: 0..1
   subject: resource
@@ -688,7 +691,7 @@ entries:
     record: dataset
     kind: conditional
     property: Composed descriptions or software citation row
-    condition: Crossref has no first-class software element (tbd Q6)
+    condition: Crossref has no first-class software element (dataset-DOI route tbd Q6b)
 - path: assemblySoftware[].name
   source_cardinality: '1'
   subject: resource

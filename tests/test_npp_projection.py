@@ -7,15 +7,65 @@ parses with entity resolution left off (stdlib ElementTree default), and every
 negative fixture fails with exactly its expected codes. A missing SHA-512/256
 implementation is reported as a failure, never a silent pass.
 """
+from copy import deepcopy
+from pathlib import Path
+import sys
 import unittest
+import xml.etree.ElementTree as ET
 
-from scripts import npp_projection
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts import npp_projection  # noqa: E402
 
 
 class NppProjectionFixtures(unittest.TestCase):
     def test_fixtures_are_consistent(self):
         errors = npp_projection.check()
         self.assertEqual(errors, [], "fixture harness reported: " + "; ".join(errors))
+
+    def test_preprint_projection_preserves_manuscript_vs_dataset_identity(self):
+        source = npp_projection.load_json(npp_projection.FIX / "source.fhr.json")
+        preprint_ctx = npp_projection.load_yaml(
+            npp_projection.FIX / "preprint" / "context-preprint.yaml"
+        )
+        xml_text = npp_projection.build_crossref(source, preprint_ctx, preprint=True)
+        root = ET.fromstring(xml_text)
+        self.assertEqual(root.tag, "preprint")
+        title = root.findtext("./titles/title")
+        self.assertEqual(title, preprint_ctx["article"]["title"])
+        self.assertNotIn(source["genome"], title)
+        authors = [el.text for el in root.findall("./contributors/names/name/author_name")]
+        expected_authors = [a["name"] for a in preprint_ctx["article"]["authors"]]
+        self.assertEqual(authors, expected_authors)
+        for creator in source.get("assemblyAuthor", []):
+            self.assertNotIn(creator["name"], authors)
+        for curator in source.get("metadataAuthor", []):
+            self.assertNotIn(curator["name"], authors)
+        related = root.find("./relatedItems/relatedIdentifier")
+        self.assertIsNotNone(related)
+        self.assertEqual(related.attrib.get("relationType"), "References")
+        self.assertEqual(related.text, preprint_ctx["deposit"]["datasetRecord"]["doi"])
+
+    def test_semantic_failures_detect_article_doi_conflicts_and_identifier_mixup(self):
+        source = npp_projection.load_json(npp_projection.FIX / "source.fhr.json")
+        context = npp_projection.load_yaml(npp_projection.FIX / "context.yaml")
+        bad_source_article = deepcopy(source)
+        bad_source_article["scholarlyArticle"] = "10.5555/conflicting-article"
+        codes = {
+            c.split(":")[0]
+            for c in npp_projection.semantic_failures(bad_source_article, context, None)
+        }
+        self.assertIn("ARTICLE_DOI_CONFLICT", codes)
+
+        bad_source_ident = deepcopy(source)
+        bad_source_ident["identifier"] = ["doi:" + context["article"]["doi"]]
+        ident_codes = {
+            c.split(":")[0]
+            for c in npp_projection.semantic_failures(bad_source_ident, context, None)
+        }
+        self.assertIn("IDENTITY_MIXUP", ident_codes)
 
 
 if __name__ == "__main__":

@@ -85,11 +85,24 @@ def validate_context(context: dict) -> list[str]:
 def semantic_failures(source: dict, context: dict, fasta_bytes: bytes | None) -> list[str]:
     errors = []
     deposit = context.get("deposit", {})
+    article_doi = context.get("article", {}).get("doi")
     if "agency" not in deposit:
         errors.append("AGENCY_UNPINNED: no agency route in context (tbd Q6); a DOI projection cannot be claimed")
     dataset = deposit.get("datasetRecord") or {}
-    if dataset.get("doi") and dataset["doi"] == context.get("article", {}).get("doi"):
+    if dataset.get("doi") and dataset["doi"] == article_doi:
         errors.append("IDENTITY_MIXUP: dataset record DOI equals the article DOI; identities must stay distinct")
+    for ident in source.get("identifier") or []:
+        bare = ident[4:] if isinstance(ident, str) and ident.lower().startswith("doi:") else ident
+        if article_doi and bare == article_doi:
+            errors.append("IDENTITY_MIXUP: article/preprint DOI appears in FHR resource identifier[]; identities must stay distinct")
+    if (deposit.get("surface") == "journal-article"
+            and source.get("scholarlyArticle")
+            and article_doi
+            and source["scholarlyArticle"] != article_doi):
+        errors.append(
+            f"ARTICLE_DOI_CONFLICT: FHR scholarlyArticle ({source['scholarlyArticle']}) "
+            f"disagrees with context article.doi ({article_doi})"
+        )
     if fasta_bytes is not None:
         stated = source.get("checksum", "")
         actual = file_checksum(fasta_bytes)
@@ -103,14 +116,12 @@ def link_ok(value: str) -> bool:
 
 
 def build_jats(source: dict, context: dict, source_digest: str) -> str:
-    authors = "; ".join(a.get("uri") and f"{a['name']} ({a['uri']})" or a["name"]
-                        for a in context["article"]["authors"])
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         "<!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema="
         f"{source['schema']}; schemaVersion={source['schemaVersion']}; "
         f"associated-file-sha512-256={source_digest}; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->",
-        "<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS flow, slots tbd(Q3) -->",
+        "<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS 1.4 flow, toolchain slots tbd(Q3b) -->",
         '<jats-fragment xmlns:xlink="http://www.w3.org/1999/xlink">',
         '<table-wrap id="fh-metadata-synthetic-example" specific-use="fa-bioheaders">',
         "<label>FAIR-bioHeaders metadata (FHR)</label>",
@@ -172,21 +183,42 @@ def build_crossref(source: dict, context: dict, preprint: bool = False) -> str:
         "     NOT a deposit, NOT schema-validated (Crossref XSD pin is open per profile-status.yml) -->",
         f'<{root} xmlns:xlink="http://www.w3.org/1999/xlink">',
         "<contributors><names>",
-        "<!-- assembly creators map to record creators and metadata curators to contributors;",
-        "     undifferentiated author_name is used because FHR may omit nameType and person vs",
-        "     organization classification must not be invented (no-invention rule) -->",
     ]
-    for author in source.get("assemblyAuthor", []):
-        lines.append(f'<name><author_name>{escape(author["name"])}</author_name>'
-                     "<!-- role: creator (dataset record) --></name>")
-    for author in source.get("metadataAuthor", []):
-        lines.append(f'<name><author_name>{escape(author["name"])}</author_name>'
-                     "<!-- role: contributor/metadata-curator --></name>")
-    lines += ["</names>", "</contributors>", f"<titles><title>{escape(genome_title)}</title></titles>",
-              f'<publicationDate><year>{source["dateCreated"][:4]}</year>'
-              f'<month>{int(source["dateCreated"][5:7]):02d}</month>'
-              f'<day>{int(source["dateCreated"][8:10]):02d}</day></publicationDate>',
-              f"<publisher>{escape(deposit['publisher'])}</publisher>"]
+    if preprint:
+        lines += [
+            "<!-- preprint manuscript authors come from context.article.authors (never from FHR",
+            "     assemblyAuthor or metadataAuthor; manuscript, dataset and metadata-record",
+            "     identities stay distinct per #56/#248/#249) -->",
+        ]
+        for author in context["article"].get("authors", []):
+            lines.append(f'<name><author_name>{escape(author["name"])}</author_name>'
+                         "<!-- role: author (preprint manuscript) --></name>")
+        preprint_title = context["article"]["title"]
+        pub_year = context["article"].get("publicationYear", source["dateCreated"][:4])
+        lines += [
+            "</names>",
+            "</contributors>",
+            f"<titles><title>{escape(preprint_title)}</title></titles>",
+            f"<publicationDate><year>{escape(str(pub_year))}</year></publicationDate>",
+            f"<publisher>{escape(deposit['publisher'])}</publisher>",
+        ]
+    else:
+        lines += [
+            "<!-- assembly creators map to record creators and metadata curators to contributors;",
+            "     undifferentiated author_name is used because FHR may omit nameType and person vs",
+            "     organization classification must not be invented (no-invention rule) -->",
+        ]
+        for author in source.get("assemblyAuthor", []):
+            lines.append(f'<name><author_name>{escape(author["name"])}</author_name>'
+                         "<!-- role: creator (dataset record) --></name>")
+        for author in source.get("metadataAuthor", []):
+            lines.append(f'<name><author_name>{escape(author["name"])}</author_name>'
+                         "<!-- role: contributor/metadata-curator --></name>")
+        lines += ["</names>", "</contributors>", f"<titles><title>{escape(genome_title)}</title></titles>",
+                  f'<publicationDate><year>{source["dateCreated"][:4]}</year>'
+                  f'<month>{int(source["dateCreated"][5:7]):02d}</month>'
+                  f'<day>{int(source["dateCreated"][8:10]):02d}</day></publicationDate>',
+                  f"<publisher>{escape(deposit['publisher'])}</publisher>"]
     lines.append("<subjects>")
     lines.append(f'<subject subjectScheme="NCBI_Taxonomy">{escape(source["taxon"]["name"])}</subject>')
     if link_ok(source["taxon"].get("uri", "")):
@@ -201,8 +233,16 @@ def build_crossref(source: dict, context: dict, preprint: bool = False) -> str:
             "<relatedItems><relatedIdentifier relatedIdentifierType=\"DOI\" "
             f"relationType=\"IsDescribedBy\">{escape(article_doi)}</relatedIdentifier></relatedItems>"
         )
-    # Preprint surface: no IsDescribedBy article relation is asserted (a preprint is
-    # not described by a journal article in these fixtures); inventing one is forbidden.
+    else:
+        dataset_doi = (deposit.get("datasetRecord") or {}).get("doi")
+        if dataset_doi:
+            lines.append(
+                "<relatedItems><relatedIdentifier relatedIdentifierType=\"DOI\" "
+                f"relationType=\"References\">{escape(dataset_doi)}</relatedIdentifier></relatedItems>"
+            )
+    # Preprint surface: no IsDescribedBy journal-article relation is asserted (a preprint is
+    # not described by a journal article in these fixtures); the separate dataset DOI is
+    # referenced without merging preprint and dataset identities.
     if source.get("funding"):
         lines.append(f"<fundingData><funder><funderIdentifierType>ISNI</funderIdentifierType>"
                      f"<funderName>{escape(source['funding'])}</funderName></funder>"
@@ -304,7 +344,9 @@ def check() -> list[str]:
         neg_fasta = ((negative / "corrupted.fhr.fasta").read_bytes()
                      if (negative / "corrupted.fhr.fasta").exists() else fasta)
         try:
-            found = {code.split(":")[0] for code in semantic_failures(neg_source, neg_context, neg_fasta)}
+            raw_failures = (validate_context(neg_context)
+                            + semantic_failures(neg_source, neg_context, neg_fasta))
+            found = {code.split(":")[0] for code in raw_failures}
         except RuntimeError as error:
             found = {str(error)}
         if found != expected:
