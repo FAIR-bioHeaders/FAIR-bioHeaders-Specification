@@ -162,16 +162,17 @@ def build_jats(source: dict, context: dict, source_digest: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def build_crossref(source: dict, context: dict) -> str:
+def build_crossref(source: dict, context: dict, preprint: bool = False) -> str:
     deposit = context["deposit"]
     genome_title = f"{source['genome']} (version {source['version']})"
+    root = "preprint" if preprint else "dataset"
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        "<!-- offline dataset-record projection PREPARED from the authoritative header and example context;",
+        f"<!-- offline {root}-record projection PREPARED from the authoritative header and example context;",
         "     NOT a deposit, NOT schema-validated (Crossref XSD pin is open per profile-status.yml) -->",
-        '<dataset xmlns:xlink="http://www.w3.org/1999/xlink">',
+        f'<{root} xmlns:xlink="http://www.w3.org/1999/xlink">',
         "<contributors><names>",
-        "<!-- assembly creators map to dataset-record creators and metadata curators to contributors;",
+        "<!-- assembly creators map to record creators and metadata curators to contributors;",
         "     undifferentiated author_name is used because FHR may omit nameType and person vs",
         "     organization classification must not be invented (no-invention rule) -->",
     ]
@@ -194,11 +195,14 @@ def build_crossref(source: dict, context: dict) -> str:
     reuse = source.get("reuseConditions", "")
     if link_ok(reuse):
         lines.append(f"<rightsList><rights rightsURI=\"{escape(reuse)}\"/></rightsList>")
-    article_doi = context["article"]["doi"]
-    lines.append(
-        "<relatedItems><relatedIdentifier relatedIdentifierType=\"DOI\" "
-        f"relationType=\"IsDescribedBy\">{escape(article_doi)}</relatedIdentifier></relatedItems>"
-    )
+    if not preprint:
+        article_doi = context["article"]["doi"]
+        lines.append(
+            "<relatedItems><relatedIdentifier relatedIdentifierType=\"DOI\" "
+            f"relationType=\"IsDescribedBy\">{escape(article_doi)}</relatedIdentifier></relatedItems>"
+        )
+    # Preprint surface: no IsDescribedBy article relation is asserted (a preprint is
+    # not described by a journal article in these fixtures); inventing one is forbidden.
     if source.get("funding"):
         lines.append(f"<fundingData><funder><funderIdentifierType>ISNI</funderIdentifierType>"
                      f"<funderName>{escape(source['funding'])}</funderName></funder>"
@@ -207,7 +211,7 @@ def build_crossref(source: dict, context: dict) -> str:
     if context.get("editorial", {}).get("composedSummariesApproved") and source.get("vitalStats"):
         stats = ", ".join(f"{key}={value}" for key, value in source["vitalStats"].items())
         lines.append(f"<descriptions><description content-type=\"composed-stats-summary\">As reported in the authoritative header: {escape(stats)}</description></descriptions>")
-    lines.append("</dataset>")
+    lines.append(f"</{root}>")
     return "\n".join(lines) + "\n"
 
 
@@ -243,12 +247,24 @@ def build_report(source: dict, context: dict, jats: str, crossref: str, source_d
 def build_all() -> dict[str, str]:
     source = load_json(FIX / "source.fhr.json")
     context = load_yaml(FIX / "context.yaml")
+    preprint_context = load_yaml(FIX / "preprint" / "context-preprint.yaml")
     fasta = (FIX / "spikeset.fhr.fasta").read_bytes()
     digest = file_checksum(fasta)
     jats = build_jats(source, context, digest)
     crossref = build_crossref(source, context)
     report = build_report(source, context, jats, crossref, digest)
-    return {"output-jats.xml": jats, "output-crossref-dataset.xml": crossref, "projection-report.yaml": report}
+    outputs = {
+        "output-jats.xml": jats,
+        "output-crossref-dataset.xml": crossref,
+        "projection-report.yaml": report,
+        "preprint/output-crossref-preprint.xml": build_crossref(source, preprint_context, preprint=True),
+    }
+    # Parity rule (#292, 2026-11-21): the verified-metadata table is
+    # surface-independent; contexts differing only by surface must produce it
+    # byte-identically, so generated/uploaded and journal/repository paths stay
+    # indistinguishable downstream.
+    assert build_jats(source, preprint_context, digest) == jats, "surface parity broken: JATS projection differs"
+    return outputs
 
 
 def load_json(path: Path):
@@ -267,11 +283,15 @@ def check() -> list[str]:
     context = load_yaml(FIX / "context.yaml")
     fasta = (FIX / "spikeset.fhr.fasta").read_bytes()
     errors += semantic_failures(source, context, fasta)
+    preprint_context = load_yaml(FIX / "preprint" / "context-preprint.yaml")
+    errors += [f"PREPRINT_CONTEXT: {e}" for e in validate_context(preprint_context)]
+    errors += [f"PREPRINT_SEMANTIC: {e}" for e in semantic_failures(source, preprint_context, fasta)]
     for name, content in build_all().items():
         stored = (FIX / name).read_text(encoding="utf-8")
         if stored != content:
             errors.append(f"OUTPUT_DRIFT: {name} differs from the deterministic rebuild")
-    for xml_name in ("output-jats.xml", "output-crossref-dataset.xml"):
+    for xml_name in ("output-jats.xml", "output-crossref-dataset.xml",
+                     "preprint/output-crossref-preprint.xml"):
         try:
             ET.fromstring((FIX / xml_name).read_text(encoding="utf-8"))
         except ET.ParseError as error:
