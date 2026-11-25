@@ -1,0 +1,11 @@
+# Negative fixture: agency route absent (tbd Q6 not yet answered).
+profileVersion: 0.1.0-draft.1
+article:
+  title: Synthetic genomic data note for projection fixtures
+  authors:
+  - name: Ariel Example
+  doi: 10.5555/example.data-note-1
+  journalTitle: Spike Journal of Synthetic Genomics (example)
+deposit:
+  publisher: Spike University Press (example)
+  surface: journal-article

@@ -1,0 +1,2 @@
+expectedCodes: [IDENTITY_MIXUP]
+rationale: Article and dataset identities are distinct (#56/#248); a reused DOI is refused, not silently re-registered.
