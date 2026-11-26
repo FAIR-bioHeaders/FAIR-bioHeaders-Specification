@@ -5,7 +5,7 @@
 ;~- SPK-SYN-1
 ;~taxon:
 ;~  name: Drosophila busckii
-;~  uri: https://identifiers.org/taxonomy:470723
+;~  uri: https://identifiers.org/taxonomy:30019
 ;~version: '1'
 ;~metadataAuthor:
 ;~- name: Casey Curator
@@ -50,7 +50,7 @@
 ;~  uri: https://example.org/spikeassembler
 ;~assemblyProtocol: https://www.protocols.io/view/spike-protocol
 ;~seqcol_id: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-;~checksum: LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=
+;~checksum: 2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=
 >synthetic chrS example scaffold
 ACGTACGTNNNNACGTTAGCGATCGATCGATCG
 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT

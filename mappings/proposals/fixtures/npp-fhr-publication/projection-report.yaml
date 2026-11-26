@@ -3,7 +3,7 @@ generatedBy: scripts/npp_projection.py (fixture harness; deterministic - timesta
 binding:
   sourceSchema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
   sourceSchemaVersion: '2.1'
-  associatedFileSha512_256: LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=
+  associatedFileSha512_256: 2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=
   articleDoi: 10.5555/example.data-note-1
   datasetDoi: 10.5555/example.dataset-1
 coveredPaths:
