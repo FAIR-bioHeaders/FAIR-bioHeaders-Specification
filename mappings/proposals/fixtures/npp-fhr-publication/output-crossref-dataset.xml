@@ -16,7 +16,7 @@
 <publisher>Spike University Press (example)</publisher>
 <subjects>
 <subject subjectScheme="NCBI_Taxonomy">Drosophila busckii</subject>
-<subjectSchemeUri>https://identifiers.org/taxonomy:470723</subjectSchemeUri>
+<subjectSchemeUri>https://identifiers.org/taxonomy:30019</subjectSchemeUri>
 </subjects>
 <relatedItems><relatedIdentifier relatedIdentifierType="DOI" relationType="IsDescribedBy">10.5555/example.data-note-1</relatedIdentifier></relatedItems>
 <fundingData><funder><funderIdentifierType>ISNI</funderIdentifierType><funderName>NSF synthetic award 0000000</funderName></funder><!-- example judgment: the verbatim FHR funding line is placed as funderName; no award identifier is parsed or invented --></fundingData>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
+<!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
 <!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS 1.4 flow, toolchain slots tbd(Q3b) -->
 <jats-fragment xmlns:xlink="http://www.w3.org/1999/xlink">
 <table-wrap id="fh-metadata-synthetic-example" specific-use="fa-bioheaders">
@@ -11,7 +11,7 @@
 <tr><th>genome</th><td>Spikeset synthetic genome</td></tr>
 <tr><th>genomeSynonym[0]</th><td>SPK-SYN-1</td></tr>
 <tr><th>taxon.name</th><td>Drosophila busckii</td></tr>
-<tr><th>taxon.uri</th><td>https://identifiers.org/taxonomy:470723</td></tr>
+<tr><th>taxon.uri</th><td>https://identifiers.org/taxonomy:30019</td></tr>
 <tr><th>version</th><td>1</td></tr>
 <tr><th>metadataAuthor[0].name</th><td>Casey Curator</td></tr>
 <tr><th>metadataAuthor[0].uri</th><td>https://orcid.org/0000-0002-1825-0097</td></tr>
@@ -48,12 +48,12 @@
 <tr><th>assemblySoftware[0].uri</th><td>https://example.org/spikeassembler</td></tr>
 <tr><th>assemblyProtocol</th><td>https://www.protocols.io/view/spike-protocol</td></tr>
 <tr><th>seqcol_id</th><td>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td></tr>
-<tr><th>checksum</th><td>LKiE2URjXo1/sgK92+05N/2eBSPaODIIUmQAARM8n08=</td></tr>
+<tr><th>checksum</th><td>2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=</td></tr>
 </tbody></table>
 </table-wrap>
 <kwd-group kwd-group-type="taxonomic-classification">
 <kwd>Drosophila busckii</kwd>
-<kwd specific-use="uri">https://identifiers.org/taxonomy:470723</kwd>
+<kwd specific-use="uri">https://identifiers.org/taxonomy:30019</kwd>
 </kwd-group>
 <date date-type="data-creation"><year>2026</year><month>11</month><day>25</day></date>
 <related-object object-type="dataset" document-id="GCA_000000000.1" content-type="genome-assembly"><ext-link ext-link-type="uri" xlink:href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/">https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/</ext-link> Spikeset synthetic genome version 1</related-object>
