@@ -48,8 +48,10 @@ targets:
     remaining: 'FHR-only NPP/Janeway slice (#249, round NPP-2 on #292). Base discovery
       pins Q1 (Genome Notes prospective venue), Q2 (Janeway 1.8.4), Q3 (JATS 1.4 / NISO
       Z39.96-2024 target) and Q6 (Crossref 5.5.0 article + preprint routes) are recorded;
-      open sub-questions tbd(Q1b/Q3b/Q6b), maintainer adoption review and website #29
-      coordination remain. DataCite stays with the deferred datacite row until G2 (no
+      the 2026-11-26 maintainer approval of the decision proposals settled Q1b (no article
+      prose in v1) and Q6b (dataset DOIs belong to the data repository; no exotic Crossref
+      slots), leaving only tbd(Q3b) toolchain verification from NPP-3, plus the maintainer
+      adoption review and website #29 coordination. DataCite stays with the deferred datacite row until G2 (no
       DataCite path in Janeway core v1.8.4) is resolved. Draft here creates no adoption,
       exporter or registration claim.'
 header_types:

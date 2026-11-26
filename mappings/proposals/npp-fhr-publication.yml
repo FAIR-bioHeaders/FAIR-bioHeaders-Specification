@@ -10,10 +10,12 @@
 # mappings/fhr-schemaorg-export.yml, docs/MICRODATA.md); workflow and the meaning of
 # verified from #248. This file proposes no schema change and claims no exporter,
 # registration or official label.
-# Publisher-dependent columns record settled pins from #292 (comment 7174452756:
-# Q1 Genome Notes prospective venue, Q2 Janeway 1.8.4, Q3 JATS 1.4 / NISO Z39.96-2024
-# target with toolchain verification caveat Q3b, Q6 Crossref article + preprint routes);
-# remaining open sub-questions carry tbd(Q1b/Q3b/Q6b) markers.
+# Publisher-dependent columns record settled pins from #292 (comment 7174452756 and the
+# maintainer approval of the 2026-11-26 decision proposals, comment 7194271285):
+# Q1 Genome Notes prospective venue, Q2 Janeway 1.8.4, Q3 JATS 1.4 / NISO Z39.96-2024,
+# Q1b no article prose in v1 (DOI descriptions composition only), Q6b dataset DOIs belong
+# to the data repository and no exotic Crossref slot is relied on.
+# Only toolchain-verification markers tbd(Q3b) remain open (NPP-3 measurement).
 profile_version: 0.1.0-draft.1
 status: draft
 official: false
@@ -52,13 +54,16 @@ targets:
   doi:
     agency: crossref
     record_types:
-      dataset: Crossref 5.5.0 dataset record (candidate pinned via profile-status.yml; dataset-DOI registration ownership tbd Q6b)
+      dataset: Crossref 5.5.0 dataset record PREPARED FOR THE DATA REPOSITORY (registration owned by the repository, not the journal plugin - decision 2026-11-26; XSD pin per profile-status.yml)
       article: 'Crossref 5.5.0 journal-article record (confirmed Janeway 1.8.4 register_crossref_doi route per #292 Q6) - receives article context only; FH field values
         enter the article deposit only where listed'
       preprint: 'Crossref 5.5.0 posted_content / preprint record (confirmed Janeway 1.8.4 register_preprint_doi route per #292 Q6) - receives preprint manuscript context only;
         never conflated with dataset record title or assembly creators'
     reference: https://www.crossref.org/documentation/schema-library/metadata-deposit-schema-5-5-0/
     invariants:
+    - Dataset-record projections are prepared artifacts for the data repository; the journal
+      plugin never submits dataset registrations (maintainer decision 2026-11-26). The plugin
+      references a dataset DOI supplied in context from article/preprint records only.
     - Article, dataset and metadata-record identities never merge; assembly creators are not article authors;
       no value moves between records without its subject declared.
     - The plugin prepares; only the publisher registers. No identifier is minted or invented anywhere
@@ -126,7 +131,7 @@ entries:
     record: dataset
     kind: conditional
     property: alt-title or originalLanguage equivalent
-    condition: Agency alt-title support tbd(Q6b); otherwise descriptions text
+    condition: no alt-title reliance - descriptions text only (decision 2026-11-26)
 - path: taxon
   source_cardinality: '1'
   subject: resource
@@ -180,8 +185,9 @@ entries:
     record: dataset
     kind: conditional
     property: Composed into titles.title
-    condition: Crossref 5.5 dataset has no standalone version element (dataset-DOI route tbd Q6b); never drop silently, composition
-      or descriptions text is mandatory
+    condition: no standalone version element - composition into titles.title or descriptions
+        text is mandatory, never a silent drop (settled 2026-11-26; registration itself is
+        the repository's act)
 - path: metadataAuthor[]
   source_cardinality: 1..n
   subject: metadata-record
@@ -223,7 +229,8 @@ entries:
     record: dataset
     kind: structured
     property: contributor person identifier slot
-    condition: Only identifier types the agency recognizes (Crossref ORCID slot, dataset-DOI route tbd Q6b)
+    condition: ORCID/identifier slot only when the agency recognizes the type; no other
+        identifier invention (settled 2026-11-26)
 - path: metadataAuthor[].nameType
   source_cardinality: '1'
   subject: metadata-record
@@ -313,7 +320,7 @@ entries:
   subject: resource
   jats:
     kind: row-only
-    target: table row; methods prose candidate for Genome Notes tbd(Q1b)
+    target: table row only in v1; article prose not permitted (decision 2026-11-26)
   html:
     microdata: voucherSpecimen
     schemaorg: fhr:voucherSpecimen
@@ -368,7 +375,7 @@ entries:
   subject: resource
   jats:
     kind: row-only
-    target: table rows; methods section prose for Genome Notes tbd(Q1b)
+    target: table rows only in v1; article prose not permitted (decision 2026-11-26)
   html:
     microdata: instrument
     schemaorg: fhr:instrument
@@ -405,7 +412,7 @@ entries:
     record: dataset
     kind: conditional
     property: text links element
-    condition: Crossref text-links support tbd(Q6b); otherwise descriptions text
+    condition: no text-links reliance - descriptions text (decision 2026-11-26)
 - path: identifier[]
   source_cardinality: 0..n
   subject: resource
@@ -584,7 +591,7 @@ entries:
   doi:
     record: dataset
     kind: conditional
-    property: methods or seq-manifest equivalent tbd(Q6b)
+    property: descriptions text (no first-class methods/seq-manifest slot relied on - decision 2026-11-26)
 - path: vitalStats.N90
   source_cardinality: 0..1
   subject: resource
@@ -691,7 +698,7 @@ entries:
     record: dataset
     kind: conditional
     property: Composed descriptions or software citation row
-    condition: Crossref has no first-class software element (dataset-DOI route tbd Q6b)
+    condition: Crossref has no first-class software element - composed descriptions text (settled 2026-11-26)
 - path: assemblySoftware[].name
   source_cardinality: '1'
   subject: resource
