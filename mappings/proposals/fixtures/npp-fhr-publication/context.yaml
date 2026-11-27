@@ -1,7 +1,7 @@
 # NPP/Janeway FHR publication slice — example context (synthetic; fixture for #249).
 # Article context is SEPARATE from the FH* contract record by design (#248);
 # all identifiers below are reserved-example or placeholder values, never real.
-profileVersion: 0.1.0-draft.1
+profileVersion: 0.1.0-draft.2
 article:
   title: Synthetic genomic data note for projection fixtures
   authors:

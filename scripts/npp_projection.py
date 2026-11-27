@@ -111,6 +111,10 @@ def semantic_failures(source: dict, context: dict, fasta_bytes: bytes | None) ->
     return errors
 
 
+def profile_version() -> str:
+    return load_yaml(CROSSWALK)["profile_version"]
+
+
 def link_ok(value: str) -> bool:
     return bool(LINK_OK.match(value or ""))
 
@@ -118,7 +122,7 @@ def link_ok(value: str) -> bool:
 def build_jats(source: dict, context: dict, source_digest: str) -> str:
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        "<!-- binding: profile=npp-fhr-publication/0.1.0-draft.1; source-schema="
+        "<!-- binding: profile=npp-fhr-publication/" + profile_version() + "; source-schema="
         f"{source['schema']}; schemaVersion={source['schemaVersion']}; "
         f"associated-file-sha512-256={source_digest}; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->",
         "<!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS 1.4 flow, toolchain slots tbd(Q3b) -->",

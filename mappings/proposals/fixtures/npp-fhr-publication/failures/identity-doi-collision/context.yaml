@@ -1,5 +1,5 @@
 # Negative fixture: the article DOI reused as the dataset record DOI.
-profileVersion: 0.1.0-draft.1
+profileVersion: 0.1.0-draft.2
 article:
   title: Synthetic genomic data note for projection fixtures
   authors:
