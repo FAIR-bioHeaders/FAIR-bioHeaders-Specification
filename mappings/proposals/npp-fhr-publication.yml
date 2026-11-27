@@ -16,10 +16,10 @@
 # Q1b no article prose in v1 (DOI descriptions composition only), Q6b dataset DOIs belong
 # to the data repository and no exotic Crossref slot is relied on.
 # Only toolchain-verification markers tbd(Q3b) remain open (NPP-3 measurement).
-profile_version: 0.1.0-draft.1
-status: draft
+profile_version: 0.1.0-draft.2
+status: adoption-pending
 official: false
-adoption_decision: null
+adoption_decision: null  # maintainer records the dated acceptance decision; this PR only prepares the final state
 source_schema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
 source_schema_version: '2.1'
 resource_scope: assembly

@@ -2,7 +2,7 @@
 # Synthetic example per the 2026-11-21 both-surfaces direction (#292). The
 # journalTitle key carries the repository's display title on this surface
 # (documented in the context schema). Identifiers are reserved 10.5555 examples.
-profileVersion: 0.1.0-draft.1
+profileVersion: 0.1.0-draft.2
 article:
   title: Synthetic genomic data note posted as a preprint
   authors:
