@@ -42,8 +42,9 @@ targets:
     remaining: Separate dataset profile; select backend/style/version and test Unicode, corporate
       authors, and rendering.
   npp-jats-html-doi:
-    status: adoption-pending
+    status: adopted
     candidate_version: 0.1.0-draft.2
+    adoption_decision: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/249#issuecomment-7219909539
     reference: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/mappings/proposals/npp-fhr-publication.yml
     remaining: 'FHR-only NPP/Janeway slice (#249, round NPP-2 on #292). Base discovery
       pins Q1 (Genome Notes prospective venue), Q2 (Janeway 1.8.4), Q3 (JATS 1.4 / NISO
