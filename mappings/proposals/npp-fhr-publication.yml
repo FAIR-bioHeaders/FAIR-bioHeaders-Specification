@@ -1,4 +1,7 @@
-# NPP/Janeway publication slice for FHR 2.1 — DRAFT, not adopted, not official.
+# NPP/Janeway publication slice for FHR 2.1 — ADOPTED mapping slice (maintainer
+# acceptance recorded 2026-11-27, adoption_decision below; profile_version stays
+# 0.1.0-draft.2 per the #56 adopted-as-is precedent). Not an official label, not a
+# shipped exporter: adopted status changes no publication, registration or tooling claim.
 # MPL-2.0; see LICENSE.
 # Purpose: #249 (Project 13 / #292 round NPP-2) machine-readable crosswalk of every
 # FHR 2.1 property path onto the three publication targets of the New Prairie Press
@@ -17,9 +20,9 @@
 # to the data repository and no exotic Crossref slot is relied on.
 # Only toolchain-verification markers tbd(Q3b) remain open (NPP-3 measurement).
 profile_version: 0.1.0-draft.2
-status: adoption-pending
+status: adopted
 official: false
-adoption_decision: null  # maintainer records the dated acceptance decision; this PR only prepares the final state
+adoption_decision: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/249#issuecomment-7219909539
 source_schema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
 source_schema_version: '2.1'
 resource_scope: assembly
