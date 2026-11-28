@@ -42,9 +42,13 @@ targets:
     remaining: Separate dataset profile; select backend/style/version and test Unicode, corporate
       authors, and rendering.
   npp-jats-html-doi:
-    status: adopted
-    candidate_version: 0.1.0-draft.2
+    status: adoption-pending
+    candidate_version: 0.1.0-draft.3
     adoption_decision: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/249#issuecomment-7219909539
+    revision_note: 'draft.3 corrects the taxon.uri JATS target (specific-use is not
+      legal on kwd in JATS 1.4, found by offline XSD validation) and accompanies the
+      harness L-statistic unit fix (FORMAT.md counts). draft.2 remains the accepted
+      record of 2026-11-27; draft.3 requires its own dated maintainer acceptance.'
     reference: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/blob/main/mappings/proposals/npp-fhr-publication.yml
     remaining: 'ADOPTED mapping slice (maintainer acceptance 2026-11-27, adoption_decision
       above; #249 stays open on its remaining criteria). Open work: tbd(Q3b) production

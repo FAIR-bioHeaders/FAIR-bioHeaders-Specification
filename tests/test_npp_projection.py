@@ -25,6 +25,35 @@ class NppProjectionFixtures(unittest.TestCase):
         errors = npp_projection.check()
         self.assertEqual(errors, [], "fixture harness reported: " + "; ".join(errors))
 
+    def test_jats_taxon_uri_and_statistic_units(self):
+        source = npp_projection.load_json(npp_projection.FIX / "source.fhr.json")
+        context = npp_projection.load_yaml(npp_projection.FIX / "context.yaml")
+        root = ET.fromstring(
+            npp_projection.build_jats(source, context, source["checksum"])
+        )
+
+        taxon_uri = source["taxon"]["uri"]
+        uri_keywords = [
+            keyword
+            for keyword in root.findall("./kwd-group/kwd")
+            if keyword.text == taxon_uri
+        ]
+        self.assertEqual(len(uri_keywords), 1)
+        self.assertNotIn("specific-use", uri_keywords[0].attrib)
+
+        rows = {
+            row.findtext("th"): "".join(row.find("td").itertext())
+            for row in root.findall("./table-wrap/table/tbody/tr")
+        }
+        l_statistics = ("L50", "L90", "scaffoldL50", "scaffoldL90")
+        n_statistics = ("N50", "N90", "scaffoldN50", "scaffoldN90")
+        for statistic in l_statistics:
+            with self.subTest(statistic=statistic):
+                self.assertNotIn("bp", rows[f"vitalStats.{statistic}"])
+        for statistic in n_statistics:
+            with self.subTest(statistic=statistic):
+                self.assertTrue(rows[f"vitalStats.{statistic}"].endswith("(bp)"))
+
     def test_preprint_projection_preserves_manuscript_vs_dataset_identity(self):
         source = npp_projection.load_json(npp_projection.FIX / "source.fhr.json")
         preprint_ctx = npp_projection.load_yaml(

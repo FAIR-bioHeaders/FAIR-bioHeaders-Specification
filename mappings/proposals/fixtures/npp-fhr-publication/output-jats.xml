@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- binding: profile=npp-fhr-publication/0.1.0-draft.2; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
+<!-- binding: profile=npp-fhr-publication/0.1.0-draft.3; source-schema=https://w3id.org/fair-bioheaders/fhr/v0.8.0; schemaVersion=2.1; associated-file-sha512-256=2Ix7oXa93QdoGDcHbCljvYKql1Qxok8QRWJcrbgMy6c=; harness=scripts/npp_projection.py (fixture generator, not an exporter) -->
 <!-- jats-fragment: single synthetic root so the file parses as XML; the real adapter inserts these elements into a pinned JATS 1.4 flow, toolchain slots tbd(Q3b) -->
 <jats-fragment xmlns:xlink="http://www.w3.org/1999/xlink">
 <table-wrap id="fh-metadata-synthetic-example" specific-use="fa-bioheaders">
@@ -31,17 +31,17 @@
 <tr><th>funding</th><td>NSF synthetic award 0000000</td></tr>
 <tr><th>reuseConditions</th><td>CC0-1.0 (example; verify before use)</td></tr>
 <tr><th>masking</th><td>soft-masked</td></tr>
-<tr><th>vitalStats.L50</th><td>1 (bp)</td></tr>
+<tr><th>vitalStats.L50</th><td>1</td></tr>
 <tr><th>vitalStats.N50</th><td>61 (bp)</td></tr>
-<tr><th>vitalStats.L90</th><td>2 (bp)</td></tr>
+<tr><th>vitalStats.L90</th><td>2</td></tr>
 <tr><th>vitalStats.totalBasePairs</th><td>73 (bp)</td></tr>
 <tr><th>vitalStats.numberContigs</th><td>2</td></tr>
 <tr><th>vitalStats.numberScaffolds</th><td>1</td></tr>
 <tr><th>vitalStats.N90</th><td>8 (bp)</td></tr>
 <tr><th>vitalStats.scaffoldN50</th><td>73 (bp)</td></tr>
 <tr><th>vitalStats.scaffoldN90</th><td>73 (bp)</td></tr>
-<tr><th>vitalStats.scaffoldL50</th><td>1 (bp)</td></tr>
-<tr><th>vitalStats.scaffoldL90</th><td>1 (bp)</td></tr>
+<tr><th>vitalStats.scaffoldL50</th><td>1</td></tr>
+<tr><th>vitalStats.scaffoldL90</th><td>1</td></tr>
 <tr><th>vitalStats.gcContent</th><td>50.72 (% of A+C+G+T+U)</td></tr>
 <tr><th>assemblySoftware[0].name</th><td>spikeassembler</td></tr>
 <tr><th>assemblySoftware[0].version</th><td>2.0</td></tr>
@@ -53,9 +53,9 @@
 </table-wrap>
 <kwd-group kwd-group-type="taxonomic-classification">
 <kwd>Drosophila busckii</kwd>
-<kwd specific-use="uri">https://identifiers.org/taxonomy:30019</kwd>
+<kwd>https://identifiers.org/taxonomy:30019</kwd>
 </kwd-group>
-<date date-type="data-creation"><year>2026</year><month>11</month><day>25</day></date>
+<date date-type="data-creation"><day>25</day><month>11</month><year>2026</year></date>
 <related-object object-type="dataset" document-id="GCA_000000000.1" content-type="genome-assembly"><ext-link ext-link-type="uri" xlink:href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/">https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/</ext-link> Spikeset synthetic genome version 1</related-object>
 <funding-group><funding-statement>NSF synthetic award 0000000</funding-statement></funding-group>
 <supplementary-material id="fh-link-1"><ext-link ext-link-type="uri" xlink:href="https://example.org/spikeset/docs">https://example.org/spikeset/docs</ext-link></supplementary-material>

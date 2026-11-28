@@ -1,7 +1,19 @@
-# NPP/Janeway publication slice for FHR 2.1 — ADOPTED mapping slice (maintainer
-# acceptance recorded 2026-11-27, adoption_decision below; profile_version stays
-# 0.1.0-draft.2 per the #56 adopted-as-is precedent). Not an official label, not a
-# shipped exporter: adopted status changes no publication, registration or tooling claim.
+# NPP/Janeway publication slice for FHR 2.1 — REVISION of the adopted slice,
+# adoption-pending. History: 0.1.0-draft.2 was maintainer-accepted 2026-11-27
+# (adoption_decision below) and stays accepted AT THAT VERSION. Independent
+# JATS 1.4 Archiving XSD validation (FAIR-bioHeaders-Tools, 2026-11-28) found
+# one defect IN THIS ACCEPTED TEXT: the taxon.uri target specified
+# 'kwd specific-use=uri', but JATS 1.4 (the pinned target) allows no
+# specific-use attribute on kwd. This revision corrects that target to legal
+# markup carrying the same semantics (URI as kwd text plus the already-listed
+# ext-link route); it ALSO corrects the harness data-creation date child order
+# (JATS 1.4 date-model is day?, month?, ..., year - the harness emitted
+# year-first, likewise caught by offline XSD validation); and it accompanies the
+# fixture-harness unit correction
+# (FORMAT.md defines L50/L90/scaffoldL50/scaffoldL90 as CONTIG COUNTS - the
+# harness mislabeled them bp; the crosswalk's generic 'table row with units'
+# stands for unitful fields). Nothing else changes. Correction is explicit
+# through this reviewed PR; no accepted artifact is silently replaced.
 # MPL-2.0; see LICENSE.
 # Purpose: #249 (Project 13 / #292 round NPP-2) machine-readable crosswalk of every
 # FHR 2.1 property path onto the three publication targets of the New Prairie Press
@@ -19,8 +31,8 @@
 # Q1b no article prose in v1 (DOI descriptions composition only), Q6b dataset DOIs belong
 # to the data repository and no exotic Crossref slot is relied on.
 # Only toolchain-verification markers tbd(Q3b) remain open (NPP-3 measurement).
-profile_version: 0.1.0-draft.2
-status: adopted
+profile_version: 0.1.0-draft.3
+status: adoption-pending
 official: false
 adoption_decision: https://github.com/FAIR-bioHeaders/FAIR-bioHeaders-Specification/issues/249#issuecomment-7219909539
 source_schema: https://w3id.org/fair-bioheaders/fhr/v0.8.0
@@ -166,7 +178,7 @@ entries:
   subject: resource
   jats:
     kind: structured
-    target: kwd specific-use=uri; ext-link xref in data-availability
+    target: kwd text (bare; JATS 1.4 forbids specific-use on kwd); ext-link xref in data-availability
   html:
     microdata: taxon.uri
     schemaorg: '@id'
