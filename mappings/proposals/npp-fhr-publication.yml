@@ -6,7 +6,10 @@
 # 'kwd specific-use=uri', but JATS 1.4 (the pinned target) allows no
 # specific-use attribute on kwd. This revision corrects that target to legal
 # markup carrying the same semantics (URI as kwd text plus the already-listed
-# ext-link route); it also accompanies the fixture-harness unit correction
+# ext-link route); it ALSO corrects the harness data-creation date child order
+# (JATS 1.4 date-model is day?, month?, ..., year - the harness emitted
+# year-first, likewise caught by offline XSD validation); and it accompanies the
+# fixture-harness unit correction
 # (FORMAT.md defines L50/L90/scaffoldL50/scaffoldL90 as CONTIG COUNTS - the
 # harness mislabeled them bp; the crosswalk's generic 'table row with units'
 # stands for unitful fields). Nothing else changes. Correction is explicit

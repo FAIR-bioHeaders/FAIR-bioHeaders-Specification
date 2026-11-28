@@ -148,10 +148,14 @@ def build_jats(source: dict, context: dict, source_digest: str) -> str:
         lines.append(f"<kwd>{escape(taxon['uri'])}</kwd>")  # JATS 1.4: kwd has no specific-use
     lines.append("</kwd-group>")
     year, month, day = (source["dateCreated"].split("-") + ["", ""])[:3]
+    # JATS 1.4 date-model child order is (day?, month?, ... , year) - the
+    # pre-revision harness emitted year-first, which failed offline XSD
+    # validation against the pinned target (2026-11-28; #308)
     lines.append(
-        f'<date date-type="data-creation"><year>{year}</year>'
+        "<date date-type=\"data-creation\">"
+        + (f"<day>{int(day):02d}</day>" if day else "")
         + (f"<month>{int(month):02d}</month>" if month else "")
-        + (f"<day>{int(day):02d}</day>" if day else "") + "</date>"
+        + f"<year>{year}</year></date>"
     )
     accession = source.get("accessionID") or {}
     lines.append(

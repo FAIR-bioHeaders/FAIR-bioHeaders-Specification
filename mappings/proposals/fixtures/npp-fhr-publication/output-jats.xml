@@ -55,7 +55,7 @@
 <kwd>Drosophila busckii</kwd>
 <kwd>https://identifiers.org/taxonomy:30019</kwd>
 </kwd-group>
-<date date-type="data-creation"><year>2026</year><month>11</month><day>25</day></date>
+<date date-type="data-creation"><day>25</day><month>11</month><year>2026</year></date>
 <related-object object-type="dataset" document-id="GCA_000000000.1" content-type="genome-assembly"><ext-link ext-link-type="uri" xlink:href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/">https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_000000000.1/</ext-link> Spikeset synthetic genome version 1</related-object>
 <funding-group><funding-statement>NSF synthetic award 0000000</funding-statement></funding-group>
 <supplementary-material id="fh-link-1"><ext-link ext-link-type="uri" xlink:href="https://example.org/spikeset/docs">https://example.org/spikeset/docs</ext-link></supplementary-material>
