@@ -274,13 +274,48 @@ wrong, so negative controls for missing files must also run on Linux CI.
 
 ## Licensing and historical material
 
-New FAIR BioHeaders contributions from March 2025 onward use MPL-2.0, subject to
-the local LICENSE. Preserve historical USDA public-domain material and third-party
-permissions/notices. David Molik left USDA in February 2025; do not classify all
-contributors as government employees or rewrite historical releases. In FHGFF3,
-MPL-2.0 on FAIR BioHeaders contributions does not resolve the inherited
-biodatamodels/gff-schema licensing question. Preserve upstream notices and do not
-assert permission that has not been established.
+**Software (new project-owned code from March 2025 onward):** MPL-2.0 — the family standard
+for new software contributions. David Molik left USDA in February 2025. Historical USDA-ARS
+public-domain material remains public domain within the United States. The project's
+`LICENSE` file documents the provenance split between these eras. Do not normalize old
+notices to the new license, and do not "clean up" a historical PDDL/public-domain line.
+
+**Test datasets and generated databases:** ODbL-1.0 (Open Database License) for newly created
+project-owned database collections where the project has authority to grant database rights.
+Reference: <https://opendatacommons.org/licenses/odbl/>. This applies to curated test fixtures,
+conformance vector collections, schema compilation metadata and derived databases where
+the project holds relevant rights.
+
+**Database rights versus content rights:** ODbL licenses the structure, curation and
+compilation of a database — not individual sequences, images, articles, books or other
+constituent works within it. Document the applicable terms for each source's constituent
+material separately. A project cannot grant ODbL-1.0 over third-party sequence data,
+NCBI-published records, INSDC minimum-specification texts, or any biological resource
+that was not authored by the project. When a conformance suite bundles public-domain
+fixture files alongside project-authored test metadata, annotate the boundary.
+
+**Mixed fixtures:** Distinguish (1) newly authored metadata headers and database schema,
+(2) database compilation/organization structure, (3) original code (MPL-2.0), and (4) third-party
+or public-domain source payloads (e.g., NCBI assembly data, GBFF features, INSDC texts).
+Do not apply a blanket license to a mixed fixture that contradicts any component's terms.
+
+**Preserved material:** Retain historical USDA/public-domain notices, previously distributed
+license permissions, third-party terms and immutable fixture bytes. Copying, converting,
+annotating, packaging or generating derivatives from third-party material does not establish
+ownership or authority to relicense it. Preserve released artifact bytes (schemas, example
+data, conformance vectors) as-is. A file's most recent modification date alone does not
+settle the licensing status of its parts.
+
+**FHGFF3 feature-model exception:** In FHGFF3, MPL-2.0 on FAIR BioHeaders contributions
+does not resolve the inherited biodatamodels/gff-schema licensing question. Preserve upstream
+notices and do not assert permission that has not been established. The unresolved
+inherited-license boundary must remain explicit.
+
+**Uncertainty:** Where rights or ODbL applicability are uncertain, document the specific
+question for maintainer disposition — do not invent permissions, ownership or legal
+conclusions. Flag for review: derived data with unclear upstream authority, cross-jurisdictional
+public-domain equivalence for material outside the US, and newly generated datasets built
+from mixed-license sources.
 
 ## Draft metadata profiles (#56)
 
