@@ -32,9 +32,11 @@ CROSSWALK = ROOT / "mappings" / "proposals" / "npp-fhr-publication.yml"
 CTX_SCHEMA = ROOT / "mappings" / "proposals" / "npp-fhr-publication.context.schema.json"
 
 UNIT_LABELS = {  # units asserted by the contract itself (FORMAT.md vitalStats definitions)
-    "totalBasePairs": "bp", "L50": "bp", "N50": "bp", "L90": "bp", "N90": "bp",
-    "scaffoldN50": "bp", "scaffoldN90": "bp", "scaffoldL50": "bp", "scaffoldL90": "bp",
+    "totalBasePairs": "bp", "N50": "bp", "N90": "bp",
+    "scaffoldN50": "bp", "scaffoldN90": "bp",
     "gcContent": "% of A+C+G+T+U",
+    # FORMAT.md: L50/L90/scaffoldL50/scaffoldL90 are CONTIG COUNTS, not lengths;
+    # they carry no unit label (corrected 2026-11-28 via JATS 1.4 XSD validation)
 }
 LINK_OK = re.compile(r"^(https|ftp)://[^\s<>\"'`]+$")  # R14 approximation (documented)
 
@@ -143,7 +145,7 @@ def build_jats(source: dict, context: dict, source_digest: str) -> str:
         f"<kwd>{escape(taxon['name'])}</kwd>",
     ]
     if link_ok(taxon.get("uri", "")):
-        lines.append(f'<kwd specific-use="uri">{escape(taxon["uri"])}</kwd>')
+        lines.append(f"<kwd>{escape(taxon['uri'])}</kwd>")  # JATS 1.4: kwd has no specific-use
     lines.append("</kwd-group>")
     year, month, day = (source["dateCreated"].split("-") + ["", ""])[:3]
     lines.append(
